@@ -1,0 +1,48 @@
+{
+  "name": "@procertus-ui/ui-lib",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "oxlint",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "storybook": "storybook dev -p 6007",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "@procertus-ui/ui": "workspace:*",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.486.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwind-merge": "^3.1.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-docs": "^10.3.0",
+    "@storybook/react-vite": "^10.3.0",
+    "@tailwindcss/vite": "^4.2.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^5.1.0",
+    "@workspace/typescript-config": "workspace:*",
+    "bun-types": "^1.3.11",
+    "oxfmt": "^0.36.0",
+    "oxlint": "^1.51.0",
+    "storybook": "^10.3.0",
+    "tailwindcss": "^4.2.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0"
+  }
+}

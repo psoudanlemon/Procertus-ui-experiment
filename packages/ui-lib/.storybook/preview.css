@@ -1,0 +1,24 @@
+/**
+ * Storybook wraps the story in `#storybook-root` / `.sb-show-main` above `body`. Painting those
+ * layers with `var(--background)` keeps the full canvas in sync when Mode toggles `html.dark` /
+ * `.light` and Theme sets `data-theme` — without re-enabling the Storybook backgrounds addon.
+ */
+html,
+body,
+#storybook-root,
+#storybook-docs,
+.sb-show-main {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/**
+ * Docs tab: the Canvas block uses `getBlockBackgroundStyle` on `.sbdocs-preview` (Storybook theme),
+ * not app tokens. Override only that shell so embedded stories match Mode + Theme. `!important`
+ * beats emotion styles.
+ */
+#storybook-docs .sbdocs-preview {
+  background-color: var(--background) !important;
+  color: var(--foreground);
+  border-color: var(--border) !important;
+}

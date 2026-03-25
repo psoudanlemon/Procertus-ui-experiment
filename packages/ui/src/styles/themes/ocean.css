@@ -1,0 +1,78 @@
+/**
+ * Ocean theme — semantic token overrides when `data-theme="ocean"` (ThemeProvider).
+ * Mode (light / dark / system) still toggles `html.dark`; these blocks layer on top of `default.css`.
+ *
+ * Light: `html[data-theme="ocean"]:not(.dark)` — matches unscoped `:root` in default.
+ * Dark: `html[data-theme="ocean"].dark` — matches `.dark` in default.
+ */
+html[data-theme="ocean"]:not(.dark) {
+  --radius: 0.4rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.3823 0.061 127.1582);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.3823 0.061 127.1582);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.3823 0.061 127.1582);
+  --primary: oklch(0.5365 0.0906 229.921);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(1 0 0);
+  --secondary-foreground: oklch(0.4225 0.0798 235.2018);
+  --muted: oklch(1 0 0);
+  --muted-foreground: oklch(0.5616 0.0938 130.3835);
+  --accent: oklch(0.9608 0.0119 223.5238);
+  --accent-foreground: oklch(0.4225 0.0798 235.2018);
+  --destructive: oklch(0.8759 0.212 124.2233);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.9563 0.0191 140.5006);
+  --input: oklch(0.9563 0.0191 140.5006);
+  --ring: oklch(0.5365 0.0906 229.921);
+  --chart-1: oklch(0.6812 0.0949 228.4165);
+  --chart-2: oklch(0.5908 0.0978 229.4314);
+  --chart-3: oklch(0.5365 0.0906 229.921);
+  --chart-4: oklch(0.4225 0.0798 235.2018);
+  --chart-5: oklch(0.243 0.0382 232.2164);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.3823 0.061 127.1582);
+  --sidebar-primary: oklch(0.5365 0.0906 229.921);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.9608 0.0119 223.5238);
+  --sidebar-accent-foreground: oklch(0.4225 0.0798 235.2018);
+  --sidebar-border: oklch(0.9563 0.0191 140.5006);
+  --sidebar-ring: oklch(0.5365 0.0906 229.921);
+}
+
+html[data-theme="ocean"].dark {
+  --radius: 0.4rem;
+  --background: oklch(0.2675 0.0257 248.8146);
+  --foreground: oklch(1 0 0);
+  --card: oklch(0.3512 0.021 231.6417);
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0.3512 0.021 231.6417);
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(0.6812 0.0949 228.4165);
+  --primary-foreground: oklch(0.243 0.0382 232.2164);
+  --secondary: oklch(0.4235 0.02 215.6897);
+  --secondary-foreground: oklch(0.9739 0.0032 197.1043);
+  --muted: oklch(0.3095 0.0154 224.0481);
+  --muted-foreground: oklch(0.9342 0.0209 140.897);
+  --accent: oklch(0.5908 0.0978 229.4314);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.8759 0.212 124.2233);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.2103 0.0191 252.088);
+  --input: oklch(0.2103 0.0191 252.088);
+  --ring: oklch(0.6812 0.0949 228.4165);
+  --chart-1: oklch(0.7986 0.0601 225.7207);
+  --chart-2: oklch(0.7367 0.0762 226.6223);
+  --chart-3: oklch(0.6812 0.0949 228.4165);
+  --chart-4: oklch(0.6477 0.1053 229.8176);
+  --chart-5: oklch(0.5908 0.0978 229.4314);
+  --sidebar: oklch(0.2675 0.0257 248.8146);
+  --sidebar-foreground: oklch(1 0 0);
+  --sidebar-primary: oklch(0.6812 0.0949 228.4165);
+  --sidebar-primary-foreground: oklch(0.243 0.0382 232.2164);
+  --sidebar-accent: oklch(0.5908 0.0978 229.4314);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(0.4235 0.02 215.6897);
+  --sidebar-ring: oklch(0.6812 0.0949 228.4165);
+}

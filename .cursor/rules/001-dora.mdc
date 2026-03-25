@@ -1,0 +1,32 @@
+---
+description: Code exploration with dora CLI
+globs: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+---
+
+# Dora Code Exploration
+
+Use the **dora** CLI for code exploration instead of grep/find/glob when possible.
+
+## When to Use Dora
+
+- Finding symbol definitions: `dora symbol <name>`
+- Understanding file dependencies: `dora file <path>`, `dora deps`, `dora rdeps`
+- Architecture analysis: `dora cycles`, `dora coupling`, `dora complexity`
+- Codebase overview: `dora map`, `dora treasure`
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `dora status` | Check index health |
+| `dora map` | Show packages and stats |
+| `dora symbol <query>` | Find symbol definitions |
+| `dora file <path>` | Analyze file with dependencies |
+| `dora deps <path>` | Show dependencies |
+| `dora rdeps <path>` | Show reverse dependencies |
+| `dora cycles` | Find circular dependencies |
+| `dora treasure` | Most referenced files |
+
+## Cursor Commands
+
+Type `/dora-explore`, `/dora-analyze-file`, `/dora-find-symbol`, or `/dora-check-architecture` in chat.
