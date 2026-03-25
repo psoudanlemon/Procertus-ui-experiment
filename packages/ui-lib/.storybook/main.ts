@@ -31,10 +31,7 @@ const config: StorybookConfig = {
   },
   async viteFinal(configStorybook) {
     return mergeConfig(configStorybook, {
-      plugins: [
-        workspaceUiAliasPlugin({ packageRoot, uiPackageRoot }),
-        tailwindcss(),
-      ],
+      plugins: [workspaceUiAliasPlugin({ packageRoot, uiPackageRoot }), tailwindcss()],
       resolve: {
         dedupe: ["react", "react-dom"],
       },

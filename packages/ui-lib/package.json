@@ -3,18 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "module": "./src/index.ts",
-  "types": "./src/index.ts",
   "sideEffects": [
     "**/*.css"
   ],
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
     "./package.json": "./package.json"
   },
   "scripts": {
     "build": "tsc",
-    "lint": "oxlint",
+    "lint": "oxlint src .storybook",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "storybook": "storybook dev -p 6007",
