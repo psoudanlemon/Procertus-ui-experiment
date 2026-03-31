@@ -1,10 +1,5 @@
 export { cn } from "./lib/utils";
-export {
-  THEMES,
-  DEFAULT_THEME_ID,
-  isThemeId,
-  type ThemeId,
-} from "./lib/themes";
+export { THEMES, DEFAULT_THEME_ID, isThemeId, type ThemeId } from "./lib/themes";
 export { ThemeProvider, useTheme } from "./components/theme-provider";
 export { ModeProvider, useMode, type Mode } from "./components/mode-provider";
 export { ModeToggle } from "./components/mode-toggle";

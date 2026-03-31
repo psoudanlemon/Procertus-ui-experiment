@@ -1,9 +1,12 @@
 /**
- * Storybook wraps the story in `#storybook-root` / `.sb-show-main` above `body`. Painting those
- * layers with `var(--background)` keeps the full canvas in sync when Mode toggles `html.dark` /
- * `.light` and Theme sets `data-theme` — without re-enabling the Storybook backgrounds addon.
+ * Storybook wraps the story in `#storybook-root` / `.sb-show-main` above `body`. The `html`
+ * element uses `var(--sidebar)` so the iOS overscroll rubber-band bounce matches the app chrome.
+ * Visible layers use `var(--background)` to stay in sync when Mode / Theme toggle.
  */
-html,
+html {
+  background-color: var(--sidebar);
+}
+
 body,
 #storybook-root,
 #storybook-docs,

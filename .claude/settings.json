@@ -98,12 +98,7 @@
     ]
   },
   "permissions": {
-    "allow": [
-      "Bash(dora:*)",
-      "Skill(dora)"
-    ],
-    "deny": [
-      "Read(./.entire/metadata/**)"
-    ]
+    "allow": ["Bash(dora:*)", "Skill(dora)"],
+    "deny": ["Read(./.entire/metadata/**)"]
   }
 }

@@ -1,16 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Bold, Italic, Underline } from "lucide-react";
 
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 /**
  * A set of two-state buttons that can be toggled on or off.
  */
 const meta = {
-  title: "ui/radix/ToggleGroup",
+  title: "components/ToggleGroup",
   component: ToggleGroup,
   tags: ["autodocs"],
   argTypes: {

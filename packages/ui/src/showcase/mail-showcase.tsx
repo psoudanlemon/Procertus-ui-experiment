@@ -1,16 +1,12 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable"
-import { Switch } from "@/components/ui/switch"
-import { Archive, Inbox, Send, Trash2 } from "lucide-react"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import { Switch } from "@/components/ui/switch";
+import { Archive, Inbox, Send, Trash2 } from "lucide-react";
 
 const folders = [
   { label: "Inbox", count: 128, active: true },
@@ -19,17 +15,17 @@ const folders = [
   { label: "Junk", count: 23, active: false },
   { label: "Trash", count: 0, active: false },
   { label: "Archive", count: 0, active: false },
-]
+];
 
 type Thread = {
-  id: string
-  from: string
-  subject: string
-  preview: string
-  time: string
-  tags: string[]
-  selected?: boolean
-}
+  id: string;
+  from: string;
+  subject: string;
+  preview: string;
+  time: string;
+  tags: string[];
+  selected?: boolean;
+};
 
 const threads: Thread[] = [
   {
@@ -57,7 +53,7 @@ const threads: Thread[] = [
     time: "1w ago",
     tags: ["important"],
   },
-]
+];
 
 /**
  * Three-pane mail layout inspired by the Tweakcn “Mail” preview (no official Shadcn mail block in the registry).
@@ -119,7 +115,9 @@ export function MailShowcase() {
                       <div>
                         <div className="font-medium">{t.from}</div>
                         <div className="text-muted-foreground text-sm">{t.subject}</div>
-                        <p className="text-muted-foreground mt-1 line-clamp-2 text-xs">{t.preview}</p>
+                        <p className="text-muted-foreground mt-1 line-clamp-2 text-xs">
+                          {t.preview}
+                        </p>
                         <div className="mt-2 flex flex-wrap gap-1">
                           {t.tags.map((tag) => (
                             <Badge key={tag} variant="secondary" className="text-xs">
@@ -183,5 +181,5 @@ export function MailShowcase() {
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
-  )
+  );
 }

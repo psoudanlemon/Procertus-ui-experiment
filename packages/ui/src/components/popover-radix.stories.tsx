@@ -1,24 +1,26 @@
+import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Field, FieldGroup, FieldTitle } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { expect, userEvent, within } from "storybook/test";
 
 /**
  * Displays rich content in a portal, triggered by a button.
  */
 const meta = {
-  title: "ui/radix/Popover",
+  title: "components/Popover",
   component: Popover,
   tags: ["autodocs"],
   argTypes: {},
 
   render: (args) => (
     <Popover {...args}>
-      <PopoverTrigger>Open</PopoverTrigger>
+      <PopoverTrigger asChild>
+        <Button variant="ghost">Open</Button>
+      </PopoverTrigger>
       <PopoverContent>Place content for the popover here.</PopoverContent>
     </Popover>
   ),
@@ -36,6 +38,44 @@ type Story = StoryObj<typeof meta>;
  */
 export const Default: Story = {};
 
+/**
+ * A popover containing a small form with dimension fields, demonstrating
+ * how to combine Field, FieldTitle, and Input inside popover content.
+ */
+export const DimensionsForm: Story = {
+  render: (args) => (
+    <Popover defaultOpen {...args}>
+      <PopoverTrigger asChild>
+        <Button variant="ghost">Open</Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-96">
+        <div className="mb-4">
+          <h4 className="font-bold">Dimensions</h4>
+          <p className="text-sm text-muted-foreground">Set the dimensions for the layer.</p>
+        </div>
+        <FieldGroup>
+          <Field orientation="horizontal" className="gap-5">
+            <FieldTitle className="w-28 shrink-0">Width</FieldTitle>
+            <Input placeholder="Placeholder" />
+          </Field>
+          <Field orientation="horizontal" className="gap-5">
+            <FieldTitle className="w-28 shrink-0">Max. width</FieldTitle>
+            <Input placeholder="Placeholder" />
+          </Field>
+          <Field orientation="horizontal" className="gap-5">
+            <FieldTitle className="w-28 shrink-0">Height</FieldTitle>
+            <Input placeholder="Placeholder" />
+          </Field>
+          <Field orientation="horizontal" className="gap-5">
+            <FieldTitle className="w-28 shrink-0">Max. height</FieldTitle>
+            <Input placeholder="Placeholder" />
+          </Field>
+        </FieldGroup>
+      </PopoverContent>
+    </Popover>
+  ),
+};
+
 export const ShouldOpenClose: Story = {
   name: "when clicking the trigger, should open and close the popover",
   tags: ["!dev", "!autodocs"],
@@ -43,20 +83,13 @@ export const ShouldOpenClose: Story = {
     const canvasBody = within(canvasElement.ownerDocument.body);
 
     await step("click the trigger to open the popover", async () => {
-      await userEvent.click(
-        await canvasBody.findByRole("button", { name: /open/i }),
-      );
+      await userEvent.click(await canvasBody.findByRole("button", { name: /open/i }));
       expect(await canvasBody.findByRole("dialog")).toBeInTheDocument();
     });
 
     await step("click the trigger to close the popover", async () => {
-      await userEvent.click(
-        await canvasBody.findByRole("button", { name: /open/i }),
-      );
-      expect(await canvasBody.findByRole("dialog")).toHaveAttribute(
-        "data-state",
-        "closed",
-      );
+      await userEvent.click(await canvasBody.findByRole("button", { name: /open/i }));
+      expect(await canvasBody.findByRole("dialog")).toHaveAttribute("data-state", "closed");
     });
   },
 };

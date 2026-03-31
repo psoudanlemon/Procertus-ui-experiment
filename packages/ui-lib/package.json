@@ -17,7 +17,7 @@
     "lint": "oxlint src .storybook",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
-    "storybook": "storybook dev -p 6007",
+    "storybook": "env NODE_OPTIONS=\"--require ../../scripts/storybook-network-fallback.cjs\" storybook dev -p 6007 --host localhost --disable-telemetry",
     "build-storybook": "storybook build"
   },
   "dependencies": {

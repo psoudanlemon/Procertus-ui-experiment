@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite"
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { SignupForm } from "@/components/signup-form"
+import { SignupForm } from "@/components/signup-form";
 
 /**
  * Full-viewport sign-up — uses the **signup-01** block’s form (`SignupForm`).
@@ -12,11 +12,11 @@ function SignupShowcase() {
         <SignupForm />
       </div>
     </div>
-  )
+  );
 }
 
 const meta: Meta = {
-  title: "theme/showcase/Sign up",
+  title: "examples/Sign up",
   component: SignupShowcase,
   parameters: {
     layout: "fullscreen",
@@ -27,12 +27,12 @@ const meta: Meta = {
       },
     },
   },
-}
+};
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof SignupShowcase>
+type Story = StoryObj<typeof SignupShowcase>;
 
 export const Default: Story = {
   render: () => <SignupShowcase />,
-}
+};

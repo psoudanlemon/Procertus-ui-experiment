@@ -53,7 +53,7 @@ const meta: Meta<{
   key: keyof CSSProperties;
   property: Typography[];
 }> = {
-  title: "design/radix/Typography",
+  title: "design tokens/Typography",
   argTypes: {},
   args: {
     children: "Typeface",
@@ -71,12 +71,7 @@ const meta: Meta<{
       </TableHeader>
       <TableBody>
         {args.property.map(({ name, value }) => (
-          <TypographyRow
-            key={name}
-            name={name}
-            value={value}
-            styleKey={args.key}
-          >
+          <TypographyRow key={name} name={name} value={value} styleKey={args.key}>
             {args.children}
           </TypographyRow>
         ))}

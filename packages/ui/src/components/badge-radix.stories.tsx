@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
  * Displays a badge or a component that looks like a badge.
  */
 const meta = {
-  title: "ui/radix/Badge",
+  title: "components/Badge",
   component: Badge,
   tags: ["autodocs"],
   argTypes: {

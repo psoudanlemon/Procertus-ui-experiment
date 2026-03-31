@@ -107,7 +107,10 @@ export function workspaceUiAliasPlugin(opts: WorkspaceUiAliasOptions): Plugin {
           return resolveSubpathToAbsoluteFile(uiSrc, subpath);
         }
         if (isPathUnder(pkgRoot, from)) {
-          return resolveSubpathToAbsoluteFile(localSrc, subpath);
+          return (
+            resolveSubpathToAbsoluteFile(localSrc, subpath) ??
+            resolveSubpathToAbsoluteFile(uiSrc, subpath)
+          );
         }
       }
 

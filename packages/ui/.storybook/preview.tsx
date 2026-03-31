@@ -69,6 +69,18 @@ const preview: Preview = {
     docs: {
       canvas: { layout: "centered" },
     },
+    options: {
+      storySort: {
+        method: "alphabetical",
+        order: [
+          "components",
+          "design tokens",
+          ["Typography", "Color", "Spacing", "Radius", "Shadow"],
+          "examples",
+          ["Typography", "Dashboard", "Login", "Sign up", "Mail"],
+        ],
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

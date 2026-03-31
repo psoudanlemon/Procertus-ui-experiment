@@ -69,6 +69,23 @@ const preview: Preview = {
     docs: {
       canvas: { layout: "centered" },
     },
+    options: {
+      storySort: {
+        order: [
+          "Management Tool",
+          [
+            "Application Shell",
+            "Authentication",
+            [
+              "*",
+              "Forms",
+              ["Account Details", "Login", "Forgot Password", "Verify Code", "Set Password"],
+            ],
+            "Status Pages",
+          ],
+        ],
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

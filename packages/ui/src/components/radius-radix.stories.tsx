@@ -20,10 +20,7 @@ const RadiusTile = ({ value }: Pick<Radius, "value">) => {
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <div
-        className="size-20 border-2 bg-card"
-        style={{ borderRadius: radius }}
-      />
+      <div className="size-20 border-2 bg-card" style={{ borderRadius: radius }} />
       <p className="text-center text-xs opacity-70">{value}</p>
       <p className="text-center text-xs">{radius}</p>
     </div>
@@ -36,7 +33,7 @@ const RadiusTile = ({ value }: Pick<Radius, "value">) => {
 const meta: Meta<{
   radius: Radius[];
 }> = {
-  title: "design/radix/Radius",
+  title: "design tokens/Radius",
   argTypes: {},
   render: (args) => (
     <Table>

@@ -1,39 +1,39 @@
-import type { ReactNode } from "react"
-import { useLayoutEffect } from "react"
+import type { ReactNode } from "react";
+import { useLayoutEffect } from "react";
 
-import { ModeProvider, useMode, type Mode } from "@/components/mode-provider"
-import { ThemeProvider, useTheme, type ThemeId } from "@/components/theme-provider"
-import { TooltipProvider } from "@/components/ui/tooltip"
-import { DEFAULT_THEME_ID, isThemeId } from "@/lib/themes"
+import { ModeProvider, useMode, type Mode } from "@/components/mode-provider";
+import { ThemeProvider, useTheme, type ThemeId } from "@/components/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { DEFAULT_THEME_ID, isThemeId } from "@/lib/themes";
 
 function StorybookToolbarThemeSync({ toolbarTheme }: { toolbarTheme: ThemeId }) {
-  const { setTheme, theme } = useTheme()
+  const { setTheme, theme } = useTheme();
   useLayoutEffect(() => {
-    if (theme !== toolbarTheme) setTheme(toolbarTheme)
-  }, [toolbarTheme, setTheme, theme])
-  return null
+    if (theme !== toolbarTheme) setTheme(toolbarTheme);
+  }, [toolbarTheme, setTheme, theme]);
+  return null;
 }
 
 function StorybookToolbarModeSync({ toolbarMode }: { toolbarMode: Mode }) {
-  const { setMode, mode } = useMode()
+  const { setMode, mode } = useMode();
   useLayoutEffect(() => {
-    if (mode !== toolbarMode) setMode(toolbarMode)
-  }, [toolbarMode, setMode, mode])
-  return null
+    if (mode !== toolbarMode) setMode(toolbarMode);
+  }, [toolbarMode, setMode, mode]);
+  return null;
 }
 
 function parseToolbarMode(value: unknown): Mode {
   if (value === "light" || value === "dark" || value === "system") {
-    return value
+    return value;
   }
-  return "dark"
+  return "dark";
 }
 
 function parseToolbarTheme(value: unknown): ThemeId {
   if (isThemeId(value)) {
-    return value
+    return value;
   }
-  return DEFAULT_THEME_ID
+  return DEFAULT_THEME_ID;
 }
 
 /**
@@ -45,9 +45,9 @@ export function StorybookThemeDecorator({
   theme: themeId,
   mode,
 }: {
-  children: ReactNode
-  theme: ThemeId
-  mode: Mode
+  children: ReactNode;
+  theme: ThemeId;
+  mode: Mode;
 }) {
   return (
     <ThemeProvider defaultTheme={themeId} storageKey="sb-ui-theme">
@@ -62,7 +62,7 @@ export function StorybookThemeDecorator({
         </TooltipProvider>
       </ModeProvider>
     </ThemeProvider>
-  )
+  );
 }
 
-export { parseToolbarTheme, parseToolbarMode }
+export { parseToolbarTheme, parseToolbarMode };

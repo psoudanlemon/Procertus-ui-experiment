@@ -1,20 +1,16 @@
 import { expect, userEvent, waitFor } from "storybook/test";
 // Replace nextjs-vite with the name of your framework
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { AppWindowIcon, CodeIcon } from "lucide-react";
 
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 /**
  * A set of layered sections of content—known as tab panels—that are displayed
  * one at a time.
  */
 const meta = {
-  title: "ui/radix/Tabs",
+  title: "components/Tabs",
   component: Tabs,
   tags: ["autodocs"],
   argTypes: {},
@@ -28,9 +24,7 @@ const meta = {
         <TabsTrigger value="account">Account</TabsTrigger>
         <TabsTrigger value="password">Password</TabsTrigger>
       </TabsList>
-      <TabsContent value="account">
-        Make changes to your account here.
-      </TabsContent>
+      <TabsContent value="account">Make changes to your account here.</TabsContent>
       <TabsContent value="password">Change your password here.</TabsContent>
     </Tabs>
   ),
@@ -48,6 +42,91 @@ type Story = StoryObj<typeof meta>;
  */
 export const Default: Story = {};
 
+/**
+ * The line variant displays an underline indicator on the active tab
+ * with a subtle bottom border spanning the full tab list.
+ */
+export const Line: Story = {
+  args: {
+    defaultValue: "overview",
+  },
+  render: (args) => (
+    <Tabs {...args}>
+      <TabsList variant="line">
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        <TabsTrigger value="reports">Reports</TabsTrigger>
+      </TabsList>
+    </Tabs>
+  ),
+};
+
+/**
+ * Use `orientation="vertical"` to display tabs vertically.
+ */
+export const Vertical: Story = {
+  args: {
+    defaultValue: "account",
+    orientation: "vertical",
+    className: undefined,
+  },
+  render: (args) => (
+    <Tabs {...args}>
+      <TabsList>
+        <TabsTrigger value="account">Account</TabsTrigger>
+        <TabsTrigger value="password">Password</TabsTrigger>
+        <TabsTrigger value="settings">Settings</TabsTrigger>
+      </TabsList>
+    </Tabs>
+  ),
+};
+
+/**
+ * Use the `disabled` prop on a `TabsTrigger` to disable it.
+ */
+export const Disabled: Story = {
+  args: {
+    defaultValue: "account",
+  },
+  render: (args) => (
+    <Tabs {...args}>
+      <TabsList>
+        <TabsTrigger value="account">Account</TabsTrigger>
+        <TabsTrigger value="password" disabled>
+          Password
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="account">Make changes to your account here.</TabsContent>
+      <TabsContent value="password">Change your password here.</TabsContent>
+    </Tabs>
+  ),
+};
+
+/**
+ * You can use icons inside `TabsTrigger`.
+ */
+export const Icon: Story = {
+  args: {
+    defaultValue: "account",
+  },
+  render: (args) => (
+    <Tabs {...args}>
+      <TabsList>
+        <TabsTrigger value="account">
+          <AppWindowIcon />
+          Account
+        </TabsTrigger>
+        <TabsTrigger value="password">
+          <CodeIcon />
+          Password
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="account">Make changes to your account here.</TabsContent>
+      <TabsContent value="password">Change your password here.</TabsContent>
+    </Tabs>
+  ),
+};
+
 export const ShouldChangeTabs: Story = {
   name: "when clicking a tab, should change the content",
   tags: ["!dev", "!autodocs"],
@@ -57,9 +136,7 @@ export const ShouldChangeTabs: Story = {
     for (let i = 0; i < tabs.length; i++) {
       await step(`click the '${tabs[i].innerText}' tab`, async () => {
         await userEvent.click(tabs[i]);
-        await waitFor(() =>
-          expect(tabs[i]).toHaveAttribute("aria-selected", "true"),
-        );
+        await waitFor(() => expect(tabs[i]).toHaveAttribute("aria-selected", "true"));
         await expect(
           await canvas.queryByRole("tabpanel", { name: tabs[i].innerText }),
         ).toBeVisible();
@@ -69,9 +146,7 @@ export const ShouldChangeTabs: Story = {
         for (let j = 0; j < tabs.length; j++) {
           if (j !== i) {
             expect(tabs[j]).toHaveAttribute("aria-selected", "false");
-            expect(
-              await canvas.queryByRole("tabpanel", { name: tabs[j].innerText }),
-            ).toBeNull();
+            expect(await canvas.queryByRole("tabpanel", { name: tabs[j].innerText })).toBeNull();
           }
         }
       });

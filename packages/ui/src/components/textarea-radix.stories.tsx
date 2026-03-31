@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
  * Displays a form textarea or a component that looks like a textarea.
  */
 const meta = {
-  title: "ui/radix/Textarea",
+  title: "components/Textarea",
   component: Textarea,
   tags: ["autodocs"],
   argTypes: {},
@@ -40,7 +40,7 @@ export const Disabled: Story = {
  * Use the `Label` component to includes a clear, descriptive label above or
  * alongside the text area to guide users.
  */
-export const WithLabel: Story = {
+export const Labeled: Story = {
   render: (args) => (
     <div className="grid w-full gap-1.5">
       <Label htmlFor="message">Your message</Label>
@@ -53,14 +53,12 @@ export const WithLabel: Story = {
  * Use a text element below the text area to provide additional instructions
  * or information to users.
  */
-export const WithText: Story = {
+export const Text: Story = {
   render: (args) => (
     <div className="grid w-full gap-1.5">
       <Label htmlFor="message-2">Your Message</Label>
       <Textarea {...args} id="message-2" />
-      <p className="text-slate-500 text-sm">
-        Your message will be copied to the support team.
-      </p>
+      <p className="text-slate-500 text-sm">Your message will be copied to the support team.</p>
     </div>
   ),
 };
@@ -69,7 +67,7 @@ export const WithText: Story = {
  * Use the `Button` component to indicate that the text area can be submitted
  * or used to trigger an action.
  */
-export const WithButton: Story = {
+export const Submit: Story = {
   render: (args) => (
     <div className="grid w-full gap-2">
       <Textarea {...args} />

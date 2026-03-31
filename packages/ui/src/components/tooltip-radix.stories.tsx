@@ -1,12 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Plus } from "lucide-react";
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 
 /**
@@ -14,7 +9,7 @@ import { expect, userEvent, waitFor, within } from "storybook/test";
  * receives keyboard focus or the mouse hovers over it.
  */
 const meta: Meta<typeof TooltipContent> = {
-  title: "ui/radix/Tooltip",
+  title: "components/Tooltip",
   component: TooltipContent,
   tags: ["autodocs"],
   argTypes: {
@@ -95,9 +90,7 @@ export const ShouldShowOnHover: Story = {
       await userEvent.hover(triggerBtn);
       await waitFor(() =>
         expect(
-          canvasElement.ownerDocument.body.querySelector(
-            "[data-radix-popper-content-wrapper]",
-          ),
+          canvasElement.ownerDocument.body.querySelector("[data-radix-popper-content-wrapper]"),
         ).toBeVisible(),
       );
     });

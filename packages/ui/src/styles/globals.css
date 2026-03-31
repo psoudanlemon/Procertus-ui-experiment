@@ -3,13 +3,16 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* Sibling ui-lib (and Storybook): scan composed components for utilities — default scan is this package only. */
+/* Ensure Tailwind scans this package's own source when globals.css is consumed from
+   another package's Storybook (e.g. ui-lib on port 6007), where the Vite root differs
+   and auto-detection no longer covers packages/ui/src. */
+@source "..";
+/* Sibling ui-lib: scan composed components for utilities. */
 @source "../../../ui-lib/src";
 
 @custom-variant dark (&:is(.dark *));
 
 @import "./themes/default.css";
-@import "./themes/ocean.css";
 
 @theme inline {
   /* Border radius — matches foundations table (xs → 4xl); --radius is Figma `lg` (10px). */
@@ -43,6 +46,9 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  html {
+    background-color: var(--sidebar);
   }
   body {
     @apply bg-background text-foreground;

@@ -7,20 +7,13 @@ import { Button } from "@/components/ui/button";
  * Displays a button or a component that looks like a button.
  */
 const meta: Meta<typeof Button> = {
-  title: "ui/radix/Button",
+  title: "components/Button",
   component: Button,
   tags: ["autodocs"],
   argTypes: {
     variant: {
       control: "select",
-      options: [
-        "default",
-        "destructive",
-        "outline",
-        "secondary",
-        "ghost",
-        "link",
-      ],
+      options: ["default", "destructive", "outline", "secondary", "ghost", "link"],
     },
     size: {
       control: "select",
@@ -116,7 +109,7 @@ export const Link: Story = {
 export const Loading: Story = {
   render: (args) => (
     <Button {...args}>
-      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+      <Loader2 data-icon="inline-start" className="h-4 w-4 animate-spin" />
       Button
     </Button>
   ),
@@ -130,10 +123,10 @@ export const Loading: Story = {
  * Add an icon element to a button to enhance visual communication and
  * providing additional context for the action.
  */
-export const WithIcon: Story = {
+export const IconLabel: Story = {
   render: (args) => (
     <Button {...args}>
-      <Mail className="mr-2 h-4 w-4" /> Login with Email Button
+      <Mail data-icon="inline-start" className="h-4 w-4" /> Login with Email Button
     </Button>
   ),
   args: {
@@ -164,7 +157,7 @@ export const Large: Story = {
 /**
  * Use the "icon" size for a button with only an icon.
  */
-export const Icon: Story = {
+export const IconOnly: Story = {
   args: {
     ...Secondary.args,
     size: "icon",

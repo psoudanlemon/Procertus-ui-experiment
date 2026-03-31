@@ -4,13 +4,12 @@
  */
 export const THEMES = [
   { id: "default", label: "Default" },
-  { id: "ocean", label: "Ocean" },
-] as const
+] as const;
 
-export type ThemeId = (typeof THEMES)[number]["id"]
+export type ThemeId = (typeof THEMES)[number]["id"];
 
-export const DEFAULT_THEME_ID: ThemeId = "default"
+export const DEFAULT_THEME_ID: ThemeId = "default";
 
 export function isThemeId(value: unknown): value is ThemeId {
-  return typeof value === "string" && THEMES.some((t) => t.id === value)
+  return typeof value === "string" && THEMES.some((t) => t.id === value);
 }

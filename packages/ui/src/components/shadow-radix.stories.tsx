@@ -20,10 +20,7 @@ const ShadowTile = ({ value }: Pick<Shadow, "value">) => {
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <div
-        className="size-20 rounded-md bg-card"
-        style={{ boxShadow: shadow }}
-      />
+      <div className="size-20 rounded-md bg-card" style={{ boxShadow: shadow }} />
       <p className="text-center text-xs opacity-70">{value}</p>
       <p className="text-center text-xs">{shadow}</p>
     </div>
@@ -36,7 +33,7 @@ const ShadowTile = ({ value }: Pick<Shadow, "value">) => {
 const meta: Meta<{
   shadow: Shadow[];
 }> = {
-  title: "design/radix/Shadow",
+  title: "design tokens/Shadow",
   argTypes: {},
   render: (args) => (
     <Table>

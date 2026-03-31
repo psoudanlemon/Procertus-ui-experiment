@@ -1,23 +1,23 @@
-import type { Meta, StoryObj } from "@storybook/react-vite"
-import type { CSSProperties } from "react"
-import type { z } from "zod"
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { CSSProperties } from "react";
+import type { z } from "zod";
 
-import { AppSidebar } from "@/components/app-sidebar"
-import { ChartAreaInteractive } from "@/components/chart-area-interactive"
-import { DataTable, schema } from "@/components/data-table"
-import { SectionCards } from "@/components/section-cards"
-import { SiteHeader } from "@/components/site-header"
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar";
+import { ChartAreaInteractive } from "@/components/chart-area-interactive";
+import { DataTable, schema } from "@/components/data-table";
+import { SectionCards } from "@/components/section-cards";
+import { SiteHeader } from "@/components/site-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
-import dashboardData from "@/app/dashboard/data.json"
+import dashboardData from "@/app/dashboard/data.json";
 
 const dashboardSidebarStyle = {
   "--sidebar-width": "calc(var(--spacing) * 72)",
   "--header-height": "calc(var(--spacing) * 12)",
-} as CSSProperties
+} as CSSProperties;
 
 function DashboardShowcase() {
-  const data = dashboardData as z.infer<typeof schema>[]
+  const data = dashboardData as z.infer<typeof schema>[];
   return (
     <SidebarProvider style={dashboardSidebarStyle}>
       <AppSidebar variant="inset" />
@@ -36,11 +36,11 @@ function DashboardShowcase() {
         </div>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }
 
 const meta: Meta = {
-  title: "theme/showcase/Dashboard",
+  title: "examples/Dashboard",
   component: DashboardShowcase,
   parameters: {
     layout: "fullscreen",
@@ -51,12 +51,12 @@ const meta: Meta = {
       },
     },
   },
-}
+};
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof DashboardShowcase>
+type Story = StoryObj<typeof DashboardShowcase>;
 
 export const Default: Story = {
   render: () => <DashboardShowcase />,
-}
+};

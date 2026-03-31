@@ -31,7 +31,7 @@ const notifications = [
  * Displays a card with header, content, and footer.
  */
 const meta = {
-  title: "ui/radix/Card",
+  title: "components/Card",
   component: Card,
   tags: ["autodocs"],
   argTypes: {},
@@ -78,7 +78,7 @@ export const Default: Story = {
 /**
  * Use the `CardAction` component to add interactive elements in the header.
  */
-export const WithCardAction: Story = {
+export const ActionHeader: Story = {
   render: (args) => (
     <Card {...args}>
       <CardHeader>
@@ -109,8 +109,8 @@ export const MinimalCard: Story = {
     <Card {...args}>
       <CardContent>
         <p className="text-sm">
-          This is a minimal card with only content. Perfect for displaying
-          simple information without the need for a header or footer.
+          This is a minimal card with only content. Perfect for displaying simple information
+          without the need for a header or footer.
         </p>
       </CardContent>
     </Card>
@@ -125,9 +125,7 @@ export const HeaderOnly: Story = {
     <Card {...args}>
       <CardHeader>
         <CardTitle>Quick Stats</CardTitle>
-        <CardDescription>
-          Your account summary at a glance. Click for details.
-        </CardDescription>
+        <CardDescription>Your account summary at a glance. Click for details.</CardDescription>
       </CardHeader>
     </Card>
   ),

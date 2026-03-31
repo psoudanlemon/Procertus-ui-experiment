@@ -2,12 +2,7 @@
 name: frontend-workspace
 description: Frontend stack for this monorepo — app types, packages/ui (Shadcn), ui-lib, custom ui-*, Storybook, Tailwind, scaffold component, workspace-ui, Vite wiring.
 globs:
-  [
-    "**/packages/ui/**",
-    "**/packages/ui-lib/**",
-    "**/packages/ui-*/**",
-    "**/apps/frontend-*/**",
-  ]
+  ["**/packages/ui/**", "**/packages/ui-lib/**", "**/packages/ui-*/**", "**/apps/frontend-*/**"]
 ---
 
 # Frontend workspace (scaffold CLI)
@@ -20,39 +15,39 @@ Workspace scope for imports: **`@procertus-ui/…`** (e.g. `@procertus-ui/ui`, `
 
 ## CLI commands (run from repo root)
 
-| Command | Purpose |
-|--------|---------|
-| `scaffold project <name> [--apps …] [--packages …]` | New monorepo + optional apps/packages |
-| `scaffold init <name> [--packages domain,svc-config,ui,ui-lib]` | Base monorepo only |
-| `scaffold app <name> --type <type> [--with-ui]` | Add application under `apps/` |
-| `scaffold package <name> --type ui` | Add `packages/ui-<name>` (needs `packages/ui`) |
-| `scaffold ui <name>` | Same as `package … --type ui` |
+| Command                                                                       | Purpose                                                           |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `scaffold project <name> [--apps …] [--packages …]`                           | New monorepo + optional apps/packages                             |
+| `scaffold init <name> [--packages domain,svc-config,ui,ui-lib]`               | Base monorepo only                                                |
+| `scaffold app <name> --type <type> [--with-ui]`                               | Add application under `apps/`                                     |
+| `scaffold package <name> --type ui`                                           | Add `packages/ui-<name>` (needs `packages/ui`)                    |
+| `scaffold ui <name>`                                                          | Same as `package … --type ui`                                     |
 | `scaffold component <Name> [--package ui-lib or ui-*] [--hook] [--variant …]` | Composed component (alias: `scaffold workspace-ui add-component`) |
-| `scaffold workspace-ui add-primitive <id>` | Extra Shadcn primitive in `packages/ui` only |
-| `scaffold workspace-ui wire-vite-app <appDir> …` | Wire Vite app to workspace UI + Tailwind |
-| `scaffold module <name>` | Service + UI package pair (loosely coupled via domain) |
+| `scaffold workspace-ui add-primitive <id>`                                    | Extra Shadcn primitive in `packages/ui` only                      |
+| `scaffold workspace-ui wire-vite-app <appDir> …`                              | Wire Vite app to workspace UI + Tailwind                          |
+| `scaffold module <name>`                                                      | Service + UI package pair (loosely coupled via domain)            |
 
 Use `--non-interactive` in CI/agents.
 
 ## Frontend app types
 
-| `--type` | Role |
-|----------|------|
-| `frontend-nextjs` | Next.js + React |
-| `frontend-vite` | Vite SPA + React |
-| `frontend-tanstack` | TanStack Start |
-| `documentation` | Starlight / docs site |
-| `slide-deck` | Reveal slides |
+| `--type`            | Role                  |
+| ------------------- | --------------------- |
+| `frontend-nextjs`   | Next.js + React       |
+| `frontend-vite`     | Vite SPA + React      |
+| `frontend-tanstack` | TanStack Start        |
+| `documentation`     | Starlight / docs site |
+| `slide-deck`        | Reveal slides         |
 
 React frontends can use **`--with-ui`** to ensure `packages/ui` and `packages/ui-lib` exist and are added as dependencies.
 
 ## UI package layout
 
-| Path | Role |
-|------|------|
-| `packages/ui` | **Only** Shadcn registry: `components.json`, `bunx shadcn@latest add …`. Default primitive catalog on init. **No** `scaffold component` here. |
-| `packages/ui-lib` | Composed components, hooks, Storybook. Imports **`@procertus-ui/ui`**. No local Shadcn registry. |
-| `packages/ui-<feature>` | Same rules as `ui-lib`; use **`scaffold ui <feature>`**. Depends on `@procertus-ui/ui` (and often `ui-lib`). |
+| Path                    | Role                                                                                                                                          |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `packages/ui`           | **Only** Shadcn registry: `components.json`, `bunx shadcn@latest add …`. Default primitive catalog on init. **No** `scaffold component` here. |
+| `packages/ui-lib`       | Composed components, hooks, Storybook. Imports **`@procertus-ui/ui`**. No local Shadcn registry.                                              |
+| `packages/ui-<feature>` | Same rules as `ui-lib`; use **`scaffold ui <feature>`**. Depends on `@procertus-ui/ui` (and often `ui-lib`).                                  |
 
 **Rules:** UI packages never depend on `svc-*`. Backend never imports `ui-*`.
 

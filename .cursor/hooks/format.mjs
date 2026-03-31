@@ -58,10 +58,10 @@ function main() {
   if (root === "/" || root === ".") exit(0);
 
   const pm =
-    existsSync(resolve(root, "bun.lockb")) || existsSync(resolve(root, "bun.lock"))
-      ? "bun"
-      : "npm";
-  const relPath = absPath.startsWith(root) ? absPath.slice(root.length).replace(/^\//, "") : absPath;
+    existsSync(resolve(root, "bun.lockb")) || existsSync(resolve(root, "bun.lock")) ? "bun" : "npm";
+  const relPath = absPath.startsWith(root)
+    ? absPath.slice(root.length).replace(/^\//, "")
+    : absPath;
 
   // 1. Format via package script
   const fmtResult = spawnSync(pm, ["run", "format", "--", relPath], {

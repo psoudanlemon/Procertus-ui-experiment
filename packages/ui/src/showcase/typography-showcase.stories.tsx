@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react-vite"
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 
 /**
  * Long-form typography preview inspired by [Tweakcn Typography](https://tweakcn.com/editor/theme?p=typography).
@@ -40,16 +40,16 @@ function TypographyShowcase() {
       </div>
       <div className="mt-10 max-w-none space-y-4">
         <p className="text-foreground leading-7">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
-          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-          laboris.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt
+          ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+          ullamco laboris.
         </p>
         <h2 className="text-foreground mt-10 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">
           The Evolution of Modern Frameworks
         </h2>
         <p className="text-foreground leading-7">
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur.
+          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+          nulla pariatur.
         </p>
         <blockquote className="border-primary/30 text-muted-foreground mt-6 border-l-4 pl-4 italic">
           The best way to predict the future is to create it. In web development, we are not just
@@ -66,11 +66,11 @@ function TypographyShowcase() {
         </ul>
       </div>
     </article>
-  )
+  );
 }
 
 const meta: Meta = {
-  title: "theme/showcase/Typography",
+  title: "examples/Typography",
   component: TypographyShowcase,
   parameters: {
     layout: "fullscreen",
@@ -81,12 +81,12 @@ const meta: Meta = {
       },
     },
   },
-}
+};
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof TypographyShowcase>
+type Story = StoryObj<typeof TypographyShowcase>;
 
 export const Default: Story = {
   render: () => <TypographyShowcase />,
-}
+};

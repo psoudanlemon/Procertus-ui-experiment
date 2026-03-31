@@ -22,21 +22,13 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import {
-  Calendar,
-  ChevronUp,
-  Home,
-  Inbox,
-  Search,
-  Settings,
-  User2,
-} from "lucide-react";
+import { Calendar, ChevronUp, Home, Inbox, Search, Settings, User2 } from "lucide-react";
 
 /**
  * A composable, themeable and customizable sidebar component.
  */
 const meta = {
-  title: "ui/radix/Sidebar",
+  title: "components/Sidebar",
   component: Sidebar,
   tags: ["autodocs"],
   argTypes: {
@@ -156,10 +148,7 @@ export const Footer: Story = {
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
-              <DropdownMenuContent
-                side="top"
-                className="w-(--radix-popper-anchor-width)"
-              >
+              <DropdownMenuContent side="top" className="w-(--radix-popper-anchor-width)">
                 <DropdownMenuItem>
                   <span>Account</span>
                 </DropdownMenuItem>

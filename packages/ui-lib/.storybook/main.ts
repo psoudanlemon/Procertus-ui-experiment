@@ -17,23 +17,39 @@ const uiPackageRoot = path.resolve(packageRoot, "..", "ui");
  * @see https://zenn.dev/wakamsha/articles/setup-storybook7-with-pnpm-workspaces — monorepo `include` for docgen
  */
 const config: StorybookConfig = {
-  stories: [
-    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    "../ui/src/showcase/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-  ],
+  stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  staticDirs: ["../public"],
   addons: ["@storybook/addon-docs"],
   framework: "@storybook/react-vite",
   typescript: {
     reactDocgen: "react-docgen-typescript",
     reactDocgenTypescriptOptions: {
-      include: ["../src/**/*.tsx", "../ui/src/**/*.tsx"],
+      // Paths relative to this file (`.storybook/`): `../src` = ui-lib, `../../ui/src` = primitives package.
+      include: [
+        path.join(packageRoot, "src/**/*.tsx").replace(/\\/g, "/"),
+        path.join(uiPackageRoot, "src/**/*.tsx").replace(/\\/g, "/"),
+      ],
     },
   },
   async viteFinal(configStorybook) {
+    // Strip the `@` → `./src` alias from vite.config.ts — it only points to
+    // ui-lib/src and hijacks `@/` imports inside packages/ui source files,
+    // breaking shared React contexts (e.g. SidebarProvider).
+    // The custom workspaceUiAliasPlugin handles `@/` with proper per-package resolution.
+    if (configStorybook.resolve?.alias) {
+      const alias = configStorybook.resolve.alias;
+      if (Array.isArray(alias)) {
+        configStorybook.resolve.alias = alias.filter(
+          (a: { find?: string | RegExp }) => a.find !== "@",
+        );
+      } else if (typeof alias === "object" && "@" in alias) {
+        delete (alias as Record<string, string>)["@"];
+      }
+    }
     return mergeConfig(configStorybook, {
       plugins: [workspaceUiAliasPlugin({ packageRoot, uiPackageRoot }), tailwindcss()],
       resolve: {
-        dedupe: ["react", "react-dom"],
+        dedupe: ["react", "react-dom", "@procertus-ui/ui"],
       },
       build: {
         chunkSizeWarningLimit: 1600,

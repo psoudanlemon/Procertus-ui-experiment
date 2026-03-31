@@ -1,17 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AlertCircle } from "lucide-react";
 
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert";
+import { Alert, AlertAction, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 
 /**
  * Displays a callout for user attention.
  */
 const meta = {
-  title: "ui/radix/Alert",
+  title: "components/Alert",
   component: Alert,
   tags: ["autodocs"],
   argTypes: {
@@ -25,10 +22,9 @@ const meta = {
   },
   render: (args) => (
     <Alert {...args}>
+      <AlertCircle className="h-4 w-4" />
       <AlertTitle>Heads up!</AlertTitle>
-      <AlertDescription>
-        You can add components to your app using the cli.
-      </AlertDescription>
+      <AlertDescription>You can add components to your app using the cli.</AlertDescription>
     </Alert>
   ),
 } satisfies Meta<typeof Alert>;
@@ -49,12 +45,27 @@ export const Destructive: Story = {
     <Alert {...args}>
       <AlertCircle className="h-4 w-4" />
       <AlertTitle>Error</AlertTitle>
-      <AlertDescription>
-        Your session has expired. Please log in again.
-      </AlertDescription>
+      <AlertDescription>Your session has expired. Please log in again.</AlertDescription>
     </Alert>
   ),
   args: {
     variant: "destructive",
   },
+};
+
+/**
+ * An alert with an action button positioned to the right.
+ */
+export const Action: Story = {
+  render: (args) => (
+    <Alert {...args} className="max-w-md">
+      <AlertTitle>Dark mode is now available</AlertTitle>
+      <AlertDescription>Enable it under your profile settings to get started.</AlertDescription>
+      <AlertAction>
+        <Button size="xs" variant="default">
+          Enable
+        </Button>
+      </AlertAction>
+    </Alert>
+  ),
 };

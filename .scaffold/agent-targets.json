@@ -1,6 +1,3 @@
 {
-  "agents": [
-    "cursor",
-    "claude"
-  ]
+  "agents": ["cursor", "claude"]
 }

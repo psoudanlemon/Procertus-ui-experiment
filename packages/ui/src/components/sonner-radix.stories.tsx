@@ -2,16 +2,14 @@ import { action } from "storybook/actions";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 // Replace nextjs-vite with the name of your framework
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { toast } from "sonner";
-
 import { Button } from "@/components/ui/button";
-import { Toaster } from "@/components/ui/sonner";
+import { toast, Toaster } from "@/components/ui/sonner";
 
 /**
  * An opinionated toast component for React.
  */
 const meta: Meta<typeof Toaster> = {
-  title: "ui/radix/Sonner",
+  title: "components/Sonner",
   component: Toaster,
   tags: ["autodocs"],
   argTypes: {},
@@ -61,17 +59,13 @@ export const ShouldShowToast: Story = {
 
     await step("create a toast", async () => {
       await userEvent.click(triggerBtn);
-      await waitFor(() =>
-        expect(canvasBody.queryByRole("listitem")).toBeInTheDocument(),
-      );
+      await waitFor(() => expect(canvasBody.queryByRole("listitem")).toBeInTheDocument());
     });
 
     await step("create more toasts", async () => {
       await userEvent.click(triggerBtn);
       await userEvent.click(triggerBtn);
-      await waitFor(() =>
-        expect(canvasBody.getAllByRole("listitem")).toHaveLength(3),
-      );
+      await waitFor(() => expect(canvasBody.getAllByRole("listitem")).toHaveLength(3));
     });
   },
 };
@@ -90,12 +84,8 @@ export const ShouldCloseToast: Story = {
     });
 
     await step("close the toast", async () => {
-      await userEvent.click(
-        await canvasBody.findByRole("button", { name: /undo/i }),
-      );
-      await waitFor(() =>
-        expect(canvasBody.queryByRole("listitem")).not.toBeInTheDocument(),
-      );
+      await userEvent.click(await canvasBody.findByRole("button", { name: /undo/i }));
+      await waitFor(() => expect(canvasBody.queryByRole("listitem")).not.toBeInTheDocument());
     });
   },
 };

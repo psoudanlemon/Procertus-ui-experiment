@@ -1,16 +1,16 @@
-import { Moon, Sun } from "lucide-react"
+import { Moon, Sun } from "lucide-react";
 
-import { useMode } from "./mode-provider"
-import { Button } from "./ui/button"
+import { useMode } from "./mode-provider";
+import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu"
+} from "./ui/dropdown-menu";
 
 export function ModeToggle() {
-  const { setMode } = useMode()
+  const { setMode } = useMode();
 
   return (
     <DropdownMenu>
@@ -27,5 +27,5 @@ export function ModeToggle() {
         <DropdownMenuItem onClick={() => setMode("system")}>System</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

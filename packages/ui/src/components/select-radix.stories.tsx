@@ -17,7 +17,7 @@ import {
  * Displays a list of options for the user to pick from—triggered by a button.
  */
 const meta: Meta<typeof Select> = {
-  title: "ui/radix/Select",
+  title: "components/Select",
   component: Select,
   tags: ["autodocs"],
   argTypes: {},
@@ -83,20 +83,17 @@ export const ShouldSelectOption: Story = {
 
     await step("open and select item", async () => {
       await userEvent.click(select);
-      await userEvent.click(
-        await canvasBody.findByRole("option", { name: /banana/i }),
-      );
+      await userEvent.click(await canvasBody.findByRole("option", { name: /banana/i }));
       expect(select).toHaveTextContent("Banana");
     });
 
     await step("verify the selected option", async () => {
       await userEvent.click(select);
-      expect(
-        await canvasBody.findByRole("option", { name: /banana/i }),
-      ).toHaveAttribute("data-state", "checked");
-      await userEvent.click(
-        await canvasBody.findByRole("option", { name: /banana/i }),
+      expect(await canvasBody.findByRole("option", { name: /banana/i })).toHaveAttribute(
+        "data-state",
+        "checked",
       );
+      await userEvent.click(await canvasBody.findByRole("option", { name: /banana/i }));
     });
   },
 };

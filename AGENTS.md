@@ -43,10 +43,9 @@ Use **`effect/Schema`**; do not add **`@effect/schema`** (deprecated).
 
 <!-- effect-solutions:end -->
 
-
 <!-- scaffold-agent-skills -->
-- **Scaffold skills:** canonical **`skills/<id>/SKILL.md`** (OpenSkills-style). This project syncs copies to **`.cursor/skills/`**, **`.claude/skills/`** per **`.scaffold/agent-targets.json`**. Add agents later with **`scaffold agents add`**. Start with **`skills/scaffolding/SKILL.md`** for the full CLI command map and repo layout (not frontend/backend-specific).
 
+- **Scaffold skills:** canonical **`skills/<id>/SKILL.md`** (OpenSkills-style). This project syncs copies to **`.cursor/skills/`**, **`.claude/skills/`** per **`.scaffold/agent-targets.json`**. Add agents later with **`scaffold agents add`**. Start with **`skills/scaffolding/SKILL.md`** for the full CLI command map and repo layout (not frontend/backend-specific).
 
 ## Code Exploration with dora
 

@@ -7,7 +7,7 @@ import { Toggle } from "@/components/ui/toggle";
  * A two-state button that can be either on or off.
  */
 const meta: Meta<typeof Toggle> = {
-  title: "ui/radix/Toggle",
+  title: "components/Toggle",
   component: Toggle,
   tags: ["autodocs"],
   argTypes: {
@@ -47,7 +47,7 @@ export const Outline: Story = {
 /**
  * Use the text element to add a label to the toggle.
  */
-export const WithText: Story = {
+export const Text: Story = {
   render: (args) => (
     <Toggle {...args}>
       <Italic className="mr-2 h-4 w-4" />

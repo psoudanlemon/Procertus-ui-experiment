@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite"
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
-type Swatch = { name: string; var: string }
+type Swatch = { name: string; var: string };
 
 const GROUPS: { title: string; items: Swatch[] }[] = [
   {
@@ -60,7 +60,7 @@ const GROUPS: { title: string; items: Swatch[] }[] = [
       { name: "Sidebar ring", var: "--sidebar-ring" },
     ],
   },
-]
+];
 
 function ColorPaletteShowcase() {
   return (
@@ -85,14 +85,14 @@ function ColorPaletteShowcase() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 function SwatchCard({ item }: { item: Swatch }) {
   /** Avoid `style={ { ... } }` split across lines with adjacent braces in .stub files — Mustache can mangle those templates. */
   const swatchStyle = {
     backgroundColor: `var(${item.var})`,
-  }
+  };
   return (
     <div className="flex items-center gap-3 rounded-lg border border-border bg-card p-3">
       <div
@@ -104,11 +104,11 @@ function SwatchCard({ item }: { item: Swatch }) {
         <code className="text-muted-foreground block truncate text-xs">{item.var}</code>
       </div>
     </div>
-  )
+  );
 }
 
 const meta: Meta = {
-  title: "theme/showcase/Color palette",
+  title: "design tokens/Color",
   component: ColorPaletteShowcase,
   parameters: {
     layout: "fullscreen",
@@ -119,12 +119,12 @@ const meta: Meta = {
       },
     },
   },
-}
+};
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof ColorPaletteShowcase>
+type Story = StoryObj<typeof ColorPaletteShowcase>;
 
 export const Default: Story = {
   render: () => <ColorPaletteShowcase />,
-}
+};

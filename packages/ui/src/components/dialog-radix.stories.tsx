@@ -18,7 +18,7 @@ import {
  * rendering the content underneath inert.
  */
 const meta = {
-  title: "ui/radix/Dialog",
+  title: "components/Dialog",
   component: Dialog,
   tags: ["autodocs"],
   argTypes: {},
@@ -29,8 +29,8 @@ const meta = {
         <DialogHeader>
           <DialogTitle>Are you absolutely sure?</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            This action cannot be undone. This will permanently delete your account and remove your
+            data from our servers.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="gap-4">
@@ -63,22 +63,15 @@ export const ShouldOpenCloseWithContinue: Story = {
     const canvasBody = within(canvasElement.ownerDocument.body);
 
     await step("Open the dialog", async () => {
-      await userEvent.click(
-        await canvasBody.findByRole("button", { name: /open/i }),
-      );
+      await userEvent.click(await canvasBody.findByRole("button", { name: /open/i }));
       const dialog = await canvasBody.findByRole("dialog");
       expect(dialog).toBeInTheDocument();
       expect(dialog).toHaveAttribute("data-state", "open");
     });
 
     await step("Close the dialog", async () => {
-      await userEvent.click(
-        await canvasBody.findByRole("button", { name: /continue/i }),
-      );
-      expect(await canvasBody.findByRole("dialog")).toHaveAttribute(
-        "data-state",
-        "closed",
-      );
+      await userEvent.click(await canvasBody.findByRole("button", { name: /continue/i }));
+      expect(await canvasBody.findByRole("dialog")).toHaveAttribute("data-state", "closed");
     });
   },
 };
@@ -90,22 +83,15 @@ export const ShouldOpenCloseWithCancel: Story = {
     const canvasBody = within(canvasElement.ownerDocument.body);
 
     await step("Open the dialog", async () => {
-      await userEvent.click(
-        await canvasBody.findByRole("button", { name: /open/i }),
-      );
+      await userEvent.click(await canvasBody.findByRole("button", { name: /open/i }));
       const dialog = await canvasBody.findByRole("dialog");
       expect(dialog).toBeInTheDocument();
       expect(dialog).toHaveAttribute("data-state", "open");
     });
 
     await step("Close the dialog", async () => {
-      await userEvent.click(
-        await canvasBody.findByRole("button", { name: /cancel/i }),
-      );
-      expect(await canvasBody.findByRole("dialog")).toHaveAttribute(
-        "data-state",
-        "closed",
-      );
+      await userEvent.click(await canvasBody.findByRole("button", { name: /cancel/i }));
+      expect(await canvasBody.findByRole("dialog")).toHaveAttribute("data-state", "closed");
     });
   },
 };
@@ -117,22 +103,15 @@ export const ShouldOpenCloseCross: Story = {
     const canvasBody = within(canvasElement.ownerDocument.body);
 
     await step("Open the dialog", async () => {
-      await userEvent.click(
-        await canvasBody.findByRole("button", { name: /open/i }),
-      );
+      await userEvent.click(await canvasBody.findByRole("button", { name: /open/i }));
       const dialog = await canvasBody.findByRole("dialog");
       expect(dialog).toBeInTheDocument();
       expect(dialog).toHaveAttribute("data-state", "open");
     });
 
     await step("Close the dialog", async () => {
-      await userEvent.click(
-        await canvasBody.findByRole("button", { name: /close/i }),
-      );
-      expect(await canvasBody.findByRole("dialog")).toHaveAttribute(
-        "data-state",
-        "closed",
-      );
+      await userEvent.click(await canvasBody.findByRole("button", { name: /close/i }));
+      expect(await canvasBody.findByRole("dialog")).toHaveAttribute("data-state", "closed");
     });
   },
 };

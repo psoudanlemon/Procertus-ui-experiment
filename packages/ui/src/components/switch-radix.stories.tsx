@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
  * A control that allows the user to toggle between checked and not checked.
  */
 const meta = {
-  title: "ui/radix/Switch",
+  title: "components/Switch",
   component: Switch,
   tags: ["autodocs"],
   argTypes: {},

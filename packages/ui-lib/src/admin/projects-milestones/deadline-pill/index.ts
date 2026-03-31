@@ -1,1 +1,0 @@
-export { DeadlinePill } from "./DeadlinePill";

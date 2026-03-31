@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react-vite"
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { MailShowcase } from "./mail-showcase"
+import { MailShowcase } from "./mail-showcase";
 
 const meta: Meta<typeof MailShowcase> = {
-  title: "theme/showcase/Mail",
+  title: "examples/Mail",
   component: MailShowcase,
   parameters: {
     layout: "centered",
@@ -14,10 +14,10 @@ const meta: Meta<typeof MailShowcase> = {
       },
     },
   },
-}
+};
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof MailShowcase>
+type Story = StoryObj<typeof MailShowcase>;
 
-export const Default: Story = {}
+export const Default: Story = {};

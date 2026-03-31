@@ -14,7 +14,7 @@ import {
  * A collection of links for navigating websites.
  */
 const meta = {
-  title: "ui/radix/NavigationMenu",
+  title: "components/NavigationMenu",
   component: NavigationMenu,
   tags: ["autodocs"],
   argTypes: {},
@@ -22,9 +22,7 @@ const meta = {
     <NavigationMenu {...args}>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-            Overview
-          </NavigationMenuLink>
+          <NavigationMenuLink className={navigationMenuTriggerStyle()}>Overview</NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuList>
           <NavigationMenuItem>
@@ -32,21 +30,15 @@ const meta = {
               Documentation
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-96 p-2">
+              <ul className="grid w-96">
                 <li>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    API Reference
-                  </NavigationMenuLink>
+                  <NavigationMenuLink>API Reference</NavigationMenuLink>
                 </li>
                 <li>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Getting Started
-                  </NavigationMenuLink>
+                  <NavigationMenuLink>Getting Started</NavigationMenuLink>
                 </li>
                 <li>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Guides
-                  </NavigationMenuLink>
+                  <NavigationMenuLink>Guides</NavigationMenuLink>
                 </li>
               </ul>
             </NavigationMenuContent>

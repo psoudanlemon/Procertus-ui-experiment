@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "module": "./src/index.ts",
-  "types": "./src/index.ts",
   "sideEffects": [
     "**/*.css"
   ],
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
     "./globals.css": "./src/styles/globals.css",
@@ -23,7 +23,7 @@
     "lint": "oxlint",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "env NODE_OPTIONS=\"--require ../../scripts/storybook-network-fallback.cjs\" storybook dev -p 6006 --host localhost --disable-telemetry",
     "build-storybook": "storybook build"
   },
   "dependencies": {
@@ -35,10 +35,16 @@
     "@tanstack/react-table": "^8.21.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^1.6.0",
+    "cmdk": "^1.1.1",
+    "date-fns": "^4.1.0",
+    "embla-carousel": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
+    "input-otp": "^1.4.2",
+    "lucide-react": "^1.7.0",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.4.0",
     "react": "^19.1.0",
+    "react-day-picker": "^9.14.0",
     "react-dom": "^19.1.0",
     "react-resizable-panels": "^4.7.6",
     "recharts": "3.8.0",

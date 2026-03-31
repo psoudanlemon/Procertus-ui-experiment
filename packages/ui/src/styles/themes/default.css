@@ -11,213 +11,202 @@
 /* ─── Core tokens ────────────────────────────────────────────────────────── */
 :root {
   /* Primary brand (gradients doc — 500–900 exact; lighter steps tinted toward 500) */
-  --brand-primary-50: #eff8fc;
-  --brand-primary-100: #dff1f9;
-  --brand-primary-200: #b8e4f2;
-  --brand-primary-300: #79cdea;
-  --brand-primary-400: #38b6de;
-  --brand-primary-500: #02a3d7;
-  --brand-primary-600: #028fb8;
-  --brand-primary-700: #0181a7;
-  --brand-primary-800: #017d9c;
-  --brand-primary-900: #015f78;
-  --brand-primary-950: #013545;
+  --brand-primary-50: #f0f9ff;
+  --brand-primary-100: #e1f2fd;
+  --brand-primary-200: #bce6fb;
+  --brand-primary-300: #81d2f8;
+  --brand-primary-400: #3dbcf3;
+  --brand-primary-500: #14a4e3;
+  --brand-primary-600: #0883c1;
+  --brand-primary-700: #076293;
+  --brand-primary-800: #0b5881;
+  --brand-primary-900: #0f4a6b;
+  --brand-primary-950: #0a2f47;
 
   /* Accent row in Figma matches primary blues — same ramp for utilities */
-  --brand-accent-50: var(--brand-primary-50);
-  --brand-accent-100: var(--brand-primary-100);
-  --brand-accent-200: var(--brand-primary-200);
-  --brand-accent-300: var(--brand-primary-300);
-  --brand-accent-400: var(--brand-primary-400);
-  --brand-accent-500: var(--brand-primary-500);
-  --brand-accent-600: var(--brand-primary-600);
-  --brand-accent-700: var(--brand-primary-700);
-  --brand-accent-800: var(--brand-primary-800);
-  --brand-accent-900: var(--brand-primary-900);
-  --brand-accent-950: var(--brand-primary-950);
+  --brand-accent-50: #f2fbf9;
+  --brand-accent-100: #d4f3ec;
+  --brand-accent-200: #a8e7da;
+  --brand-accent-300: #71d2c1;
+  --brand-accent-400: #48b9a9;
+  --brand-accent-500: #2f9d8f;
+  --brand-accent-600: #237e74;
+  --brand-accent-700: #20655e;
+  --brand-accent-800: #1e514d;
+  --brand-accent-900: #1d4441;
+  --brand-accent-950: #0b2827;
 
   /* System neutral (slate-scale “Neutral” swatches) */
-  --proc-neutral-white: #ffffff;
-  --proc-neutral-50: #f8f9fc;
-  --proc-neutral-100: #eef2f6;
-  --proc-neutral-200: #e2e8f0;
-  --proc-neutral-300: #cbd5e1;
-  --proc-neutral-400: #94a3b8;
-  --proc-neutral-500: #64748b;
-  --proc-neutral-600: #475569;
-  --proc-neutral-700: #334155;
-  --proc-neutral-800: #1e293b;
-  --proc-neutral-900: #0f172a;
-  --proc-neutral-950: #020617;
-  --proc-neutral-black: #000000;
-
-  /* Grey ramp for neutral gradients (separate from slate neutrals above) */
-  --grad-neutral-white: #ffffff;
-  --grad-neutral-25: #f4f4f4;
-  --grad-neutral-50: #dedede;
-  --grad-neutral-100: #d2d2d2;
-  --grad-neutral-200: #afb0b1;
-  --grad-neutral-500: #525456;
-  --grad-neutral-600: #4b4c4e;
-  --grad-neutral-700: #3a3c3d;
-  --grad-neutral-800: #2d2e2f;
-  --grad-neutral-900: #222324;
+  --neutral-white: #ffffff;
+  --neutral-50: #f8fafc;
+  --neutral-100: #f1f5f9;
+  --neutral-200: #e2e8f0;
+  --neutral-300: #cad5e2;
+  --neutral-400: #90a1b9;
+  --neutral-500: #62748e;
+  --neutral-600: #45556c;
+  --neutral-700: #314158;
+  --neutral-800: #1d293d;
+  --neutral-900: #0f172b;
+  --neutral-950: #020618;
+  --neutral-black: #000000;
 
   /* System semantic ramps */
-  --sys-destructive-50: #fef2f2;
-  --sys-destructive-100: #fee2e2;
-  --sys-destructive-200: #fecaca;
-  --sys-destructive-300: #fca5a5;
-  --sys-destructive-400: #f87171;
-  --sys-destructive-500: #ef4444;
-  --sys-destructive-600: #dc2626;
-  --sys-destructive-700: #b91c1c;
-  --sys-destructive-800: #991b1b;
-  --sys-destructive-900: #7f1d1d;
-  --sys-destructive-950: #450a0a;
+  --sys-destructive-50: #fef3f2;
+  --sys-destructive-100: #fde5e3;
+  --sys-destructive-200: #fdcfcb;
+  --sys-destructive-300: #faada7;
+  --sys-destructive-400: #f67d73;
+  --sys-destructive-500: #ea4335;
+  --sys-destructive-600: #d93729;
+  --sys-destructive-700: #b62b1f;
+  --sys-destructive-800: #97261d;
+  --sys-destructive-900: #7d261f;
+  --sys-destructive-950: #440f0b;
 
-  --sys-success-50: #f0fdf4;
-  --sys-success-100: #dcfce7;
-  --sys-success-200: #bbf7d0;
-  --sys-success-300: #86efac;
-  --sys-success-400: #4ade80;
-  --sys-success-500: #22c55e;
-  --sys-success-600: #16a34a;
-  --sys-success-700: #15803d;
-  --sys-success-800: #166534;
-  --sys-success-900: #14532d;
-  --sys-success-950: #052e16;
+  --sys-success-50: #f2fbf4;
+  --sys-success-100: #e0f8e6;
+  --sys-success-200: #c3efce;
+  --sys-success-300: #93e2a8;
+  --sys-success-400: #5dcb7a;
+  --sys-success-500: #34a853;
+  --sys-success-600: #289144;
+  --sys-success-700: #237239;
+  --sys-success-800: #205b30;
+  --sys-success-900: #1c4b2a;
+  --sys-success-950: #0a2914;
 
-  --sys-warning-50: #fffbeb;
-  --sys-warning-100: #fef3c7;
-  --sys-warning-200: #fde68a;
-  --sys-warning-300: #fcd34d;
-  --sys-warning-400: #fbbf24;
-  --sys-warning-500: #f59e0b;
-  --sys-warning-600: #d97706;
-  --sys-warning-700: #b45309;
-  --sys-warning-800: #92400e;
-  --sys-warning-900: #78350f;
-  --sys-warning-950: #451a03;
+  --sys-warning-50: #fffdea;
+  --sys-warning-100: #fffac6;
+  --sys-warning-200: #fff587;
+  --sys-warning-300: #ffe949;
+  --sys-warning-400: #ffda1e;
+  --sys-warning-500: #fbbc05;
+  --sys-warning-600: #de9101;
+  --sys-warning-700: #b86705;
+  --sys-warning-800: #954f0b;
+  --sys-warning-900: #7b410c;
+  --sys-warning-950: #472101;
 
   --sys-info-50: #eff6ff;
   --sys-info-100: #dbeafe;
-  --sys-info-200: #bfdbfe;
-  --sys-info-300: #93c5fd;
-  --sys-info-400: #60a5fa;
-  --sys-info-500: #3b82f6;
-  --sys-info-600: #2563eb;
-  --sys-info-700: #1d4ed8;
-  --sys-info-800: #1e40af;
-  --sys-info-900: #1e3a8a;
-  --sys-info-950: #172554;
+  --sys-info-200: #c0dbfd;
+  --sys-info-300: #94c5fc;
+  --sys-info-400: #62a5f8;
+  --sys-info-500: #4285f4;
+  --sys-info-600: #2763e9;
+  --sys-info-700: #1f4ed6;
+  --sys-info-800: #2041ad;
+  --sys-info-900: #1f3a89;
+  --sys-info-950: #182553;
 
-  --sys-focus: #06b6d4;
+  --sys-focus: hsl(175, 100%, 46%, 50%);
 
   /* Radius — foundations table (px → rem @ 16px) */
   --radius-ds-none: 0;
   --radius-ds-xs: 0.125rem; /* 2px */
-  --radius-ds-sm: 0.25rem; /* 4px */
-  --radius-ds-md: 0.375rem; /* 6px */
-  --radius-ds-lg: 0.625rem; /* 10px */
-  --radius-ds-xl: 0.75rem; /* 12px */
-  --radius-ds-2xl: 1rem; /* 16px */
-  --radius-ds-3xl: 1.5rem; /* 24px */
+  --radius-ds-sm: 0.375rem; /* 6px */
+  --radius-ds-md: 0.5rem; /* 8px */
+  --radius-ds-lg: 0.875rem; /* 14px */
+  --radius-ds-xl: 1rem; /* 16px */
+  --radius-ds-2xl: 1.25rem; /* 20px */
+  --radius-ds-3xl: 1.75rem; /* 28px */
   --radius-ds-4xl: 2rem; /* 32px */
   --radius-ds-full: 9999px;
 
   /* Shadcn-style default = Figma `border radius/lg` */
   --radius: var(--radius-ds-lg);
 
-  --background: var(--proc-neutral-white);
-  --foreground: var(--proc-neutral-900);
-  --card: var(--proc-neutral-white);
-  --card-foreground: var(--proc-neutral-900);
-  --popover: var(--proc-neutral-white);
-  --popover-foreground: var(--proc-neutral-900);
+  --background: var(--neutral-100);
+  --foreground: var(--neutral-950);
+  --card: var(--neutral-white);
+  --card-foreground: var(--neutral-950);
+  --popover: var(--neutral-white);
+  --popover-foreground: var(--neutral-950);
 
-  --primary: var(--brand-primary-600);
-  --primary-foreground: var(--proc-neutral-white);
+  --primary: var(--brand-accent-300);
+  --primary-foreground: var(--brand-primary-950);
 
-  --secondary: var(--proc-neutral-100);
-  --secondary-foreground: var(--proc-neutral-900);
+  --secondary: var(--brand-primary-100);
+  --secondary-foreground: var(--brand-primary-700);
 
-  --muted: var(--proc-neutral-100);
-  --muted-foreground: var(--proc-neutral-600);
+  --muted: var(--neutral-300);
+  --muted-foreground: var(--neutral-700);
 
-  --accent: var(--proc-neutral-100);
-  --accent-foreground: var(--proc-neutral-900);
+  --accent: var(--brand-accent-50);
+  --accent-foreground: var(--brand-primary-700);
 
   --destructive: var(--sys-destructive-600);
-  --destructive-foreground: var(--proc-neutral-white);
+  --destructive-foreground: var(--neutral-white);
 
-  --border: var(--proc-neutral-200);
-  --input: var(--proc-neutral-200);
+  --border: var(--neutral-300);
+  --input: var(--neutral-300);
   --ring: var(--sys-focus);
 
-  --chart-1: var(--brand-primary-500);
-  --chart-2: var(--sys-success-500);
-  --chart-3: var(--sys-info-500);
-  --chart-4: var(--sys-warning-500);
-  --chart-5: var(--brand-primary-700);
+  --chart-1: var(--brand-primary-200);
+  --chart-2: var(--brand-primary-300);
+  --chart-3: var(--brand-primary-500);
+  --chart-4: var(--brand-primary-700);
+  --chart-5: var(--brand-primary-900);
 
-  --sidebar: var(--proc-neutral-50);
-  --sidebar-foreground: var(--proc-neutral-900);
-  --sidebar-primary: var(--brand-primary-600);
-  --sidebar-primary-foreground: var(--proc-neutral-white);
-  --sidebar-accent: var(--proc-neutral-100);
-  --sidebar-accent-foreground: var(--proc-neutral-900);
-  --sidebar-border: var(--proc-neutral-200);
+  --sidebar: var(--neutral-white);
+  --sidebar-foreground: var(--neutral-950);
+  --sidebar-primary: var(--brand-primary-300);
+  --sidebar-primary-foreground: var(--brand-primary-950);
+  --sidebar-accent: var(--brand-accent-100);
+  --sidebar-accent-foreground: var(--brand-primary-950);
+  --sidebar-border: var(--neutral-200);
   --sidebar-ring: var(--sys-focus);
 }
 
 .dark {
-  --background: var(--proc-neutral-950);
-  --foreground: var(--proc-neutral-50);
-  --card: var(--proc-neutral-900);
-  --card-foreground: var(--proc-neutral-50);
-  --popover: var(--proc-neutral-900);
-  --popover-foreground: var(--proc-neutral-50);
+  --background: var(--neutral-900);
+  --foreground: var(--brand-primary-50);
+  --card: var(--neutral-800);
+  --card-foreground: var(--brand-primary-50);
+  --popover: var(--neutral-900);
+  --popover-foreground: var(--neutral-50);
 
-  --primary: var(--brand-primary-400);
-  --primary-foreground: var(--proc-neutral-950);
+  --primary: var(--brand-accent-300);
+  --primary-foreground: var(--neutral-950);
 
-  --secondary: var(--proc-neutral-800);
-  --secondary-foreground: var(--proc-neutral-50);
+  --secondary: var(--brand-primary-800);
+  --secondary-foreground: var(--brand-primary-50);
 
-  --muted: var(--proc-neutral-800);
-  --muted-foreground: var(--proc-neutral-400);
+  --muted: var(--neutral-800);
+  --muted-foreground: var(--neutral-300);
 
-  --accent: var(--proc-neutral-800);
-  --accent-foreground: var(--proc-neutral-50);
+  --accent: var(--brand-accent-950);
+  --accent-foreground: var(--brand-accent-300);
 
-  --destructive: var(--sys-destructive-500);
-  --destructive-foreground: var(--proc-neutral-white);
+  --destructive: var(--sys-destructive-400);
+  --destructive-foreground: var(--sys-destructive-50);
 
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 14%);
+  --border: var(--neutral-700);
+  --input: var(--neutral-950);
   --ring: var(--sys-focus);
 
-  --chart-1: var(--brand-primary-400);
-  --chart-2: var(--sys-success-400);
-  --chart-3: var(--sys-info-400);
-  --chart-4: var(--sys-warning-400);
-  --chart-5: var(--brand-primary-300);
+  --chart-1: var(--brand-accent-200);
+  --chart-2: var(--brand-accent-300);
+  --chart-3: var(--brand-accent-500);
+  --chart-4: var(--brand-accent-700);
+  --chart-5: var(--brand-accent-900);
 
-  --sidebar: var(--proc-neutral-950);
-  --sidebar-foreground: var(--proc-neutral-50);
-  --sidebar-primary: var(--brand-primary-500);
-  --sidebar-primary-foreground: var(--proc-neutral-white);
-  --sidebar-accent: var(--proc-neutral-800);
-  --sidebar-accent-foreground: var(--proc-neutral-50);
-  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar: var(--neutral-950);
+  --sidebar-foreground: var(--neutral-50);
+  --sidebar-primary: var(--brand-primary-700);
+  --sidebar-primary-foreground: var(--neutral-50);
+  --sidebar-accent: var(--brand-accent-950);
+  --sidebar-accent-foreground: var(--brand-accent-300);
+  --sidebar-border: var(--brand-primary-950);
   --sidebar-ring: var(--sys-focus);
 }
 
 /* ─── Tailwind @theme ─────────────────────────────────────────────────────── */
 @theme inline {
-  --font-sans: "Avenir", "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans:
+    "Avenir", "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
   --font-serif: "Libre Baskerville", ui-serif, Georgia, "Times New Roman", serif;
   --font-mono: "Space Mono", ui-monospace, "Cascadia Code", "Source Code Pro", monospace;
   --font-display: var(--font-sans);
@@ -326,19 +315,19 @@
   --color-brand-accent-950: var(--brand-accent-950);
 
   /* Neutral (slate system) */
-  --color-proc-neutral-white: var(--proc-neutral-white);
-  --color-proc-neutral-50: var(--proc-neutral-50);
-  --color-proc-neutral-100: var(--proc-neutral-100);
-  --color-proc-neutral-200: var(--proc-neutral-200);
-  --color-proc-neutral-300: var(--proc-neutral-300);
-  --color-proc-neutral-400: var(--proc-neutral-400);
-  --color-proc-neutral-500: var(--proc-neutral-500);
-  --color-proc-neutral-600: var(--proc-neutral-600);
-  --color-proc-neutral-700: var(--proc-neutral-700);
-  --color-proc-neutral-800: var(--proc-neutral-800);
-  --color-proc-neutral-900: var(--proc-neutral-900);
-  --color-proc-neutral-950: var(--proc-neutral-950);
-  --color-proc-neutral-black: var(--proc-neutral-black);
+  --color-proc-neutral-white: var(--neutral-white);
+  --color-proc-neutral-50: var(--neutral-50);
+  --color-proc-neutral-100: var(--neutral-100);
+  --color-proc-neutral-200: var(--neutral-200);
+  --color-proc-neutral-300: var(--neutral-300);
+  --color-proc-neutral-400: var(--neutral-400);
+  --color-proc-neutral-500: var(--neutral-500);
+  --color-proc-neutral-600: var(--neutral-600);
+  --color-proc-neutral-700: var(--neutral-700);
+  --color-proc-neutral-800: var(--neutral-800);
+  --color-proc-neutral-900: var(--neutral-900);
+  --color-proc-neutral-950: var(--neutral-950);
+  --color-proc-neutral-black: var(--neutral-black);
 
   /* Semantic system colors */
   --color-sys-destructive-50: var(--sys-destructive-50);
@@ -530,19 +519,16 @@
     var(--brand-primary-700) 45%,
     var(--brand-primary-500) 100%
   );
-  --background-image-gradient-procertus-mesh: radial-gradient(
-      at 0% 0%,
-      var(--brand-primary-200) 0%,
-      transparent 55%
-    ),
+  --background-image-gradient-procertus-mesh:
+    radial-gradient(at 0% 0%, var(--brand-primary-200) 0%, transparent 55%),
     radial-gradient(at 100% 0%, var(--sys-info-200) 0%, transparent 50%),
     radial-gradient(at 100% 100%, var(--brand-primary-300) 0%, transparent 55%),
-    linear-gradient(180deg, var(--brand-primary-50) 0%, var(--proc-neutral-white) 100%);
+    linear-gradient(180deg, var(--brand-primary-50) 0%, var(--neutral-white) 100%);
 
-  --shadow-proc-xs: 0 1px 2px rgb(2 90 120 / 0.06);
-  --shadow-proc-sm: 0 2px 8px rgb(2 90 120 / 0.08);
-  --shadow-proc-md: 0 8px 24px rgb(2 90 120 / 0.1);
-  --shadow-proc-lg: 0 16px 48px rgb(1 63 78 / 0.14);
+  --shadow-proc-xs: 0 1px 2px rgb(0 0 0 / 0.06);
+  --shadow-proc-sm: 0 2px 8px rgb(0 0 0 / 0.08);
+  --shadow-proc-md: 0 8px 24px rgb(0 0 0 / 0.12);
+  --shadow-proc-lg: 0 16px 48px rgb(0 0 0 / 0.16);
   --shadow-proc-glow-primary: 0 0 40px rgb(2 163 215 / 0.28);
 
   --color-chart-1: var(--chart-1);

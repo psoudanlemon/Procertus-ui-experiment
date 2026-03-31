@@ -2,11 +2,11 @@
   "name": "@procertus-ui/root",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "workspaces": [
     "packages/*",
     "apps/*"
   ],
+  "type": "module",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
@@ -15,18 +15,10 @@
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "storybook": "turbo storybook",
+    "storybook:ui": "bun run --cwd packages/ui storybook",
+    "storybook:ui-lib": "bun run --cwd packages/ui-lib storybook",
     "dora:index": "dora index",
     "prepare": "effect-language-service patch"
-  },
-  "packageManager": "bun@1.2.2",
-  "engines": {
-    "node": ">=20"
-  },
-  "overrides": {
-    "oxlint": "^1.51.0",
-    "oxfmt": "^0.36.0",
-    "turbo": "^2.8.12",
-    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "@effect/language-service": "^0.83.1",
@@ -37,5 +29,15 @@
     "oxlint": "^1.51.0",
     "turbo": "^2.8.12",
     "typescript": "^5.9.3"
-  }
+  },
+  "overrides": {
+    "oxfmt": "^0.36.0",
+    "oxlint": "^1.51.0",
+    "turbo": "^2.8.12",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "bun@1.2.2"
 }
