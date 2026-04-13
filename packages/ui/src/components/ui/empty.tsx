@@ -7,7 +7,7 @@ function Empty({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="empty"
       className={cn(
-        "flex min-h-[200px] flex-col items-center justify-center gap-6 rounded-lg border border-dashed p-8 text-center",
+        "flex min-h-[200px] flex-col items-center justify-center gap-section rounded-lg border border-dashed p-region text-center",
         className,
       )}
       {...props}
@@ -52,7 +52,7 @@ function EmptyActions({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="empty-actions"
-      className={cn("flex flex-wrap justify-center gap-3", className)}
+      className={cn("flex flex-wrap justify-center gap-component", className)}
       {...props}
     />
   );

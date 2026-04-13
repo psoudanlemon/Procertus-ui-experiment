@@ -40,3 +40,12 @@ const twMerge = extendTailwindMerge({
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+const ICON_BASE_SIZE = 16;
+const ICON_BASE_STROKE = 1.33;
+const ICON_SCALE_EXPONENT = 0.35;
+
+/** Compute proportional stroke weight for a given icon size. */
+export function iconStroke(size: number = ICON_BASE_SIZE) {
+  return Math.round(ICON_BASE_STROKE * Math.pow(size / ICON_BASE_SIZE, ICON_SCALE_EXPONENT) * 100) / 100;
+}

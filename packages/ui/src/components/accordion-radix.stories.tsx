@@ -150,7 +150,7 @@ export const InCard: Story = {
     className: "max-w-lg",
   },
   render: (args) => (
-    <Card className="max-w-lg">
+    <Card className="w-lg">
       <CardHeader>
         <CardTitle>Subscription & Billing</CardTitle>
         <CardDescription>

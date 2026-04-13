@@ -39,6 +39,12 @@ try {
         root.dataset.theme = theme;
         localStorage.setItem("sb-ui-theme", theme);
       }
+
+      if (globals.density != null) {
+        const density = String(globals.density);
+        root.dataset.density = density;
+        localStorage.setItem("sb-ui-density", density);
+      }
     },
   );
 } catch {

@@ -13,7 +13,7 @@ const buttonVariants = cva(
     // Command Confirm: mechanical travel + beacon pulse (retains Signature radius)
     "active:not-aria-[haspopup]:translate-y-[1px] active:not-aria-[haspopup]:duration-0 active:not-aria-[haspopup]:animate-[command-pulse_800ms_ease-out]",
     // Standard states
-    "focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg]:stroke-[1.33px]",
+    "focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive-foreground aria-invalid:ring-3 aria-invalid:ring-destructive-foreground/20 dark:aria-invalid:border-destructive-foreground/50 dark:aria-invalid:ring-destructive-foreground/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg]:stroke-[1.33px]",
   ].join(" "),
   {
     variants: {

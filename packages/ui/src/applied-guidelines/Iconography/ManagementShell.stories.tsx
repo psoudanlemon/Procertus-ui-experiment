@@ -64,6 +64,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui";
+import { iconStroke } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -132,7 +133,7 @@ const navGroups: NavGroup[] = [
   {
     label: "Documentation",
     items: [
-      { title: "Domain Browser", url: "#", icon: Database01Icon as IconSvgElement, isActive: true },
+      { title: "Domain Browser", url: "#", icon: Database01Icon as IconSvgElement },
       { title: "Architecture", url: "#", icon: HierarchySquare02Icon as IconSvgElement },
     ],
   },
@@ -236,7 +237,7 @@ function NavCollapsible({
                     <HugeiconsIcon
                       icon={ArrowRight01Icon as IconSvgElement}
                       size={14}
-                      strokeWidth={1.33}
+                      strokeWidth={iconStroke(14)}
                       className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
                     />
                   </SidebarMenuButton>
@@ -276,7 +277,7 @@ function NavCollapsible({
               <HugeiconsIcon
                 icon={MoreHorizontalIcon as IconSvgElement}
                 size={16}
-                strokeWidth={1.33}
+                strokeWidth={iconStroke(16)}
                 className="text-sidebar-foreground/70"
               />
               <span>{expanded ? "Less" : "More"}</span>
@@ -347,7 +348,7 @@ function NavUser() {
             </div>
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive">
-              <HugeiconsIcon icon={Logout01Icon as IconSvgElement} size={16} strokeWidth={1.33} />
+              <HugeiconsIcon icon={Logout01Icon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} />
               <span>Log out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -373,7 +374,7 @@ function Header() {
           disabled
           className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
         >
-          <HugeiconsIcon icon={ArrowLeft01Icon as IconSvgElement} size={16} strokeWidth={1.33} />
+          <HugeiconsIcon icon={ArrowLeft01Icon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} />
           <span className="sr-only">Go back</span>
         </Button>
         <Button
@@ -382,7 +383,7 @@ function Header() {
           disabled
           className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
         >
-          <HugeiconsIcon icon={ArrowRight01Icon as IconSvgElement} size={16} strokeWidth={1.33} />
+          <HugeiconsIcon icon={ArrowRight01Icon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} />
           <span className="sr-only">Go forward</span>
         </Button>
         <Separator orientation="vertical" className="mx-0.5 !h-5 !self-center" />
@@ -480,10 +481,10 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * The management shell with Hugeicons Two-Tone navigation icons.
- * Hover over any sidebar item to see the icon switch from Two-Tone to Stroke,
- * mirroring the text accent color for immediate focus and action.
+ * Management shell with stroke navigation icons. Primary-700 icons on a neutral
+ * background at rest, shifting to Primary-700 text on an Accent-100 background
+ * on hover and active states.
  */
-export const SymbolicDuality: Story = {
+export const ManagementShell: Story = {
   render: () => <ManagementShellLayout />,
 };

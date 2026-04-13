@@ -1,7 +1,5 @@
 {/* packages/ui/src/design-tokens/Iconography/Guidelines.mdx */}
 import { Meta } from "@storybook/addon-docs/blocks";
-import { Button } from "@/components/ui/button";
-import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/ui/table";
 
 <Meta title="design tokens/Iconography/Guidelines" />
 
@@ -10,9 +8,8 @@ import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@
   <h1 className="font-sans font-bold text-foreground m-0 mb-4" style={{ fontSize: '1.875rem', lineHeight: 1.2, letterSpacing: '-0.03em' }}>Iconography</h1>
   <p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
     Icons in the PROCERTUS system are not decoration. They are a symbolic language
-    that extends our brand into every interaction, creating depth in navigation and
-    clarity in action. This document defines the authoritative rules for how symbols
-    behave across the platform.
+    that encodes trust, hierarchy, and intent into every surface of the platform.
+    This document defines the reasoning behind our choices, not merely the rules.
   </p>
 </div>
 
@@ -20,184 +17,111 @@ import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@
 
 <div className="mt-16">
 
-## 01. The language of symbols
+## 01. Why Hugeicons
 
 <p className="text-base text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
-  <strong>Hugeicons</strong> is the authoritative symbol library for PROCERTUS. Every icon
-  in the platform is sourced from Hugeicons, ensuring visual consistency, professional
-  density, and a unified geometric language across every surface.
+  Iconography in the PROCERTUS system is not decorative: it is a functional dialect.
+  After evaluating numerous libraries, we selected Hugeicons as our authoritative symbol set.
+  It is the only library that mirrors the "Engineered Rigor" of our data-first philosophy.
 </p>
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-  <div className="rounded-xl border border-border bg-card p-6">
-    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Two-Tone</span>
-    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Navigational dialect</span>
-    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
-      The Two-Tone variant uses a primary stroke with a secondary accent fill to create
-      visual depth. It extends our brand's checkmark duality into everyday navigation,
-      giving icons a sense of weight and presence. Reserved for sidebar and primary
-      navigation elements where the user is orienting themselves.
-    </p>
+<div className="mt-6 flex flex-col gap-4">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="rounded-xl border border-border bg-card p-6">
+      <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">Geometric alignment</h4>
+      <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+        Built on a strict grid, Hugeicons share the same blueprint DNA as our 8px Blueprint
+        Radius, ensuring every symbol feels "manufactured" rather than hand-drawn.
+      </p>
+    </div>
+    <div className="rounded-xl border border-border bg-card p-6">
+      <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">Enterprise depth</h4>
+      <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+        From audit trails to cryptographic shields, the library provides a deep, industrial
+        vocabulary that allows us to stay within a single symbolic family, ensuring absolute
+        visual consistency across the entire platform.
+      </p>
+    </div>
   </div>
-  <div className="rounded-xl border border-border bg-card p-6">
-    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Stroke</span>
-    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Actionable dialect</span>
-    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
-      The Stroke variant is a single-color outline optimized for legibility at small sizes.
-      It is the dialect of action: used in buttons, inputs, inline commands, and any context
-      where the icon signals "you can do something here." It also appears when navigational
-      icons are hovered, signalling the transition from orientation to intent.
-    </p>
-  </div>
-</div>
-
-<div className="mt-8 rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-brand-primary-50 dark:bg-brand-primary-950 p-6">
-  <h4 className="font-sans text-base font-bold text-brand-primary-800 dark:text-brand-primary-200 m-0 mb-3">The specification: 1.33px stroke weight</h4>
-  <p className="text-base text-brand-primary-700 dark:text-brand-primary-300 leading-[1.6] m-0">
-    All Hugeicons in the PROCERTUS system render at a <strong>1.33px</strong> stroke weight.
-    This value is not arbitrary: it provides the optimal balance between precision and sturdiness
-    at our standard icon sizes (16px and 20px). Thinner strokes disappear at small sizes, heavier
-    strokes compete with text. The 1.33px weight ensures icons remain crisp on both standard
-    and high-density displays while maintaining visual parity with our typography.
-  </p>
+  <a href="?path=/story/design-tokens-iconography--symbol-library" className="font-semibold text-brand-primary-700 underline underline-offset-4 hover:text-brand-primary-900">Browse the full symbol library</a>
 </div>
 
 </div>
 
 <hr />
 
-<div className="mt-20">
+<div className="mt-16">
 
-## 02. Navigational symbolism
+## 02. The stroke and its scale
 
 <p className="text-base text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
-  For our primary navigation (the sidebar), we use the Hugeicons <strong>Two-Tone</strong> variant
-  to create visual depth and extend our brand's checkmark logic into the user's path. The dual-color
-  treatment gives navigation icons a sense of dimensionality that single-color icons cannot achieve,
-  subtly reinforcing the PROCERTUS identity at every level of the interface.
+  Every icon renders exclusively in the <strong>Stroke</strong> variant at a baseline weight of
+  <strong> 1.33px</strong>. We chose this weight because it matches the sophistication of the
+  PROCERTUS brand. This precision must also hold at every size.
 </p>
 
-### Color doctrine
-
-<p className="text-base text-muted-foreground leading-[1.6] m-0 max-w-[680px] mt-4">
-  The two-tone color mapping follows a strict hierarchy: the primary color dominates the icon's
-  structure while the accent remains subtle, providing depth without competing for attention.
-</p>
-
-<div className="mt-6">
-  <Table className="rounded-xl overflow-hidden">
-    <TableHeader>
-      <TableRow>
-        <TableHead>Mode</TableHead>
-        <TableHead>Primary stroke</TableHead>
-        <TableHead>Secondary fill</TableHead>
-        <TableHead>Rationale</TableHead>
-      </TableRow>
-    </TableHeader>
-    <TableBody>
-      <TableRow>
-        <TableCell className="font-bold">Light mode</TableCell>
-        <TableCell>
-          <span className="inline-flex items-center gap-2">
-            <span className="inline-block size-4 rounded-sm" style={{ backgroundColor: 'var(--brand-primary-700)' }} />
-            <code className="text-sm bg-muted px-1.5 py-0.5 rounded">brand-primary-700</code>
-          </span>
-        </TableCell>
-        <TableCell>
-          <span className="inline-flex items-center gap-2">
-            <span className="inline-block size-4 rounded-sm" style={{ backgroundColor: 'var(--brand-accent-300)' }} />
-            <code className="text-sm bg-muted px-1.5 py-0.5 rounded">brand-accent-300</code>
-          </span>
-        </TableCell>
-        <TableCell className="text-muted-foreground">Navy anchors the structure, teal provides the brand signature</TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell className="font-bold">Dark mode</TableCell>
-        <TableCell>
-          <span className="inline-flex items-center gap-2">
-            <span className="inline-block size-4 rounded-sm" style={{ backgroundColor: 'var(--brand-primary-300)' }} />
-            <code className="text-sm bg-muted px-1.5 py-0.5 rounded">brand-primary-300</code>
-          </span>
-        </TableCell>
-        <TableCell>
-          <span className="inline-flex items-center gap-2">
-            <span className="inline-block size-4 rounded-sm" style={{ backgroundColor: 'var(--brand-accent-500)' }} />
-            <code className="text-sm bg-muted px-1.5 py-0.5 rounded">brand-accent-500</code>
-          </span>
-        </TableCell>
-        <TableCell className="text-muted-foreground">Lighter primary for dark backgrounds, mid-tone accent for contrast</TableCell>
-      </TableRow>
-    </TableBody>
-  </Table>
-</div>
-
-<div className="mt-6">
-  <Button variant="link" className="p-0 h-auto text-base" asChild>
-    <a href="?path=/story/applied-guidelines-iconography--symbolic-duality">View the two-tone navigational specs</a>
-  </Button>
+<div className="mt-6 flex flex-col gap-4">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="rounded-xl border border-border bg-card p-6">
+      <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">The 1.33px baseline</h4>
+      <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+        A heavier stroke feels consumer-grade: rounded, friendly, informal. A thinner stroke
+        feels fragile: elegant but uncertain. At 1.33px, symbols carry exactly enough visual
+        weight to stand beside dense data tables and legal-weight text without either disappearing
+        or shouting. The weight says "this system is exact."
+      </p>
+    </div>
+    <div className="rounded-xl border border-border bg-card p-6">
+      <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">Proportional scaling</h4>
+      <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+        A 1.33px stroke looks sharp at 16px, but at 48px it would appear paper-thin.
+        To preserve visual density across all sizes, we generated a custom curve that gently
+        increases the stroke weight as icons scale up. Whether an icon sits in a sidebar or
+        anchors an empty state, it always carries the same engineered authority.
+      </p>
+    </div>
+  </div>
+  <a href="?path=/story/design-tokens-iconography--proportional-scale" className="font-semibold text-brand-primary-700 underline underline-offset-4 hover:text-brand-primary-900">View the proportional scale</a>
 </div>
 
 </div>
 
 <hr />
 
-<div className="mt-20">
+<div className="mt-16">
 
-## 03. Actionable clarity
+## 03. Branded vs. neutral
 
 <p className="text-base text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
-  For functional actions (buttons, inputs, inline commands), we use the high-legibility Hugeicons
-  <strong> Stroke</strong> variant. Where Two-Tone creates depth for orientation, Stroke creates
-  focus for execution. The single-color treatment ensures maximum contrast and instant recognition
-  at the moment a user commits to an action.
+  Icons in the application shell carry brand color to scale our identity into the navigation
+  layer. Everywhere else, icons stay neutral. This split is intentional: the sidebar is the
+  one surface that is always visible, always orienting, so it earns the branded treatment.
+  The rest of the interface stays quiet so the content can speak.
 </p>
 
-### Color and behavior
-
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-  <div className="rounded-xl border border-border bg-card p-6">
-    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Static</span>
-    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>One-color, foreground</span>
-    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
-      Stroke icons in buttons and inputs use the component's standard foreground color.
-      They inherit <code className="text-sm bg-muted px-1.5 py-0.5 rounded">currentColor</code> from
-      their parent, ensuring they always match the text they accompany without any manual color assignment.
-    </p>
+<div className="mt-6 flex flex-col gap-4">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="rounded-xl border border-border bg-card p-6">
+      <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Sidebar navigation</span>
+      <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Branded presence</span>
+      <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+        Navigation icons in the sidebar carry a branded color that is always on, providing a
+        visible thread of identity through every screen. The user never has to search for where
+        they are: the colored symbols tell them. By confining brand color to this single surface,
+        we avoid diluting it across the entire UI.
+      </p>
+    </div>
+    <div className="rounded-xl border border-border bg-card p-6">
+      <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Everything else</span>
+      <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Neutral utility</span>
+      <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+        Icons in buttons, inputs, tables, and content areas inherit color from their parent.
+        They clarify actions without competing for attention. This restraint is what makes
+        the sidebar's branded icons meaningful: if everything were colored, nothing would stand out.
+      </p>
+    </div>
   </div>
-  <div className="rounded-xl border-2 border-brand-accent-200 dark:border-brand-accent-800 bg-brand-accent-50 dark:bg-brand-accent-950 p-6">
-    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Hover transition</span>
-    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>The dialect shift</span>
-    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
-      When a navigational Two-Tone icon is hovered, it transitions to the Stroke variant
-      and adopts the sidebar accent foreground color. This "dialect shift" from orientation
-      to action creates a clear visual signal that the user is about to act, bridging
-      the gap between <em>where I am</em> and <em>what I can do</em>.
-    </p>
-  </div>
-</div>
-
-<div className="mt-6">
-  <Button variant="link" className="p-0 h-auto text-base" asChild>
-    <a href="?path=/story/applied-guidelines-iconography--symbolic-duality">Explore the stroke actionable specs</a>
-  </Button>
-</div>
-
-</div>
-
-<hr />
-
-<div className="mt-20">
-
-## 04. The proximity rule
-
-<div className="rounded-xl border border-border bg-card p-6 mt-6">
-  <p className="text-base text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
-    Icons are always paired with text using the <strong>Micro</strong> spacing token (<code className="text-sm bg-muted px-1.5 py-0.5 rounded">4px</code>).
-    This tight coupling creates a single, unified <strong>Symbolic Action</strong> grouping: the icon and its
-    label read as one atomic element rather than two adjacent objects. This aligns with the proximity
-    principle documented in our <Button variant="link" className="p-0 h-auto text-base inline" asChild><a href="?path=/docs/design-tokens-spacing-guidelines--docs">Spacing Guidelines</a></Button>,
-    where the Micro token is reserved for binding elements that share a single semantic function.
-  </p>
+  <a href="?path=/story/applied-guidelines-iconography--management-shell" className="font-semibold text-brand-primary-700 underline underline-offset-4 hover:text-brand-primary-900">See the management shell</a>
 </div>
 
 </div>
@@ -206,28 +130,17 @@ import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@
 
 <div style={{ marginTop: '5rem' }}>
 
-## System in action
-
-<p className="text-base text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
-  The management shell demonstrates both dialects working in concert: Two-Tone icons at rest
-  in the sidebar, shifting to Stroke on hover, while buttons and actions use Stroke throughout.
-</p>
-
-<div className="mt-6">
-  <Button variant="default" asChild>
-    <a href="?path=/story/applied-guidelines-iconography--symbolic-duality">Launch the management shell symbolic duality</a>
-  </Button>
-</div>
-
-<div className="mt-8 rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-brand-primary-50 dark:bg-brand-primary-950 p-6">
-  <h4 className="font-sans text-base font-bold text-brand-primary-800 dark:text-brand-primary-200 m-0 mb-3">Developer note</h4>
-  <p className="text-base text-brand-primary-700 dark:text-brand-primary-300 leading-[1.6] m-0">
-    The specifications for the Two-Tone navigational icons, the Stroke actionable icons, and the
-    1.33px weight are already integrated into our base component primitives. If you use the standard
-    <code className="text-sm bg-brand-primary-100 dark:bg-brand-primary-900 px-1.5 py-0.5 rounded mx-1">Sidebar</code>,
-    <code className="text-sm bg-brand-primary-100 dark:bg-brand-primary-900 px-1.5 py-0.5 rounded mx-1">SidebarNavIcon</code>, or
-    <code className="text-sm bg-brand-primary-100 dark:bg-brand-primary-900 px-1.5 py-0.5 rounded mx-1">Button</code> components,
-    these rules are applied automatically.
+<div className="rounded-xl border border-border bg-muted/30 p-6">
+  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For developers</h4>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    The
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">SidebarNavIcon</code>
+    component handles the branded color logic (light/dark mode switching) automatically.
+    The
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">SidebarMenuButton</code>
+    enforces the base stroke weight on all nested SVGs. Use
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">iconStroke(size)</code>
+    for any icon rendered outside sidebar primitives to get the correct proportional weight.
   </p>
 </div>
 

@@ -59,6 +59,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+  [data-density] * {
+    transition-property: padding, margin, gap, row-gap, column-gap;
+    transition-duration: 300ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
   html {
     background-color: var(--sidebar);
   }

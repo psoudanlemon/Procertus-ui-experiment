@@ -1,16 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { type LucideIcon } from "lucide-react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import {
-  CheckIcon,
-  ChevronRightIcon,
-  ChevronsUpDownIcon,
-  LogOutIcon,
+  ArrowRight01Icon,
+  CheckmarkSquare01Icon,
+  ArrowShrink02Icon,
+  Logout01Icon,
   MoreHorizontalIcon,
-  PlusIcon,
-  SearchIcon,
-} from "lucide-react";
+  PlusSignIcon,
+  Search01Icon,
+} from "@hugeicons/core-free-icons";
 
 import {
   Avatar,
@@ -39,6 +39,8 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  SidebarNavIcon,
+  iconStroke,
   useSidebar,
 } from "@procertus-ui/ui";
 
@@ -57,7 +59,7 @@ export type Workspace = {
 export type NavItem = {
   title: string;
   url: string;
-  icon?: LucideIcon;
+  icon?: IconSvgElement;
   isActive?: boolean;
   shortcut?: string;
 };
@@ -72,7 +74,7 @@ export type ProjectItem = {
 export type CollapsibleNavItem = {
   title: string;
   url: string;
-  icon?: LucideIcon;
+  icon?: IconSvgElement;
   isActive?: boolean;
   items?: { title: string; url: string; isActive?: boolean }[];
 };
@@ -86,7 +88,7 @@ export type UserInfo = {
 export type UserMenuItem = {
   title: string;
   url: string;
-  icon?: LucideIcon;
+  icon?: IconSvgElement;
   highlight?: boolean;
 };
 
@@ -151,7 +153,7 @@ function WorkspaceSwitcher({
         <span className="truncate font-semibold">{activeWorkspace.name}</span>
         <span className="truncate text-xs text-muted-foreground">{activeWorkspace.plan}</span>
       </div>
-      {!isSingleWorkspace && <ChevronsUpDownIcon className="ml-auto size-4" />}
+      {!isSingleWorkspace && <HugeiconsIcon icon={ArrowShrink02Icon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} className="ml-auto" />}
     </SidebarMenuButton>
   );
 
@@ -191,7 +193,7 @@ function WorkspaceSwitcher({
                       ` · ${workspace.memberCount} member${workspace.memberCount !== 1 ? "s" : ""}`}
                   </span>
                 </div>
-                {workspace.id === activeWorkspaceId && <CheckIcon className="ml-auto size-4" />}
+                {workspace.id === activeWorkspaceId && <HugeiconsIcon icon={CheckmarkSquare01Icon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} className="ml-auto" />}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
@@ -234,7 +236,7 @@ function NavSearch() {
               tooltip="Search"
               className="hidden group-data-[collapsible=icon]:flex"
             >
-              <SearchIcon />
+              <HugeiconsIcon icon={Search01Icon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -252,7 +254,7 @@ function NavPrimary({ items, className }: { items: NavItem[]; className?: string
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title} isActive={item.isActive}>
                 <a href={item.url}>
-                  {item.icon && <item.icon />}
+                  {item.icon && <SidebarNavIcon icon={item.icon} />}
                   <span>{item.title}</span>
                 </a>
               </SidebarMenuButton>
@@ -298,9 +300,9 @@ function NavCollapsible({
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton tooltip={item.title} isActive={item.isActive}>
-                    {item.icon && <item.icon />}
+                    {item.icon && <SidebarNavIcon icon={item.icon} />}
                     <span>{item.title}</span>
-                    <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                    <HugeiconsIcon icon={ArrowRight01Icon as IconSvgElement} size={14} strokeWidth={iconStroke(14)} className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
@@ -322,7 +324,7 @@ function NavCollapsible({
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title} isActive={item.isActive}>
                 <a href={item.url}>
-                  {item.icon && <item.icon />}
+                  {item.icon && <SidebarNavIcon icon={item.icon} />}
                   <span>{item.title}</span>
                 </a>
               </SidebarMenuButton>
@@ -335,7 +337,7 @@ function NavCollapsible({
               className="text-sidebar-foreground/70"
               onClick={() => setExpanded(!expanded)}
             >
-              <MoreHorizontalIcon className="text-sidebar-foreground/70" />
+              <HugeiconsIcon icon={MoreHorizontalIcon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} className="text-sidebar-foreground/70" />
               <span>{expanded ? "Less" : "More"}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -375,7 +377,7 @@ function NavProjects({
         {onAdd && (
           <SidebarMenuItem>
             <SidebarMenuButton className="text-sidebar-foreground/70" onClick={onAdd}>
-              <PlusIcon className="text-sidebar-foreground/70" />
+              <HugeiconsIcon icon={PlusSignIcon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} className="text-sidebar-foreground/70" />
               <span>Add New Project</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -401,7 +403,7 @@ function NavSecondary({
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title}>
                 <a href={item.url}>
-                  {item.icon && <item.icon />}
+                  {item.icon && <SidebarNavIcon icon={item.icon} />}
                   <span>{item.title}</span>
                 </a>
               </SidebarMenuButton>
@@ -452,7 +454,7 @@ function NavUser({
                 <span className="truncate font-semibold">{user.name}</span>
                 <span className="truncate text-xs text-muted-foreground">{user.email}</span>
               </div>
-              <ChevronsUpDownIcon className="ml-auto size-4" />
+              <HugeiconsIcon icon={ArrowShrink02Icon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -484,14 +486,14 @@ function NavUser({
                   {item.highlight && (
                     <span className="size-2 shrink-0 rounded-full bg-emerald-500" />
                   )}
-                  {item.icon && <item.icon />}
+                  {item.icon && <SidebarNavIcon icon={item.icon} />}
                   <span>{item.title}</span>
                 </DropdownMenuItem>
                 {index === menuItems.length - 1 && <DropdownMenuSeparator />}
               </React.Fragment>
             ))}
             <DropdownMenuItem>
-              <LogOutIcon />
+              <HugeiconsIcon icon={Logout01Icon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} />
               <span>Log out</span>
             </DropdownMenuItem>
             {version && (

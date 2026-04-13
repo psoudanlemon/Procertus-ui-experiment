@@ -1,26 +1,26 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { AlertTriangleIcon, ArrowLeftIcon } from "lucide-react";
+import type { IconSvgElement } from "@hugeicons/react";
 import {
-  AlertTriangleIcon,
-  ArrowLeftIcon,
-  CalendarIcon,
-  DollarSignIcon,
+  Calendar01Icon,
+  DollarCircleIcon,
   HelpCircleIcon,
-  HomeIcon,
-  MapIcon,
-  ReceiptIcon,
-  SettingsIcon,
-  UsersIcon,
-  BarChart3Icon,
-  BookOpenIcon,
-  BoxIcon,
+  Home01Icon,
+  MapsIcon,
+  Invoice01Icon,
+  Setting06Icon,
+  UserGroupIcon,
+  AnalyticsUpIcon,
+  BookOpen01Icon,
+  CubeIcon,
   CodeIcon,
-  DatabaseIcon,
+  Database01Icon,
   GitBranchIcon,
-  ListTreeIcon,
-  NetworkIcon,
-  PaletteIcon,
-  ZapIcon,
-} from "lucide-react";
+  Task01Icon,
+  HierarchySquare02Icon,
+  PaintBoardIcon,
+  FlashIcon,
+} from "@hugeicons/core-free-icons";
 
 import {
   Button,
@@ -59,12 +59,12 @@ const sidebarProps = {
   ] as Workspace[],
   activeWorkspaceId: "3",
   navItems: [
-    { title: "Startpagina", url: "#", icon: HomeIcon },
-    { title: "Roadmap", url: "#", icon: MapIcon },
-    { title: "Budget", url: "#", icon: DollarSignIcon },
-    { title: "Meetings", url: "#", icon: CalendarIcon },
-    { title: "People", url: "#", icon: UsersIcon },
-    { title: "Invoicing", url: "#", icon: ReceiptIcon },
+    { title: "Startpagina", url: "#", icon: Home01Icon as IconSvgElement },
+    { title: "Roadmap", url: "#", icon: MapsIcon as IconSvgElement },
+    { title: "Budget", url: "#", icon: DollarCircleIcon as IconSvgElement },
+    { title: "Meetings", url: "#", icon: Calendar01Icon as IconSvgElement },
+    { title: "People", url: "#", icon: UserGroupIcon as IconSvgElement },
+    { title: "Invoicing", url: "#", icon: Invoice01Icon as IconSvgElement },
   ] as NavItem[],
   navGroups: [
     {
@@ -73,7 +73,7 @@ const sidebarProps = {
         {
           title: "Analysis",
           url: "#",
-          icon: BarChart3Icon,
+          icon: AnalyticsUpIcon as IconSvgElement,
           items: [
             { title: "Overview", url: "#" },
             { title: "Reports", url: "#" },
@@ -83,7 +83,7 @@ const sidebarProps = {
         {
           title: "Design",
           url: "#",
-          icon: PaletteIcon,
+          icon: PaintBoardIcon as IconSvgElement,
           items: [
             { title: "Components", url: "#" },
             { title: "Tokens", url: "#" },
@@ -95,27 +95,27 @@ const sidebarProps = {
     {
       label: "Documentation",
       items: [
-        { title: "Domain Browser", url: "#", icon: DatabaseIcon },
-        { title: "Architecture", url: "#", icon: NetworkIcon },
+        { title: "Domain Browser", url: "#", icon: Database01Icon as IconSvgElement },
+        { title: "Architecture", url: "#", icon: HierarchySquare02Icon as IconSvgElement },
       ],
     },
     {
       label: "Coming Soon",
       maxVisible: 3,
       items: [
-        { title: "User Stories", url: "#", icon: ListTreeIcon },
-        { title: "Event Models", url: "#", icon: ZapIcon },
-        { title: "Prototypes", url: "#", icon: BoxIcon },
-        { title: "Context Maps", url: "#", icon: GitBranchIcon },
-        { title: "DAL Playground", url: "#", icon: CodeIcon },
-        { title: "API Docs", url: "#", icon: BookOpenIcon },
-        { title: "Guides", url: "#", icon: BookOpenIcon },
+        { title: "User Stories", url: "#", icon: Task01Icon as IconSvgElement },
+        { title: "Event Models", url: "#", icon: FlashIcon as IconSvgElement },
+        { title: "Prototypes", url: "#", icon: CubeIcon as IconSvgElement },
+        { title: "Context Maps", url: "#", icon: GitBranchIcon as IconSvgElement },
+        { title: "DAL Playground", url: "#", icon: CodeIcon as IconSvgElement },
+        { title: "API Docs", url: "#", icon: BookOpen01Icon as IconSvgElement },
+        { title: "Guides", url: "#", icon: BookOpen01Icon as IconSvgElement },
       ],
     },
   ] as NavGroup[],
   secondaryItems: [
-    { title: "Settings", url: "#", icon: SettingsIcon },
-    { title: "Help", url: "#", icon: HelpCircleIcon },
+    { title: "Settings", url: "#", icon: Setting06Icon as IconSvgElement },
+    { title: "Help", url: "#", icon: HelpCircleIcon as IconSvgElement },
   ] as NavItem[],
   showSearch: false,
 };

@@ -1,14 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { IconSvgElement } from "@hugeicons/react";
 import {
-  CalendarIcon,
-  DollarSignIcon,
+  Calendar01Icon,
+  DollarCircleIcon,
   HelpCircleIcon,
-  HomeIcon,
-  MapIcon,
-  ReceiptIcon,
-  SettingsIcon,
-  UsersIcon,
-} from "lucide-react";
+  Home01Icon,
+  MapsIcon,
+  Invoice01Icon,
+  Setting06Icon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -56,26 +57,26 @@ const workspaces: Workspace[] = [
 ];
 
 const navItems: NavItem[] = [
-  { title: "Startpagina", url: "#", icon: HomeIcon },
-  { title: "Roadmap", url: "#", icon: MapIcon },
-  { title: "Budget", url: "#", icon: DollarSignIcon },
-  { title: "Meetings", url: "#", icon: CalendarIcon },
-  { title: "People", url: "#", icon: UsersIcon },
-  { title: "Invoicing", url: "#", icon: ReceiptIcon },
+  { title: "Startpagina", url: "#", icon: Home01Icon as IconSvgElement },
+  { title: "Roadmap", url: "#", icon: MapsIcon as IconSvgElement },
+  { title: "Budget", url: "#", icon: DollarCircleIcon as IconSvgElement },
+  { title: "Meetings", url: "#", icon: Calendar01Icon as IconSvgElement },
+  { title: "People", url: "#", icon: UserGroupIcon as IconSvgElement },
+  { title: "Invoicing", url: "#", icon: Invoice01Icon as IconSvgElement },
 ];
 
 import {
-  BarChart3Icon,
-  BookOpenIcon,
-  BoxIcon,
+  AnalyticsUpIcon,
+  BookOpen01Icon,
+  CubeIcon,
   CodeIcon,
-  DatabaseIcon,
+  Database01Icon,
   GitBranchIcon,
-  ListTreeIcon,
-  NetworkIcon,
-  PaletteIcon,
-  ZapIcon,
-} from "lucide-react";
+  Task01Icon,
+  HierarchySquare02Icon,
+  PaintBoardIcon,
+  FlashIcon,
+} from "@hugeicons/core-free-icons";
 
 const navGroups: import("./ManagementSidebar").NavGroup[] = [
   {
@@ -84,7 +85,7 @@ const navGroups: import("./ManagementSidebar").NavGroup[] = [
       {
         title: "Analysis",
         url: "#",
-        icon: BarChart3Icon,
+        icon: AnalyticsUpIcon as IconSvgElement,
         isActive: true,
         items: [
           { title: "Overview", url: "#" },
@@ -95,7 +96,7 @@ const navGroups: import("./ManagementSidebar").NavGroup[] = [
       {
         title: "Design",
         url: "#",
-        icon: PaletteIcon,
+        icon: PaintBoardIcon as IconSvgElement,
         items: [
           { title: "Components", url: "#" },
           { title: "Tokens", url: "#" },
@@ -107,28 +108,28 @@ const navGroups: import("./ManagementSidebar").NavGroup[] = [
   {
     label: "Documentation",
     items: [
-      { title: "Domain Browser", url: "#", icon: DatabaseIcon, isActive: true },
-      { title: "Architecture", url: "#", icon: NetworkIcon },
+      { title: "Domain Browser", url: "#", icon: Database01Icon as IconSvgElement, isActive: true },
+      { title: "Architecture", url: "#", icon: HierarchySquare02Icon as IconSvgElement },
     ],
   },
   {
     label: "Coming Soon",
     maxVisible: 3,
     items: [
-      { title: "User Stories", url: "#", icon: ListTreeIcon },
-      { title: "Event Models", url: "#", icon: ZapIcon },
-      { title: "Prototypes", url: "#", icon: BoxIcon },
-      { title: "Context Maps", url: "#", icon: GitBranchIcon },
-      { title: "DAL Playground", url: "#", icon: CodeIcon },
-      { title: "API Docs", url: "#", icon: BookOpenIcon },
-      { title: "Guides", url: "#", icon: BookOpenIcon },
+      { title: "User Stories", url: "#", icon: Task01Icon as IconSvgElement },
+      { title: "Event Models", url: "#", icon: FlashIcon as IconSvgElement },
+      { title: "Prototypes", url: "#", icon: CubeIcon as IconSvgElement },
+      { title: "Context Maps", url: "#", icon: GitBranchIcon as IconSvgElement },
+      { title: "DAL Playground", url: "#", icon: CodeIcon as IconSvgElement },
+      { title: "API Docs", url: "#", icon: BookOpen01Icon as IconSvgElement },
+      { title: "Guides", url: "#", icon: BookOpen01Icon as IconSvgElement },
     ],
   },
 ];
 
 const secondaryItems: NavItem[] = [
-  { title: "Settings", url: "#", icon: SettingsIcon },
-  { title: "Help", url: "#", icon: HelpCircleIcon },
+  { title: "Settings", url: "#", icon: Setting06Icon as IconSvgElement },
+  { title: "Help", url: "#", icon: HelpCircleIcon as IconSvgElement },
 ];
 
 // ---------------------------------------------------------------------------
@@ -202,11 +203,11 @@ export const Default: Story = {
     ],
     activeWorkspaceId: "3",
     navItems: [
-      { title: "Roadmap", url: "#", icon: MapIcon },
-      { title: "Budget", url: "#", icon: DollarSignIcon },
-      { title: "Meetings", url: "#", icon: CalendarIcon },
-      { title: "People", url: "#", icon: UsersIcon },
-      { title: "Invoicing", url: "#", icon: ReceiptIcon },
+      { title: "Roadmap", url: "#", icon: MapsIcon as IconSvgElement },
+      { title: "Budget", url: "#", icon: DollarCircleIcon as IconSvgElement },
+      { title: "Meetings", url: "#", icon: Calendar01Icon as IconSvgElement },
+      { title: "People", url: "#", icon: UserGroupIcon as IconSvgElement },
+      { title: "Invoicing", url: "#", icon: Invoice01Icon as IconSvgElement },
     ],
   },
 };
