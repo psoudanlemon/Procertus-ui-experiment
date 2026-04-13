@@ -5,102 +5,103 @@
  *
  * **Sans:** Avenir is not served by Google Fonts; stack below uses local/installed
  * faces then system UI. Load Avenir via Adobe/self-hosted `@font-face` in your app
- * if required. **Serif / mono:** Libre Baskerville + Space Mono from `globals.css`.
+ * if required. **Mono:** Space Mono from `globals.css`.
  */
 
 /* ─── Core tokens ────────────────────────────────────────────────────────── */
 :root {
-  /* Primary brand (gradients doc — 500–900 exact; lighter steps tinted toward 500) */
-  --brand-primary-50: #f0f9ff;
-  --brand-primary-100: #e1f2fd;
-  --brand-primary-200: #bce6fb;
-  --brand-primary-300: #81d2f8;
-  --brand-primary-400: #3dbcf3;
-  --brand-primary-500: #14a4e3;
-  --brand-primary-600: #0883c1;
-  --brand-primary-700: #076293;
-  --brand-primary-800: #0b5881;
-  --brand-primary-900: #0f4a6b;
-  --brand-primary-950: #0a2f47;
+  /* Primary brand (Navy scale — OKLCH from brand-specified HEX) */
+  --brand-primary-50: oklch(0.9793 0.0131 199.85);
+  --brand-primary-100: oklch(0.9364 0.0189 210.32);
+  --brand-primary-200: oklch(0.8796 0.0384 207.52);
+  --brand-primary-300: oklch(0.7913 0.0581 207.14);
+  --brand-primary-400: oklch(0.6874 0.0812 213.45);
+  --brand-primary-500: oklch(0.6063 0.0982 218.34);
+  --brand-primary-600: oklch(0.5415 0.1026 222.71);
+  --brand-primary-700: oklch(0.4770 0.1022 226.54); /* Logo Anchor */
+  --brand-primary-800: oklch(0.4177 0.0865 228.43);
+  --brand-primary-900: oklch(0.3717 0.0725 230.88);
+  --brand-primary-950: oklch(0.2824 0.0555 233.12);
 
-  /* Accent row in Figma matches primary blues — same ramp for utilities */
-  --brand-accent-50: #f2fbf9;
-  --brand-accent-100: #d4f3ec;
-  --brand-accent-200: #a8e7da;
-  --brand-accent-300: #71d2c1;
-  --brand-accent-400: #48b9a9;
-  --brand-accent-500: #2f9d8f;
-  --brand-accent-600: #237e74;
-  --brand-accent-700: #20655e;
-  --brand-accent-800: #1e514d;
-  --brand-accent-900: #1d4441;
-  --brand-accent-950: #0b2827;
+  /* Accent (Teal scale — OKLCH from brand-specified HEX) */
+  --brand-accent-50: oklch(0.9811 0.0120 170.52);
+  --brand-accent-100: oklch(0.9590 0.0206 170.33);
+  --brand-accent-200: oklch(0.9154 0.0347 170.12);
+  --brand-accent-300: oklch(0.8032 0.0727 172.88); /* Logo Anchor */
+  --brand-accent-400: oklch(0.7337 0.0748 172.14);
+  --brand-accent-500: oklch(0.6327 0.0704 172.07);
+  --brand-accent-600: oklch(0.5518 0.0617 172.90);
+  --brand-accent-700: oklch(0.4808 0.0536 173.07);
+  --brand-accent-800: oklch(0.4139 0.0450 173.56);
+  --brand-accent-900: oklch(0.3573 0.0376 173.56);
+  --brand-accent-950: oklch(0.2439 0.0234 174.47);
 
-  /* System neutral (slate-scale “Neutral” swatches) */
-  --neutral-white: #ffffff;
-  --neutral-50: #f8fafc;
-  --neutral-100: #f1f5f9;
-  --neutral-200: #e2e8f0;
-  --neutral-300: #cad5e2;
-  --neutral-400: #90a1b9;
-  --neutral-500: #62748e;
-  --neutral-600: #45556c;
-  --neutral-700: #314158;
-  --neutral-800: #1d293d;
-  --neutral-900: #0f172b;
-  --neutral-950: #020618;
-  --neutral-black: #000000;
+  /* Neutrals (Midnight — navy-tinted, hue 230 matching brand primary) */
+  --neutral-white: oklch(1.0000 0 none);
+  --neutral-25: oklch(0.9930 0.004 230);
+  --neutral-50: oklch(0.9850 0.008 230);
+  --neutral-100: oklch(0.9670 0.010 230);
+  --neutral-200: oklch(0.9200 0.013 230);
+  --neutral-300: oklch(0.8700 0.015 230);
+  --neutral-400: oklch(0.7050 0.015 230);
+  --neutral-500: oklch(0.5530 0.016 230);
+  --neutral-600: oklch(0.4420 0.018 230);
+  --neutral-700: oklch(0.3720 0.020 230);
+  --neutral-800: oklch(0.2790 0.023 230);
+  --neutral-900: oklch(0.2100 0.025 230);
+  --neutral-950: oklch(0.1410 0.025 230);
+  --neutral-black: oklch(0.0000 0 none);
 
-  /* System semantic ramps */
-  --sys-destructive-50: #fef3f2;
-  --sys-destructive-100: #fde5e3;
-  --sys-destructive-200: #fdcfcb;
-  --sys-destructive-300: #faada7;
-  --sys-destructive-400: #f67d73;
-  --sys-destructive-500: #ea4335;
-  --sys-destructive-600: #d93729;
-  --sys-destructive-700: #b62b1f;
-  --sys-destructive-800: #97261d;
-  --sys-destructive-900: #7d261f;
-  --sys-destructive-950: #440f0b;
+  /* System semantic ramps (subdued OKLCH — chroma 0.04–0.07) */
+  --sys-destructive-50: oklch(0.9700 0.015 27);
+  --sys-destructive-100: oklch(0.9350 0.035 27);
+  --sys-destructive-200: oklch(0.8800 0.060 27);
+  --sys-destructive-300: oklch(0.8000 0.090 27);
+  --sys-destructive-400: oklch(0.7000 0.130 27);
+  --sys-destructive-500: oklch(0.6000 0.150 27);
+  --sys-destructive-600: oklch(0.5200 0.140 27);
+  --sys-destructive-700: oklch(0.4400 0.130 27);
+  --sys-destructive-800: oklch(0.3700 0.110 27);
+  --sys-destructive-900: oklch(0.3000 0.090 27);
+  --sys-destructive-950: oklch(0.2000 0.060 27);
 
-  --sys-success-50: #f2fbf4;
-  --sys-success-100: #e0f8e6;
-  --sys-success-200: #c3efce;
-  --sys-success-300: #93e2a8;
-  --sys-success-400: #5dcb7a;
-  --sys-success-500: #34a853;
-  --sys-success-600: #289144;
-  --sys-success-700: #237239;
-  --sys-success-800: #205b30;
-  --sys-success-900: #1c4b2a;
-  --sys-success-950: #0a2914;
+  --sys-success-50: oklch(0.9700 0.015 150);
+  --sys-success-100: oklch(0.9350 0.035 150);
+  --sys-success-200: oklch(0.8800 0.060 150);
+  --sys-success-300: oklch(0.8000 0.090 150);
+  --sys-success-400: oklch(0.7000 0.130 150);
+  --sys-success-500: oklch(0.6000 0.150 150);
+  --sys-success-600: oklch(0.5200 0.140 150);
+  --sys-success-700: oklch(0.4400 0.130 150);
+  --sys-success-800: oklch(0.3700 0.110 150);
+  --sys-success-900: oklch(0.3000 0.090 150);
+  --sys-success-950: oklch(0.2000 0.060 150);
 
-  --sys-warning-50: #fffdea;
-  --sys-warning-100: #fffac6;
-  --sys-warning-200: #fff587;
-  --sys-warning-300: #ffe949;
-  --sys-warning-400: #ffda1e;
-  --sys-warning-500: #fbbc05;
-  --sys-warning-600: #de9101;
-  --sys-warning-700: #b86705;
-  --sys-warning-800: #954f0b;
-  --sys-warning-900: #7b410c;
-  --sys-warning-950: #472101;
+  --sys-warning-50: oklch(0.9750 0.015 90);
+  --sys-warning-100: oklch(0.9400 0.035 90);
+  --sys-warning-200: oklch(0.8900 0.060 90);
+  --sys-warning-300: oklch(0.8300 0.090 90);
+  --sys-warning-400: oklch(0.7600 0.130 90);
+  --sys-warning-500: oklch(0.6800 0.150 90);
+  --sys-warning-600: oklch(0.5800 0.140 90);
+  --sys-warning-700: oklch(0.4800 0.130 90);
+  --sys-warning-800: oklch(0.4000 0.110 90);
+  --sys-warning-900: oklch(0.3300 0.090 90);
+  --sys-warning-950: oklch(0.2200 0.060 90);
 
-  --sys-info-50: #eff6ff;
-  --sys-info-100: #dbeafe;
-  --sys-info-200: #c0dbfd;
-  --sys-info-300: #94c5fc;
-  --sys-info-400: #62a5f8;
-  --sys-info-500: #4285f4;
-  --sys-info-600: #2763e9;
-  --sys-info-700: #1f4ed6;
-  --sys-info-800: #2041ad;
-  --sys-info-900: #1f3a89;
-  --sys-info-950: #182553;
+  --sys-info-50: oklch(0.9700 0.015 255);
+  --sys-info-100: oklch(0.9350 0.035 255);
+  --sys-info-200: oklch(0.8800 0.060 255);
+  --sys-info-300: oklch(0.8000 0.090 255);
+  --sys-info-400: oklch(0.7000 0.130 255);
+  --sys-info-500: oklch(0.6000 0.150 255);
+  --sys-info-600: oklch(0.5200 0.140 255);
+  --sys-info-700: oklch(0.4400 0.130 255);
+  --sys-info-800: oklch(0.3700 0.110 255);
+  --sys-info-900: oklch(0.3000 0.090 255);
+  --sys-info-950: oklch(0.2000 0.060 255);
 
-  --sys-focus: hsl(175, 100%, 46%, 50%);
+  --sys-focus: oklch(0.8032 0.0727 172.88 / 50%);
 
   /* Radius — foundations table (px → rem @ 16px) */
   --radius-ds-none: 0;
@@ -114,34 +115,45 @@
   --radius-ds-4xl: 2rem; /* 32px */
   --radius-ds-full: 9999px;
 
-  /* Shadcn-style default = Figma `border radius/lg` */
-  --radius: var(--radius-ds-lg);
+  /* Shadcn Nova default radius (0.625rem / 10px) */
+  --radius: 0.625rem;
 
-  --background: var(--neutral-100);
+  --background: var(--neutral-50);
   --foreground: var(--neutral-950);
   --card: var(--neutral-white);
   --card-foreground: var(--neutral-950);
   --popover: var(--neutral-white);
   --popover-foreground: var(--neutral-950);
 
-  --primary: var(--brand-accent-300);
-  --primary-foreground: var(--brand-primary-950);
+  --primary: var(--brand-primary-700);
+  --primary-foreground: var(--neutral-white);
 
-  --secondary: var(--brand-primary-100);
+  --secondary: var(--brand-primary-50);
   --secondary-foreground: var(--brand-primary-700);
 
-  --muted: var(--neutral-300);
+  --muted: var(--neutral-200);
   --muted-foreground: var(--neutral-700);
 
   --accent: var(--brand-accent-50);
   --accent-foreground: var(--brand-primary-700);
 
-  --destructive: var(--sys-destructive-600);
-  --destructive-foreground: var(--neutral-white);
+  --heading-foreground: var(--brand-primary-700);
+
+  --success: var(--sys-success-50);
+  --success-foreground: var(--sys-success-800);
+
+  --warning: var(--sys-warning-50);
+  --warning-foreground: var(--sys-warning-800);
+
+  --info: var(--sys-info-50);
+  --info-foreground: var(--sys-info-800);
+
+  --destructive: var(--sys-destructive-50);
+  --destructive-foreground: var(--sys-destructive-800);
 
   --border: var(--neutral-300);
   --input: var(--neutral-300);
-  --ring: var(--sys-focus);
+  --ring: var(--brand-accent-300);
 
   --chart-1: var(--brand-primary-200);
   --chart-2: var(--brand-primary-300);
@@ -157,6 +169,28 @@
   --sidebar-accent-foreground: var(--brand-primary-950);
   --sidebar-border: var(--neutral-200);
   --sidebar-ring: var(--sys-focus);
+
+  /* ── Surface gradients (light mode) ────────────────────────────────────── */
+  --gradient-primary:
+    radial-gradient(at 0% 0%, var(--brand-primary-200) 0%, transparent 55%),
+    radial-gradient(at 100% 0%, var(--brand-primary-100) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, var(--brand-primary-200) 0%, transparent 55%),
+    linear-gradient(180deg, var(--neutral-white) 0%, var(--neutral-100) 100%);
+  --gradient-accent:
+    radial-gradient(at 0% 0%, var(--brand-accent-200) 0%, transparent 55%),
+    radial-gradient(at 100% 0%, var(--brand-accent-100) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, var(--brand-accent-200) 0%, transparent 55%),
+    linear-gradient(180deg, var(--neutral-white) 0%, var(--neutral-100) 100%);
+  --gradient-neutral:
+    radial-gradient(at 0% 0%, var(--neutral-100) 0%, transparent 55%),
+    radial-gradient(at 100% 0%, var(--neutral-50) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, var(--neutral-100) 0%, transparent 55%),
+    linear-gradient(180deg, var(--neutral-white) 0%, var(--neutral-100) 100%);
+  --gradient-blend:
+    radial-gradient(at 0% 0%, var(--brand-primary-200) 0%, transparent 55%),
+    radial-gradient(at 100% 0%, var(--brand-accent-200) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, var(--brand-primary-100) 0%, transparent 55%),
+    linear-gradient(180deg, var(--neutral-white) 0%, var(--neutral-50) 100%);
 }
 
 .dark {
@@ -164,27 +198,38 @@
   --foreground: var(--brand-primary-50);
   --card: var(--neutral-800);
   --card-foreground: var(--brand-primary-50);
-  --popover: var(--neutral-900);
+  --popover: var(--neutral-800);
   --popover-foreground: var(--neutral-50);
 
   --primary: var(--brand-accent-300);
   --primary-foreground: var(--neutral-950);
 
-  --secondary: var(--brand-primary-800);
+  --secondary: var(--brand-primary-950);
   --secondary-foreground: var(--brand-primary-50);
 
-  --muted: var(--neutral-800);
+  --muted: var(--neutral-950);
   --muted-foreground: var(--neutral-300);
 
   --accent: var(--brand-accent-950);
   --accent-foreground: var(--brand-accent-300);
 
-  --destructive: var(--sys-destructive-400);
+  --heading-foreground: var(--brand-primary-400);
+
+  --success: var(--sys-success-900);
+  --success-foreground: var(--sys-success-50);
+
+  --warning: var(--sys-warning-900);
+  --warning-foreground: var(--sys-warning-50);
+
+  --info: var(--sys-info-900);
+  --info-foreground: var(--sys-info-50);
+
+  --destructive: var(--sys-destructive-900);
   --destructive-foreground: var(--sys-destructive-50);
 
   --border: var(--neutral-700);
-  --input: var(--neutral-950);
-  --ring: var(--sys-focus);
+  --input: var(--neutral-700);
+  --ring: var(--brand-accent-300);
 
   --chart-1: var(--brand-accent-200);
   --chart-2: var(--brand-accent-300);
@@ -199,57 +244,137 @@
   --sidebar-accent: var(--brand-accent-950);
   --sidebar-accent-foreground: var(--brand-accent-300);
   --sidebar-border: var(--brand-primary-950);
-  --sidebar-ring: var(--sys-focus);
+  --sidebar-ring: var(--brand-accent-300);
+
+  /* ── Dark-mode gradient overrides ──────────────────────────────────────── */
+  --gradient-primary:
+    radial-gradient(at 0% 0%, var(--brand-primary-700) 0%, transparent 55%),
+    radial-gradient(at 100% 0%, var(--brand-primary-800) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, var(--brand-primary-700) 0%, transparent 55%),
+    linear-gradient(180deg, var(--neutral-800) 0%, var(--neutral-900) 100%);
+  --gradient-accent:
+    radial-gradient(at 0% 0%, var(--brand-accent-800) 0%, transparent 55%),
+    radial-gradient(at 100% 0%, var(--brand-accent-900) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, var(--brand-accent-800) 0%, transparent 55%),
+    linear-gradient(180deg, var(--neutral-800) 0%, var(--neutral-900) 100%);
+  --gradient-neutral:
+    radial-gradient(at 0% 0%, var(--neutral-700) 0%, transparent 55%),
+    radial-gradient(at 100% 0%, var(--neutral-800) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, var(--neutral-700) 0%, transparent 55%),
+    linear-gradient(180deg, var(--neutral-900) 0%, var(--neutral-950) 100%);
+  --gradient-blend:
+    radial-gradient(at 0% 0%, var(--brand-primary-900) 0%, transparent 55%),
+    radial-gradient(at 100% 0%, var(--brand-accent-900) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, var(--brand-primary-800) 0%, transparent 55%),
+    linear-gradient(180deg, var(--neutral-800) 0%, var(--neutral-800) 100%);
+}
+
+/* ─── Responsive density overrides ──────────────────────────────────────────
+ * Mobile-first: base values are touch-optimised (< 768px).
+ * Desktop override at min-width: 768px restores the standard density.
+ *
+ * Operational = staff tools. Spacious = public registry.
+ * The Tailwind aliases (p-element, gap-region, etc.) point to these
+ * variables, so the UI snaps to the correct density automatically. */
+
+/* Operational: mobile (touch) */
+:root {
+  --spacing-micro:      0.25rem;   /* 4px  */
+  --spacing-element:    0.75rem;   /* 12px — larger for touch */
+  --spacing-component:  0.5rem;    /* 8px  */
+  --spacing-section:    0.75rem;   /* 12px */
+  --spacing-region:     1.25rem;   /* 20px */
+  --spacing-boundary:   1.25rem;   /* 20px */
+}
+
+/* Operational: desktop */
+@media (min-width: 768px) {
+  :root {
+    --spacing-micro:      0.25rem;   /* 4px  */
+    --spacing-element:    0.5rem;    /* 8px  */
+    --spacing-component:  0.75rem;   /* 12px */
+    --spacing-section:    1rem;      /* 16px */
+    --spacing-region:     2rem;      /* 32px */
+    --spacing-boundary:   1rem;      /* 16px */
+  }
+}
+
+/* Spacious: mobile (touch) */
+[data-density="spacious"] {
+  --spacing-micro:      0.5rem;    /* 8px  */
+  --spacing-element:    1rem;      /* 16px — larger for touch */
+  --spacing-component:  0.75rem;   /* 12px */
+  --spacing-section:    1rem;      /* 16px */
+  --spacing-region:     1.5rem;    /* 24px */
+  --spacing-boundary:   1.25rem;   /* 20px */
+}
+
+/* Spacious: desktop */
+@media (min-width: 768px) {
+  [data-density="spacious"] {
+    --spacing-micro:      0.5rem;    /* 8px  */
+    --spacing-element:    0.75rem;   /* 12px */
+    --spacing-component:  1rem;      /* 16px */
+    --spacing-section:    1.5rem;    /* 24px */
+    --spacing-region:     3rem;      /* 48px */
+    --spacing-boundary:   1.5rem;    /* 24px */
+  }
 }
 
 /* ─── Tailwind @theme ─────────────────────────────────────────────────────── */
 @theme inline {
-  --font-sans:
-    "Avenir", "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
-  --font-serif: "Libre Baskerville", ui-serif, Georgia, "Times New Roman", serif;
-  --font-mono: "Space Mono", ui-monospace, "Cascadia Code", "Source Code Pro", monospace;
+  --font-sans: "Avenir", "Avenir Next LT", "Avenir Next", "Nunito Sans", sans-serif;
+  --font-mono: "Space Mono", monospace;
   --font-display: var(--font-sans);
 
-  --text-display-xl: 3.5rem;
-  --text-display-xl--line-height: 1.05;
-  --text-display-xl--letter-spacing: -0.03em;
-  --text-display-lg: 3rem;
-  --text-display-lg--line-height: 1.08;
-  --text-display-lg--letter-spacing: -0.025em;
-  --text-display-md: 2.25rem;
-  --text-display-md--line-height: 1.12;
-  --text-display-md--letter-spacing: -0.02em;
-  --text-display-sm: 1.875rem;
-  --text-display-sm--line-height: 1.15;
-  --text-display-sm--letter-spacing: -0.02em;
+  /* ── Custom heading tokens (H1–H4 page-layout headings) ─────────────────
+   * Separate from the standard Tailwind scale so heading sizes can be tuned
+   * independently without affecting primitives (Button, Label, Badge, etc.). */
+  --text-heading-xl: 1.875rem;        /* 30px — H1 */
+  --text-heading-xl--line-height: 1.2;
+  --text-heading-xl--letter-spacing: -0.03em;
+  --text-heading-lg: 1.5rem;          /* 24px — H2 */
+  --text-heading-lg--line-height: 1.2;
+  --text-heading-lg--letter-spacing: -0.04em;
+  --text-heading-md: 1.25rem;         /* 20px — H3 */
+  --text-heading-md--line-height: 1.2;
+  --text-heading-md--letter-spacing: -0.03em;
+  --text-heading-sm: 0.875rem;        /* 14px — H4 */
+  --text-heading-sm--line-height: 1.2;
+  --text-heading-sm--letter-spacing: 0.05em;
 
-  --text-proc-caption: 0.75rem;
-  --text-proc-caption--line-height: 1rem;
-  --text-proc-caption--letter-spacing: 0.01em;
-  --text-proc-body-sm: 0.875rem;
-  --text-proc-body-sm--line-height: 1.25rem;
-  --text-proc-body: 1rem;
-  --text-proc-body--line-height: 1.5rem;
-  --text-proc-body-lg: 1.125rem;
-  --text-proc-body-lg--line-height: 1.75rem;
-  --text-proc-lead: 1.25rem;
-  --text-proc-lead--line-height: 1.75rem;
-  --text-proc-lead--letter-spacing: -0.01em;
-  --text-proc-heading-sm: 1.25rem;
-  --text-proc-heading-sm--line-height: 1.75rem;
-  --text-proc-heading-sm--letter-spacing: -0.015em;
-  --text-proc-heading-md: 1.5rem;
-  --text-proc-heading-md--line-height: 2rem;
-  --text-proc-heading-md--letter-spacing: -0.02em;
-  --text-proc-heading-lg: 1.875rem;
-  --text-proc-heading-lg--line-height: 2.25rem;
-  --text-proc-heading-lg--letter-spacing: -0.02em;
+  /* ── Text scale overrides (Figma variables: text/xs → text/9xl) ───────────
+   * Font-sizes match Tailwind defaults — only line-height & letter-spacing differ.
+   * Body sizes (xs–xl): 1.4× line-height for comfortable reading.
+   * Heading sizes (2xl+): 1.2× line-height for tight, cohesive headings.
+   * Letter-spacing: headings use negative tracking proportional to size. */
 
-  --font-weight-proc-regular: 400;
-  --font-weight-proc-medium: 500;
-  --font-weight-proc-semibold: 600;
-  --font-weight-proc-bold: 700;
+  /* Body range — 1.4× line-height */
+  --text-xs--line-height: 1.05rem;   /* 16.8px  (default: 1rem) */
+  --text-sm--line-height: 1.225rem;  /* 19.6px  (default: 1.25rem) */
+  --text-base--line-height: 1.4rem;  /* 22.4px  (default: 1.5rem) */
+  --text-lg--line-height: 1.575rem;  /* 25.2px  (default: 1.75rem) */
+  /* xl line-height matches Tailwind default (1.75rem) — no override needed */
+
+  /* Heading range — 1.2× line-height, negative letter-spacing */
+  --text-lg--letter-spacing: -0.02em;
+  --text-xl--letter-spacing: -0.03em;
+  --text-2xl--line-height: 1.8rem;   /* 28.8px  (default: 2rem) */
+  --text-2xl--letter-spacing: -0.04em;
+  /* 3xl line-height matches Tailwind default (2.25rem) — no override needed */
+  --text-3xl--letter-spacing: -0.03em;
+  --text-4xl--line-height: 2.7rem;   /* 43.2px  (default: 2.5rem) */
+  --text-4xl--letter-spacing: -0.025em;
+  --text-5xl--line-height: 3.6rem;   /* 57.6px  (default: 1) */
+  --text-5xl--letter-spacing: -0.025em;
+  --text-6xl--line-height: 4.5rem;   /* 72px    (default: 1) */
+  --text-6xl--letter-spacing: -0.025em;
+  --text-7xl--line-height: 5.4rem;   /* 86.4px  (default: 1) */
+  --text-7xl--letter-spacing: -0.025em;
+  --text-8xl--line-height: 7.2rem;   /* 115.2px (default: 1) */
+  --text-8xl--letter-spacing: -0.025em;
+  --text-9xl--line-height: 9.6rem;   /* 153.6px (default: 1) */
+  --text-9xl--letter-spacing: -0.025em;
 
   --spacing-ds-0: 0;
   --spacing-ds-px: 1px;
@@ -380,151 +505,6 @@
 
   --color-sys-focus: var(--sys-focus);
 
-  /* Grey ramp (gradient neutrals) */
-  --color-grad-neutral-white: var(--grad-neutral-white);
-  --color-grad-neutral-25: var(--grad-neutral-25);
-  --color-grad-neutral-50: var(--grad-neutral-50);
-  --color-grad-neutral-100: var(--grad-neutral-100);
-  --color-grad-neutral-200: var(--grad-neutral-200);
-  --color-grad-neutral-500: var(--grad-neutral-500);
-  --color-grad-neutral-600: var(--grad-neutral-600);
-  --color-grad-neutral-700: var(--grad-neutral-700);
-  --color-grad-neutral-800: var(--grad-neutral-800);
-  --color-grad-neutral-900: var(--grad-neutral-900);
-
-  /* Brand linear gradients (Figma angles; CSS conic 0deg = top, clockwise) */
-  --background-image-gradient-brand-1: linear-gradient(
-    90deg,
-    var(--brand-primary-600) 0%,
-    var(--brand-primary-500) 100%
-  );
-  --background-image-gradient-brand-2: linear-gradient(
-    45deg,
-    var(--brand-primary-700) 0%,
-    var(--brand-primary-500) 100%
-  );
-  --background-image-gradient-brand-3: linear-gradient(
-    45deg,
-    var(--brand-primary-800) 0%,
-    var(--brand-primary-500) 100%
-  );
-  --background-image-gradient-brand-4: linear-gradient(
-    90deg,
-    var(--brand-primary-800) 0%,
-    var(--brand-primary-500) 100%
-  );
-  --background-image-gradient-brand-5: linear-gradient(
-    26.5deg,
-    var(--brand-primary-800) 0%,
-    var(--brand-primary-700) 100%
-  );
-  --background-image-gradient-brand-6: linear-gradient(
-    45deg,
-    var(--brand-primary-900) 0%,
-    var(--brand-primary-500) 100%
-  );
-  --background-image-gradient-brand-7: linear-gradient(
-    45deg,
-    var(--brand-primary-900) 0%,
-    var(--brand-primary-700) 100%
-  );
-
-  --background-image-gradient-neutral-dark-1: linear-gradient(
-    90deg,
-    var(--grad-neutral-600) 0%,
-    var(--grad-neutral-500) 100%
-  );
-  --background-image-gradient-neutral-dark-2: linear-gradient(
-    45deg,
-    var(--grad-neutral-700) 0%,
-    var(--grad-neutral-500) 100%
-  );
-  --background-image-gradient-neutral-dark-3: linear-gradient(
-    45deg,
-    var(--grad-neutral-800) 0%,
-    var(--grad-neutral-500) 100%
-  );
-  --background-image-gradient-neutral-dark-4: linear-gradient(
-    90deg,
-    var(--grad-neutral-800) 0%,
-    var(--grad-neutral-500) 100%
-  );
-  --background-image-gradient-neutral-dark-5: linear-gradient(
-    26.5deg,
-    var(--grad-neutral-800) 0%,
-    var(--grad-neutral-700) 100%
-  );
-  --background-image-gradient-neutral-dark-6: linear-gradient(
-    45deg,
-    var(--grad-neutral-900) 0%,
-    var(--grad-neutral-500) 100%
-  );
-  --background-image-gradient-neutral-dark-7: linear-gradient(
-    45deg,
-    var(--grad-neutral-900) 0%,
-    var(--grad-neutral-700) 100%
-  );
-
-  --background-image-gradient-neutral-light-1: linear-gradient(
-    90deg,
-    var(--grad-neutral-25) 0%,
-    var(--grad-neutral-white) 100%
-  );
-  --background-image-gradient-neutral-light-2: linear-gradient(
-    45deg,
-    var(--grad-neutral-50) 0%,
-    var(--grad-neutral-white) 100%
-  );
-  --background-image-gradient-neutral-light-3: linear-gradient(
-    45deg,
-    var(--grad-neutral-50) 0%,
-    var(--grad-neutral-25) 100%
-  );
-  --background-image-gradient-neutral-light-4: linear-gradient(
-    90deg,
-    var(--grad-neutral-100) 0%,
-    var(--grad-neutral-50) 100%
-  );
-  --background-image-gradient-neutral-light-5: linear-gradient(
-    26.5deg,
-    var(--grad-neutral-100) 0%,
-    var(--grad-neutral-25) 100%
-  );
-  --background-image-gradient-neutral-light-6: linear-gradient(
-    45deg,
-    var(--grad-neutral-100) 0%,
-    var(--grad-neutral-50) 100%
-  );
-  --background-image-gradient-neutral-light-7: linear-gradient(
-    45deg,
-    var(--grad-neutral-200) 0%,
-    var(--grad-neutral-25) 100%
-  );
-
-  /* Composed marketing / hero (optional) */
-  --background-image-gradient-procertus-brand: linear-gradient(
-    135deg,
-    var(--brand-primary-600) 0%,
-    var(--brand-primary-500) 100%
-  );
-  --background-image-gradient-procertus-aurora: linear-gradient(
-    125deg,
-    var(--brand-primary-100) 0%,
-    var(--grad-neutral-25) 50%,
-    var(--brand-primary-50) 100%
-  );
-  --background-image-gradient-procertus-hero: linear-gradient(
-    180deg,
-    var(--brand-primary-900) 0%,
-    var(--brand-primary-700) 45%,
-    var(--brand-primary-500) 100%
-  );
-  --background-image-gradient-procertus-mesh:
-    radial-gradient(at 0% 0%, var(--brand-primary-200) 0%, transparent 55%),
-    radial-gradient(at 100% 0%, var(--sys-info-200) 0%, transparent 50%),
-    radial-gradient(at 100% 100%, var(--brand-primary-300) 0%, transparent 55%),
-    linear-gradient(180deg, var(--brand-primary-50) 0%, var(--neutral-white) 100%);
-
   --shadow-proc-xs: 0 1px 2px rgb(0 0 0 / 0.06);
   --shadow-proc-sm: 0 2px 8px rgb(0 0 0 / 0.08);
   --shadow-proc-md: 0 8px 24px rgb(0 0 0 / 0.12);
@@ -545,6 +525,39 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* ─── Density-aware semantic spacing ─────────────────────────────────────
+ * Non-inline @theme so Tailwind emits these as real CSS custom properties.
+ * The actual values are set by the responsive :root / [data-density]
+ * rules above. These initial values register the tokens with Tailwind
+ * so it generates p-element, gap-region, m-boundary, etc. */
+@theme {
+  --spacing-micro:     0.25rem;
+  --spacing-element:   0.5rem;
+  --spacing-component: 0.75rem;
+  --spacing-section:   1rem;
+  --spacing-region:    2rem;
+  --spacing-boundary:  1rem;
+}
+
+/* ─── Command button pulse ───────────────────────────────────────────────── */
+@keyframes command-pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--ring);
+  }
+  100% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+@keyframes command-pulse-destructive {
+  0% {
+    box-shadow: 0 0 0 0 var(--destructive);
+  }
+  100% {
+    box-shadow: 0 0 0 6px transparent;
+  }
 }
 
 @layer base {

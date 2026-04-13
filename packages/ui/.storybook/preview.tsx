@@ -1,9 +1,49 @@
 import type { Preview } from "@storybook/react-vite";
+import { addons } from "storybook/preview-api";
+import { GLOBALS_UPDATED } from "storybook/internal/core-events";
 
 import { THEMES } from "@/lib/themes";
 import "../src/styles/globals.css";
 import "./preview.css";
-import { parseToolbarMode, parseToolbarTheme, StorybookThemeDecorator } from "./storybook-theme";
+import { parseToolbarDensity, parseToolbarMode, parseToolbarTheme, StorybookThemeDecorator } from "./storybook-theme";
+
+/**
+ * Module-level listener: syncs toolbar mode/theme to the DOM imperatively.
+ * Standalone MDX docs pages (no inline stories) don't run the decorator,
+ * so the ModeProvider/ThemeProvider never fire. This fills the gap.
+ */
+try {
+  const channel = addons.getChannel();
+  channel.on(
+    GLOBALS_UPDATED,
+    ({ globals }: { globals: Record<string, unknown> }) => {
+      const root = document.documentElement;
+
+      if (globals.mode != null) {
+        const mode = String(globals.mode);
+        root.classList.remove("light", "dark");
+        if (mode === "system") {
+          root.classList.add(
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light",
+          );
+        } else {
+          root.classList.add(mode);
+        }
+        localStorage.setItem("sb-ui-mode", mode);
+      }
+
+      if (globals.theme != null) {
+        const theme = String(globals.theme);
+        root.dataset.theme = theme;
+        localStorage.setItem("sb-ui-theme", theme);
+      }
+    },
+  );
+} catch {
+  // Channel not ready — decorators will handle it once a story renders.
+}
 
 const THEME_TOOLBAR_ICONS = ["circle", "component"] as const;
 
@@ -11,6 +51,7 @@ const preview: Preview = {
   initialGlobals: {
     theme: "default",
     mode: "dark",
+    density: "operational",
   },
   globalTypes: {
     theme: {
@@ -43,13 +84,28 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
+    density: {
+      name: "Density",
+      description: "Spacing density preset (operational / spacious)",
+      defaultValue: "operational",
+      toolbar: {
+        title: "Density",
+        icon: "grid",
+        items: [
+          { value: "operational", title: "Operational", icon: "grid" },
+          { value: "spacious", title: "Spacious", icon: "sidebar" },
+        ],
+        dynamicTitle: true,
+      },
+    },
   },
   decorators: [
     (Story, context) => {
       const theme = parseToolbarTheme(context.globals.theme);
       const mode = parseToolbarMode(context.globals.mode);
+      const density = parseToolbarDensity(context.globals.density);
       return (
-        <StorybookThemeDecorator theme={theme} mode={mode}>
+        <StorybookThemeDecorator theme={theme} mode={mode} density={density}>
           <Story />
         </StorybookThemeDecorator>
       );
@@ -73,11 +129,38 @@ const preview: Preview = {
       storySort: {
         method: "alphabetical",
         order: [
-          "components",
           "design tokens",
-          ["Typography", "Color", "Spacing", "Radius", "Shadow"],
-          "examples",
-          ["Typography", "Dashboard", "Login", "Sign up", "Mail"],
+          [
+            "Typography",
+            ["Guidelines", "Font Family", "Font Size", "Font Weight", "Line Height", "Letter Spacing"],
+            "Iconography",
+            "Color", ["Guidelines", "Default", "*"],
+            "Gradient", ["Guidelines", "Default", "*"],
+            "Radius", ["Guidelines", "Default", "*"],
+            "Spacing", ["Guidelines", "Default", "*"],
+            "Elevation",
+            "Shadow", ["Guidelines", "Default", "*"],
+            "Motion",
+          ],
+          "components",
+          ["*", ["Guidelines", "Default", "*"]],
+          "Applied Guidelines",
+          [
+            "Typography",
+            "Iconography",
+            "Colors",
+            "Gradients",
+            "Radius",
+            "Spacing",
+            "Elevation",
+            "Shadows",
+            "Motion",
+          ],
+          "Showroom",
+          [
+            "Typography", ["Registry Detail View", "Management Data Grid", "Management Shell", "Long-form Content"],
+            "Dashboard", "Login", "Sign up", "Mail",
+          ],
         ],
       },
     },

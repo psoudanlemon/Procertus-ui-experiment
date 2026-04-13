@@ -1,0 +1,319 @@
+{/* packages/ui/src/showcase/RadiusGuidelines.mdx */}
+import { Meta } from "@storybook/addon-docs/blocks";
+import { Button } from "@/components/ui/button";
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/ui/table";
+
+<Meta title="design tokens/Radius/Guidelines" />
+
+<div className="mb-12">
+  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-3">PROCERTUS Design Guidelines</p>
+  <h1 className="font-sans font-bold text-foreground m-0 mb-4" style={{ fontSize: '1.875rem', lineHeight: 1.2, letterSpacing: '-0.03em' }}>Radius doctrine</h1>
+  <p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
+    The geometry of trust is not arbitrary. Every curve in the PROCERTUS system
+    is extracted from the brand, encoded into tokens, and governed by strict
+    functional rules. Radius is not decoration; it is
+    <strong> structural intent</strong> made visible.
+  </p>
+</div>
+
+<hr />
+
+<div className="mt-16">
+
+## 01. The blueprint radius
+
+The resting state of every interactive and structural surface in the PROCERTUS system.
+Cards, inputs, dialogs, dropdowns, table containers: all begin here. This is not a
+suggestion. It is the non-negotiable foundation.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>8px</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>The anchor</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      The visual equivalent of a machined edge: clean, deliberate, and unmistakably
+      engineered. It sits at the exact threshold where a rectangle communicates
+      structure without feeling sharp or hostile. Below <code className="text-sm bg-muted px-1.5 py-0.5 rounded">8px</code>,
+      surfaces feel brittle. Above it, they drift toward playfulness.
+      This is the equilibrium point where PROCERTUS lives.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border flex items-center gap-4">
+      <div className="shrink-0 border-2 border-border bg-card shadow-sm" style={{ width: '48px', height: '48px', borderRadius: '8px' }} />
+      <div>
+        <p className="text-sm text-foreground font-semibold" style={{ margin: 0, lineHeight: 1.2 }}>Blueprint state</p>
+        <p className="text-xs text-muted-foreground" style={{ margin: 0, marginTop: '8px', lineHeight: 1.2 }}><code className="text-xs bg-muted px-1 py-0.5 rounded">0.5rem (8px)</code></p>
+      </div>
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Continuity rule</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Density invariant</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      This radius remains constant across all density modes.
+      When the system compresses spacing and type to fit denser layouts, the blueprint
+      radius holds. Reducing it would erode brand recognition at the moment it matters
+      most: when the interface is at its most functional and utilitarian.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border">
+      <div className="flex items-center gap-4">
+        <div className="shrink-0 border-2 border-border bg-card shadow-sm" style={{ width: '48px', height: '48px', borderRadius: '8px' }} />
+        <div className="shrink-0 border-2 border-border bg-card shadow-sm" style={{ width: '36px', height: '36px', borderRadius: '8px' }} />
+        <div className="shrink-0 border-2 border-border bg-card shadow-sm" style={{ width: '28px', height: '28px', borderRadius: '8px' }} />
+        <span className="text-xs text-muted-foreground">Same radius. Any scale.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '24px' }}>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    The <code className="text-sm bg-muted px-1.5 py-0.5 rounded">8px</code> anchor is what keeps a compact
+    PROCERTUS screen looking like PROCERTUS, not like a generic data table.
+    It is the constant that holds the brand together when everything else compresses.
+  </p>
+  <Button variant="link" className="p-0 h-auto text-sm" asChild><a href="?path=/story/design-tokens-radius--core">View radius tokens</a></Button>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 02. The signature curve
+
+The PROCERTUS logotype contains two interlocking checkmarks. Their geometry is not
+a circle and not a square; it is a compound curve with one deep sweep and one sharp
+return. We extracted this DNA and encoded it as an asymmetric radius that can be
+applied to any interactive component.
+
+<div className="flex flex-col mt-6" style={{ gap: '24px' }}>
+
+<div className="rounded-xl border-2 border-brand-accent-200 dark:border-brand-accent-800 bg-card p-6">
+  <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Checkmark DNA</span>
+  <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>The extraction</span>
+  <p className="text-sm text-muted-foreground m-0 mb-4" style={{ lineHeight: 1.6 }}>
+    On hover, buttons transition from the blueprint <code className="text-sm bg-muted px-1.5 py-0.5 rounded">8px</code> to
+    the signature geometry: <strong>16px</strong> on the deep corners and <strong>4px</strong> on the sharp
+    corners. This creates a shape that echoes the checkmark without literally drawing
+    one. The brand is felt, not seen.
+  </p>
+  <div className="p-4 rounded-lg bg-muted/50 border border-border flex items-center justify-center gap-8">
+    <div className="flex flex-col items-center gap-2">
+      <div className="border-2 border-border bg-card shadow-sm" style={{ width: '64px', height: '40px', borderRadius: '8px' }} />
+      <span className="text-xs text-muted-foreground">Idle (8px uniform)</span>
+    </div>
+    <span className="text-muted-foreground text-lg">&rarr;</span>
+    <div className="flex flex-col items-center gap-2">
+      <div className="border-2 border-primary/40 bg-primary/10 shadow-sm" style={{ width: '64px', height: '40px', borderRadius: '16px 4px 16px 4px' }} />
+      <span className="text-xs text-muted-foreground">Signature (16/4px)</span>
+    </div>
+  </div>
+</div>
+
+<div className="rounded-xl border border-border bg-card p-6">
+  <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Optical scaling</span>
+  <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Rule of proportion</span>
+  <p className="text-sm text-muted-foreground m-0 mb-4" style={{ lineHeight: 1.6 }}>
+    The signature must remain legible at every component size. On a default
+    button, the <code className="text-sm bg-muted px-1.5 py-0.5 rounded">16px</code> deep curve reads clearly. But on
+    a small button, that same value would consume too much of the surface and distort
+    the shape. The deep-corner value scales down with component size, while the sharp
+    corner remains fixed at <code className="text-sm bg-muted px-1.5 py-0.5 rounded">4px</code>.
+  </p>
+  <div className="mt-4">
+    <Table className="rounded-xl overflow-hidden">
+      <TableHeader>
+        <TableRow>
+          <TableHead>Size</TableHead>
+          <TableHead>Deep corner</TableHead>
+          <TableHead>Sharp corner</TableHead>
+          <TableHead><span className="sr-only">Preview</span></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow>
+          <TableCell className="font-bold">default</TableCell>
+          <TableCell className="text-muted-foreground">16px</TableCell>
+          <TableCell className="text-muted-foreground">4px</TableCell>
+          <TableCell>
+            <div className="border-2 border-primary/40 bg-primary/10" style={{ width: '56px', height: '36px', borderRadius: '16px 4px 16px 4px' }} />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell className="font-bold">sm</TableCell>
+          <TableCell className="text-muted-foreground">12px</TableCell>
+          <TableCell className="text-muted-foreground">4px</TableCell>
+          <TableCell>
+            <div className="border-2 border-primary/40 bg-primary/10" style={{ width: '48px', height: '32px', borderRadius: '12px 4px 12px 4px' }} />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell className="font-bold">xs</TableCell>
+          <TableCell className="text-muted-foreground">10px</TableCell>
+          <TableCell className="text-muted-foreground">4px</TableCell>
+          <TableCell>
+            <div className="border-2 border-primary/40 bg-primary/10" style={{ width: '40px', height: '28px', borderRadius: '10px 4px 10px 4px' }} />
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  </div>
+</div>
+
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 03. Kinetic pairing
+
+Not all actions move in the same direction. Some push the user forward (Submit,
+Confirm, Save). Others pull them back or offer an exit (Cancel, Back, Dismiss).
+The Signature Curve encodes this distinction through its orientation.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Forward curve</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Commitment</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      Deep corners at <strong>top-left and bottom-right</strong>. The diagonal creates
+      a shape that leans forward, like a checkmark in motion. Used for Primary
+      and Destructive actions: buttons that represent progression, commitment,
+      and irreversible intent.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border flex items-center justify-center">
+      <div className="flex flex-col items-center gap-2">
+        <div className="bg-primary text-primary-foreground flex items-center justify-center text-xs font-semibold uppercase tracking-wider" style={{ width: '140px', height: '36px', borderRadius: '16px 4px 16px 4px' }}>
+          Confirm
+        </div>
+      </div>
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Reciprocal curve</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Retreat</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      Deep corners at <strong>top-right and bottom-left</strong>, the exact mirror.
+      This signals a supporting or backward-moving action. Outline, Secondary,
+      and Ghost variants carry the Reciprocal Curve. Cancel buttons, navigation-back,
+      and dismissals all use this geometry.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border flex items-center justify-center">
+      <div className="flex flex-col items-center gap-2">
+        <div className="bg-background border-2 border-border text-foreground flex items-center justify-center text-xs font-semibold uppercase tracking-wider" style={{ width: '140px', height: '36px', borderRadius: '4px 16px 4px 16px' }}>
+          Cancel
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div className="rounded-xl border-2 border-brand-accent-200 dark:border-brand-accent-800 bg-card p-6" style={{ marginTop: '24px' }}>
+  <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>The symmetrical bracket</span>
+  <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Kinetic pairing in context</span>
+  <p className="text-sm text-muted-foreground m-0 mb-4" style={{ lineHeight: 1.6 }}>
+    When a Forward and Reciprocal button sit side by side, as they do in every
+    confirmation dialog, their curves form a symmetrical bracket that echoes the
+    mirrored checkmarks in the PROCERTUS logotype. The paired geometry creates a
+    visual container around the decision point, drawing the eye inward toward the choice.
+  </p>
+  <div className="p-6 rounded-lg bg-muted/50 border border-border flex items-center justify-center gap-3">
+    <div className="bg-background border-2 border-border text-foreground flex items-center justify-center text-xs font-semibold uppercase tracking-wider" style={{ width: '120px', height: '36px', borderRadius: '4px 16px 4px 16px' }}>
+      Cancel
+    </div>
+    <div className="bg-primary text-primary-foreground flex items-center justify-center text-xs font-semibold uppercase tracking-wider" style={{ width: '120px', height: '36px', borderRadius: '16px 4px 16px 4px' }}>
+      Confirm
+    </div>
+  </div>
+  <p className="text-xs text-muted-foreground m-0 text-center" style={{ marginTop: '12px' }}>
+    Together: a bracket that mirrors the brand. Shapes create intent before the user reads a single word.
+  </p>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 04. The pulse of verification
+
+A PROCERTUS button does not simply change color on press. It travels. On active,
+the button translates <strong>1px</strong> downward with zero duration and simultaneously fires a
+beacon pulse: a ring of light that expands outward from the button's edge over
+<strong>800ms</strong> before fading to nothing. This is the command confirm interaction model.
+
+<div className="flex flex-col mt-6" style={{ gap: '24px' }}>
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Travel</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Mechanical</span>
+    <p className="text-sm text-muted-foreground m-0 mb-4" style={{ lineHeight: 1.6 }}>
+      A <strong>1px</strong> downward translation with instant duration. The tactile
+      confirmation: "I pressed it." No easing, no delay. Immediate and physical.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border flex items-center justify-center mt-auto">
+      <Button variant="outline">Press me</Button>
+    </div>
+  </div>
+  <div className="rounded-xl border-2 border-brand-accent-200 dark:border-brand-accent-800 bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Teal pulse</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Verified</span>
+    <p className="text-sm text-muted-foreground m-0 mb-4" style={{ lineHeight: 1.6 }}>
+      The default beacon. Uses the focus ring color at full strength,
+      expanding to <strong>6px</strong> over <strong>800ms</strong> before fading. The checkmark made kinetic:
+      "verified, proceeding."
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border flex items-center justify-center mt-auto">
+      <Button variant="default">Confirm</Button>
+    </div>
+  </div>
+  <div className="rounded-xl border-l-4 bg-sys-destructive-50 dark:bg-sys-destructive-950 p-6 flex flex-col" style={{ borderLeftColor: 'var(--sys-destructive-500)' }}>
+    <span className="font-semibold text-sys-destructive-900 dark:text-sys-destructive-100 block" style={{ fontSize: '1.5rem' }}>Red pulse</span>
+    <span className="uppercase text-sys-destructive-700 dark:text-sys-destructive-300 block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', marginTop: '8px' }}>Critical</span>
+    <p className="text-sm text-sys-destructive-800 dark:text-sys-destructive-200 m-0 mb-4" style={{ lineHeight: 1.6 }}>
+      Fires on destructive actions. Uses <code className="text-xs bg-muted px-1 py-0.5 rounded">sys-destructive-400</code>,
+      signaling the action is irreversible. The system has acknowledged the gravity.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border flex items-center justify-center mt-auto">
+      <Button variant="destructive">Delete</Button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div className="rounded-xl border-2 border-sys-warning-300 dark:border-sys-warning-700 bg-sys-warning-50 dark:bg-sys-warning-950 p-6" style={{ marginTop: '24px' }}>
+  <h4 className="font-sans text-base font-bold text-sys-warning-800 dark:text-sys-warning-200 m-0 mb-3">The Signature Curve is retained throughout the active state and pulse.</h4>
+  <p className="text-base text-sys-warning-700 dark:text-sys-warning-300 leading-[1.6] m-0">
+    The shape does not snap back to <code className="text-sm bg-muted px-1.5 py-0.5 rounded">8px</code> during the
+    interaction. The user hovered to reveal the brand geometry, clicked to confirm,
+    and the geometry held steady through the entire sequence. Trust is built through consistency.
+  </p>
+</div>
+
+</div>
+
+<hr className="page-end" />
+
+<div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '5rem' }}>
+  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For developers</h4>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    Every rule on this page is <strong>already encoded in the component library</strong>.
+    The <code className="text-sm bg-muted px-1.5 py-0.5 rounded">button.tsx</code> component implements the Blueprint
+    Radius, Signature Curve, Kinetic Pairing, and Command Confirm interaction model through
+    CSS custom properties and Tailwind utility classes. The <code className="text-sm bg-muted px-1.5 py-0.5 rounded">--cmd-deep</code> token
+    governs the deep corner, and per-size overrides handle optical scaling automatically.
+    Do not manually set border-radius values on buttons. The component handles the geometry.
+  </p>
+  <div className="flex gap-4 items-center" style={{ marginTop: '16px' }}>
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-radius--core">Radius tokens</a></Button>
+    <span className="text-muted-foreground">|</span>
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/applied-guidelines-radius--default">View kinetic pairing in action</a></Button>
+  </div>
+</div>

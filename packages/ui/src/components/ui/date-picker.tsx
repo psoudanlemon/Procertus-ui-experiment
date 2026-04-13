@@ -31,7 +31,7 @@ function DatePicker({
           variant="outline"
           disabled={disabled}
           className={cn(
-            "w-[240px] justify-start text-left font-normal",
+            "w-[240px] justify-start text-left normal-case tracking-normal font-normal",
             !value && "text-muted-foreground",
             className,
           )}
@@ -72,7 +72,7 @@ function DateRangePicker({
           variant="outline"
           disabled={disabled}
           className={cn(
-            "w-[300px] justify-start text-left font-normal",
+            "w-[300px] justify-start text-left normal-case tracking-normal font-normal",
             !value?.from && "text-muted-foreground",
             className,
           )}

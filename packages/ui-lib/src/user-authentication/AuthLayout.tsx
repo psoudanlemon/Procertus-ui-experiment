@@ -8,7 +8,7 @@ import {
 } from "@procertus-ui/ui";
 
 // ---------------------------------------------------------------------------
-// Procertus Logo (full wordmark)
+// PROCERTUS Logo (full wordmark)
 // ---------------------------------------------------------------------------
 
 function ProcertusLogo({ className }: { className?: string }) {
@@ -18,7 +18,7 @@ function ProcertusLogo({ className }: { className?: string }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      aria-label="Procertus — Certification that builds trust"
+      aria-label="PROCERTUS — Certification that builds trust"
     >
       {/* Checkmark icon */}
       <path
@@ -91,7 +91,7 @@ export type AuthLayoutProps = {
   description?: React.ReactNode;
   /** Whether to wrap children in a Card shell. Defaults to true. Set to false for status/message pages. */
   card?: boolean;
-  /** Logo element. Defaults to the full Procertus wordmark. */
+  /** Logo element. Defaults to the full PROCERTUS wordmark. */
   logo?: React.ReactNode;
   /** Right panel configuration. Pass `false` to hide entirely. */
   panel?: AuthLayoutPanelConfig | false;
@@ -163,26 +163,26 @@ function AuthLayout({
   return (
     <div className={`flex min-h-svh w-full bg-background ${className ?? ""}`}>
       {/* Left panel — form */}
-      <div className="flex min-h-svh w-full flex-col items-center p-6 md:p-10 lg:w-3/5">
+      <div className="flex min-h-svh w-full flex-col items-center p-boundary lg:w-3/5">
         {/* Logo */}
         <div className="flex w-full max-w-sm justify-center">
           {logo ?? (
             <>
-              <img src="/Procertus Logo 1.png" alt="Procertus — Certification that builds trust" className="h-16 w-auto dark:hidden" />
-              <img src="/Procertus Logo 2.png" alt="Procertus — Certification that builds trust" className="hidden h-16 w-auto dark:block" />
+              <img src="/Procertus Logo 1.png" alt="PROCERTUS — Certification that builds trust" className="h-16 w-auto dark:hidden" />
+              <img src="/Procertus Logo 2.png" alt="PROCERTUS — Certification that builds trust" className="hidden h-16 w-auto dark:block" />
             </>
           )}
         </div>
 
-        <div className="flex w-full max-w-sm flex-1 flex-col justify-center gap-6">
+        <div className="flex w-full max-w-sm flex-1 flex-col justify-center gap-component">
           {/* Content */}
           {showCard ? (
-            <Card className="gap-8 py-10 shadow-[var(--shadow-proc-md)] ring-0">
-              <CardHeader className="gap-0 px-8 text-center">
+            <Card className="gap-section py-section shadow-[var(--shadow-proc-md)] ring-0">
+              <CardHeader className="gap-0 px-section text-center">
                 <H1>{title}</H1>
                 {description && <p className="text-base leading-[1.4] text-muted-foreground mt-1">{description}</p>}
               </CardHeader>
-              <CardContent className="px-8">{children}</CardContent>
+              <CardContent className="px-section">{children}</CardContent>
             </Card>
           ) : (
             children
@@ -193,7 +193,7 @@ function AuthLayout({
 
       {/* Right panel — branded visual */}
       {showPanel && (
-        <div className="relative my-6 mr-6 hidden flex-1 overflow-hidden rounded-sm rounded-tr-[40%] rounded-bl-[40%] md:my-10 md:mr-10 lg:flex">
+        <div className="relative my-boundary mr-boundary hidden flex-1 overflow-hidden rounded-sm rounded-tr-[40%] rounded-bl-[40%] lg:flex">
           {hasImages ? (
             <ImageCarousel images={panelConfig.images!} interval={panelConfig.carouselInterval} />
           ) : panelConfig.image ? (
@@ -217,12 +217,12 @@ function AuthLayout({
           )}
 
           {(panelConfig.title || panelConfig.subtitle) && (
-            <div className="relative z-10 mt-auto w-full bg-gradient-to-t from-[var(--brand-primary-950)]/80 via-[var(--brand-primary-900)]/40 to-transparent px-8 pb-18 pt-20">
+            <div className="relative z-10 mt-auto w-full bg-gradient-to-t from-[var(--brand-primary-950)]/80 via-[var(--brand-primary-900)]/40 to-transparent px-section pb-18 pt-20">
               {panelConfig.title && (
-                <h2 className="text-proc-heading-sm font-semibold text-white">{panelConfig.title}</h2>
+                <h2 className="text-xl font-semibold text-white">{panelConfig.title}</h2>
               )}
               {panelConfig.subtitle && (
-                <p className="mt-1 text-proc-body-sm text-white/60">{panelConfig.subtitle}</p>
+                <p className="mt-1 text-sm text-white/60">{panelConfig.subtitle}</p>
               )}
             </div>
           )}

@@ -55,7 +55,7 @@ function Combobox({
           aria-expanded={open}
           disabled={disabled}
           className={cn(
-            "w-[200px] justify-between font-normal",
+            "w-[200px] justify-between normal-case tracking-normal font-normal",
             !value && "text-muted-foreground",
             className,
           )}

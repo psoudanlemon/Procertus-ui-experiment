@@ -1,11 +1,11 @@
 import { userEvent } from "storybook/test";
-// Replace nextjs-vite with the name of your framework
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -13,16 +13,42 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
+  SidebarInset,
   SidebarMenu,
+  SidebarMenuAction,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarProvider,
+  SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Calendar, ChevronUp, Home, Inbox, Search, Settings, User2 } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import {
+  Calendar,
+  ChevronDown,
+  ChevronUp,
+  ChevronsUpDown,
+  Folder,
+  Home,
+  Inbox,
+  LayoutDashboard,
+  MoreHorizontal,
+  Plus,
+  Search,
+  Settings,
+  User2,
+  FileText,
+  BookOpen,
+  HelpCircle,
+} from "lucide-react";
 
 /**
  * A composable, themeable and customizable sidebar component.
@@ -53,122 +79,173 @@ const meta = {
   parameters: {
     layout: "fullscreen",
   },
-  decorators: [
-    (Story) => (
-      <SidebarProvider>
-        <Story />
-        <section className="m-4">
-          <SidebarTrigger />
-          <div className="size-full" />
-        </section>
-      </SidebarProvider>
-    ),
-  ],
 } satisfies Meta<typeof Sidebar>;
 
 export default meta;
 
 type Story = StoryObj<typeof Sidebar>;
 
-// Menu items.
-const items = [
-  {
-    title: "Home",
-    url: "#",
-    icon: Home,
-  },
-  {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-];
-
 /**
- * A simple sidebar with a group of menu items.
+ * A full sidebar demonstrating all composable parts: header, groups with labels
+ * and actions, menu items with badges/actions/sub-menus, footer with a dropdown,
+ * rail, inset, and trigger.
  */
-export const Simple: Story = {
+export const Default: Story = {
   render: (args) => (
-    <Sidebar {...args}>
-      <SidebarHeader />
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+    <SidebarProvider>
+      <Sidebar {...args}>
+        <SidebarHeader>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton size="lg">
+                <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  <LayoutDashboard className="size-4" />
+                </div>
+                <div className="flex flex-col gap-0.5 leading-none">
+                  <span className="font-semibold">Acme Inc</span>
+                  <span className="text-xs text-muted-foreground">Enterprise</span>
+                </div>
+                <ChevronsUpDown className="ml-auto size-4" />
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Platform</SidebarGroupLabel>
+            <SidebarGroupAction title="Add project">
+              <Plus />
+            </SidebarGroupAction>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton isActive>
+                    <Home />
+                    <span>Dashboard</span>
+                  </SidebarMenuButton>
+                  <SidebarMenuBadge>24</SidebarMenuBadge>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <Inbox />
+                    <span>Inbox</span>
+                  </SidebarMenuButton>
+                  <SidebarMenuBadge>3</SidebarMenuBadge>
+                  <SidebarMenuAction>
+                    <MoreHorizontal />
+                  </SidebarMenuAction>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <Calendar />
+                    <span>Calendar</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter />
-    </Sidebar>
-  ),
-};
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <Search />
+                    <span>Search</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <Folder />
+                    <span>Projects</span>
+                  </SidebarMenuButton>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton isActive>
+                        <span>Design System</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton>
+                        <span>Marketing Site</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton>
+                        <span>Mobile App</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
 
-/**
- * A simple sidebar with a footer menu item.
- */
-export const Footer: Story = {
-  render: (args) => (
-    <Sidebar {...args}>
-      <SidebarHeader />
-      <SidebarContent />
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton>
-                  <User2 /> Username
-                  <ChevronUp className="ml-auto" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent side="top" className="w-(--radix-popper-anchor-width)">
-                <DropdownMenuItem>
-                  <span>Account</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Billing</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Sign out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-    </Sidebar>
+          <SidebarGroup>
+            <SidebarGroupLabel>Resources</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <FileText />
+                    <span>Documentation</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <BookOpen />
+                    <span>Guides</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <HelpCircle />
+                    <span>Support</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <Settings />
+                    <span>Settings</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton>
+                    <User2 /> Username
+                    <ChevronUp className="ml-auto" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent side="top" className="w-(--radix-popper-anchor-width)">
+                  <DropdownMenuItem>Account</DropdownMenuItem>
+                  <DropdownMenuItem>Billing</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Sign out</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+        <SidebarRail />
+      </Sidebar>
+      <SidebarInset>
+        <header className="flex h-12 items-center gap-2 border-b px-4">
+          <SidebarTrigger />
+          <Separator orientation="vertical" className="mr-2 h-4!" />
+          <span className="text-sm font-medium">Dashboard</span>
+        </header>
+        <div className="flex-1 p-6">
+          <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
+            Content area
+          </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   ),
 };
 
 export const ShouldCloseOpen: Story = {
-  ...Simple,
+  ...Default,
   name: "when clicking the trigger, should close and open the sidebar",
   tags: ["!dev", "!autodocs"],
   play: async ({ canvas, step }) => {

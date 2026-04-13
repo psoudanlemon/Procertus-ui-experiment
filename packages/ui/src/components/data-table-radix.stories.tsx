@@ -90,15 +90,13 @@ const columns: ColumnDef<Payment>[] = [
     header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
     cell: ({ row }) => {
       const status = row.getValue("status") as string;
-      return (
-        <Badge
-          variant={
-            status === "success" ? "default" : status === "failed" ? "destructive" : "secondary"
-          }
-        >
-          {status}
-        </Badge>
-      );
+      const variantMap: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+        success: "default",
+        failed: "destructive",
+        pending: "secondary",
+        processing: "outline",
+      };
+      return <Badge variant={variantMap[status] ?? "outline"}>{status}</Badge>;
     },
   },
   {

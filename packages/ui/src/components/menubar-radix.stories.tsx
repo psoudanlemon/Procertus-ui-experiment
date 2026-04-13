@@ -93,7 +93,7 @@ export const WithRadioItems: Story = {
       <MenubarMenu>
         <MenubarTrigger>View</MenubarTrigger>
         <MenubarContent>
-          <MenubarLabel inset>Device Size</MenubarLabel>
+          <MenubarLabel>Device Size</MenubarLabel>
           <MenubarRadioGroup value="md">
             <MenubarRadioItem value="sm">Small</MenubarRadioItem>
             <MenubarRadioItem value="md">Medium</MenubarRadioItem>

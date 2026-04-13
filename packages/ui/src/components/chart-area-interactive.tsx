@@ -223,10 +223,12 @@ export function ChartAreaInteractive() {
               minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                });
+                return date
+                  .toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })
+                  .toUpperCase();
               }}
             />
             <ChartTooltip

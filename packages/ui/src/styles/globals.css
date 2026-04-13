@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200..1000;1,200..1000&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -11,18 +11,17 @@
 @source "../../../ui-lib/src";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant density-spacious (&:is([data-density="spacious"] *));
+@custom-variant density-operational (&:is([data-density="operational"] *));
 
 @import "./themes/default.css";
 
 @theme inline {
-  /* Border radius — matches foundations table (xs → 4xl); --radius is Figma `lg` (10px). */
-  --radius-sm: var(--radius-ds-sm);
-  --radius-md: var(--radius-ds-md);
-  --radius-lg: var(--radius-ds-lg);
-  --radius-xl: var(--radius-ds-xl);
-  --radius-2xl: var(--radius-ds-2xl);
-  --radius-3xl: var(--radius-ds-3xl);
-  --radius-4xl: var(--radius-ds-4xl);
+  /* Border radius — standard shadcn Nova scale derived from --radius (0.625rem). */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -37,10 +36,23 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-heading-foreground: var(--heading-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+}
+
+@utility text-box-trim-cap {
+  text-box-trim: both;
+  text-box-edge: cap alphabetic;
 }
 
 @layer base {

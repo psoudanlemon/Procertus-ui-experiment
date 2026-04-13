@@ -3,12 +3,14 @@ import { useLayoutEffect } from "react";
 
 import {
   DEFAULT_THEME_ID,
+  DensityProvider,
   isThemeId,
   ModeProvider,
   ThemeProvider,
   TooltipProvider,
   useMode,
   useTheme,
+  type Density,
   type Mode,
   type ThemeId,
 } from "@procertus-ui/ui";
@@ -43,6 +45,13 @@ function parseToolbarTheme(value: unknown): ThemeId {
   return DEFAULT_THEME_ID;
 }
 
+function parseToolbarDensity(value: unknown): Density {
+  if (value === "operational" || value === "spacious") {
+    return value;
+  }
+  return "operational";
+}
+
 /**
  * Wraps the Storybook canvas with ThemeProvider (palette) + ModeProvider (light/dark/system).
  * Storybook **toolbars** drive `globalTypes.theme` (palette id) and `globalTypes.mode` (color mode).
@@ -51,25 +60,29 @@ export function StorybookThemeDecorator({
   children,
   theme: themeId,
   mode,
+  density = "operational",
 }: {
   children: ReactNode;
   theme: ThemeId;
   mode: Mode;
+  density?: Density;
 }) {
   return (
     <ThemeProvider defaultTheme={themeId} storageKey="sb-ui-lib-theme">
       <StorybookToolbarThemeSync toolbarTheme={themeId} />
       <ModeProvider defaultMode={mode} storageKey="sb-ui-lib-mode">
         <StorybookToolbarModeSync toolbarMode={mode} />
-        <TooltipProvider delayDuration={0}>
-          {/** No min-h-screen — it forced Docs/Canvas previews to full viewport height. */}
-          <div className="relative box-border w-full bg-background text-foreground">
-            <div className="relative box-border">{children}</div>
-          </div>
-        </TooltipProvider>
+        <DensityProvider density={density}>
+          <TooltipProvider delayDuration={0}>
+            {/** No min-h-screen — it forced Docs/Canvas previews to full viewport height. */}
+            <div className="relative box-border w-full bg-background text-foreground">
+              <div className="relative box-border">{children}</div>
+            </div>
+          </TooltipProvider>
+        </DensityProvider>
       </ModeProvider>
     </ThemeProvider>
   );
 }
 
-export { parseToolbarTheme, parseToolbarMode };
+export { parseToolbarTheme, parseToolbarMode, parseToolbarDensity };

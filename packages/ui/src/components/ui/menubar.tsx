@@ -162,7 +162,7 @@ function MenubarLabel({
     <MenubarPrimitive.Label
       data-slot="menubar-label"
       data-inset={inset}
-      className={cn("px-1.5 py-1 text-sm font-medium data-inset:pl-7", className)}
+      className={cn("px-1.5 py-1.5 text-xs font-medium uppercase tracking-wider text-box-trim-cap text-muted-foreground data-inset:pl-7", className)}
       {...props}
     />
   );

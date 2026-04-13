@@ -16,7 +16,7 @@ export type StatusPageAction = {
 };
 
 export type StatusPageProps = {
-  /** Logo element rendered at the very top. Defaults to the Procertus wordmark image. Pass `null` to hide. */
+  /** Logo element rendered at the very top. Defaults to the PROCERTUS wordmark image. Pass `null` to hide. */
   logo?: React.ReactNode | null;
   /** Large icon displayed above the heading. */
   icon?: LucideIcon;
@@ -79,12 +79,12 @@ const defaultLogo = (
   <>
     <img
       src="/Procertus Logo 1.png"
-      alt="Procertus — Certification that builds trust"
+      alt="PROCERTUS — Certification that builds trust"
       className="h-16 w-auto dark:hidden"
     />
     <img
       src="/Procertus Logo 2.png"
-      alt="Procertus — Certification that builds trust"
+      alt="PROCERTUS — Certification that builds trust"
       className="hidden h-16 w-auto dark:block"
     />
   </>
@@ -101,14 +101,14 @@ function StatusPage({
 }: StatusPageProps) {
   return (
     <div
-      className={`relative flex min-h-svh w-full flex-col items-center justify-center overflow-hidden bg-background p-6 md:p-10 ${className ?? ""}`}
+      className={`relative flex min-h-svh w-full flex-col items-center justify-center overflow-hidden bg-background p-boundary ${className ?? ""}`}
     >
       {/* Brand watermark — bottom-right, partially off-screen */}
       <BrandWatermark />
 
       {/* Logo — top center */}
       {logo !== null && (
-        <div className="absolute top-6 left-1/2 -translate-x-1/2 md:top-10">{logo}</div>
+        <div className="absolute top-boundary left-1/2 -translate-x-1/2">{logo}</div>
       )}
 
       <StatusContent

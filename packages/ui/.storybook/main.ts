@@ -18,7 +18,7 @@ const uiLibPackageRoot = path.resolve(packageRoot, "..", "ui-lib");
  * @see https://zenn.dev/wakamsha/articles/setup-storybook7-with-pnpm-workspaces — monorepo `include` for docgen
  */
 const config: StorybookConfig = {
-  stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
   addons: ["@storybook/addon-docs"],
   framework: "@storybook/react-vite",
   typescript: {

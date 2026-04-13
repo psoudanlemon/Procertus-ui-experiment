@@ -6,7 +6,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-// Replace nextjs-vite with the name of your framework
+import { H2 } from "@/components/ui/heading";
+import { Muted, Small } from "@/components/ui/typography";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 type Radius = {
@@ -16,14 +17,28 @@ type Radius = {
 
 const RadiusTile = ({ value }: Pick<Radius, "value">) => {
   const style = window.getComputedStyle(document.body);
-  const radius = style.getPropertyValue(value);
+  const computed = style.getPropertyValue(value);
+  const px =
+    value === "--radius-ds-full"
+      ? "pill"
+      : `${Math.round(parseFloat(computed) * 16)}px`;
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="size-20 border-2 bg-card" style={{ borderRadius: radius }} />
-      <p className="text-center text-xs opacity-70">{value}</p>
-      <p className="text-center text-xs">{radius}</p>
-    </div>
+    <TableRow>
+      <TableCell className="font-mono text-xs">{value}</TableCell>
+      <TableCell className="font-mono text-xs text-muted-foreground">
+        {computed || "0"}
+      </TableCell>
+      <TableCell className="font-mono text-xs text-muted-foreground">
+        {px}
+      </TableCell>
+      <TableCell>
+        <div
+          className="size-16 border-2 border-border bg-card shadow-sm"
+          style={{ borderRadius: computed }}
+        />
+      </TableCell>
+    </TableRow>
   );
 };
 
@@ -36,26 +51,32 @@ const meta: Meta<{
   title: "design tokens/Radius",
   argTypes: {},
   render: (args) => (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>
-            <span className="sr-only">Preview</span>
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {args.radius.map(({ name, value }) => (
-          <TableRow key={name}>
-            <TableCell>{name}</TableCell>
-            <TableCell>
-              <RadiusTile value={value} />
-            </TableCell>
+    <div>
+      <header className="mb-4">
+        <H2>Radius</H2>
+        <Muted className="mt-2 text-base">
+          Border radius tokens for consistent corner rounding across buttons,
+          cards, and containers.
+        </Muted>
+      </header>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Token</TableHead>
+            <TableHead>Value</TableHead>
+            <TableHead>Pixels</TableHead>
+            <TableHead>
+              <span className="sr-only">Preview</span>
+            </TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {args.radius.map(({ name, value }) => (
+            <RadiusTile key={name} value={value} />
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   ),
 };
 
@@ -64,15 +85,21 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Border radius tokens used for UI elements like buttons, cards, and modals.
+ * The full design-system radius scale from `none` to `full`.
  */
 export const Core: Story = {
   args: {
     radius: [
-      { name: "xs", value: "--radius-xs" },
-      { name: "sm", value: "--radius-sm" },
-      { name: "md", value: "--radius-md" },
-      { name: "lg", value: "--radius-lg" },
+      { name: "none", value: "--radius-ds-none" },
+      { name: "xs", value: "--radius-ds-xs" },
+      { name: "sm", value: "--radius-ds-sm" },
+      { name: "md", value: "--radius-ds-md" },
+      { name: "lg", value: "--radius-ds-lg" },
+      { name: "xl", value: "--radius-ds-xl" },
+      { name: "2xl", value: "--radius-ds-2xl" },
+      { name: "3xl", value: "--radius-ds-3xl" },
+      { name: "4xl", value: "--radius-ds-4xl" },
+      { name: "full", value: "--radius-ds-full" },
     ],
   },
 };

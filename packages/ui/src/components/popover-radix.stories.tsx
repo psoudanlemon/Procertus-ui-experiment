@@ -3,8 +3,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldTitle } from "@/components/ui/field";
+import { H4 } from "@/components/ui/heading";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Muted } from "@/components/ui/typography";
 import { expect, userEvent, within } from "storybook/test";
 
 /**
@@ -50,8 +52,8 @@ export const DimensionsForm: Story = {
       </PopoverTrigger>
       <PopoverContent className="w-96">
         <div className="mb-4">
-          <h4 className="font-bold">Dimensions</h4>
-          <p className="text-sm text-muted-foreground">Set the dimensions for the layer.</p>
+          <H4>Dimensions</H4>
+          <Muted>Set the dimensions for the layer.</Muted>
         </div>
         <FieldGroup>
           <Field orientation="horizontal" className="gap-5">

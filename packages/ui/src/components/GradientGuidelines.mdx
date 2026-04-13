@@ -1,0 +1,189 @@
+{/* packages/ui/src/components/GradientGuidelines.mdx */}
+import { Meta } from "@storybook/addon-docs/blocks";
+import { Button } from "@/components/ui/button";
+
+<Meta title="design tokens/Gradient/Guidelines" />
+
+<div className="mb-12">
+  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-3">PROCERTUS Design Guidelines</p>
+  <h1 className="font-sans font-bold text-foreground m-0 mb-4" style={{ fontSize: '1.875rem', lineHeight: 1.2, letterSpacing: '-0.03em' }}>Atmospheric Depth</h1>
+  <p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
+    Gradients at PROCERTUS are not decoration. They are a <strong>functional
+    signal</strong> that elevates a surface above its neighbours, reserved for
+    moments where the platform needs to speak louder than the surrounding
+    interface. A single gradient on a dashboard says: <em>this matters most.</em>
+  </p>
+</div>
+
+<hr />
+
+<div className="mt-16">
+
+## The mesh methodology
+
+Three iterations, each solving a problem the previous approach created.
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.25rem', opacity: 0.75 }}>Linear</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px', marginBottom: '8px', opacity: 0.75 }}>Step 1</span>
+    <div className="aspect-[3/2] rounded-lg border border-border mb-3" style={{ backgroundImage: 'linear-gradient(135deg, var(--brand-primary-400) 0%, var(--brand-primary-200) 100%)' }} />
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6, opacity: 0.75 }}>
+      Flat, directional, generic. Reads as a default CSS property rather
+      than a deliberate design choice.
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.25rem', opacity: 0.85 }}>Radial</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px', marginBottom: '8px', opacity: 0.85 }}>Step 2</span>
+    <div className="aspect-[3/2] rounded-lg border border-border mb-3" style={{ backgroundImage: 'radial-gradient(circle at center, var(--brand-primary-200) 0%, var(--brand-primary-400) 100%)' }} />
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6, opacity: 0.85 }}>
+      Better depth, but the single focal point competed with the content
+      it was supposed to support.
+    </p>
+  </div>
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.25rem' }}>Mesh</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px', marginBottom: '8px' }}>What we chose</span>
+    <div className="aspect-[3/2] rounded-lg border border-border mb-3" style={{ backgroundImage: 'var(--gradient-primary)' }} />
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Multiple radial layers on a neutral base. Sophisticated, non-linear
+      depth that feels proprietary to PROCERTUS. No focal point competes
+      with the content above it.
+    </p>
+  </div>
+</div>
+
+<div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '24px' }}>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    The final refinement placed brand-tinted radial blobs on a <strong>neutral
+    card background</strong> and shifted each brand stop one step lighter. The
+    gradient tints the surface with brand identity without overwhelming it,
+    keeping the card cohesive with adjacent plain surfaces while still
+    signalling importance. See all four tokens in the{" "}
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-gradient--default">gradient explorer</a></Button>.
+  </p>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## The intelligence signal
+
+Gradients do not shout. They draw attention by giving a surface so much
+<strong>atmospheric depth</strong> that the eye finds it naturally, without
+breaking the design language or sacrificing the premium feel we maintain
+across both light and dark mode.
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.25rem' }}>High-value insights</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Primary use</span>
+    <p className="text-sm text-muted-foreground m-0 flex-1" style={{ lineHeight: 1.6 }}>
+      A featured KPI that summarises the health of an entire domain.
+      A compliance score that triggers action. A certification status
+      that determines what a user sees next. These are gradient surfaces.
+    </p>
+  </div>
+  <div className="rounded-xl border-2 border-brand-accent-200 dark:border-brand-accent-800 bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.25rem' }}>AI-driven recommendations</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Differentiation</span>
+    <p className="text-sm text-muted-foreground m-0 flex-1" style={{ lineHeight: 1.6 }}>
+      When the platform generates an insight or automated recommendation,
+      the gradient distinguishes machine intelligence from human-entered
+      data. The surface itself communicates:
+      <em> "This was generated for you."</em>
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.25rem' }}>Premium data surfaces</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Elevation</span>
+    <p className="text-sm text-muted-foreground m-0 flex-1" style={{ lineHeight: 1.6 }}>
+      Hero sections, promotional panels, and onboarding cards that need
+      to feel elevated above the operational interface. The gradient
+      communicates that this content exists at a different altitude.
+    </p>
+  </div>
+</div>
+
+<div className="rounded-xl border-2 border-sys-warning-300 dark:border-sys-warning-700 bg-sys-warning-50 dark:bg-sys-warning-950 p-6" style={{ marginTop: '24px' }}>
+  <h4 className="font-sans text-base font-bold text-sys-warning-800 dark:text-sys-warning-200 m-0 mb-3">One gradient per view.</h4>
+  <p className="text-base text-sys-warning-700 dark:text-sys-warning-300 leading-[1.6] m-0">
+    The moment two gradient cards appear side by side, neither stands out.
+    The atmosphere collapses into noise. If everything is elevated, nothing is.
+    Reserve the gradient for the single surface that deserves the user's
+    attention first.
+  </p>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## The surface handshake
+
+A gradient surface is atmospheric. It sets the mood. The content on top of it
+must remain the primary focus, which means text can never compete with the
+background for attention.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.25rem' }}>Light mode</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Dark on light</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      All text on light gradient surfaces uses the darkest shade from the
+      Midnight Neutral scale at full or reduced opacity. Headings at 100%,
+      descriptions at 80%, tertiary labels at 50%. Never use brand colors
+      for text on a gradient.
+    </p>
+    <div className="p-4 rounded-lg border border-border flex-1 mt-auto" style={{ backgroundImage: 'var(--gradient-primary)' }}>
+      <p className="text-sm font-semibold m-0 mb-1" style={{ color: 'var(--neutral-900)' }}>Heading at 100%</p>
+      <p className="text-sm m-0 mb-1" style={{ color: 'var(--neutral-900)', opacity: 0.8 }}>Description at 80%</p>
+      <p className="text-xs m-0" style={{ color: 'var(--neutral-900)', opacity: 0.5 }}>Tertiary label at 50%</p>
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.25rem' }}>Dark mode</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Light on dark</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      On dark gradient surfaces, all text uses the lightest shade from the
+      Midnight Neutral scale at equivalent opacity steps. The same hierarchy
+      applies: 100% for headings, 80% for descriptions, 60% for labels.
+      The gradient breathes underneath without interfering with readability.
+    </p>
+    <div className="p-4 rounded-lg border border-border flex-1 mt-auto" style={{ backgroundImage: 'radial-gradient(at 0% 0%, var(--brand-primary-700) 0%, transparent 55%), radial-gradient(at 100% 0%, var(--brand-primary-800) 0%, transparent 50%), radial-gradient(at 100% 100%, var(--brand-primary-700) 0%, transparent 55%), linear-gradient(180deg, var(--neutral-800) 0%, var(--neutral-900) 100%)' }}>
+      <p className="text-sm font-semibold m-0 mb-2" style={{ color: 'var(--neutral-50)' }}>Heading at 100%</p>
+      <p className="text-sm m-0 mb-2" style={{ color: 'var(--neutral-50)', opacity: 0.8 }}>Description at 80%</p>
+      <p className="text-xs m-0" style={{ color: 'var(--neutral-50)', opacity: 0.6 }}>Tertiary label at 60%</p>
+    </div>
+  </div>
+</div>
+
+<div style={{ marginTop: '16px' }}>
+  <Button variant="link" className="p-0 h-auto text-sm" asChild>
+    <a href="?path=/story/applied-guidelines-gradients--default">Now that you've read the rules, go see the proof &rarr;</a>
+  </Button>
+</div>
+
+</div>
+
+<hr className="page-end" />
+
+<div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '2rem' }}>
+  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For Developers</h4>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    All gradient tokens are defined in{" "}
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded">default.css</code> and
+    swap automatically between light and dark mode via the{" "}
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded">.dark</code> class.
+    Apply them with{" "}
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded">background: var(--gradient-primary)</code>.
+    Do not override with raw gradient values. For live token exploration, see the{" "}
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-gradient--default">Gradient Tokens</a></Button>.
+  </p>
+</div>

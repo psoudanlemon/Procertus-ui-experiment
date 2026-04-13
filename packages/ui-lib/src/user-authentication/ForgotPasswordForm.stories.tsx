@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
 
 const meta = {
-  title: "Management Tool/Authentication/Forms/Forgot Password",
+  title: "Management Interface/Authentication/Forms/Forgot Password",
   component: ForgotPasswordForm,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

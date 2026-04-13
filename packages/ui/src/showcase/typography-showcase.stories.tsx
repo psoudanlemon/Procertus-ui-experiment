@@ -1,92 +1,384 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import {
+  CalendarIcon,
+  DollarSignIcon,
+  HelpCircleIcon,
+  MapIcon,
+  ReceiptIcon,
+  SettingsIcon,
+  UsersIcon,
+  BarChart3Icon,
+  BookOpenIcon,
+  BoxIcon,
+  CodeIcon,
+  DatabaseIcon,
+  GitBranchIcon,
+  ListTreeIcon,
+  NetworkIcon,
+  PaletteIcon,
+  ZapIcon,
+} from "lucide-react";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { H1, H2, H3, H4 } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { P, Muted, Blockquote, List } from "@/components/ui/typography";
 
-/**
- * Long-form typography preview inspired by [Tweakcn Typography](https://tweakcn.com/editor/theme?p=typography).
- */
-function TypographyShowcase() {
+import { ManagementAppShell } from "../../../ui-lib/src/management-interface/app-shell/ManagementAppShell";
+import type { Workspace, NavItem, NavGroup } from "../../../ui-lib/src/management-interface/app-shell/ManagementSidebar";
+
+/* ---------------------------------------------------------------------------
+ * Registry Detail View — Hierarchy Demo
+ * ------------------------------------------------------------------------- */
+
+function RegistryDetailView() {
   return (
-    <article className="bg-background text-foreground mx-auto max-w-3xl px-4 py-8 md:px-8">
-      <div className="mb-6 flex flex-wrap gap-2">
-        <Badge variant="outline">Technology</Badge>
-        <Badge variant="outline">Web Development</Badge>
-        <Badge variant="outline">React</Badge>
-      </div>
-      <h1 className="text-foreground scroll-m-20 text-4xl font-bold tracking-tight md:text-5xl">
-        The Future of Web Development: Embracing Modern Technologies
-      </h1>
-      <p className="text-muted-foreground mt-4 text-lg leading-relaxed">
-        Discover how cutting-edge technologies are reshaping the landscape of web development, from
-        AI-powered tools to frameworks that change how we build for the web.
-      </p>
-      <div className="mt-8 flex flex-wrap items-center gap-6">
-        <div className="flex items-center gap-3">
-          <Avatar>
-            <AvatarFallback>JD</AvatarFallback>
-          </Avatar>
-          <div>
-            <div className="text-sm font-medium leading-none">Jane Doe</div>
-            <div className="text-muted-foreground text-sm">Senior Developer</div>
+    <div className="min-h-svh bg-background">
+      <div className="px-8 py-10">
+        <div className="mx-auto max-w-[800px] rounded-xl border border-border bg-card p-10 shadow-sm">
+          <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground">
+            Record ID: PR-9942-X
+          </span>
+
+          <H1 className="mt-2 mb-6">
+            Aalst Industrial Safety Certification
+          </H1>
+
+          <Separator className="mb-6" />
+
+          <div className="mb-8 grid grid-cols-2 gap-x-12 gap-y-4 md:grid-cols-4">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground block mb-1">
+                Status
+              </span>
+              <Badge variant="success">Active</Badge>
+            </div>
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground block mb-1">
+                Issue Date
+              </span>
+              <span className="text-base font-semibold text-foreground">
+                12 Mar 2025
+              </span>
+            </div>
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground block mb-1">
+                Expiry
+              </span>
+              <span className="text-base font-semibold text-foreground">
+                11 Mar 2028
+              </span>
+            </div>
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground block mb-1">
+                Authority
+              </span>
+              <span className="text-base font-semibold text-foreground">
+                BELAC
+              </span>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-border bg-muted/30 p-6">
+            <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 block mb-3">
+              Authority Statement
+            </span>
+            <P>
+              This certification confirms that Aalst Industrial Safety NV has
+              met all requirements under ISO 45001:2018 for Occupational Health
+              and Safety Management Systems. The scope covers fabrication,
+              assembly, and quality inspection of industrial pressure vessels and
+              structural steel components. This record is maintained by the
+              Belgian Accreditation Body (BELAC) and is subject to annual
+              surveillance audits.
+            </P>
+            <Muted className="mt-4">
+              Last audited on 28 November 2025 by Lead Auditor K. Vandenberghe.
+              Next surveillance audit scheduled for 15 January 2027.
+            </Muted>
+          </div>
+
+          <div className="mt-8">
+            <H2 className="mb-4">Scope of Certification</H2>
+            <div className="grid gap-3 md:grid-cols-2">
+              {[
+                "Pressure vessel fabrication (EN 13445)",
+                "Structural steel assembly (EN 1090-2, EXC3)",
+                "Non-destructive testing coordination",
+                "Welding quality management (ISO 3834-2)",
+              ].map((scope) => (
+                <div
+                  key={scope}
+                  className="flex items-center gap-3 rounded-lg border border-border bg-card p-4"
+                >
+                  <div
+                    className="size-2 shrink-0 rounded-full"
+                    style={{ backgroundColor: "var(--brand-accent-400)" }}
+                  />
+                  <span className="text-sm text-foreground">{scope}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-        <Separator orientation="vertical" className="hidden h-8 md:block" />
-        <p className="text-muted-foreground text-sm">Dec 15, 2024 · 8 min read</p>
       </div>
-      <div className="bg-muted/40 mt-10 flex aspect-video items-center justify-center rounded-xl border border-dashed">
-        <span className="text-muted-foreground text-sm">Featured image</span>
-      </div>
-      <div className="mt-10 max-w-none space-y-4">
-        <p className="text-foreground leading-7">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-          ullamco laboris.
-        </p>
-        <h2 className="text-foreground mt-10 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">
-          The Evolution of Modern Frameworks
-        </h2>
-        <p className="text-foreground leading-7">
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-          nulla pariatur.
-        </p>
-        <blockquote className="border-primary/30 text-muted-foreground mt-6 border-l-4 pl-4 italic">
-          The best way to predict the future is to create it. In web development, we are not just
-          following trends — we are setting them.
-        </blockquote>
-        <h3 className="text-foreground mt-8 scroll-m-20 text-xl font-semibold tracking-tight">
-          Key technologies
-        </h3>
-        <ul className="text-foreground my-4 ml-6 list-disc space-y-2">
-          <li>Artificial intelligence and machine learning integration</li>
-          <li>Edge computing and serverless architectures</li>
-          <li>Progressive web applications (PWAs)</li>
-          <li>WebAssembly for high-performance applications</li>
-        </ul>
-      </div>
-    </article>
+    </div>
   );
 }
 
+/* ---------------------------------------------------------------------------
+ * Management Shell — Architecture Demo
+ * ------------------------------------------------------------------------- */
+
+const procertusLogo = (
+  <img
+    src="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='32' height='32' fill='%23F1F5F9'/%3E%3Cpath d='M17.4262 21.7754L13.9269 18.6647C12.8241 17.6857 12.7265 15.999 13.7055 14.8963L13.7858 14.8051L18.2489 18.7711L24.0796 12.109C25.0846 10.9607 26.8321 10.8435 27.9804 11.8485L28 11.8659L19.4406 21.6495C18.9218 22.2422 18.0188 22.3008 17.4283 21.7754H17.4262Z' fill='%2371D2C1'/%3E%3Cpath d='M14.5738 10.2246L18.0731 13.3353C19.1758 14.3143 19.2735 16.001 18.2945 17.1038L18.2142 17.1949L13.7511 13.2289L7.92041 19.891C6.91534 21.0394 5.16787 21.1566 4.01954 20.1515L4 20.1342L12.5593 10.3505C13.0781 9.75789 13.9812 9.69928 14.5716 10.2246H14.5738Z' fill='%23076293'/%3E%3C/svg%3E"
+    alt="PROCERTUS"
+    className="size-full rounded-sm"
+  />
+);
+
+const managementSidebarProps = {
+  workspaces: [
+    { id: "1", name: "PROCERTUS", logo: procertusLogo, plan: "Certification platform" },
+  ] as Workspace[],
+  activeWorkspaceId: "1",
+  navItems: [
+    { title: "Roadmap", url: "#", icon: MapIcon },
+    { title: "Budget", url: "#", icon: DollarSignIcon },
+    { title: "Meetings", url: "#", icon: CalendarIcon },
+    { title: "People", url: "#", icon: UsersIcon },
+    { title: "Invoicing", url: "#", icon: ReceiptIcon },
+  ] as NavItem[],
+  navGroups: [
+    {
+      label: "Registry",
+      items: [
+        {
+          title: "Certificates", url: "#", icon: BarChart3Icon, isActive: true,
+          items: [
+            { title: "Overview", url: "#" },
+            { title: "Pending", url: "#", isActive: true },
+            { title: "Expiring", url: "#" },
+          ],
+        },
+        {
+          title: "Standards", url: "#", icon: PaletteIcon,
+          items: [
+            { title: "ISO 9001", url: "#" },
+            { title: "ISO 14001", url: "#" },
+            { title: "ISO 45001", url: "#" },
+          ],
+        },
+      ],
+    },
+    {
+      label: "Compliance",
+      items: [
+        { title: "Audit Schedule", url: "#", icon: DatabaseIcon, isActive: true },
+        { title: "Non-conformities", url: "#", icon: NetworkIcon },
+      ],
+    },
+    {
+      label: "Coming Soon",
+      maxVisible: 3,
+      items: [
+        { title: "User Stories", url: "#", icon: ListTreeIcon },
+        { title: "Event Models", url: "#", icon: ZapIcon },
+        { title: "Prototypes", url: "#", icon: BoxIcon },
+        { title: "Context Maps", url: "#", icon: GitBranchIcon },
+        { title: "DAL Playground", url: "#", icon: CodeIcon },
+        { title: "API Docs", url: "#", icon: BookOpenIcon },
+        { title: "Guides", url: "#", icon: BookOpenIcon },
+      ],
+    },
+  ] as NavGroup[],
+  secondaryItems: [
+    { title: "Settings", url: "#", icon: SettingsIcon },
+    { title: "Help", url: "#", icon: HelpCircleIcon },
+  ] as NavItem[],
+  showSearch: false,
+};
+
+const managementHeaderProps = {
+  showNavigation: false,
+  breadcrumbs: [
+    { label: "Dashboard", href: "#" },
+    { label: "Registry", href: "#" },
+    { label: "Certificates", href: "#" },
+    { label: "Pending" },
+  ],
+  canGoBack: true,
+  canGoForward: false,
+  user: {
+    name: "K. Vandenberghe",
+    email: "k.vandenberghe@procertus.be",
+    role: "Lead Auditor",
+  },
+  version: "Webapp: V10.00.00  Api: V10.00.00",
+};
+
+/* ---------------------------------------------------------------------------
+ * Long-form Content
+ * ------------------------------------------------------------------------- */
+
+function TypographyShowcase() {
+  return (
+    <div className="mx-auto max-w-[680px] space-y-6 py-16">
+      <H1>The Joke Tax Chronicles</H1>
+      <P>
+        Once upon a time, in a far-off land, there was a very lazy king who
+        spent all day lounging on his throne. One day, his advisors came to him
+        with a problem: the kingdom was running out of money.
+      </P>
+
+      <H2>The King's Plan</H2>
+      <P>
+        The king thought long and hard, and finally came up with{" "}
+        <a
+          href="#"
+          className="font-medium text-foreground underline underline-offset-4"
+        >
+          a brilliant plan
+        </a>
+        : he would tax the jokes in the kingdom.
+      </P>
+      <Blockquote>
+        "After all," he said, "everyone enjoys a good joke, so it's only fair
+        that they should pay for the privilege."
+      </Blockquote>
+
+      <H3>The Joke Tax</H3>
+      <P>
+        The king's subjects were not amused. They grumbled and complained, but
+        the king was firm:
+      </P>
+      <List>
+        <li>1st level of puns: 5 gold coins</li>
+        <li>2nd level of jokes: 10 gold coins</li>
+        <li>3rd level of one-liners: 20 gold coins</li>
+      </List>
+      <P>
+        As a result, people stopped telling jokes, and the kingdom fell into a
+        gloom. But there was one person who refused to let the king's foolishness
+        get him down: a court jester named Jokester.
+      </P>
+
+      <H3>Jokester's Revolt</H3>
+      <P>
+        Jokester began sneaking into the castle in the middle of the night and
+        leaving jokes all over the place: under the king's pillow, in his soup,
+        even in the royal toilet. The king was furious, but he couldn't seem to
+        stop Jokester.
+      </P>
+      <P>
+        And then, one day, the people of the kingdom discovered that the jokes
+        left by Jokester were so funny that they couldn't help but laugh. And
+        once they started laughing, they couldn't stop.
+      </P>
+
+      <H4>The People's Rebellion</H4>
+      <P>
+        The people of the kingdom, feeling uplifted by the laughter, started to
+        tell jokes and puns again, and soon the entire kingdom was in on the
+        joke.
+      </P>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>King's Treasury</TableHead>
+            <TableHead>People's happiness</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell>Empty</TableCell>
+            <TableCell>Overflowing</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Modest</TableCell>
+            <TableCell>Satisfied</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Full</TableCell>
+            <TableCell>Ecstatic</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+      <P>
+        The king, seeing how much happier his subjects were, realized the error
+        of his ways and repealed the joke tax. Jokester was declared a hero, and
+        the kingdom lived happily ever after.
+      </P>
+      <P>
+        The moral of the story is: never underestimate the power of a good laugh
+        and always be careful of bad ideas.
+      </P>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+ * Story Configuration
+ * ------------------------------------------------------------------------- */
+
 const meta: Meta = {
-  title: "examples/Typography",
-  component: TypographyShowcase,
+  title: "Applied Guidelines/Typography",
   parameters: {
     layout: "fullscreen",
-    docs: {
-      description: {
-        story:
-          "Article-style typography preview (headings, lead, quote, lists) — aligned with the Tweakcn Typography tab.",
-      },
-    },
   },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof TypographyShowcase>;
-
-export const Default: Story = {
+export const LongFormContent: StoryObj = {
+  name: "Long-form Content",
   render: () => <TypographyShowcase />,
+  parameters: {
+    layout: "padded",
+  },
+};
+
+export const Shell: StoryObj = {
+  name: "Management Shell",
+  render: () => (
+    <ManagementAppShell sidebar={managementSidebarProps} header={managementHeaderProps}>
+      <div className="min-h-[200vh] rounded-xl border border-dashed" />
+    </ManagementAppShell>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "**Architecture Demo** — The real ManagementAppShell from ui-lib. " +
+          "Proves the Recessed Workspace (sidebar frame in white, main area " +
+          "rounded with bg-background on a sidebar-toned floor), Structural " +
+          "Caps in sidebar group labels, and the scroll-fade gradient.",
+      },
+    },
+  },
+};
+
+export const RegistryDetail: StoryObj = {
+  name: "Registry Detail View",
+  render: () => <RegistryDetailView />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "**Hierarchy Demo** — Proves the Content vs. Context weight rule. " +
+          "Structural Cap Labels (uppercase, wide tracking) define the frame; " +
+          "Heading XL anchors the content; Body M provides the authority statement " +
+          "in regular weight. Metadata uses bold values with regular labels.",
+      },
+    },
+  },
 };

@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Muted, P, Small } from "@/components/ui/typography";
 
 const notifications = [
   {
@@ -62,8 +63,8 @@ export const Default: Story = {
           <div key={index} className="flex items-center gap-4">
             <BellRing className="size-6" />
             <div>
-              <p>{notification.title}</p>
-              <p className="text-foreground/60">{notification.description}</p>
+              <P>{notification.title}</P>
+              <Muted>{notification.description}</Muted>
             </div>
           </div>
         ))}
@@ -91,7 +92,7 @@ export const ActionHeader: Story = {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <p>Configure team members, permissions, and notifications.</p>
+        <P>Configure team members, permissions, and notifications.</P>
       </CardContent>
       <CardFooter>
         <Button variant="ghost">Cancel</Button>
@@ -108,10 +109,10 @@ export const MinimalCard: Story = {
   render: (args) => (
     <Card {...args}>
       <CardContent>
-        <p className="text-sm">
+        <Small>
           This is a minimal card with only content. Perfect for displaying simple information
           without the need for a header or footer.
-        </p>
+        </Small>
       </CardContent>
     </Card>
   ),

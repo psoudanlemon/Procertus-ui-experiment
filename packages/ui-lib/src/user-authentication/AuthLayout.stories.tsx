@@ -11,7 +11,7 @@ const panel = {
 };
 
 const meta = {
-  title: "Management Tool/Authentication",
+  title: "Management Interface/Authentication",
   component: AuthLayout,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
@@ -25,7 +25,7 @@ type Story = StoryObj<typeof meta>;
 export const Login: Story = {
   args: {
     title: "Welcome back",
-    description: "Sign in to your Procertus account",
+    description: "Sign in to your PROCERTUS account",
     children: (
       <LoginForm
         email="jane.doe@company.com"
@@ -39,7 +39,7 @@ export const Login: Story = {
 export const AcceptInvitation: Story = {
   args: {
     title: "Create your account",
-    description: "You've been invited to join Procertus",
+    description: "You've been invited to join PROCERTUS",
     children: (
       <AccountDetailsForm
         invitedEmail="jane.doe@company.com"

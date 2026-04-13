@@ -1,0 +1,429 @@
+{/* packages/ui/src/showcase/ColorGuidelines.mdx */}
+import { Meta } from "@storybook/addon-docs/blocks";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/ui/table";
+
+<Meta title="design tokens/Color/Guidelines" />
+
+<div className="mb-12">
+  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-3">PROCERTUS Design Guidelines</p>
+  <h1 className="font-sans font-bold text-foreground m-0 mb-4" style={{ fontSize: '1.875rem', lineHeight: 1.2, letterSpacing: '-0.03em' }}>Color Strategy</h1>
+  <p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
+    Color at PROCERTUS is never decorative. Every hue earns its place by
+    reducing cognitive load, reinforcing the <strong>frame vs content</strong> distinction,
+    or communicating <strong>status at a glance</strong>. This document explains the
+    decisions behind our palette so that anyone on the team can speak the
+    same visual language.
+  </p>
+</div>
+
+<hr />
+
+<div className="mt-16">
+
+## The brand palette
+
+Both brand colors are derived directly from the PROCERTUS logotype.
+Navy and Teal form the recognisable identity of the platform and are
+used intentionally throughout the interface to reinforce the brand.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Navy</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Primary</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      Navy provides the anchor points. It appears in headings, primary
+      actions, and secondary actions to give the interface its structural
+      rhythm without overwhelming the content.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border flex items-center gap-3">
+      <div className="rounded-lg shrink-0" style={{ width: '40px', height: '40px', backgroundColor: 'var(--brand-primary-700)' }} />
+      <div>
+        <p className="text-sm text-foreground font-semibold" style={{ margin: 0, lineHeight: 1.2 }}>Logo Anchor</p>
+        <p className="text-xs text-muted-foreground" style={{ margin: 0, marginTop: '12px', lineHeight: 1.2 }}><code className="text-xs bg-muted px-1 py-0.5 rounded">#006789</code></p>
+      </div>
+    </div>
+  </div>
+  <div className="rounded-xl border-2 border-brand-accent-200 dark:border-brand-accent-800 bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Teal</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Accent</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      Teal surfaces on interaction. It appears in hover states and
+      active selections, giving the user subtle feedback through
+      brand color rather than generic highlights.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border flex items-center gap-3">
+      <div className="rounded-lg shrink-0" style={{ width: '40px', height: '40px', backgroundColor: 'var(--brand-accent-300)' }} />
+      <div>
+        <p className="text-sm text-foreground font-semibold" style={{ margin: 0, lineHeight: 1.2 }}>Logo Anchor</p>
+        <p className="text-xs text-muted-foreground" style={{ margin: 0, marginTop: '12px', lineHeight: 1.2 }}><code className="text-xs bg-muted px-1 py-0.5 rounded">#8dcfba</code></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '24px' }}>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0 mb-3">
+    The two logo hex codes are converted into the <strong>OKLCH</strong> color space before
+    generating any scales. Unlike traditional color models, OKLCH is perceptually
+    uniform: a 10-point lightness step looks equally different to the human eye
+    whether you are moving between light tints or dark shades. This eliminates
+    the muddy mid-tones and uneven contrast jumps that plague hex-based ramps.
+  </p>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0 mb-3">
+    From each OKLCH anchor we generate a full <strong>11-step ramp</strong> (<code className="text-sm bg-muted px-1.5 py-0.5 rounded">50</code>–<code className="text-sm bg-muted px-1.5 py-0.5 rounded">950</code>),
+    giving every component consistent access to the right shade for backgrounds,
+    borders, text, and interactive states without ever hard-coding a one-off
+    color value.
+  </p>
+  <Button variant="link" className="p-0 h-auto text-sm" asChild><a href="?path=/story/design-tokens-color--brand-colors">View brand color ramps</a></Button>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## The "Midnight" neutral
+
+A platform built entirely on Navy and Teal would be visually overwhelming.
+The bulk of the interface, body text, backgrounds, and borders, lives in
+neutral tones to keep the experience calm and readable. But we don't
+reach for pure black and pure white. Although they offer strong contrast,
+they make every platform look the same. Instead, we infuse a hint of
+brand navy into every neutral (hue ~230), creating our "Midnight" shades
+that feel more refined and premium.
+
+<div className="flex flex-col gap-6 mt-6">
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Midnight Neutrals</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Navy-Tinted</span>
+    <div className="flex h-12 overflow-hidden rounded-lg border border-border mb-3">
+      <div className="flex-1" style={{ backgroundColor: 'var(--neutral-50)' }} />
+      <div className="flex-1" style={{ backgroundColor: 'var(--neutral-100)' }} />
+      <div className="flex-1" style={{ backgroundColor: 'var(--neutral-200)' }} />
+      <div className="flex-1" style={{ backgroundColor: 'var(--neutral-300)' }} />
+      <div className="flex-1" style={{ backgroundColor: 'var(--neutral-400)' }} />
+      <div className="flex-1" style={{ backgroundColor: 'var(--neutral-500)' }} />
+      <div className="flex-1" style={{ backgroundColor: 'var(--neutral-600)' }} />
+      <div className="flex-1" style={{ backgroundColor: 'var(--neutral-700)' }} />
+      <div className="flex-1" style={{ backgroundColor: 'var(--neutral-800)' }} />
+      <div className="flex-1" style={{ backgroundColor: 'var(--neutral-900)' }} />
+      <div className="flex-1" style={{ backgroundColor: 'var(--neutral-950)' }} />
+    </div>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Cohesive. Refined. Every shade carries a whisper of the brand.
+    </p>
+    <p className="mt-4 mb-0 text-sm">
+      <a href="?path=/story/design-tokens-color--neutral" className="text-brand-accent-600 hover:underline font-medium">View Neutral Colors →</a>
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6" style={{ opacity: 0.5 }}>
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Every Other Platform</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Generic</span>
+    <div className="flex h-12 overflow-hidden rounded-lg border border-border mb-3">
+      <div className="flex-1" style={{ backgroundColor: '#fafafa' }} />
+      <div className="flex-1" style={{ backgroundColor: '#f5f5f5' }} />
+      <div className="flex-1" style={{ backgroundColor: '#e5e5e5' }} />
+      <div className="flex-1" style={{ backgroundColor: '#d4d4d4' }} />
+      <div className="flex-1" style={{ backgroundColor: '#a3a3a3' }} />
+      <div className="flex-1" style={{ backgroundColor: '#737373' }} />
+      <div className="flex-1" style={{ backgroundColor: '#525252' }} />
+      <div className="flex-1" style={{ backgroundColor: '#404040' }} />
+      <div className="flex-1" style={{ backgroundColor: '#262626' }} />
+      <div className="flex-1" style={{ backgroundColor: '#171717' }} />
+      <div className="flex-1" style={{ backgroundColor: '#0a0a0a' }} />
+    </div>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Flat. Generic. Every application looks the same.
+    </p>
+  </div>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## System colors
+
+Brand colors and neutrals handle structure and content, but they cannot
+communicate urgency. Without a dedicated set of feedback colors, every row
+in a table looks the same and nothing stands out. System colors solve this.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border-l-4 bg-sys-success-50 dark:bg-sys-success-950 p-6" style={{ borderLeftColor: 'var(--sys-success-500)' }}>
+    <span className="font-semibold text-sys-success-900 dark:text-sys-success-100 block" style={{ fontSize: '1.5rem' }}>Success</span>
+    <span className="uppercase text-sys-success-700 dark:text-sys-success-300 block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', marginTop: '8px' }}>Confirmed</span>
+    <p className="text-sm text-sys-success-800 dark:text-sys-success-200 m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      A certification has been approved, a payment has gone through, a
+      profile is complete. Success confirms that something went right.
+    </p>
+  </div>
+  <div className="rounded-xl border-l-4 bg-sys-warning-50 dark:bg-sys-warning-950 p-6" style={{ borderLeftColor: 'var(--sys-warning-500)' }}>
+    <span className="font-semibold text-sys-warning-900 dark:text-sys-warning-100 block" style={{ fontSize: '1.5rem' }}>Warning</span>
+    <span className="uppercase text-sys-warning-700 dark:text-sys-warning-300 block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', marginTop: '8px' }}>Attention Needed</span>
+    <p className="text-sm text-sys-warning-800 dark:text-sys-warning-200 m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      A certification is about to expire, a required field is missing, or a
+      deadline is approaching. Warning tells the user to act before it
+      becomes a problem.
+    </p>
+  </div>
+  <div className="rounded-xl border-l-4 bg-sys-destructive-50 dark:bg-sys-destructive-950 p-6" style={{ borderLeftColor: 'var(--sys-destructive-500)' }}>
+    <span className="font-semibold text-sys-destructive-900 dark:text-sys-destructive-100 block" style={{ fontSize: '1.5rem' }}>Destructive</span>
+    <span className="uppercase text-sys-destructive-700 dark:text-sys-destructive-300 block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', marginTop: '8px' }}>Critical</span>
+    <p className="text-sm text-sys-destructive-800 dark:text-sys-destructive-200 m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      A submission has been rejected, an action cannot be undone, or a
+      certification has been revoked. Destructive signals that something
+      requires immediate attention.
+    </p>
+  </div>
+  <div className="rounded-xl border-l-4 bg-sys-info-50 dark:bg-sys-info-950 p-6" style={{ borderLeftColor: 'var(--sys-info-500)' }}>
+    <span className="font-semibold text-sys-info-900 dark:text-sys-info-100 block" style={{ fontSize: '1.5rem' }}>Info</span>
+    <span className="uppercase text-sys-info-700 dark:text-sys-info-300 block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', marginTop: '8px' }}>Neutral Feedback</span>
+    <p className="text-sm text-sys-info-800 dark:text-sys-info-200 m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      A certification is under review, a process is in progress, or there
+      is additional context to share. Info communicates without urgency.
+    </p>
+  </div>
+</div>
+
+### In context
+
+<div className="flex flex-col gap-3 mt-6">
+  <div className="flex gap-6 items-baseline p-6 rounded-xl border border-sys-success-500 bg-sys-success-50 dark:bg-sys-success-950">
+    <span className="shrink-0 w-14 text-base font-bold text-sys-success-600 dark:text-sys-success-400">DO</span>
+    <div>
+      <p className="m-0 text-base text-foreground">Subdued backgrounds let badges inform without competing with content. Use semantic status badge variants.</p>
+      <div className="mt-3 flex flex-wrap gap-3">
+        <Badge variant="success">Active</Badge>
+        <Badge variant="warning">Expiring</Badge>
+        <Badge variant="destructive">Revoked</Badge>
+        <Badge variant="info">Under Review</Badge>
+      </div>
+    </div>
+  </div>
+  <div className="flex gap-6 items-baseline p-6 rounded-xl border border-sys-destructive-500 bg-sys-destructive-50 dark:bg-sys-destructive-950">
+    <span className="shrink-0 w-14 text-base font-bold text-sys-destructive-600 dark:text-sys-destructive-400">DON'T</span>
+    <div>
+      <p className="m-0 text-base text-foreground">Use saturated 500-level backgrounds. They compete with content and create visual noise.</p>
+      <div className="mt-3 flex flex-wrap gap-3 opacity-60">
+        <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold line-through decoration-sys-destructive-400/50" style={{ backgroundColor: 'var(--sys-success-500)', color: 'white' }}>Active</span>
+        <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold line-through decoration-sys-destructive-400/50" style={{ backgroundColor: 'var(--sys-warning-500)', color: 'white' }}>Expiring</span>
+        <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold line-through decoration-sys-destructive-400/50" style={{ backgroundColor: 'var(--sys-destructive-500)', color: 'white' }}>Revoked</span>
+        <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold line-through decoration-sys-destructive-400/50" style={{ backgroundColor: 'var(--sys-info-500)', color: 'white' }}>Under Review</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '24px' }}>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    Each system color is built as its own 11-step OKLCH ramp, with hue and
+    saturation tweaked to sit naturally alongside our brand Navy and Teal.
+    We keep them deliberately low-vibrancy: the <code className="text-sm bg-muted px-1.5 py-0.5 rounded">100</code> level
+    for backgrounds and <code className="text-sm bg-muted px-1.5 py-0.5 rounded">700</code> for text maintains
+    a professional tone while keeping meaning clear.
+  </p>
+  <Button variant="link" className="p-0 h-auto text-sm" asChild><a href="?path=/story/design-tokens-color--system-colors">View system color ramps</a></Button>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## The functional blueprint
+
+The Functional Blueprint is the bridge where our raw brand DNA meets the actual user interface. It is the logic engine that translates color into Functional Roles: Structure, Interaction, and Surfaces. Where the preceding sections define *what* our colors are, this section defines *what they do*.
+
+<div className="flex flex-col mt-6" style={{ gap: '24px' }}>
+
+<div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+  <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Unified Governance</span>
+  <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Single Source of Truth</span>
+  <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+    Procertus utilizes a single, unified semantic theme for all current and future tools. By rejecting a multi-layered theming approach, we ensure that brand integrity is maintained across the entire ecosystem, from the Registry to automated Phase 4 documentation. Any future adjustment is managed through one single source of truth, ensuring 100% consistency with zero maintenance overhead.
+  </p>
+  <p className="mt-4 mb-0 text-sm">
+    <a href="?path=/story/design-tokens-color--semantic-colors" className="text-brand-accent-600 hover:underline font-medium">View the Unified Theme Mapping →</a>
+  </p>
+</div>
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Structure</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>The Frame</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Our Navys and Neutrals defining the skeleton and boundaries. Headers, sidebars, dividers, borders: the architectural elements that give the interface its shape and hierarchy.
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Interaction</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>The Action</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Our Teals and Accents reserved for user intent. Buttons, links, focus rings, active states: anything the user can act upon. These tokens carry energy and invite engagement.
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Surfaces</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>The Content</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Our Whites and Midnights defining the depth and focus of the data. Backgrounds, cards, input fields, overlays: the planes on which information lives.
+    </p>
+  </div>
+</div>
+
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## The contrast contract
+
+Accessibility is not a checklist. It is the orchestration layer of our
+color system: if a combination does not meet the contrast contract, it
+does not enter the theme. A **contract of inclusion** that ensures every
+surface is legible for every user.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>WCAG 2.1 AA</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Our Standard</span>
+    <div className="text-sm text-muted-foreground" style={{ lineHeight: 1.6, margin: 0, marginBottom: '12px' }}>
+      <span style={{ display: 'block' }}>
+        We commit to AA (4.5:1) across every foreground/background relationship
+        in the theme. This preserves the exact brand anchors from the logotype
+        while guaranteeing legibility for all users.
+      </span>
+      <span style={{ display: 'block', marginTop: '8px' }}>
+        A single shared theme governs all products. Every contrast decision
+        is made once and applied everywhere, so no product drifts from
+        the standard.
+      </span>
+    </div>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border flex-1 mt-auto flex items-center gap-3">
+      <div className="rounded-lg" style={{ width: '40px', height: '40px', backgroundColor: 'var(--brand-primary-700)' }} />
+      <div className="rounded-lg" style={{ width: '40px', height: '40px', backgroundColor: 'var(--brand-accent-300)' }} />
+      <span className="text-xs text-muted-foreground">Brand-first, accessible design</span>
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col" style={{ opacity: 0.75 }}>
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Why not AAA?</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>The Alternative</span>
+    <div className="text-sm text-muted-foreground" style={{ lineHeight: 1.6, margin: 0, marginBottom: '12px' }}>
+      <span style={{ display: 'block' }}>
+        Reaching AAA (7.0:1) on every relationship would require shifting to
+        darker navys and lighter teals, moving away from the logotype's
+        exact values.
+      </span>
+      <span style={{ display: 'block', marginTop: '8px' }}>
+        The contrast improves on paper, but the brand identity weakens
+        and the platform loses its distinction.
+      </span>
+    </div>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border flex-1 mt-auto flex items-center gap-3">
+      <div className="rounded-lg" style={{ width: '40px', height: '40px', backgroundColor: 'var(--brand-primary-900)' }} />
+      <div className="rounded-lg" style={{ width: '40px', height: '40px', backgroundColor: 'var(--brand-accent-200)' }} />
+      <span className="text-xs text-muted-foreground">Higher ratio, diluted identity</span>
+    </div>
+  </div>
+</div>
+
+<div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '24px' }}>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    All ratios are computed live in
+    our <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-color--contrast-checker">Contrast Checker</a></Button>.
+  </p>
+  <p className="text-sm text-muted-foreground leading-[1.6] m-0" style={{ marginTop: '12px' }}>
+    <strong>*</strong> The checker measures two flat colors against each other.
+    In practice, many relationships are rendered in semibold or bold (buttons,
+    labels, headings), which increases perceived contrast. The actual
+    implemented result often exceeds the checker's score.
+  </p>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## The beacon principle
+
+With the functional roles defined and their accessibility validated, we can now address the final environmental variable: how this system adapts when the lights go out. Dark mode isn't a "darker version" of the app, it's an entirely different environment. In a dark room, your eyes naturally hunt for the light.
+
+<div className="flex flex-col mt-6" style={{ gap: '24px' }}>
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Light Mode</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Authority</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      Think of a dark car on a sunlit street: it is the heaviest thing in
+      the scene, impossible to miss. Navy works the same way on a light
+      screen. It commands attention, so primary actions wear deep Navy.
+    </p>
+    <div className="p-4 rounded-lg bg-background border border-border flex-1 mt-auto flex items-center justify-center">
+      <div className="w-full rounded-lg px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider text-white" style={{ backgroundColor: 'var(--brand-primary-700)' }}>
+        Submit
+      </div>
+    </div>
+  </div>
+  <div className="rounded-xl border-2 border-brand-accent-200 dark:border-brand-accent-800 bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Dark Mode</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Beacon</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      Now picture a white car in a dark parking lot: it glows. Teal does
+      the same on a dark screen. Navy vanishes, so Teal is promoted to
+      primary, the beacon your eyes find first.
+    </p>
+    <div className="p-4 rounded-lg border border-border flex-1 mt-auto flex items-center justify-center" style={{ backgroundColor: 'var(--neutral-950)' }}>
+      <div className="w-full rounded-lg px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider" style={{ backgroundColor: 'var(--brand-accent-300)', color: 'var(--neutral-950)' }}>
+        Submit
+      </div>
+    </div>
+  </div>
+</div>
+
+<div className="rounded-xl border-2 border-sys-warning-300 dark:border-sys-warning-700 bg-sys-warning-50 dark:bg-sys-warning-950 p-6">
+  <h4 className="font-sans text-base font-bold text-sys-warning-800 dark:text-sys-warning-200 m-0 mb-3">This is not just a color swap. It is an intent swap.</h4>
+  <p className="text-base text-sys-warning-700 dark:text-sys-warning-300 leading-[1.6] m-0">
+    The role stays the same: "this is the primary action." The color that best
+    fulfills that role simply changes with the environment. Teal achieves <strong>11:1</strong> contrast
+    against dark surfaces, exceeding even AAA (7:1). The theme handles this mapping
+    automatically, so component code never needs to know which color is active.
+  </p>
+  <Button variant="link" className="p-0 h-auto text-sm" asChild><a href="?path=/story/applied-guidelines-colors--default">See this in action</a></Button>
+</div>
+
+</div>
+
+</div>
+
+<hr className="page-end" />
+
+<div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '5rem' }}>
+  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For Developers</h4>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    Every rule on this page is <strong>already encoded in the component library</strong>.
+    Semantic color tokens are resolved automatically by Button, Badge, Alert, Card,
+    Input, Sidebar, and Table components. The light/dark switch, the beacon principle,
+    and the subdued status strategy are all handled by the theme layer in
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded">default.css</code>.
+    Do not override semantic tokens with raw ramp values. For live token exploration, see the
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-color--brand-colors">Brand Colors</a></Button>,{" "}
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-color--system-colors">System Colors</a></Button>,{" "}
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-color--semantic-colors">Semantic Colors</a></Button>, and{" "}
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-color--contrast-checker">Contrast Checker</a></Button> showcases.
+  </p>
+</div>

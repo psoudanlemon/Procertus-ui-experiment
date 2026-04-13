@@ -1,0 +1,370 @@
+{/* packages/ui/src/components/spacing-guidelines.mdx */}
+import { Meta } from "@storybook/addon-docs/blocks";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+
+<Meta title="design tokens/Spacing/Guidelines" />
+
+<div className="mb-12">
+  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-3">PROCERTUS Design Guidelines</p>
+  <h1 className="font-sans font-bold text-foreground m-0 mb-4" style={{ fontSize: '1.875rem', lineHeight: 1.2, letterSpacing: '-0.03em' }}>Spacing</h1>
+  <p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
+    Space is the invisible structure that tells a user what belongs together and what
+    stands apart. At PROCERTUS, every gap, margin, and breath of air is deliberate:
+    it encodes hierarchy so the interface can communicate without relying on lines,
+    borders, or decoration.
+  </p>
+</div>
+
+<hr />
+
+<div className="mt-16">
+
+## The architectural beat
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ marginTop: '1.5rem' }}>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>The industry standard</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>4px base unit</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Every spacing value in the PROCERTUS system is a multiple of **4 pixels**, the
+      same base unit used across the modern software industry. When every gap snaps
+      to the same increment, layouts feel stable and intentional, the same way a
+      consistent grid anchors a printed page.
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Why it works</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Precision and clarity</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Small enough to provide fine-grained control in dense management tables, yet
+      large enough to produce visible, meaningful distinctions at every step. No magic
+      numbers, no one-off overrides. The constraint is the feature.
+    </p>
+  </div>
+</div>
+
+<div className="flex flex-col items-start gap-3" style={{ marginTop: '1rem' }}>
+  <Button variant="link" className="p-0 h-auto text-base font-semibold" asChild>
+    <a href="?path=/story/design-tokens-spacing--scale-foundations">View the scale foundations</a>
+  </Button>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## The token system
+
+<p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
+  Instead of scattering pixel values across components, every gap in the
+  Procertus platform is controlled by six named tokens. This gives us a
+  consistent, purpose-built spacing scale that can be tuned from a single
+  place and applied across every product at once.
+</p>
+
+<div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-brand-primary-50 dark:bg-brand-primary-950 p-6" style={{ marginTop: '1.5rem' }}>
+  <h4 className="font-sans text-base font-bold text-brand-primary-800 dark:text-brand-primary-200 m-0 mb-3">Why tokens, not pixels</h4>
+  <p className="text-base text-brand-primary-700 dark:text-brand-primary-300 leading-[1.6] m-0">
+    A token like <strong>Element</strong> resolves to different pixel values depending on
+    the density context, the device, and the platform. Change it once in the
+    system and every card, form, and layout across every product updates
+    automatically. No component code changes, no manual audits.
+  </p>
+</div>
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ marginTop: '1.5rem' }}>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Micro</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>The glue</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      Binds tightly coupled elements: an icon to its label, a status dot
+      to its text.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border mt-auto">
+      <div className="flex items-center gap-micro">
+        <div className="size-2 rounded-full bg-sys-success-500" />
+        <span className="text-sm text-foreground">Active</span>
+      </div>
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Element</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>The standard breath</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      Default padding inside containers. Rows in a list, fields in a form,
+      cells in a table.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border mt-auto">
+      <div className="flex flex-col gap-element">
+        <div className="flex items-center justify-between">
+          <span className="text-xs text-muted-foreground">Standard</span>
+          <Skeleton className="h-3 w-24" />
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-xs text-muted-foreground">Scope</span>
+          <Skeleton className="h-3 w-32" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Component</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>The relationship gap</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      Between related but independent pieces: sibling cards, form field
+      groups.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border mt-auto">
+      <div className="flex gap-component">
+        <Skeleton className="h-10 flex-1 rounded-lg" />
+        <Skeleton className="h-10 flex-1 rounded-lg" />
+      </div>
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Section</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>The subject change</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      Marks a shift in topic. Between a summary and an audit table, or
+      between two distinct form sections.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border mt-auto">
+      <div className="flex flex-col gap-section">
+        <Skeleton className="h-6 w-full rounded-lg" />
+        <Skeleton className="h-6 w-full rounded-lg" />
+      </div>
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Region</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>The major break</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      The largest internal gap. Separates the header from the body, the
+      body from the footer.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border mt-auto">
+      <div className="flex flex-col gap-region">
+        <Skeleton className="h-4 w-full rounded" />
+        <Skeleton className="h-12 w-full rounded-lg" />
+      </div>
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Boundary</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>The outer frame</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3" style={{ lineHeight: 1.6 }}>
+      Page margins and viewport edges. Tighter than Region so the eye
+      focuses inward on content, not outward on chrome.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border mt-auto">
+      <div className="border border-border/50 rounded-lg p-boundary">
+        <Skeleton className="h-8 w-full rounded" />
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## Proximity creates structure
+
+<p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
+  When you layer these spacing roles together, structure emerges on its own.
+  Tight gaps bind related data into rows. Medium gaps separate those rows into
+  groups. Large gaps carve out sections. The result is cards, tables, pages,
+  and layouts, all without a single decorative line.
+</p>
+
+<div className="rounded-xl border border-border bg-card overflow-hidden p-section" data-density="operational" style={{ marginTop: '1.5rem' }}>
+
+  {/* Page header */}
+  <div className="flex flex-col gap-micro">
+    <Skeleton className="h-5 w-56 rounded" />
+    <Skeleton className="h-3 w-80 rounded" />
+  </div>
+
+  {/* Stat cards row */}
+  <div className="grid grid-cols-4 gap-component" style={{ marginTop: 'var(--spacing-section)' }}>
+    {[1, 2, 3, 4].map((n) => (
+      <div key={n} className="rounded-lg border border-border p-element flex flex-col gap-element">
+        <Skeleton className="h-2.5 w-20 rounded" />
+        <Skeleton className="h-5 w-16 rounded" />
+        <Skeleton className="h-1.5 w-full rounded" />
+      </div>
+    ))}
+  </div>
+
+  {/* Section break: table area */}
+  <div className="flex flex-col gap-element" style={{ marginTop: 'var(--spacing-section)' }}>
+
+    {/* Table toolbar */}
+    <div className="flex items-center justify-between">
+      <Skeleton className="h-4 w-36 rounded" />
+      <div className="flex items-center gap-micro">
+        <Skeleton className="h-7 w-28 rounded-full" />
+        <Skeleton className="h-7 w-24 rounded-full" />
+        <Skeleton className="h-7 w-24 rounded-full" />
+      </div>
+    </div>
+
+    {/* Table */}
+    <div className="rounded-lg border border-border overflow-hidden">
+      {/* Table header */}
+      <div className="flex items-center gap-element px-element py-element border-b border-border bg-muted/30">
+        <Skeleton className="h-2 w-[18%] rounded" />
+        <Skeleton className="h-2 w-[14%] rounded" />
+        <Skeleton className="h-2 w-[12%] rounded" />
+        <Skeleton className="h-2 w-[14%] rounded" />
+        <Skeleton className="h-2 w-[14%] rounded" />
+        <Skeleton className="h-2 flex-1 rounded" />
+      </div>
+
+      {/* Table rows */}
+      {[1, 2, 3, 4, 5].map((n) => (
+        <div key={n} className={`flex items-center gap-element px-element py-element ${n < 5 ? 'border-b border-border/50' : ''}`}>
+          <Skeleton className="h-3 w-[18%] rounded" />
+          <Skeleton className="h-3 w-[14%] rounded" />
+          <Skeleton className="h-5 w-[12%] rounded-full" />
+          <Skeleton className="h-3 w-[14%] rounded" />
+          <Skeleton className="h-3 w-[14%] rounded" />
+          <Skeleton className="h-3 flex-1 rounded" />
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## The density-aware system
+
+PROCERTUS is a **multi-density system**. The same component library serves two
+fundamentally different audiences, and each audience needs a different relationship
+with space. This is not a screen-size concern. It is a product-level decision:
+density is driven by **who** is using the interface and **why**.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Operational density</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Professional mode</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      This is the mode for internal staff: certification managers, auditors, and
+      administrators who live in dense, data-rich cockpits. They scan hundreds of
+      records per session and need maximum information per viewport. Operational
+      density uses tight spacing to keep more data visible without scrolling:
+      compact cards, dense tables, narrow margins. Speed and efficiency are the
+      priority.
+    </p>
+    <Button variant="link" className="p-0 h-auto text-sm font-semibold mt-3 w-fit" asChild>
+      <a href="?path=/story/design-tokens-spacing--operational-spacing">View operational spacing reference</a>
+    </Button>
+  </div>
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Spacious density</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Public mode</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      This is the mode for the public-facing registry and external documents.
+      Visitors come to verify a single certification. They need clarity, trust,
+      and a sense of authority. Spacious density uses generous gaps and breathing
+      room to create a premium, confident layout: wider padding, larger gaps,
+      substantial margins. Every extra pixel of whitespace says "this information
+      is trustworthy." Trust, prestige, and readability are the priority.
+    </p>
+    <Button variant="link" className="p-0 h-auto text-sm font-semibold mt-3 w-fit" asChild>
+      <a href="?path=/story/design-tokens-spacing--spacious-spacing">View spacious spacing reference</a>
+    </Button>
+  </div>
+</div>
+
+<div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-brand-primary-50 dark:bg-brand-primary-950 p-6" style={{ marginTop: '1.5rem' }}>
+  <h4 className="font-sans text-base font-bold text-brand-primary-800 dark:text-brand-primary-200 m-0 mb-3">Identity stays fixed. Volume is fluid.</h4>
+  <p className="text-base text-brand-primary-700 dark:text-brand-primary-300 leading-[1.6] m-0">
+    Radius, color, and typography do not change between contexts. Only the air
+    between elements adapts.
+  </p>
+</div>
+
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## The accordion system
+
+<p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
+  Procertus spacing is responsive. Tokens automatically shift at the 768px
+  breakpoint so the interface adapts to the device without manual overrides.
+</p>
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ marginTop: '1.5rem' }}>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Stable glue</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Micro and element</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      The internal "glue" that holds icons to labels and pads containers stays
+      stable or grows slightly on mobile to accommodate touch targets. These
+      values ensure tap areas remain comfortable without distorting the component's
+      internal rhythm.
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Structural air</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Region and boundary</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      The large-scale structural spacing compresses on mobile where viewport
+      real estate is scarce, then expands on desktop where the screen can
+      afford to breathe. This is where the accordion effect is most visible:
+      Region can jump from 20px to 32px (or 24px to 48px in Spacious mode).
+    </p>
+  </div>
+</div>
+
+<p className="text-sm text-muted-foreground m-0 max-w-[680px]" style={{ marginTop: '1.5rem', lineHeight: 1.6 }}>
+  The system is built to scale consistently. If we adjust a token's value
+  in the future, the change propagates globally to maintain visual harmony
+  across every component, page, and density context.
+</p>
+
+<div className="flex flex-col items-start gap-4" style={{ marginTop: '1rem' }}>
+  <Button variant="link" className="p-0 h-auto text-base font-semibold" asChild>
+    <a href="?path=/story/design-tokens-spacing-product-context--duality">Test the duality for yourself</a>
+  </Button>
+</div>
+
+
+</div>
+
+<hr className="page-end" />
+
+<div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '5rem' }}>
+  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For developers</h4>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    Every rule on this page is <strong>already encoded in the component library</strong>.
+    Card, Table, and layout components use semantic spacing tokens by default.
+    A component built with semantic spacing tokens works in either density context
+    with zero code changes. Wrap it in an Operational or Spacious context and every
+    spacing value recalculates automatically through CSS custom property resolution.
+    The responsive breakpoint at 768px is handled by the token layer, not by
+    component code. No conditional logic. No props. No re-renders. For live token
+    exploration, see the{" "}
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-spacing--operational-spacing">Operational spacing</a></Button>,{" "}
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-spacing--spacious-spacing">Spacious spacing</a></Button>, and{" "}
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-spacing--scale-foundations">Scale foundations</a></Button> showcases.
+  </p>
+</div>

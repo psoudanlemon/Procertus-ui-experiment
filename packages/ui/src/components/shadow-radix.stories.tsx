@@ -6,7 +6,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-// Replace nextjs-vite with the name of your framework
+import { H2 } from "@/components/ui/heading";
+import { Muted, Small } from "@/components/ui/typography";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 type Shadow = {
@@ -21,8 +22,8 @@ const ShadowTile = ({ value }: Pick<Shadow, "value">) => {
   return (
     <div className="flex flex-col items-center gap-2">
       <div className="size-20 rounded-md bg-card" style={{ boxShadow: shadow }} />
-      <p className="text-center text-xs opacity-70">{value}</p>
-      <p className="text-center text-xs">{shadow}</p>
+      <Muted className="text-center text-xs">{value}</Muted>
+      <Small className="text-center text-xs">{shadow}</Small>
     </div>
   );
 };
@@ -36,7 +37,14 @@ const meta: Meta<{
   title: "design tokens/Shadow",
   argTypes: {},
   render: (args) => (
-    <Table>
+    <div>
+      <header className="mb-4">
+        <H2>Shadow</H2>
+        <Muted className="mt-2 text-base">
+          Box shadow tokens for elevation, depth, and layering across cards, modals, and overlays.
+        </Muted>
+      </header>
+      <Table>
       <TableHeader>
         <TableRow>
           <TableHead>Name</TableHead>
@@ -56,6 +64,7 @@ const meta: Meta<{
         ))}
       </TableBody>
     </Table>
+    </div>
   ),
 };
 

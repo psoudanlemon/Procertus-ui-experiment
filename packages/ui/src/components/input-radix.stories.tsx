@@ -5,6 +5,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Muted } from "@/components/ui/typography";
 
 /**
  * Displays a form input field or a component that looks like an input field.
@@ -64,7 +65,7 @@ export const HelperText: Story = {
     <div className="grid items-center gap-1.5">
       <Label htmlFor="email-2">{args.placeholder}</Label>
       <Input {...args} id="email-2" />
-      <p className="text-foreground/60 text-sm">Enter your email address.</p>
+      <Muted>Enter your email address.</Muted>
     </div>
   ),
 };

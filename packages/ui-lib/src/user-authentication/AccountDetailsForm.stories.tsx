@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AccountDetailsForm } from "./AccountDetailsForm";
 
 const meta = {
-  title: "Management Tool/Authentication/Forms/Account Details",
+  title: "Management Interface/Authentication/Forms/Account Details",
   component: AccountDetailsForm,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

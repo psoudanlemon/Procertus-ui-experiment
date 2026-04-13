@@ -16,12 +16,185 @@ body,
 }
 
 /**
- * Docs tab: the Canvas block uses `getBlockBackgroundStyle` on `.sbdocs-preview` (Storybook theme),
- * not app tokens. Override only that shell so embedded stories match Mode + Theme. `!important`
- * beats emotion styles.
+ * ─── Docs page theming ──────────────────────────────────────────────────────
+ *
+ * Storybook's addon-docs injects hardcoded white backgrounds and dark text
+ * via emotion/inline styles on the docs wrapper, prose elements, tables, and
+ * code blocks. Every override below uses `!important` to beat those styles
+ * so our CSS-variable-driven light/dark tokens paint through.
  */
+
+/* Wrapper & content shell */
+#storybook-docs .sbdocs-wrapper {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+#storybook-docs .sbdocs-content {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+/* Headings — remove Storybook's bottom border and use the semantic heading token */
+#storybook-docs h1,
+#storybook-docs h2,
+#storybook-docs h3,
+#storybook-docs h4,
+#storybook-docs h5,
+#storybook-docs h6 {
+  color: var(--heading-foreground) !important;
+  border: none !important;
+}
+
+#storybook-docs h2,
+.sbdocs h2,
+.sbdocs-content h2 {
+  margin-top: 4rem !important;
+  margin-bottom: 0.25rem !important;
+  padding-bottom: 0 !important;
+  font-weight: 700 !important;
+}
+
+#storybook-docs h2 + p,
+.sbdocs h2 + p,
+.sbdocs-content h2 + p {
+  margin-top: 0 !important;
+}
+
+
+#storybook-docs h3 {
+  margin-top: 2rem !important;
+  margin-bottom: 0.5rem !important;
+  font-weight: 500 !important;
+}
+
+/* Body text */
+#storybook-docs p,
+#storybook-docs li,
+#storybook-docs span:not([data-slot]),
+#storybook-docs label,
+#storybook-docs strong,
+#storybook-docs em {
+  color: inherit;
+}
+
+/* Blockquotes — subtle left accent, no background */
+#storybook-docs blockquote {
+  background-color: transparent !important;
+  border-left: 3px solid var(--brand-primary-500) !important;
+  padding: 0.75rem 1.25rem !important;
+  margin: 1.5rem 0 !important;
+  color: var(--muted-foreground) !important;
+}
+
+/* Horizontal rules — subtle section dividers */
+#storybook-docs hr {
+  display: block !important;
+  height: 0 !important;
+  border-style: none !important;
+  border-top-style: solid !important;
+  border-top-width: 1px !important;
+  border-top-color: var(--border) !important;
+  margin: 5rem 0 0 0 !important;
+}
+
+#storybook-docs hr:first-of-type,
+#storybook-docs hr.page-end {
+  width: 100vw !important;
+  position: relative !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+/* Links — override Storybook's emotion-injected anchor styles.
+   Prose links (no data-slot) get brand-primary. Component-rendered anchors
+   (Button asChild) need both base AND hover overrides because Storybook's
+   unlayered emotion styles beat Tailwind's @layer-scoped utilities. */
+#storybook-docs a:not([data-slot]):not([data-variant]) {
+  color: var(--brand-primary-500) !important;
+}
+
+#storybook-docs a[data-slot="button"][data-variant="link"] {
+  color: var(--accent-foreground) !important;
+}
+
+#storybook-docs a[data-slot="button"][data-variant="link"]:hover {
+  color: color-mix(in srgb, var(--accent-foreground) 80%, transparent) !important;
+  text-decoration: underline !important;
+}
+
+#storybook-docs a[data-slot="button"]:not([data-variant="link"]) {
+  color: inherit !important;
+}
+
+/* ─── Code ─────────────────────────────────────────────────────────────── */
+
+#storybook-docs code {
+  color: var(--foreground) !important;
+  background-color: var(--muted) !important;
+}
+
+#storybook-docs pre {
+  background-color: var(--muted) !important;
+  color: var(--muted-foreground) !important;
+  border-color: var(--border) !important;
+}
+
+#storybook-docs pre code {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+/* ─── Tables ───────────────────────────────────────────────────────────── */
+
+/* Storybook injects inline background-color on table, thead, tbody, tr, td, th.
+   Override every level so no white leaks through in dark mode. */
+#storybook-docs table {
+  background-color: var(--card) !important;
+  border-color: var(--border) !important;
+}
+
+#storybook-docs thead {
+  background-color: transparent !important;
+}
+
+#storybook-docs tbody {
+  background-color: transparent !important;
+}
+
+#storybook-docs tr {
+  background-color: transparent !important;
+  border-bottom-color: var(--border) !important;
+}
+
+#storybook-docs td,
+#storybook-docs th {
+  background-color: transparent !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+#storybook-docs td {
+  padding-top: 0.875rem !important;
+  padding-bottom: 0.875rem !important;
+}
+
+/* ─── Canvas / preview blocks ──────────────────────────────────────────── */
+
 #storybook-docs .sbdocs-preview {
   background-color: var(--background) !important;
   color: var(--foreground);
+  border-color: var(--border) !important;
+}
+
+#storybook-docs .sbdocs-preview > div,
+#storybook-docs .docs-story {
+  background-color: var(--background) !important;
+}
+
+/* ─── Catch-all: any remaining Storybook divs with hardcoded backgrounds ─ */
+
+#storybook-docs .docblock-source {
+  background-color: var(--muted) !important;
   border-color: var(--border) !important;
 }

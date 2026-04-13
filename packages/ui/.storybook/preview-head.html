@@ -1,0 +1,20 @@
+<script>
+  // Sync mode class + data-theme from localStorage before first paint.
+  // Prevents flash-of-wrong-theme on standalone MDX docs pages where
+  // the React-based ModeProvider/ThemeProvider may not run.
+  // Keys match those used by ModeProvider and ThemeProvider.
+  (function () {
+    var mode = localStorage.getItem('sb-ui-mode') || 'dark';
+    var theme = localStorage.getItem('sb-ui-theme') || 'default';
+    var root = document.documentElement;
+    root.classList.remove('light', 'dark');
+    if (mode === 'system') {
+      root.classList.add(
+        window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      );
+    } else {
+      root.classList.add(mode);
+    }
+    root.dataset.theme = theme;
+  })();
+</script>

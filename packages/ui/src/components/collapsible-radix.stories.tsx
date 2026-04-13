@@ -15,8 +15,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { H4 } from "@/components/ui/heading";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Muted, P, Small } from "@/components/ui/typography";
 
 /**
  * An interactive component that expands and collapses a panel.
@@ -44,7 +46,7 @@ export const Default: Story = {
     return (
       <Collapsible open={isOpen} onOpenChange={setIsOpen} className="flex w-[350px] flex-col gap-2">
         <div className="flex items-center justify-between gap-4 px-4">
-          <h4 className="text-sm font-semibold">Order #4189</h4>
+          <Small className="font-semibold">Order #4189</Small>
           <CollapsibleTrigger asChild>
             <Button variant="ghost" size="icon" className="size-8">
               <ChevronsUpDown />
@@ -53,17 +55,17 @@ export const Default: Story = {
           </CollapsibleTrigger>
         </div>
         <div className="flex items-center justify-between rounded-md border px-4 py-2 text-sm">
-          <span className="text-muted-foreground">Status</span>
-          <span className="font-medium">Shipped</span>
+          <Muted>Status</Muted>
+          <Small className="font-medium">Shipped</Small>
         </div>
         <CollapsibleContent className="flex flex-col gap-2">
           <div className="rounded-md border px-4 py-2 text-sm">
-            <p className="font-medium">Shipping address</p>
-            <p className="text-muted-foreground">100 Market St, San Francisco</p>
+            <Small className="font-medium">Shipping address</Small>
+            <Muted>100 Market St, San Francisco</Muted>
           </div>
           <div className="rounded-md border px-4 py-2 text-sm">
-            <p className="font-medium">Items</p>
-            <p className="text-muted-foreground">2x Studio Headphones</p>
+            <Small className="font-medium">Items</Small>
+            <Muted>2x Studio Headphones</Muted>
           </div>
         </CollapsibleContent>
       </Collapsible>
@@ -103,7 +105,7 @@ export const SettingsPanel: Story = {
     const [isOpen, setIsOpen] = React.useState(false);
 
     return (
-      <Card className="mx-auto w-full max-w-xs" size="sm">
+      <Card className="mx-auto w-full max-w-xs">
         <CardHeader>
           <CardTitle>Radius</CardTitle>
           <CardDescription>Set the corner radius of the element.</CardDescription>
@@ -241,7 +243,7 @@ const fileTree: FileTreeItem[] = [
  */
 export const FileTree: Story = {
   render: () => (
-    <Card className="mx-auto w-[16rem] gap-2" size="sm">
+    <Card className="mx-auto w-[16rem] gap-2">
       <CardHeader>
         <Tabs defaultValue="explorer">
           <TabsList className="w-full">

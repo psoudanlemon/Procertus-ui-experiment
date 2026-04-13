@@ -72,7 +72,7 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
-          "Management Tool",
+          "Management Interface",
           [
             "Application Shell",
             "Authentication",

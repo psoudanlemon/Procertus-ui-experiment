@@ -177,7 +177,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     header: "Section Type",
     cell: ({ row }) => (
       <div className="w-32">
-        <Badge variant="outline" className="px-1.5 text-muted-foreground">
+        <Badge variant="outline">
           {row.original.type}
         </Badge>
       </div>
@@ -187,7 +187,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
-      <Badge variant="outline" className="px-1.5 text-muted-foreground">
+      <Badge variant="outline">
         {row.original.status === "Done" ? (
           <CircleCheckIcon className="fill-green-500 dark:fill-green-400" />
         ) : (

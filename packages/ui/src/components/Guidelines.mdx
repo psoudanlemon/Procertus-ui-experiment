@@ -1,0 +1,474 @@
+{/* packages/ui/src/components/Guidelines.mdx */}
+import { Meta } from "@storybook/addon-docs/blocks";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/ui/table";
+import { H1, H2, H3, H4 } from "@/components/ui/heading";
+
+<Meta title="design tokens/Typography/Guidelines" />
+
+<div className="mb-12">
+  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-3">PROCERTUS Design Guidelines</p>
+  <h1 className="font-sans font-bold text-foreground m-0 mb-4" style={{ fontSize: '1.875rem', lineHeight: 1.2, letterSpacing: '-0.03em' }}>Typography</h1>
+  <p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
+    Every typographic decision in the PROCERTUS system serves a single purpose:
+    to reduce cognitive load. The interface distinguishes between its
+    <strong> frame</strong> and its <strong>content</strong>, and typography is the
+    primary instrument for making that distinction legible at a glance.
+  </p>
+</div>
+
+<hr />
+
+<div className="mt-16">
+
+## Font family
+
+<p className="text-base text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
+  The CSS font stack resolves in order: <strong>Avenir</strong> → <strong>Avenir Next LT</strong> → <strong>Avenir Next</strong> → <strong>Nunito Sans</strong> → system <strong>sans-serif</strong>.
+  Nunito Sans is loaded via Google Fonts and serves as the guaranteed baseline.
+</p>
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Avenir</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Primary</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      The preferred typeface. Geometric, clean, and legible at every size.
+      Available natively on macOS and some Windows systems. Must be loaded
+      via Adobe Fonts or self-hosted <code className="text-sm bg-muted px-1.5 py-0.5 rounded">@font-face</code> if
+      required on all platforms.
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Avenir Next LT</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Secondary</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Alternate weight family name used by some system and Adobe installations.
+      Visually identical to Avenir. Included in the font stack to cover
+      environments where only this variant is installed.
+    </p>
+  </div>
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Nunito Sans</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Fallback (most common)</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Google Fonts fallback, always available regardless of platform.
+      Rounded geometric sans that closely matches Avenir's proportions.
+      This is what renders when Avenir is not installed.
+    </p>
+  </div>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## Line height
+
+Two deliberate strategies balance readability with visual cohesion.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Headings</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Tight Leading (~1.2)</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3">
+      Headings use tighter letter-spacing and compact line heights so that
+      multi-line headings read as a single cohesive visual anchor rather than
+      separate lines.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border flex-1 mt-auto">
+      <H2 className="!m-0">Certificate Verification & Compliance Overview</H2>
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Body</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Generous Leading (1.4)</span>
+    <p className="text-sm text-muted-foreground m-0 mb-3">
+      All body copy uses a 1.4 line-height ratio. This creates comfortable
+      vertical rhythm for sustained reading in management interfaces and
+      public registry detail pages.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border flex-1 mt-auto">
+      <p className="font-sans text-base font-normal text-foreground m-0">
+        The International Register of Certificated Auditors maintains records
+        for all active certifications. Each certificate is assigned a unique
+        reference number and linked to the issuing body's accreditation chain.
+      </p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## Font weight
+
+Font weight is not decorative. It establishes a functional hierarchy between
+*what something is* and *what it says*. In data-dense interfaces this distinction
+is the difference between comfortable scanning and visual fatigue. Weight creates
+the visual anchors that give the eye somewhere to land.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Content & Action</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Bold and Semibold</span>
+    <p className="text-base text-muted-foreground leading-[1.6] m-0 mb-3">
+      This weight is reserved for the most critical information and the "path forward." It tells the user: <strong>"This is the result"</strong> or <strong>"Click here to proceed.</strong>"
+    </p>
+    <div className="flex flex-col items-start gap-3 mt-1">
+      <Button variant="link" className="p-0 h-auto text-base font-semibold" asChild><a href="?path=/story/components-button--default">Buttons</a></Button>
+      <Button variant="link" className="p-0 h-auto text-base font-semibold" asChild><a href="?path=/story/components-label--default">Labels</a></Button>
+      <Button variant="link" className="p-0 h-auto text-base font-semibold" asChild><a href="?path=/story/components-typography--h-1">Headings</a></Button>
+      <Button variant="link" className="p-0 h-auto text-base font-semibold" asChild><a href="?path=/story/components-typography--large">Large Typography</a></Button>
+      <Button variant="link" className="p-0 h-auto text-base font-semibold" asChild><a href="?path=/story/components-empty--default">Empty State Title</a></Button>
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Context & Metadata</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Regular</span>
+    <p className="text-base text-muted-foreground leading-[1.6] m-0 mb-3">
+      These weights provide the "frame" for the work. 
+      They are designed to recede slightly so they don't compete with the data. 
+      They answer: <strong>"Where am I?"</strong> and <strong>"What is this field for?"</strong>
+    </p>
+    <div className="flex flex-col items-start gap-3 mt-1">
+      <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/components-input--default">Input Content</a></Button>
+      <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/components-sidebar--simple">Sidebar Items</a></Button>
+      <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/components-input--helper-text">Helper Text</a></Button>
+      <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/components-tooltip--default">Tooltips</a></Button>
+      <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/components-typography--p">Body Paragraphs</a></Button>
+    </div>
+  </div>
+</div>
+
+### In context
+
+<div className="flex flex-col gap-3 mt-6">
+  <div className="flex gap-6 items-baseline p-6 rounded-xl border border-sys-success-500 bg-sys-success-50 dark:bg-sys-success-950">
+    <span className="shrink-0 w-14 text-base font-bold text-sys-success-600 dark:text-sys-success-400">DO</span>
+    <div>
+      <p className="m-0 text-base text-foreground">Bold for the <strong>value</strong>, regular for the <strong>label</strong>. In data-dense interfaces the data itself matters most.</p>
+      <div className="mt-3 flex gap-8 text-base">
+        <span><span className="font-normal text-muted-foreground">Status:</span> <strong className="font-bold">Active</strong></span>
+        <span><span className="font-normal text-muted-foreground">Issued:</span> <strong className="font-bold">12 Mar 2026</strong></span>
+        <span><span className="font-normal text-muted-foreground">Holder:</span> <strong className="font-bold">Jane Doe</strong></span>
+      </div>
+    </div>
+  </div>
+  <div className="flex gap-6 items-baseline p-6 rounded-xl border border-sys-destructive-500 bg-sys-destructive-50 dark:bg-sys-destructive-950">
+    <span className="shrink-0 w-14 text-base font-bold text-sys-destructive-600 dark:text-sys-destructive-400">DON'T</span>
+    <div>
+      <p className="m-0 text-base text-foreground">Bolding everything (labels, values and full rows) flattens the hierarchy and adds cognitive load.</p>
+      <div className="mt-3 flex gap-8 text-base font-bold text-muted-foreground line-through decoration-sys-destructive-400/50">
+        <span>Status: Active</span>
+        <span>Issued: 12 Mar 2026</span>
+        <span>Holder: Jane Doe</span>
+      </div>
+    </div>
+  </div>
+  <div className="flex gap-6 items-baseline p-6 rounded-xl border border-sys-success-500 bg-sys-success-50 dark:bg-sys-success-950">
+    <span className="shrink-0 w-14 text-base font-bold text-sys-success-600 dark:text-sys-success-400">DO</span>
+    <div>
+      <p className="m-0 text-base text-foreground">Bold table headers act as visual anchors; regular cell content recedes for comfortable scanning.</p>
+      <div className="mt-3">
+        <Table className="rounded-xl overflow-hidden">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Certificate</TableHead>
+              <TableHead>Expires</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>Jane Doe</TableCell>
+              <TableCell>ISO 27001 Lead</TableCell>
+              <TableCell>2027-04-15</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>John Smith</TableCell>
+              <TableCell>CISA</TableCell>
+              <TableCell>2026-11-30</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-16">
+
+## Capitalisation
+
+The most consequential typographic rule in this system is also the simplest.
+Every piece of text belongs to one of two tiers, and the capitalisation
+treatment declares which one immediately.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Structural</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Uppercase, Wide Tracking</span>
+    <p className="text-base text-muted-foreground leading-[1.6] m-0 mb-4">
+      Buttons, form labels, table column headers, sidebar group titles and badges
+      are rendered in <strong>uppercase</strong> with increased letter-spacing.
+      These elements form the visual anchors of the interface. They echo the
+      authority of the PROCERTUS logotype and tell the user <em>where they are</em>
+      and <em>what actions are available</em>.
+    </p>
+    <div className="flex flex-col items-start gap-2 mt-4">
+      <Button variant="link" className="p-0" asChild><a href="?path=/story/components-button--default">Buttons</a></Button>
+      <Button variant="link" className="p-0" asChild><a href="?path=/story/components-input--labeled">Form Labels</a></Button>
+      <Button variant="link" className="p-0" asChild><a href="?path=/story/components-table--default">Table Headers</a></Button>
+      <Button variant="link" className="p-0" asChild><a href="?path=/story/components-badge--default">Badges</a></Button>
+      <Button variant="link" className="p-0" asChild><a href="?path=/story/components-sidebar--simple">Sidebar Groups</a></Button>
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Informational</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Sentence Case, Normal Tracking</span>
+    <p className="text-base text-muted-foreground leading-[1.6] m-0 mb-4">
+      User-generated data, descriptions, helper text and long-form content remain
+      in <strong>sentence case</strong>. Research consistently shows that all-caps
+      body text reduces reading speed by 13 to 20 percent. In data-heavy management
+      interfaces, sentence case preserves the scanning velocity that professionals
+      depend on.
+    </p>
+    <div className="flex flex-col items-start gap-2 mt-4">
+      <Button variant="link" className="p-0" asChild><a href="?path=/story/components-input--default">Inputs</a></Button>
+      <Button variant="link" className="p-0" asChild><a href="?path=/story/components-table--default">Table Cells</a></Button>
+      <Button variant="link" className="p-0" asChild><a href="?path=/story/components-tooltip--default">Tooltips</a></Button>
+      <Button variant="link" className="p-0" asChild><a href="?path=/story/components-sonner--default">Toasts</a></Button>
+      <Button variant="link" className="p-0" asChild><a href="?path=/story/components-dialog--default">Dialog Content</a></Button>
+    </div>
+  </div>
+</div>
+
+> If text describes the *frame*, uppercase it.
+> If text describes the *content inside the frame*, leave it in sentence case.
+
+<div className="mt-6 rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-brand-primary-50 dark:bg-brand-primary-950 p-6">
+  <h4 className="font-sans text-base font-bold text-brand-primary-800 dark:text-brand-primary-200 m-0 mb-3">PROCERTUS is always written in all caps.</h4>
+  <p className="text-base text-brand-primary-700 dark:text-brand-primary-300 leading-[1.6] m-0">
+    The brand name is a proper noun that follows the logotype's uppercase treatment.
+    Wherever it appears in UI copy, documentation, alt text or metadata,
+    write it as <strong>PROCERTUS</strong>, never "Procertus" or "procertus".
+  </p>
+</div>
+
+### The two-word threshold
+
+<div className="mt-8 rounded-xl border-2 border-sys-warning-300 dark:border-sys-warning-700 bg-sys-warning-50 dark:bg-sys-warning-950 p-6">
+  <h4 className="font-sans text-base font-bold text-sys-warning-800 dark:text-sys-warning-200 m-0 mb-3">Never uppercase strings longer than two words.</h4>
+  <p className="text-base text-sys-warning-700 dark:text-sys-warning-300 leading-[1.6] m-0 mb-4">
+    Structural caps work because they are short. The moment an uppercase string
+    exceeds two words it stops reading as a label and starts reading as a
+    sentence. Readability drops sharply. If a structural element requires more
+    than two words, the copy itself needs to be reconsidered.
+  </p>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="p-3 rounded-lg bg-card border border-border">
+      <span className="text-sm font-bold text-sys-success-600 dark:text-sys-success-400" style={{ display: 'block', marginBottom: '0.75rem' }}>Acceptable</span>
+      <div className="flex flex-col gap-2">
+        <span className="uppercase text-foreground block" style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em' }}>Save</span>
+        <span className="uppercase text-foreground block" style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em' }}>View Status</span>
+        <span className="uppercase text-foreground block" style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em' }}>Issue Date</span>
+      </div>
+    </div>
+    <div className="p-3 rounded-lg bg-card border border-border">
+      <span className="text-sm font-bold text-sys-destructive-600 dark:text-sys-destructive-400" style={{ display: 'block', marginBottom: '0.75rem' }}>Rewrite as sentence case</span>
+      <div className="flex flex-col gap-2">
+        <span className="text-muted-foreground leading-normal line-through decoration-sys-destructive-400/50" style={{ fontSize: '0.75rem', fontWeight: 400, display: 'block' }}><span className="uppercase" style={{ letterSpacing: '0.1em' }}>Save All Changes</span></span>
+        <span className="text-muted-foreground leading-normal line-through decoration-sys-destructive-400/50" style={{ fontSize: '0.75rem', fontWeight: 400, display: 'block' }}><span className="uppercase" style={{ letterSpacing: '0.1em' }}>Upload Your Documents</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+### In context
+
+<div className="flex flex-col gap-3 mt-6">
+  <div className="flex gap-6 items-baseline p-6 rounded-xl border border-sys-success-500 bg-sys-success-50 dark:bg-sys-success-950">
+    <span className="shrink-0 w-14 text-base font-bold text-sys-success-600 dark:text-sys-success-400">DO</span>
+    <div>
+      <p className="m-0 text-base text-foreground">Structural elements announce themselves in uppercase.</p>
+      <div className="mt-3 flex flex-col gap-3">
+        <div className="flex flex-col gap-1.5">
+          <Label>Email Address</Label>
+          <Input className="w-64" defaultValue="jane.doe@example.com" readOnly />
+        </div>
+        <div><Button>Save Changes</Button></div>
+      </div>
+    </div>
+  </div>
+  <div className="flex gap-6 items-baseline p-6 rounded-xl border border-sys-destructive-500 bg-sys-destructive-50 dark:bg-sys-destructive-950">
+    <span className="shrink-0 w-14 text-base font-bold text-sys-destructive-600 dark:text-sys-destructive-400">DON'T</span>
+    <div>
+      <p className="m-0 text-base text-foreground">Uppercase on informational text destroys readability and reads as visual shouting.</p>
+      <div className="mt-3 flex flex-col gap-3 opacity-60">
+        <div className="flex flex-col gap-1.5">
+          <Label>Email Address</Label>
+          <Input className="w-64 uppercase line-through decoration-sys-destructive-400/50" defaultValue="JANE.DOE@EXAMPLE.COM" readOnly />
+        </div>
+        <div><Button variant="outline" className="line-through decoration-sys-destructive-400/50">Upload your certification documents</Button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## The PROCERTUS type scale
+
+Our typography follows a strict mathematical scale to ensure absolute clarity.
+By defining specific roles for every font size, we create a consistent visual
+hierarchy that guides the user effortlessly through the application.
+
+<div className="mt-6">
+  <Table className="rounded-xl overflow-hidden">
+    <TableHeader>
+      <TableRow>
+        <TableHead>Element</TableHead>
+        <TableHead>Line Height</TableHead>
+        <TableHead>Weight</TableHead>
+        <TableHead>Case</TableHead>
+        <TableHead>Size</TableHead>
+        <TableHead>Preview</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      <TableRow>
+        <TableCell className="font-bold">Page Title</TableCell>
+        <TableCell className="text-muted-foreground">1.2</TableCell>
+        <TableCell className="text-muted-foreground">Semibold</TableCell>
+        <TableCell className="text-muted-foreground">Sentence case</TableCell>
+        <TableCell className="text-muted-foreground">30px</TableCell>
+        <TableCell><H1 className="m-0">Heading XL</H1></TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell className="font-bold">Section Header</TableCell>
+        <TableCell className="text-muted-foreground">1.2</TableCell>
+        <TableCell className="text-muted-foreground">Semibold</TableCell>
+        <TableCell className="text-muted-foreground">Sentence case</TableCell>
+        <TableCell className="text-muted-foreground">24px</TableCell>
+        <TableCell><H2 className="m-0">Heading Large</H2></TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell className="font-bold">Subsection Header</TableCell>
+        <TableCell className="text-muted-foreground">1.2</TableCell>
+        <TableCell className="text-muted-foreground">Semibold</TableCell>
+        <TableCell className="text-muted-foreground">Sentence case</TableCell>
+        <TableCell className="text-muted-foreground">20px</TableCell>
+        <TableCell><H3 className="m-0">Heading Medium</H3></TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell className="font-bold">Grouping Header</TableCell>
+        <TableCell className="text-muted-foreground">1.2</TableCell>
+        <TableCell className="text-muted-foreground">Semibold</TableCell>
+        <TableCell className="text-muted-foreground">Uppercase</TableCell>
+        <TableCell className="text-muted-foreground">14px</TableCell>
+        <TableCell><H4 className="m-0">Heading Small</H4></TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell className="font-bold">Body text</TableCell>
+        <TableCell className="text-muted-foreground">1.4</TableCell>
+        <TableCell className="text-muted-foreground">Regular</TableCell>
+        <TableCell className="text-muted-foreground">Sentence case</TableCell>
+        <TableCell className="text-muted-foreground">16px</TableCell>
+        <TableCell><span className="font-sans text-foreground" style={{ fontSize: '1rem', fontWeight: 400 }}>Standard body text for descriptions.</span></TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell className="font-bold">Primary Action</TableCell>
+        <TableCell className="text-muted-foreground">1.4</TableCell>
+        <TableCell className="text-muted-foreground">Medium / Semibold</TableCell>
+        <TableCell className="text-muted-foreground">Uppercase</TableCell>
+        <TableCell className="text-muted-foreground">14px</TableCell>
+        <TableCell><Button>Submit</Button></TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell className="font-bold">Supportive Metadata</TableCell>
+        <TableCell className="text-muted-foreground">1.4</TableCell>
+        <TableCell className="text-muted-foreground">Regular</TableCell>
+        <TableCell className="text-muted-foreground">Sentence case</TableCell>
+        <TableCell className="text-muted-foreground">14px</TableCell>
+        <TableCell><span className="font-sans text-muted-foreground" style={{ fontSize: '0.875rem', fontWeight: 400 }}>Timestamps, captions, metadata</span></TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell className="font-bold">Form labels</TableCell>
+        <TableCell className="text-muted-foreground">1.4</TableCell>
+        <TableCell className="text-muted-foreground">Semibold</TableCell>
+        <TableCell className="text-muted-foreground">Uppercase</TableCell>
+        <TableCell className="text-muted-foreground">12px</TableCell>
+        <TableCell><Label>Email</Label></TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell className="font-bold">Table headers</TableCell>
+        <TableCell className="text-muted-foreground">1.4</TableCell>
+        <TableCell className="text-muted-foreground">Medium</TableCell>
+        <TableCell className="text-muted-foreground">Uppercase</TableCell>
+        <TableCell className="text-muted-foreground">12px</TableCell>
+        <TableCell><TableHead className="h-auto p-0">Name</TableHead></TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell className="font-bold">Badge text</TableCell>
+        <TableCell className="text-muted-foreground">1.4</TableCell>
+        <TableCell className="text-muted-foreground">Medium</TableCell>
+        <TableCell className="text-muted-foreground">Uppercase</TableCell>
+        <TableCell className="text-muted-foreground">12px</TableCell>
+        <TableCell><span className="uppercase text-foreground" style={{ fontSize: '0.75rem', fontWeight: 500, letterSpacing: '0.05em' }}>Active</span></TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell className="font-bold">Menu / Select group labels</TableCell>
+        <TableCell className="text-muted-foreground">1.4</TableCell>
+        <TableCell className="text-muted-foreground">Medium</TableCell>
+        <TableCell className="text-muted-foreground">Uppercase</TableCell>
+        <TableCell className="text-muted-foreground">12px</TableCell>
+        <TableCell><span className="uppercase text-muted-foreground" style={{ fontSize: '0.75rem', fontWeight: 500, letterSpacing: '0.05em' }}>Category</span></TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell className="font-bold">Sidebar group label</TableCell>
+        <TableCell className="text-muted-foreground">1.4</TableCell>
+        <TableCell className="text-muted-foreground">Bold</TableCell>
+        <TableCell className="text-muted-foreground">Uppercase</TableCell>
+        <TableCell className="text-muted-foreground">10px</TableCell>
+        <TableCell><span className="uppercase text-sidebar-foreground/70" style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.05em' }}>Navigation</span></TableCell>
+      </TableRow>
+    </TableBody>
+  </Table>
+</div>
+
+<div className="mt-6 rounded-xl border border-border bg-muted/30 p-6">
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    All Uppercase elements utilize a <strong>+0.05em letter-spacing</strong> to ensure a sharp, professional framework.
+  </p>
+</div>
+
+</div>
+
+<hr className="page-end" />
+
+<div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '5rem' }}>
+  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For Developers</h4>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    Every rule on this page is <strong>already encoded in the component library</strong>.
+    Structural caps, weight defaults and letter-spacing are applied automatically
+    by the Button, Label, Table Header, Badge, Sidebar Group Label and Menu Group Label components.
+    Write text in natural case. The components handle the visual transformation.
+    Do not manually override these defaults.
+  </p>
+</div>

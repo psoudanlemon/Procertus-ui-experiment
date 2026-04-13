@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Muted } from "@/components/ui/typography";
 
 /**
  * Displays a form textarea or a component that looks like a textarea.
@@ -58,7 +59,7 @@ export const Text: Story = {
     <div className="grid w-full gap-1.5">
       <Label htmlFor="message-2">Your Message</Label>
       <Textarea {...args} id="message-2" />
-      <p className="text-slate-500 text-sm">Your message will be copied to the support team.</p>
+      <Muted>Your message will be copied to the support team.</Muted>
     </div>
   ),
 };
