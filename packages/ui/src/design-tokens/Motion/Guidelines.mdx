@@ -1,0 +1,245 @@
+{/* packages/ui/src/design-tokens/Motion/Guidelines.mdx */}
+import { Meta } from "@storybook/addon-docs/blocks";
+import { Button } from "@/components/ui/button";
+
+<Meta title="design tokens/Motion/Guidelines" />
+
+<div className="mb-12">
+  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-3">PROCERTUS Design Guidelines</p>
+  <h1 className="font-sans font-bold text-foreground m-0 mb-4" style={{ fontSize: '1.875rem', lineHeight: 1.2, letterSpacing: '-0.03em' }}>Motion</h1>
+  <p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
+    Motion in the PROCERTUS system is not decoration or personality. It is
+    <strong> information about change</strong>: a controlled vocabulary of
+    durations, curves, and patterns that tells users what happened, where it
+    happened, and how important it is.
+  </p>
+</div>
+
+<hr />
+
+<div className="mt-16">
+
+## 01. Principles
+
+Three rules govern every animation in the platform. They exist to keep motion
+precise, confident, and invisible when it should be.
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+    <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">Precise, not playful</h4>
+    <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+      This is a certification platform. Motion should feel controlled and
+      confident. Short durations, no bounce, no spring physics. If a user
+      notices the animation itself, it is too much.
+    </p>
+  </div>
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+    <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">Fade + scale to appear, slide to navigate</h4>
+    <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+      Floating UI (popovers, dialogs, menus) fades in with a subtle scale.
+      Lateral content (sheets, navigation panels) slides. This distinction
+      separates "new layer" from "adjacent content."
+    </p>
+  </div>
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+    <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">Respect the user</h4>
+    <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+      When <code className="text-xs bg-muted px-1 py-0.5 rounded">prefers-reduced-motion</code> is
+      active, all animations and transitions are disabled globally. No
+      component-level opt-outs, no exceptions.
+    </p>
+  </div>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 02. Easing curves
+
+Two curves handle the entire system. Fewer curves means more consistency;
+more consistency means motion becomes invisible infrastructure rather than
+noticeable style.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Default</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>ease-out</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Fast start, gentle landing. The standard for nearly everything: overlays,
+      expand/collapse, sidebar transitions, button states. Elements arrive
+      quickly and settle precisely.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border mt-4">
+      <svg viewBox="0 0 200 100" className="w-full" style={{ height: '80px' }}>
+        <line x1="0" y1="95" x2="200" y2="95" stroke="var(--border)" strokeWidth="1" />
+        <line x1="0" y1="5" x2="200" y2="5" stroke="var(--border)" strokeWidth="1" strokeDasharray="4 4" strokeOpacity="0.4" />
+        <path d="M 0 95 C 0 95, 116 5, 200 5" fill="none" stroke="var(--muted-foreground)" strokeWidth="2.5" />
+      </svg>
+    </div>
+  </div>
+  <div className="rounded-xl border-2 border-brand-accent-200 dark:border-brand-accent-800 bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Expressive</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>cubic-bezier(0.22, 1, 0.36, 1)</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Reserved for moments that deserve energy. A slight overshoot creates a
+      sense of commitment, like the element is eager to arrive. Used for
+      navigation menu lateral content transitions where panels trade places
+      across the viewport.
+    </p>
+    <div className="p-4 rounded-lg bg-muted/50 border border-border mt-4">
+      <svg viewBox="0 0 200 100" className="w-full" style={{ height: '80px' }}>
+        <line x1="0" y1="95" x2="200" y2="95" stroke="var(--border)" strokeWidth="1" />
+        <line x1="0" y1="5" x2="200" y2="5" stroke="var(--border)" strokeWidth="1" strokeDasharray="4 4" strokeOpacity="0.4" />
+        <path d="M 0 95 C 44 5, 72 -5, 200 5" fill="none" stroke="var(--muted-foreground)" strokeWidth="2.5" />
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div className="mt-6 rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-brand-primary-50 dark:bg-brand-primary-950 p-6">
+  <h4 className="font-sans text-base font-bold text-brand-primary-800 dark:text-brand-primary-200 m-0 mb-3">
+    A curve is only half the equation
+  </h4>
+  <p className="text-base text-brand-primary-700 dark:text-brand-primary-300 leading-[1.6] m-0">
+    The right easing curve on the wrong duration still feels off. A tooltip
+    at 300ms feels sluggish no matter how smooth the curve is. A sheet at
+    100ms feels abrupt even with a gentle ease-out. Every curve in this
+    system is paired with a specific duration tier so that the two work
+    together to produce the right feeling for each interaction.
+  </p>
+  <div style={{ marginTop: '16px' }}>
+    <Button variant="link" className="p-0 h-auto text-base font-semibold text-brand-primary-700 dark:text-brand-primary-300" asChild>
+      <a href="?path=/story/design-tokens-motion--duration-scale">View the duration scale</a>
+    </Button>
+  </div>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 03. Animation patterns
+
+Every animation in the system maps to one of four patterns. Knowing which
+pattern applies to a given component eliminates guesswork.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Fade + scale</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Floating layers</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Opacity from 0 to 1 combined with scale from 95% to 100%. Communicates
+      "a new layer appeared above the current surface." Used for all floating UI
+      that originates from a trigger point.
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Slide</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Lateral content</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Translate along one axis combined with fade. Communicates "content is
+      arriving from, or departing to, a specific direction." Direction follows
+      the element's position: sheets slide from their edge, navigation content
+      slides in from its origin side.
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Expand / collapse</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Content reveal</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Height animation from 0 to auto (via Radix CSS variables). Communicates
+      "more content exists here and is now visible." The surrounding layout
+      adjusts smoothly as the element grows or shrinks.
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Continuous loop</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Ambient state</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Infinite iteration with linear or ease-out timing. Communicates either
+      "work is happening" (spinner, skeleton pulse) or "this element is
+      exceptional" (glow-spin). Never tied to a discrete user action.
+    </p>
+  </div>
+</div>
+
+<div style={{ marginTop: '16px' }}>
+  <Button variant="link" className="p-0 h-auto text-base" asChild>
+    <a href="?path=/story/design-tokens-motion--animation-mapping">See which components use each pattern</a>
+  </Button>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 04. Branded motion
+
+Two custom animations exist outside the standard pattern vocabulary. They
+carry brand identity and should not be replicated or extended without
+deliberate design intent.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Command pulse</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Tactile feedback</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      An 800ms box-shadow expansion that radiates outward from a pressed button.
+      It transforms a click from a binary state change into a physical gesture:
+      the user pushed, and the interface responded with weight. Two variants
+      exist: default (ring color) and destructive (destructive color).
+    </p>
+  </div>
+  <div className="rounded-xl border-2 border-brand-accent-200 dark:border-brand-accent-800 bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Glow-spin</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Visual gravity</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      A 6-second rotating conic gradient through two counter-rotating blur
+      layers. Reserved for the L1 Standout elevation tier. One per viewport at
+      most. Freezes at 135 degrees when
+      <code className="text-xs bg-muted px-1 py-0.5 rounded">prefers-reduced-motion</code> is
+      active.
+    </p>
+  </div>
+</div>
+
+</div>
+
+<hr className="page-end" />
+
+<div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '5rem' }}>
+  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For developers</h4>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    Every rule on this page is <strong>already encoded in the component library</strong>.
+    Durations and easing curves are applied directly in component Tailwind classes
+    (<code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">duration-100</code>,
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">duration-200</code>,
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">duration-300</code>,
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">ease-out</code>).
+    Enter/exit animations use
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">tw-animate-css</code>
+    utilities (<code className="text-sm bg-muted px-1.5 py-0.5 rounded">animate-in</code>,
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded">fade-in-0</code>,
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded">zoom-in-95</code>).
+    Custom keyframes (<code className="text-sm bg-muted px-1.5 py-0.5 rounded">command-pulse</code>,
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded">glow-spin</code>) are defined in
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">default.css</code> and
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">globals.css</code> respectively.
+    The global <code className="text-sm bg-muted px-1.5 py-0.5 rounded">prefers-reduced-motion</code> override
+    in <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">globals.css</code> disables
+    all animations platform-wide. Do not add component-level reduced-motion
+    overrides. Do not create new easing curves or duration values.
+  </p>
+  <div className="flex gap-4 items-center" style={{ marginTop: '16px' }}>
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-shadow-guidelines--docs">Shadow guidelines</a></Button>
+    <span className="text-muted-foreground">|</span>
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-elevation-guidelines--docs">Elevation guidelines</a></Button>
+  </div>
+</div>

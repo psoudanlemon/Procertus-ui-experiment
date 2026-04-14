@@ -1,10 +1,11 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { LoaderCircleIcon } from "lucide-react";
+import { HugeiconsIcon, type HugeiconsIconProps } from "@hugeicons/react";
+import { Loading03Icon } from "@hugeicons/core-free-icons";
 
 import { cn } from "@/lib/utils";
 
-const spinnerVariants = cva("animate-spin text-muted-foreground", {
+const spinnerVariants = cva("animate-spin [animation-duration:2s] [animation-timing-function:ease-out] text-muted-foreground", {
   variants: {
     size: {
       sm: "size-4",
@@ -21,9 +22,10 @@ function Spinner({
   className,
   size = "default",
   ...props
-}: React.ComponentProps<"svg"> & VariantProps<typeof spinnerVariants>) {
+}: Omit<HugeiconsIconProps, "icon"> & VariantProps<typeof spinnerVariants>) {
   return (
-    <LoaderCircleIcon
+    <HugeiconsIcon
+      icon={Loading03Icon}
       data-slot="spinner"
       className={cn(spinnerVariants({ size }), className)}
       {...props}

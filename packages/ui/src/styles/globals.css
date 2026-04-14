@@ -55,6 +55,65 @@
   text-box-edge: cap alphabetic;
 }
 
+/* ── Branded glow (standout) ───────────────────────────────────────────────
+ * Animated conic-gradient glow for the L1 Standout elevation tier.
+ * Apply to a wrapper with `position: relative` around the target element.
+ * Falls back to a static gradient when motion is reduced.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+@property --glow-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes glow-spin {
+  to {
+    --glow-angle: 360deg;
+  }
+}
+
+@utility glow-standout {
+  position: relative;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: inherit;
+    pointer-events: none;
+    background: conic-gradient(
+      from var(--glow-angle, 0deg),
+      oklch(0.803 0.073 173) 0%,
+      oklch(0.477 0.102 227) 33%,
+      oklch(0.803 0.073 173) 66%,
+      oklch(0.477 0.102 227) 100%
+    );
+    animation: glow-spin 6s ease-out infinite;
+    z-index: -1;
+  }
+
+  &::before {
+    filter: blur(12px);
+    opacity: 0.5;
+  }
+
+  &::after {
+    filter: blur(16px);
+    opacity: 0.2;
+    animation-direction: reverse;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::before,
+    &::after {
+      animation: none;
+      --glow-angle: 135deg;
+    }
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -69,5 +128,15 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
