@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { LucideIcon } from "lucide-react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 
 import { Button, Card, CardContent, H1 } from "@procertus-ui/ui";
 
@@ -11,7 +11,7 @@ import type { StatusPageAction } from "./StatusPage";
 
 export type StatusContentProps = {
   /** Large icon displayed above the heading. */
-  icon?: LucideIcon;
+  icon?: IconSvgElement;
   /** Optional image/illustration element — replaces the icon when provided. */
   illustration?: React.ReactNode;
   /** Main heading. */
@@ -29,7 +29,7 @@ export type StatusContentProps = {
 // ---------------------------------------------------------------------------
 
 function StatusContent({
-  icon: Icon,
+  icon,
   illustration,
   heading,
   description,
@@ -42,9 +42,9 @@ function StatusContent({
         {/* Visual */}
         {illustration ? (
           <div className="flex items-center justify-center">{illustration}</div>
-        ) : Icon ? (
+        ) : icon ? (
           <div className="flex size-16 items-center justify-center rounded-full bg-background">
-            <Icon className="size-8 text-brand-primary-700 dark:text-brand-primary-200" />
+            <HugeiconsIcon icon={icon} className="size-8 text-brand-primary-700 dark:text-brand-primary-200" />
           </div>
         ) : null}
 
@@ -59,29 +59,26 @@ function StatusContent({
         {/* Actions */}
         {actions && actions.length > 0 && (
           <div className="flex flex-wrap justify-center gap-component">
-            {actions.map((action) => {
-              const ActionIcon = action.icon;
-              return (
-                <Button
-                  key={action.label}
-                  variant={action.variant ?? "outline"}
-                  onClick={action.onClick}
-                  asChild={!!action.href}
-                >
-                  {action.href ? (
-                    <a href={action.href}>
-                      {ActionIcon && <ActionIcon className="size-4" />}
-                      {action.label}
-                    </a>
-                  ) : (
-                    <>
-                      {ActionIcon && <ActionIcon className="size-4" />}
-                      {action.label}
-                    </>
-                  )}
-                </Button>
-              );
-            })}
+            {actions.map((action) => (
+              <Button
+                key={action.label}
+                variant={action.variant ?? "outline"}
+                onClick={action.onClick}
+                asChild={!!action.href}
+              >
+                {action.href ? (
+                  <a href={action.href}>
+                    {action.icon && <HugeiconsIcon icon={action.icon} className="size-4" />}
+                    {action.label}
+                  </a>
+                ) : (
+                  <>
+                    {action.icon && <HugeiconsIcon icon={action.icon} className="size-4" />}
+                    {action.label}
+                  </>
+                )}
+              </Button>
+            ))}
           </div>
         )}
       </CardContent>

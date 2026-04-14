@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  BadgeCheckIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
-  Plus,
-  PlusIcon,
+  CheckmarkBadge01Icon,
+  ArrowDown01Icon,
+  ArrowRight01Icon,
+  PlusSignIcon,
   ShieldAlertIcon,
-} from "lucide-react";
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import * as React from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -79,13 +79,13 @@ export const Default: Story = {
       <Item variant="outline" size="sm" asChild>
         <a href="#">
           <ItemMedia>
-            <BadgeCheckIcon className="size-5" />
+            <HugeiconsIcon icon={CheckmarkBadge01Icon} className="size-5" />
           </ItemMedia>
           <ItemContent>
             <ItemTitle>Your profile has been verified.</ItemTitle>
           </ItemContent>
           <ItemActions>
-            <ChevronRightIcon className="size-4" />
+            <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
           </ItemActions>
         </a>
       </Item>
@@ -128,7 +128,7 @@ export const Muted: Story = {
     <div className="flex w-full max-w-md flex-col gap-6">
       <Item {...args} variant="muted">
         <ItemMedia variant="icon">
-          <BadgeCheckIcon />
+          <HugeiconsIcon icon={CheckmarkBadge01Icon} />
         </ItemMedia>
         <ItemContent>
           <ItemTitle>Account Verified</ItemTitle>
@@ -189,7 +189,7 @@ export const WithIcon: Story = {
     <div className="flex w-full max-w-lg flex-col gap-6">
       <Item {...args} variant="outline">
         <ItemMedia variant="icon">
-          <ShieldAlertIcon />
+          <HugeiconsIcon icon={ShieldAlertIcon} />
         </ItemMedia>
         <ItemContent>
           <ItemTitle>Security Alert</ItemTitle>
@@ -224,7 +224,7 @@ export const WithAvatar: Story = {
         </ItemContent>
         <ItemActions>
           <Button size="icon-sm" variant="outline" className="rounded-full" aria-label="Invite">
-            <Plus />
+            <HugeiconsIcon icon={PlusSignIcon} />
           </Button>
         </ItemActions>
       </Item>
@@ -359,7 +359,7 @@ export const WithGroup: Story = {
                 </ItemContent>
                 <ItemActions>
                   <Button variant="ghost" size="icon" className="rounded-full">
-                    <PlusIcon />
+                    <HugeiconsIcon icon={PlusSignIcon} />
                   </Button>
                 </ItemActions>
               </Item>
@@ -455,7 +455,7 @@ export const WithDropdown: Story = {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="w-fit">
-              Select <ChevronDownIcon />
+              Select <HugeiconsIcon icon={ArrowDown01Icon} />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-72 [--radius:0.65rem]" align="end">

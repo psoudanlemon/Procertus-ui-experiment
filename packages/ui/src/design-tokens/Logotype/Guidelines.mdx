@@ -1,0 +1,369 @@
+{/* packages/ui/src/design-tokens/Logotype/Guidelines.mdx */}
+import { Meta } from "@storybook/addon-docs/blocks";
+import { Button } from "@/components/ui/button";
+
+<Meta title="design tokens/Logotype/Guidelines" />
+
+<div className="mb-12">
+  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-3">PROCERTUS Design Guidelines</p>
+  <h1 className="font-sans font-bold text-foreground m-0 mb-4" style={{ fontSize: '1.875rem', lineHeight: 1.2, letterSpacing: '-0.03em' }}>Logotype</h1>
+  <p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
+    The PROCERTUS logotype is not a graphic element you place where it fits.
+    It is the <strong>primary trust signal</strong> of the entire platform:
+    the visual contract that tells an auditor, a registrar, or an accreditation
+    body that they are inside a system that takes precision seriously. Every
+    placement rule exists to protect that signal from erosion.
+  </p>
+</div>
+
+<hr />
+
+<div className="mt-16">
+
+## 01. Color options
+
+The logotype is available in three color treatments. The choice is determined
+by the background it sits on, not by preference.
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.25rem' }}>Color</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Default</span>
+    <p className="text-sm text-muted-foreground m-0 mb-4 flex-1" style={{ lineHeight: 1.6 }}>
+      The full-color logotype is the primary version. Used on white
+      or light backgrounds in all digital and print contexts.
+    </p>
+    <div className="p-6 rounded-lg bg-neutral-50 border border-border flex items-center justify-center mt-auto">
+      <img src="/Procertus Logo with tagline.svg" alt="Color logotype with tagline" style={{ width: 240 }} />
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.25rem' }}>White</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Inverted</span>
+    <p className="text-sm text-muted-foreground m-0 mb-4 flex-1" style={{ lineHeight: 1.6 }}>
+      The white logotype is used on dark backgrounds, brand blue surfaces,
+      and approved dark imagery. Applied via CSS filter, never as a
+      separate SVG file.
+    </p>
+    <div className="p-6 rounded-lg bg-[var(--neutral-900)] border border-border flex items-center justify-center mt-auto">
+      <img src="/Procertus Logo with tagline.svg" alt="White logotype with tagline" className="brightness-0 invert" style={{ width: 240 }} />
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.25rem' }}>Black</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Print / monochrome</span>
+    <p className="text-sm text-muted-foreground m-0 mb-4 flex-1" style={{ lineHeight: 1.6 }}>
+      The black logotype is reserved for monochrome print where color
+      reproduction is unavailable. Applied via CSS <code className="text-xs bg-muted px-1 py-0.5 rounded">grayscale</code> and <code className="text-xs bg-muted px-1 py-0.5 rounded">brightness-0</code> filters.
+    </p>
+    <div className="p-6 rounded-lg bg-white border border-border flex items-center justify-center mt-auto">
+      <img src="/Procertus Logo with tagline.svg" alt="Black logotype with tagline" className="grayscale brightness-0" style={{ width: 240 }} />
+    </div>
+  </div>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 02. Background application
+
+Each color treatment is tied to specific background conditions.
+The mode is determined by the surface, not by preference: color on light,
+white on dark, black on monochrome print stock. The background rules story
+maps every approved, conditional, and forbidden combination.
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.25rem' }}>Light surfaces</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Color logotype</span>
+    <p className="text-sm text-muted-foreground m-0 mb-4 flex-1" style={{ lineHeight: 1.6 }}>
+      White, off-white, and neutral-50 backgrounds. This is the default
+      for every light-mode interface: login screens, public registry,
+      management views.
+    </p>
+    <div className="p-4 rounded-lg bg-neutral-50 border border-border flex items-center justify-center mt-auto">
+      <img src="/Procertus logo.svg" alt="Color logo on light" style={{ width: 180 }} />
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.25rem' }}>Dark surfaces</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>White logotype</span>
+    <p className="text-sm text-muted-foreground m-0 mb-4 flex-1" style={{ lineHeight: 1.6 }}>
+      Neutral-900, brand blue, and approved dark imagery. Applied
+      automatically via CSS filter when the interface switches to dark
+      mode.
+    </p>
+    <div className="p-4 rounded-lg bg-[var(--neutral-900)] border border-border flex items-center justify-center mt-auto">
+      <img src="/Procertus logo.svg" alt="White logo on dark" className="brightness-0 invert" style={{ width: 180 }} />
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.25rem' }}>Black/white</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Black logotype</span>
+    <p className="text-sm text-muted-foreground m-0 mb-4 flex-1" style={{ lineHeight: 1.6 }}>
+      White paper where color reproduction is unavailable. Reserved
+      for monochrome print contexts only.
+    </p>
+    <div className="p-4 rounded-lg bg-white border border-border flex items-center justify-center mt-auto">
+      <img src="/Procertus logo.svg" alt="Black logo on print" className="grayscale brightness-0" style={{ width: 180 }} />
+    </div>
+  </div>
+  <div style={{ marginTop: 16 }}>
+    <Button variant="link" className="p-0 h-auto text-sm" asChild>
+      <a href="?path=/story/design-tokens-logotype--visual-contrast">View background rules &rarr;</a>
+    </Button>
+  </div>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 03. Variants
+
+The logotype system includes five distinct variants. Each serves a different
+spatial and contextual need. All previews below are shown at their minimum
+reproduction size.
+
+<div className="flex flex-col gap-8 mt-6">
+
+  {/* Default with tagline */}
+  <div className="rounded-xl border border-border bg-card p-6">
+    <div className="flex flex-col md:flex-row md:items-center gap-6">
+      <div className="flex-1">
+        <span className="font-semibold text-foreground block" style={{ fontSize: '1.125rem' }}>Horizontal with tagline</span>
+        <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Default</span>
+        <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+          The primary logotype variant. Includes "Certification that builds trust"
+          beneath the wordmark. Use this wherever space allows and the brand is
+          being introduced for the first time on a surface.
+        </p>
+      </div>
+      <div className="shrink-0 flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-4" style={{ width: 320 }}>
+        <img src="/Procertus Logo with tagline.svg" alt="Horizontal with tagline" className="w-full" />
+      </div>
+    </div>
+  </div>
+
+  {/* Horizontal without tagline */}
+  <div className="rounded-xl border border-border bg-card p-6">
+    <div className="flex flex-col md:flex-row md:items-center gap-6">
+      <div className="flex-1">
+        <span className="font-semibold text-foreground block" style={{ fontSize: '1.125rem' }}>Horizontal without tagline</span>
+        <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Compact</span>
+        <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+          The wordmark and logomark without the tagline. Use in contexts where
+          the brand has already been established on the same screen, or where
+          vertical space is constrained (headers, navigation bars).
+        </p>
+      </div>
+      <div className="shrink-0 flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-4" style={{ width: 320 }}>
+        <img src="/Procertus logo.svg" alt="Horizontal without tagline" className="w-full" />
+      </div>
+    </div>
+  </div>
+
+  {/* Vertical with tagline */}
+  <div className="rounded-xl border border-border bg-card p-6">
+    <div className="flex flex-col md:flex-row md:items-center gap-6">
+      <div className="flex-1">
+        <span className="font-semibold text-foreground block" style={{ fontSize: '1.125rem' }}>Vertical with tagline</span>
+        <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Stacked</span>
+        <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+          Stacked layout with the logomark above the wordmark and tagline below.
+          Suited for centered compositions, title pages, certificates, and
+          contexts where vertical emphasis is preferred.
+        </p>
+      </div>
+      <div className="shrink-0 flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-4" style={{ width: 200 }}>
+        <img src="/Procertus Logo_vertical with tagline.svg" alt="Vertical with tagline" className="w-full" />
+      </div>
+    </div>
+  </div>
+
+  {/* Vertical without tagline */}
+  <div className="rounded-xl border border-border bg-card p-6">
+    <div className="flex flex-col md:flex-row md:items-center gap-6">
+      <div className="flex-1">
+        <span className="font-semibold text-foreground block" style={{ fontSize: '1.125rem' }}>Vertical without tagline</span>
+        <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Stacked compact</span>
+        <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+          Stacked layout without the tagline. Used in the same vertical
+          contexts as above, but where space is limited or the brand is
+          already established.
+        </p>
+      </div>
+      <div className="shrink-0 flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-4" style={{ width: 200 }}>
+        <img src="/Procertus Logo_vertical.svg" alt="Vertical without tagline" className="w-full" />
+      </div>
+    </div>
+  </div>
+
+  {/* Logomark */}
+  <div className="rounded-xl border border-border bg-card p-6">
+    <div className="flex flex-col md:flex-row md:items-center gap-6">
+      <div className="flex-1">
+        <span className="font-semibold text-foreground block" style={{ fontSize: '1.125rem' }}>Logomark</span>
+        <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Pictogram</span>
+        <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+          The dual-check pictogram on its own. May only appear without the
+          wordmark when the full logotype would be illegible, or when the brand
+          has already been established in context. Common uses: favicons, app
+          icons, avatar placeholders.
+        </p>
+      </div>
+      <div className="shrink-0 flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-4" style={{ width: 44, height: 44 }}>
+        <img src="/logomark.svg" alt="Logomark" className="w-full" />
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style={{ marginTop: 24 }} className="rounded-xl border-2 border-sys-warning-300 dark:border-sys-warning-700 bg-sys-warning-50 dark:bg-sys-warning-950 p-6">
+  <h4 className="font-sans text-base font-bold text-sys-warning-800 dark:text-sys-warning-200 m-0 mb-3">
+    Tagline can never be used alone.
+  </h4>
+  <p className="text-base text-sys-warning-700 dark:text-sys-warning-300 leading-[1.6] m-0">
+    "Certification that builds trust" only appears as part of the full logotype.
+    It is never rendered as standalone text, a footer line, or a subtitle
+    separated from the mark.
+  </p>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 04. Usage and sizing
+
+Each variant has specific minimum reproduction sizes for digital and print
+contexts. Below these thresholds the logotype fails fidelity checks and
+should not be used at all.
+
+<div className="flex flex-col gap-6 mt-6">
+
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="rounded-xl border border-border bg-card p-6">
+      <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">Horizontal variants</h4>
+      <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+        The horizontal logotype (with or without tagline) requires a minimum
+        width of <strong>320px</strong> in digital contexts and <strong>38mm</strong> in print.
+        Use the tagline version when introducing the brand for the first time.
+        Drop the tagline in repeated placements like navigation headers.
+      </p>
+    </div>
+    <div className="rounded-xl border border-border bg-card p-6">
+      <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">Vertical variants</h4>
+      <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+        The vertical logotype (with or without tagline) requires a minimum
+        width of <strong>200px</strong> in digital contexts and <strong>38mm</strong> in print.
+        Preferred for centered compositions, certificates, and layouts where
+        vertical emphasis works better than horizontal.
+      </p>
+    </div>
+  </div>
+
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="rounded-xl border border-border bg-card p-6">
+      <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">Logomark</h4>
+      <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+        The standalone pictogram requires a minimum size of <strong>44px</strong> for
+        digital and <strong>38mm</strong> for print. Below these thresholds, do not
+        use the pictogram at all. It may also appear as a low-opacity watermark
+        (below 10%) anchored to the bottom-right of branded surfaces like
+        certificates and status pages.
+      </p>
+    </div>
+    <div className="rounded-xl border border-border bg-card p-6">
+      <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">Digital vs. print</h4>
+      <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+        Digital contexts use pixel-based minimums and CSS filters for color
+        treatment (<code className="text-xs bg-muted px-1 py-0.5 rounded">brightness-0 invert</code> for white, <code className="text-xs bg-muted px-1 py-0.5 rounded">grayscale brightness-0</code> for black).
+        Print contexts use millimetre-based minimums. Never manually create
+        white or monochrome SVG variants.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<div style={{ marginTop: 16 }}>
+  <Button variant="link" className="p-0 h-auto text-sm" asChild>
+    <a href="?path=/story/design-tokens-logotype--logotype-specs">View minimum dimensions &rarr;</a>
+  </Button>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 05. Light and dark mode
+
+In digital interfaces the logotype must adapt to the active color mode.
+The color variant is used in light mode, the white variant in dark mode.
+This switch is handled entirely through CSS filters applied to the same
+SVG source file: <code className="text-xs bg-muted px-1 py-0.5 rounded">brightness-0 invert</code> produces the white
+version on dark surfaces. There is no separate white SVG.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.125rem' }}>Light mode</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Color logotype on neutral-50</span>
+    <p className="text-sm text-muted-foreground m-0 mb-4 flex-1" style={{ lineHeight: 1.6 }}>
+      The default for every light-mode interface. Headers, sidebars,
+      login screens, and public-facing pages all use the full-color
+      logotype on a light background.
+    </p>
+    <div className="p-4 rounded-lg bg-neutral-50 border border-border flex items-center justify-center mt-auto">
+      <img src="/Procertus logo.svg" alt="Color logo in light mode" style={{ width: 180 }} />
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.125rem' }}>Dark mode</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>White logotype on neutral-900</span>
+    <p className="text-sm text-muted-foreground m-0 mb-4 flex-1" style={{ lineHeight: 1.6 }}>
+      When the interface switches to dark mode, the logotype inverts
+      automatically. The same SVG is used with a CSS filter. Never
+      manually create a white variant of the file.
+    </p>
+    <div className="p-4 rounded-lg bg-[var(--neutral-900)] border border-border flex items-center justify-center mt-auto">
+      <img src="/Procertus logo.svg" alt="White logo in dark mode" className="brightness-0 invert" style={{ width: 180 }} />
+    </div>
+  </div>
+</div>
+
+<div style={{ marginTop: 16 }}>
+  <Button variant="link" className="p-0 h-auto text-sm" asChild>
+    <a href="?path=/story/applied-guidelines-logotype--identity-stress-test">View identity stress test &rarr;</a>
+  </Button>
+</div>
+
+</div>
+
+<hr className="page-end" />
+
+<div style={{ marginTop: '5rem' }}>
+
+<div className="rounded-xl border border-border bg-muted/30 p-6">
+  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For developers</h4>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    Every rule on this page is <strong>already encoded in the component library</strong>.
+    The logotype SVGs live in <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">packages/ui/public/</code> and
+    are served via Storybook's <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">staticDirs</code> config.
+    Dark mode inversion uses <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">brightness-0 invert</code>,
+    and print mode uses <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">grayscale brightness-0</code>.
+    Do not manually create white or monochrome variants of the SVG files.
+  </p>
+</div>
+
+</div>

@@ -1,4 +1,5 @@
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -11,11 +12,11 @@ export function SiteHeader() {
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />
         <Button variant="ghost" size="icon-sm">
-          <ArrowLeftIcon />
+          <HugeiconsIcon icon={ArrowLeft01Icon} />
           <span className="sr-only">Go back</span>
         </Button>
         <Button variant="ghost" size="icon-sm">
-          <ArrowRightIcon />
+          <HugeiconsIcon icon={ArrowRight01Icon} />
           <span className="sr-only">Go forward</span>
         </Button>
         <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />

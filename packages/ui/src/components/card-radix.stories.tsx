@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { BellRing } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { NotificationBubbleIcon } from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -61,7 +62,7 @@ export const Default: Story = {
       <CardContent className="grid gap-4">
         {notifications.map((notification, index) => (
           <div key={index} className="flex items-center gap-4">
-            <BellRing className="size-6" />
+            <HugeiconsIcon icon={NotificationBubbleIcon} className="size-6" />
             <div>
               <P>{notification.title}</P>
               <Muted>{notification.description}</Muted>

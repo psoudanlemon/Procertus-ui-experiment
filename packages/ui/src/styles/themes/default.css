@@ -252,8 +252,6 @@
   --shadow-proc-sm: 0 2px 8px oklch(0.28 0.055 233 / 0.28);
   --shadow-proc-md: 0 8px 24px oklch(0.28 0.055 233 / 0.36);
   --shadow-proc-lg: 0 16px 48px oklch(0.28 0.055 233 / 0.44);
-  --shadow-proc-glow-standout: 0 0 32px oklch(0.477 0.102 227 / 0.45);
-  --shadow-proc-glow-system: 0 2px 4px oklch(0.28 0.055 233 / 0.24), 0 0 40px oklch(0.803 0.073 173 / 0.40);
 
   /* ── Dark-mode gradient overrides ──────────────────────────────────────── */
   --gradient-primary:
@@ -339,13 +337,13 @@
   /* ── Custom heading tokens (H1–H4 page-layout headings) ─────────────────
    * Separate from the standard Tailwind scale so heading sizes can be tuned
    * independently without affecting primitives (Button, Label, Badge, etc.). */
-  --text-heading-xl: 1.875rem;        /* 30px — H1 */
+  --text-heading-xl: 1.5rem;          /* 24px — H1 */
   --text-heading-xl--line-height: 1.2;
   --text-heading-xl--letter-spacing: -0.03em;
-  --text-heading-lg: 1.5rem;          /* 24px — H2 */
+  --text-heading-lg: 1.25rem;         /* 20px — H2 */
   --text-heading-lg--line-height: 1.2;
   --text-heading-lg--letter-spacing: -0.04em;
-  --text-heading-md: 1.25rem;         /* 20px — H3 */
+  --text-heading-md: 1.125rem;        /* 18px — H3 */
   --text-heading-md--line-height: 1.2;
   --text-heading-md--letter-spacing: -0.03em;
   --text-heading-sm: 0.875rem;        /* 14px — H4 */
@@ -519,9 +517,6 @@
   --shadow-proc-sm: 0 2px 8px rgb(0 0 0 / 0.08);
   --shadow-proc-md: 0 8px 24px rgb(0 0 0 / 0.12);
   --shadow-proc-lg: 0 16px 48px rgb(0 0 0 / 0.16);
-  --shadow-proc-glow-standout: 0 0 32px oklch(0.477 0.102 227 / 0.30);
-  --shadow-proc-glow-system: 0 2px 4px rgb(0 0 0 / 0.10), 0 0 40px oklch(0.803 0.073 173 / 0.32);
-  --shadow-proc-glow-primary: 0 0 40px rgb(2 163 215 / 0.28);
 
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);

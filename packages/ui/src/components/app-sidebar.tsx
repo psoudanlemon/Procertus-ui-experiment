@@ -16,21 +16,21 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import {
-  LayoutDashboardIcon,
-  ListIcon,
-  ChartBarIcon,
-  FolderIcon,
-  UsersIcon,
-  CameraIcon,
-  FileTextIcon,
-  Settings2Icon,
-  CircleHelpIcon,
-  SearchIcon,
+  DashboardSquare01Icon,
+  Menu01Icon,
+  AnalyticsUpIcon,
+  Folder01Icon,
+  UserGroupIcon,
+  Camera01Icon,
+  File01Icon,
+  Setting06Icon,
+  HelpCircleIcon,
+  Search01Icon,
   DatabaseIcon,
-  FileChartColumnIcon,
-  FileIcon,
-  CommandIcon,
-} from "lucide-react";
+  FileAttachmentIcon,
+  ComputerTerminal01Icon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 const data = {
   user: {
@@ -42,33 +42,33 @@ const data = {
     {
       title: "Dashboard",
       url: "#",
-      icon: <LayoutDashboardIcon />,
+      icon: <HugeiconsIcon icon={DashboardSquare01Icon} />,
     },
     {
       title: "Lifecycle",
       url: "#",
-      icon: <ListIcon />,
+      icon: <HugeiconsIcon icon={Menu01Icon} />,
     },
     {
       title: "Analytics",
       url: "#",
-      icon: <ChartBarIcon />,
+      icon: <HugeiconsIcon icon={AnalyticsUpIcon} />,
     },
     {
       title: "Projects",
       url: "#",
-      icon: <FolderIcon />,
+      icon: <HugeiconsIcon icon={Folder01Icon} />,
     },
     {
       title: "Team",
       url: "#",
-      icon: <UsersIcon />,
+      icon: <HugeiconsIcon icon={UserGroupIcon} />,
     },
   ],
   navClouds: [
     {
       title: "Capture",
-      icon: <CameraIcon />,
+      icon: <HugeiconsIcon icon={Camera01Icon} />,
       isActive: true,
       url: "#",
       items: [
@@ -84,7 +84,7 @@ const data = {
     },
     {
       title: "Proposal",
-      icon: <FileTextIcon />,
+      icon: <HugeiconsIcon icon={File01Icon} />,
       url: "#",
       items: [
         {
@@ -99,7 +99,7 @@ const data = {
     },
     {
       title: "Prompts",
-      icon: <FileTextIcon />,
+      icon: <HugeiconsIcon icon={File01Icon} />,
       url: "#",
       items: [
         {
@@ -117,34 +117,34 @@ const data = {
     {
       title: "Settings",
       url: "#",
-      icon: <Settings2Icon />,
+      icon: <HugeiconsIcon icon={Setting06Icon} />,
     },
     {
       title: "Get Help",
       url: "#",
-      icon: <CircleHelpIcon />,
+      icon: <HugeiconsIcon icon={HelpCircleIcon} />,
     },
     {
       title: "Search",
       url: "#",
-      icon: <SearchIcon />,
+      icon: <HugeiconsIcon icon={Search01Icon} />,
     },
   ],
   documents: [
     {
       name: "Data Library",
       url: "#",
-      icon: <DatabaseIcon />,
+      icon: <HugeiconsIcon icon={DatabaseIcon} />,
     },
     {
       name: "Reports",
       url: "#",
-      icon: <FileChartColumnIcon />,
+      icon: <HugeiconsIcon icon={FileAttachmentIcon} />,
     },
     {
       name: "Word Assistant",
       url: "#",
-      icon: <FileIcon />,
+      icon: <HugeiconsIcon icon={File01Icon} />,
     },
   ],
 };
@@ -157,7 +157,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
               <a href="#">
-                <CommandIcon className="size-5!" />
+                <HugeiconsIcon icon={ComputerTerminal01Icon} className="size-5!" />
                 <span className="text-base font-semibold">Acme Inc.</span>
               </a>
             </SidebarMenuButton>

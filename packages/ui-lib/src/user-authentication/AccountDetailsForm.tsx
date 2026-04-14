@@ -1,5 +1,6 @@
 import * as React from "react";
-import { CircleAlertIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { AlertCircleIcon } from "@hugeicons/core-free-icons";
 
 import {
   Alert,
@@ -69,7 +70,7 @@ function AccountDetailsForm({
       <FieldGroup>
         {error && (
           <Alert variant="destructive">
-            <CircleAlertIcon />
+            <HugeiconsIcon icon={AlertCircleIcon} />
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
@@ -115,7 +116,7 @@ function AccountDetailsForm({
         </Field>
         {showTermsCheckbox && (
           <Field>
-            <div className="flex items-start gap-2">
+            <div className="flex items-start gap-micro">
               <Checkbox
                 id="invite-terms"
                 checked={termsAccepted}
@@ -131,7 +132,7 @@ function AccountDetailsForm({
             </div>
           </Field>
         )}
-        <Field className="mt-3">
+        <Field className="mt-section">
           <Button type="submit" disabled={isSubmitting} className="w-full">
             {isSubmitting ? <Spinner size="sm" /> : "Continue"}
           </Button>

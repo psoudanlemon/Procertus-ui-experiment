@@ -1,10 +1,10 @@
  import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  AlertTriangleIcon,
-  ArrowLeftIcon,
-  ClockIcon,
-  ShieldXIcon,
-} from "lucide-react";
+  Alert02Icon,
+  ArrowLeft01Icon,
+  Clock01Icon,
+  SecurityBlockIcon,
+} from "@hugeicons/core-free-icons";
 
 import { StatusPage } from "./StatusPage";
 
@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 /** Invitation link has expired — user needs to request a new one from their admin. */
 export const InvitationExpired: Story = {
   args: {
-    icon: ClockIcon,
+    icon: Clock01Icon,
     heading: "Invitation expired",
     description:
       "This invitation link is no longer valid. Please contact your administrator to receive a new invitation.",
@@ -30,7 +30,7 @@ export const InvitationExpired: Story = {
         label: "Back to sign in",
         onClick: () => {},
         variant: "default",
-        icon: ArrowLeftIcon,
+        icon: ArrowLeft01Icon,
       },
     ],
   },
@@ -39,7 +39,7 @@ export const InvitationExpired: Story = {
 /** Invitation link is invalid or has already been used. */
 export const InvitationInvalid: Story = {
   args: {
-    icon: ShieldXIcon,
+    icon: SecurityBlockIcon,
     heading: "Invalid invitation",
     description:
       "This invitation link is not valid or has already been used. If you believe this is an error, please contact your administrator.",
@@ -48,7 +48,7 @@ export const InvitationInvalid: Story = {
         label: "Back to sign in",
         onClick: () => {},
         variant: "default",
-        icon: ArrowLeftIcon,
+        icon: ArrowLeft01Icon,
       },
     ],
   },
@@ -57,7 +57,7 @@ export const InvitationInvalid: Story = {
 /** Generic unexpected error — redirects the user back to the homepage to escape the dead-end. */
 export const SomethingWentWrong: Story = {
   args: {
-    icon: AlertTriangleIcon,
+    icon: Alert02Icon,
     heading: "Something went wrong",
     description:
       "An unexpected error occurred. Please return to the homepage and try again.",
@@ -66,7 +66,7 @@ export const SomethingWentWrong: Story = {
         label: "Go to homepage",
         href: "/",
         variant: "default",
-        icon: ArrowLeftIcon,
+        icon: ArrowLeft01Icon,
       },
     ],
   },

@@ -11,7 +11,18 @@
     "unicorn/consistent-function-scoping": "off",
     "unicorn/no-array-sort": "off",
     "eslint/func-style": "off",
-    "eslint/sort-imports": "off"
+    "eslint/sort-imports": "off",
+    "eslint/no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "lucide-react",
+            "message": "Use @hugeicons/react and @hugeicons/core-free-icons instead. See design tokens/Iconography guidelines."
+          }
+        ]
+      }
+    ]
   },
   "ignorePatterns": ["dist/**", "node_modules/**", ".next/**", "build/**"]
 }

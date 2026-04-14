@@ -1,5 +1,6 @@
 import * as React from "react";
-import { ArrowLeftIcon, CircleAlertIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { AlertCircleIcon, ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 
 import {
   Alert,
@@ -69,7 +70,7 @@ function SetPasswordForm({
       <FieldGroup>
         {error && (
           <Alert variant="destructive">
-            <CircleAlertIcon />
+            <HugeiconsIcon icon={AlertCircleIcon} />
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
@@ -104,7 +105,7 @@ function SetPasswordForm({
             <FieldError errors={[fieldErrors.confirmPassword]} />
           )}
         </Field>
-        <Field className="mt-3 gap-2">
+        <Field className="mt-section gap-component">
           {onBack && (
             <Button
               type="button"
@@ -112,7 +113,7 @@ function SetPasswordForm({
               onClick={onBack}
               className="w-full"
             >
-              <ArrowLeftIcon className="size-4" />
+              <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
               {backLabel}
             </Button>
           )}

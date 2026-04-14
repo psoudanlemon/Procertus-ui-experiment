@@ -1,0 +1,197 @@
+{/* packages/ui/src/design-tokens/Shadow/Guidelines.mdx */}
+import { Meta } from "@storybook/addon-docs/blocks";
+import { Button } from "@/components/ui/button";
+
+<Meta title="design tokens/Shadow/Guidelines" />
+
+<div className="mb-12">
+  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-3">PROCERTUS Design Guidelines</p>
+  <h1 className="font-sans font-bold text-foreground m-0 mb-4" style={{ fontSize: '1.875rem', lineHeight: 1.2, letterSpacing: '-0.03em' }}>Shadow</h1>
+  <p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
+    Shadows in the PROCERTUS system are not cosmetic softness. They are the
+    <strong> raw material of depth</strong>: a controlled scale of neutral
+    drop-shadows for spatial layering, and a colored glow for visual promotion.
+  </p>
+</div>
+
+<hr />
+
+<div className="mt-16">
+
+## 01. The depth scale
+
+Five neutral tokens form a progression from subtle to dramatic. Each step
+increases the vertical offset, blur radius, and opacity, simulating an element
+lifting further from the surface beneath it. The scale gives every component
+a precise amount of perceived distance.
+
+<div className="p-6 rounded-xl bg-muted/30 border border-border mt-6">
+  <div className="flex flex-wrap items-end justify-center gap-10 py-4">
+    <div className="flex flex-col items-center gap-3">
+      <div className="size-20 rounded-xl bg-card ring-1 ring-foreground/[0.04]" style={{ boxShadow: '0 1px 0 rgb(0 0 0 / 0.05), 0 1px 3px rgb(0 0 0 / 0.08)' }} />
+      <code className="text-[10px] text-muted-foreground">tactile</code>
+    </div>
+    <div className="flex flex-col items-center gap-3">
+      <div className="size-20 rounded-xl bg-card ring-1 ring-foreground/[0.04]" style={{ boxShadow: '0 1px 2px rgb(0 0 0 / 0.06)' }} />
+      <code className="text-[10px] text-muted-foreground">xs</code>
+    </div>
+    <div className="flex flex-col items-center gap-3">
+      <div className="size-20 rounded-xl bg-card ring-1 ring-foreground/[0.04]" style={{ boxShadow: '0 2px 8px rgb(0 0 0 / 0.08)' }} />
+      <code className="text-[10px] text-muted-foreground">sm</code>
+    </div>
+    <div className="flex flex-col items-center gap-3">
+      <div className="size-20 rounded-xl bg-card ring-1 ring-foreground/[0.04]" style={{ boxShadow: '0 8px 24px rgb(0 0 0 / 0.12)' }} />
+      <code className="text-[10px] text-muted-foreground">md</code>
+    </div>
+    <div className="flex flex-col items-center gap-3">
+      <div className="size-20 rounded-xl bg-card ring-1 ring-foreground/[0.04]" style={{ boxShadow: '0 16px 48px rgb(0 0 0 / 0.16)' }} />
+      <code className="text-[10px] text-muted-foreground">lg</code>
+    </div>
+  </div>
+</div>
+
+<p className="text-sm text-muted-foreground mt-4 m-0" style={{ lineHeight: 1.6 }}>
+  All five use only black at calibrated opacities: no hue, no brand color, no
+  semantic meaning. A neutral shadow says "this element is above that element"
+  and nothing more. Dark mode overrides switch to tinted
+  <code className="text-xs bg-muted px-1 py-0.5 rounded mx-0.5">oklch(0.28 0.055 233)</code>
+  at higher opacities so shadows remain visible against dark surfaces.
+</p>
+
+<div style={{ marginTop: '16px' }}>
+  <Button variant="link" className="p-0 h-auto text-base" asChild>
+    <a href="?path=/story/design-tokens-shadow--neutral-shadows">View neutral shadow tokens</a>
+  </Button>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 02. The glow
+
+A glow is a drop-shadow with a brand color instead of black. That single change
+transforms its purpose: where a neutral shadow communicates distance, a colored
+glow communicates <strong>importance</strong>. Apply it to a raised card and
+the card becomes a highlighted card, amplifying its visual gravity without
+changing its content or layout.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Neutral shadow</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Spatial</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Directional, colorless, invisible to attention. The card is raised but
+      unremarkable.
+    </p>
+    <div className="p-6 rounded-lg bg-muted/50 border border-border flex items-center justify-center mt-4 flex-1">
+      <div className="flex h-28 w-48 flex-col items-center justify-center rounded-xl bg-card ring-1 ring-foreground/[0.04]" style={{ boxShadow: '0 1px 2px rgb(0 0 0 / 0.06)' }}>
+        <span className="text-xl font-semibold text-foreground">94.2%</span>
+        <span className="text-xs text-muted-foreground">Pass rate</span>
+      </div>
+    </div>
+  </div>
+  <div className="rounded-xl border-2 border-brand-accent-200 dark:border-brand-accent-800 bg-card p-6 flex flex-col">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Glow</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Promotional</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Omnidirectional, brand-colored, demands attention. The same card now
+      signals "look here first."
+    </p>
+    <div className="p-6 rounded-lg bg-muted/50 border border-border flex items-center justify-center mt-4 flex-1">
+      <div className="glow-standout rounded-xl">
+        <div className="flex h-28 w-48 flex-col items-center justify-center rounded-xl bg-card ring-1 ring-foreground/10">
+          <span className="text-xl font-semibold text-foreground">94.2%</span>
+          <span className="text-xs text-muted-foreground">Pass rate</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style={{ marginTop: '16px' }}>
+  <Button variant="link" className="p-0 h-auto text-base" asChild>
+    <a href="?path=/story/design-tokens-shadow--branded-glow">View the branded glow</a>
+  </Button>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 03. Static vs. motion
+
+Neutral shadows are always static. They are infrastructure: a dropdown's shadow
+should never compete with the dropdown's content. Glows, however, can be
+animated to attract even more attention.
+
+<div className="flex flex-col mt-6" style={{ gap: '24px' }}>
+
+<div className="rounded-xl border border-border bg-card p-6">
+  <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Static glow</span>
+  <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Quiet promotion</span>
+  <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+    A colored <code className="text-xs bg-muted px-1 py-0.5 rounded">box-shadow</code> applied
+    directly to the element. It highlights without movement, suitable when
+    promotion should be present but not distracting.
+  </p>
+</div>
+
+<div className="rounded-xl border-2 border-brand-accent-200 dark:border-brand-accent-800 bg-card p-6">
+  <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Animated glow</span>
+  <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Active promotion</span>
+  <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+    The <code className="text-xs bg-muted px-1 py-0.5 rounded">glow-standout</code> utility
+    rotates a conic gradient (accent-300 to primary-700) through two
+    counter-rotating blur layers. Use it when a single element needs to be the
+    undeniable focal point: a KPI card, a search bar, a call-to-action. One per
+    viewport at most. Respects
+    <code className="text-xs bg-muted px-1 py-0.5 rounded">prefers-reduced-motion</code> by
+    freezing the gradient at 135 degrees.
+  </p>
+</div>
+
+</div>
+
+<div style={{ marginTop: '16px' }}>
+  <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/applied-guidelines-shadows--highlighted-card">Highlighted card</a></Button>
+  <span className="text-muted-foreground">|</span>
+  <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/applied-guidelines-shadows--gradient-card">Gradient card</a></Button>
+  <span className="text-muted-foreground">|</span>
+  <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/applied-guidelines-shadows--default">Neutral shadow</a></Button>
+</div>
+
+</div>
+
+<hr className="page-end" />
+
+<div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '5rem' }}>
+  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For developers</h4>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    Every rule on this page is <strong>already encoded in the component library</strong>.
+    The five neutral tokens are defined in
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">default.css</code>
+    as <code className="text-sm bg-muted px-1.5 py-0.5 rounded">--shadow-proc-{'{tactile|xs|sm|md|lg}'}</code>
+    with automatic dark mode overrides. Tailwind classes
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">shadow-proc-xs</code>
+    through
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">shadow-proc-lg</code>
+    map directly to these tokens. The animated glow is a single utility:
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">glow-standout</code>,
+    defined in
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">globals.css</code>.
+    Apply it to a wrapper element around the target, not to the target itself.
+    Do not construct custom box-shadow values.
+  </p>
+  <div className="flex gap-4 items-center" style={{ marginTop: '16px' }}>
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-shadow--neutral-shadows">Token reference</a></Button>
+    <span className="text-muted-foreground">|</span>
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-shadow--branded-glow">Branded glow</a></Button>
+    <span className="text-muted-foreground">|</span>
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-elevation-guidelines--docs">Elevation guidelines</a></Button>
+  </div>
+</div>

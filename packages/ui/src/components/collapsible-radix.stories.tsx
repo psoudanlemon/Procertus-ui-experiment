@@ -1,15 +1,16 @@
 import * as React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  ChevronsUpDown,
-  FileIcon,
-  FolderIcon,
-  MaximizeIcon,
-  MinimizeIcon,
-} from "lucide-react";
+  ArrowDown01Icon,
+  ArrowRight01Icon,
+  ArrowUpDownIcon,
+  File01Icon,
+  Folder01Icon,
+  Maximize01Icon,
+  Minimize01Icon,
+} from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,7 +50,7 @@ export const Default: Story = {
           <Small className="font-semibold">Order #4189</Small>
           <CollapsibleTrigger asChild>
             <Button variant="ghost" size="icon" className="size-8">
-              <ChevronsUpDown />
+              <HugeiconsIcon icon={ArrowUpDownIcon} />
               <span className="sr-only">Toggle details</span>
             </Button>
           </CollapsibleTrigger>
@@ -84,7 +85,7 @@ export const Basic: Story = {
           <CollapsibleTrigger asChild>
             <Button variant="ghost" className="group w-full">
               Product details
-              <ChevronDownIcon className="ml-auto group-data-[state=open]:rotate-180" />
+              <HugeiconsIcon icon={ArrowDown01Icon} className="ml-auto group-data-[state=open]:rotate-180" />
             </Button>
           </CollapsibleTrigger>
           <CollapsibleContent className="flex flex-col items-start gap-2 p-2.5 pt-0 text-sm">
@@ -142,7 +143,7 @@ export const SettingsPanel: Story = {
             </FieldGroup>
             <CollapsibleTrigger asChild>
               <Button variant="outline" size="icon">
-                {isOpen ? <MinimizeIcon /> : <MaximizeIcon />}
+                {isOpen ? <HugeiconsIcon icon={Minimize01Icon} /> : <HugeiconsIcon icon={Maximize01Icon} />}
               </Button>
             </CollapsibleTrigger>
           </Collapsible>
@@ -164,8 +165,8 @@ function renderItem(fileItem: FileTreeItem) {
             size="sm"
             className="group w-full justify-start transition-none hover:bg-accent hover:text-accent-foreground"
           >
-            <ChevronRightIcon className="transition-transform group-data-[state=open]:rotate-90" />
-            <FolderIcon />
+            <HugeiconsIcon icon={ArrowRight01Icon} className="transition-transform group-data-[state=open]:rotate-90" />
+            <HugeiconsIcon icon={Folder01Icon} />
             {fileItem.name}
           </Button>
         </CollapsibleTrigger>
@@ -184,7 +185,7 @@ function renderItem(fileItem: FileTreeItem) {
       size="sm"
       className="w-full justify-start gap-2 text-foreground"
     >
-      <FileIcon />
+      <HugeiconsIcon icon={File01Icon} />
       <span>{fileItem.name}</span>
     </Button>
   );

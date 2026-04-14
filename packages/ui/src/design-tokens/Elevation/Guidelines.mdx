@@ -1,0 +1,288 @@
+{/* packages/ui/src/design-tokens/Elevation/Guidelines.mdx */}
+import { Meta } from "@storybook/addon-docs/blocks";
+import { Button } from "@/components/ui/button";
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+
+<Meta title="design tokens/Elevation/Guidelines" />
+
+<div className="mb-12">
+  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-3">PROCERTUS Design Guidelines</p>
+  <h1 className="font-sans font-bold text-foreground m-0 mb-4" style={{ fontSize: '1.875rem', lineHeight: 1.2, letterSpacing: '-0.03em' }}>Elevation</h1>
+  <p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
+    Elevation at PROCERTUS is not ornamentation. It is a
+    <strong> spatial contract</strong> between the interface and the user: a fixed
+    addressing system that tells every element exactly how close it is to the
+    person holding the device. When a certification auditor opens a dropdown,
+    dismisses a modal, or receives a toast notification, elevation is the silent
+    grammar that keeps every layer in its place.
+  </p>
+</div>
+
+<hr />
+
+<div className="mt-16">
+
+## 01. The hierarchy of intent
+
+Every interactive overlay in the PROCERTUS system has a permanent z-address.
+This is not a guideline. It is a contract. A dropdown will always sit at the
+same altitude as a popover, a modal will always eclipse a sheet, and a toast
+will always float above everything else. The user never has to wonder which
+layer will win.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Six tiers</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>The strata</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      The page itself is the ground floor: cards, buttons, containers. Above it, a
+      promoted element lifts just enough to distinguish itself. Ephemeral hints like
+      tooltips float higher still. Interactive menus, sheets, and popovers occupy the
+      next altitude. Modals and command palettes demand full attention above those.
+      System notifications sit above everything for alerts that must never be occluded.
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Cognitive load</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Why it matters</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      A compliance officer reviewing an ISO 27001 audit trail may have a data table,
+      a side sheet, a command palette, and a toast on screen simultaneously. Without a
+      fixed hierarchy, the brain wastes energy figuring out what is in front of what.
+      The tier system removes that cognitive tax entirely: each element's altitude is
+      predetermined, so spatial reasoning becomes unconscious.
+    </p>
+  </div>
+</div>
+
+<div style={{ marginTop: '16px' }}>
+  <Button variant="link" className="p-0 h-auto text-base" asChild>
+    <a href="?path=/story/design-tokens-elevation--isometric-strata">View the isometric strata</a>
+  </Button>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 02. The physics of depth
+
+Shadows in this system are a finite resource. Every shadow token represents a
+measured amount of visual weight. Spend too much and the interface feels heavy,
+muddy, and anxious. Spend too little and everything looks flat and disconnected.
+The budget is strict: five neutral shadow values, one backdrop blur, and zero
+colored glows in the elevation stack.
+
+<div className="flex flex-col mt-6" style={{ gap: '24px' }}>
+
+<div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+  <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Neutral only</span>
+  <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>The constraint</span>
+  <p className="text-sm text-muted-foreground m-0 mb-4" style={{ lineHeight: 1.6 }}>
+    Every elevation shadow uses neutral black with increasing opacity. No brand colors,
+    no accent glows, no tinted halos. Color in shadows creates false associations: a blue
+    glow suggests interactivity, a red one suggests danger. Elevation must be perceived as
+    physics, not semantics. The light source is universal, and the shadows it casts are
+    colorless.
+  </p>
+  <div className="p-4 rounded-lg bg-muted/50 border border-border flex items-center justify-center gap-6">
+    <div className="flex flex-col items-center gap-2">
+      <div className="size-12 rounded-xl bg-card ring-1 ring-foreground/10" style={{ boxShadow: '0 1px 2px rgb(0 0 0 / 0.06)' }} />
+      <span className="text-[10px] text-muted-foreground">xs</span>
+    </div>
+    <div className="flex flex-col items-center gap-2">
+      <div className="size-12 rounded-xl bg-card ring-1 ring-foreground/10" style={{ boxShadow: '0 2px 8px rgb(0 0 0 / 0.08)' }} />
+      <span className="text-[10px] text-muted-foreground">sm</span>
+    </div>
+    <div className="flex flex-col items-center gap-2">
+      <div className="size-12 rounded-xl bg-card ring-1 ring-foreground/10" style={{ boxShadow: '0 8px 24px rgb(0 0 0 / 0.12)' }} />
+      <span className="text-[10px] text-muted-foreground">md</span>
+    </div>
+    <div className="flex flex-col items-center gap-2">
+      <div className="size-12 rounded-xl bg-card ring-1 ring-foreground/10" style={{ boxShadow: '0 16px 48px rgb(0 0 0 / 0.16)' }} />
+      <span className="text-[10px] text-muted-foreground">lg</span>
+    </div>
+  </div>
+</div>
+
+<div className="rounded-xl border border-border bg-card p-6">
+  <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Shadows and backdrops</span>
+  <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>How depth is communicated</span>
+  <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+    Almost every level of elevation communicates its position through drop shadows
+    alone. Shadows start tight and subtle at lower tiers and grow softer and wider
+    as elements rise, mirroring how real objects behave as they lift away from a
+    surface. The highest tier is the exception: components like modals and alert
+    dialogs receive an additional backdrop overlay that dims the page behind them,
+    driving focus toward the action the user needs to take.
+  </p>
+</div>
+
+</div>
+
+<div style={{ marginTop: '16px' }}>
+  <Button variant="link" className="p-0 h-auto text-base" asChild>
+    <a href="?path=/story/applied-guidelines-elevation--component-elevation">View component elevation</a>
+  </Button>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 03. Adaptive ergonomics
+
+On a desktop, a dropdown floats beside its trigger: small, precise, out of the way.
+On a phone, that same floating rectangle is too small to tap, too far from the thumb,
+and too easy to accidentally dismiss. The solution is not to shrink the desktop pattern.
+It is to replace it entirely with a pattern built for the hand.
+
+<div className="flex flex-col mt-6" style={{ gap: '24px' }}>
+
+<div className="rounded-xl border-2 border-brand-accent-200 dark:border-brand-accent-800 bg-card p-6">
+  <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Swap, do not shrink</span>
+  <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>The doctrine</span>
+  <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+    A responsive dropdown is not a smaller dropdown. It is a drawer. A responsive
+    modal is not a narrower modal. It is a drawer anchored to the thumb zone. A
+    responsive command palette is not a squished search box. It is a full-page sheet
+    with room to type, scan, and select. Every mobile substitution is a completely
+    different component chosen for ergonomic fitness, not a CSS media query that
+    adjusts padding.
+  </p>
+</div>
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Linear content</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Drawer</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Flat lists of actions, simple selections, confirmation prompts: anything the user
+      can resolve with a single tap. These become drawers that slide up from the bottom
+      edge with <strong>44px</strong> minimum touch targets. The content is linear, so
+      the container is linear.
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Depth content</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Full-page sheet</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Nested menus, searchable lists, rich content panels: anything that requires
+      navigation or filtering. These become full-page sheets that slide in from the
+      right with a back button and room for a search field. The content has depth, so
+      the container provides depth.
+    </p>
+  </div>
+</div>
+
+</div>
+
+<div className="rounded-xl border-2 border-sys-warning-300 dark:border-sys-warning-700 bg-sys-warning-50 dark:bg-sys-warning-950 p-6" style={{ marginTop: '24px' }}>
+  <p className="text-base text-sys-warning-700 dark:text-sys-warning-300 leading-[1.6] m-0">
+    Two questions determine the mobile substitute: "Is this content flat or nested?"
+    and "Can the user resolve this in one tap?" If flat and one-tap: drawer.
+    If nested or multi-step: full-page sheet.
+  </p>
+</div>
+
+<div style={{ marginTop: '16px' }}>
+  <Button variant="link" className="p-0 h-auto text-base" asChild>
+    <a href="?path=/story/design-tokens-elevation--mobile-mapping">View the mobile mapping table</a>
+  </Button>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## 04. System orchestration
+
+Depth is not static. It is revealed through motion. When a sheet slides in from the
+right, the user understands it is a layer on top of the page. When a modal fades in
+with a subtle scale, the user understands it is demanding attention. When a toast
+appears at the bottom corner, the user understands it is a notification that will leave
+on its own. Motion is the verb that makes the elevation system legible.
+
+<div className="flex flex-col mt-6" style={{ gap: '24px' }}>
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Instance swap</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>The rule</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+    At the highest attention tier, only one overlay may be active at a time. Opening a
+      command palette while a modal is visible must close the modal first. This is not
+      a technical limitation. It is a design constraint: the user's attention is a
+      resource, and two full-attention surfaces competing for it is a failure of
+      orchestration. The new overlay replaces the existing one.
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Motion as syntax</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>How depth speaks</span>
+    <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+      Each tier enters and exits with a motion that communicates its spatial position.
+      Sheets slide from the edge they are anchored to. Modals scale up from the center.
+      Dropdowns and popovers fade with a subtle zoom. Toasts slide in from the screen
+      boundary. The user never has to read a label to understand what kind of overlay
+      appeared: the motion told them.
+    </p>
+  </div>
+</div>
+
+<div className="rounded-xl border border-border bg-card p-6">
+  <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Stacking sheets</span>
+  <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>The exception</span>
+  <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+    Sheets are the one element that may stack: opening a detail panel from within
+    another detail panel is a legitimate navigation pattern. Each subsequent sheet offsets
+    inward, creating a visual stack that communicates depth without obscuring the panels
+    behind it. The user can dismiss individual sheets or close the entire stack at once.
+    This is horizontal depth, not vertical depth: the panels fan out like cards in a hand,
+    not like windows piled on a desktop.
+  </p>
+</div>
+
+</div>
+
+<div style={{ marginTop: '16px' }}>
+  <Button variant="link" className="p-0 h-auto text-base" asChild>
+    <a href="?path=/story/applied-guidelines-elevation--stacking-sequence">Experience the stacking sequence</a>
+  </Button>
+</div>
+
+</div>
+
+<hr className="page-end" />
+
+<div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '5rem' }}>
+  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For developers</h4>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    Every rule on this page is <strong>already encoded in the component library</strong>.
+    Shadow tokens are defined in
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">default.css</code>
+    as <code className="text-sm bg-muted px-1.5 py-0.5 rounded">--shadow-proc-{'{xs|sm|md|lg}'}</code>.
+    The backdrop blur on L4 Takeover is baked into
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">dialog.tsx</code>,
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">alert-dialog.tsx</code>,
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">drawer.tsx</code>, and
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">sheet.tsx</code>
+    overlay components. The mobile substitution patterns are composition-level decisions
+    documented in the sandbox, not primitive-level behavior: use
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">useIsMobile()</code>
+    and swap components at the feature level.
+    Do not manually override shadow tokens on overlay components.
+  </p>
+  <div className="flex gap-4 items-center" style={{ marginTop: '16px' }}>
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-elevation--isometric-strata">Elevation tokens</a></Button>
+    <span className="text-muted-foreground">|</span>
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/applied-guidelines-elevation--component-elevation">View component elevation</a></Button>
+  </div>
+</div>

@@ -13,16 +13,17 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  ChevronsUpDownIcon,
-  EyeOffIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronsLeftIcon,
-  ChevronsRightIcon,
-} from "lucide-react";
+  ArrowDown01Icon,
+  ArrowUp01Icon,
+  ArrowUpDownIcon,
+  ViewOffIcon,
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
+  ArrowLeftDoubleIcon,
+  ArrowRightDoubleIcon,
+} from "@hugeicons/core-free-icons";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -152,26 +153,26 @@ function DataTableColumnHeader<TData, TValue>({
           <Button variant="ghost" size="sm" className="-ml-3 h-8 data-[state=open]:bg-accent">
             <span>{title}</span>
             {column.getIsSorted() === "desc" ? (
-              <ArrowDownIcon className="ml-2 size-4" />
+              <HugeiconsIcon icon={ArrowDown01Icon} className="ml-2 size-4" />
             ) : column.getIsSorted() === "asc" ? (
-              <ArrowUpIcon className="ml-2 size-4" />
+              <HugeiconsIcon icon={ArrowUp01Icon} className="ml-2 size-4" />
             ) : (
-              <ChevronsUpDownIcon className="ml-2 size-4" />
+              <HugeiconsIcon icon={ArrowUpDownIcon} className="ml-2 size-4" />
             )}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-            <ArrowUpIcon className="mr-2 size-3.5 text-muted-foreground/70" />
+            <HugeiconsIcon icon={ArrowUp01Icon} className="mr-2 size-3.5 text-muted-foreground/70" />
             Asc
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-            <ArrowDownIcon className="mr-2 size-3.5 text-muted-foreground/70" />
+            <HugeiconsIcon icon={ArrowDown01Icon} className="mr-2 size-3.5 text-muted-foreground/70" />
             Desc
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
-            <EyeOffIcon className="mr-2 size-3.5 text-muted-foreground/70" />
+            <HugeiconsIcon icon={ViewOffIcon} className="mr-2 size-3.5 text-muted-foreground/70" />
             Hide
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -229,7 +230,7 @@ function DataTablePagination<TData>({ table, className }: DataTablePaginationPro
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Go to first page</span>
-            <ChevronsLeftIcon className="size-4" />
+            <HugeiconsIcon icon={ArrowLeftDoubleIcon} className="size-4" />
           </Button>
           <Button
             variant="outline"
@@ -238,7 +239,7 @@ function DataTablePagination<TData>({ table, className }: DataTablePaginationPro
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Go to previous page</span>
-            <ChevronLeftIcon className="size-4" />
+            <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
           </Button>
           <Button
             variant="outline"
@@ -247,7 +248,7 @@ function DataTablePagination<TData>({ table, className }: DataTablePaginationPro
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Go to next page</span>
-            <ChevronRightIcon className="size-4" />
+            <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
           </Button>
           <Button
             variant="outline"
@@ -256,7 +257,7 @@ function DataTablePagination<TData>({ table, className }: DataTablePaginationPro
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Go to last page</span>
-            <ChevronsRightIcon className="size-4" />
+            <HugeiconsIcon icon={ArrowRightDoubleIcon} className="size-4" />
           </Button>
         </div>
       </div>

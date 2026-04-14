@@ -31,24 +31,25 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Calendar,
-  ChevronDown,
-  ChevronUp,
-  ChevronsUpDown,
-  Folder,
-  Home,
-  Inbox,
-  LayoutDashboard,
-  MoreHorizontal,
-  Plus,
-  Search,
-  Settings,
-  User2,
-  FileText,
-  BookOpen,
-  HelpCircle,
-} from "lucide-react";
+  Calendar01Icon,
+  ArrowDown01Icon,
+  ArrowUp01Icon,
+  ArrowUpDownIcon,
+  Folder01Icon,
+  Home01Icon,
+  InboxIcon,
+  DashboardSquare01Icon,
+  MoreHorizontalIcon,
+  PlusSignIcon,
+  Search01Icon,
+  Setting06Icon,
+  UserGroupIcon,
+  File01Icon,
+  BookOpen01Icon,
+  HelpCircleIcon,
+} from "@hugeicons/core-free-icons";
 
 /**
  * A composable, themeable and customizable sidebar component.
@@ -99,13 +100,13 @@ export const Default: Story = {
             <SidebarMenuItem>
               <SidebarMenuButton size="lg">
                 <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <LayoutDashboard className="size-4" />
+                  <HugeiconsIcon icon={DashboardSquare01Icon} className="size-4" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-semibold">Acme Inc</span>
                   <span className="text-xs text-muted-foreground">Enterprise</span>
                 </div>
-                <ChevronsUpDown className="ml-auto size-4" />
+                <HugeiconsIcon icon={ArrowUpDownIcon} className="ml-auto size-4" />
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -114,42 +115,42 @@ export const Default: Story = {
           <SidebarGroup>
             <SidebarGroupLabel>Platform</SidebarGroupLabel>
             <SidebarGroupAction title="Add project">
-              <Plus />
+              <HugeiconsIcon icon={PlusSignIcon} />
             </SidebarGroupAction>
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton isActive>
-                    <Home />
+                    <HugeiconsIcon icon={Home01Icon} />
                     <span>Dashboard</span>
                   </SidebarMenuButton>
                   <SidebarMenuBadge>24</SidebarMenuBadge>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton>
-                    <Inbox />
+                    <HugeiconsIcon icon={InboxIcon} />
                     <span>Inbox</span>
                   </SidebarMenuButton>
                   <SidebarMenuBadge>3</SidebarMenuBadge>
                   <SidebarMenuAction>
-                    <MoreHorizontal />
+                    <HugeiconsIcon icon={MoreHorizontalIcon} />
                   </SidebarMenuAction>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton>
-                    <Calendar />
+                    <HugeiconsIcon icon={Calendar01Icon} />
                     <span>Calendar</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton>
-                    <Search />
+                    <HugeiconsIcon icon={Search01Icon} />
                     <span>Search</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton>
-                    <Folder />
+                    <HugeiconsIcon icon={Folder01Icon} />
                     <span>Projects</span>
                   </SidebarMenuButton>
                   <SidebarMenuSub>
@@ -180,25 +181,25 @@ export const Default: Story = {
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton>
-                    <FileText />
+                    <HugeiconsIcon icon={File01Icon} />
                     <span>Documentation</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton>
-                    <BookOpen />
+                    <HugeiconsIcon icon={BookOpen01Icon} />
                     <span>Guides</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton>
-                    <HelpCircle />
+                    <HugeiconsIcon icon={HelpCircleIcon} />
                     <span>Support</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton>
-                    <Settings />
+                    <HugeiconsIcon icon={Setting06Icon} />
                     <span>Settings</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -212,8 +213,8 @@ export const Default: Story = {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton>
-                    <User2 /> Username
-                    <ChevronUp className="ml-auto" />
+                    <HugeiconsIcon icon={UserGroupIcon} /> Username
+                    <HugeiconsIcon icon={ArrowUp01Icon} className="ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent side="top" className="w-(--radix-popper-anchor-width)">

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AlertTriangleIcon, ArrowLeftIcon } from "lucide-react";
-import type { IconSvgElement } from "@hugeicons/react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { Alert02Icon, ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 import {
   Calendar01Icon,
   DollarCircleIcon,
@@ -158,7 +158,7 @@ export const SomethingWentWrong: Story = {
       <div className="flex h-full items-center justify-center">
         <Empty className="w-[420px] border-none">
           <EmptyIcon>
-            <AlertTriangleIcon />
+            <HugeiconsIcon icon={Alert02Icon} />
           </EmptyIcon>
           <EmptyTitle>Something went wrong</EmptyTitle>
           <EmptyDescription>
@@ -168,7 +168,7 @@ export const SomethingWentWrong: Story = {
           <EmptyActions>
             <Button asChild>
               <a href="/">
-                <ArrowLeftIcon className="size-4" />
+                <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
                 Go to homepage
               </a>
             </Button>

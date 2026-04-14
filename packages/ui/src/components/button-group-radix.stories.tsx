@@ -3,19 +3,20 @@
 import * as React from "react";
 import { expect, userEvent, within } from "storybook/test";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArchiveIcon,
-  ArrowLeftIcon,
-  CalendarPlusIcon,
-  ChevronDownIcon,
-  ClockIcon,
-  ListFilterIcon,
-  MailCheckIcon,
+  ArrowLeft01Icon,
+  CalendarAdd01Icon,
+  ArrowDown01Icon,
+  Clock01Icon,
+  FilterIcon,
+  MailValidation01Icon,
   MoreHorizontalIcon,
-  SearchIcon,
-  TagIcon,
-  Trash2Icon,
-} from "lucide-react";
+  Search01Icon,
+  Tag01Icon,
+  Delete02Icon,
+} from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/button";
 import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from "@/components/ui/button-group";
@@ -128,7 +129,7 @@ export const Nested: Story = {
     <ButtonGroup {...args}>
       <ButtonGroup>
         <Button variant="outline" size="icon" aria-label="Go Back">
-          <ArrowLeftIcon />
+          <HugeiconsIcon icon={ArrowLeft01Icon} />
         </Button>
       </ButtonGroup>
       <ButtonGroup>
@@ -138,7 +139,7 @@ export const Nested: Story = {
       <ButtonGroup>
         <Button variant="outline">Snooze</Button>
         <Button variant="outline" size="icon" aria-label="More Options">
-          <MoreHorizontalIcon />
+          <HugeiconsIcon icon={MoreHorizontalIcon} />
         </Button>
       </ButtonGroup>
     </ButtonGroup>
@@ -155,7 +156,7 @@ export const Separator: Story = {
       <Button>Save</Button>
       <ButtonGroupSeparator />
       <Button size="icon" aria-label="More Options">
-        <ChevronDownIcon />
+        <HugeiconsIcon icon={ArrowDown01Icon} />
       </Button>
     </ButtonGroup>
   ),
@@ -173,7 +174,7 @@ export const SplitButton: Story = {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button size="icon" aria-label="More Save Options">
-            <ChevronDownIcon />
+            <HugeiconsIcon icon={ArrowDown01Icon} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -207,7 +208,7 @@ export const InputGroup: Story = {
   render: (args) => (
     <ButtonGroup {...args} className="w-80">
       <Button variant="outline" size="icon" aria-label="Search">
-        <SearchIcon />
+        <HugeiconsIcon icon={Search01Icon} />
       </Button>
       <Input placeholder="Search certifications..." />
     </ButtonGroup>
@@ -226,7 +227,7 @@ export const Toolbar: Story = {
       <ButtonGroup {...args}>
         <ButtonGroup className="hidden sm:flex">
           <Button variant="outline" size="icon" aria-label="Go Back">
-            <ArrowLeftIcon />
+            <HugeiconsIcon icon={ArrowLeft01Icon} />
           </Button>
         </ButtonGroup>
         <ButtonGroup>
@@ -238,37 +239,37 @@ export const Toolbar: Story = {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon" aria-label="More Options">
-                <MoreHorizontalIcon />
+                <HugeiconsIcon icon={MoreHorizontalIcon} />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <MailCheckIcon />
+                  <HugeiconsIcon icon={MailValidation01Icon} />
                   Mark as Read
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <ArchiveIcon />
+                  <HugeiconsIcon icon={ArchiveIcon} />
                   Archive
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <ClockIcon />
+                  <HugeiconsIcon icon={Clock01Icon} />
                   Snooze
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <CalendarPlusIcon />
+                  <HugeiconsIcon icon={CalendarAdd01Icon} />
                   Add to Calendar
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <ListFilterIcon />
+                  <HugeiconsIcon icon={FilterIcon} />
                   Add to List
                 </DropdownMenuItem>
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger>
-                    <TagIcon />
+                    <HugeiconsIcon icon={Tag01Icon} />
                     Label As...
                   </DropdownMenuSubTrigger>
                   <DropdownMenuSubContent>
@@ -283,7 +284,7 @@ export const Toolbar: Story = {
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem variant="destructive">
-                  <Trash2Icon />
+                  <HugeiconsIcon icon={Delete02Icon} />
                   Trash
                 </DropdownMenuItem>
               </DropdownMenuGroup>
@@ -305,7 +306,7 @@ export const ShouldOpenDropdown: Story = {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button size="icon" aria-label="More Save Options">
-            <ChevronDownIcon />
+            <HugeiconsIcon icon={ArrowDown01Icon} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

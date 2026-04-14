@@ -1,7 +1,8 @@
 import { expect, userEvent, waitFor } from "storybook/test";
 // Replace nextjs-vite with the name of your framework
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AppWindowIcon, CodeIcon } from "lucide-react";
+import { BrowserIcon, CodeIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -113,11 +114,11 @@ export const Icon: Story = {
     <Tabs {...args}>
       <TabsList>
         <TabsTrigger value="account">
-          <AppWindowIcon />
+          <HugeiconsIcon icon={BrowserIcon} />
           Account
         </TabsTrigger>
         <TabsTrigger value="password">
-          <CodeIcon />
+          <HugeiconsIcon icon={CodeIcon} />
           Password
         </TabsTrigger>
       </TabsList>

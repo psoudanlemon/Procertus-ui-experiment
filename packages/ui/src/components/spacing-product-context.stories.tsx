@@ -6,7 +6,8 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Muted } from "@/components/ui/typography";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ShieldCheckIcon } from "lucide-react";
+import { SecurityCheckIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 /* ---------------------------------------------------------------------------
  * Shared certificate data (identical in both views)
@@ -34,7 +35,7 @@ function SpaciousView() {
         {/* Page header */}
         <div className="mb-section flex items-center gap-element">
           <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10">
-            <ShieldCheckIcon className="size-6 text-primary" />
+            <HugeiconsIcon icon={SecurityCheckIcon} className="size-6 text-primary" />
           </div>
           <div className="flex flex-col gap-1">
             <Skeleton className="h-6 w-64" />
@@ -95,7 +96,7 @@ function OperationalView() {
       <div className="p-boundary">
         {/* Compact page header */}
         <div className="mb-component flex items-center gap-element">
-          <ShieldCheckIcon className="size-4 text-primary" />
+          <HugeiconsIcon icon={SecurityCheckIcon} className="size-4 text-primary" />
           <Skeleton className="h-5 w-48" />
           <Badge variant="success" className="ml-auto">Active</Badge>
         </div>

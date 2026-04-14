@@ -1,5 +1,6 @@
 import * as React from "react";
-import { FilePlusIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { FilePlusIcon } from "@hugeicons/core-free-icons";
 
 import { Button } from "@procertus-ui/ui";
 
@@ -47,11 +48,11 @@ function PublicRegistryAppShell({
       {!hideFab && (
         <Button
           size="lg"
-          className="fixed right-boundary bottom-boundary z-40 h-12 gap-element rounded-full px-element shadow-lg"
+          className="fixed right-boundary bottom-boundary z-40 h-12 gap-element rounded-full px-element shadow-[var(--shadow-proc-lg)]"
           asChild
         >
           <a href={requestUrl} onClick={onRequestCertificate}>
-            <FilePlusIcon className="size-5" />
+            <HugeiconsIcon icon={FilePlusIcon} className="size-5" />
             <span className="hidden sm:inline">Certificaat aanvragen</span>
             <span className="sm:hidden">Aanvragen</span>
           </a>

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Loader2, Mail } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Loading03Icon, Mail01Icon } from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/button";
 
@@ -109,7 +110,7 @@ export const Link: Story = {
 export const Loading: Story = {
   render: (args) => (
     <Button {...args}>
-      <Loader2 data-icon="inline-start" className="h-4 w-4 animate-spin" />
+      <HugeiconsIcon icon={Loading03Icon} data-icon="inline-start" className="h-4 w-4 animate-spin" />
       Button
     </Button>
   ),
@@ -126,7 +127,7 @@ export const Loading: Story = {
 export const IconLabel: Story = {
   render: (args) => (
     <Button {...args}>
-      <Mail data-icon="inline-start" className="h-4 w-4" /> Login with Email Button
+      <HugeiconsIcon icon={Mail01Icon} data-icon="inline-start" className="h-4 w-4" /> Login with Email Button
     </Button>
   ),
   args: {
@@ -162,7 +163,7 @@ export const IconOnly: Story = {
     ...Secondary.args,
     size: "icon",
     title: "Mail",
-    children: <Mail />,
+    children: <HugeiconsIcon icon={Mail01Icon} />,
   },
 };
 
@@ -174,7 +175,7 @@ export const IconSmall: Story = {
     variant: "secondary",
     size: "icon-sm",
     title: "Mail",
-    children: <Mail />,
+    children: <HugeiconsIcon icon={Mail01Icon} />,
   },
 };
 
@@ -186,7 +187,7 @@ export const IconLarge: Story = {
     variant: "secondary",
     size: "icon-lg",
     title: "Mail",
-    children: <Mail />,
+    children: <HugeiconsIcon icon={Mail01Icon} />,
   },
 };
 

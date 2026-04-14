@@ -1,5 +1,6 @@
 import * as React from "react";
-import { ArrowLeftIcon, CircleAlertIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { AlertCircleIcon, ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 
 import {
   Alert,
@@ -62,7 +63,7 @@ function VerifyCodeForm({
       <FieldGroup>
         {error && (
           <Alert variant="destructive">
-            <CircleAlertIcon />
+            <HugeiconsIcon icon={AlertCircleIcon} />
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
@@ -105,7 +106,7 @@ function VerifyCodeForm({
             </FieldDescription>
           )}
         </Field>
-        <Field className="mt-3 gap-2">
+        <Field className="mt-section gap-component">
           {onBackToLogin && (
             <Button
               type="button"
@@ -113,7 +114,7 @@ function VerifyCodeForm({
               onClick={onBackToLogin}
               className="w-full"
             >
-              <ArrowLeftIcon className="size-4" />
+              <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
               Back to sign in
             </Button>
           )}

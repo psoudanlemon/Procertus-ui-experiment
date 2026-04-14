@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { InboxIcon, FileIcon, SearchIcon } from "lucide-react";
+import { InboxIcon, File01Icon, Search01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,7 +33,7 @@ export const Default: Story = {
   render: () => (
     <Empty className="w-[420px]">
       <EmptyIcon>
-        <InboxIcon />
+        <HugeiconsIcon icon={InboxIcon} />
       </EmptyIcon>
       <EmptyTitle>No messages</EmptyTitle>
       <EmptyDescription>
@@ -52,7 +53,7 @@ export const WithoutAction: Story = {
   render: () => (
     <Empty className="w-[420px]">
       <EmptyIcon>
-        <FileIcon />
+        <HugeiconsIcon icon={File01Icon} />
       </EmptyIcon>
       <EmptyTitle>No documents</EmptyTitle>
       <EmptyDescription>There are no documents in this folder.</EmptyDescription>
@@ -67,7 +68,7 @@ export const SearchResults: Story = {
   render: () => (
     <Empty className="w-[420px]">
       <EmptyIcon>
-        <SearchIcon />
+        <HugeiconsIcon icon={Search01Icon} />
       </EmptyIcon>
       <EmptyTitle>No results found</EmptyTitle>
       <EmptyDescription>

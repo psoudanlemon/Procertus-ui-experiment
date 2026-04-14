@@ -6,7 +6,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { Switch } from "@/components/ui/switch";
-import { Archive, Inbox, Send, Trash2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArchiveIcon, InboxIcon, MailSend01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 
 const folders = [
   { label: "Inbox", count: 128, active: true },
@@ -78,7 +79,7 @@ export function MailShowcase() {
                   size="sm"
                 >
                   <span className="flex items-center gap-2">
-                    {f.label === "Inbox" ? <Inbox className="size-4" /> : null}
+                    {f.label === "Inbox" ? <HugeiconsIcon icon={InboxIcon} className="size-4" /> : null}
                     {f.label}
                   </span>
                   <span className="text-muted-foreground text-xs">{f.count}</span>
@@ -139,13 +140,13 @@ export function MailShowcase() {
           <div className="flex h-full flex-col">
             <div className="flex items-center gap-1 border-b p-2">
               <Button variant="ghost" size="icon" aria-label="Archive">
-                <Archive className="size-4" />
+                <HugeiconsIcon icon={ArchiveIcon} className="size-4" />
               </Button>
               <Button variant="ghost" size="icon" aria-label="Trash">
-                <Trash2 className="size-4" />
+                <HugeiconsIcon icon={Delete02Icon} className="size-4" />
               </Button>
               <Button variant="ghost" size="icon" aria-label="Send">
-                <Send className="size-4" />
+                <HugeiconsIcon icon={MailSend01Icon} className="size-4" />
               </Button>
             </div>
             <div className="flex items-start gap-3 border-b p-4">

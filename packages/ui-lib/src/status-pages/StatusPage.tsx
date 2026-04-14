@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { LucideIcon } from "lucide-react";
+import type { IconSvgElement } from "@hugeicons/react";
 
 import { StatusContent } from "./StatusContent";
 
@@ -12,14 +12,14 @@ export type StatusPageAction = {
   onClick?: () => void;
   href?: string;
   variant?: "default" | "outline" | "ghost" | "link";
-  icon?: LucideIcon;
+  icon?: IconSvgElement;
 };
 
 export type StatusPageProps = {
   /** Logo element rendered at the very top. Defaults to the PROCERTUS wordmark image. Pass `null` to hide. */
   logo?: React.ReactNode | null;
   /** Large icon displayed above the heading. */
-  icon?: LucideIcon;
+  icon?: IconSvgElement;
   /** Optional image/illustration element — replaces the icon when provided. */
   illustration?: React.ReactNode;
   /** Main heading. */
@@ -78,14 +78,14 @@ function BrandWatermark() {
 const defaultLogo = (
   <>
     <img
-      src="/Procertus Logo 1.png"
+      src="/Procertus logo.svg"
       alt="PROCERTUS — Certification that builds trust"
       className="h-16 w-auto dark:hidden"
     />
     <img
-      src="/Procertus Logo 2.png"
+      src="/Procertus logo.svg"
       alt="PROCERTUS — Certification that builds trust"
-      className="hidden h-16 w-auto dark:block"
+      className="hidden h-16 w-auto brightness-0 invert dark:block"
     />
   </>
 );

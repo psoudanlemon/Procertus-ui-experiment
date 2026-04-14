@@ -1,15 +1,16 @@
 "use client";
 
 import * as React from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  CheckIcon,
-  ChevronDownIcon,
+  Tick01Icon,
+  ArrowDown01Icon,
   GlobeIcon,
-  LogOutIcon,
-  MenuIcon,
-  SearchIcon,
-  XIcon,
-} from "lucide-react";
+  Logout01Icon,
+  Menu01Icon,
+  Search01Icon,
+  Cancel01Icon,
+} from "@hugeicons/core-free-icons";
 
 import {
   Avatar,
@@ -148,7 +149,7 @@ function PublicRegistryHeader({
     <header
       data-slot="public-registry-header"
       className={cn(
-        "sticky top-0 z-30 w-full border-b",
+        "sticky top-0 z-20 w-full border-b",
         variant === "transparent"
           ? "border-border bg-background text-foreground"
           : "border-sidebar-border bg-sidebar text-sidebar-foreground",
@@ -162,13 +163,13 @@ function PublicRegistryHeader({
           className="sm:hidden min-h-11 min-w-11 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
           onClick={() => setMobileMenuOpen(true)}
         >
-          <MenuIcon />
+          <HugeiconsIcon icon={Menu01Icon} />
           <span className="sr-only">Menu</span>
         </Button>
 
         {/* Logo */}
         {logo && (
-          <a href="/" className="flex shrink-0 items-center gap-2.5">
+          <a href="/" className="flex shrink-0 items-center gap-element">
             {logo}
           </a>
         )}
@@ -180,7 +181,7 @@ function PublicRegistryHeader({
               key={link.title}
               href={link.url}
               className={cn(
-                "rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                "rounded-md px-component py-element text-sm font-medium transition-colors",
                 link.isActive
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
                   : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
@@ -195,7 +196,7 @@ function PublicRegistryHeader({
         {showSearch && (
           <div className="mx-auto hidden w-full max-w-md sm:block">
             <div className="relative">
-              <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <HugeiconsIcon icon={Search01Icon} className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 ref={searchRef}
                 placeholder={searchPlaceholder}
@@ -254,7 +255,7 @@ function PublicRegistryHeader({
                   <>
                     <DropdownMenuSub>
                       <DropdownMenuSubTrigger>
-                        <GlobeIcon />
+                        <HugeiconsIcon icon={GlobeIcon} />
                         <span>{activeLanguageObj?.label ?? languages[0]?.label}</span>
                       </DropdownMenuSubTrigger>
                       <DropdownMenuSubContent className="w-auto">
@@ -274,7 +275,7 @@ function PublicRegistryHeader({
                 )}
 
                 <DropdownMenuItem variant="destructive" onClick={onLogout}>
-                  <LogOutIcon />
+                  <HugeiconsIcon icon={Logout01Icon} />
                   <span>Uitloggen</span>
                 </DropdownMenuItem>
 
@@ -313,7 +314,7 @@ function PublicRegistryHeader({
                   <span className="text-xs font-medium uppercase">
                     {activeLanguageObj?.code ?? languages[0]?.code}
                   </span>
-                  <ChevronDownIcon className="size-3" />
+                  <HugeiconsIcon icon={ArrowDown01Icon} className="size-3" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-auto">
@@ -336,9 +337,9 @@ function PublicRegistryHeader({
       {/* Mobile sheet — nav links + language */}
       <style>{`
         [data-slot="public-registry-header"] [data-slot="sheet-overlay"] {
-          background: rgba(0, 0, 0, 0.25) !important;
-          backdrop-filter: blur(4px) !important;
-          -webkit-backdrop-filter: blur(4px) !important;
+          background: rgb(0 0 0 / 0.10) !important;
+          backdrop-filter: blur(1px) !important;
+          -webkit-backdrop-filter: blur(1px) !important;
         }
       `}</style>
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -360,7 +361,7 @@ function PublicRegistryHeader({
                 className="min-h-11 min-w-11 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <XIcon />
+                <HugeiconsIcon icon={Cancel01Icon} />
                 <span className="sr-only">Sluiten</span>
               </Button>
             </div>
@@ -368,13 +369,13 @@ function PublicRegistryHeader({
 
             {/* Navigation links */}
             {navLinks.length > 0 && (
-              <nav className="flex flex-col gap-0.5 p-2">
+              <nav className="flex flex-col gap-0.5 p-element">
                 {navLinks.map((link) => (
                   <a
                     key={link.title}
                     href={link.url}
                     className={cn(
-                      "flex min-h-11 items-center rounded-md px-3 text-sm font-medium transition-colors",
+                      "flex min-h-11 items-center rounded-md px-element text-sm font-medium transition-colors",
                       link.isActive
                         ? "bg-sidebar-accent text-sidebar-accent-foreground"
                         : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
@@ -391,8 +392,8 @@ function PublicRegistryHeader({
             {languages.length > 1 && (
               <>
                 <Separator className="bg-sidebar-border" />
-                <div className="flex flex-col p-2">
-                  <div className="px-3 py-1.5 text-xs font-medium text-sidebar-foreground/60">
+                <div className="flex flex-col p-element">
+                  <div className="px-element py-1.5 text-xs font-medium text-sidebar-foreground/60">
                     Kies een taal
                   </div>
                   {languages.map((lang) => (
@@ -400,17 +401,17 @@ function PublicRegistryHeader({
                       key={lang.code}
                       type="button"
                       className={cn(
-                        "flex min-h-11 items-center justify-between rounded-md px-3 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                        "flex min-h-11 items-center justify-between rounded-md px-element text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                         lang.code === (activeLanguage ?? languages[0]?.code) &&
                           "font-medium",
                       )}
                       onClick={() => onLanguageChange?.(lang.code)}
                     >
-                      <span className="flex items-center gap-2">
+                      <span className="flex items-center gap-micro">
                         <span>{lang.flag}</span> {lang.label}
                       </span>
                       {lang.code === (activeLanguage ?? languages[0]?.code) && (
-                        <CheckIcon className="size-4 text-sidebar-accent-foreground" />
+                        <HugeiconsIcon icon={Tick01Icon} className="size-4 text-sidebar-accent-foreground" />
                       )}
                     </button>
                   ))}

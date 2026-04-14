@@ -1,23 +1,24 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  CalendarIcon,
-  DollarSignIcon,
+  Calendar01Icon,
+  Dollar01Icon,
   HelpCircleIcon,
-  MapIcon,
-  ReceiptIcon,
-  SettingsIcon,
-  UsersIcon,
-  BarChart3Icon,
-  BookOpenIcon,
-  BoxIcon,
+  CompassIcon,
+  Invoice01Icon,
+  Setting06Icon,
+  UserGroupIcon,
+  BarChartIcon,
+  BookOpen01Icon,
+  PackageIcon,
   CodeIcon,
-  DatabaseIcon,
+  Database01Icon,
   GitBranchIcon,
-  ListTreeIcon,
-  NetworkIcon,
-  PaletteIcon,
-  ZapIcon,
-} from "lucide-react";
+  HierarchyFilesIcon,
+  AiNetworkIcon,
+  ColorPickerIcon,
+  FlashIcon,
+} from "@hugeicons/core-free-icons";
 
 import { Badge } from "@/components/ui/badge";
 import { H1, H2, H3, H4 } from "@/components/ui/heading";
@@ -152,18 +153,18 @@ const managementSidebarProps = {
   ] as Workspace[],
   activeWorkspaceId: "1",
   navItems: [
-    { title: "Roadmap", url: "#", icon: MapIcon },
-    { title: "Budget", url: "#", icon: DollarSignIcon },
-    { title: "Meetings", url: "#", icon: CalendarIcon },
-    { title: "People", url: "#", icon: UsersIcon },
-    { title: "Invoicing", url: "#", icon: ReceiptIcon },
+    { title: "Roadmap", url: "#", icon: CompassIcon },
+    { title: "Budget", url: "#", icon: Dollar01Icon },
+    { title: "Meetings", url: "#", icon: Calendar01Icon },
+    { title: "People", url: "#", icon: UserGroupIcon },
+    { title: "Invoicing", url: "#", icon: Invoice01Icon },
   ] as NavItem[],
   navGroups: [
     {
       label: "Registry",
       items: [
         {
-          title: "Certificates", url: "#", icon: BarChart3Icon, isActive: true,
+          title: "Certificates", url: "#", icon: BarChartIcon, isActive: true,
           items: [
             { title: "Overview", url: "#" },
             { title: "Pending", url: "#", isActive: true },
@@ -171,7 +172,7 @@ const managementSidebarProps = {
           ],
         },
         {
-          title: "Standards", url: "#", icon: PaletteIcon,
+          title: "Standards", url: "#", icon: ColorPickerIcon,
           items: [
             { title: "ISO 9001", url: "#" },
             { title: "ISO 14001", url: "#" },
@@ -183,26 +184,26 @@ const managementSidebarProps = {
     {
       label: "Compliance",
       items: [
-        { title: "Audit Schedule", url: "#", icon: DatabaseIcon, isActive: true },
-        { title: "Non-conformities", url: "#", icon: NetworkIcon },
+        { title: "Audit Schedule", url: "#", icon: Database01Icon, isActive: true },
+        { title: "Non-conformities", url: "#", icon: AiNetworkIcon },
       ],
     },
     {
       label: "Coming Soon",
       maxVisible: 3,
       items: [
-        { title: "User Stories", url: "#", icon: ListTreeIcon },
-        { title: "Event Models", url: "#", icon: ZapIcon },
-        { title: "Prototypes", url: "#", icon: BoxIcon },
+        { title: "User Stories", url: "#", icon: HierarchyFilesIcon },
+        { title: "Event Models", url: "#", icon: FlashIcon },
+        { title: "Prototypes", url: "#", icon: PackageIcon },
         { title: "Context Maps", url: "#", icon: GitBranchIcon },
         { title: "DAL Playground", url: "#", icon: CodeIcon },
-        { title: "API Docs", url: "#", icon: BookOpenIcon },
-        { title: "Guides", url: "#", icon: BookOpenIcon },
+        { title: "API Docs", url: "#", icon: BookOpen01Icon },
+        { title: "Guides", url: "#", icon: BookOpen01Icon },
       ],
     },
   ] as NavGroup[],
   secondaryItems: [
-    { title: "Settings", url: "#", icon: SettingsIcon },
+    { title: "Settings", url: "#", icon: Setting06Icon },
     { title: "Help", url: "#", icon: HelpCircleIcon },
   ] as NavItem[],
   showSearch: false,

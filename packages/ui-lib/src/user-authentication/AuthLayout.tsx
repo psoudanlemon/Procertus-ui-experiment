@@ -8,62 +8,16 @@ import {
 } from "@procertus-ui/ui";
 
 // ---------------------------------------------------------------------------
-// PROCERTUS Logo (full wordmark)
+// PROCERTUS Logo (SVG asset from public folder)
 // ---------------------------------------------------------------------------
 
 function ProcertusLogo({ className }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 360 80"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+    <img
+      src="/Procertus logo.svg"
+      alt="PROCERTUS — Certification that builds trust"
       className={className}
-      aria-label="PROCERTUS — Certification that builds trust"
-    >
-      {/* Checkmark icon */}
-      <path
-        d="M42.26 55.78L33.93 48.38C31.31 46.05 31.08 42.04 33.41 39.42L33.6 39.2L44.22 48.64L58.08 32.77C60.47 30.04 64.63 29.76 67.36 32.15L67.41 32.19L47.06 55.48C45.82 56.89 43.67 56.99 42.27 55.78H42.26Z"
-        fill="#71D2C1"
-      />
-      <path
-        d="M34.74 24.22L43.07 31.62C45.69 33.95 45.92 37.96 43.59 40.58L43.4 40.8L32.78 31.36L18.92 47.23C16.53 49.96 12.37 50.24 9.64 47.85L9.59 47.81L29.94 24.52C31.18 23.11 33.33 23.01 34.73 24.22H34.74Z"
-        fill="#076293"
-      />
-      {/* "PRO" in dark blue */}
-      <text
-        x="82"
-        y="48"
-        fontFamily="Avenir, 'Avenir Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-        fontWeight="800"
-        fontSize="36"
-        fill="#076293"
-      >
-        PRO
-      </text>
-      {/* "CERTUS" in teal */}
-      <text
-        x="157"
-        y="48"
-        fontFamily="Avenir, 'Avenir Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-        fontWeight="800"
-        fontSize="36"
-        fill="#71D2C1"
-      >
-        CERTUS
-      </text>
-      {/* Tagline */}
-      <text
-        x="83"
-        y="68"
-        fontFamily="Avenir, 'Avenir Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-        fontWeight="500"
-        fontSize="11"
-        letterSpacing="0.15em"
-        fill="#90A1B9"
-      >
-        CERTIFICATION THAT BUILDS TRUST
-      </text>
-    </svg>
+    />
   );
 }
 
@@ -119,7 +73,7 @@ function ImageCarousel({ images, interval = 6000 }: { images: string[]; interval
           key={src}
           src={src}
           alt=""
-          className="absolute inset-0 size-full object-cover brightness-90 saturate-[0.3] transition-opacity duration-1000 ease-in-out"
+          className="absolute inset-0 size-full object-cover brightness-90 saturate-[0.3] transition-opacity duration-200 ease-out"
           style={{ opacity: i === active ? 1 : 0 }}
         />
       ))}
@@ -180,7 +134,7 @@ function AuthLayout({
             <Card className="gap-section py-section shadow-[var(--shadow-proc-md)] ring-0">
               <CardHeader className="gap-0 px-section text-center">
                 <H1>{title}</H1>
-                {description && <p className="text-base leading-[1.4] text-muted-foreground mt-1">{description}</p>}
+                {description && <p className="text-base leading-[1.4] text-muted-foreground mt-micro">{description}</p>}
               </CardHeader>
               <CardContent className="px-section">{children}</CardContent>
             </Card>
@@ -222,7 +176,7 @@ function AuthLayout({
                 <h2 className="text-xl font-semibold text-white">{panelConfig.title}</h2>
               )}
               {panelConfig.subtitle && (
-                <p className="mt-1 text-sm text-white/60">{panelConfig.subtitle}</p>
+                <p className="mt-micro text-sm text-white/60">{panelConfig.subtitle}</p>
               )}
             </div>
           )}

@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { CalendarIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Calendar01Icon } from "@hugeicons/core-free-icons";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -36,7 +37,7 @@ function DatePicker({
             className,
           )}
         >
-          <CalendarIcon className="mr-2 size-4" />
+          <HugeiconsIcon icon={Calendar01Icon} className="mr-2 size-4" />
           {value ? formatDate(value) : <span>{placeholder}</span>}
         </Button>
       </PopoverTrigger>
@@ -77,7 +78,7 @@ function DateRangePicker({
             className,
           )}
         >
-          <CalendarIcon className="mr-2 size-4" />
+          <HugeiconsIcon icon={Calendar01Icon} className="mr-2 size-4" />
           {value?.from ? (
             value.to ? (
               <>

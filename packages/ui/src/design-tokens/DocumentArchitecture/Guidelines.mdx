@@ -1,0 +1,266 @@
+{/* packages/ui/src/design-tokens/DocumentArchitecture/Guidelines.mdx */}
+import { Meta } from "@storybook/addon-docs/blocks";
+import { Button } from "@/components/ui/button";
+
+<Meta title="design tokens/Document architecture/Guidelines" />
+
+<div className="mb-12">
+  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-3">PROCERTUS Design Guidelines</p>
+  <h1 className="font-sans font-bold text-foreground m-0 mb-4" style={{ fontSize: '1.875rem', lineHeight: 1.2, letterSpacing: '-0.03em' }}>Document architecture</h1>
+  <p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
+    Documents produced by the PROCERTUS platform are not styled afterthoughts.
+    They are <strong>physical artifacts that carry legal weight</strong>: certificates
+    that get framed, audit reports that get filed with regulators, and data exports
+    that get printed at scale. Every document maps to one of three tiers, and the
+    tier determines everything: logotype treatment, color allowance, grid density,
+    and typographic hierarchy.
+  </p>
+</div>
+
+<hr />
+
+<div className="mt-16">
+
+## The physical page
+
+Unlike screen interfaces that flex and scroll, a printed document is a fixed
+canvas. The A4 sheet at 210 x 297mm is the only format the platform produces,
+and its physical constraints shape every layout decision. Content that looks
+fine on screen can clip, bleed, or become illegible once it hits paper.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border border-border bg-card p-6">
+    <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">Print margins</h4>
+    <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+      Physical printers clip unpredictably near sheet edges, and regulatory
+      bodies expect consistent, professional margins on filed documents. The
+      PROCERTUS system enforces a 20mm safe zone on all four edges at the
+      renderer level. No content, no decorative elements, no bleed. Template
+      authors cannot override this. It reduces the usable content area to
+      170 x 257mm, and every grid, header, and footer must fit within that
+      boundary.
+    </p>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">Point-based typography</h4>
+    <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+      Documents use typographic points, not CSS pixels, because the output is
+      paper, not a viewport. Body text floors at 11pt for readability. Dense
+      data rows in T2 documents can go as low as 7pt, but no smaller. Footers
+      sit at 6pt, light enough to recede but always legible when a regulator
+      needs to trace a page back to its generation timestamp.
+    </p>
+  </div>
+</div>
+
+<div style={{ marginTop: '16px' }}>
+  <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-document-architecture--a-4-layout">Explore the A4 layout for exact dimensions and grid overlays</a></Button>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## The authority ladder
+
+Every document the platform generates belongs to exactly one tier. The tier is
+not a style preference. It encodes the document's *authority*, its intended
+audience, and how long it will exist in the world. A certificate pinned to an
+office wall demands different treatment than an internal export headed for a
+shredder.
+
+<div className="flex flex-col mt-6" style={{ gap: '24px' }}>
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+      <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Formal</span>
+      <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Tier 1</span>
+      <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+        The certificate. The highest-authority document class. Designed for framing,
+        long-term archival, and public display. This is the document a certification
+        holder shows to clients and hangs on a wall. Every element serves the
+        moment of achievement.
+      </p>
+    </div>
+    <div className="rounded-xl border border-border bg-card p-6">
+      <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Operational</span>
+      <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Tier 2</span>
+      <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+        The audit report. High-density compliance artifacts that auditors, registrars,
+        and regulators read in detail. Data tables, status indicators, and finding
+        matrices dominate. Every millimeter of the page earns its place through
+        information, not ornament.
+      </p>
+    </div>
+    <div className="rounded-xl border border-border bg-card p-6">
+      <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Utility</span>
+      <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Tier 3</span>
+      <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
+        The internal export. Minimal document class for bulk printing, data dumps,
+        and internal records. Black and white only, no background elements, no heavy
+        fills. Optimized for ink efficiency and high-speed reproduction. These
+        documents live briefly and serve a single operational purpose.
+      </p>
+    </div>
+  </div>
+
+  <div className="rounded-xl border-2 border-sys-warning-300 dark:border-sys-warning-700 bg-sys-warning-50 dark:bg-sys-warning-950 p-6">
+  <h4 className="font-sans text-base font-bold text-sys-warning-800 dark:text-sys-warning-200 m-0 mb-3">Every document belongs to exactly one tier.</h4>
+  <p className="text-base text-sys-warning-700 dark:text-sys-warning-300 leading-[1.6] m-0">
+    There is no hybrid. A document cannot borrow the logotype treatment from T1
+    and the data grid from T2. The tier system works because each tier carries a
+    complete, self-consistent set of rules. Mixing tiers produces documents that
+    look uncertain about their own authority.
+  </p>
+</div>
+</div>
+
+<div style={{ marginTop: '16px' }}>
+  <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-document-architecture--document-templates">View the three tiers side by side</a></Button>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## The template contract
+
+Within each tier, multiple document types exist. An audit report, a corrective
+action request, and a surveillance summary are all Tier 2 documents, but they
+serve different purposes and carry different content. The tier defines the
+*visual rules*. The template defines the *content structure*.
+
+Templates are interchangeable within their tier. Any Tier 2 template can be
+swapped for another Tier 2 template without breaking the visual language,
+because they all inherit the same logotype placement, color mode, grid system,
+and typographic hierarchy. This is the fundamental design constraint: the tier
+is the contract, and templates are implementations of that contract.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="rounded-xl border border-border bg-card p-6">
+    <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">What the tier controls</h4>
+    <p className="text-sm text-muted-foreground leading-[1.6] m-0 mb-4">
+      These properties are locked by the tier and cannot be overridden by any
+      template within it. They form the visual identity of the document class.
+    </p>
+    <div className="flex flex-col gap-2">
+      {[
+        "Logotype size, placement, and color treatment",
+        "Color mode (full brand, limited, or black and white)",
+        "Background elements (watermarks, fills, or none)",
+        "Grid system (centered, 6-column, or single-column)",
+        "Margin safe zone (20mm on all edges, always)",
+        "Header and footer structure",
+      ].map((item) => (
+        <div key={item} className="flex items-start gap-2">
+          <span className="text-brand-primary-500 mt-0.5" style={{ fontSize: '12px', fontWeight: 700 }}>+</span>
+          <span className="text-sm text-muted-foreground" style={{ lineHeight: 1.6 }}>{item}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+  <div className="rounded-xl border border-border bg-card p-6">
+    <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">What the template controls</h4>
+    <p className="text-sm text-muted-foreground leading-[1.6] m-0 mb-4">
+      These properties vary between templates within the same tier. They define
+      how content is organized within the tier's visual constraints.
+    </p>
+    <div className="flex flex-col gap-2">
+      {[
+        "Section ordering and page flow",
+        "Which metadata fields appear in the header strip",
+        "Table column definitions and row density",
+        "Section titles and narrative structure",
+        "Summary block placement and format",
+        "Continuation rules across page breaks",
+      ].map((item) => (
+        <div key={item} className="flex items-start gap-2">
+          <span className="text-brand-accent-500 mt-0.5" style={{ fontSize: '12px', fontWeight: 700 }}>+</span>
+          <span className="text-sm text-muted-foreground" style={{ lineHeight: 1.6 }}>{item}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+</div>
+
+<hr />
+
+<div className="mt-20">
+
+## Tier anatomy
+
+Each tier prescribes a specific arrangement of structural elements. These are
+not suggestions for template designers. They are fixed positions that every
+document within the tier must honor.
+
+<div className="flex flex-col mt-6" style={{ gap: '24px' }}>
+  <div className="rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-card p-6">
+    <h4 className="font-sans text-base font-bold text-foreground m-0 mb-2">Tier 1: the formal document</h4>
+    <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+      Centered logotype with tagline at the largest permitted scale. Brand watermark
+      anchored bottom-right. Full brand palette, centered single-column layout.
+      Typography focuses entirely on the achievement: the standard name, the holder
+      name, and the validity period. Everything else recedes.
+    </p>
+    <div style={{ marginTop: '12px' }}>
+      <Button variant="link" className="p-0 h-auto text-sm" asChild><a href="?path=/story/applied-guidelines-document-architecture--t-1-formal">View the T1 prototype &rarr;</a></Button>
+    </div>
+  </div>
+
+  <div className="rounded-xl border border-border bg-card p-6">
+    <h4 className="font-sans text-base font-bold text-foreground m-0 mb-2">Tier 2: the operational document</h4>
+    <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+      Logotype with tagline anchored top-right. Document type label top-left. Full
+      brand palette with no background elements. High-density data grid for audit
+      findings, control matrices, and compliance evidence tables. Status indicators
+      use semantic colors that map directly to system color tokens.
+    </p>
+    <div style={{ marginTop: '12px' }}>
+      <Button variant="link" className="p-0 h-auto text-sm" asChild><a href="?path=/story/applied-guidelines-document-architecture--t-2-operational">View the T2 prototype &rarr;</a></Button>
+    </div>
+  </div>
+
+  <div className="rounded-xl border border-border bg-card p-6">
+    <h4 className="font-sans text-base font-bold text-foreground m-0 mb-2">Tier 3: the utility document</h4>
+    <p className="text-sm text-muted-foreground leading-[1.6] m-0">
+      Black-and-white logotype top-left at the smallest permitted scale. No background
+      elements, no solid fills, no colored status indicators. Text and thin rules only.
+      Single-column flow optimized for ink efficiency and high-speed bulk reproduction.
+    </p>
+    <div style={{ marginTop: '12px' }}>
+      <Button variant="link" className="p-0 h-auto text-sm" asChild><a href="?path=/story/applied-guidelines-document-architecture--t-3-utility">View the T3 prototype &rarr;</a></Button>
+    </div>
+  </div>
+
+  <div className="rounded-xl border-2 border-sys-warning-300 dark:border-sys-warning-700 bg-sys-warning-50 dark:bg-sys-warning-950 p-6">
+    <h4 className="font-sans text-base font-bold text-sys-warning-800 dark:text-sys-warning-200 m-0 mb-3">Solid fills are prohibited in T3.</h4>
+    <p className="text-base text-sys-warning-700 dark:text-sys-warning-300 leading-[1.6] m-0">
+      No table header backgrounds, no colored badges, no shaded rows. If you need to
+      distinguish a row, use weight or indentation, not color. This is the only tier
+      where the brand is deliberately muted to serve the operational context.
+    </p>
+  </div>
+</div>
+
+</div>
+
+<hr className="page-end" />
+
+<div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '5rem' }}>
+  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For developers</h4>
+  <p className="text-base text-muted-foreground leading-[1.6] m-0">
+    Every rule on this page is <strong>already encoded in the component library</strong>.
+    Document generation uses the tier as a configuration preset. Each tier maps to a
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded">DocumentTierConfig</code> that
+    controls header layout, color mode, grid columns, and background treatment. The
+    20mm safe zone is enforced at the PDF renderer level and cannot be overridden by
+    template authors. Text sizing uses native point units in the renderer. The A4 layout
+    sandbox story provides a screen-resolution preview at 2.5px per mm for visual
+    validation during development.
+  </p>
+</div>

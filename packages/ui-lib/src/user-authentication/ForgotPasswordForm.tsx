@@ -1,5 +1,6 @@
 import * as React from "react";
-import { ArrowLeftIcon, CheckCircle2Icon, CircleAlertIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { AlertCircleIcon, ArrowLeft01Icon, CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
 
 import {
   Alert,
@@ -54,13 +55,13 @@ function ForgotPasswordForm({
       <FieldGroup>
         {error && (
           <Alert variant="destructive">
-            <CircleAlertIcon />
+            <HugeiconsIcon icon={AlertCircleIcon} />
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
         {successMessage && (
           <Alert variant="success">
-            <CheckCircle2Icon />
+            <HugeiconsIcon icon={CheckmarkCircle02Icon} />
             <AlertDescription>{successMessage}</AlertDescription>
           </Alert>
         )}
@@ -79,7 +80,7 @@ function ForgotPasswordForm({
           />
           {fieldErrors?.email && <FieldError errors={[fieldErrors.email]} />}
         </Field>
-        <Field className="mt-3 gap-2">
+        <Field className="mt-section gap-component">
           {onBackToLogin && (
             <Button
               type="button"
@@ -87,7 +88,7 @@ function ForgotPasswordForm({
               onClick={onBackToLogin}
               className="w-full"
             >
-              <ArrowLeftIcon className="size-4" />
+              <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
               Back to sign in
             </Button>
           )}

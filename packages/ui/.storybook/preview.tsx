@@ -1,11 +1,36 @@
 import type { Preview } from "@storybook/react-vite";
 import { addons } from "storybook/preview-api";
-import { GLOBALS_UPDATED } from "storybook/internal/core-events";
+import { GLOBALS_UPDATED, NAVIGATE_URL } from "storybook/internal/core-events";
 
 import { THEMES } from "@/lib/themes";
 import "../src/styles/globals.css";
 import "./preview.css";
 import { parseToolbarDensity, parseToolbarMode, parseToolbarTheme, StorybookThemeDecorator } from "./storybook-theme";
+
+/**
+ * Intercept clicks on `?path=/story/...` and `?path=/docs/...` links inside
+ * MDX docs pages and route them through Storybook's navigation channel so the
+ * manager shell (sidebar + toolbar) stays intact.
+ */
+document.addEventListener("click", (e) => {
+  const anchor = (e.target as Element).closest?.("a[href^='?path=/']");
+  if (!anchor) return;
+
+  const href = anchor.getAttribute("href");
+  if (!href) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  try {
+    const channel = addons.getChannel();
+    channel.emit(NAVIGATE_URL, href);
+  } catch {
+    // Fallback: set the parent frame URL directly
+    const url = new URL(href, window.top?.location.href ?? window.location.href);
+    if (window.top) window.top.location.href = url.toString();
+  }
+});
 
 /**
  * Module-level listener: syncs toolbar mode/theme to the DOM imperatively.
@@ -139,13 +164,15 @@ const preview: Preview = {
           [
             "Typography",
             ["Guidelines", "Font Family", "Font Size", "Font Weight", "Line Height", "Letter Spacing"],
+            "Logotype", ["Guidelines", "Minimum dimensions", "Background rules", "*"],
             "Iconography",
             "Color", ["Guidelines", "Default", "*"],
             "Gradient", ["Guidelines", "Default", "*"],
             "Radius", ["Guidelines", "Default", "*"],
             "Spacing", ["Guidelines", "Default", "*"],
-            "Elevation",
             "Shadow", ["Guidelines", "Default", "*"],
+            "Elevation", ["Guidelines", "*"],
+            "Document architecture",
             "Motion",
           ],
           "components",
@@ -153,13 +180,15 @@ const preview: Preview = {
           "Applied Guidelines",
           [
             "Typography",
+            "Logotype",
             "Iconography",
             "Colors",
             "Gradients",
             "Radius",
             "Spacing",
-            "Elevation",
             "Shadows",
+            "Elevation",
+            "Document architecture",
             "Motion",
           ],
           "Showroom",

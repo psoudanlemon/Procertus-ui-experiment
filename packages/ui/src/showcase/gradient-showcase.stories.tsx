@@ -1,23 +1,24 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  BarChart3Icon,
-  BookOpenIcon,
-  BoxIcon,
+  BarChartIcon,
+  BookOpen01Icon,
+  PackageIcon,
   CodeIcon,
   DatabaseIcon,
   GitBranchIcon,
   HelpCircleIcon,
-  ListTreeIcon,
-  MapIcon,
-  NetworkIcon,
-  PaletteIcon,
-  SettingsIcon,
-  ShieldCheckIcon,
+  HierarchyFilesIcon,
+  MapsIcon,
+  AiNetworkIcon,
+  ColorPickerIcon,
+  Settings01Icon,
+  SecurityCheckIcon,
   SparklesIcon,
-  UsersIcon,
-  ZapIcon,
-} from "lucide-react";
+  UserMultipleIcon,
+  FlashIcon,
+} from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/button";
 import {

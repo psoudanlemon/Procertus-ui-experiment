@@ -1,28 +1,29 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  ArrowUpRightIcon,
-  ArrowDownRightIcon,
-  CalendarIcon,
-  DollarSignIcon,
+  ArrowUpRight01Icon,
+  ArrowDownRight01Icon,
+  Calendar01Icon,
+  Dollar01Icon,
   HelpCircleIcon,
-  MapIcon,
-  ReceiptIcon,
-  SettingsIcon,
-  UsersIcon,
-  BarChart3Icon,
-  BookOpenIcon,
-  BoxIcon,
+  MapsIcon,
+  Invoice01Icon,
+  Settings01Icon,
+  UserMultipleIcon,
+  BarChartIcon,
+  BookOpen01Icon,
+  PackageIcon,
   CodeIcon,
   DatabaseIcon,
   GitBranchIcon,
-  ListTreeIcon,
-  NetworkIcon,
-  PaletteIcon,
-  ZapIcon,
-  ShieldCheckIcon,
-  AlertTriangleIcon,
-  FileTextIcon,
-} from "lucide-react";
+  HierarchyFilesIcon,
+  AiNetworkIcon,
+  ColorPickerIcon,
+  FlashIcon,
+  SecurityCheckIcon,
+  Alert01Icon,
+  File02Icon,
+} from "@hugeicons/core-free-icons";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -73,11 +74,11 @@ const sidebarProps = {
   ] as Workspace[],
   activeWorkspaceId: "1",
   navItems: [
-    { title: "Roadmap", url: "#", icon: MapIcon },
-    { title: "Budget", url: "#", icon: DollarSignIcon },
-    { title: "Meetings", url: "#", icon: CalendarIcon },
-    { title: "People", url: "#", icon: UsersIcon },
-    { title: "Invoicing", url: "#", icon: ReceiptIcon },
+    { title: "Roadmap", url: "#", icon: MapsIcon },
+    { title: "Budget", url: "#", icon: Dollar01Icon },
+    { title: "Meetings", url: "#", icon: Calendar01Icon },
+    { title: "People", url: "#", icon: UserMultipleIcon },
+    { title: "Invoicing", url: "#", icon: Invoice01Icon },
   ] as NavItem[],
   navGroups: [
     {
@@ -86,7 +87,7 @@ const sidebarProps = {
         {
           title: "Certificates",
           url: "#",
-          icon: BarChart3Icon,
+          icon: BarChartIcon,
           isActive: true,
           items: [
             { title: "Overview", url: "#", isActive: true },
@@ -97,7 +98,7 @@ const sidebarProps = {
         {
           title: "Standards",
           url: "#",
-          icon: PaletteIcon,
+          icon: ColorPickerIcon,
           items: [
             { title: "ISO 9001", url: "#" },
             { title: "ISO 14001", url: "#" },
@@ -110,25 +111,25 @@ const sidebarProps = {
       label: "Compliance",
       items: [
         { title: "Audit Schedule", url: "#", icon: DatabaseIcon },
-        { title: "Non-conformities", url: "#", icon: NetworkIcon },
+        { title: "Non-conformities", url: "#", icon: AiNetworkIcon },
       ],
     },
     {
       label: "Coming Soon",
       maxVisible: 3,
       items: [
-        { title: "User Stories", url: "#", icon: ListTreeIcon },
-        { title: "Event Models", url: "#", icon: ZapIcon },
-        { title: "Prototypes", url: "#", icon: BoxIcon },
+        { title: "User Stories", url: "#", icon: HierarchyFilesIcon },
+        { title: "Event Models", url: "#", icon: FlashIcon },
+        { title: "Prototypes", url: "#", icon: PackageIcon },
         { title: "Context Maps", url: "#", icon: GitBranchIcon },
         { title: "DAL Playground", url: "#", icon: CodeIcon },
-        { title: "API Docs", url: "#", icon: BookOpenIcon },
-        { title: "Guides", url: "#", icon: BookOpenIcon },
+        { title: "API Docs", url: "#", icon: BookOpen01Icon },
+        { title: "Guides", url: "#", icon: BookOpen01Icon },
       ],
     },
   ] as NavGroup[],
   secondaryItems: [
-    { title: "Settings", url: "#", icon: SettingsIcon },
+    { title: "Settings", url: "#", icon: Settings01Icon },
     { title: "Help", url: "#", icon: HelpCircleIcon },
   ] as NavItem[],
   showSearch: false,
@@ -280,9 +281,9 @@ function ColorShowcasePage() {
                     }`}
                   >
                     {kpi.trending === "up" ? (
-                      <ArrowUpRightIcon className="mr-0.5 size-4" />
+                      <HugeiconsIcon icon={ArrowUpRight01Icon} className="mr-0.5 size-4" />
                     ) : (
-                      <ArrowDownRightIcon className="mr-0.5 size-4" />
+                      <HugeiconsIcon icon={ArrowDownRight01Icon} className="mr-0.5 size-4" />
                     )}
                     {kpi.change}
                   </span>
@@ -392,7 +393,7 @@ function ColorShowcasePage() {
               <CardHeader className="px-0">
                 <div className="flex items-center gap-3">
                   <div className="flex size-10 items-center justify-center rounded-lg bg-sys-success-100 dark:bg-sys-success-950">
-                    <ShieldCheckIcon className="size-5 text-sys-success-600 dark:text-sys-success-300" />
+                    <HugeiconsIcon icon={SecurityCheckIcon} className="size-5 text-sys-success-600 dark:text-sys-success-300" />
                   </div>
                   <div className="flex-1 space-y-1.5">
                     <Skeleton className="h-4 w-32" />
@@ -412,7 +413,7 @@ function ColorShowcasePage() {
               <CardHeader className="px-0">
                 <div className="flex items-center gap-3">
                   <div className="flex size-10 items-center justify-center rounded-lg bg-sys-warning-100 dark:bg-sys-warning-950">
-                    <AlertTriangleIcon className="size-5 text-sys-warning-600 dark:text-sys-warning-300" />
+                    <HugeiconsIcon icon={Alert01Icon} className="size-5 text-sys-warning-600 dark:text-sys-warning-300" />
                   </div>
                   <div className="flex-1 space-y-1.5">
                     <Skeleton className="h-4 w-36" />
@@ -432,7 +433,7 @@ function ColorShowcasePage() {
               <CardHeader className="px-0">
                 <div className="flex items-center gap-3">
                   <div className="flex size-10 items-center justify-center rounded-lg bg-sys-info-100 dark:bg-sys-info-950">
-                    <FileTextIcon className="size-5 text-sys-info-600 dark:text-sys-info-300" />
+                    <HugeiconsIcon icon={File02Icon} className="size-5 text-sys-info-600 dark:text-sys-info-300" />
                   </div>
                   <div className="flex-1 space-y-1.5">
                     <Skeleton className="h-4 w-32" />

@@ -4,8 +4,7 @@ import * as React from "react";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import {
   ArrowRight01Icon,
-  CheckmarkSquare01Icon,
-  ArrowShrink02Icon,
+  ChevronDoubleCloseIcon,
   Logout01Icon,
   MoreHorizontalIcon,
   PlusSignIcon,
@@ -16,6 +15,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
+  cn,
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
@@ -153,7 +153,7 @@ function WorkspaceSwitcher({
         <span className="truncate font-semibold">{activeWorkspace.name}</span>
         <span className="truncate text-xs text-muted-foreground">{activeWorkspace.plan}</span>
       </div>
-      {!isSingleWorkspace && <HugeiconsIcon icon={ArrowShrink02Icon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} className="ml-auto" />}
+      {!isSingleWorkspace && <HugeiconsIcon icon={ChevronDoubleCloseIcon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} className="ml-auto rotate-90" />}
     </SidebarMenuButton>
   );
 
@@ -171,7 +171,7 @@ function WorkspaceSwitcher({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>{header}</DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg bg-sidebar text-sidebar-foreground"
+            className="flex w-[--radix-dropdown-menu-trigger-width] min-w-56 flex-col gap-micro rounded-lg bg-sidebar text-sidebar-foreground"
             side={isMobile ? "bottom" : "right"}
             align="start"
             sideOffset={6}
@@ -179,7 +179,10 @@ function WorkspaceSwitcher({
             {workspaces.map((workspace) => (
               <DropdownMenuItem
                 key={workspace.id}
-                className="gap-2 p-2"
+                className={cn(
+                  "gap-element p-element focus:bg-sidebar-accent focus:text-sidebar-accent-foreground",
+                  workspace.id === activeWorkspaceId && "bg-sidebar-accent text-sidebar-accent-foreground",
+                )}
                 onClick={() => onWorkspaceChange?.(workspace.id)}
               >
                 <div className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-primary text-primary-foreground! *:text-inherit!">
@@ -193,7 +196,6 @@ function WorkspaceSwitcher({
                       ` · ${workspace.memberCount} member${workspace.memberCount !== 1 ? "s" : ""}`}
                   </span>
                 </div>
-                {workspace.id === activeWorkspaceId && <HugeiconsIcon icon={CheckmarkSquare01Icon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} className="ml-auto" />}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
@@ -454,7 +456,7 @@ function NavUser({
                 <span className="truncate font-semibold">{user.name}</span>
                 <span className="truncate text-xs text-muted-foreground">{user.email}</span>
               </div>
-              <HugeiconsIcon icon={ArrowShrink02Icon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} className="ml-auto" />
+              <HugeiconsIcon icon={ChevronDoubleCloseIcon as IconSvgElement} size={16} strokeWidth={iconStroke(16)} className="ml-auto rotate-90" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -463,7 +465,7 @@ function NavUser({
             align="end"
             sideOffset={4}
           >
-            <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+            <div className="flex items-center gap-micro px-micro py-1.5 text-left text-sm">
               <Avatar className="size-8 rounded-lg">
                 {user.avatar && <AvatarImage src={user.avatar} alt={user.name} />}
                 <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
@@ -479,12 +481,12 @@ function NavUser({
                 <DropdownMenuItem
                   className={
                     item.highlight
-                      ? "bg-emerald-50 text-emerald-600 focus:bg-emerald-100 focus:text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400 dark:focus:bg-emerald-950/50"
+                      ? "bg-success text-success-foreground focus:bg-success focus:text-success-foreground"
                       : undefined
                   }
                 >
                   {item.highlight && (
-                    <span className="size-2 shrink-0 rounded-full bg-emerald-500" />
+                    <span className="size-2 shrink-0 rounded-full bg-[var(--sys-success-500)]" />
                   )}
                   {item.icon && <SidebarNavIcon icon={item.icon} />}
                   <span>{item.title}</span>
@@ -585,9 +587,9 @@ function ManagementSidebar({
         [data-slot="sidebar"][data-mobile="true"] + [data-slot="sheet-overlay"],
         [data-slot="sidebar"][data-mobile="true"] ~ [data-slot="sheet-overlay"],
         [data-slot="sheet-overlay"]:has(~ [data-slot="sidebar"][data-mobile="true"]) {
-          background: rgba(0, 0, 0, 0.25) !important;
-          backdrop-filter: blur(4px) !important;
-          -webkit-backdrop-filter: blur(4px) !important;
+          background: rgb(0 0 0 / 0.10) !important;
+          backdrop-filter: blur(1px) !important;
+          -webkit-backdrop-filter: blur(1px) !important;
         }
 
         /* Mobile touch targets (Sheet portal) */
@@ -601,11 +603,11 @@ function ManagementSidebar({
           height: 44px !important;
         }
         [data-slot="sidebar"][data-mobile="true"] [data-slot="sidebar-menu-sub-button"] {
-          padding-right: 12px !important;
+          padding-right: var(--spacing-element) !important;
         }
         [data-slot="sidebar"][data-mobile="true"] [data-slot="sidebar-menu-sub"],
         [data-slot="sidebar"][data-mobile="true"] [data-slot="sidebar-menu"] {
-          gap: 4px !important;
+          gap: var(--spacing-micro) !important;
         }
         [data-slot="sidebar"][data-mobile="true"] [data-slot="sidebar-menu-sub"] {
           padding-right: 0 !important;
@@ -614,7 +616,7 @@ function ManagementSidebar({
       `}</style>
       <Sidebar
         collapsible="offcanvas"
-        className="border-none [&_[data-slot=sidebar-inner]]:p-2 [&_[data-slot=sidebar-group]]:p-1 [&_[data-slot=sidebar-header]]:p-1 [&_[data-slot=sidebar-footer]]:p-1 [&_[data-slot=sidebar-content]]:mt-0 [&_[data-slot=sidebar-content]]:gap-3 [&_[data-slot=sidebar-menu-sub]]:mr-0 [&_[data-slot=sidebar-menu-sub]]:pr-0 [&_[data-slot=sidebar-menu-sub]]:overflow-hidden [&_[data-slot=sidebar-menu-sub]]:py-1 [&_[data-slot=sidebar-menu-sub]]:border-l-0 [&_[data-slot=sidebar-menu-sub]]:relative [&_[data-slot=sidebar-menu-sub]]:before:absolute [&_[data-slot=sidebar-menu-sub]]:before:left-0 [&_[data-slot=sidebar-menu-sub]]:before:top-1 [&_[data-slot=sidebar-menu-sub]]:before:bottom-1 [&_[data-slot=sidebar-menu-sub]]:before:w-px [&_[data-slot=sidebar-menu-sub]]:before:bg-sidebar-border [&_[data-slot=sidebar-menu-sub]]:rounded-r-md [&_[data-slot=sidebar-menu]]:gap-1! [&_[data-slot=sidebar-menu-button]>span]:truncate [&_[data-slot=sidebar-menu-button]>a>span]:truncate max-lg:[&_[data-slot=sidebar-menu-button]:not([data-size=lg])]:!h-11 max-lg:[&_[data-slot=sidebar-menu-button]:not([data-size=lg])]:!py-2.5 max-lg:[&_[data-slot=collapsible-trigger]]:!h-11 max-lg:[&_[data-slot=sidebar-menu-sub-button]]:!h-11 max-lg:[&_[data-slot=sidebar-menu-sub-button]]:!py-2.5 max-lg:[&_[data-slot=sidebar-menu-sub-button]]:!pr-3  max-lg:[&_[data-slot=sidebar-menu-sub]]:!pr-0 max-lg:[&_[data-slot=sidebar-menu-sub]]:!mr-0 max-lg:[&_[data-slot=sidebar-menu-sub]]:!gap-1 max-lg:[&_[data-slot=sidebar-menu]]:!gap-1"
+        className="border-none [&_[data-slot=sidebar-inner]]:p-element [&_[data-slot=sidebar-group]]:p-micro [&_[data-slot=sidebar-header]]:p-micro [&_[data-slot=sidebar-footer]]:p-micro [&_[data-slot=sidebar-content]]:mt-0 [&_[data-slot=sidebar-content]]:gap-component [&_[data-slot=sidebar-menu-sub]]:mr-0 [&_[data-slot=sidebar-menu-sub]]:pr-0 [&_[data-slot=sidebar-menu-sub]]:overflow-hidden [&_[data-slot=sidebar-menu-sub]]:py-1 [&_[data-slot=sidebar-menu-sub]]:border-l-0 [&_[data-slot=sidebar-menu-sub]]:relative [&_[data-slot=sidebar-menu-sub]]:before:absolute [&_[data-slot=sidebar-menu-sub]]:before:left-0 [&_[data-slot=sidebar-menu-sub]]:before:top-1 [&_[data-slot=sidebar-menu-sub]]:before:bottom-1 [&_[data-slot=sidebar-menu-sub]]:before:w-px [&_[data-slot=sidebar-menu-sub]]:before:bg-sidebar-border [&_[data-slot=sidebar-menu-sub]]:rounded-r-md [&_[data-slot=sidebar-menu]]:gap-1! [&_[data-slot=sidebar-menu-button]>span]:truncate [&_[data-slot=sidebar-menu-button]>a>span]:truncate max-lg:[&_[data-slot=sidebar-menu-button]:not([data-size=lg])]:!h-11 max-lg:[&_[data-slot=sidebar-menu-button]:not([data-size=lg])]:!py-2.5 max-lg:[&_[data-slot=collapsible-trigger]]:!h-11 max-lg:[&_[data-slot=sidebar-menu-sub-button]]:!h-11 max-lg:[&_[data-slot=sidebar-menu-sub-button]]:!py-2.5 max-lg:[&_[data-slot=sidebar-menu-sub-button]]:!pr-3  max-lg:[&_[data-slot=sidebar-menu-sub]]:!pr-0 max-lg:[&_[data-slot=sidebar-menu-sub]]:!mr-0 max-lg:[&_[data-slot=sidebar-menu-sub]]:!gap-1 max-lg:[&_[data-slot=sidebar-menu]]:!gap-1"
         {...sidebarProps}
       >
         <SidebarHeader>
@@ -637,10 +639,10 @@ function ManagementSidebar({
 
         {showSearch && <NavSearch />}
 
-        {stickyNav && <NavPrimary items={navItems} className={showSearch ? "mb-5" : "mt-3 mb-5"} />}
+        {stickyNav && <NavPrimary items={navItems} className={showSearch ? "mb-section" : "mt-component mb-section"} />}
 
         <ScrollFade>
-          {!stickyNav && <NavPrimary items={navItems} className="mt-3 mb-5" />}
+          {!stickyNav && <NavPrimary items={navItems} className="mt-component mb-section" />}
 
           {navGroups.map((group) => (
             <NavCollapsible

@@ -1,6 +1,7 @@
 import { expect, userEvent, within } from "storybook/test";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ChevronDownIcon, HomeIcon } from "lucide-react";
+import { ArrowDown01Icon, Home01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import {
   Breadcrumb,
@@ -68,7 +69,7 @@ export const Icon: Story = {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="#">
-            <HomeIcon className="size-4" />
+            <HugeiconsIcon icon={Home01Icon} className="size-4" />
             <span className="sr-only">Home</span>
           </BreadcrumbLink>
         </BreadcrumbItem>
@@ -144,7 +145,7 @@ export const Dropdown: Story = {
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-1">
                 Components
-                <ChevronDownIcon className="size-3.5" />
+                <HugeiconsIcon icon={ArrowDown01Icon} className="size-3.5" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">

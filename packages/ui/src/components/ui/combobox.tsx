@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Tick01Icon, ArrowUpDownIcon } from "@hugeicons/core-free-icons";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -61,7 +62,7 @@ function Combobox({
           )}
         >
           {selectedLabel ?? placeholder}
-          <ChevronsUpDownIcon className="ml-2 size-4 shrink-0 opacity-50" />
+          <HugeiconsIcon icon={ArrowUpDownIcon} className="ml-2 size-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
@@ -81,7 +82,8 @@ function Combobox({
                   }}
                 >
                   {option.label}
-                  <CheckIcon
+                  <HugeiconsIcon
+                    icon={Tick01Icon}
                     className={cn(
                       "ml-auto size-4",
                       value === option.value ? "opacity-100" : "opacity-0",

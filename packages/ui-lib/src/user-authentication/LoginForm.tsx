@@ -1,5 +1,6 @@
 import * as React from "react";
-import { CircleAlertIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { AlertCircleIcon } from "@hugeicons/core-free-icons";
 
 import {
   Alert,
@@ -59,7 +60,7 @@ function LoginForm({
       <FieldGroup>
         {error && (
           <Alert variant="destructive">
-            <CircleAlertIcon />
+            <HugeiconsIcon icon={AlertCircleIcon} />
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
@@ -104,7 +105,7 @@ function LoginForm({
           />
           {fieldErrors?.password && <FieldError errors={[fieldErrors.password]} />}
         </Field>
-        <Field className="mt-3">
+        <Field className="mt-section">
           <Button type="submit" disabled={isSubmitting} className="w-full">
             {isSubmitting ? <Spinner size="sm" /> : "Sign in"}
           </Button>

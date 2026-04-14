@@ -1,7 +1,8 @@
 import { expect, userEvent, within } from "storybook/test";
 // Replace nextjs-vite with the name of your framework
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Mail, Plus, PlusCircle, Search, UserPlus } from "lucide-react";
+import { Mail01Icon, PlusSignIcon, AddCircleIcon, Search01Icon, UserAdd01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import {
   DropdownMenu,
@@ -88,30 +89,30 @@ export const Submenus: Story = {
       <DropdownMenuTrigger>Open</DropdownMenuTrigger>
       <DropdownMenuContent className="w-44">
         <DropdownMenuItem>
-          <Search className="mr-0.5 size-4" />
+          <HugeiconsIcon icon={Search01Icon} className="mr-0.5 size-4" />
           <span>Search</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <Plus className="mr-0.5 size-4" />
+            <HugeiconsIcon icon={PlusSignIcon} className="mr-0.5 size-4" />
             <span>New Team</span>
             <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
-              <UserPlus className="mr-0.5 size-4" />
+              <HugeiconsIcon icon={UserAdd01Icon} className="mr-0.5 size-4" />
               <span>Invite users</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuItem>
-                  <Mail className="mr-0.5 size-4" />
+                  <HugeiconsIcon icon={Mail01Icon} className="mr-0.5 size-4" />
                   <span>Email</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <PlusCircle className="mr-0.5 size-4" />
+                  <HugeiconsIcon icon={AddCircleIcon} className="mr-0.5 size-4" />
                   <span>More...</span>
                 </DropdownMenuItem>
               </DropdownMenuSubContent>

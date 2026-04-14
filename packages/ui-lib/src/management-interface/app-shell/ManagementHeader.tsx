@@ -1,14 +1,15 @@
 import * as React from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  CheckIcon,
-  ChevronDownIcon,
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
+  Tick01Icon,
+  ArrowDown01Icon,
   GlobeIcon,
-  LogOutIcon,
-  MenuIcon,
-  SearchIcon,
-} from "lucide-react";
+  Logout01Icon,
+  Menu01Icon,
+  Search01Icon,
+} from "@hugeicons/core-free-icons";
 
 import {
   Avatar,
@@ -134,7 +135,7 @@ function PickerWheel({
   const pad = Math.floor(VISIBLE_ITEMS / 2);
 
   return (
-    <div className="relative mx-4" style={{ height: ITEM_HEIGHT * VISIBLE_ITEMS }}>
+    <div className="relative mx-element" style={{ height: ITEM_HEIGHT * VISIBLE_ITEMS }}>
       {/* Highlight band */}
       <div
         className="pointer-events-none absolute inset-x-0 rounded-lg bg-accent"
@@ -231,7 +232,7 @@ function ManagementHeader({
           className="md:hidden min-h-11 min-w-11 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
           onClick={() => toggleSidebar()}
         >
-          <MenuIcon />
+          <HugeiconsIcon icon={Menu01Icon} />
           <span className="sr-only">Toggle Sidebar</span>
         </Button>
         {showNavigation && (
@@ -247,7 +248,7 @@ function ManagementHeader({
               onClick={onBack}
               className="hidden lg:inline-flex hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
             >
-              <ArrowLeftIcon />
+              <HugeiconsIcon icon={ArrowLeft01Icon} />
               <span className="sr-only">Go back</span>
             </Button>
             <Button
@@ -257,7 +258,7 @@ function ManagementHeader({
               onClick={onForward}
               className="hidden lg:inline-flex hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
             >
-              <ArrowRightIcon />
+              <HugeiconsIcon icon={ArrowRight01Icon} />
               <span className="sr-only">Go forward</span>
             </Button>
           </>
@@ -305,9 +306,9 @@ function ManagementHeader({
                     {/* Middle — dropdown with hidden crumbs */}
                     <BreadcrumbItem>
                       <DropdownMenu>
-                        <DropdownMenuTrigger className="flex items-center gap-1 text-sm">
+                        <DropdownMenuTrigger className="flex items-center gap-micro text-sm">
                           {breadcrumbs[breadcrumbs.length - 2]?.label}
-                          <ChevronDownIcon className="size-3.5" />
+                          <HugeiconsIcon icon={ArrowDown01Icon} className="size-3.5" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start">
                           {breadcrumbs.slice(1, -2).map((crumb, index) => (
@@ -339,11 +340,11 @@ function ManagementHeader({
                         <>
                           <button
                             type="button"
-                            className="flex min-h-11 items-center gap-1 text-sm text-muted-foreground"
+                            className="flex min-h-11 items-center gap-micro text-sm text-muted-foreground"
                             onClick={() => setBreadcrumbDrawerOpen(true)}
                           >
                             {breadcrumbs[breadcrumbs.length - 2]?.label}
-                            <ChevronDownIcon className="size-3.5" />
+                            <HugeiconsIcon icon={ArrowDown01Icon} className="size-3.5" />
                           </button>
                           <Drawer
                             open={breadcrumbDrawerOpen}
@@ -406,7 +407,7 @@ function ManagementHeader({
         {showSearch && (
           <div className="mx-auto hidden w-full max-w-sm lg:block">
             <div className="relative">
-              <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <HugeiconsIcon icon={Search01Icon} className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 ref={searchRef}
                 placeholder="Search"
@@ -465,24 +466,24 @@ function ManagementHeader({
                     <Separator className="bg-sidebar-border" />
 
                     {/* Language */}
-                    <div className="flex flex-col p-2">
-                      <div className="px-2 py-1.5 text-xs font-medium text-sidebar-foreground/60">
+                    <div className="flex flex-col p-element">
+                      <div className="px-element py-1.5 text-xs font-medium text-sidebar-foreground/60">
                         Kies een taal
                       </div>
                       <button
                         type="button"
-                        className="flex min-h-11 items-center justify-between rounded-md px-2 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                        className="flex min-h-11 items-center justify-between rounded-md px-element text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                       >
-                        <span className="flex items-center gap-2">
+                        <span className="flex items-center gap-micro">
                           <span>🇳🇱</span> Nederlands
                         </span>
-                        <CheckIcon className="size-4 text-accent-foreground" />
+                        <HugeiconsIcon icon={Tick01Icon} className="size-4 text-accent-foreground" />
                       </button>
                       <button
                         type="button"
-                        className="mt-0.5 flex min-h-11 items-center rounded-md px-2 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                        className="mt-0.5 flex min-h-11 items-center rounded-md px-element text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                       >
-                        <span className="flex items-center gap-2">
+                        <span className="flex items-center gap-micro">
                           <span>🇫🇷</span> Français
                         </span>
                       </button>
@@ -491,12 +492,12 @@ function ManagementHeader({
                     <Separator className="bg-sidebar-border" />
 
                     {/* Logout */}
-                    <div className="flex flex-col gap-0.5 p-2">
+                    <div className="flex flex-col gap-0.5 p-element">
                       <button
                         type="button"
-                        className="flex min-h-11 items-center gap-2 rounded-md px-2 text-sm text-destructive hover:bg-destructive/10"
+                        className="flex min-h-11 items-center gap-micro rounded-md px-element text-sm text-destructive hover:bg-destructive/10"
                       >
-                        <LogOutIcon className="size-4 shrink-0" />
+                        <HugeiconsIcon icon={Logout01Icon} className="size-4 shrink-0" />
                         <span>Log out</span>
                       </button>
                     </div>
@@ -546,7 +547,7 @@ function ManagementHeader({
                   {/* Language */}
                   <DropdownMenuSub>
                     <DropdownMenuSubTrigger>
-                      <GlobeIcon />
+                      <HugeiconsIcon icon={GlobeIcon} />
                       <span>Nederlands</span>
                     </DropdownMenuSubTrigger>
                     <DropdownMenuSubContent>
@@ -563,7 +564,7 @@ function ManagementHeader({
 
                   {/* Logout */}
                   <DropdownMenuItem variant="destructive" className="mt-0.5">
-                    <LogOutIcon />
+                    <HugeiconsIcon icon={Logout01Icon} />
                     <span>Log out</span>
                   </DropdownMenuItem>
 

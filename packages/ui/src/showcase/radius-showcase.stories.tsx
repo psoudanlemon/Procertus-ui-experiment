@@ -1,17 +1,18 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  BarChart3Icon,
-  BookOpenIcon,
-  DatabaseIcon,
+  BarChartIcon,
+  BookOpen01Icon,
+  Database01Icon,
   HelpCircleIcon,
-  MapIcon,
-  NetworkIcon,
-  PaletteIcon,
-  SettingsIcon,
-  ShieldCheckIcon,
-  UsersIcon,
-  ZapIcon,
-} from "lucide-react";
+  CompassIcon,
+  AiNetworkIcon,
+  ColorPickerIcon,
+  Setting06Icon,
+  SecurityCheckIcon,
+  UserGroupIcon,
+  FlashIcon,
+} from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -47,9 +48,9 @@ const sidebarProps = {
   activeWorkspaceId: "1",
   showSearch: false,
   navItems: [
-    { title: "Certifications", url: "#", icon: ShieldCheckIcon },
-    { title: "Candidates", url: "#", icon: UsersIcon },
-    { title: "Roadmap", url: "#", icon: MapIcon },
+    { title: "Certifications", url: "#", icon: SecurityCheckIcon },
+    { title: "Candidates", url: "#", icon: UserGroupIcon },
+    { title: "Roadmap", url: "#", icon: CompassIcon },
   ] as NavItem[],
   navGroups: [
     {
@@ -58,28 +59,28 @@ const sidebarProps = {
         {
           title: "Analytics",
           url: "#",
-          icon: BarChart3Icon,
+          icon: BarChartIcon,
           isActive: true,
           items: [
             { title: "Overview", url: "#" },
             { title: "Reports", url: "#", isActive: true },
           ],
         },
-        { title: "Design System", url: "#", icon: PaletteIcon },
+        { title: "Design System", url: "#", icon: ColorPickerIcon },
       ],
     },
     {
       label: "Platform",
       items: [
-        { title: "Domain Browser", url: "#", icon: DatabaseIcon },
-        { title: "Architecture", url: "#", icon: NetworkIcon },
-        { title: "Events", url: "#", icon: ZapIcon },
-        { title: "Docs", url: "#", icon: BookOpenIcon },
+        { title: "Domain Browser", url: "#", icon: Database01Icon },
+        { title: "Architecture", url: "#", icon: AiNetworkIcon },
+        { title: "Events", url: "#", icon: FlashIcon },
+        { title: "Docs", url: "#", icon: BookOpen01Icon },
       ],
     },
   ] as NavGroup[],
   secondaryItems: [
-    { title: "Settings", url: "#", icon: SettingsIcon },
+    { title: "Settings", url: "#", icon: Setting06Icon },
     { title: "Help", url: "#", icon: HelpCircleIcon },
   ] as NavItem[],
 };

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Bold, Italic } from "lucide-react";
+import { TextBoldIcon, TextItalicIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import { Toggle } from "@/components/ui/toggle";
 
@@ -16,7 +17,7 @@ const meta: Meta<typeof Toggle> = {
     },
   },
   args: {
-    children: <Bold className="h-4 w-4" />,
+    children: <HugeiconsIcon icon={TextBoldIcon} className="h-4 w-4" />,
     "aria-label": "Toggle bold",
   },
   parameters: {
@@ -39,7 +40,7 @@ export const Default: Story = {};
 export const Outline: Story = {
   args: {
     variant: "outline",
-    children: <Italic className="h-4 w-4" />,
+    children: <HugeiconsIcon icon={TextItalicIcon} className="h-4 w-4" />,
     "aria-label": "Toggle italic",
   },
 };
@@ -50,7 +51,7 @@ export const Outline: Story = {
 export const Text: Story = {
   render: (args) => (
     <Toggle {...args}>
-      <Italic className="mr-2 h-4 w-4" />
+      <HugeiconsIcon icon={TextItalicIcon} className="mr-2 h-4 w-4" />
       Italic
     </Toggle>
   ),

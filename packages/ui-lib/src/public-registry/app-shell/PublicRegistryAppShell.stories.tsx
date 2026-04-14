@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { PlusIcon, SearchIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PlusSignIcon, Search01Icon } from "@hugeicons/core-free-icons";
 
 import { Button, Input, Tooltip, TooltipContent, TooltipTrigger } from "@procertus-ui/ui";
 
@@ -8,14 +9,14 @@ import { PublicRegistryAppShell } from "./PublicRegistryAppShell";
 const procertusLogoLarge = (
   <>
     <img
-      src="/Procertus Logo 1.png"
+      src="/Procertus logo.svg"
       alt="PROCERTUS — Certification that builds trust"
       className="h-20 w-auto dark:hidden"
     />
     <img
-      src="/Procertus Logo 2.png"
+      src="/Procertus logo.svg"
       alt="PROCERTUS — Certification that builds trust"
-      className="hidden h-20 w-auto dark:block"
+      className="hidden h-20 w-auto brightness-0 invert dark:block"
     />
   </>
 );
@@ -84,7 +85,7 @@ export const WithFab: Story = {
         <div className="flex w-full max-w-lg flex-col items-center gap-8 -mt-20">
           {procertusLogoLarge}
           <div className="relative w-full">
-            <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
+            <HugeiconsIcon icon={Search01Icon} className="pointer-events-none absolute left-3.5 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
             <Input
               autoFocus
               placeholder="Zoek op producent, certificaatnummer, product..."
@@ -112,7 +113,7 @@ export const Homepage: Story = {
         <div className="flex w-full max-w-lg flex-col items-center gap-8 -mt-20">
           {procertusLogoLarge}
           <div className="relative w-full">
-            <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
+            <HugeiconsIcon icon={Search01Icon} className="pointer-events-none absolute left-3.5 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
             <Input
               autoFocus
               placeholder="Zoek op producent, certificaatnummer, product..."
@@ -126,7 +127,7 @@ export const Homepage: Story = {
                   asChild
                 >
                   <a href="#">
-                    <PlusIcon className="size-5" />
+                    <HugeiconsIcon icon={PlusSignIcon} className="size-5" />
                     <span className="sr-only">Certificaat aanvragen</span>
                   </a>
                 </Button>

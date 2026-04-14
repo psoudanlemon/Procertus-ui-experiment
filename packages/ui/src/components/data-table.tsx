@@ -88,19 +88,20 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  GripVerticalIcon,
-  CircleCheckIcon,
-  LoaderIcon,
-  EllipsisVerticalIcon,
-  Columns3Icon,
-  ChevronDownIcon,
-  PlusIcon,
-  ChevronsLeftIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronsRightIcon,
-  TrendingUpIcon,
-} from "lucide-react";
+  DragDropVerticalIcon,
+  CheckmarkCircle01Icon,
+  Loading01Icon,
+  MoreVerticalIcon,
+  LeftToRightListBulletIcon,
+  ArrowDown01Icon,
+  PlusSignIcon,
+  ArrowLeftDoubleIcon,
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
+  ArrowRightDoubleIcon,
+  AnalyticsUpIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 export const schema = z.object({
   id: z.number(),
@@ -126,7 +127,7 @@ function DragHandle({ id }: { id: number }) {
       size="icon"
       className="size-7 text-muted-foreground hover:bg-transparent"
     >
-      <GripVerticalIcon className="size-3 text-muted-foreground" />
+      <HugeiconsIcon icon={DragDropVerticalIcon} className="size-3 text-muted-foreground" />
       <span className="sr-only">Drag to reorder</span>
     </Button>
   );
@@ -189,9 +190,9 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     cell: ({ row }) => (
       <Badge variant="outline">
         {row.original.status === "Done" ? (
-          <CircleCheckIcon className="fill-green-500 dark:fill-green-400" />
+          <HugeiconsIcon icon={CheckmarkCircle01Icon} className="fill-green-500 dark:fill-green-400" />
         ) : (
-          <LoaderIcon />
+          <HugeiconsIcon icon={Loading01Icon} />
         )}
         {row.original.status}
       </Badge>
@@ -291,7 +292,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
             className="flex size-8 text-muted-foreground data-[state=open]:bg-muted"
             size="icon"
           >
-            <EllipsisVerticalIcon />
+            <HugeiconsIcon icon={MoreVerticalIcon} />
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
@@ -420,9 +421,9 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
-                <Columns3Icon data-icon="inline-start" />
+                <HugeiconsIcon icon={LeftToRightListBulletIcon} data-icon="inline-start" />
                 Columns
-                <ChevronDownIcon data-icon="inline-end" />
+                <HugeiconsIcon icon={ArrowDown01Icon} data-icon="inline-end" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-32">
@@ -444,7 +445,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
             </DropdownMenuContent>
           </DropdownMenu>
           <Button variant="outline" size="sm">
-            <PlusIcon />
+            <HugeiconsIcon icon={PlusSignIcon} />
             <span className="hidden lg:inline">Add Section</span>
           </Button>
         </div>
@@ -536,7 +537,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                 disabled={!table.getCanPreviousPage()}
               >
                 <span className="sr-only">Go to first page</span>
-                <ChevronsLeftIcon />
+                <HugeiconsIcon icon={ArrowLeftDoubleIcon} />
               </Button>
               <Button
                 variant="outline"
@@ -546,7 +547,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                 disabled={!table.getCanPreviousPage()}
               >
                 <span className="sr-only">Go to previous page</span>
-                <ChevronLeftIcon />
+                <HugeiconsIcon icon={ArrowLeft01Icon} />
               </Button>
               <Button
                 variant="outline"
@@ -556,7 +557,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                 disabled={!table.getCanNextPage()}
               >
                 <span className="sr-only">Go to next page</span>
-                <ChevronRightIcon />
+                <HugeiconsIcon icon={ArrowRight01Icon} />
               </Button>
               <Button
                 variant="outline"
@@ -566,7 +567,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                 disabled={!table.getCanNextPage()}
               >
                 <span className="sr-only">Go to last page</span>
-                <ChevronsRightIcon />
+                <HugeiconsIcon icon={ArrowRightDoubleIcon} />
               </Button>
             </div>
           </div>
@@ -663,7 +664,7 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
               <Separator />
               <div className="grid gap-2">
                 <div className="flex gap-2 leading-none font-medium">
-                  Trending up by 5.2% this month <TrendingUpIcon className="size-4" />
+                  Trending up by 5.2% this month <HugeiconsIcon icon={AnalyticsUpIcon} className="size-4" />
                 </div>
                 <div className="text-muted-foreground">
                   Showing total visitors for the last 6 months. This is just some random text to
