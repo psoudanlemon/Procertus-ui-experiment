@@ -18,7 +18,7 @@ const logo = (
 // ---------------------------------------------------------------------------
 
 const meta = {
-  title: "applied guidelines/Logotype",
+  title: "Applied Guidelines/Logotype",
   tags: ["!autodocs"],
   parameters: {
     layout: "fullscreen",
