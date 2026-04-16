@@ -1,23 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useEffect, useState } from "react";
 import {
+  AiNetworkIcon,
   BarChartIcon,
   BookOpen01Icon,
-  PackageIcon,
-  CodeIcon,
-  DatabaseIcon,
-  GitBranchIcon,
-  HelpCircleIcon,
-  HierarchyFilesIcon,
-  MapsIcon,
-  AiNetworkIcon,
   ColorPickerIcon,
-  Settings01Icon,
+  DatabaseIcon,
+  HelpCircleIcon,
+  MapsIcon,
+  PackageIcon,
   SecurityCheckIcon,
+  Settings01Icon,
   SparklesIcon,
   UserMultipleIcon,
-  FlashIcon,
 } from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/button";
@@ -61,11 +57,11 @@ const sidebarProps = {
   ] as Workspace[],
   activeWorkspaceId: "1",
   navItems: [
-    { title: "Dashboard", url: "#", icon: BarChart3Icon, isActive: true },
-    { title: "Analytics", url: "#", icon: MapIcon },
-    { title: "Projects", url: "#", icon: BoxIcon },
-    { title: "Team", url: "#", icon: UsersIcon },
-    { title: "Reports", url: "#", icon: BookOpenIcon },
+    { title: "Dashboard", url: "#", icon: BarChartIcon, isActive: true },
+    { title: "Analytics", url: "#", icon: MapsIcon },
+    { title: "Projects", url: "#", icon: PackageIcon },
+    { title: "Team", url: "#", icon: UserMultipleIcon },
+    { title: "Reports", url: "#", icon: BookOpen01Icon },
   ] as NavItem[],
   navGroups: [
     {
@@ -74,7 +70,7 @@ const sidebarProps = {
         {
           title: "Certificates",
           url: "#",
-          icon: ShieldCheckIcon,
+          icon: SecurityCheckIcon,
           items: [
             { title: "Overview", url: "#" },
             { title: "Pending", url: "#" },
@@ -84,7 +80,7 @@ const sidebarProps = {
         {
           title: "Standards",
           url: "#",
-          icon: PaletteIcon,
+          icon: ColorPickerIcon,
           items: [
             { title: "ISO 9001", url: "#" },
             { title: "ISO 14001", url: "#" },
@@ -96,12 +92,12 @@ const sidebarProps = {
       label: "Compliance",
       items: [
         { title: "Audit Schedule", url: "#", icon: DatabaseIcon },
-        { title: "Non-conformities", url: "#", icon: NetworkIcon },
+        { title: "Non-conformities", url: "#", icon: AiNetworkIcon },
       ],
     },
   ] as NavGroup[],
   secondaryItems: [
-    { title: "Settings", url: "#", icon: SettingsIcon },
+    { title: "Settings", url: "#", icon: Settings01Icon },
     { title: "Help", url: "#", icon: HelpCircleIcon },
   ] as NavItem[],
   showSearch: false,
@@ -184,7 +180,10 @@ function CyclingGradientCard({
       {/* Content */}
       <CardHeader className="relative z-10">
         <div className="mb-2 flex size-10 items-center justify-center rounded-lg bg-neutral-900/10 dark:bg-white/20">
-          <SparklesIcon className="size-5 text-neutral-900 dark:text-white" />
+          <HugeiconsIcon
+            icon={SparklesIcon}
+            className="size-5 text-neutral-900 dark:text-white"
+          />
         </div>
         <CardTitle className="text-neutral-900 dark:text-white">
           IAM Insights AI

@@ -4,7 +4,7 @@ import {
   ArrowDown01Icon,
   ArrowRight01Icon,
   PlusSignIcon,
-  ShieldAlertIcon,
+  SecurityWarningIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import * as React from "react";
@@ -189,7 +189,7 @@ export const WithIcon: Story = {
     <div className="flex w-full max-w-lg flex-col gap-6">
       <Item {...args} variant="outline">
         <ItemMedia variant="icon">
-          <HugeiconsIcon icon={ShieldAlertIcon} />
+          <HugeiconsIcon icon={SecurityWarningIcon} />
         </ItemMedia>
         <ItemContent>
           <ItemTitle>Security Alert</ItemTitle>
