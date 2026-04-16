@@ -35,7 +35,7 @@ function parseToolbarMode(value: unknown): Mode {
   if (value === "light" || value === "dark" || value === "system") {
     return value;
   }
-  return "dark";
+  return "light";
 }
 
 function parseToolbarTheme(value: unknown): ThemeId {
