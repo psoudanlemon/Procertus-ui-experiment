@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Table,
   TableBody,
@@ -10,6 +11,88 @@ import { Badge } from "@/components/ui/badge";
 import { H2 } from "@/components/ui/heading";
 import { Muted } from "@/components/ui/typography";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
+/* ---------------------------------------------------------------------------
+ * Read spacing tokens from the live stylesheet
+ *
+ * Walks document.styleSheets to find both the base selector rule and its
+ * @media (min-width: 768px) override, so the table always reflects the
+ * current source of truth in default.css.
+ * ------------------------------------------------------------------------- */
+
+const SPACING_ROLES = [
+  "micro",
+  "component",
+  "section",
+  "region",
+  "boundary",
+] as const;
+
+type SpacingRole = (typeof SPACING_ROLES)[number];
+type ResolvedTokens = Record<SpacingRole, { mobile: string; desktop: string }>;
+
+const remToPx = (value: string): string => {
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+  if (trimmed.endsWith("rem")) {
+    return `${Math.round(parseFloat(trimmed) * 16)}px`;
+  }
+  return trimmed;
+};
+
+function readSpacingFromStyleSheets(targetSelector: string): ResolvedTokens {
+  const result = Object.fromEntries(
+    SPACING_ROLES.map((role) => [role, { mobile: "", desktop: "" }]),
+  ) as ResolvedTokens;
+
+  for (const sheet of Array.from(document.styleSheets)) {
+    let rules: CSSRule[];
+    try {
+      rules = Array.from(sheet.cssRules ?? []);
+    } catch {
+      continue;
+    }
+    for (const rule of rules) {
+      if (
+        rule instanceof CSSStyleRule &&
+        rule.selectorText === targetSelector
+      ) {
+        for (const role of SPACING_ROLES) {
+          const value = rule.style.getPropertyValue(`--spacing-${role}`);
+          if (value) result[role].mobile = remToPx(value);
+        }
+      } else if (
+        rule instanceof CSSMediaRule &&
+        rule.conditionText.includes("768px")
+      ) {
+        for (const inner of Array.from(rule.cssRules)) {
+          if (
+            inner instanceof CSSStyleRule &&
+            inner.selectorText === targetSelector
+          ) {
+            for (const role of SPACING_ROLES) {
+              const value = inner.style.getPropertyValue(`--spacing-${role}`);
+              if (value) result[role].desktop = remToPx(value);
+            }
+          }
+        }
+      }
+    }
+  }
+  return result;
+}
+
+function useSpacingTokens(targetSelector: string): ResolvedTokens {
+  const [tokens, setTokens] = React.useState<ResolvedTokens>(() =>
+    Object.fromEntries(
+      SPACING_ROLES.map((role) => [role, { mobile: "", desktop: "" }]),
+    ) as ResolvedTokens,
+  );
+  React.useEffect(() => {
+    setTokens(readSpacingFromStyleSheets(targetSelector));
+  }, [targetSelector]);
+  return tokens;
+}
 
 /* ---------------------------------------------------------------------------
  * Scale story row (raw multiplier table)
@@ -109,10 +192,11 @@ function ContextTable({
       </Table>
       <div className="mt-6 rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-brand-primary-50 dark:bg-brand-primary-950 p-4">
         <p className="text-sm text-brand-primary-700 dark:text-brand-primary-300 leading-[1.6] m-0">
-          <strong>Boundary is always 20px on mobile</strong> across both
-          systems, ensuring a consistent, safe-area-compliant frame on every
-          device. On desktop, the values diverge to match each context's density
-          strategy.
+          <strong>Boundary is always larger than region.</strong> The outer page
+          frame is the biggest spacing token in the ladder, then region (between
+          top-level page blocks), section (inside a card), component (inside a
+          primitive), and micro (inside a phrase). Each tier is a clear visual
+          step up so the layout hierarchy reads at a glance.
         </p>
       </div>
     </div>
@@ -208,58 +292,87 @@ export const ScaleFoundations: Story = {
  * Operational spacing reference
  * ------------------------------------------------------------------------- */
 
-const operationalTokens: ContextToken[] = [
-  { role: "Micro", mobile: "4px", desktop: "4px", intent: "The glue. Icon-to-text gaps and micro-grouping." },
-  { role: "Element", mobile: "12px", desktop: "8px", intent: "Primary component padding. Larger on mobile for touch targets." },
-  { role: "Component", mobile: "8px", desktop: "12px", intent: "Relationship gap between related elements or form fields." },
-  { role: "Section", mobile: "12px", desktop: "16px", intent: "Structural separation between distinct blocks of data." },
-  { role: "Region", mobile: "20px", desktop: "32px", intent: "Major breaks. The largest internal gap between UI sections." },
-  { role: "Boundary", mobile: "20px", desktop: "16px", intent: "Outer frame. Page margins and viewport edges." },
-];
+const ROLE_INTENT: Record<SpacingRole, { label: string; intent: string }> = {
+  micro: {
+    label: "Micro",
+    intent:
+      "Inside a phrase. Icon-to-label gaps, title-to-subtitle, status dot to text.",
+  },
+  component: {
+    label: "Component",
+    intent:
+      "Inside a single component. Button padding, input padding, icon-to-text gaps inside primitives. Larger on mobile for touch targets.",
+  },
+  section: {
+    label: "Section",
+    intent:
+      "Inside a section or card. Card padding, gaps between rows in a list, gaps between sibling components arranged in the same panel.",
+  },
+  region: {
+    label: "Region",
+    intent:
+      "Inside a page region. Vertical rhythm between top-level page blocks (header, stat row, main grid, activity feed).",
+  },
+  boundary: {
+    label: "Boundary",
+    intent:
+      "The outer page frame. Applied by the app shell to the main content area, page margins, and viewport edges. Pages should not re-apply it.",
+  },
+};
+
+function buildContextTokens(resolved: ResolvedTokens): ContextToken[] {
+  return SPACING_ROLES.map((role) => ({
+    role: ROLE_INTENT[role].label,
+    mobile: resolved[role].mobile || "—",
+    desktop: resolved[role].desktop || resolved[role].mobile || "—",
+    intent: ROLE_INTENT[role].intent,
+  }));
+}
 
 /**
  * **Operational spacing** (professional mode)
  *
  * Quick reference for the staff management console. Dense, efficient,
- * optimised for scanning hundreds of records per session. Element padding
- * increases on mobile to accommodate touch targets.
+ * optimised for scanning hundreds of records per session. Values are read
+ * live from default.css so this table never goes out of sync with the tokens.
  */
-export const OperationalSpacing: Story = {
-  render: () => (
+function OperationalSpacingTable() {
+  const resolved = useSpacingTokens(":root");
+  return (
     <ContextTable
       title="Operational spacing"
       subtitle="Professional mode for internal staff tools. Dense and efficient, optimised for speed and data-density. Element padding increases on mobile to accommodate touch targets."
-      tokens={operationalTokens}
+      tokens={buildContextTokens(resolved)}
     />
-  ),
+  );
+}
+
+export const OperationalSpacing: Story = {
+  render: () => <OperationalSpacingTable />,
 };
 
 /* ---------------------------------------------------------------------------
  * Spacious spacing reference
  * ------------------------------------------------------------------------- */
 
-const spaciousTokens: ContextToken[] = [
-  { role: "Micro", mobile: "8px", desktop: "8px", intent: "The glue. Icon-to-text gaps and micro-grouping." },
-  { role: "Element", mobile: "16px", desktop: "12px", intent: "Primary component padding. Generous breath for trust and readability." },
-  { role: "Component", mobile: "12px", desktop: "16px", intent: "Relationship gap between related elements or form fields." },
-  { role: "Section", mobile: "16px", desktop: "24px", intent: "Structural separation between distinct blocks of data." },
-  { role: "Region", mobile: "24px", desktop: "48px", intent: "Major breaks. Premium breathing room between UI sections." },
-  { role: "Boundary", mobile: "20px", desktop: "24px", intent: "Outer frame. Page margins and viewport edges." },
-];
-
 /**
  * **Spacious spacing** (public mode)
  *
  * Quick reference for the public-facing registry and external documents.
  * Generous gaps create a premium, trustworthy layout where clarity and
- * readability are the priority.
+ * readability are the priority. Values read live from default.css.
  */
-export const SpaciousSpacing: Story = {
-  render: () => (
+function SpaciousSpacingTable() {
+  const resolved = useSpacingTokens('[data-density="spacious"]');
+  return (
     <ContextTable
       title="Spacious spacing"
       subtitle="Public mode for the registry and external documents. Generous gaps create a premium, trustworthy layout where clarity, prestige, and readability are the priority."
-      tokens={spaciousTokens}
+      tokens={buildContextTokens(resolved)}
     />
-  ),
+  );
+}
+
+export const SpaciousSpacing: Story = {
+  render: () => <SpaciousSpacingTable />,
 };

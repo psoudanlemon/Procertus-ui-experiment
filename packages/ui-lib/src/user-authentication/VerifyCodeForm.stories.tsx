@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { VerifyCodeForm } from "./VerifyCodeForm";
 
 const meta = {
-  title: "Management Interface/Authentication/Forms/Verify Code",
+  title: "Management interface/Authentication/Forms/Verify code",
   component: VerifyCodeForm,
   tags: ["autodocs"],
   parameters: { layout: "centered" },
@@ -26,7 +26,7 @@ export const FilledIn: Story = {
   },
 };
 
-/** General error — code is invalid or expired. */
+/** General error: code is invalid or expired. */
 export const WithError: Story = {
   args: {
     code: "999999",

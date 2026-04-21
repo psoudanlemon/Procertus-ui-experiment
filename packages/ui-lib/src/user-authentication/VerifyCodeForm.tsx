@@ -106,20 +106,18 @@ function VerifyCodeForm({
             </FieldDescription>
           )}
         </Field>
-        <Field className="mt-section gap-component">
-          {onBackToLogin && (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onBackToLogin}
-              className="w-full"
-            >
-              <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
-              Back to sign in
-            </Button>
-          )}
+        <Field className="mt-section gap-section">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onBackToLogin ?? (() => window.history.back())}
+            className="w-full"
+          >
+            <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
+            Back
+          </Button>
           <Button type="submit" disabled={isSubmitting} className="w-full">
-            {isSubmitting ? <Spinner size="sm" /> : "Verify"}
+            {isSubmitting ? <Spinner size="sm" className="text-current" /> : "Verify"}
           </Button>
         </Field>
       </FieldGroup>

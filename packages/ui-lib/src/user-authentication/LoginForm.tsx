@@ -107,7 +107,7 @@ function LoginForm({
         </Field>
         <Field className="mt-section">
           <Button type="submit" disabled={isSubmitting} className="w-full">
-            {isSubmitting ? <Spinner size="sm" /> : "Sign in"}
+            {isSubmitting ? <Spinner size="sm" className="text-current" /> : "Sign in"}
           </Button>
         </Field>
       </FieldGroup>

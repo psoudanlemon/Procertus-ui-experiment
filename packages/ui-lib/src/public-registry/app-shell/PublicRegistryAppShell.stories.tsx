@@ -3,19 +3,20 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { PlusSignIcon, Search01Icon } from "@hugeicons/core-free-icons";
 
 import { Button, Input, Tooltip, TooltipContent, TooltipTrigger } from "@procertus-ui/ui";
+import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 
 import { PublicRegistryAppShell } from "./PublicRegistryAppShell";
 
 const procertusLogoLarge = (
   <>
     <img
-      src="/Procertus logo.svg"
-      alt="PROCERTUS — Certification that builds trust"
+      src={procertusLogo}
+      alt="PROCERTUS, certification that builds trust"
       className="h-20 w-auto dark:hidden"
     />
     <img
-      src="/Procertus logo.svg"
-      alt="PROCERTUS — Certification that builds trust"
+      src={procertusLogo}
+      alt="PROCERTUS, certification that builds trust"
       className="hidden h-20 w-auto brightness-0 invert dark:block"
     />
   </>
@@ -28,14 +29,14 @@ const languages = [
 ];
 
 /**
- * The public-registry application shell for PROCERTUS — a search-first portal
+ * The public-registry application shell for PROCERTUS: a search-first portal
  * for looking up certificates across prefab, metal, and steel sectors.
  *
  * The homepage follows a Google-like approach: minimal chrome, all focus
  * on the search bar. Categories and filters appear after results load.
  */
 const meta = {
-  title: "Public Registry/Application Shell",
+  title: "Public registry/Application shell",
   component: PublicRegistryAppShell,
   tags: ["autodocs"],
   parameters: {
@@ -45,6 +46,13 @@ const meta = {
       story: { inline: false, iframeHeight: 700 },
     },
   },
+  decorators: [
+    (Story) => (
+      <div data-density="spacious" className="contents">
+        <Story />
+      </div>
+    ),
+  ],
   args: {
     header: {
       navLinks: [
@@ -72,11 +80,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * The homepage — minimal header, centered logo + search, minimal footer.
+ * The homepage: minimal header, centered logo and search, minimal footer.
  * Just like Google: type what you're looking for and go.
  */
 /**
- * With FAB — floating action button for certificate requests.
+ * With FAB: floating action button for certificate requests.
  */
 export const WithFab: Story = {
   render: (args) => (
@@ -99,7 +107,7 @@ export const WithFab: Story = {
 };
 
 /**
- * With inline + button in the search bar — the + opens the certificate
+ * With inline + button in the search bar: the + opens the certificate
  * request flow. Tooltip on hover: "Certificaat aanvragen".
  * No FAB needed.
  */

@@ -61,15 +61,15 @@ export const Default: Story = {
     <form>
       <FieldGroup>
         <FieldSet>
-          <FieldLegend>Payment Method</FieldLegend>
+          <FieldLegend>Payment method</FieldLegend>
           <FieldDescription>All transactions are secure and encrypted</FieldDescription>
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="card-name">Name on Card</FieldLabel>
+              <FieldLabel htmlFor="card-name">Name on card</FieldLabel>
               <Input id="card-name" placeholder="Evil Rabbit" required />
             </Field>
             <Field>
-              <FieldLabel htmlFor="card-number">Card Number</FieldLabel>
+              <FieldLabel htmlFor="card-number">Card number</FieldLabel>
               <Input id="card-number" placeholder="1234 5678 9012 3456" required />
               <FieldDescription>Enter your 16-digit card number</FieldDescription>
             </Field>
@@ -116,7 +116,7 @@ export const Default: Story = {
         </FieldSet>
         <FieldSeparator />
         <FieldSet>
-          <FieldLegend>Billing Address</FieldLegend>
+          <FieldLegend>Billing address</FieldLegend>
           <FieldDescription>
             The billing address associated with your payment method
           </FieldDescription>
@@ -207,8 +207,8 @@ export const SelectField: Story = {
           <SelectItem value="design">Design</SelectItem>
           <SelectItem value="marketing">Marketing</SelectItem>
           <SelectItem value="sales">Sales</SelectItem>
-          <SelectItem value="support">Customer Support</SelectItem>
-          <SelectItem value="hr">Human Resources</SelectItem>
+          <SelectItem value="support">Customer support</SelectItem>
+          <SelectItem value="hr">Human resources</SelectItem>
           <SelectItem value="finance">Finance</SelectItem>
           <SelectItem value="operations">Operations</SelectItem>
         </SelectContent>
@@ -227,7 +227,7 @@ export const SliderField: Story = {
 
     return (
       <Field>
-        <FieldTitle>Price Range</FieldTitle>
+        <FieldTitle>Price range</FieldTitle>
         <FieldDescription>
           Set your budget range ($
           <span className="font-medium tabular-nums">{value[0]}</span> -{" "}
@@ -240,7 +240,7 @@ export const SliderField: Story = {
           min={0}
           step={10}
           className="mt-2 w-full"
-          aria-label="Price Range"
+          aria-label="Price range"
         />
       </Field>
     );
@@ -253,11 +253,11 @@ export const SliderField: Story = {
 export const Fieldset: Story = {
   render: () => (
     <FieldSet>
-      <FieldLegend>Address Information</FieldLegend>
+      <FieldLegend>Address information</FieldLegend>
       <FieldDescription>We need your address to deliver your order.</FieldDescription>
       <FieldGroup>
         <Field>
-          <FieldLabel htmlFor="street">Street Address</FieldLabel>
+          <FieldLabel htmlFor="street">Street address</FieldLabel>
           <Input id="street" type="text" placeholder="123 Main St" />
         </Field>
         <div className="grid grid-cols-2 gap-4">
@@ -266,7 +266,7 @@ export const Fieldset: Story = {
             <Input id="city" type="text" placeholder="New York" />
           </Field>
           <Field>
-            <FieldLabel htmlFor="zip">Postal Code</FieldLabel>
+            <FieldLabel htmlFor="zip">Postal code</FieldLabel>
             <Input id="zip" type="text" placeholder="90502" />
           </Field>
         </div>

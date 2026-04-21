@@ -1,6 +1,18 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar, type NavItem } from "@/components/app-sidebar";
+import type { IconSvgElement } from "@hugeicons/react";
+import {
+  DashboardSquare01Icon,
+  Folder01Icon,
+  AnalyticsUpIcon,
+} from "@hugeicons/core-free-icons";
+
+const wireframeNavItems: NavItem[] = [
+  { title: "Dashboard", url: "#", icon: DashboardSquare01Icon as IconSvgElement, isActive: true },
+  { title: "Projects", url: "#", icon: Folder01Icon as IconSvgElement },
+  { title: "Analytics", url: "#", icon: AnalyticsUpIcon as IconSvgElement },
+];
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
@@ -18,7 +30,7 @@ import {
 // ---------------------------------------------------------------------------
 
 const meta = {
-  title: "Applied Guidelines/Shadows",
+  title: "Applied guidelines/Shadows",
   tags: ["!autodocs"],
   parameters: {
     layout: "fullscreen",
@@ -93,7 +105,7 @@ function DashboardLayout({
 }) {
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar navItems={wireframeNavItems} showSearch={false} />
       <SidebarInset>
         <AppHeader />
         <div className="flex flex-1 flex-col gap-6 p-6">

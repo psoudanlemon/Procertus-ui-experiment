@@ -120,16 +120,16 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
-          "Management Interface",
+          "Management interface",
           [
-            "Application Shell",
+            "Application shell",
             "Authentication",
             [
               "*",
               "Forms",
-              ["Account Details", "Login", "Forgot Password", "Verify Code", "Set Password"],
+              ["Account details", "Login", "Forgot password", "Verify code", "Set password"],
             ],
-            "Status Pages",
+            "Status pages",
           ],
         ],
       },

@@ -28,11 +28,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Muted } from "@/components/ui/typography";
 
 import { ManagementAppShell } from "../../../ui-lib/src/management-interface/app-shell/ManagementAppShell";
-import type {
-  Workspace,
-  NavItem,
-  NavGroup,
-} from "../../../ui-lib/src/management-interface/app-shell/ManagementSidebar";
+import type { Workspace, NavItem, NavGroup } from "@/components/app-sidebar";
 
 /* ---------------------------------------------------------------------------
  * Sidebar & Header Configuration
@@ -40,7 +36,7 @@ import type {
 
 const procertusLogo = (
   <img
-    src="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='32' height='32' fill='%23F1F5F9'/%3E%3Cpath d='M17.4262 21.7754L13.9269 18.6647C12.8241 17.6857 12.7265 15.999 13.7055 14.8963L13.7858 14.8051L18.2489 18.7711L24.0796 12.109C25.0846 10.9607 26.8321 10.8435 27.9804 11.8485L28 11.8659L19.4406 21.6495C18.9218 22.2422 18.0188 22.3008 17.4283 21.7754H17.4262Z' fill='%2371D2C1'/%3E%3Cpath d='M14.5738 10.2246L18.0731 13.3353C19.1758 14.3143 19.2735 16.001 18.2945 17.1038L18.2142 17.1949L13.7511 13.2289L7.92041 19.891C6.91534 21.0394 5.16787 21.1566 4.01954 20.1515L4 20.1342L12.5593 10.3505C13.0781 9.75789 13.9812 9.69928 14.5716 10.2246H14.5738Z' fill='%23076293'/%3E%3C/svg%3E"
+    src="/logomark.svg"
     alt="PROCERTUS"
     className="size-full rounded-sm"
   />
@@ -91,7 +87,7 @@ const sidebarProps = {
     {
       label: "Compliance",
       items: [
-        { title: "Audit Schedule", url: "#", icon: DatabaseIcon },
+        { title: "Audit schedule", url: "#", icon: DatabaseIcon },
         { title: "Non-conformities", url: "#", icon: AiNetworkIcon },
       ],
     },
@@ -312,7 +308,7 @@ function GradientShowcase() {
 }
 
 const meta: Meta = {
-  title: "Applied Guidelines/Gradients",
+  title: "Applied guidelines/Gradients",
   component: GradientShowcase,
   parameters: {
     layout: "fullscreen",

@@ -38,7 +38,7 @@ function StatusContent({
 }: StatusContentProps) {
   return (
     <Card className={`relative z-10 w-full max-w-md shadow-[var(--shadow-proc-md)] ring-0 ${className ?? ""}`}>
-      <CardContent className="flex flex-col items-center gap-component px-section py-section text-center">
+      <CardContent className="flex flex-col items-center gap-section px-section py-section text-center">
         {/* Visual */}
         {illustration ? (
           <div className="flex items-center justify-center">{illustration}</div>
@@ -58,7 +58,7 @@ function StatusContent({
 
         {/* Actions */}
         {actions && actions.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-component">
+          <div className="flex flex-wrap justify-center gap-section">
             {actions.map((action) => (
               <Button
                 key={action.label}

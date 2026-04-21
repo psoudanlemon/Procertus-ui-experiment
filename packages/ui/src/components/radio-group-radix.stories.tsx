@@ -140,7 +140,7 @@ export const ChoiceCard: Story = {
 export const Fieldset: Story = {
   render: () => (
     <FieldSet>
-      <FieldLegend>Subscription Plan</FieldLegend>
+      <FieldLegend>Subscription plan</FieldLegend>
       <FieldDescription>Choose a plan. Save more with yearly or lifetime.</FieldDescription>
       <RadioGroup defaultValue="monthly" className="gap-4">
         <FieldLabel>
@@ -214,7 +214,7 @@ export const Invalid: Story = {
 
     return (
       <FieldSet>
-        <FieldLegend>Notification Preferences</FieldLegend>
+        <FieldLegend>Notification preferences</FieldLegend>
         <FieldDescription>Choose how you want to be notified.</FieldDescription>
         <RadioGroup className="gap-4" value={value} onValueChange={setValue}>
           <FieldLabel className={isInvalid ? "border-destructive" : undefined}>

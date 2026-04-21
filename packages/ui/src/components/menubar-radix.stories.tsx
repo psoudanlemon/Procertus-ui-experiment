@@ -35,9 +35,9 @@ const meta = {
         <MenubarTrigger>File</MenubarTrigger>
         <MenubarContent>
           <MenubarItem>
-            New Tab <MenubarShortcut>⌘T</MenubarShortcut>
+            New tab <MenubarShortcut>⌘T</MenubarShortcut>
           </MenubarItem>
-          <MenubarItem>New Window</MenubarItem>
+          <MenubarItem>New window</MenubarItem>
           <MenubarSeparator />
           <MenubarItem disabled>Share</MenubarItem>
           <MenubarSeparator />
@@ -93,7 +93,7 @@ export const WithRadioItems: Story = {
       <MenubarMenu>
         <MenubarTrigger>View</MenubarTrigger>
         <MenubarContent>
-          <MenubarLabel>Device Size</MenubarLabel>
+          <MenubarLabel>Device size</MenubarLabel>
           <MenubarRadioGroup value="md">
             <MenubarRadioItem value="sm">Small</MenubarRadioItem>
             <MenubarRadioItem value="md">Medium</MenubarRadioItem>
@@ -114,7 +114,7 @@ export const WithCheckboxItems: Story = {
       <MenubarMenu>
         <MenubarTrigger>Filters</MenubarTrigger>
         <MenubarContent>
-          <MenubarItem>Show All</MenubarItem>
+          <MenubarItem>Show all</MenubarItem>
           <MenubarGroup>
             <MenubarCheckboxItem checked>Unread</MenubarCheckboxItem>
             <MenubarCheckboxItem checked>Important</MenubarCheckboxItem>

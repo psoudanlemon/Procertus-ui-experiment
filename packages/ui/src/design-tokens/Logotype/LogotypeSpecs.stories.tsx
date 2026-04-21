@@ -71,8 +71,8 @@ function LogotypeSpecsView() {
                 <td className="px-4 py-5 text-muted-foreground">Horizontal with tagline</td>
                 <td className="px-4 py-5"><Badge variant="secondary">320px</Badge></td>
                 <td className="px-4 py-5">
-                  <div className="flex items-center rounded-lg border border-dashed border-border bg-background p-3" style={{ width: 320 }}>
-                    <img src={LOGO_TAGLINE} alt="Horizontal with tagline at 320px" className="w-full" />
+                  <div className="inline-flex items-center rounded-lg border border-dashed border-border bg-background p-3">
+                    <img src={LOGO_TAGLINE} alt="Horizontal with tagline at 320px" style={{ width: 320 }} />
                   </div>
                 </td>
               </tr>
@@ -81,8 +81,8 @@ function LogotypeSpecsView() {
                 <td className="px-4 py-5 text-muted-foreground">Horizontal with tagline</td>
                 <td className="px-4 py-5"><Badge variant="secondary">38mm</Badge></td>
                 <td className="px-4 py-5">
-                  <div className="flex items-center rounded-lg border border-dashed border-border bg-background p-3" style={{ width: "38mm" }}>
-                    <img src={LOGO_TAGLINE} alt="Horizontal with tagline at 38mm" className="w-full" />
+                  <div className="inline-flex items-center rounded-lg border border-dashed border-border bg-background p-3">
+                    <img src={LOGO_TAGLINE} alt="Horizontal with tagline at 38mm" style={{ width: "38mm" }} />
                   </div>
                 </td>
               </tr>
@@ -96,8 +96,8 @@ function LogotypeSpecsView() {
                 <td className="px-4 py-5 text-muted-foreground">Horizontal</td>
                 <td className="px-4 py-5"><Badge variant="secondary">320px</Badge></td>
                 <td className="px-4 py-5">
-                  <div className="flex items-center rounded-lg border border-dashed border-border bg-background p-3" style={{ width: 320 }}>
-                    <img src={LOGO} alt="Horizontal at 320px" className="w-full" />
+                  <div className="inline-flex items-center rounded-lg border border-dashed border-border bg-background p-3">
+                    <img src={LOGO} alt="Horizontal at 320px" style={{ width: 320 }} />
                   </div>
                 </td>
               </tr>
@@ -106,8 +106,8 @@ function LogotypeSpecsView() {
                 <td className="px-4 py-5 text-muted-foreground">Horizontal</td>
                 <td className="px-4 py-5"><Badge variant="secondary">38mm</Badge></td>
                 <td className="px-4 py-5">
-                  <div className="flex items-center rounded-lg border border-dashed border-border bg-background p-3" style={{ width: "38mm" }}>
-                    <img src={LOGO} alt="Horizontal at 38mm" className="w-full" />
+                  <div className="inline-flex items-center rounded-lg border border-dashed border-border bg-background p-3">
+                    <img src={LOGO} alt="Horizontal at 38mm" style={{ width: "38mm" }} />
                   </div>
                 </td>
               </tr>
@@ -121,8 +121,8 @@ function LogotypeSpecsView() {
                 <td className="px-4 py-5 text-muted-foreground">Vertical with tagline</td>
                 <td className="px-4 py-5"><Badge variant="secondary">200px</Badge></td>
                 <td className="px-4 py-5">
-                  <div className="flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-3" style={{ width: 200 }}>
-                    <img src={LOGO_VERTICAL_TAGLINE} alt="Vertical with tagline at 200px" className="w-full" />
+                  <div className="inline-flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-3">
+                    <img src={LOGO_VERTICAL_TAGLINE} alt="Vertical with tagline at 200px" style={{ width: 200 }} />
                   </div>
                 </td>
               </tr>
@@ -131,8 +131,8 @@ function LogotypeSpecsView() {
                 <td className="px-4 py-5 text-muted-foreground">Vertical with tagline</td>
                 <td className="px-4 py-5"><Badge variant="secondary">38mm</Badge></td>
                 <td className="px-4 py-5">
-                  <div className="flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-3" style={{ width: "38mm" }}>
-                    <img src={LOGO_VERTICAL_TAGLINE} alt="Vertical with tagline at 38mm" className="w-full" />
+                  <div className="inline-flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-3">
+                    <img src={LOGO_VERTICAL_TAGLINE} alt="Vertical with tagline at 38mm" style={{ width: "38mm" }} />
                   </div>
                 </td>
               </tr>
@@ -146,8 +146,8 @@ function LogotypeSpecsView() {
                 <td className="px-4 py-5 text-muted-foreground">Vertical</td>
                 <td className="px-4 py-5"><Badge variant="secondary">200px</Badge></td>
                 <td className="px-4 py-5">
-                  <div className="flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-3" style={{ width: 200 }}>
-                    <img src={LOGO_VERTICAL} alt="Vertical at 200px" className="w-full" />
+                  <div className="inline-flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-3">
+                    <img src={LOGO_VERTICAL} alt="Vertical at 200px" style={{ width: 200 }} />
                   </div>
                 </td>
               </tr>
@@ -156,8 +156,8 @@ function LogotypeSpecsView() {
                 <td className="px-4 py-5 text-muted-foreground">Vertical</td>
                 <td className="px-4 py-5"><Badge variant="secondary">38mm</Badge></td>
                 <td className="px-4 py-5">
-                  <div className="flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-3" style={{ width: "38mm" }}>
-                    <img src={LOGO_VERTICAL} alt="Vertical at 38mm" className="w-full" />
+                  <div className="inline-flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-3">
+                    <img src={LOGO_VERTICAL} alt="Vertical at 38mm" style={{ width: "38mm" }} />
                   </div>
                 </td>
               </tr>
@@ -171,8 +171,8 @@ function LogotypeSpecsView() {
                 <td className="px-4 py-5 text-muted-foreground">Pictogram only</td>
                 <td className="px-4 py-5"><Badge variant="secondary">44px</Badge></td>
                 <td className="px-4 py-5">
-                  <div className="flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-3" style={{ width: 44, height: 44 }}>
-                    <img src={LOGOMARK} alt="Pictogram at 44px" className="w-full" />
+                  <div className="flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-3" style={{ width: 68, height: 68 }}>
+                    <img src={LOGOMARK} alt="Pictogram at 44px" style={{ width: 44, height: 44 }} />
                   </div>
                 </td>
               </tr>
@@ -181,8 +181,8 @@ function LogotypeSpecsView() {
                 <td className="px-4 py-5 text-muted-foreground">Pictogram only</td>
                 <td className="px-4 py-5"><Badge variant="secondary">38mm</Badge></td>
                 <td className="px-4 py-5">
-                  <div className="flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-3" style={{ width: "38mm", height: "38mm" }}>
-                    <img src={LOGOMARK} alt="Pictogram at 38mm" className="w-full" />
+                  <div className="inline-flex items-center justify-center rounded-lg border border-dashed border-border bg-background p-3">
+                    <img src={LOGOMARK} alt="Pictogram at 38mm" style={{ width: "38mm", height: "38mm" }} />
                   </div>
                 </td>
               </tr>

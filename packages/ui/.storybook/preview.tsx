@@ -211,7 +211,7 @@ const preview: Preview = {
           "design tokens",
           [
             "Typography",
-            ["Guidelines", "Font Family", "Font Size", "Font Weight", "Line Height", "Letter Spacing"],
+            ["Guidelines", "Font family", "Font size", "Font weight", "Line height", "Letter spacing"],
             "Logotype", ["Guidelines", "Minimum dimensions", "Background rules", "*"],
             "Iconography",
             "Color", ["Guidelines", "Default", "*"],
@@ -225,7 +225,7 @@ const preview: Preview = {
           ],
           "components",
           ["*", ["Guidelines", "Default", "*"]],
-          "Applied Guidelines",
+          "Applied guidelines",
           [
             "Typography",
             "Logotype",
@@ -244,7 +244,7 @@ const preview: Preview = {
           ],
           "Showroom",
           [
-            "Typography", ["Registry Detail View", "Management Data Grid", "Management Shell", "Long-form Content"],
+            "Typography", ["Registry detail view", "Management data grid", "Management shell", "Long-form content"],
             "Dashboard", "Login", "Sign up", "Mail",
           ],
         ],

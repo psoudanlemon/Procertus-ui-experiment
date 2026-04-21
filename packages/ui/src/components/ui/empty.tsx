@@ -52,7 +52,7 @@ function EmptyActions({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="empty-actions"
-      className={cn("flex flex-wrap justify-center gap-component", className)}
+      className={cn("flex flex-wrap justify-center gap-section", className)}
       {...props}
     />
   );

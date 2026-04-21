@@ -173,7 +173,7 @@ function BrandColorShowcase() {
           <H2>Brand colors</H2>
           <Muted className="mt-2 text-base">
             Full Primary (Navy) and Accent (Teal) ramps. Steps marked{" "}
-            <strong>Logo Anchor</strong> are used in the PROCERTUS wordmark.
+            <strong>Logo anchor</strong> are used in the PROCERTUS wordmark.
           </Muted>
         </header>
         {BRAND_SCALES.map((scale) => (

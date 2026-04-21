@@ -71,7 +71,7 @@ import { Muted } from "@/components/ui/typography";
 // ---------------------------------------------------------------------------
 
 const meta = {
-  title: "Applied Guidelines/Motion",
+  title: "Applied guidelines/Motion",
   tags: ["!autodocs", "!docs"],
   parameters: {
     layout: "centered",
@@ -148,10 +148,7 @@ export const Sandbox: Story = {
             <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-2">
               Motion sandbox
             </p>
-            <h1
-              className="font-sans font-bold text-foreground m-0 mb-2"
-              style={{ fontSize: "1.5rem", lineHeight: 1.2 }}
-            >
+            <h1 className="font-sans text-2xl font-bold leading-tight text-foreground m-0 mb-2">
               Trigger animations
             </h1>
             <Muted className="m-0 max-w-[560px]">
@@ -175,8 +172,8 @@ export const Sandbox: Story = {
                   </Button>
                 </DialogPrimitive.Trigger>
                 <DialogPrimitive.Portal>
-                  <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/10 backdrop-blur-[1px] duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0" />
-                  <DialogPrimitive.Content className="fixed top-1/2 left-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-xl border border-border bg-popover p-section shadow-proc-md duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95">
+                  <DialogPrimitive.Overlay className="fixed inset-0 z-40 bg-black/10 backdrop-blur-[1px] duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0" />
+                  <DialogPrimitive.Content className="fixed top-1/2 left-1/2 z-40 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-xl border border-border bg-popover p-section shadow-proc-md duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95">
                     <DialogHeader>
                       <DialogTitle>Dialog</DialogTitle>
                       <DialogDescription>

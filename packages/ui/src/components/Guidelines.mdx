@@ -9,7 +9,7 @@ import { H1, H2, H3, H4 } from "@/components/ui/heading";
 <Meta title="design tokens/Typography/Guidelines" />
 
 <div className="mb-12">
-  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-3">PROCERTUS Design Guidelines</p>
+  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-3">PROCERTUS design guidelines</p>
   <h1 className="font-sans font-bold text-foreground m-0 mb-4" style={{ fontSize: '1.5rem', lineHeight: 1.2, letterSpacing: '-0.03em' }}>Typography</h1>
   <p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
     Every typographic decision in the PROCERTUS system serves a single purpose:
@@ -126,11 +126,12 @@ the visual anchors that give the eye somewhere to land.
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
   <div className="rounded-xl border border-border bg-card p-6">
     <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Content & Action</span>
-    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Bold and Semibold</span>
+    <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Medium, Semibold and Bold</span>
     <p className="text-base text-muted-foreground leading-[1.6] m-0 mb-3">
-      This weight is reserved for the most critical information and the "path forward." It tells the user: <strong>"This is the result"</strong> or <strong>"Click here to proceed.</strong>"
+      These weights mark what matters and where to go next. <strong>Medium</strong> is the everyday workhorse for navigation and active states, <strong>semibold</strong> anchors headings and primary actions, and <strong>bold</strong> stays rare, reserved for the single most critical value in a row of data.
     </p>
     <div className="flex flex-col items-start gap-3 mt-1">
+      <Button variant="link" className="p-0 h-auto text-base font-medium" asChild><a href="?path=/story/components-sidebar--simple">Sidebar Items</a></Button>
       <Button variant="link" className="p-0 h-auto text-base font-semibold" asChild><a href="?path=/story/components-button--default">Buttons</a></Button>
       <Button variant="link" className="p-0 h-auto text-base font-semibold" asChild><a href="?path=/story/components-label--default">Labels</a></Button>
       <Button variant="link" className="p-0 h-auto text-base font-semibold" asChild><a href="?path=/story/components-typography--h-1">Headings</a></Button>
@@ -142,13 +143,10 @@ the visual anchors that give the eye somewhere to land.
     <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Context & Metadata</span>
     <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)' }}>Regular</span>
     <p className="text-base text-muted-foreground leading-[1.6] m-0 mb-3">
-      These weights provide the "frame" for the work. 
-      They are designed to recede slightly so they don't compete with the data. 
-      They answer: <strong>"Where am I?"</strong> and <strong>"What is this field for?"</strong>
+      Regular provides the frame for the work. It is designed to recede slightly so it doesn't compete with the data. It answers: <strong>"What is this field for?"</strong> and <strong>"What does this paragraph say?"</strong>
     </p>
     <div className="flex flex-col items-start gap-3 mt-1">
       <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/components-input--default">Input Content</a></Button>
-      <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/components-sidebar--simple">Sidebar Items</a></Button>
       <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/components-input--helper-text">Helper Text</a></Button>
       <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/components-tooltip--default">Tooltips</a></Button>
       <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/components-typography--p">Body Paragraphs</a></Button>
@@ -279,30 +277,30 @@ treatment declares which one immediately.
   </p>
 </div>
 
-### The two-word threshold
+### The three-word threshold
 
 <div className="mt-8 rounded-xl border-2 border-sys-warning-300 dark:border-sys-warning-700 bg-sys-warning-50 dark:bg-sys-warning-950 p-6">
-  <h4 className="font-sans text-base font-bold text-sys-warning-800 dark:text-sys-warning-200 m-0 mb-3">Never uppercase strings longer than two words.</h4>
+  <h4 className="font-sans text-base font-bold text-sys-warning-800 dark:text-sys-warning-200 m-0 mb-3">Never uppercase strings longer than three words.</h4>
   <p className="text-base text-sys-warning-700 dark:text-sys-warning-300 leading-[1.6] m-0 mb-4">
     Structural caps work because they are short. The moment an uppercase string
-    exceeds two words it stops reading as a label and starts reading as a
+    exceeds three words it stops reading as a label and starts reading as a
     sentence. Readability drops sharply. If a structural element requires more
-    than two words, the copy itself needs to be reconsidered.
+    than three words, the copy itself needs to be reconsidered.
   </p>
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div className="p-3 rounded-lg bg-card border border-border">
       <span className="text-sm font-bold text-sys-success-600 dark:text-sys-success-400" style={{ display: 'block', marginBottom: '0.75rem' }}>Acceptable</span>
       <div className="flex flex-col gap-2">
         <span className="uppercase text-foreground block" style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em' }}>Save</span>
-        <span className="uppercase text-foreground block" style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em' }}>View Status</span>
         <span className="uppercase text-foreground block" style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em' }}>Issue Date</span>
+        <span className="uppercase text-foreground block" style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em' }}>Save All Changes</span>
       </div>
     </div>
     <div className="p-3 rounded-lg bg-card border border-border">
       <span className="text-sm font-bold text-sys-destructive-600 dark:text-sys-destructive-400" style={{ display: 'block', marginBottom: '0.75rem' }}>Rewrite as sentence case</span>
       <div className="flex flex-col gap-2">
-        <span className="text-muted-foreground leading-normal line-through decoration-sys-destructive-400/50" style={{ fontSize: '0.75rem', fontWeight: 400, display: 'block' }}><span className="uppercase" style={{ letterSpacing: '0.1em' }}>Save All Changes</span></span>
-        <span className="text-muted-foreground leading-normal line-through decoration-sys-destructive-400/50" style={{ fontSize: '0.75rem', fontWeight: 400, display: 'block' }}><span className="uppercase" style={{ letterSpacing: '0.1em' }}>Upload Your Documents</span></span>
+        <span className="text-muted-foreground leading-normal line-through decoration-sys-destructive-400/50" style={{ fontSize: '0.75rem', fontWeight: 400, display: 'block' }}><span className="uppercase" style={{ letterSpacing: '0.1em' }}>Upload Your Certification Documents</span></span>
+        <span className="text-muted-foreground leading-normal line-through decoration-sys-destructive-400/50" style={{ fontSize: '0.75rem', fontWeight: 400, display: 'block' }}><span className="uppercase" style={{ letterSpacing: '0.1em' }}>Review And Confirm Submission</span></span>
       </div>
     </div>
   </div>
@@ -483,7 +481,7 @@ hierarchy that guides the user effortlessly through the application.
 <hr className="page-end" />
 
 <div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '5rem' }}>
-  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For Developers</h4>
+  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For developers</h4>
   <p className="text-base text-muted-foreground leading-[1.6] m-0">
     Every rule on this page is <strong>already encoded in the component library</strong>.
     Structural caps, weight defaults and letter-spacing are applied automatically

@@ -35,7 +35,7 @@ const meta = {
     <DropdownMenu {...args}>
       <DropdownMenuTrigger>Open</DropdownMenuTrigger>
       <DropdownMenuContent className="w-44">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel>My account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>Profile</DropdownMenuItem>
         <DropdownMenuItem>Billing</DropdownMenuItem>
@@ -96,7 +96,7 @@ export const Submenus: Story = {
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <HugeiconsIcon icon={PlusSignIcon} className="mr-0.5 size-4" />
-            <span>New Team</span>
+            <span>New team</span>
             <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuSub>
@@ -155,7 +155,7 @@ export const Checkboxes: Story = {
           Autosave
           <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
         </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem>Show Comments</DropdownMenuCheckboxItem>
+        <DropdownMenuCheckboxItem>Show comments</DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>
   ),
