@@ -65,3 +65,11 @@ Set up a design system route in the prototype application and configure a more c
 Create a presentational component in the UI-lib package that uses more of the available primitives and follows design system guidelines. Scaffold this component using the scaffolding tool and add the correct stories next to the presentational component.
 
 Also demo and showcase most of the available design tokens that are being used in the primitives, and use them to set up some custom components in both the UI library and the application itself.
+
+---
+
+Please use the Commit skill to commit all changes for this first task, A.
+
+---
+
+Please use the Commit skill to commit all changes for this first task, A.
