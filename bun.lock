@@ -19,6 +19,8 @@
       "name": "frontend-pt1-extranet-onboarding",
       "version": "0.0.0",
       "dependencies": {
+        "@hugeicons/core-free-icons": "^4.1.1",
+        "@hugeicons/react": "^1.1.6",
         "@procertus-ui/ui": "workspace:*",
         "@procertus-ui/ui-lib": "workspace:*",
         "react": "^19.2.5",

@@ -6,8 +6,8 @@ import { BrandGradientHero } from "../components/BrandGradientHero";
 
 export function DesignSystemPage() {
   return (
-    <div className="min-h-svh bg-background text-foreground">
-      <div className="mx-auto max-w-5xl space-y-8 px-4 pb-16 pt-6">
+    <div className="text-foreground">
+      <div className="mx-auto max-w-5xl space-y-8 px-4 pb-12 pt-2">
         <AppDesignToolbar />
         <BrandGradientHero />
         <PrototypeSurfaceMarquee />

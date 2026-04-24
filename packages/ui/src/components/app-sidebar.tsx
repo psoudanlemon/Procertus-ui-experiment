@@ -109,6 +109,18 @@ export type NavGroup = {
   maxVisible?: number;
 };
 
+/** Props for an SPA nav link (e.g. `react-router-dom` `Link` uses `to`). */
+export type AppSidebarNavLinkProps = {
+  to: string;
+  className?: string;
+  children?: React.ReactNode;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+};
+
+export type AppSidebarNavLinkComponent = React.ComponentType<
+  AppSidebarNavLinkProps & React.RefAttributes<HTMLAnchorElement>
+>;
+
 export type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
   workspaces?: Workspace[];
   activeWorkspaceId?: string;
@@ -126,7 +138,43 @@ export type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
   user?: UserInfo;
   userMenuItems?: UserMenuItem[];
   version?: string;
+  /**
+   * Client-side navigation for `navItems` / groups / secondary / projects links.
+   * Pass e.g. `Link` from `react-router-dom` to avoid full page reloads on in-app routes.
+   */
+  NavLink?: AppSidebarNavLinkComponent;
 };
+
+// ---------------------------------------------------------------------------
+// Nav link (SPA vs full document navigation)
+// ---------------------------------------------------------------------------
+
+function SidebarNavLink({
+  NavLink,
+  to,
+  className,
+  children,
+  onClick,
+}: {
+  NavLink?: AppSidebarNavLinkComponent;
+  to: string;
+  className?: string;
+  children: React.ReactNode;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+}) {
+  if (NavLink) {
+    return (
+      <NavLink to={to} className={className} onClick={onClick}>
+        {children}
+      </NavLink>
+    );
+  }
+  return (
+    <a href={to} className={className} onClick={onClick}>
+      {children}
+    </a>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // MobileCloseButton
@@ -347,7 +395,15 @@ function NavSearch() {
 // NavPrimary
 // ---------------------------------------------------------------------------
 
-function NavPrimary({ items, className }: { items: NavItem[]; className?: string }) {
+function NavPrimary({
+  items,
+  className,
+  NavLink,
+}: {
+  items: NavItem[];
+  className?: string;
+  NavLink?: AppSidebarNavLinkComponent;
+}) {
   return (
     <SidebarGroup className={`py-0! ${className ?? ""}`}>
       <SidebarGroupContent>
@@ -355,10 +411,10 @@ function NavPrimary({ items, className }: { items: NavItem[]; className?: string
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title} isActive={item.isActive}>
-                <a href={item.url}>
+                <SidebarNavLink NavLink={NavLink} to={item.url}>
                   {item.icon && <SidebarNavIcon icon={item.icon} />}
                   <span>{item.title}</span>
-                </a>
+                </SidebarNavLink>
               </SidebarMenuButton>
               {item.shortcut && <SidebarMenuBadge>{item.shortcut}</SidebarMenuBadge>}
             </SidebarMenuItem>
@@ -377,10 +433,12 @@ function NavCollapsible({
   items,
   label = "Navigation",
   maxVisible,
+  NavLink,
 }: {
   items: CollapsibleNavItem[];
   label?: string;
   maxVisible?: number;
+  NavLink?: AppSidebarNavLinkComponent;
 }) {
   const [expanded, setExpanded] = React.useState(false);
 
@@ -417,9 +475,9 @@ function NavCollapsible({
                     {item.items.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuSubButton asChild isActive={subItem.isActive}>
-                          <a href={subItem.url}>
+                          <SidebarNavLink NavLink={NavLink} to={subItem.url}>
                             <span>{subItem.title}</span>
-                          </a>
+                          </SidebarNavLink>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
@@ -430,10 +488,10 @@ function NavCollapsible({
           ) : (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title} isActive={item.isActive}>
-                <a href={item.url}>
+                <SidebarNavLink NavLink={NavLink} to={item.url}>
                   {item.icon && <SidebarNavIcon icon={item.icon} />}
                   <span>{item.title}</span>
-                </a>
+                </SidebarNavLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ),
@@ -467,10 +525,12 @@ function NavProjects({
   items,
   label = "Projects",
   onAdd,
+  NavLink,
 }: {
   items: ProjectItem[];
   label?: string;
   onAdd?: () => void;
+  NavLink?: AppSidebarNavLinkComponent;
 }) {
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -479,10 +539,10 @@ function NavProjects({
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
             <SidebarMenuButton asChild isActive={item.isActive}>
-              <a href={item.url}>
+              <SidebarNavLink NavLink={NavLink} to={item.url}>
                 <span className={`size-2.5 shrink-0 rounded-full ${item.color}`} />
                 <span>{item.title}</span>
-              </a>
+              </SidebarNavLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
@@ -510,8 +570,9 @@ function NavProjects({
 
 function NavSecondary({
   items,
+  NavLink,
   ...props
-}: { items: NavItem[] } & React.ComponentProps<typeof SidebarGroup>) {
+}: { items: NavItem[]; NavLink?: AppSidebarNavLinkComponent } & React.ComponentProps<typeof SidebarGroup>) {
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
@@ -519,10 +580,10 @@ function NavSecondary({
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
+                <SidebarNavLink NavLink={NavLink} to={item.url}>
                   {item.icon && <SidebarNavIcon icon={item.icon} />}
                   <span>{item.title}</span>
-                </a>
+                </SidebarNavLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
@@ -699,6 +760,7 @@ function AppSidebar({
   user,
   userMenuItems = [],
   version,
+  NavLink,
   ...sidebarProps
 }: AppSidebarProps) {
   return (
@@ -745,15 +807,20 @@ function AppSidebar({
         {showSearch && <NavSearch />}
 
         {stickyNav && (
-          <NavPrimary items={navItems} className={showSearch ? "mb-section" : "mt-micro mb-section"} />
+          <NavPrimary
+            NavLink={NavLink}
+            items={navItems}
+            className={showSearch ? "mb-section" : "mt-micro mb-section"}
+          />
         )}
 
         <ScrollFade>
-          {!stickyNav && <NavPrimary items={navItems} className="mt-micro mb-section" />}
+          {!stickyNav && <NavPrimary NavLink={NavLink} items={navItems} className="mt-micro mb-section" />}
 
           {navGroups.map((group) => (
             <NavCollapsible
               key={group.label}
+              NavLink={NavLink}
               items={group.items}
               label={group.label}
               maxVisible={group.maxVisible}
@@ -761,11 +828,11 @@ function AppSidebar({
           ))}
 
           {projects.length > 0 && (
-            <NavProjects items={projects} label={projectsLabel} onAdd={onAddProject} />
+            <NavProjects NavLink={NavLink} items={projects} label={projectsLabel} onAdd={onAddProject} />
           )}
         </ScrollFade>
 
-        {secondaryItems.length > 0 && <NavSecondary items={secondaryItems} />}
+        {secondaryItems.length > 0 && <NavSecondary NavLink={NavLink} items={secondaryItems} />}
 
         {user && (
           <SidebarFooter>

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import type { AppSidebarNavLinkComponent } from "@/components/app-sidebar";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowLeft01Icon,
@@ -96,7 +97,37 @@ export type AppHeaderProps = {
   canGoForward?: boolean;
   user?: HeaderUserInfo;
   version?: string;
+  /** When set, invoked from the user menu “Log out” action (desktop and mobile). */
+  onSignOut?: () => void;
+  /**
+   * Client-side navigation for breadcrumb links (e.g. `Link` from `react-router-dom`).
+   * When set, `href` values are passed as `to` on this component instead of using a full document navigation.
+   */
+  NavLink?: AppSidebarNavLinkComponent;
 };
+
+// ---------------------------------------------------------------------------
+// Breadcrumb leaf (SPA vs `<a href>`)
+// ---------------------------------------------------------------------------
+
+function HeaderBreadcrumbLeaf({
+  NavLink,
+  href,
+  children,
+}: {
+  NavLink?: AppSidebarNavLinkComponent;
+  href: string;
+  children: React.ReactNode;
+}) {
+  if (NavLink) {
+    return (
+      <BreadcrumbLink asChild>
+        <NavLink to={href}>{children}</NavLink>
+      </BreadcrumbLink>
+    );
+  }
+  return <BreadcrumbLink href={href}>{children}</BreadcrumbLink>;
+}
 
 // ---------------------------------------------------------------------------
 // Picker wheel
@@ -189,6 +220,8 @@ function AppHeader({
   canGoForward = false,
   user,
   version,
+  onSignOut,
+  NavLink,
 }: AppHeaderProps) {
   const searchRef = React.useRef<HTMLInputElement>(null);
 
@@ -286,7 +319,9 @@ function AppHeader({
                           {isLast ? (
                             <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
                           ) : (
-                            <BreadcrumbLink href={crumb.href ?? "#"}>{crumb.label}</BreadcrumbLink>
+                            <HeaderBreadcrumbLeaf NavLink={NavLink} href={crumb.href ?? "#"}>
+                              {crumb.label}
+                            </HeaderBreadcrumbLeaf>
                           )}
                         </BreadcrumbItem>
                         {!isLast && <BreadcrumbSeparator />}
@@ -296,9 +331,9 @@ function AppHeader({
                 ) : (
                   <>
                     <BreadcrumbItem>
-                      <BreadcrumbLink href={breadcrumbs[0]?.href ?? "#"}>
+                      <HeaderBreadcrumbLeaf NavLink={NavLink} href={breadcrumbs[0]?.href ?? "#"}>
                         {breadcrumbs[0]?.label}
-                      </BreadcrumbLink>
+                      </HeaderBreadcrumbLeaf>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
 
@@ -309,11 +344,17 @@ function AppHeader({
                           <HugeiconsIcon icon={ArrowDown01Icon} className="size-3.5" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start">
-                          {breadcrumbs.slice(1, -2).map((crumb, index) => (
-                            <DropdownMenuItem key={`${crumb.label}-${index}`} asChild>
-                              <a href={crumb.href ?? "#"}>{crumb.label}</a>
-                            </DropdownMenuItem>
-                          ))}
+                          {breadcrumbs.slice(1, -2).map((crumb, index) =>
+                            NavLink ? (
+                              <DropdownMenuItem key={`${crumb.label}-${index}`} asChild>
+                                <NavLink to={crumb.href ?? "#"}>{crumb.label}</NavLink>
+                              </DropdownMenuItem>
+                            ) : (
+                              <DropdownMenuItem key={`${crumb.label}-${index}`} asChild>
+                                <a href={crumb.href ?? "#"}>{crumb.label}</a>
+                              </DropdownMenuItem>
+                            ),
+                          )}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </BreadcrumbItem>
@@ -372,9 +413,18 @@ function AppHeader({
                                     />
                                     <DrawerFooter>
                                       <Button asChild>
-                                        <a href={breadcrumbs[selectedCrumbIndex]?.href ?? "#"}>
-                                          Navigeer
-                                        </a>
+                                        {NavLink ? (
+                                          <NavLink
+                                            to={breadcrumbs[selectedCrumbIndex]?.href ?? "#"}
+                                            onClick={() => setBreadcrumbDrawerOpen(false)}
+                                          >
+                                            Navigeer
+                                          </NavLink>
+                                        ) : (
+                                          <a href={breadcrumbs[selectedCrumbIndex]?.href ?? "#"}>
+                                            Navigeer
+                                          </a>
+                                        )}
                                       </Button>
                                     </DrawerFooter>
                                   </>
@@ -384,9 +434,9 @@ function AppHeader({
                           </Drawer>
                         </>
                       ) : (
-                        <BreadcrumbLink href={breadcrumbs[0]?.href ?? "#"}>
+                        <HeaderBreadcrumbLeaf NavLink={NavLink} href={breadcrumbs[0]?.href ?? "#"}>
                           {breadcrumbs[0]?.label}
-                        </BreadcrumbLink>
+                        </HeaderBreadcrumbLeaf>
                       )}
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
@@ -490,6 +540,10 @@ function AppHeader({
                       <button
                         type="button"
                         className="flex min-h-11 items-center gap-micro rounded-md px-component text-sm text-destructive hover:bg-destructive/10"
+                        onClick={() => {
+                          onSignOut?.();
+                          setUserMenuOpen(false);
+                        }}
                       >
                         <HugeiconsIcon icon={Logout01Icon} className="size-4 shrink-0" />
                         <span>Log out</span>
@@ -553,7 +607,11 @@ function AppHeader({
                     </DropdownMenuSubContent>
                   </DropdownMenuSub>
 
-                  <DropdownMenuItem variant="destructive" className="mt-0.5">
+                  <DropdownMenuItem
+                    variant="destructive"
+                    className="mt-0.5"
+                    onClick={() => onSignOut?.()}
+                  >
                     <HugeiconsIcon icon={Logout01Icon} />
                     <span>Log out</span>
                   </DropdownMenuItem>
