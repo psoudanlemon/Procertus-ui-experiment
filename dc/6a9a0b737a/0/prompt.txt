@@ -1,0 +1,5 @@
+@procertus-docs/apps/frontend-docs/docs/pt1/task-b-decision-tree-data-module.md please set up a data provider to expose the entire process categorization, together with helper functions and clean queries, to be available as easy-to-use hooks in the application. Be inspired by @procertus-docs/apps/frontend-docs/src/components/analysis/q2b-categorization-tree.tsx
+
+---
+
+@procertus-docs/apps/frontend-docs/docs/pt1/task-b-decision-tree-data-module.md please set up a data provider to expose the entire process categorization, together with helper functions and clean queries, to be available as easy-to-use hooks in the application. Be inspired by @procertus-docs/apps/frontend-docs/src/components/analysis/q2b-categorization-tree.tsx
