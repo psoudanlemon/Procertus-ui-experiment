@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import { mergeConfig } from "vite";
 
-import { workspaceUiAliasPlugin } from "./vite-workspace-ui-alias.ts";
+import { workspaceUiAliasPlugin } from "@procertus-ui/ui/vite-workspace-ui-alias";
 
 const packageRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const monorepoRoot = path.join(packageRoot, "..", "..");
