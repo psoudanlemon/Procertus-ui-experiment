@@ -1,0 +1,67 @@
+Please implement as instructed.@procertus-docs/apps/frontend-docs/docs/pt1/task-a-wire-vite-design-system.md 
+
+ Since an agent has already started work on this task, some of the implementation may already be done. Please review closely and implement.
+
+---
+
+Please implement as instructed.@procertus-docs/apps/frontend-docs/docs/pt1/task-a-wire-vite-design-system.md 
+
+ Since an agent has already started work on this task, some of the implementation may already be done. Please review closely and implement.
+
+---
+
+Please implement as instructed.@procertus-docs/apps/frontend-docs/docs/pt1/task-a-wire-vite-design-system.md 
+
+ Since an agent has already started work on this task, some of the implementation may already be done. Please review closely and implement.@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src
+
+---
+
+Please implement as instructed.@procertus-docs/apps/frontend-docs/docs/pt1/task-a-wire-vite-design-system.md 
+
+ Since an agent has already started work on this task, some of the implementation may already be done. Please review closely and implement.@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src
+
+---
+
+[vite] Internal server error: Failed to resolve import "@/lib/utils" from "../../packages/ui/src/components/ui/typography.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/psoudan/workspace/05-Procertus/Procertus-ui-experiment/packages/ui/src/components/ui/typography.tsx:3:19
+  1  |  import * as React from "react";
+  2  |  import { cn } from "@/lib/utils";
+     |                      ^
+  3  |  var _jsxFileName = "/Users/psoudan/workspace/05-Procertus/Procertus-ui-experiment/packages/ui/src/components/ui/typog...
+  4  |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+
+---
+
+[vite] Internal server error: Failed to resolve import "@/lib/utils" from "../../packages/ui/src/components/ui/typography.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/psoudan/workspace/05-Procertus/Procertus-ui-experiment/packages/ui/src/components/ui/typography.tsx:3:19
+  1  |  import * as React from "react";
+  2  |  import { cn } from "@/lib/utils";
+     |                      ^
+  3  |  var _jsxFileName = "/Users/psoudan/workspace/05-Procertus/Procertus-ui-experiment/packages/ui/src/components/ui/typog...
+  4  |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+
+---
+
+@procertus-docs/ui-experiment/packages/ui-lib/.storybook/vite-workspace-ui-alias.ts @Procertus-ui-experiment/packages/ui/.storybook/vite-workspace-ui-alias.ts  this file has already been duplicated. Move it out of the Storybook folder and make sure it can be exported from the UI package and reused in the UI library and other front-end applications using the UI setup.
+
+---
+
+@procertus-docs/ui-experiment/packages/ui-lib/.storybook/vite-workspace-ui-alias.ts @Procertus-ui-experiment/packages/ui/.storybook/vite-workspace-ui-alias.ts  this file has already been duplicated. Move it out of the Storybook folder and make sure it can be exported from the UI package and reused in the UI library and other front-end applications using the UI setup.
+
+---
+
+Set up a design system route in the prototype application and configure a more complex usage of the UI and UI-lib packages. Forward the home route to the design system route for now.
+
+Create a presentational component in the UI-lib package that uses more of the available primitives and follows design system guidelines. Scaffold this component using the scaffolding tool and add the correct stories next to the presentational component.
+
+Also demo and showcase most of the available design tokens that are being used in the primitives, and use them to set up some custom components in both the UI library and the application itself.
+
+---
+
+Set up a design system route in the prototype application and configure a more complex usage of the UI and UI-lib packages. Forward the home route to the design system route for now.
+
+Create a presentational component in the UI-lib package that uses more of the available primitives and follows design system guidelines. Scaffold this component using the scaffolding tool and add the correct stories next to the presentational component.
+
+Also demo and showcase most of the available design tokens that are being used in the primitives, and use them to set up some custom components in both the UI library and the application itself.
