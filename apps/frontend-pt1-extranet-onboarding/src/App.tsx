@@ -1,6 +1,5 @@
+import { useMockPrototypeIsAuthenticated } from "@procertus-ui/ui-pt1-prototype";
 import { Navigate, Route, Routes } from "react-router-dom";
-
-import { usePrototypeSession } from "./auth/usePrototypeSession";
 import { AuthenticatedAppShell } from "./layouts/AuthenticatedAppShell";
 import { PublicAppShell } from "./layouts/PublicAppShell";
 import { AuthenticatedHomePage } from "./pages/AuthenticatedHomePage";
@@ -10,7 +9,7 @@ import { WelcomePage } from "./pages/WelcomePage";
 import { RequireAuth } from "./routes/RequireAuth";
 
 function RootRedirect() {
-  const { isAuthenticated } = usePrototypeSession();
+  const isAuthenticated = useMockPrototypeIsAuthenticated();
   return <Navigate to={isAuthenticated ? "/app" : "/welcome"} replace />;
 }
 

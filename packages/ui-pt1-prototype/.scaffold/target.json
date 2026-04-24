@@ -1,0 +1,9 @@
+{
+  "dirName": "ui-pt1-prototype",
+  "packageName": "@procertus-ui/ui-pt1-prototype",
+  "packageType": "ui",
+  "relativeDir": "ui-pt1-prototype",
+  "targetName": "ui-pt1-prototype",
+  "kind": "package",
+  "schemaVersion": 1
+}

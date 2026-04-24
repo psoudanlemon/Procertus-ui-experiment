@@ -12,7 +12,7 @@ import { ManagementAppShell } from "@procertus-ui/ui-lib";
 import { useLayoutEffect, useMemo } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
-import { usePrototypeSession } from "../auth/usePrototypeSession";
+import { useMockPrototypeLogout, useMockPrototypeSession } from "@procertus-ui/ui-pt1-prototype";
 
 /** Collapses the mobile sheet after in-app navigation so the new page isn’t hidden behind the drawer. */
 function CloseMobileSidebarOnRouteChange() {
@@ -34,17 +34,23 @@ function CloseMobileSidebarOnRouteChange() {
 export function AuthenticatedAppShell() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { signOut } = usePrototypeSession();
+  const session = useMockPrototypeSession();
+  const logout = useMockPrototypeLogout();
   const pathname = location.pathname;
 
   const sidebar: AppSidebarProps = useMemo(() => {
     const isHome = pathname === "/app" || pathname === "/app/";
     const isDesign = pathname.startsWith("/app/design-system");
+    const workspaceId = session?.user.homeOrganization.id ?? "prototype";
+    const workspaceName = session?.user.homeOrganization.name ?? "Workspace";
+    const plan = session
+      ? `Represents ${session.user.representedOrganization.name}`
+      : "Demo workspace";
     return {
       workspaces: [
         {
-          id: "prototype",
-          name: "Prototype org",
+          id: workspaceId,
+          name: workspaceName,
           logo: (
             <img
               src={logomark}
@@ -52,10 +58,10 @@ export function AuthenticatedAppShell() {
               className="size-full rounded-sm object-contain"
             />
           ),
-          plan: "Demo workspace",
+          plan,
         },
       ],
-      activeWorkspaceId: "prototype",
+      activeWorkspaceId: workspaceId,
       showSearch: false,
       stickyNav: false,
       navItems: [
@@ -79,25 +85,32 @@ export function AuthenticatedAppShell() {
       ],
       NavLink: Link,
     };
-  }, [pathname]);
+  }, [pathname, session]);
 
   const header: AppHeaderProps = useMemo(() => {
     const crumb = pathname.startsWith("/app/design-system") ? "Design system" : "Overview";
+    const user = session?.user;
     return {
       showNavigation: false,
       breadcrumbs: [{ label: "Workspace", href: "/app" }, { label: crumb }],
-      user: {
-        name: "Demo user",
-        email: "demo.user@prototype.local",
-        role: "Prototype session",
-      },
+      user: user
+        ? {
+            name: user.displayName,
+            email: user.email,
+            role: user.role ?? "Prototype session",
+          }
+        : {
+            name: "Guest",
+            email: "",
+            role: "",
+          },
       onSignOut: () => {
-        signOut();
+        logout();
         navigate("/welcome", { replace: true });
       },
       NavLink: Link,
     };
-  }, [pathname, navigate, signOut]);
+  }, [pathname, navigate, logout, session]);
 
   return (
     <ManagementAppShell sidebar={sidebar} header={header}>

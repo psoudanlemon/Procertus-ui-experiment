@@ -1,14 +1,13 @@
 import { ModeToggle } from "@procertus-ui/ui";
+import { useMockPrototypeIsAuthenticated } from "@procertus-ui/ui-pt1-prototype";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-
-import { usePrototypeSession } from "../auth/usePrototypeSession";
 
 /**
  * Guest routes: no management sidebar — pages use **`AuthLayout`** from ui-lib (same pattern as authentication stories).
  * Matches Storybook decorator **`data-density="operational"`** for auth screens.
  */
 export function PublicAppShell() {
-  const { isAuthenticated } = usePrototypeSession();
+  const isAuthenticated = useMockPrototypeIsAuthenticated();
   const location = useLocation();
 
   if (isAuthenticated && location.pathname.startsWith("/welcome")) {
