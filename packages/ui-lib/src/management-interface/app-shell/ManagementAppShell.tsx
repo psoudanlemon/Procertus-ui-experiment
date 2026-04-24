@@ -1,13 +1,16 @@
 import * as React from "react";
 
-import { SidebarProvider } from "@procertus-ui/ui";
-
-import { ManagementHeader, type ManagementHeaderProps } from "./ManagementHeader";
-import { ManagementSidebar, type ManagementSidebarProps } from "./ManagementSidebar";
+import {
+  AppHeader,
+  type AppHeaderProps,
+  AppSidebar,
+  type AppSidebarProps,
+  SidebarProvider,
+} from "@procertus-ui/ui";
 
 export type ManagementAppShellProps = {
-  sidebar: ManagementSidebarProps;
-  header: ManagementHeaderProps;
+  sidebar: AppSidebarProps;
+  header: AppHeaderProps;
   children: React.ReactNode;
 };
 
@@ -22,19 +25,17 @@ function ManagementAppShell({ sidebar, header, children }: ManagementAppShellPro
 
   return (
     <SidebarProvider>
-      <ManagementSidebar {...sidebar} />
+      <AppSidebar {...sidebar} />
       <div className="flex min-h-svh flex-1 flex-col bg-sidebar">
         <div className="sticky top-0 z-20 bg-sidebar">
-          <ManagementHeader {...header} />
+          <AppHeader {...header} />
           <div
-            className="pointer-events-none mx-component -mb-8 h-8 bg-gradient-to-b from-sidebar to-transparent transition-opacity duration-200"
+            className="pointer-events-none mx-section -mb-8 h-8 bg-gradient-to-b from-sidebar to-transparent transition-opacity duration-200"
             style={{ opacity: scrolled ? 1 : 0 }}
           />
         </div>
-        <div className="mx-component flex flex-1 flex-col pb-component">
-          <main className="flex-1 rounded-xl bg-background p-element">
-            {children}
-          </main>
+        <div className="mx-section flex flex-1 flex-col pb-section">
+          <main className="flex-1 rounded-xl bg-background p-boundary">{children}</main>
         </div>
       </div>
     </SidebarProvider>

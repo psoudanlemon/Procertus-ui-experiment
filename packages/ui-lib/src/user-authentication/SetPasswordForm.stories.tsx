@@ -3,11 +3,11 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SetPasswordForm } from "./SetPasswordForm";
 
 const meta = {
-  title: "Management Interface/Authentication/Forms/Set Password",
+  title: "Management interface/Authentication/Forms/Set password",
   component: SetPasswordForm,
   tags: ["autodocs"],
   parameters: { layout: "centered" },
-  decorators: [(Story) => <div className="w-sm"><Story /></div>],
+  decorators: [(Story) => <div data-density="operational" className="w-sm"><Story /></div>],
   args: {
     onBack: () => {},
   },

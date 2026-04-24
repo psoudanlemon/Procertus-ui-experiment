@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -11,23 +13,24 @@ import {
   Search01Icon,
 } from "@hugeicons/core-free-icons";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   Breadcrumb,
-  cn,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-  Button,
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import {
   Drawer,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
+} from "@/components/ui/drawer";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -38,16 +41,18 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-  Input,
-  Separator,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SidebarTrigger,
-  useSidebar,
-} from "@procertus-ui/ui";
+} from "@/components/ui/sheet";
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 
 const TABLET_BREAKPOINT = 1024;
 
@@ -81,7 +86,7 @@ export type HeaderUserInfo = {
   avatar?: string;
 };
 
-export type ManagementHeaderProps = {
+export type AppHeaderProps = {
   breadcrumbs?: BreadcrumbEntry[];
   showNavigation?: boolean;
   showSearch?: boolean;
@@ -112,7 +117,6 @@ function PickerWheel({
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const isScrollingRef = React.useRef(false);
 
-  // Scroll to selected index on mount
   React.useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -135,16 +139,13 @@ function PickerWheel({
   const pad = Math.floor(VISIBLE_ITEMS / 2);
 
   return (
-    <div className="relative mx-element" style={{ height: ITEM_HEIGHT * VISIBLE_ITEMS }}>
-      {/* Highlight band */}
+    <div className="relative mx-component" style={{ height: ITEM_HEIGHT * VISIBLE_ITEMS }}>
       <div
         className="pointer-events-none absolute inset-x-0 rounded-lg bg-accent"
         style={{ top: pad * ITEM_HEIGHT, height: ITEM_HEIGHT }}
       />
-      {/* Fade masks */}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-20 bg-gradient-to-b from-popover to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-20 bg-gradient-to-t from-popover to-transparent" />
-      {/* Scrollable area */}
       <div
         ref={scrollRef}
         className="relative z-10 size-full overflow-y-auto overscroll-contain"
@@ -154,7 +155,6 @@ function PickerWheel({
         }}
         onScroll={handleScroll}
       >
-        {/* Top padding */}
         <div style={{ height: pad * ITEM_HEIGHT }} />
         {items.map((label, index) => (
           <div
@@ -169,7 +169,6 @@ function PickerWheel({
             {label}
           </div>
         ))}
-        {/* Bottom padding */}
         <div style={{ height: pad * ITEM_HEIGHT }} />
       </div>
     </div>
@@ -180,7 +179,7 @@ function PickerWheel({
 // Component
 // ---------------------------------------------------------------------------
 
-function ManagementHeader({
+function AppHeader({
   breadcrumbs = [],
   showNavigation = true,
   showSearch = false,
@@ -190,7 +189,7 @@ function ManagementHeader({
   canGoForward = false,
   user,
   version,
-}: ManagementHeaderProps) {
+}: AppHeaderProps) {
   const searchRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -223,8 +222,11 @@ function ManagementHeader({
     : (user?.email?.slice(0, 2).toUpperCase() ?? "");
 
   return (
-    <header data-slot="management-header" className="shrink-0 bg-sidebar px-element pt-element pb-element">
-      <div className="flex h-[56px] items-center gap-micro lg:gap-element px-element">
+    <header
+      data-slot="app-header"
+      className="shrink-0 bg-sidebar px-component pt-component pb-component"
+    >
+      <div className="flex h-[56px] items-center gap-micro lg:gap-component px-component">
         <SidebarTrigger className="hidden md:inline-flex lg:min-h-0 lg:min-w-0 min-h-11 min-w-11 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" />
         <Button
           variant="ghost"
@@ -233,7 +235,7 @@ function ManagementHeader({
           onClick={() => toggleSidebar()}
         >
           <HugeiconsIcon icon={Menu01Icon} />
-          <span className="sr-only">Toggle Sidebar</span>
+          <span className="sr-only">Toggle sidebar</span>
         </Button>
         {showNavigation && (
           <>
@@ -264,7 +266,6 @@ function ManagementHeader({
           </>
         )}
 
-        {/* Breadcrumbs — desktop: full trail */}
         {breadcrumbs.length > 0 && (
           <>
             {showNavigation && (
@@ -274,7 +275,6 @@ function ManagementHeader({
               />
             )}
 
-            {/* Desktop: max 3 visible — first, middle (dropdown if collapsed), last */}
             <Breadcrumb className="hidden lg:flex">
               <BreadcrumbList>
                 {breadcrumbs.length <= 3 ? (
@@ -295,7 +295,6 @@ function ManagementHeader({
                   })
                 ) : (
                   <>
-                    {/* First */}
                     <BreadcrumbItem>
                       <BreadcrumbLink href={breadcrumbs[0]?.href ?? "#"}>
                         {breadcrumbs[0]?.label}
@@ -303,7 +302,6 @@ function ManagementHeader({
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
 
-                    {/* Middle — dropdown with hidden crumbs */}
                     <BreadcrumbItem>
                       <DropdownMenu>
                         <DropdownMenuTrigger className="flex items-center gap-micro text-sm">
@@ -321,7 +319,6 @@ function ManagementHeader({
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
 
-                    {/* Last */}
                     <BreadcrumbItem>
                       <BreadcrumbPage>{breadcrumbs[breadcrumbs.length - 1]?.label}</BreadcrumbPage>
                     </BreadcrumbItem>
@@ -330,7 +327,6 @@ function ManagementHeader({
               </BreadcrumbList>
             </Breadcrumb>
 
-            {/* Mobile/Tablet: parent (with drawer) > current page */}
             <Breadcrumb className="lg:hidden ml-0.5 [&_[data-slot=breadcrumb-link]]:min-h-11 [&_[data-slot=breadcrumb-link]]:flex [&_[data-slot=breadcrumb-link]]:items-center [&_[data-slot=breadcrumb-page]]:min-h-11 [&_[data-slot=breadcrumb-page]]:flex [&_[data-slot=breadcrumb-page]]:items-center">
               <BreadcrumbList>
                 {breadcrumbs.length > 1 && (
@@ -357,7 +353,6 @@ function ManagementHeader({
                               <DrawerHeader>
                                 <DrawerTitle>Kies een bestemming</DrawerTitle>
                               </DrawerHeader>
-                              {/* Scroll-wheel picker */}
                               {(() => {
                                 const pickerCrumbs = breadcrumbs
                                   .slice(0, -1)
@@ -371,7 +366,9 @@ function ManagementHeader({
                                     <PickerWheel
                                       items={pickerCrumbs.map((c) => c.label)}
                                       selectedIndex={sortedSelectedIndex}
-                                      onSelect={(i) => setSelectedCrumbIndex(pickerCrumbs[i].originalIndex)}
+                                      onSelect={(i) =>
+                                        setSelectedCrumbIndex(pickerCrumbs[i].originalIndex)
+                                      }
                                     />
                                     <DrawerFooter>
                                       <Button asChild>
@@ -403,11 +400,13 @@ function ManagementHeader({
           </>
         )}
 
-        {/* Search — centered */}
         {showSearch && (
           <div className="mx-auto hidden w-full max-w-sm lg:block">
             <div className="relative">
-              <HugeiconsIcon icon={Search01Icon} className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <HugeiconsIcon
+                icon={Search01Icon}
+                className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              />
               <Input
                 ref={searchRef}
                 placeholder="Search"
@@ -420,10 +419,8 @@ function ManagementHeader({
           </div>
         )}
 
-        {/* Right group */}
         {user && (
           <div className="ml-auto flex items-center">
-            {/* Avatar trigger — shared between mobile sheet & desktop dropdown */}
             {isMobileOrTablet ? (
               <Sheet open={userMenuOpen} onOpenChange={setUserMenuOpen}>
                 <Button
@@ -446,8 +443,7 @@ function ManagementHeader({
                     <SheetDescription>Account menu</SheetDescription>
                   </SheetHeader>
                   <div className="flex h-full flex-col">
-                    {/* User info */}
-                    <div className="flex items-center gap-component px-element py-element">
+                    <div className="flex items-center gap-component px-component py-component">
                       <Avatar className="size-9">
                         {user.avatar && (
                           <AvatarImage src={user.avatar} alt={user.name ?? user.email} />
@@ -465,14 +461,13 @@ function ManagementHeader({
                     </div>
                     <Separator className="bg-sidebar-border" />
 
-                    {/* Language */}
-                    <div className="flex flex-col p-element">
-                      <div className="px-element py-1.5 text-xs font-medium text-sidebar-foreground/60">
+                    <div className="flex flex-col p-component">
+                      <div className="px-component py-1.5 text-xs font-medium text-sidebar-foreground/60">
                         Kies een taal
                       </div>
                       <button
                         type="button"
-                        className="flex min-h-11 items-center justify-between rounded-md px-element text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                        className="flex min-h-11 items-center justify-between rounded-md px-component text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                       >
                         <span className="flex items-center gap-micro">
                           <span>🇳🇱</span> Nederlands
@@ -481,7 +476,7 @@ function ManagementHeader({
                       </button>
                       <button
                         type="button"
-                        className="mt-0.5 flex min-h-11 items-center rounded-md px-element text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                        className="mt-0.5 flex min-h-11 items-center rounded-md px-component text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                       >
                         <span className="flex items-center gap-micro">
                           <span>🇫🇷</span> Français
@@ -491,20 +486,18 @@ function ManagementHeader({
 
                     <Separator className="bg-sidebar-border" />
 
-                    {/* Logout */}
-                    <div className="flex flex-col gap-0.5 p-element">
+                    <div className="flex flex-col gap-0.5 p-component">
                       <button
                         type="button"
-                        className="flex min-h-11 items-center gap-micro rounded-md px-element text-sm text-destructive hover:bg-destructive/10"
+                        className="flex min-h-11 items-center gap-micro rounded-md px-component text-sm text-destructive hover:bg-destructive/10"
                       >
                         <HugeiconsIcon icon={Logout01Icon} className="size-4 shrink-0" />
                         <span>Log out</span>
                       </button>
                     </div>
 
-                    {/* Version */}
                     {version && (
-                      <div className="mt-auto px-element py-element text-xs text-sidebar-foreground/60">
+                      <div className="mt-auto px-component py-component text-xs text-sidebar-foreground/60">
                         {version}
                       </div>
                     )}
@@ -527,8 +520,7 @@ function ManagementHeader({
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-64" align="end" sideOffset={8}>
-                  {/* User info */}
-                  <div className="flex items-center gap-component px-element py-element">
+                  <div className="flex items-center gap-component px-component py-component">
                     <Avatar className="size-9">
                       {user.avatar && (
                         <AvatarImage src={user.avatar} alt={user.name ?? user.email} />
@@ -544,7 +536,6 @@ function ManagementHeader({
                   </div>
                   <DropdownMenuSeparator />
 
-                  {/* Language */}
                   <DropdownMenuSub>
                     <DropdownMenuSubTrigger>
                       <HugeiconsIcon icon={GlobeIcon} />
@@ -562,13 +553,11 @@ function ManagementHeader({
                     </DropdownMenuSubContent>
                   </DropdownMenuSub>
 
-                  {/* Logout */}
                   <DropdownMenuItem variant="destructive" className="mt-0.5">
                     <HugeiconsIcon icon={Logout01Icon} />
                     <span>Log out</span>
                   </DropdownMenuItem>
 
-                  {/* Version */}
                   {version && (
                     <>
                       <DropdownMenuSeparator />
@@ -585,4 +574,4 @@ function ManagementHeader({
   );
 }
 
-export { ManagementHeader };
+export { AppHeader };

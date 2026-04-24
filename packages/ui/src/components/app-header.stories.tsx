@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { AppHeader } from "@/components/app-header";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
-import { ManagementHeader } from "./ManagementHeader";
-
 const meta = {
-  title: "Management Interface/Application Shell/Header",
-  component: ManagementHeader,
+  title: "components/Header",
+  component: AppHeader,
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
@@ -34,7 +33,7 @@ const meta = {
   decorators: [
     (Story) => (
       <SidebarProvider>
-        <div className="flex h-svh w-full flex-col bg-sidebar">
+        <div data-density="operational" className="flex h-svh w-full flex-col bg-sidebar">
           <Story />
           <div className="mt-1 ml-3 mr-4 flex-1 rounded-t-xl bg-background p-6">
             <div className="min-h-[50vh] rounded-xl border border-dashed" />
@@ -43,7 +42,7 @@ const meta = {
       </SidebarProvider>
     ),
   ],
-} satisfies Meta<typeof ManagementHeader> as Meta<typeof ManagementHeader>;
+} satisfies Meta<typeof AppHeader> as Meta<typeof AppHeader>;
 
 export default meta;
 

@@ -32,10 +32,10 @@ const meta = {
             <NavigationMenuContent>
               <ul className="grid w-96">
                 <li>
-                  <NavigationMenuLink>API Reference</NavigationMenuLink>
+                  <NavigationMenuLink>API reference</NavigationMenuLink>
                 </li>
                 <li>
-                  <NavigationMenuLink>Getting Started</NavigationMenuLink>
+                  <NavigationMenuLink>Getting started</NavigationMenuLink>
                 </li>
                 <li>
                   <NavigationMenuLink>Guides</NavigationMenuLink>

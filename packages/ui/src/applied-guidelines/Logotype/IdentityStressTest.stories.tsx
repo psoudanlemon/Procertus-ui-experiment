@@ -18,7 +18,7 @@ const logo = (
 // ---------------------------------------------------------------------------
 
 const meta = {
-  title: "Applied Guidelines/Logotype",
+  title: "Applied guidelines/Logotype",
   tags: ["!autodocs"],
   parameters: {
     layout: "fullscreen",
@@ -59,12 +59,12 @@ export const IdentityStressTest: Story = {
     <div className="relative flex min-h-svh w-full flex-col items-center justify-center overflow-hidden bg-background p-boundary">
       <BrandWatermark />
       <div className="absolute top-boundary left-1/2 -translate-x-1/2">{logo}</div>
-      <Card className="relative z-10 w-full max-w-md shadow-[var(--shadow-proc-md)] ring-0">
-        <CardContent className="flex flex-col items-center gap-component px-section py-section text-center">
+      <Card className="relative z-10 w-full max-w-md shadow-proc-md ring-0">
+        <CardContent className="flex flex-col items-center gap-component p-section text-center">
           <Skeleton className="size-16 rounded-full" />
-          <div className="flex w-full flex-col items-center gap-2">
+          <div className="flex w-full flex-col items-center gap-component">
             <Skeleton className="h-7 w-48" />
-            <div className="flex w-full flex-col items-center gap-1.5">
+            <div className="flex w-full flex-col items-center gap-micro">
               <Skeleton className="h-4 w-full max-w-xs" />
               <Skeleton className="h-4 w-full max-w-[260px]" />
             </div>

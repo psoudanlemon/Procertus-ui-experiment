@@ -84,7 +84,7 @@ export const ActionHeader: Story = {
   render: (args) => (
     <Card {...args}>
       <CardHeader>
-        <CardTitle>Team Settings</CardTitle>
+        <CardTitle>Team settings</CardTitle>
         <CardDescription>Manage your team preferences</CardDescription>
         <CardAction>
           <Button size="sm" variant="outline">
@@ -97,7 +97,7 @@ export const ActionHeader: Story = {
       </CardContent>
       <CardFooter>
         <Button variant="ghost">Cancel</Button>
-        <Button className="ml-auto">Save Changes</Button>
+        <Button className="ml-auto">Save changes</Button>
       </CardFooter>
     </Card>
   ),
@@ -126,7 +126,7 @@ export const HeaderOnly: Story = {
   render: (args) => (
     <Card {...args}>
       <CardHeader>
-        <CardTitle>Quick Stats</CardTitle>
+        <CardTitle>Quick stats</CardTitle>
         <CardDescription>Your account summary at a glance. Click for details.</CardDescription>
       </CardHeader>
     </Card>

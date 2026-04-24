@@ -34,7 +34,7 @@ import {
 import { P, Muted, Blockquote, List } from "@/components/ui/typography";
 
 import { ManagementAppShell } from "../../../ui-lib/src/management-interface/app-shell/ManagementAppShell";
-import type { Workspace, NavItem, NavGroup } from "../../../ui-lib/src/management-interface/app-shell/ManagementSidebar";
+import type { Workspace, NavItem, NavGroup } from "@/components/app-sidebar";
 
 /* ---------------------------------------------------------------------------
  * Registry Detail View — Hierarchy Demo
@@ -141,7 +141,7 @@ function RegistryDetailView() {
 
 const procertusLogo = (
   <img
-    src="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='32' height='32' fill='%23F1F5F9'/%3E%3Cpath d='M17.4262 21.7754L13.9269 18.6647C12.8241 17.6857 12.7265 15.999 13.7055 14.8963L13.7858 14.8051L18.2489 18.7711L24.0796 12.109C25.0846 10.9607 26.8321 10.8435 27.9804 11.8485L28 11.8659L19.4406 21.6495C18.9218 22.2422 18.0188 22.3008 17.4283 21.7754H17.4262Z' fill='%2371D2C1'/%3E%3Cpath d='M14.5738 10.2246L18.0731 13.3353C19.1758 14.3143 19.2735 16.001 18.2945 17.1038L18.2142 17.1949L13.7511 13.2289L7.92041 19.891C6.91534 21.0394 5.16787 21.1566 4.01954 20.1515L4 20.1342L12.5593 10.3505C13.0781 9.75789 13.9812 9.69928 14.5716 10.2246H14.5738Z' fill='%23076293'/%3E%3C/svg%3E"
+    src="/logomark.svg"
     alt="PROCERTUS"
     className="size-full rounded-sm"
   />
@@ -184,20 +184,20 @@ const managementSidebarProps = {
     {
       label: "Compliance",
       items: [
-        { title: "Audit Schedule", url: "#", icon: Database01Icon, isActive: true },
+        { title: "Audit schedule", url: "#", icon: Database01Icon, isActive: true },
         { title: "Non-conformities", url: "#", icon: AiNetworkIcon },
       ],
     },
     {
-      label: "Coming Soon",
+      label: "Coming soon",
       maxVisible: 3,
       items: [
-        { title: "User Stories", url: "#", icon: HierarchyFilesIcon },
-        { title: "Event Models", url: "#", icon: FlashIcon },
+        { title: "User stories", url: "#", icon: HierarchyFilesIcon },
+        { title: "Event models", url: "#", icon: FlashIcon },
         { title: "Prototypes", url: "#", icon: PackageIcon },
-        { title: "Context Maps", url: "#", icon: GitBranchIcon },
-        { title: "DAL Playground", url: "#", icon: CodeIcon },
-        { title: "API Docs", url: "#", icon: BookOpen01Icon },
+        { title: "Context maps", url: "#", icon: GitBranchIcon },
+        { title: "DAL playground", url: "#", icon: CodeIcon },
+        { title: "API docs", url: "#", icon: BookOpen01Icon },
         { title: "Guides", url: "#", icon: BookOpen01Icon },
       ],
     },
@@ -234,14 +234,14 @@ const managementHeaderProps = {
 function TypographyShowcase() {
   return (
     <div className="mx-auto max-w-[680px] space-y-6 py-16">
-      <H1>The Joke Tax Chronicles</H1>
+      <H1>The joke tax chronicles</H1>
       <P>
         Once upon a time, in a far-off land, there was a very lazy king who
         spent all day lounging on his throne. One day, his advisors came to him
         with a problem: the kingdom was running out of money.
       </P>
 
-      <H2>The King's Plan</H2>
+      <H2>The king's plan</H2>
       <P>
         The king thought long and hard, and finally came up with{" "}
         <a
@@ -257,7 +257,7 @@ function TypographyShowcase() {
         that they should pay for the privilege."
       </Blockquote>
 
-      <H3>The Joke Tax</H3>
+      <H3>The joke tax</H3>
       <P>
         The king's subjects were not amused. They grumbled and complained, but
         the king was firm:
@@ -273,7 +273,7 @@ function TypographyShowcase() {
         get him down: a court jester named Jokester.
       </P>
 
-      <H3>Jokester's Revolt</H3>
+      <H3>Jokester's revolt</H3>
       <P>
         Jokester began sneaking into the castle in the middle of the night and
         leaving jokes all over the place: under the king's pillow, in his soup,
@@ -286,7 +286,7 @@ function TypographyShowcase() {
         once they started laughing, they couldn't stop.
       </P>
 
-      <H4>The People's Rebellion</H4>
+      <H4>The people's rebellion</H4>
       <P>
         The people of the kingdom, feeling uplifted by the laughter, started to
         tell jokes and puns again, and soon the entire kingdom was in on the
@@ -295,7 +295,7 @@ function TypographyShowcase() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>King's Treasury</TableHead>
+            <TableHead>King's treasury</TableHead>
             <TableHead>People's happiness</TableHead>
           </TableRow>
         </TableHeader>
@@ -332,7 +332,7 @@ function TypographyShowcase() {
  * ------------------------------------------------------------------------- */
 
 const meta: Meta = {
-  title: "Applied Guidelines/Typography",
+  title: "Applied guidelines/Typography",
   parameters: {
     layout: "fullscreen",
   },
@@ -341,7 +341,7 @@ const meta: Meta = {
 export default meta;
 
 export const LongFormContent: StoryObj = {
-  name: "Long-form Content",
+  name: "Long-form content",
   render: () => <TypographyShowcase />,
   parameters: {
     layout: "padded",
@@ -349,7 +349,7 @@ export const LongFormContent: StoryObj = {
 };
 
 export const Shell: StoryObj = {
-  name: "Management Shell",
+  name: "Management shell",
   render: () => (
     <ManagementAppShell sidebar={managementSidebarProps} header={managementHeaderProps}>
       <div className="min-h-[200vh] rounded-xl border border-dashed" />
@@ -369,7 +369,7 @@ export const Shell: StoryObj = {
 };
 
 export const RegistryDetail: StoryObj = {
-  name: "Registry Detail View",
+  name: "Registry detail view",
   render: () => <RegistryDetailView />,
   parameters: {
     docs: {

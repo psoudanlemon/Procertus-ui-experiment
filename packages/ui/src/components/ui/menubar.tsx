@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Menubar as MenubarPrimitive } from "radix-ui";
 
+import { useAutoElevate } from "@/hooks/use-auto-elevate";
 import { cn } from "@/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Tick01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
@@ -52,19 +53,25 @@ function MenubarContent({
   align = "start",
   alignOffset = -4,
   sideOffset = 8,
+  style,
   ...props
 }: React.ComponentProps<typeof MenubarPrimitive.Content>) {
+  const contentRef = React.useRef<HTMLDivElement>(null);
+  const autoZIndex = useAutoElevate(contentRef);
+
   return (
     <MenubarPortal>
       <MenubarPrimitive.Content
+        ref={contentRef}
         data-slot="menubar-content"
         align={align}
         alignOffset={alignOffset}
         sideOffset={sideOffset}
         className={cn(
-          "z-50 min-w-36 origin-(--radix-menubar-content-transform-origin) overflow-hidden rounded-lg bg-popover p-micro text-popover-foreground shadow-proc-md ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95",
+          "z-20 min-w-36 origin-(--radix-menubar-content-transform-origin) overflow-hidden rounded-lg bg-popover p-micro text-popover-foreground shadow-proc-md ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95",
           className,
         )}
+        style={autoZIndex !== undefined ? { ...style, zIndex: autoZIndex } : style}
         {...props}
       />
     </MenubarPortal>
@@ -86,7 +93,7 @@ function MenubarItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        "group/menubar-item relative flex cursor-default items-center gap-micro rounded-md px-element py-micro text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:pl-7 data-[variant=destructive]:text-destructive-foreground data-[variant=destructive]:focus:bg-destructive-foreground/10 data-[variant=destructive]:focus:text-destructive-foreground dark:data-[variant=destructive]:focus:bg-destructive-foreground/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-[variant=destructive]:*:[svg]:text-destructive-foreground!",
+        "group/menubar-item relative flex cursor-default items-center gap-micro rounded-md px-component py-micro text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:pl-7 data-[variant=destructive]:text-destructive-foreground data-[variant=destructive]:focus:bg-destructive-foreground/10 data-[variant=destructive]:focus:text-destructive-foreground dark:data-[variant=destructive]:focus:bg-destructive-foreground/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-[variant=destructive]:*:[svg]:text-destructive-foreground!",
         className,
       )}
       {...props}
@@ -108,13 +115,13 @@ function MenubarCheckboxItem({
       data-slot="menubar-checkbox-item"
       data-inset={inset}
       className={cn(
-        "relative flex cursor-default items-center gap-micro rounded-md py-micro pr-element pl-7 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "relative flex cursor-default items-center gap-micro rounded-md py-micro pr-component pl-7 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       checked={checked}
       {...props}
     >
-      <span className="pointer-events-none absolute left-element flex size-4 items-center justify-center [&_svg:not([class*='size-'])]:size-4">
+      <span className="pointer-events-none absolute left-component flex size-4 items-center justify-center [&_svg:not([class*='size-'])]:size-4">
         <MenubarPrimitive.ItemIndicator>
           <HugeiconsIcon icon={Tick01Icon} />
         </MenubarPrimitive.ItemIndicator>
@@ -137,12 +144,12 @@ function MenubarRadioItem({
       data-slot="menubar-radio-item"
       data-inset={inset}
       className={cn(
-        "relative flex cursor-default items-center gap-micro rounded-md py-micro pr-element pl-7 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative flex cursor-default items-center gap-micro rounded-md py-micro pr-component pl-7 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
     >
-      <span className="pointer-events-none absolute left-element flex size-4 items-center justify-center [&_svg:not([class*='size-'])]:size-4">
+      <span className="pointer-events-none absolute left-component flex size-4 items-center justify-center [&_svg:not([class*='size-'])]:size-4">
         <MenubarPrimitive.ItemIndicator>
           <HugeiconsIcon icon={Tick01Icon} />
         </MenubarPrimitive.ItemIndicator>
@@ -163,7 +170,7 @@ function MenubarLabel({
     <MenubarPrimitive.Label
       data-slot="menubar-label"
       data-inset={inset}
-      className={cn("px-element py-micro text-xs font-medium uppercase tracking-wider text-box-trim-cap text-muted-foreground data-inset:pl-7", className)}
+      className={cn("px-component py-micro text-xs font-medium uppercase tracking-wider text-box-trim-cap text-muted-foreground data-inset:pl-7", className)}
       {...props}
     />
   );
@@ -212,7 +219,7 @@ function MenubarSubTrigger({
       data-slot="menubar-sub-trigger"
       data-inset={inset}
       className={cn(
-        "flex cursor-default items-center gap-micro rounded-md px-element py-micro text-sm outline-none select-none focus:bg-accent focus:text-accent-foreground data-inset:pl-7 data-open:bg-accent data-open:text-accent-foreground [&_svg:not([class*='size-'])]:size-4",
+        "flex cursor-default items-center gap-micro rounded-md px-component py-micro text-sm outline-none select-none focus:bg-accent focus:text-accent-foreground data-inset:pl-7 data-open:bg-accent data-open:text-accent-foreground [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -225,15 +232,21 @@ function MenubarSubTrigger({
 
 function MenubarSubContent({
   className,
+  style,
   ...props
 }: React.ComponentProps<typeof MenubarPrimitive.SubContent>) {
+  const contentRef = React.useRef<HTMLDivElement>(null);
+  const autoZIndex = useAutoElevate(contentRef);
+
   return (
     <MenubarPrimitive.SubContent
+      ref={contentRef}
       data-slot="menubar-sub-content"
       className={cn(
-        "z-50 min-w-32 origin-(--radix-menubar-content-transform-origin) overflow-hidden rounded-lg bg-popover p-micro text-popover-foreground shadow-proc-md ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+        "z-20 min-w-32 origin-(--radix-menubar-content-transform-origin) overflow-hidden rounded-lg bg-popover p-micro text-popover-foreground shadow-proc-md ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
         className,
       )}
+      style={autoZIndex !== undefined ? { ...style, zIndex: autoZIndex } : style}
       {...props}
     />
   );

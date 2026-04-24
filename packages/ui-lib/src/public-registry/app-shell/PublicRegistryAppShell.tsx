@@ -48,7 +48,7 @@ function PublicRegistryAppShell({
       {!hideFab && (
         <Button
           size="lg"
-          className="fixed right-boundary bottom-boundary z-40 h-12 gap-element rounded-full px-element shadow-[var(--shadow-proc-lg)]"
+          className="fixed right-boundary bottom-boundary z-40 h-12 gap-component rounded-full px-component shadow-[var(--shadow-proc-lg)]"
           asChild
         >
           <a href={requestUrl} onClick={onRequestCertificate}>

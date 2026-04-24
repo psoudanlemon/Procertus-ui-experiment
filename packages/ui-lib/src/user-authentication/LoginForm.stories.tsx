@@ -3,11 +3,11 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LoginForm } from "./LoginForm";
 
 const meta = {
-  title: "Management Interface/Authentication/Forms/Login",
+  title: "Management interface/Authentication/Forms/Login",
   component: LoginForm,
   tags: ["autodocs"],
   parameters: { layout: "centered" },
-  decorators: [(Story) => <div className="w-sm"><Story /></div>],
+  decorators: [(Story) => <div data-density="operational" className="w-sm"><Story /></div>],
   args: {
     onForgotPassword: () => {},
   },
@@ -25,7 +25,7 @@ export const FilledIn: Story = {
   },
 };
 
-/** General error — no specific field is at fault (e.g. wrong credentials). */
+/** General error: no specific field is at fault (e.g. wrong credentials). */
 export const WithError: Story = {
   args: {
     email: "jane.doe@company.com",

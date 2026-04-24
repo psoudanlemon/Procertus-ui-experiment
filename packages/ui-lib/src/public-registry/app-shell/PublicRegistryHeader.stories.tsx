@@ -9,17 +9,24 @@ const languages = [
 ];
 
 /**
- * Minimal public-registry header — just a thin utility bar.
+ * Minimal public-registry header: just a thin utility bar.
  * No logo (that lives centered on the page itself, Google-style).
  * Language selector and auth pushed to the far right.
  */
 const meta = {
-  title: "Public Registry/Application Shell/Header",
+  title: "Public registry/Application shell/Header",
   component: PublicRegistryHeader,
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
   },
+  decorators: [
+    (Story) => (
+      <div data-density="spacious" className="contents">
+        <Story />
+      </div>
+    ),
+  ],
   args: {
     navLinks: [
       { title: "Over", url: "#" },
@@ -35,7 +42,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Homepage header — no logo, just language selector and login/register
+ * Homepage header: no logo, just language selector and login/register
  * pushed to the right. Minimal cognitive load.
  */
 export const Default: Story = {};

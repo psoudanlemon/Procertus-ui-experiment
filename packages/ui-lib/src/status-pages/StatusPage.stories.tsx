@@ -9,16 +9,23 @@ import {
 import { StatusPage } from "./StatusPage";
 
 const meta = {
-  title: "Management Interface/Status Pages/Logged Out",
+  title: "Management interface/Status pages/Logged out",
   component: StatusPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
+  decorators: [
+    (Story) => (
+      <div data-density="operational" className="contents">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof StatusPage> as Meta<typeof StatusPage>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Invitation link has expired — user needs to request a new one from their admin. */
+/** Invitation link has expired: user needs to request a new one from their admin. */
 export const InvitationExpired: Story = {
   args: {
     icon: Clock01Icon,
@@ -27,7 +34,7 @@ export const InvitationExpired: Story = {
       "This invitation link is no longer valid. Please contact your administrator to receive a new invitation.",
     actions: [
       {
-        label: "Back to sign in",
+        label: "Sign in",
         onClick: () => {},
         variant: "default",
         icon: ArrowLeft01Icon,
@@ -45,7 +52,7 @@ export const InvitationInvalid: Story = {
       "This invitation link is not valid or has already been used. If you believe this is an error, please contact your administrator.",
     actions: [
       {
-        label: "Back to sign in",
+        label: "Sign in",
         onClick: () => {},
         variant: "default",
         icon: ArrowLeft01Icon,
@@ -54,7 +61,7 @@ export const InvitationInvalid: Story = {
   },
 };
 
-/** Generic unexpected error — redirects the user back to the homepage to escape the dead-end. */
+/** Generic unexpected error: redirects the user back to the homepage to escape the dead end. */
 export const SomethingWentWrong: Story = {
   args: {
     icon: Alert02Icon,
@@ -63,7 +70,7 @@ export const SomethingWentWrong: Story = {
       "An unexpected error occurred. Please return to the homepage and try again.",
     actions: [
       {
-        label: "Go to homepage",
+        label: "Homepage",
         href: "/",
         variant: "default",
         icon: ArrowLeft01Icon,

@@ -1,1 +1,1 @@
-export { cn } from "@procertus-ui/ui/lib/utils";
+export { cn, iconStroke } from "@procertus-ui/ui/lib/utils";

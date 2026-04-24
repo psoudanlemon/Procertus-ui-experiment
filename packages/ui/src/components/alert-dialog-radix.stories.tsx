@@ -29,7 +29,7 @@ const meta = {
   render: (args) => (
     <AlertDialog {...args}>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost">Show Dialog</Button>
+        <Button variant="ghost">Show dialog</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -67,7 +67,7 @@ export const Small: Story = {
   render: (args) => (
     <AlertDialog {...args}>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost">Show Dialog</Button>
+        <Button variant="ghost">Show dialog</Button>
       </AlertDialogTrigger>
       <AlertDialogContent size="sm">
         <AlertDialogHeader>
@@ -92,7 +92,7 @@ export const Media: Story = {
   render: (args) => (
     <AlertDialog {...args}>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost">Share Project</Button>
+        <Button variant="ghost">Share project</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -120,7 +120,7 @@ export const Destructive: Story = {
   render: (args) => (
     <AlertDialog {...args}>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">Delete Chat</Button>
+        <Button variant="destructive">Delete chat</Button>
       </AlertDialogTrigger>
       <AlertDialogContent size="sm">
         <AlertDialogHeader>

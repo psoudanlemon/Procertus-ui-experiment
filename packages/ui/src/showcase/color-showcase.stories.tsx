@@ -45,11 +45,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Muted } from "@/components/ui/typography";
 
 import { ManagementAppShell } from "../../../ui-lib/src/management-interface/app-shell/ManagementAppShell";
-import type {
-  Workspace,
-  NavItem,
-  NavGroup,
-} from "../../../ui-lib/src/management-interface/app-shell/ManagementSidebar";
+import type { Workspace, NavItem, NavGroup } from "@/components/app-sidebar";
 
 /* ---------------------------------------------------------------------------
  * Sidebar & Header Configuration
@@ -57,7 +53,7 @@ import type {
 
 const procertusLogo = (
   <img
-    src="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='32' height='32' fill='%23F1F5F9'/%3E%3Cpath d='M17.4262 21.7754L13.9269 18.6647C12.8241 17.6857 12.7265 15.999 13.7055 14.8963L13.7858 14.8051L18.2489 18.7711L24.0796 12.109C25.0846 10.9607 26.8321 10.8435 27.9804 11.8485L28 11.8659L19.4406 21.6495C18.9218 22.2422 18.0188 22.3008 17.4283 21.7754H17.4262Z' fill='%2371D2C1'/%3E%3Cpath d='M14.5738 10.2246L18.0731 13.3353C19.1758 14.3143 19.2735 16.001 18.2945 17.1038L18.2142 17.1949L13.7511 13.2289L7.92041 19.891C6.91534 21.0394 5.16787 21.1566 4.01954 20.1515L4 20.1342L12.5593 10.3505C13.0781 9.75789 13.9812 9.69928 14.5716 10.2246H14.5738Z' fill='%23076293'/%3E%3C/svg%3E"
+    src="/logomark.svg"
     alt="PROCERTUS"
     className="size-full rounded-sm"
   />
@@ -110,20 +106,20 @@ const sidebarProps = {
     {
       label: "Compliance",
       items: [
-        { title: "Audit Schedule", url: "#", icon: DatabaseIcon },
+        { title: "Audit schedule", url: "#", icon: DatabaseIcon },
         { title: "Non-conformities", url: "#", icon: AiNetworkIcon },
       ],
     },
     {
-      label: "Coming Soon",
+      label: "Coming soon",
       maxVisible: 3,
       items: [
-        { title: "User Stories", url: "#", icon: HierarchyFilesIcon },
-        { title: "Event Models", url: "#", icon: FlashIcon },
+        { title: "User stories", url: "#", icon: HierarchyFilesIcon },
+        { title: "Event models", url: "#", icon: FlashIcon },
         { title: "Prototypes", url: "#", icon: PackageIcon },
-        { title: "Context Maps", url: "#", icon: GitBranchIcon },
-        { title: "DAL Playground", url: "#", icon: CodeIcon },
-        { title: "API Docs", url: "#", icon: BookOpen01Icon },
+        { title: "Context maps", url: "#", icon: GitBranchIcon },
+        { title: "DAL playground", url: "#", icon: CodeIcon },
+        { title: "API docs", url: "#", icon: BookOpen01Icon },
         { title: "Guides", url: "#", icon: BookOpen01Icon },
       ],
     },
@@ -148,7 +144,7 @@ const headerProps = {
   user: {
     name: "K. Vandenberghe",
     email: "k.vandenberghe@procertus.be",
-    role: "Lead Auditor",
+    role: "Lead auditor",
   },
   version: "Webapp: V10.00.00  Api: V10.00.00",
 };
@@ -159,28 +155,28 @@ const headerProps = {
 
 const kpiCards = [
   {
-    title: "Active Certificates",
+    title: "Active certificates",
     value: "1,284",
     change: "+12.5%",
     trending: "up" as const,
     description: "Issued in the last 6 months",
   },
   {
-    title: "Pending Applications",
+    title: "Pending applications",
     value: "47",
     change: "-8%",
     trending: "down" as const,
     description: "Backlog reducing steadily",
   },
   {
-    title: "Upcoming Audits",
+    title: "Upcoming audits",
     value: "23",
     change: "+4.5%",
     trending: "up" as const,
     description: "Scheduled next quarter",
   },
   {
-    title: "Compliance Rate",
+    title: "Compliance rate",
     value: "97.2%",
     change: "+1.3%",
     trending: "up" as const,
@@ -206,7 +202,7 @@ const recentCertificates = [
     name: "Certus Maritime Services NV",
     scheme: "ISO 14001:2015",
     status: "info" as const,
-    statusLabel: "Under Review",
+    statusLabel: "Under review",
     issueDate: "Awaiting review",
     expiry: "--",
     auditor: "L. De Smedt",
@@ -242,7 +238,7 @@ const recentCertificates = [
     name: "Liege Compliance Partners SA",
     scheme: "ISO 3834-2",
     status: "info" as const,
-    statusLabel: "Under Review",
+    statusLabel: "Under review",
     issueDate: "Awaiting review",
     expiry: "--",
     auditor: "L. De Smedt",
@@ -257,19 +253,19 @@ function ColorShowcasePage() {
   return (
     <div>
       {/* Page Header */}
-      <div className="mb-6 space-y-3">
+      <div className="mb-region space-y-component">
         <Skeleton className="h-8 w-72" />
         <Skeleton className="h-4 w-96" />
       </div>
 
-      <div className="space-y-12">
+      <div className="space-y-region">
         {/* KPI Cards */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-section md:grid-cols-2 lg:grid-cols-4">
           {kpiCards.map((kpi) => (
-            <Card key={kpi.title} className="gap-0 p-4 py-4">
-              <CardHeader className="gap-3 px-0">
+            <Card key={kpi.title} className="gap-0 p-section">
+              <CardHeader className="gap-component px-0">
                 <H4>{kpi.title}</H4>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-component">
                   <span className="text-[32px] font-semibold leading-none tabular-nums">
                     {kpi.value}
                   </span>
@@ -289,7 +285,7 @@ function ColorShowcasePage() {
                   </span>
                 </div>
               </CardHeader>
-              <CardContent className="px-0 pt-3">
+              <CardContent className="px-0 pt-component">
                 <Skeleton className="h-3 w-3/4" />
               </CardContent>
             </Card>
@@ -299,18 +295,18 @@ function ColorShowcasePage() {
         {/* Tabbed Section */}
         <div>
           <Tabs defaultValue="recent" className="gap-0">
-            <div className="mb-4 flex items-center justify-between">
+            <div className="mb-section flex items-center justify-between">
               <Skeleton className="h-6 w-52" />
               <TabsList>
-                <TabsTrigger value="recent">Recent Certificates</TabsTrigger>
+                <TabsTrigger value="recent">Recent certificates</TabsTrigger>
                 <TabsTrigger value="expiring">
-                  Expiring Soon
+                  Expiring soon
                   <Badge variant="warning" className="ml-2">
                     3
                   </Badge>
                 </TabsTrigger>
                 <TabsTrigger value="pending">
-                  Pending Review
+                  Pending review
                   <Badge variant="info" className="ml-2">
                     2
                   </Badge>
@@ -320,16 +316,16 @@ function ColorShowcasePage() {
 
             <TabsContent value="recent">
               <Card>
-                <CardContent className="px-4 py-0">
+                <CardContent className="px-section py-0">
                   <Table className="[&_tr:last-child]:border-0">
                     <TableHeader>
                       <TableRow>
                         <TableHead>Organisation</TableHead>
                         <TableHead>Scheme</TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead>Issue Date</TableHead>
+                        <TableHead>Issue date</TableHead>
                         <TableHead>Expiry</TableHead>
-                        <TableHead>Lead Auditor</TableHead>
+                        <TableHead>Lead auditor</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -387,62 +383,62 @@ function ColorShowcasePage() {
 
         {/* Summary Cards */}
         <div>
-          <Skeleton className="mb-4 h-6 w-36" />
-          <div className="grid gap-4 md:grid-cols-3">
-            <Card className="gap-3 p-4 py-4">
+          <Skeleton className="mb-section h-6 w-36" />
+          <div className="grid gap-section md:grid-cols-3">
+            <Card className="gap-component p-section">
               <CardHeader className="px-0">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-component">
                   <div className="flex size-10 items-center justify-center rounded-lg bg-sys-success-100 dark:bg-sys-success-950">
                     <HugeiconsIcon icon={SecurityCheckIcon} className="size-5 text-sys-success-600 dark:text-sys-success-300" />
                   </div>
-                  <div className="flex-1 space-y-1.5">
+                  <div className="flex-1 space-y-micro">
                     <Skeleton className="h-4 w-32" />
                     <Skeleton className="h-3 w-40" />
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="px-0">
-                <div className="space-y-2">
+                <div className="space-y-micro">
                   <Skeleton className="h-3 w-full" />
                   <Skeleton className="h-3 w-4/5" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="gap-3 p-4 py-4">
+            <Card className="gap-component p-section">
               <CardHeader className="px-0">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-component">
                   <div className="flex size-10 items-center justify-center rounded-lg bg-sys-warning-100 dark:bg-sys-warning-950">
                     <HugeiconsIcon icon={Alert01Icon} className="size-5 text-sys-warning-600 dark:text-sys-warning-300" />
                   </div>
-                  <div className="flex-1 space-y-1.5">
+                  <div className="flex-1 space-y-micro">
                     <Skeleton className="h-4 w-36" />
                     <Skeleton className="h-3 w-36" />
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="px-0">
-                <div className="space-y-2">
+                <div className="space-y-micro">
                   <Skeleton className="h-3 w-full" />
                   <Skeleton className="h-3 w-3/4" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="gap-3 p-4 py-4">
+            <Card className="gap-component p-section">
               <CardHeader className="px-0">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-component">
                   <div className="flex size-10 items-center justify-center rounded-lg bg-sys-info-100 dark:bg-sys-info-950">
                     <HugeiconsIcon icon={File02Icon} className="size-5 text-sys-info-600 dark:text-sys-info-300" />
                   </div>
-                  <div className="flex-1 space-y-1.5">
+                  <div className="flex-1 space-y-micro">
                     <Skeleton className="h-4 w-32" />
                     <Skeleton className="h-3 w-36" />
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="px-0">
-                <div className="space-y-2">
+                <div className="space-y-micro">
                   <Skeleton className="h-3 w-full" />
                   <Skeleton className="h-3 w-5/6" />
                 </div>
@@ -460,7 +456,7 @@ function ColorShowcasePage() {
  * ------------------------------------------------------------------------- */
 
 const meta: Meta = {
-  title: "Applied Guidelines/Colors",
+  title: "Applied guidelines/Colors",
   parameters: {
     layout: "fullscreen",
   },

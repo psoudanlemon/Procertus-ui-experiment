@@ -64,7 +64,7 @@ function AlertDescription({ className, ...props }: React.ComponentProps<"div">) 
 
 function AlertAction({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div data-slot="alert-action" className={cn("absolute top-element right-element", className)} {...props} />
+    <div data-slot="alert-action" className={cn("absolute top-component right-component", className)} {...props} />
   );
 }
 

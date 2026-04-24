@@ -90,7 +90,7 @@ export const Basic: Story = {
           </CollapsibleTrigger>
           <CollapsibleContent className="flex flex-col items-start gap-2 p-2.5 pt-0 text-sm">
             <div>This panel can be expanded or collapsed to reveal additional content.</div>
-            <Button size="xs">Learn More</Button>
+            <Button size="xs">Learn more</Button>
           </CollapsibleContent>
         </Collapsible>
       </CardContent>

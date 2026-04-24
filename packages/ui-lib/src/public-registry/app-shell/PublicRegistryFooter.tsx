@@ -55,8 +55,8 @@ function PublicRegistryFooter({
         <div className="border-t border-border bg-card">
           <div className="mx-auto max-w-7xl px-boundary">
             <div className="grid gap-section py-region md:grid-cols-2 lg:grid-cols-[1.5fr_repeat(auto-fit,1fr)]">
-              <div className="flex flex-col gap-component">
-                {logo && <div className="flex items-center gap-element">{logo}</div>}
+              <div className="flex flex-col gap-section">
+                {logo && <div className="flex items-center gap-component">{logo}</div>}
                 {tagline && (
                   <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
                     {tagline}
@@ -66,10 +66,10 @@ function PublicRegistryFooter({
 
               {linkGroups.map((group) => (
                 <div key={group.title}>
-                  <h3 className="mb-component text-sm font-semibold text-foreground">
+                  <h3 className="mb-section text-sm font-semibold text-foreground">
                     {group.title}
                   </h3>
-                  <ul className="flex flex-col gap-element">
+                  <ul className="flex flex-col gap-component">
                     {group.links.map((link) => (
                       <li key={link.label}>
                         <a
@@ -95,7 +95,7 @@ function PublicRegistryFooter({
           ? "border-border bg-background text-foreground"
           : "border-sidebar-border bg-sidebar text-sidebar-foreground",
       )}>
-        <div className="flex flex-wrap items-center gap-x-micro gap-y-micro px-boundary py-element text-xs leading-relaxed text-sidebar-foreground/60">
+        <div className="flex flex-wrap items-center gap-x-micro gap-y-micro px-boundary py-component text-xs leading-relaxed text-sidebar-foreground/60">
           {companyDetails.map((detail, index) => (
             <React.Fragment key={detail.label}>
               {index > 0 && (

@@ -7,7 +7,7 @@ import { Muted } from "@/components/ui/typography";
 // ---------------------------------------------------------------------------
 
 const meta = {
-  title: "Applied Guidelines/Document architecture",
+  title: "Applied guidelines/Document architecture",
   tags: ["!autodocs"],
   parameters: {
     layout: "centered",

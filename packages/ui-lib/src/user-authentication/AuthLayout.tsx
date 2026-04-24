@@ -6,16 +6,14 @@ import {
   CardHeader,
   H1,
 } from "@procertus-ui/ui";
-
-// ---------------------------------------------------------------------------
-// PROCERTUS Logo (SVG asset from public folder)
-// ---------------------------------------------------------------------------
+import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
+import procertusLogoDark from "@procertus-ui/ui/assets/Marks_Procertus logo.svg";
 
 function ProcertusLogo({ className }: { className?: string }) {
   return (
     <img
-      src="/Procertus logo.svg"
-      alt="PROCERTUS — Certification that builds trust"
+      src={procertusLogo}
+      alt="PROCERTUS, certification that builds trust"
       className={className}
     />
   );
@@ -122,13 +120,13 @@ function AuthLayout({
         <div className="flex w-full max-w-sm justify-center">
           {logo ?? (
             <>
-              <img src="/Procertus Logo 1.png" alt="PROCERTUS — Certification that builds trust" className="h-16 w-auto dark:hidden" />
-              <img src="/Procertus Logo 2.png" alt="PROCERTUS — Certification that builds trust" className="hidden h-16 w-auto dark:block" />
+              <img src={procertusLogo} alt="PROCERTUS, certification that builds trust" className="h-16 w-auto dark:hidden" />
+              <img src={procertusLogoDark} alt="PROCERTUS, certification that builds trust" className="hidden h-16 w-auto dark:block" />
             </>
           )}
         </div>
 
-        <div className="flex w-full max-w-sm flex-1 flex-col justify-center gap-component">
+        <div className="flex w-full max-w-sm flex-1 flex-col justify-center gap-section">
           {/* Content */}
           {showCard ? (
             <Card className="gap-section py-section shadow-[var(--shadow-proc-md)] ring-0">

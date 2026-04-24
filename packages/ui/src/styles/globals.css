@@ -75,12 +75,12 @@
 
 @utility glow-standout {
   position: relative;
+  isolation: isolate;
 
   &::before,
   &::after {
     content: "";
     position: absolute;
-    inset: 1px;
     border-radius: inherit;
     pointer-events: none;
     background: conic-gradient(
@@ -95,13 +95,15 @@
   }
 
   &::before {
-    filter: blur(12px);
-    opacity: 0.5;
+    inset: -2px;
+    filter: blur(10px);
+    opacity: 0.3;
   }
 
   &::after {
-    filter: blur(16px);
-    opacity: 0.2;
+    inset: -6px;
+    filter: blur(20px);
+    opacity: 0.22;
     animation-direction: reverse;
   }
 
