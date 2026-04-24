@@ -1,0 +1,45 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "8de2b1733ed5",
+  "session_id": "d6b4e73f-6478-4976-aa7b-652ef8872307",
+  "strategy": "manual-commit",
+  "created_at": "2026-04-24T13:00:48.447702Z",
+  "branch": "main",
+  "checkpoints_count": 7,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/.gitignore",
+    "apps/frontend-pt1-extranet-onboarding/README.md",
+    "apps/frontend-pt1-extranet-onboarding/eslint.config.js",
+    "apps/frontend-pt1-extranet-onboarding/index.html",
+    "apps/frontend-pt1-extranet-onboarding/package.json",
+    "apps/frontend-pt1-extranet-onboarding/public/favicon.svg",
+    "apps/frontend-pt1-extranet-onboarding/public/icons.svg",
+    "apps/frontend-pt1-extranet-onboarding/src/App.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/assets/hero.png",
+    "apps/frontend-pt1-extranet-onboarding/src/assets/react.svg",
+    "apps/frontend-pt1-extranet-onboarding/src/assets/vite.svg",
+    "apps/frontend-pt1-extranet-onboarding/src/index.css",
+    "apps/frontend-pt1-extranet-onboarding/src/main.tsx",
+    "apps/frontend-pt1-extranet-onboarding/tsconfig.app.json",
+    "apps/frontend-pt1-extranet-onboarding/tsconfig.json",
+    "apps/frontend-pt1-extranet-onboarding/tsconfig.node.json",
+    "apps/frontend-pt1-extranet-onboarding/vite.config.ts",
+    "bun.lock",
+    "packages/ui/src/showcase/gradient-showcase.stories.tsx"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "8009a6708ee6",
+  "session_metrics": {
+    "turn_count": 10
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-04-24T13:00:48.412378Z",
+    "agent_lines": 0,
+    "human_added": 1337,
+    "human_modified": 44,
+    "human_removed": 0,
+    "total_committed": 1337,
+    "agent_percentage": 0
+  }
+}
