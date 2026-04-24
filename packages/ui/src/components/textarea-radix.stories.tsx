@@ -57,7 +57,7 @@ export const Labeled: Story = {
 export const Text: Story = {
   render: (args) => (
     <div className="grid w-full gap-1.5">
-      <Label htmlFor="message-2">Your Message</Label>
+      <Label htmlFor="message-2">Your message</Label>
       <Textarea {...args} id="message-2" />
       <Muted>Your message will be copied to the support team.</Muted>
     </div>
@@ -72,7 +72,7 @@ export const Submit: Story = {
   render: (args) => (
     <div className="grid w-full gap-2">
       <Textarea {...args} />
-      <Button type="submit">Send Message</Button>
+      <Button type="submit">Send message</Button>
     </div>
   ),
 };

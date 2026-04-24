@@ -281,50 +281,46 @@
  * Desktop override at min-width: 768px restores the standard density.
  *
  * Operational = staff tools. Spacious = public registry.
- * The Tailwind aliases (p-element, gap-region, etc.) point to these
+ * The Tailwind aliases (p-component, gap-region, etc.) point to these
  * variables, so the UI snaps to the correct density automatically. */
 
 /* Operational: mobile (touch) */
 :root {
   --spacing-micro:      0.25rem;   /* 4px  */
-  --spacing-element:    0.75rem;   /* 12px — larger for touch */
-  --spacing-component:  0.5rem;    /* 8px  */
-  --spacing-section:    0.75rem;   /* 12px */
+  --spacing-component:  0.75rem;   /* 12px — larger for touch */
+  --spacing-section:    1rem;      /* 16px */
   --spacing-region:     1.25rem;   /* 20px */
-  --spacing-boundary:   1.25rem;   /* 20px */
+  --spacing-boundary:   1.5rem;    /* 24px */
 }
 
 /* Operational: desktop */
 @media (min-width: 768px) {
   :root {
     --spacing-micro:      0.25rem;   /* 4px  */
-    --spacing-element:    0.5rem;    /* 8px  */
-    --spacing-component:  0.75rem;   /* 12px */
+    --spacing-component:  0.5rem;    /* 8px  */
     --spacing-section:    1rem;      /* 16px */
-    --spacing-region:     2rem;      /* 32px */
-    --spacing-boundary:   1rem;      /* 16px */
+    --spacing-region:     1.5rem;    /* 24px */
+    --spacing-boundary:   2rem;      /* 32px */
   }
 }
 
 /* Spacious: mobile (touch) */
 [data-density="spacious"] {
   --spacing-micro:      0.5rem;    /* 8px  */
-  --spacing-element:    1rem;      /* 16px — larger for touch */
-  --spacing-component:  0.75rem;   /* 12px */
-  --spacing-section:    1rem;      /* 16px */
+  --spacing-component:  1rem;      /* 16px — larger for touch */
+  --spacing-section:    1.25rem;   /* 20px */
   --spacing-region:     1.5rem;    /* 24px */
-  --spacing-boundary:   1.25rem;   /* 20px */
+  --spacing-boundary:   2rem;      /* 32px */
 }
 
 /* Spacious: desktop */
 @media (min-width: 768px) {
   [data-density="spacious"] {
     --spacing-micro:      0.5rem;    /* 8px  */
-    --spacing-element:    0.75rem;   /* 12px */
-    --spacing-component:  1rem;      /* 16px */
+    --spacing-component:  0.75rem;   /* 12px */
     --spacing-section:    1.5rem;    /* 24px */
-    --spacing-region:     3rem;      /* 48px */
-    --spacing-boundary:   1.5rem;    /* 24px */
+    --spacing-region:     2rem;      /* 32px */
+    --spacing-boundary:   3rem;      /* 48px */
   }
 }
 
@@ -538,14 +534,13 @@
  * Non-inline @theme so Tailwind emits these as real CSS custom properties.
  * The actual values are set by the responsive :root / [data-density]
  * rules above. These initial values register the tokens with Tailwind
- * so it generates p-element, gap-region, m-boundary, etc. */
+ * so it generates p-component, gap-region, m-boundary, etc. */
 @theme {
   --spacing-micro:     0.25rem;
-  --spacing-element:   0.5rem;
-  --spacing-component: 0.75rem;
+  --spacing-component: 0.5rem;
   --spacing-section:   1rem;
-  --spacing-region:    2rem;
-  --spacing-boundary:  1rem;
+  --spacing-region:    1.5rem;
+  --spacing-boundary:  2rem;
 }
 
 /* ─── Command button pulse ───────────────────────────────────────────────── */

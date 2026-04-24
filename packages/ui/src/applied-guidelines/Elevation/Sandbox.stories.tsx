@@ -56,7 +56,7 @@ import { ArrowRight01Icon, MoreVerticalIcon, Cancel01Icon, Search01Icon } from "
 // ---------------------------------------------------------------------------
 
 const meta = {
-  title: "Applied Guidelines/Elevation",
+  title: "Applied guidelines/Elevation",
   tags: ["!autodocs", "!docs"],
   parameters: {
     layout: "fullscreen",
@@ -94,7 +94,7 @@ function NavItem({ children, onClick, className }: { children: React.ReactNode; 
   return (
     <button
       className={cn(
-        "flex min-h-8 w-full items-center gap-element rounded-md px-element text-left text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground max-sm:min-h-[44px]",
+        "flex min-h-8 w-full items-center gap-component rounded-md px-component text-left text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground max-sm:min-h-[44px]",
         className,
       )}
       onClick={onClick}
@@ -118,13 +118,13 @@ function NestedSheetNav({ onClose }: { onClose: () => void }) {
         </Button>
       </div>
       {/* Content */}
-      <div className="-mx-2 flex-1 overflow-y-auto pt-element">
+      <div className="-mx-2 flex-1 overflow-y-auto pt-component">
         <nav className="flex flex-col gap-1">
           <NavItem onClick={onClose}>Edit</NavItem>
           <NavItem onClick={onClose}>Duplicate</NavItem>
 
           {/* Move to group */}
-          <div className="mt-section flex h-8 shrink-0 items-center px-element text-[10px] font-bold uppercase tracking-wider text-sidebar-foreground/70">
+          <div className="mt-section flex h-8 shrink-0 items-center px-component text-[10px] font-bold uppercase tracking-wider text-sidebar-foreground/70">
             Move to
           </div>
           <NavItem onClick={onClose}>Workspace</NavItem>
@@ -132,7 +132,7 @@ function NestedSheetNav({ onClose }: { onClose: () => void }) {
 
           {/* Team collapsible */}
           <button
-            className="flex min-h-8 w-full items-center justify-between rounded-md px-element text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground max-sm:min-h-[44px]"
+            className="flex min-h-8 w-full items-center justify-between rounded-md px-component text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground max-sm:min-h-[44px]"
             onClick={() => setTeamOpen(!teamOpen)}
           >
             Team
@@ -141,17 +141,17 @@ function NestedSheetNav({ onClose }: { onClose: () => void }) {
           {teamOpen && (
             <ul className="mx-3.5 flex flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5">
               <li>
-                <button className="flex min-h-7 w-full items-center rounded-md px-element text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground max-sm:min-h-[44px]" onClick={onClose}>
+                <button className="flex min-h-7 w-full items-center rounded-md px-component text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground max-sm:min-h-[44px]" onClick={onClose}>
                   Engineering
                 </button>
               </li>
               <li>
-                <button className="flex min-h-7 w-full items-center rounded-md px-element text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground max-sm:min-h-[44px]" onClick={onClose}>
+                <button className="flex min-h-7 w-full items-center rounded-md px-component text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground max-sm:min-h-[44px]" onClick={onClose}>
                   Design
                 </button>
               </li>
               <li>
-                <button className="flex min-h-7 w-full items-center rounded-md px-element text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground max-sm:min-h-[44px]" onClick={onClose}>
+                <button className="flex min-h-7 w-full items-center rounded-md px-component text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground max-sm:min-h-[44px]" onClick={onClose}>
                   Operations
                 </button>
               </li>
@@ -256,7 +256,7 @@ function ScrollPicker({
         {/* Top boundary */}
         {Array.from({ length: padCount }).map((_, i) => (
           <div key={`pad-top-${i}`} className="flex items-center justify-center text-sm text-muted-foreground/40" style={{ height: PICKER_ITEM_HEIGHT }}>
-            {i === padCount - 1 ? "—" : ""}
+            {i === padCount - 1 ? "·" : ""}
           </div>
         ))}
         {items.map((item, i) => (
@@ -283,7 +283,7 @@ function ScrollPicker({
         {/* Bottom boundary */}
         {Array.from({ length: padCount }).map((_, i) => (
           <div key={`pad-bottom-${i}`} className="flex items-center justify-center text-sm text-muted-foreground/40" style={{ height: PICKER_ITEM_HEIGHT }}>
-            {i === 0 ? "—" : ""}
+            {i === 0 ? "·" : ""}
           </div>
         ))}
       </div>
@@ -417,7 +417,7 @@ function ElevationSandbox() {
             <CardTitle>Control panel</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col gap-element [&_[data-slot=button]]:max-sm:min-h-[44px]">
+            <div className="flex flex-col gap-component [&_[data-slot=button]]:max-sm:min-h-[44px]">
               {/* Tooltip */}
               {isMobile ? (
                 <>
@@ -447,7 +447,7 @@ function ElevationSandbox() {
                       Tooltip
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent className="z-[60] shadow-proc-xs">
+                  <TooltipContent className="shadow-proc-xs">
                     Whisper layer: informational hints
                   </TooltipContent>
                 </Tooltip>
@@ -484,7 +484,7 @@ function ElevationSandbox() {
                     </Button>
                   </HoverCardTrigger>
                   <HoverCardContent>
-                    <div className="flex flex-col gap-element">
+                    <div className="flex flex-col gap-component">
                       <span className="font-medium">Preview</span>
                       <Muted>
                         Hover cards show contextual information on pointer
@@ -572,7 +572,7 @@ function ElevationSandbox() {
                   </Button>
                   <DialogPrimitive.Root open={nestedSheetOpen} onOpenChange={setNestedSheetOpen} modal={false}>
                     <DialogPrimitive.Portal>
-                      <DialogPrimitive.Content className="fixed inset-0 z-50 bg-sidebar text-sidebar-foreground data-open:animate-in data-open:slide-in-from-right-full data-open:duration-200 data-closed:animate-out data-closed:slide-out-to-right-full data-closed:duration-200">
+                      <DialogPrimitive.Content className="fixed inset-0 z-20 bg-sidebar text-sidebar-foreground data-open:animate-in data-open:slide-in-from-right-full data-open:duration-200 data-closed:animate-out data-closed:slide-out-to-right-full data-closed:duration-200">
                         <NestedSheetNav
                           onClose={() => setNestedSheetOpen(false)}
                         />
@@ -690,12 +690,12 @@ function ElevationSandbox() {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="flex flex-col p-micro" align="center">
-                    <div className="px-element py-micro text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Status</div>
+                    <div className="px-component py-micro text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Status</div>
                       {["Draft", "In review", "Approved", "Published"].map((item) => (
                         <button
                           key={item}
                           className={cn(
-                            "flex items-center rounded-md px-element py-micro text-sm outline-hidden select-none hover:bg-accent hover:text-accent-foreground",
+                            "flex items-center rounded-md px-component py-micro text-sm outline-hidden select-none hover:bg-accent hover:text-accent-foreground",
                             selectValue === item.toLowerCase() && "bg-accent text-accent-foreground",
                           )}
                           onClick={() => {
@@ -722,7 +722,7 @@ function ElevationSandbox() {
                   </Button>
                   <DialogPrimitive.Root open={comboboxSheetOpen} onOpenChange={setComboboxSheetOpen} modal={false}>
                     <DialogPrimitive.Portal>
-                      <DialogPrimitive.Content className="fixed inset-0 z-50 bg-sidebar text-sidebar-foreground data-open:animate-in data-open:slide-in-from-right-full data-open:duration-200 data-closed:animate-out data-closed:slide-out-to-right-full data-closed:duration-200">
+                      <DialogPrimitive.Content className="fixed inset-0 z-20 bg-sidebar text-sidebar-foreground data-open:animate-in data-open:slide-in-from-right-full data-open:duration-200 data-closed:animate-out data-closed:slide-out-to-right-full data-closed:duration-200">
                         <div className="flex h-full flex-col p-boundary">
                           <div className="-mx-2 -mt-2 flex items-center gap-micro">
                             <Button variant="ghost" size="icon-sm" className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground max-sm:size-11" onClick={() => setComboboxSheetOpen(false)}>
@@ -730,7 +730,7 @@ function ElevationSandbox() {
                               <span className="sr-only">Close</span>
                             </Button>
                           </div>
-                          <div className="pt-element">
+                          <div className="pt-component">
                             <div className="relative">
                               <HugeiconsIcon icon={Search01Icon} className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                               <Input
@@ -740,7 +740,7 @@ function ElevationSandbox() {
                               />
                             </div>
                           </div>
-                          <div className="-mx-2 flex-1 overflow-y-auto pt-element">
+                          <div className="-mx-2 flex-1 overflow-y-auto pt-component">
                             <nav className="flex flex-col gap-1">
                               {["React", "Vue", "Angular", "Svelte", "Solid"].map((item) => (
                                 <NavItem key={item} onClick={() => {
@@ -781,7 +781,7 @@ function ElevationSandbox() {
                           <button
                             key={item}
                             className={cn(
-                              "flex items-center rounded-md px-element py-micro text-sm outline-hidden select-none hover:bg-accent hover:text-accent-foreground",
+                              "flex items-center rounded-md px-component py-micro text-sm outline-hidden select-none hover:bg-accent hover:text-accent-foreground",
                               comboboxValue === item.toLowerCase() && "bg-accent text-accent-foreground",
                             )}
                             onClick={() => {
@@ -796,7 +796,7 @@ function ElevationSandbox() {
                       {["React", "Vue", "Angular", "Svelte", "Solid"]
                         .filter((item) => item.toLowerCase().includes(comboboxSearch.toLowerCase()))
                         .length === 0 && (
-                        <p className="px-element py-micro text-sm text-muted-foreground">No results found.</p>
+                        <p className="px-component py-micro text-sm text-muted-foreground">No results found.</p>
                       )}
                     </div>
                   </PopoverContent>
@@ -823,7 +823,7 @@ function ElevationSandbox() {
               {isMobile ? (
                 <DialogPrimitive.Root open={commandOpen} onOpenChange={setCommandOpen} modal={false}>
                   <DialogPrimitive.Portal>
-                    <DialogPrimitive.Content className="fixed inset-0 z-50 bg-sidebar text-sidebar-foreground data-open:animate-in data-open:slide-in-from-right-full data-open:duration-200 data-closed:animate-out data-closed:slide-out-to-right-full data-closed:duration-200">
+                    <DialogPrimitive.Content className="fixed inset-0 z-20 bg-sidebar text-sidebar-foreground data-open:animate-in data-open:slide-in-from-right-full data-open:duration-200 data-closed:animate-out data-closed:slide-out-to-right-full data-closed:duration-200">
                       <div className="flex h-full flex-col p-boundary">
                         {/* Action bar */}
                         <div className="-mx-2 -mt-2 flex items-center gap-micro">
@@ -833,7 +833,7 @@ function ElevationSandbox() {
                           </Button>
                         </div>
                         {/* Search */}
-                        <div className="pt-element">
+                        <div className="pt-component">
                           <div className="relative">
                             <HugeiconsIcon icon={Search01Icon} className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                             <Input
@@ -844,8 +844,8 @@ function ElevationSandbox() {
                           </div>
                         </div>
                         {/* Navigation items */}
-                        <div className="-mx-2 flex-1 overflow-y-auto pt-element">
-                          <div className="flex h-8 shrink-0 items-center px-element text-[10px] font-bold uppercase tracking-wider text-sidebar-foreground/70">
+                        <div className="-mx-2 flex-1 overflow-y-auto pt-component">
+                          <div className="flex h-8 shrink-0 items-center px-component text-[10px] font-bold uppercase tracking-wider text-sidebar-foreground/70">
                             Actions
                           </div>
                           <nav className="flex flex-col gap-1">
@@ -861,8 +861,8 @@ function ElevationSandbox() {
               ) : (
                 <DialogPrimitive.Root open={commandOpen} onOpenChange={setCommandOpen}>
                   <DialogPrimitive.Portal>
-                    <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/10 backdrop-blur-[1px] data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0" />
-                    <DialogPrimitive.Content className="fixed top-1/3 left-1/2 z-50 w-[calc(100%-var(--spacing-boundary)*2)] max-w-lg -translate-x-1/2 overflow-hidden rounded-xl bg-popover p-0 text-sm text-popover-foreground ring-1 ring-foreground/10 shadow-proc-lg outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95">
+                    <DialogPrimitive.Overlay className="fixed inset-0 z-40 bg-black/10 backdrop-blur-[1px] data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0" />
+                    <DialogPrimitive.Content className="fixed top-1/3 left-1/2 z-40 w-[calc(100%-var(--spacing-boundary)*2)] max-w-lg -translate-x-1/2 overflow-hidden rounded-xl bg-popover p-0 text-sm text-popover-foreground ring-1 ring-foreground/10 shadow-proc-lg outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95">
                       <Command>
                         <CommandInput placeholder="Type a command..." autoFocus />
                         <CommandList>
@@ -902,7 +902,7 @@ function ElevationSandbox() {
                         This action cannot be undone. Are you sure?
                       </DrawerDescription>
                     </DrawerHeader>
-                    <div className="flex flex-col gap-element p-section pt-0">
+                    <div className="flex flex-col gap-component p-section pt-0">
                       <Button
                         variant="destructive"
                         className="min-h-[44px]"
@@ -923,8 +923,8 @@ function ElevationSandbox() {
               ) : (
                 <Dialog open={modalOpen} onOpenChange={setModalOpen}>
                   <DialogPrimitive.Portal>
-                    <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/10 backdrop-blur-[1px] data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0" />
-                    <DialogPrimitive.Content className="fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-section rounded-xl bg-popover p-section text-sm text-popover-foreground shadow-proc-lg duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95">
+                    <DialogPrimitive.Overlay className="fixed inset-0 z-40 bg-black/10 backdrop-blur-[1px] data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0" />
+                    <DialogPrimitive.Content className="fixed top-1/2 left-1/2 z-40 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-section rounded-xl bg-popover p-section text-sm text-popover-foreground shadow-proc-lg duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95">
                       <DialogHeader>
                         <DialogTitle>Confirm action</DialogTitle>
                         <DialogDescription>
@@ -1000,7 +1000,7 @@ function ElevationSandbox() {
           return (
           <div
             key={id}
-            className={`fixed z-50 flex transition-[top,bottom,right] duration-300 ease-out ${
+            className={`fixed z-20 flex transition-[top,bottom,right] duration-300 ease-out ${
               isMobile ? "inset-0 w-full" : "w-80"
             } ${
               isDismissing
@@ -1008,12 +1008,12 @@ function ElevationSandbox() {
                 : "animate-in slide-in-from-right-full fade-in-0 duration-300 ease-out"
             }`}
             style={isMobile ? {
-              zIndex: 50 + (stackIndex >= 0 ? stackIndex : 0),
+              zIndex: 20 + (stackIndex >= 0 ? stackIndex : 0),
             } : {
               top: 16 + depth * 8,
               bottom: 16 + depth * 8,
               right: depth * 12 + 16,
-              zIndex: 50 + (stackIndex >= 0 ? stackIndex : 0),
+              zIndex: 20 + (stackIndex >= 0 ? stackIndex : 0),
             }}
           >
             <div className={`relative flex flex-1 flex-col overflow-hidden text-sm ${
@@ -1035,7 +1035,7 @@ function ElevationSandbox() {
                       <span className="sr-only">Dismiss</span>
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent className="z-[60] shadow-proc-xs">Dismiss</TooltipContent>
+                  <TooltipContent className="shadow-proc-xs">Dismiss</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -1048,7 +1048,7 @@ function ElevationSandbox() {
                       <span className="sr-only">More actions</span>
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent className="z-[60] shadow-proc-xs">More actions</TooltipContent>
+                  <TooltipContent className="shadow-proc-xs">More actions</TooltipContent>
                 </Tooltip>
                 {visiblePanels.length > 1 && (
                   <Tooltip>
@@ -1067,13 +1067,13 @@ function ElevationSandbox() {
                         <span className="sr-only">Close all</span>
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent className="z-[60] shadow-proc-xs">Close all</TooltipContent>
+                    <TooltipContent className="shadow-proc-xs">Close all</TooltipContent>
                   </Tooltip>
                 )}
               </div>
               <PanelScrollFade />
               {/* Content */}
-              <div className="flex-1 overflow-y-auto pt-element" data-slot="panel-scroll">
+              <div className="flex-1 overflow-y-auto pt-component" data-slot="panel-scroll">
                 <span className="font-medium">Details panel #{id}</span>
                 <Muted className="mt-2">
                   Floating side panel, no backdrop. Panels stack
@@ -1140,7 +1140,7 @@ function ElevationSandbox() {
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="mt-element max-sm:min-h-[44px]"
+                    className="mt-component max-sm:min-h-[44px]"
                     onClick={addPanel}
                   >
                     View details

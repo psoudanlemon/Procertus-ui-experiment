@@ -79,7 +79,7 @@ export const Icon: Story = {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage>Application Details</BreadcrumbPage>
+          <BreadcrumbPage>Application details</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
@@ -182,11 +182,11 @@ export const DeepNavigation: Story = {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="#">Concrete Materials</BreadcrumbLink>
+          <BreadcrumbLink href="#">Concrete materials</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="#">Assessment Results</BreadcrumbLink>
+          <BreadcrumbLink href="#">Assessment results</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>

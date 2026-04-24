@@ -155,7 +155,7 @@ function PublicRegistryHeader({
           : "border-sidebar-border bg-sidebar text-sidebar-foreground",
       )}
     >
-      <div className="flex h-16 items-center gap-element px-boundary">
+      <div className="flex h-16 items-center gap-component px-boundary">
         {/* Mobile hamburger — left side */}
         <Button
           variant="ghost"
@@ -169,19 +169,19 @@ function PublicRegistryHeader({
 
         {/* Logo */}
         {logo && (
-          <a href="/" className="flex shrink-0 items-center gap-element">
+          <a href="/" className="flex shrink-0 items-center gap-component">
             {logo}
           </a>
         )}
 
         {/* Desktop navigation */}
-        <nav className="hidden items-center gap-component sm:flex">
+        <nav className="hidden items-center gap-section sm:flex">
           {navLinks.map((link) => (
             <a
               key={link.title}
               href={link.url}
               className={cn(
-                "rounded-md px-component py-element text-sm font-medium transition-colors",
+                "rounded-md px-section py-component text-sm font-medium transition-colors",
                 link.isActive
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
                   : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
@@ -211,7 +211,7 @@ function PublicRegistryHeader({
         )}
 
         {/* Right side actions */}
-        <div className="ml-auto flex items-center gap-component">
+        <div className="ml-auto flex items-center gap-section">
           {/* Auth area */}
           {user ? (
             <DropdownMenu>
@@ -231,7 +231,7 @@ function PublicRegistryHeader({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-64" align="end" sideOffset={8}>
-                <div className="flex items-center gap-component px-element py-element">
+                <div className="flex items-center gap-section px-component py-component">
                   <Avatar className="size-9">
                     {user.avatar && (
                       <AvatarImage src={user.avatar} alt={user.name ?? user.email} />
@@ -353,7 +353,7 @@ function PublicRegistryHeader({
             <SheetDescription>Navigatiemenu</SheetDescription>
           </SheetHeader>
           <div className="flex h-full flex-col">
-            <div className="flex items-center justify-between px-element py-element">
+            <div className="flex items-center justify-between px-component py-component">
               <span className="text-sm font-semibold">Menu</span>
               <Button
                 variant="ghost"
@@ -369,13 +369,13 @@ function PublicRegistryHeader({
 
             {/* Navigation links */}
             {navLinks.length > 0 && (
-              <nav className="flex flex-col gap-0.5 p-element">
+              <nav className="flex flex-col gap-0.5 p-component">
                 {navLinks.map((link) => (
                   <a
                     key={link.title}
                     href={link.url}
                     className={cn(
-                      "flex min-h-11 items-center rounded-md px-element text-sm font-medium transition-colors",
+                      "flex min-h-11 items-center rounded-md px-component text-sm font-medium transition-colors",
                       link.isActive
                         ? "bg-sidebar-accent text-sidebar-accent-foreground"
                         : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
@@ -392,8 +392,8 @@ function PublicRegistryHeader({
             {languages.length > 1 && (
               <>
                 <Separator className="bg-sidebar-border" />
-                <div className="flex flex-col p-element">
-                  <div className="px-element py-1.5 text-xs font-medium text-sidebar-foreground/60">
+                <div className="flex flex-col p-component">
+                  <div className="px-component py-1.5 text-xs font-medium text-sidebar-foreground/60">
                     Kies een taal
                   </div>
                   {languages.map((lang) => (
@@ -401,7 +401,7 @@ function PublicRegistryHeader({
                       key={lang.code}
                       type="button"
                       className={cn(
-                        "flex min-h-11 items-center justify-between rounded-md px-element text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                        "flex min-h-11 items-center justify-between rounded-md px-component text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                         lang.code === (activeLanguage ?? languages[0]?.code) &&
                           "font-medium",
                       )}

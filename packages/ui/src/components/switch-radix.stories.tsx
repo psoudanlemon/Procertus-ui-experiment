@@ -19,7 +19,7 @@ const meta = {
   render: (args) => (
     <div className="flex items-center space-x-2">
       <Switch {...args} />
-      <Label htmlFor={args.id}>Airplane Mode</Label>
+      <Label htmlFor={args.id}>Airplane mode</Label>
     </div>
   ),
 } satisfies Meta<typeof Switch>;

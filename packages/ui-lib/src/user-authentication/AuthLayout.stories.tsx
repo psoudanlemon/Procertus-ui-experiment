@@ -11,17 +11,24 @@ const panel = {
 };
 
 const meta = {
-  title: "Management Interface/Authentication",
+  title: "Management interface/Authentication",
   component: AuthLayout,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
   args: { panel },
+  decorators: [
+    (Story) => (
+      <div data-density="operational" className="contents">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof AuthLayout> as Meta<typeof AuthLayout>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** The default login page — the first screen users see when navigating to the platform. */
+/** The default login page: the first screen users see when navigating to the platform. */
 export const Login: Story = {
   args: {
     title: "Welcome back",
@@ -35,7 +42,7 @@ export const Login: Story = {
   },
 };
 
-/** Invitation step 1 — account details (email, name, terms). */
+/** Invitation step 1: account details (email, name, terms). */
 export const AcceptInvitation: Story = {
   args: {
     title: "Create your account",
@@ -51,7 +58,7 @@ export const AcceptInvitation: Story = {
   },
 };
 
-/** Invitation step 2 — choose a password. */
+/** Invitation step 2: choose a password. */
 export const ChoosePassword: Story = {
   args: {
     title: "Choose a password",
@@ -66,7 +73,7 @@ export const ChoosePassword: Story = {
   },
 };
 
-/** Forgot password — user requests a reset link via email. */
+/** Forgot password: user requests a reset link via email. */
 export const ForgotPassword: Story = {
   args: {
     title: "Forgot your password?",
@@ -80,7 +87,7 @@ export const ForgotPassword: Story = {
   },
 };
 
-/** Reset password — user clicks the reset link from their email. */
+/** Reset password: user clicks the reset link from their email. */
 export const ResetPassword: Story = {
   args: {
     title: "Set new password",

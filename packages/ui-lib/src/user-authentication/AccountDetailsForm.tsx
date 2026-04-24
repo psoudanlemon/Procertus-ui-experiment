@@ -125,16 +125,16 @@ function AccountDetailsForm({
               />
               <Label htmlFor="invite-terms" className="inline text-sm leading-normal font-normal">
                 I agree to the{" "}
-                <a href="#" className="text-primary underline underline-offset-2 hover:text-primary/80">Terms of Service</a>
+                <a href="#" className="text-primary underline underline-offset-2 hover:text-primary/80">terms of service</a>
                 {" "}and{" "}
-                <a href="#" className="text-primary underline underline-offset-2 hover:text-primary/80">Privacy Policy</a>
+                <a href="#" className="text-primary underline underline-offset-2 hover:text-primary/80">privacy policy</a>
               </Label>
             </div>
           </Field>
         )}
         <Field className="mt-section">
           <Button type="submit" disabled={isSubmitting} className="w-full">
-            {isSubmitting ? <Spinner size="sm" /> : "Continue"}
+            {isSubmitting ? <Spinner size="sm" className="text-current" /> : "Continue"}
           </Button>
         </Field>
       </FieldGroup>

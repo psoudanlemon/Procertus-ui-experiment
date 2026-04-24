@@ -9,8 +9,8 @@ import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@
 <Meta title="design tokens/Color/Guidelines" />
 
 <div className="mb-12">
-  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-3">PROCERTUS Design Guidelines</p>
-  <h1 className="font-sans font-bold text-foreground m-0 mb-4" style={{ fontSize: '1.875rem', lineHeight: 1.2, letterSpacing: '-0.03em' }}>Color Strategy</h1>
+  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-primary-500 m-0 mb-3">PROCERTUS design guidelines</p>
+  <h1 className="font-sans font-bold text-foreground m-0 mb-4" style={{ fontSize: '1.875rem', lineHeight: 1.2, letterSpacing: '-0.03em' }}>Color strategy</h1>
   <p className="text-lg text-muted-foreground leading-[1.6] m-0 max-w-[680px]">
     Color at PROCERTUS is never decorative. Every hue earns its place by
     reducing cognitive load, reinforcing the <strong>frame vs content</strong> distinction,
@@ -79,7 +79,7 @@ used intentionally throughout the interface to reinforce the brand.
     borders, text, and interactive states without ever hard-coding a one-off
     color value.
   </p>
-  <Button variant="link" className="p-0 h-auto text-sm" asChild><a href="?path=/story/design-tokens-color--brand-colors">View brand color ramps</a></Button>
+  <Button variant="link" className="p-0 h-auto text-sm" asChild><a href="?path=/story/design-tokens-color--brand">View brand color ramps</a></Button>
 </div>
 
 </div>
@@ -230,7 +230,7 @@ in a table looks the same and nothing stands out. System colors solve this.
     for backgrounds and <code className="text-sm bg-muted px-1.5 py-0.5 rounded">700</code> for text maintains
     a professional tone while keeping meaning clear.
   </p>
-  <Button variant="link" className="p-0 h-auto text-sm" asChild><a href="?path=/story/design-tokens-color--system-colors">View system color ramps</a></Button>
+  <Button variant="link" className="p-0 h-auto text-sm" asChild><a href="?path=/story/design-tokens-color--system">View system color ramps</a></Button>
 </div>
 
 </div>
@@ -252,7 +252,7 @@ The Functional Blueprint is the bridge where our raw brand DNA meets the actual 
     Procertus utilizes a single, unified semantic theme for all current and future tools. By rejecting a multi-layered theming approach, we ensure that brand integrity is maintained across the entire ecosystem, from the Registry to automated Phase 4 documentation. Any future adjustment is managed through one single source of truth, ensuring 100% consistency with zero maintenance overhead.
   </p>
   <p className="mt-4 mb-0 text-sm">
-    <a href="?path=/story/design-tokens-color--semantic-colors" className="text-brand-accent-600 hover:underline font-medium">View the Unified Theme Mapping →</a>
+    <a href="?path=/story/design-tokens-color--theme" className="text-brand-accent-600 hover:underline font-medium">View the Unified Theme Mapping →</a>
   </p>
 </div>
 
@@ -413,7 +413,7 @@ With the functional roles defined and their accessibility validated, we can now 
 <hr className="page-end" />
 
 <div className="rounded-xl border border-border bg-muted/30 p-6" style={{ marginTop: '5rem' }}>
-  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For Developers</h4>
+  <h4 className="font-sans text-base font-bold text-foreground m-0 mb-3">For developers</h4>
   <p className="text-base text-muted-foreground leading-[1.6] m-0">
     Every rule on this page is <strong>already encoded in the component library</strong>.
     Semantic color tokens are resolved automatically by Button, Badge, Alert, Card,
@@ -421,9 +421,9 @@ With the functional roles defined and their accessibility validated, we can now 
     and the subdued status strategy are all handled by the theme layer in
     <code className="text-sm bg-muted px-1.5 py-0.5 rounded">default.css</code>.
     Do not override semantic tokens with raw ramp values. For live token exploration, see the
-    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-color--brand-colors">Brand Colors</a></Button>,{" "}
-    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-color--system-colors">System Colors</a></Button>,{" "}
-    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-color--semantic-colors">Semantic Colors</a></Button>, and{" "}
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-color--brand">Brand Colors</a></Button>,{" "}
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-color--system">System Colors</a></Button>,{" "}
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-color--theme">Semantic Colors</a></Button>, and{" "}
     <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-color--contrast-checker">Contrast Checker</a></Button> showcases.
   </p>
 </div>

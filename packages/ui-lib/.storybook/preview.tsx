@@ -5,12 +5,60 @@ import "@procertus-ui/ui/globals.css";
 import "./preview.css";
 import { parseToolbarMode, parseToolbarTheme, StorybookThemeDecorator } from "./storybook-theme";
 
+/** Must match `PROCERTUS_DOCS_ROOT_SYNC_TYPE` in procertus-docs `storybook-parent-sync.ts`. */
+const PROCERTUS_DOCS_ROOT_SYNC_TYPE = "procertus-docs-root-sync" as const;
+
+function applyHtmlRootFromDocsPortalMessage(payload: {
+  mode: string;
+  theme?: string;
+  density?: string;
+}): void {
+  const root = document.documentElement;
+  const mode = payload.mode;
+  root.classList.remove("light", "dark");
+  if (mode === "system") {
+    root.classList.add(
+      window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light",
+    );
+  } else if (mode === "dark" || mode === "light") {
+    root.classList.add(mode);
+  } else {
+    root.classList.add("light");
+  }
+  if (payload.theme !== undefined) {
+    root.dataset.theme = String(payload.theme);
+  }
+  if (payload.density !== undefined) {
+    root.dataset.density = String(payload.density);
+  }
+}
+
+window.addEventListener("message", (event: MessageEvent) => {
+  if (event.source !== window.parent) {
+    return;
+  }
+  const data = event.data as {
+    type?: string;
+    mode?: string;
+    theme?: string;
+    density?: string;
+  };
+  if (data?.type !== PROCERTUS_DOCS_ROOT_SYNC_TYPE) {
+    return;
+  }
+  applyHtmlRootFromDocsPortalMessage({
+    mode: data.mode ?? "light",
+    theme: data.theme,
+    density: data.density,
+  });
+});
+
 const THEME_TOOLBAR_ICONS = ["circle", "component"] as const;
 
 const preview: Preview = {
   initialGlobals: {
     theme: "default",
-    mode: "dark",
+    mode: "light",
   },
   globalTypes: {
     theme: {
@@ -31,7 +79,7 @@ const preview: Preview = {
     mode: {
       name: "Mode",
       description: "Color mode for the current theme (light / dark / system)",
-      defaultValue: "dark",
+      defaultValue: "light",
       toolbar: {
         title: "Mode",
         icon: "circlehollow",
@@ -72,16 +120,16 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
-          "Management Interface",
+          "Management interface",
           [
-            "Application Shell",
+            "Application shell",
             "Authentication",
             [
               "*",
               "Forms",
-              ["Account Details", "Login", "Forgot Password", "Verify Code", "Set Password"],
+              ["Account details", "Login", "Forgot password", "Verify code", "Set password"],
             ],
-            "Status Pages",
+            "Status pages",
           ],
         ],
       },

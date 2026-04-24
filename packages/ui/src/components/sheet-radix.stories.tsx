@@ -345,7 +345,7 @@ function StackingPanel({
           <p className="mt-4 text-sm text-muted-foreground">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
           <p className="mt-3 text-sm text-muted-foreground">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
           {showViewDetails && (
-            <Button variant="secondary" size="sm" className="mt-element" onClick={onViewDetails}>
+            <Button variant="secondary" size="sm" className="mt-component" onClick={onViewDetails}>
               View details
             </Button>
           )}

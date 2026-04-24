@@ -10,7 +10,7 @@ function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
     <fieldset
       data-slot="field-set"
       className={cn(
-        "flex flex-col gap-section has-[>[data-slot=checkbox-group]]:gap-component has-[>[data-slot=radio-group]]:gap-component",
+        "flex flex-col gap-section has-[>[data-slot=checkbox-group]]:gap-section has-[>[data-slot=radio-group]]:gap-section",
         className,
       )}
       {...props}
@@ -41,7 +41,7 @@ function FieldGroup({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="field-group"
       className={cn(
-        "group/field-group @container/field-group flex w-full flex-col gap-section data-[slot=checkbox-group]:gap-component *:data-[slot=field-group]:gap-section",
+        "group/field-group @container/field-group flex w-full flex-col gap-section data-[slot=checkbox-group]:gap-section *:data-[slot=field-group]:gap-section",
         className,
       )}
       {...props}
@@ -49,7 +49,7 @@ function FieldGroup({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-const fieldVariants = cva("group/field flex w-full gap-element data-[invalid=true]:text-destructive-foreground", {
+const fieldVariants = cva("group/field flex w-full gap-component data-[invalid=true]:text-destructive-foreground", {
   variants: {
     orientation: {
       vertical: "flex-col *:w-full [&>.sr-only]:w-auto",
@@ -95,7 +95,7 @@ function FieldLabel({ className, ...props }: React.ComponentProps<typeof Label>)
     <Label
       data-slot="field-label"
       className={cn(
-        "group/field-label peer/field-label flex w-fit gap-element leading-snug group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5 dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10",
+        "group/field-label peer/field-label flex w-fit gap-component leading-snug group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5 dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10",
         "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col",
         className,
       )}
@@ -109,7 +109,7 @@ function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="field-label"
       className={cn(
-        "flex w-fit items-center gap-element text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-50",
+        "flex w-fit items-center gap-component text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-50",
         className,
       )}
       {...props}

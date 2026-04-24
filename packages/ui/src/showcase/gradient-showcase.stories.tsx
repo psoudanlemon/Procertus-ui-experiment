@@ -1,22 +1,18 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
 import {
+  AiNetworkIcon,
   BarChartIcon,
   BookOpen01Icon,
-  PackageIcon,
-  CodeIcon,
-  DatabaseIcon,
-  GitBranchIcon,
-  HelpCircleIcon,
-  HierarchyFilesIcon,
-  MapsIcon,
-  AiNetworkIcon,
   ColorPickerIcon,
-  Settings01Icon,
+  DatabaseIcon,
+  HelpCircleIcon,
+  MapsIcon,
+  PackageIcon,
   SecurityCheckIcon,
+  Settings01Icon,
   SparklesIcon,
   UserMultipleIcon,
-  FlashIcon,
 } from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/button";
@@ -25,23 +21,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Muted } from "@/components/ui/typography";
 
 import { ManagementAppShell } from "../../../ui-lib/src/management-interface/app-shell/ManagementAppShell";
-import type {
-  Workspace,
-  NavItem,
-  NavGroup,
-} from "../../../ui-lib/src/management-interface/app-shell/ManagementSidebar";
+import type { Workspace, NavItem, NavGroup } from "@/components/app-sidebar";
 
 /* ---------------------------------------------------------------------------
  * Sidebar & Header Configuration
  * ------------------------------------------------------------------------- */
 
-const procertusLogo = (
-  <img
-    src="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='32' height='32' fill='%23F1F5F9'/%3E%3Cpath d='M17.4262 21.7754L13.9269 18.6647C12.8241 17.6857 12.7265 15.999 13.7055 14.8963L13.7858 14.8051L18.2489 18.7711L24.0796 12.109C25.0846 10.9607 26.8321 10.8435 27.9804 11.8485L28 11.8659L19.4406 21.6495C18.9218 22.2422 18.0188 22.3008 17.4283 21.7754H17.4262Z' fill='%2371D2C1'/%3E%3Cpath d='M14.5738 10.2246L18.0731 13.3353C19.1758 14.3143 19.2735 16.001 18.2945 17.1038L18.2142 17.1949L13.7511 13.2289L7.92041 19.891C6.91534 21.0394 5.16787 21.1566 4.01954 20.1515L4 20.1342L12.5593 10.3505C13.0781 9.75789 13.9812 9.69928 14.5716 10.2246H14.5738Z' fill='%23076293'/%3E%3C/svg%3E"
-    alt="PROCERTUS"
-    className="size-full rounded-sm"
-  />
-);
+const procertusLogo = <img src="/logomark.svg" alt="PROCERTUS" className="size-full rounded-sm" />;
 
 const sidebarProps = {
   workspaces: [
@@ -56,9 +42,9 @@ const sidebarProps = {
   navItems: [
     { title: "Dashboard", url: "#", icon: BarChartIcon, isActive: true },
     { title: "Analytics", url: "#", icon: MapsIcon },
-    { title: "Projects", url: "#", icon: BoxIcon },
-    { title: "Team", url: "#", icon: UsersIcon },
-    { title: "Reports", url: "#", icon: BookOpenIcon },
+    { title: "Projects", url: "#", icon: PackageIcon },
+    { title: "Team", url: "#", icon: UserMultipleIcon },
+    { title: "Reports", url: "#", icon: BookOpen01Icon },
   ] as NavItem[],
   navGroups: [
     {
@@ -67,7 +53,7 @@ const sidebarProps = {
         {
           title: "Certificates",
           url: "#",
-          icon: ShieldCheckIcon,
+          icon: SecurityCheckIcon,
           items: [
             { title: "Overview", url: "#" },
             { title: "Pending", url: "#" },
@@ -77,7 +63,7 @@ const sidebarProps = {
         {
           title: "Standards",
           url: "#",
-          icon: PaletteIcon,
+          icon: ColorPickerIcon,
           items: [
             { title: "ISO 9001", url: "#" },
             { title: "ISO 14001", url: "#" },
@@ -88,13 +74,13 @@ const sidebarProps = {
     {
       label: "Compliance",
       items: [
-        { title: "Audit Schedule", url: "#", icon: DatabaseIcon },
-        { title: "Non-conformities", url: "#", icon: NetworkIcon },
+        { title: "Audit schedule", url: "#", icon: DatabaseIcon },
+        { title: "Non-conformities", url: "#", icon: AiNetworkIcon },
       ],
     },
   ] as NavGroup[],
   secondaryItems: [
-    { title: "Settings", url: "#", icon: SettingsIcon },
+    { title: "Settings", url: "#", icon: Settings01Icon },
     { title: "Help", url: "#", icon: HelpCircleIcon },
   ] as NavItem[],
   showSearch: false,
@@ -163,7 +149,7 @@ function CyclingGradientCard({ active }: { active: number }) {
       {/* Content */}
       <CardHeader className="relative z-10">
         <div className="mb-2 flex size-10 items-center justify-center rounded-lg bg-neutral-900/10 dark:bg-white/20">
-          <SparklesIcon className="size-5 text-neutral-900 dark:text-white" />
+          <HugeiconsIcon icon={SparklesIcon} className="size-5 text-neutral-900 dark:text-white" />
         </div>
         <CardTitle className="text-neutral-900 dark:text-white">IAM Insights AI</CardTitle>
         <CardDescription className="text-neutral-800/80 dark:text-white/70">
@@ -285,7 +271,7 @@ function GradientShowcase() {
 }
 
 const meta: Meta = {
-  title: "Applied Guidelines/Gradients",
+  title: "Applied guidelines/Gradients",
   component: GradientShowcase,
   parameters: {
     layout: "fullscreen",

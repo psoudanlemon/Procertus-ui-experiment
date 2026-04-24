@@ -92,20 +92,20 @@ export const WithSubmenu: Story = {
       </ContextMenuTrigger>
       <ContextMenuContent className="w-32">
         <ContextMenuItem>
-          New Tab
+          New tab
           <ContextMenuShortcut>⌘N</ContextMenuShortcut>
         </ContextMenuItem>
         <ContextMenuSub>
-          <ContextMenuSubTrigger>More Tools</ContextMenuSubTrigger>
+          <ContextMenuSubTrigger>More tools</ContextMenuSubTrigger>
           <ContextMenuSubContent>
             <ContextMenuItem>
-              Save Page As...
+              Save page as...
               <ContextMenuShortcut>⇧⌘S</ContextMenuShortcut>
             </ContextMenuItem>
-            <ContextMenuItem>Create Shortcut...</ContextMenuItem>
-            <ContextMenuItem>Name Window...</ContextMenuItem>
+            <ContextMenuItem>Create shortcut...</ContextMenuItem>
+            <ContextMenuItem>Name window...</ContextMenuItem>
             <ContextMenuSeparator />
-            <ContextMenuItem>Developer Tools</ContextMenuItem>
+            <ContextMenuItem>Developer tools</ContextMenuItem>
           </ContextMenuSubContent>
         </ContextMenuSub>
       </ContextMenuContent>
@@ -124,10 +124,10 @@ export const WithCheckboxes: Story = {
       </ContextMenuTrigger>
       <ContextMenuContent className="w-64">
         <ContextMenuCheckboxItem checked>
-          Show Comments
+          Show comments
           <ContextMenuShortcut>⌘⇧C</ContextMenuShortcut>
         </ContextMenuCheckboxItem>
-        <ContextMenuCheckboxItem>Show Preview</ContextMenuCheckboxItem>
+        <ContextMenuCheckboxItem>Show preview</ContextMenuCheckboxItem>
       </ContextMenuContent>
     </ContextMenu>
   ),

@@ -55,7 +55,7 @@ function SetPasswordForm({
   onSubmit,
   submitLabel = "Set password",
   onBack,
-  backLabel = "Back to sign in",
+  backLabel = "Back",
   isSubmitting = false,
   error,
   fieldErrors,
@@ -105,20 +105,18 @@ function SetPasswordForm({
             <FieldError errors={[{ message: fieldErrors.confirmPassword }]} />
           )}
         </Field>
-        <Field className="mt-section gap-component">
-          {onBack && (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onBack}
-              className="w-full"
-            >
-              <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
-              {backLabel}
-            </Button>
-          )}
+        <Field className="mt-section gap-section">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onBack ?? (() => window.history.back())}
+            className="w-full"
+          >
+            <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
+            {backLabel}
+          </Button>
           <Button type="submit" disabled={isSubmitting} className="w-full">
-            {isSubmitting ? <Spinner size="sm" /> : submitLabel}
+            {isSubmitting ? <Spinner size="sm" className="text-current" /> : submitLabel}
           </Button>
         </Field>
       </FieldGroup>

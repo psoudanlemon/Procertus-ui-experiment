@@ -7,6 +7,54 @@ import "../src/styles/globals.css";
 import "./preview.css";
 import { parseToolbarDensity, parseToolbarMode, parseToolbarTheme, StorybookThemeDecorator } from "./storybook-theme";
 
+/** Must match `PROCERTUS_DOCS_ROOT_SYNC_TYPE` in `apps/frontend-docs/src/lib/storybook-parent-sync.ts`. */
+const PROCERTUS_DOCS_ROOT_SYNC_TYPE = "procertus-docs-root-sync" as const;
+
+function applyHtmlRootFromDocsPortalMessage(payload: {
+  mode: string;
+  theme?: string;
+  density?: string;
+}): void {
+  const root = document.documentElement;
+  const mode = payload.mode;
+  root.classList.remove("light", "dark");
+  if (mode === "system") {
+    root.classList.add(
+      window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light",
+    );
+  } else if (mode === "dark" || mode === "light") {
+    root.classList.add(mode);
+  } else {
+    root.classList.add("light");
+  }
+  if (payload.theme !== undefined) {
+    root.dataset.theme = String(payload.theme);
+  }
+  if (payload.density !== undefined) {
+    root.dataset.density = String(payload.density);
+  }
+}
+
+window.addEventListener("message", (event: MessageEvent) => {
+  if (event.source !== window.parent) {
+    return;
+  }
+  const data = event.data as {
+    type?: string;
+    mode?: string;
+    theme?: string;
+    density?: string;
+  };
+  if (data?.type !== PROCERTUS_DOCS_ROOT_SYNC_TYPE) {
+    return;
+  }
+  applyHtmlRootFromDocsPortalMessage({
+    mode: data.mode ?? "light",
+    theme: data.theme,
+    density: data.density,
+  });
+});
+
 /**
  * Intercept clicks on `?path=/story/...` and `?path=/docs/...` links inside
  * MDX docs pages and route them through Storybook's navigation channel so the
@@ -26,9 +74,9 @@ document.addEventListener("click", (e) => {
     const channel = addons.getChannel();
     channel.emit(NAVIGATE_URL, href);
   } catch {
-    // Fallback: set the parent frame URL directly
-    const url = new URL(href, window.top?.location.href ?? window.location.href);
-    if (window.top) window.top.location.href = url.toString();
+    // Fallback: navigate inside this frame (embedded in docs portal or standalone)
+    const url = new URL(href, window.location.href);
+    window.location.href = url.toString();
   }
 });
 
@@ -81,7 +129,7 @@ const THEME_TOOLBAR_ICONS = ["circle", "component"] as const;
 const preview: Preview = {
   initialGlobals: {
     theme: "default",
-    mode: "dark",
+    mode: "light",
     density: "operational",
   },
   globalTypes: {
@@ -103,7 +151,7 @@ const preview: Preview = {
     mode: {
       name: "Mode",
       description: "Color mode for the current theme (light / dark / system)",
-      defaultValue: "dark",
+      defaultValue: "light",
       toolbar: {
         title: "Mode",
         icon: "circlehollow",
@@ -163,7 +211,7 @@ const preview: Preview = {
           "design tokens",
           [
             "Typography",
-            ["Guidelines", "Font Family", "Font Size", "Font Weight", "Line Height", "Letter Spacing"],
+            ["Guidelines", "Font family", "Font size", "Font weight", "Line height", "Letter spacing"],
             "Logotype", ["Guidelines", "Minimum dimensions", "Background rules", "*"],
             "Iconography",
             "Color", ["Guidelines", "Default", "*"],
@@ -177,7 +225,7 @@ const preview: Preview = {
           ],
           "components",
           ["*", ["Guidelines", "Default", "*"]],
-          "Applied Guidelines",
+          "Applied guidelines",
           [
             "Typography",
             "Logotype",
@@ -196,7 +244,7 @@ const preview: Preview = {
           ],
           "Showroom",
           [
-            "Typography", ["Registry Detail View", "Management Data Grid", "Management Shell", "Long-form Content"],
+            "Typography", ["Registry detail view", "Management data grid", "Management shell", "Long-form content"],
             "Dashboard", "Login", "Sign up", "Mail",
           ],
         ],

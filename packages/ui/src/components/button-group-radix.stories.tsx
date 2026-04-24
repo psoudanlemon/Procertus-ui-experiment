@@ -169,11 +169,11 @@ export const Separator: Story = {
 export const SplitButton: Story = {
   render: (args) => (
     <ButtonGroup {...args}>
-      <Button>Save Draft</Button>
+      <Button>Save draft</Button>
       <ButtonGroupSeparator />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" aria-label="More Save Options">
+          <Button size="icon" aria-label="More save options">
             <HugeiconsIcon icon={ArrowDown01Icon} />
           </Button>
         </DropdownMenuTrigger>
@@ -301,11 +301,11 @@ export const ShouldOpenDropdown: Story = {
   tags: ["!dev", "!autodocs"],
   render: (args) => (
     <ButtonGroup {...args}>
-      <Button>Save Draft</Button>
+      <Button>Save draft</Button>
       <ButtonGroupSeparator />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" aria-label="More Save Options">
+          <Button size="icon" aria-label="More save options">
             <HugeiconsIcon icon={ArrowDown01Icon} />
           </Button>
         </DropdownMenuTrigger>

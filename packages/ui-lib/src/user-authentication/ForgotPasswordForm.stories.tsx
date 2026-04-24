@@ -3,11 +3,11 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
 
 const meta = {
-  title: "Management Interface/Authentication/Forms/Forgot Password",
+  title: "Management interface/Authentication/Forms/Forgot password",
   component: ForgotPasswordForm,
   tags: ["autodocs"],
   parameters: { layout: "centered" },
-  decorators: [(Story) => <div className="w-sm"><Story /></div>],
+  decorators: [(Story) => <div data-density="operational" className="w-sm"><Story /></div>],
   args: {
     onBackToLogin: () => {},
   },

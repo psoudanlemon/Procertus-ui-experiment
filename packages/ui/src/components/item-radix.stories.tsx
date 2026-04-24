@@ -4,7 +4,7 @@ import {
   ArrowDown01Icon,
   ArrowRight01Icon,
   PlusSignIcon,
-  ShieldAlertIcon,
+  SecurityWarningIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import * as React from "react";
@@ -67,7 +67,7 @@ export const Default: Story = {
     <div className="flex w-full max-w-md flex-col gap-6">
       <Item {...args} variant="outline">
         <ItemContent>
-          <ItemTitle>Basic Item</ItemTitle>
+          <ItemTitle>Basic item</ItemTitle>
           <ItemDescription>A simple item with title and description.</ItemDescription>
         </ItemContent>
         <ItemActions>
@@ -107,7 +107,7 @@ export const Outline: Story = {
           </Avatar>
         </ItemMedia>
         <ItemContent>
-          <ItemTitle>Software Update Available</ItemTitle>
+          <ItemTitle>Software update available</ItemTitle>
           <ItemDescription>Version 2.0 is now available for download.</ItemDescription>
         </ItemContent>
         <ItemActions>
@@ -131,7 +131,7 @@ export const Muted: Story = {
           <HugeiconsIcon icon={CheckmarkBadge01Icon} />
         </ItemMedia>
         <ItemContent>
-          <ItemTitle>Account Verified</ItemTitle>
+          <ItemTitle>Account verified</ItemTitle>
           <ItemDescription>Your account has been successfully verified.</ItemDescription>
         </ItemContent>
         <ItemActions>
@@ -189,10 +189,10 @@ export const WithIcon: Story = {
     <div className="flex w-full max-w-lg flex-col gap-6">
       <Item {...args} variant="outline">
         <ItemMedia variant="icon">
-          <HugeiconsIcon icon={ShieldAlertIcon} />
+          <HugeiconsIcon icon={SecurityWarningIcon} />
         </ItemMedia>
         <ItemContent>
-          <ItemTitle>Security Alert</ItemTitle>
+          <ItemTitle>Security alert</ItemTitle>
           <ItemDescription>New login detected from unknown device.</ItemDescription>
         </ItemContent>
         <ItemActions>
@@ -246,7 +246,7 @@ export const WithAvatar: Story = {
           </div>
         </ItemMedia>
         <ItemContent>
-          <ItemTitle>No Team Members</ItemTitle>
+          <ItemTitle>No team members</ItemTitle>
           <ItemDescription>Invite your team to collaborate on this project.</ItemDescription>
         </ItemContent>
         <ItemActions>
