@@ -21,22 +21,22 @@ Unless the user passes **`--no-git`**, the CLI **refuses to start** unless Git i
 
 Use **[Conventional Commits](https://www.conventionalcommits.org/)**-style prefixes so history stays scannable:
 
-| Prefix         | Use for                                          |
-| -------------- | ------------------------------------------------ |
-| **`feat`**     | New user-visible behavior or API                 |
-| **`fix`**      | Bug fixes                                        |
-| **`docs`**     | Documentation only                               |
-| **`style`**    | Formatting, whitespace (no logic change)         |
-| **`refactor`** | Internal structure without behavior change       |
-| **`test`**     | Adding or fixing tests                           |
-| **`chore`**    | Tooling, deps, config, build—no product behavior |
-| **`ci`**       | CI configuration                                 |
-| **`perf`**     | Performance improvements                         |
+| Prefix | Use for |
+|--------|---------|
+| **`feat`** | New user-visible behavior or API |
+| **`fix`** | Bug fixes |
+| **`docs`** | Documentation only |
+| **`style`** | Formatting, whitespace (no logic change) |
+| **`refactor`** | Internal structure without behavior change |
+| **`test`** | Adding or fixing tests |
+| **`chore`** | Tooling, deps, config, build—no product behavior |
+| **`ci`** | CI configuration |
+| **`perf`** | Performance improvements |
 
 **Subject line (first line):**
 
 - Pattern: **`type(scope): imperative summary`** — scope is optional (e.g. `feat(cli-scaffold): add workspace-ui hook`).
-- Use **imperative mood** (_add_, _fix_, _remove_), not past tense (_added_, _fixed_).
+- Use **imperative mood** (*add*, *fix*, *remove*), not past tense (*added*, *fixed*).
 - Keep the subject **concise** (about 50–72 characters). **No trailing period** on the subject line.
 
 **Body (optional, recommended when non-obvious):**
