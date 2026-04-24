@@ -4,9 +4,9 @@ import { fileURLToPath } from "node:url";
 import type { Plugin } from "vite";
 
 export interface WorkspaceUiAliasOptions {
-  /** e.g. `packages/ui-lib` or `packages/ui` */
+  /** e.g. `packages/ui-lib` or a Vite app package root (directory that contains `src/`) */
   readonly packageRoot: string;
-  /** Sibling `packages/ui` (always the primitives package name in this monorepo layout). */
+  /** `packages/ui` root (directory that contains `src/` with Shadcn `@/` sources). */
   readonly uiPackageRoot: string;
 }
 
@@ -37,7 +37,7 @@ function resolveSubpathToAbsoluteFile(srcRoot: string, subpath: string): string 
 /**
  * `@/…` path as it appears in source, or after Vite’s `alias: { "@": "<pkg>/src" }` (Storybook merges
  * `vite.config.ts`), which rewrites `@/components/ui/button` → `./src/components/ui/button` relative
- * to the **Storybook package** cwd — wrong for files under `packages/ui`.
+ * to the **consumer package** cwd — wrong for files under `packages/ui`.
  */
 function parseVirtualSrcSubpath(id: string): string | undefined {
   if (id.startsWith("@/")) {
@@ -54,12 +54,12 @@ function parseVirtualSrcSubpath(id: string): string | undefined {
 
 /**
  * Vite does not read `tsconfig` `paths`. Shadcn sources use `@/…`; map `@/` from the file that imports
- * it — `packages/ui/src` vs this package’s `src` — so Storybook matches TypeScript.
+ * it — `packages/ui/src` vs the consumer package’s `src/` — so Vite matches TypeScript.
  *
  * Rollup may call `resolveId` **without** `importer` when resolving nested imports (e.g. `sheet` →
  * `button`). If we bail on `!importer`, `@/` falls through to a wrong alias and primitives break.
  *
- * Always return a resolved path **with** a file extension; extensionless ids break Vite’s load step in Storybook.
+ * Always return a resolved path **with** a file extension; extensionless ids break Vite’s load step.
  */
 export function workspaceUiAliasPlugin(opts: WorkspaceUiAliasOptions): Plugin {
   const uiRoot = path.resolve(opts.uiPackageRoot);
@@ -73,7 +73,7 @@ export function workspaceUiAliasPlugin(opts: WorkspaceUiAliasOptions): Plugin {
   }
 
   return {
-    name: "storybook-workspace-ui-at-alias",
+    name: "procertus-ui-workspace-at-alias",
     enforce: "pre",
     resolveId(id, importer) {
       const from = importer ? normalizeImporterPath(importer) : undefined;

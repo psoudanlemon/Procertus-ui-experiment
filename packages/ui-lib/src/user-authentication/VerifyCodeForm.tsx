@@ -89,7 +89,7 @@ function VerifyCodeForm({
               </InputOTPGroup>
             </InputOTP>
           </div>
-          {fieldErrors?.code && <FieldError errors={[fieldErrors.code]} />}
+          {fieldErrors?.code && <FieldError errors={[{ message: fieldErrors.code }]} />}
           {onResendCode && (
             <FieldDescription className="text-center">
               Didn't receive a code?{" "}

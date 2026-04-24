@@ -1,0 +1,4 @@
+@import "@procertus-ui/ui/globals.css";
+
+/* Tailwind content: this app (ui package globals already scan packages/ui + ui-lib). */
+@source "./**/*.{ts,tsx}";

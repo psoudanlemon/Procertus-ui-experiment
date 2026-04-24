@@ -16,6 +16,7 @@
     "./components/ui/*": "./src/components/ui/*",
     "./hooks": "./src/hooks/index.ts",
     "./hooks/*": "./src/hooks/*",
+    "./vite-workspace-ui-alias": "./src/vite-workspace-ui-alias.ts",
     "./package.json": "./package.json"
   },
   "scripts": {

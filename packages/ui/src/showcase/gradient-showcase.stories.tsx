@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
   BarChartIcon,
   BookOpen01Icon,
@@ -21,13 +20,7 @@ import {
 } from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Muted } from "@/components/ui/typography";
 
@@ -61,8 +54,8 @@ const sidebarProps = {
   ] as Workspace[],
   activeWorkspaceId: "1",
   navItems: [
-    { title: "Dashboard", url: "#", icon: BarChart3Icon, isActive: true },
-    { title: "Analytics", url: "#", icon: MapIcon },
+    { title: "Dashboard", url: "#", icon: BarChartIcon, isActive: true },
+    { title: "Analytics", url: "#", icon: MapsIcon },
     { title: "Projects", url: "#", icon: BoxIcon },
     { title: "Team", url: "#", icon: UsersIcon },
     { title: "Reports", url: "#", icon: BookOpenIcon },
@@ -109,11 +102,7 @@ const sidebarProps = {
 
 const headerProps = {
   showNavigation: false,
-  breadcrumbs: [
-    { label: "Home", href: "#" },
-    { label: "IAM", href: "#" },
-    { label: "Users" },
-  ],
+  breadcrumbs: [{ label: "Home", href: "#" }, { label: "IAM", href: "#" }, { label: "Users" }],
   canGoBack: true,
   canGoForward: false,
   user: {
@@ -134,13 +123,7 @@ const gradientTokens = [
   "--gradient-blend",
 ];
 
-function GradientDots({
-  active,
-  onSelect,
-}: {
-  active: number;
-  onSelect: (i: number) => void;
-}) {
+function GradientDots({ active, onSelect }: { active: number; onSelect: (i: number) => void }) {
   return (
     <div className="flex flex-col items-center justify-center gap-2">
       {gradientTokens.map((t, i) => (
@@ -160,11 +143,7 @@ function GradientDots({
   );
 }
 
-function CyclingGradientCard({
-  active,
-}: {
-  active: number;
-}) {
+function CyclingGradientCard({ active }: { active: number }) {
   const token = gradientTokens[active];
 
   return (
@@ -186,12 +165,10 @@ function CyclingGradientCard({
         <div className="mb-2 flex size-10 items-center justify-center rounded-lg bg-neutral-900/10 dark:bg-white/20">
           <SparklesIcon className="size-5 text-neutral-900 dark:text-white" />
         </div>
-        <CardTitle className="text-neutral-900 dark:text-white">
-          IAM Insights AI
-        </CardTitle>
+        <CardTitle className="text-neutral-900 dark:text-white">IAM Insights AI</CardTitle>
         <CardDescription className="text-neutral-800/80 dark:text-white/70">
-          "3 roles have excessive unused permissions. Recommend downgrading
-          access for security optimization."
+          "3 roles have excessive unused permissions. Recommend downgrading access for security
+          optimization."
         </CardDescription>
       </CardHeader>
       <CardContent className="relative z-10">
@@ -201,9 +178,7 @@ function CyclingGradientCard({
         >
           Run Optimization
         </Button>
-        <Muted className="mt-3 text-xs text-neutral-900/50 dark:text-white/50">
-          {token}
-        </Muted>
+        <Muted className="mt-3 text-xs text-neutral-900/50 dark:text-white/50">{token}</Muted>
       </CardContent>
     </Card>
   );
@@ -288,10 +263,7 @@ function DashboardContent() {
       </div>
 
       {/* Bottom row */}
-      <div
-        className="gap-6"
-        style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr" }}
-      >
+      <div className="gap-6" style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr" }}>
         <SkeletonCard className="h-full" />
         <GradientDots active={active} onSelect={setActive} />
         <CyclingGradientCard active={active} />

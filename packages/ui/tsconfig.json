@@ -2,12 +2,13 @@
   "extends": "@workspace/typescript-config/react-library.json",
   "compilerOptions": {
     "outDir": "dist",
+    "rootDir": "./src",
     "allowImportingTsExtensions": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", ".storybook/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.stories.tsx", "**/*.stories.ts"]
 }

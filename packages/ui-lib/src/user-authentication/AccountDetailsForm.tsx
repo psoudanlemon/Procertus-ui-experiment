@@ -97,7 +97,7 @@ function AccountDetailsForm({
             autoComplete="given-name"
             aria-invalid={!!fieldErrors?.firstName}
           />
-          {fieldErrors?.firstName && <FieldError errors={[fieldErrors.firstName]} />}
+          {fieldErrors?.firstName && <FieldError errors={[{ message: fieldErrors.firstName }]} />}
         </Field>
         <Field>
           <FieldLabel htmlFor="invite-last-name">Last name</FieldLabel>
@@ -112,7 +112,7 @@ function AccountDetailsForm({
             autoComplete="family-name"
             aria-invalid={!!fieldErrors?.lastName}
           />
-          {fieldErrors?.lastName && <FieldError errors={[fieldErrors.lastName]} />}
+          {fieldErrors?.lastName && <FieldError errors={[{ message: fieldErrors.lastName }]} />}
         </Field>
         {showTermsCheckbox && (
           <Field>

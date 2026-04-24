@@ -77,7 +77,7 @@ function LoginForm({
             autoComplete="email"
             aria-invalid={!!fieldErrors?.email}
           />
-          {fieldErrors?.email && <FieldError errors={[fieldErrors.email]} />}
+          {fieldErrors?.email && <FieldError errors={[{ message: fieldErrors.email }]} />}
         </Field>
         <Field>
           <div className="flex items-center">
@@ -103,7 +103,7 @@ function LoginForm({
             autoComplete="current-password"
             aria-invalid={!!fieldErrors?.password}
           />
-          {fieldErrors?.password && <FieldError errors={[fieldErrors.password]} />}
+          {fieldErrors?.password && <FieldError errors={[{ message: fieldErrors.password }]} />}
         </Field>
         <Field className="mt-section">
           <Button type="submit" disabled={isSubmitting} className="w-full">

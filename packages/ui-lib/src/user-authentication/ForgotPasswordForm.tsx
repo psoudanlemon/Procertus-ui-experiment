@@ -78,7 +78,7 @@ function ForgotPasswordForm({
             autoComplete="email"
             aria-invalid={!!fieldErrors?.email}
           />
-          {fieldErrors?.email && <FieldError errors={[fieldErrors.email]} />}
+          {fieldErrors?.email && <FieldError errors={[{ message: fieldErrors.email }]} />}
         </Field>
         <Field className="mt-section gap-component">
           {onBackToLogin && (

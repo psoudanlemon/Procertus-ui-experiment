@@ -87,7 +87,7 @@ function SetPasswordForm({
             aria-invalid={!!fieldErrors?.newPassword}
           />
           <PasswordStrength password={newPassword} />
-          {fieldErrors?.newPassword && <FieldError errors={[fieldErrors.newPassword]} />}
+          {fieldErrors?.newPassword && <FieldError errors={[{ message: fieldErrors.newPassword }]} />}
         </Field>
         <Field>
           <FieldLabel htmlFor="set-confirm">Confirm new password</FieldLabel>
@@ -102,7 +102,7 @@ function SetPasswordForm({
             aria-invalid={!!fieldErrors?.confirmPassword}
           />
           {fieldErrors?.confirmPassword && (
-            <FieldError errors={[fieldErrors.confirmPassword]} />
+            <FieldError errors={[{ message: fieldErrors.confirmPassword }]} />
           )}
         </Field>
         <Field className="mt-section gap-component">
