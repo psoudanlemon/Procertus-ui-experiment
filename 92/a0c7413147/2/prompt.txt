@@ -1,0 +1,93 @@
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src I have scaffolded a new frontend application that serves as a prototype to implement a first iteration for internal and external testing of the new application, including the onboarding flow and certification request flow.  the flows are well documented in the analysis documentation. @procertus-docs/apps/frontend-docs/content/analysis/external-portal-cim-external-portal-1-analyse 
+
+ I want to start implementing the flow and data organization to build this application based on the feedback and discussions we had about the first data delivery by Procertus. @procertus-docs/apps/frontend-docs/content/meetings/stavaza-04-2026-04-24.md @procertus-docs/apps/frontend-docs/src/analysis/data/procertus-categorization.json @procertus-docs/apps/frontend-docs/src/components/analysis/procertus-categorization-tree.tsx 
+
+ as you can see in the repository where we will implement this prototype, we have already set up an extensive design system implementation using Shadcn and Tailwind. @Procertus-ui-experiment/packages/ui @Procertus-ui-experiment/packages/ui-lib  Together with the Tailwind team's implementation and the customization of the Shadcn primitives, we have drafted extensive guideline documents on how to use these components and apply the design guidelines throughout applications.
+
+In this prototype, I want to adhere to these guidelines and set up everything using the underlying customized primitives from the UI package. When developing new components, I want to develop them in isolation within the UI library so they can be thoroughly tested using Storybook and documented for how to use these custom presentational components.
+
+When we identify needs—such as setting up the user onboarding flow or the certification request flow and management for custom components—we should scaffold these inside the UI library and document their usage before implementing or wiring the presentational components into the prototype application.  to find all of the guidelines, we have documented these specific storybooks and stories about the guidelines inside the Documentation Portal website. @procertus-docs/apps/frontend-docs/src/design/design-system-nav-data.ts:347-461  of course. Together with the high-level guidelines, we have also related these guidelines to the underlying token usage and design system token setup. 
+
+ it is clear I want the prototype we implement to rely on these design system guidelines by first using the Tailwind theme from the UI package.
+
+When implementing custom components, always use the underlying primitives from the UI package. Implement the guidelines correctly by using the correct heading levels and other appropriate tokens.
+
+ I want you to plan a development plan to build this prototype application as a VIT frontend app using React with the underlying UI and UIlib packages.
+
+Document and implement presentational components in the UIlib and wire them into the frontend application where we do the actual data binding.
+
+ make sure that in your plan you also orchestrate which tasks can be run by using sub-agents with their own specific and contained briefing and context to implement these one-off tasks.
+
+Supply all needed information in the context briefing for each sub-agent.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src I have scaffolded a new frontend application that serves as a prototype to implement a first iteration for internal and external testing of the new application, including the onboarding flow and certification request flow.  the flows are well documented in the analysis documentation. @procertus-docs/apps/frontend-docs/content/analysis/external-portal-cim-external-portal-1-analyse 
+
+ I want to start implementing the flow and data organization to build this application based on the feedback and discussions we had about the first data delivery by Procertus. @procertus-docs/apps/frontend-docs/content/meetings/stavaza-04-2026-04-24.md @procertus-docs/apps/frontend-docs/src/analysis/data/procertus-categorization.json @procertus-docs/apps/frontend-docs/src/components/analysis/procertus-categorization-tree.tsx 
+
+ as you can see in the repository where we will implement this prototype, we have already set up an extensive design system implementation using Shadcn and Tailwind. @Procertus-ui-experiment/packages/ui @Procertus-ui-experiment/packages/ui-lib  Together with the Tailwind team's implementation and the customization of the Shadcn primitives, we have drafted extensive guideline documents on how to use these components and apply the design guidelines throughout applications.
+
+In this prototype, I want to adhere to these guidelines and set up everything using the underlying customized primitives from the UI package. When developing new components, I want to develop them in isolation within the UI library so they can be thoroughly tested using Storybook and documented for how to use these custom presentational components.
+
+When we identify needs—such as setting up the user onboarding flow or the certification request flow and management for custom components—we should scaffold these inside the UI library and document their usage before implementing or wiring the presentational components into the prototype application.  to find all of the guidelines, we have documented these specific storybooks and stories about the guidelines inside the Documentation Portal website. @procertus-docs/apps/frontend-docs/src/design/design-system-nav-data.ts:347-461  of course. Together with the high-level guidelines, we have also related these guidelines to the underlying token usage and design system token setup. 
+
+ it is clear I want the prototype we implement to rely on these design system guidelines by first using the Tailwind theme from the UI package.
+
+When implementing custom components, always use the underlying primitives from the UI package. Implement the guidelines correctly by using the correct heading levels and other appropriate tokens.
+
+ I want you to plan a development plan to build this prototype application as a VIT frontend app using React with the underlying UI and UIlib packages.
+
+Document and implement presentational components in the UIlib and wire them into the frontend application where we do the actual data binding.
+
+ make sure that in your plan you also orchestrate which tasks can be run by using sub-agents with their own specific and contained briefing and context to implement these one-off tasks.
+
+Supply all needed information in the context briefing for each sub-agent.
+
+---
+
+I want to set up an extra task about the application shell we currently have.
+
+We have an example application shell in the UI library. Make sure this application shell, together with its navigation drawer, can be set up generally so the application shell controls the exact navigation structure but uses the underlying presentation components.
+
+Set up the entire application shell, together with the navigation drawer, as a separate to-do for a separate sub-agent.
+
+My intent is that when I start building this plan, you will orchestrate all sub-agents, providing the necessary information and context so each sub-agent can pick up work without separate research.
+
+I want this session to manage all research, maintain a high-level overview of progress, and instruct sub-agents until work is completed and we can move on to the next task executed by a new sub-agent session.
+
+---
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+---
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+---
+
+I'll hold you right there. I see you started implementing. I clearly instructed you to only orchestrate and set up a new sub-agent for every task that was created.
+
+Please set up a new sub-agent for Task A and provide all information from your research to this AI agent so it can work on the task without needing to do any more research, except for the briefing you provide.
+
+---
+
+I'll hold you right there. I see you started implementing. I clearly instructed you to only orchestrate and set up a new sub-agent for every task that was created.
+
+Please set up a new sub-agent for Task A and provide all information from your research to this AI agent so it can work on the task without needing to do any more research, except for the briefing you provide.
+
+---
+
+Instead of orchestrating the different sub-agents and writing a brief on the fly based on the prepared research, I want you to pre-generate the correct briefing documents explaining how you would instruct the different AI agents to implement each task.
+
+I have set up a prototype folder in the docs. Please draft Markdown files for each task as instructions for AI agents.@procertus-docs/apps/frontend-docs/docs/pt1
+
+---
+
+Instead of orchestrating the different sub-agents and writing a brief on the fly based on the prepared research, I want you to pre-generate the correct briefing documents explaining how you would instruct the different AI agents to implement each task.
+
+I have set up a prototype folder in the docs. Please draft Markdown files for each task as instructions for AI agents.@procertus-docs/apps/frontend-docs/docs/pt1
