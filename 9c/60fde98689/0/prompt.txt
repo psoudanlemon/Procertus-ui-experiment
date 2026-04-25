@@ -1,0 +1,132 @@
+@procertus-docs/apps/frontend-docs/docs/pt1/task-b-decision-tree-data-module.md please set up a data provider to expose the entire process categorization, together with helper functions and clean queries, to be available as easy-to-use hooks in the application. Be inspired by @procertus-docs/apps/frontend-docs/src/components/analysis/q2b-categorization-tree.tsx
+
+---
+
+@procertus-docs/apps/frontend-docs/docs/pt1/task-b-decision-tree-data-module.md please set up a data provider to expose the entire process categorization, together with helper functions and clean queries, to be available as easy-to-use hooks in the application. Be inspired by @procertus-docs/apps/frontend-docs/src/components/analysis/q2b-categorization-tree.tsx
+
+---
+
+Move this entire data organization, including the core data, to a reusable client side package so it can be reused across different applications.
+
+---
+
+Move this entire data organization, including the core data, to a reusable client side package so it can be reused across different applications.
+
+---
+
+@Procertus-ui-experiment/packages/procertus-categorization/package.json I have copied this package into another repository to use the data in the prototype apps. Make sure the package is renamed to fit the new model-equal setup and can be used inside the first prototype application.
+
+Provide all of the categorization data in the prototype app. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/main.tsx
+
+---
+
+Now set up a new demo route inside the prototype application to browse the nested tree of categorization items. Much like in the docs application, a UI component was set up to do exactly this.
+@procertus-docs/apps/frontend-docs/src/components/analysis/procertus-categorization-tree.tsx 
+Move this UI, without data dependencies, to a new component scaffolded inside the UILib package.@procertus-docs/ui-experiment/packages/ui-lib/src/index.ts
+
+---
+
+Sorry—I want you to use the scaffold tool to scaffold a new UI component inside the UI library and start from there.
+
+---
+
+Sorry—I want you to use the scaffold tool to scaffold a new UI component inside the UI library and start from there.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx 
+
+[plugin:vite:import-analysis] Failed to resolve import "@/categorization" from "src/pages/CategorizationDemoPage.tsx". Does the file exist?
+/Users/psoudan/workspace/05-Procertus/Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/CategorizationDemoPage.tsx:1:46
+1  |  import { useProcertusCategorizationDoc } from "@/categorization";
+   |                                                 ^
+2  |  import { ProcertusCategorizationTreeView } from "@procertus-ui/ui-lib";
+3  |  import { P } from "@procertus-ui/ui";
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/CategorizationDemoPage.tsx:1 why not just import from `@procertus-ui/procertus-categorization`
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/CategorizationDemoPage.tsx:1 why not just import from `@procertus-ui/procertus-categorization`
+
+---
+
+Use a Commit Kit skill to commit all changes.
+
+---
+
+Use a Commit Kit skill to commit all changes.
+
+---
+
+I said to use a commit skill to commit all changes.
+
+---
+
+I said to use a commit skill to commit all changes.
+
+---
+
+@Procertus-ui-experiment/packages/ui-lib/src/components now scaffold a new component that is generic enough to allow different types of onboarding flows to be implemented. It should allow going back in the steps and going forward in the steps if all prerequisites have been met. So, if going forward has been enabled, it should proceed.
+
+This flow step layout needs to allow implementation of different onboarding use cases. So it should just implement the core. 
+
+ use the scaffolding command to start. @procertus-docs/apps/frontend-docs/docs/pt1/task-c-ui-lib-onboarding-shell.md
+
+---
+
+@Procertus-ui-experiment/packages/ui-lib/src/components now scaffold a new component that is generic enough to allow different types of onboarding flows to be implemented. It should allow going back in the steps and going forward in the steps if all prerequisites have been met. So, if going forward has been enabled, it should proceed.
+
+This flow step layout needs to allow implementation of different onboarding use cases. So it should just implement the core. 
+
+ use the scaffolding command to start. @procertus-docs/apps/frontend-docs/docs/pt1/task-c-ui-lib-onboarding-shell.md
+
+---
+
+Please make sure we also allow for a layout mode where this entire onboarding flow shell takes the full available visible space and stretches to the screen size.
+
+---
+
+@procertus-docs/ui-experiment/packages/ui/src/design-tokens/Shadow/Guidelines.mdx @procertus-docs/ui-experiment/packages/ui/src/design-tokens/Motion/Guidelines.mdx @procertus-docs/ui-experiment/packages/ui/src/design-tokens/Logotype/Guidelines.mdx @procertus-docs/ui-experiment/packages/ui/src/design-tokens/Iconography/Guidelines.mdx @procertus-docs/ui-experiment/packages/ui/src/design-tokens/Elevation/Guidelines.mdx @procertus-docs/ui-experiment/design-tokens/Colors/Guidelines.md @procertus-docs/ui-experiment/design-tokens/Radius/Guidelines.md @procertus-docs/ui-experiment/packages/ui/src/components/Guidelines.mdx @procertus-docs/ui-experiment/packages/ui/src/components/GradientGuidelines.mdx  please read all guidelines for the exact design features that should and can be used, and ensure the entire onboarding flow shell adheres to these guidelines.
+
+---
+
+@procertus-docs/ui-experiment/packages/ui/src/design-tokens/Shadow/Guidelines.mdx @procertus-docs/ui-experiment/packages/ui/src/design-tokens/Motion/Guidelines.mdx @procertus-docs/ui-experiment/packages/ui/src/design-tokens/Logotype/Guidelines.mdx @procertus-docs/ui-experiment/packages/ui/src/design-tokens/Iconography/Guidelines.mdx @procertus-docs/ui-experiment/packages/ui/src/design-tokens/Elevation/Guidelines.mdx @procertus-docs/ui-experiment/design-tokens/Colors/Guidelines.md @procertus-docs/ui-experiment/design-tokens/Radius/Guidelines.md @procertus-docs/ui-experiment/packages/ui/src/components/Guidelines.mdx @procertus-docs/ui-experiment/packages/ui/src/components/GradientGuidelines.mdx  please read all guidelines for the exact design features that should and can be used, and ensure the entire onboarding flow shell adheres to these guidelines.
+
+---
+
+Now also set up a reusable horizontal or vertical stepper that can be used and aligned with the onboarding flow shell. Please review the existing Shadcn stepper components and, if needed, add them to the UI package.
+https://reui.io/docs/components/base/stepper 
+bunx --bun shadcn@latest add @reui/stepper
+
+Ensure the design system for implementing the reusable stepper component is adhered to.
+
+---
+
+Now also set up a reusable horizontal or vertical stepper that can be used and aligned with the onboarding flow shell. Please review the existing Shadcn stepper components and, if needed, add them to the UI package.
+https://reui.io/docs/components/base/stepper 
+bunx --bun shadcn@latest add @reui/stepper
+
+Ensure the design system for implementing the reusable stepper component is adhered to.
+
+---
+
+@Procertus-ui-experiment/packages/ui/src/components/reui/stepper.tsx set up detailed stories for the stepper and all possible configurations.
+
+---
+
+@Procertus-ui-experiment/packages/ui/src/components/reui/stepper.tsx set up detailed stories for the stepper and all possible configurations.
+
+---
+
+@Procertus-ui-experiment/packages/ui-lib/src/components/onboarding-flow-shell rename this onboarding flow shell to a more generic name "StepLayout".  set up a slot in this step layout, generic layouting component, or shell component to allow positioning a stepper component.
+
+---
+
+@Procertus-ui-experiment/packages/ui-lib/src/components/onboarding-flow-shell rename this onboarding flow shell to a more generic name "StepLayout".  set up a slot in this step layout, generic layouting component, or shell component to allow positioning a stepper component.
+
+---
+
+Use commit skill to commit all your changes.
