@@ -1,0 +1,1393 @@
+{
+  "meta": {
+    "schemaVersion": "1.0.0",
+    "treeVersion": "2.0.0",
+    "canonicalLocale": "nl-BE",
+    "source": {
+      "spreadsheetExport": {
+        "fileName": "DecisionTree_v2.xlsx - Overzicht_v2.csv",
+        "sheetName": "Overzicht_v2",
+        "exportedAt": "2026-04-24",
+        "notes": "Imported from CSV; hierarchy uses Excel columns A–D carry-forward."
+      }
+    },
+    "wizard": {
+      "entryPoints": ["regulated-certificate", "atg-attest", "innovation-attest-ssd"]
+    }
+  },
+  "clusters": [
+    {
+      "id": "beton-en-mortel",
+      "kind": "group",
+      "label": "Beton en mortel",
+      "children": [
+        {
+          "id": "beton-en-mortel--stortklaar-beton",
+          "kind": "product",
+          "label": "Stortklaar beton",
+          "certification": {
+            "ce": "/",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": "x"
+          }
+        },
+        {
+          "id": "beton-en-mortel--verhuurbedrijven",
+          "kind": "product",
+          "label": "Verhuurbedrijven",
+          "certification": {
+            "ce": "/",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": "x"
+          }
+        },
+        {
+          "id": "beton-en-mortel--wegenbeton",
+          "kind": "product",
+          "label": "Wegenbeton",
+          "certification": {
+            "ce": "/",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": "x"
+          }
+        },
+        {
+          "id": "beton-en-mortel--metselmortel",
+          "kind": "product",
+          "label": "Metselmortel",
+          "certification": {
+            "ce": "2+",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": "x"
+          }
+        },
+        {
+          "id": "beton-en-mortel--hydraulisch-gebonden-mengsels",
+          "kind": "product",
+          "label": "Hydraulisch gebonden mengsels",
+          "certification": {
+            "ce": "/",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": "x"
+          }
+        },
+        {
+          "id": "beton-en-mortel--prefab",
+          "kind": "group",
+          "label": "Prefab",
+          "children": [
+            {
+              "id": "beton-en-mortel--prefab--infrastructuur",
+              "kind": "group",
+              "label": "Infrastructuur",
+              "children": [
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--geprefabriceerde-betonproducten-voor-infrastructuurwerken--100",
+                  "kind": "product",
+                  "label": "Geprefabriceerde betonproducten voor infrastructuurwerken",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "100"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--toegangs-en-verbindingsputten-van-ongewapend-beton-van-staalvezelbeton-en-van-ge--101",
+                  "kind": "product",
+                  "label": "Toegangs- en verbindingsputten van ongewapend beton, van staalvezelbeton en van gewapend beton",
+                  "certification": {
+                    "ce": "4",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "101"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--cirkelvormige-geperforeerde-buizen-cirkelvormige-poreuze-buizen-en-hulpstukken-v--104",
+                  "kind": "product",
+                  "label": "Cirkelvormige geperforeerde buizen, cirkelvormige poreuze buizen en hulpstukken van ongewapend beton voor draineer- en infiltratieleidingen",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "104"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--geprefabriceerde-betonnen-bakken-voor-waterafvoer-en-infiltratie--105",
+                  "kind": "product",
+                  "label": "Geprefabriceerde betonnen bakken voor waterafvoer en -infiltratie",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "105"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--buizen-en-hulpstukken-van-ongewapend-beton-van-staalvezelbeton-en-van-gewapend-b--106",
+                  "kind": "product",
+                  "label": "Buizen en hulpstukken van ongewapend beton, van staalvezelbeton en van gewapend beton",
+                  "certification": {
+                    "ce": "4",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "106"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--betonnen-kabelbeschermers-kabelsleuven-en-deksels--107",
+                  "kind": "product",
+                  "label": "Betonnen kabelbeschermers, kabelsleuven en deksels",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "107"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--betonnen-grachtelementen-en-taludgoten--108",
+                  "kind": "product",
+                  "label": "Betonnen grachtelementen en taludgoten",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "108"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--betonboorden--110",
+                  "kind": "product",
+                  "label": "Betonboorden",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "(x)",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "110"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--geprefabriceerde-betonproducten-met-infiltratiekenmerken--111",
+                  "kind": "product",
+                  "label": "Geprefabriceerde betonproducten met infiltratiekenmerken",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "111"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--geprefabriceerde-bekuipingen-van-beton-voor-regenwaterputten-septische-tanks-en---114",
+                  "kind": "product",
+                  "label": "Geprefabriceerde bekuipingen van beton voor regenwaterputten, septische tanks en zuiveringsinstallaties van huishoudelijk afvalwater",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "114"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--betonnen-draineer-en-doorgroeiplaten-voor-grond-en-of-taludbekleding--123",
+                  "kind": "product",
+                  "label": "Betonnen draineer- en doorgroeiplaten voor grond- en/of taludbekleding",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "123"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--geprefabriceerde-betonnen-elementen-voor-afschermende-constructies-voor-wegen--124",
+                  "kind": "product",
+                  "label": "Geprefabriceerde betonnen elementen voor afschermende constructies voor wegen",
+                  "certification": {
+                    "ce": "1",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "x",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "124"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--betonstraatstenen-met-gekliefd-zichtvlak--125",
+                  "kind": "product",
+                  "label": "Betonstraatstenen met gekliefd zichtvlak",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "125"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--betonproducten-voor-waterdoorlatende-bestratingen--126",
+                  "kind": "product",
+                  "label": "Betonproducten voor waterdoorlatende bestratingen",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "126"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--betontegels--211",
+                  "kind": "product",
+                  "label": "Betontegels",
+                  "certification": {
+                    "ce": "4",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "211"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--betonstraatstenen--311",
+                  "kind": "product",
+                  "label": "Betonstraatstenen",
+                  "certification": {
+                    "ce": "4",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "311"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--betonboordstenen--411",
+                  "kind": "product",
+                  "label": "Betonboordstenen",
+                  "certification": {
+                    "ce": "4",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "411"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--infrastructuur--betonnen-lichtmasten--141",
+                  "kind": "product",
+                  "label": "Betonnen lichtmasten",
+                  "certification": {
+                    "ce": "1",
+                    "benor": "(x)",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "141"
+                }
+              ]
+            },
+            {
+              "id": "beton-en-mortel--prefab--bouwelementen",
+              "kind": "group",
+              "label": "Bouwelementen",
+              "children": [
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--elementen-van-gewapend-geautoclaveerd-cellenbeton--004",
+                  "kind": "product",
+                  "label": "Elementen van gewapend geautoclaveerd cellenbeton",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "004"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--betonnen-potten-voor-combinatievloeren--006",
+                  "kind": "product",
+                  "label": "Betonnen potten voor combinatievloeren",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "006"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--kokerelementen--102",
+                  "kind": "product",
+                  "label": "Kokerelementen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "102"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--betonnen-straat-en-tuinmeubilair--131",
+                  "kind": "product",
+                  "label": "Betonnen straat- en tuinmeubilair",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "131"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--keermuurelementen--132",
+                  "kind": "product",
+                  "label": "Keermuurelementen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "132"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--geprefabriceerde-betonproducten--600",
+                  "kind": "product",
+                  "label": "Geprefabriceerde betonproducten",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "600"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--elementen-van-architectonisch-beton--601",
+                  "kind": "product",
+                  "label": "Elementen van architectonisch beton",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "601"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--masten-en-palen--602",
+                  "kind": "product",
+                  "label": "Masten en palen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "(x)",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "602"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--geribde-vloerelementen--603",
+                  "kind": "product",
+                  "label": "Geribde vloerelementen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "603"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--lijnvormige-dragende-elementen--604",
+                  "kind": "product",
+                  "label": "Lijnvormige dragende elementen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "604"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--holle-vloerelementen--605",
+                  "kind": "product",
+                  "label": "Holle vloerelementen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "605"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--breedplaten--606",
+                  "kind": "product",
+                  "label": "Breedplaten",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "606"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--roostervloerelementen--607",
+                  "kind": "product",
+                  "label": "Roostervloerelementen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "zie 620",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "607"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--bijzondere-dakelementen--608",
+                  "kind": "product",
+                  "label": "Bijzondere dakelementen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "(x)",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "608"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--funderingselementen--609",
+                  "kind": "product",
+                  "label": "Funderingselementen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "609"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--brugelementen--610",
+                  "kind": "product",
+                  "label": "Brugelementen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "(x)",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "610"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--trappen--611",
+                  "kind": "product",
+                  "label": "Trappen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "611"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--wandelementen--612",
+                  "kind": "product",
+                  "label": "Wandelementen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "612"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--funderingspalen--613",
+                  "kind": "product",
+                  "label": "Funderingspalen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "613"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--garages-van-gewapend-beton--615",
+                  "kind": "product",
+                  "label": "Garages van gewapend beton",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "(x)",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "615"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--balken-voor-combinatievloeren--616",
+                  "kind": "product",
+                  "label": "Balken voor combinatievloeren",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "616"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--agrarische-betonproducten--620",
+                  "kind": "product",
+                  "label": "Agrarische betonproducten",
+                  "certification": {
+                    "ce": "/",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "620"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--bouwelementen--gewapende-elementen-van-lichtbeton-met-openstructuur--240",
+                  "kind": "product",
+                  "label": "Gewapende elementen van lichtbeton met openstructuur",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "(x)",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "240"
+                }
+              ]
+            },
+            {
+              "id": "beton-en-mortel--prefab--metselstenen",
+              "kind": "group",
+              "label": "Metselstenen",
+              "children": [
+                {
+                  "id": "beton-en-mortel--prefab--metselstenen--betonmetselstenen--001",
+                  "kind": "product",
+                  "label": "Betonmetselstenen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "x",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "001"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--metselstenen--geautoclaveerde-cellenbetonmetselstenen--002",
+                  "kind": "product",
+                  "label": "Geautoclaveerde cellenbetonmetselstenen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "002"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--metselstenen--metselstenen-van-kalkzandsteen--003",
+                  "kind": "product",
+                  "label": "Metselstenen van kalkzandsteen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "x",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "003"
+                },
+                {
+                  "id": "beton-en-mortel--prefab--metselstenen--metselstenen-van-kunststeen--005",
+                  "kind": "product",
+                  "label": "Metselstenen van kunststeen",
+                  "certification": {
+                    "ce": "2+",
+                    "benor": "(x)",
+                    "atg": "",
+                    "ssdInnovationAttest": ""
+                  },
+                  "procedures": {
+                    "procertus": "",
+                    "partijkeuring": "x",
+                    "epd": "x"
+                  },
+                  "productTypeStreamLabel": "005"
+                }
+              ]
+            },
+            {
+              "id": "beton-en-mortel--prefab--dakpannen--490",
+              "kind": "product",
+              "label": "Dakpannen",
+              "certification": {
+                "ce": "3 / 4",
+                "benor": "x",
+                "atg": "",
+                "ssdInnovationAttest": ""
+              },
+              "procedures": {
+                "procertus": "",
+                "partijkeuring": "x",
+                "epd": "x"
+              },
+              "productTypeStreamLabel": "490"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bestanddelen-voor-beton",
+      "kind": "group",
+      "label": "Bestanddelen voor beton",
+      "children": [
+        {
+          "id": "bestanddelen-voor-beton--cement-productie",
+          "kind": "product",
+          "label": "Cement productie",
+          "certification": {
+            "ce": "1+",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": "x"
+          }
+        },
+        {
+          "id": "bestanddelen-voor-beton--cement-overslag",
+          "kind": "product",
+          "label": "Cement overslag",
+          "certification": {
+            "ce": "/",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": "x"
+          }
+        },
+        {
+          "id": "bestanddelen-voor-beton--granulaten",
+          "kind": "group",
+          "label": "Granulaten",
+          "children": [
+            {
+              "id": "bestanddelen-voor-beton--granulaten--natuurlijke-granulaten",
+              "kind": "product",
+              "label": "Natuurlijke granulaten",
+              "certification": {
+                "ce": "2+",
+                "benor": "x",
+                "atg": "",
+                "ssdInnovationAttest": ""
+              },
+              "procedures": {
+                "procertus": "",
+                "partijkeuring": "",
+                "epd": "x"
+              }
+            },
+            {
+              "id": "bestanddelen-voor-beton--granulaten--gerecycleerde-granulaten",
+              "kind": "product",
+              "label": "Gerecycleerde granulaten",
+              "certification": {
+                "ce": "2+",
+                "benor": "-",
+                "atg": "",
+                "ssdInnovationAttest": "x"
+              },
+              "procedures": {
+                "procertus": "",
+                "partijkeuring": "",
+                "epd": "x"
+              }
+            },
+            {
+              "id": "bestanddelen-voor-beton--granulaten--kunstmatige-granulaten",
+              "kind": "product",
+              "label": "Kunstmatige granulaten",
+              "certification": {
+                "ce": "2+",
+                "benor": "x",
+                "atg": "",
+                "ssdInnovationAttest": "x"
+              },
+              "procedures": {
+                "procertus": "",
+                "partijkeuring": "",
+                "epd": "x"
+              }
+            },
+            {
+              "id": "bestanddelen-voor-beton--granulaten--kalksteenfiller",
+              "kind": "product",
+              "label": "Kalksteenfiller",
+              "certification": {
+                "ce": "2+",
+                "benor": "x",
+                "atg": "x",
+                "ssdInnovationAttest": ""
+              },
+              "procedures": {
+                "procertus": "",
+                "partijkeuring": "",
+                "epd": "x"
+              }
+            }
+          ]
+        },
+        {
+          "id": "bestanddelen-voor-beton--hulpstoffen",
+          "kind": "product",
+          "label": "Hulpstoffen",
+          "certification": {
+            "ce": "2+",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": "x"
+          }
+        },
+        {
+          "id": "bestanddelen-voor-beton--hoogovenslak",
+          "kind": "product",
+          "label": "Hoogovenslak",
+          "certification": {
+            "ce": "1+",
+            "benor": "/",
+            "atg": "x",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": "x"
+          }
+        },
+        {
+          "id": "bestanddelen-voor-beton--kalk",
+          "kind": "product",
+          "label": "Kalk",
+          "certification": {
+            "ce": "2+",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": "x"
+          }
+        },
+        {
+          "id": "bestanddelen-voor-beton--hydraulische-bindmiddelen-wegenbouw",
+          "kind": "product",
+          "label": "Hydraulische bindmiddelen wegenbouw",
+          "certification": {
+            "ce": "2+",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": "x"
+          }
+        },
+        {
+          "id": "bestanddelen-voor-beton--pigmenten",
+          "kind": "product",
+          "label": "Pigmenten",
+          "certification": {
+            "ce": "2+",
+            "benor": "/",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": "x"
+          }
+        },
+        {
+          "id": "bestanddelen-voor-beton--vliegas-productie",
+          "kind": "product",
+          "label": "Vliegas productie",
+          "certification": {
+            "ce": "1+",
+            "benor": "x",
+            "atg": "x",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": "x"
+          }
+        },
+        {
+          "id": "bestanddelen-voor-beton--vliegas-overslag",
+          "kind": "product",
+          "label": "Vliegas overslag",
+          "certification": {
+            "ce": "/",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": "x"
+          }
+        }
+      ]
+    },
+    {
+      "id": "staal",
+      "kind": "group",
+      "label": "Staal",
+      "children": [
+        {
+          "id": "staal--lichtmasten-voor-openbare-verlichting",
+          "kind": "product",
+          "label": "Lichtmasten voor openbare verlichting",
+          "certification": {
+            "ce": "1",
+            "benor": "(x)",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": ""
+          }
+        },
+        {
+          "id": "staal--vast-opgestelde-verticale-verkeerstekens",
+          "kind": "product",
+          "label": "Vast opgestelde verticale verkeerstekens",
+          "certification": {
+            "ce": "1",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": ""
+          }
+        },
+        {
+          "id": "staal--staal-en-aluminiumconstructies",
+          "kind": "product",
+          "label": "Staal- en aluminiumconstructies",
+          "certification": {
+            "ce": "2+",
+            "benor": "/",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": ""
+          }
+        },
+        {
+          "id": "staal--bouwstaal",
+          "kind": "product",
+          "label": "Bouwstaal",
+          "certification": {
+            "ce": "2+",
+            "benor": "/",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": ""
+          }
+        },
+        {
+          "id": "staal--roestvrij-bouwstaal",
+          "kind": "product",
+          "label": "Roestvrij bouwstaal",
+          "certification": {
+            "ce": "2+",
+            "benor": "/",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": ""
+          }
+        },
+        {
+          "id": "staal--bewerkers",
+          "kind": "product",
+          "label": "Bewerkers",
+          "certification": {
+            "ce": "/",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": ""
+          }
+        },
+        {
+          "id": "staal--stockhouders-verdelers",
+          "kind": "product",
+          "label": "Stockhouders-verdelers",
+          "certification": {
+            "ce": "/",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": ""
+          }
+        },
+        {
+          "id": "staal--verdelen-van-constructieve-stalen-onderdelen",
+          "kind": "product",
+          "label": "Verdelen van constructieve stalen onderdelen",
+          "certification": {
+            "ce": "/",
+            "benor": "/",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "x",
+            "partijkeuring": "",
+            "epd": ""
+          }
+        },
+        {
+          "id": "staal--lassen-van-staalconstructies",
+          "kind": "product",
+          "label": "Lassen van staalconstructies",
+          "certification": {
+            "ce": "/",
+            "benor": "/",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "x",
+            "partijkeuring": "",
+            "epd": ""
+          }
+        },
+        {
+          "id": "staal--staal-voor-gewapend-beton",
+          "kind": "group",
+          "label": "Staal voor gewapend beton",
+          "children": [
+            {
+              "id": "staal--staal-voor-gewapend-beton--warmgewalst-staal-geribde-warmgewalste-staven-en-draad",
+              "kind": "product",
+              "label": "Warmgewalst staal: geribde warmgewalste staven en draad",
+              "certification": {
+                "ce": "/",
+                "benor": "x",
+                "atg": "",
+                "ssdInnovationAttest": ""
+              },
+              "procedures": {
+                "procertus": "",
+                "partijkeuring": "",
+                "epd": ""
+              }
+            },
+            {
+              "id": "staal--staal-voor-gewapend-beton--koudvervormd-staal-geribde-koudvervormde-draad",
+              "kind": "product",
+              "label": "Koudvervormd staal: geribde koudvervormde draad",
+              "certification": {
+                "ce": "/",
+                "benor": "x",
+                "atg": "",
+                "ssdInnovationAttest": ""
+              },
+              "procedures": {
+                "procertus": "",
+                "partijkeuring": "",
+                "epd": ""
+              }
+            },
+            {
+              "id": "staal--staal-voor-gewapend-beton--gelaste-wapeningsnetten-en-vlakke-panelen",
+              "kind": "product",
+              "label": "Gelaste wapeningsnetten en vlakke panelen",
+              "certification": {
+                "ce": "/",
+                "benor": "x",
+                "atg": "",
+                "ssdInnovationAttest": ""
+              },
+              "procedures": {
+                "procertus": "",
+                "partijkeuring": "",
+                "epd": ""
+              }
+            },
+            {
+              "id": "staal--staal-voor-gewapend-beton--tralieliggers",
+              "kind": "product",
+              "label": "Tralieliggers",
+              "certification": {
+                "ce": "/",
+                "benor": "x",
+                "atg": "",
+                "ssdInnovationAttest": ""
+              },
+              "procedures": {
+                "procertus": "",
+                "partijkeuring": "",
+                "epd": ""
+              }
+            },
+            {
+              "id": "staal--staal-voor-gewapend-beton--mechanische-verbindingen-van-betonstaal",
+              "kind": "product",
+              "label": "Mechanische verbindingen van betonstaal",
+              "certification": {
+                "ce": "/",
+                "benor": "x",
+                "atg": "",
+                "ssdInnovationAttest": ""
+              },
+              "procedures": {
+                "procertus": "",
+                "partijkeuring": "",
+                "epd": ""
+              }
+            }
+          ]
+        },
+        {
+          "id": "staal--voorspanstaal",
+          "kind": "product",
+          "label": "Voorspanstaal",
+          "certification": {
+            "ce": "/",
+            "benor": "x",
+            "atg": "",
+            "ssdInnovationAttest": ""
+          },
+          "procedures": {
+            "procertus": "",
+            "partijkeuring": "",
+            "epd": ""
+          }
+        }
+      ]
+    }
+  ]
+}

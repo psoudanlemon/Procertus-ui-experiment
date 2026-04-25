@@ -63,3 +63,4 @@
 {"command":"component","args":["ForgotPasswordForm","--package","ui-lib"],"cwd":"/Users/matthias/Desktop/Procertus-ui-experiment","durationMs":328,"success":true,"ts":"2026-03-30T10:55:50.420Z"}
 {"command":"component","args":["ResetPasswordForm","--package","ui-lib"],"cwd":"/Users/matthias/Desktop/Procertus-ui-experiment","durationMs":312,"success":true,"ts":"2026-03-30T10:55:51.098Z"}
 {"command":"component","args":["AuthVerifying","--package","ui-lib"],"cwd":"/Users/matthias/Desktop/Procertus-ui-experiment","durationMs":288,"success":true,"ts":"2026-03-30T10:55:51.738Z"}
+{"command":"workspace-ui","args":["add-component","ProcertusCategorizationTreeView","--package","ui-lib","--variant","data-panel"],"cwd":"/Users/psoudan/workspace/05-Procertus/Procertus-ui-experiment","durationMs":636,"success":true,"ts":"2026-04-25T04:53:55.215Z"}

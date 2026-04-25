@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import { ModeProvider, ThemeProvider, TooltipProvider } from "@procertus-ui/ui";
+import { ProcertusCategorizationProvider } from "@procertus-ui/procertus-categorization";
 
 import { MockPrototypeAuthProvider } from "@procertus-ui/ui-pt1-prototype";
 
@@ -16,9 +17,11 @@ createRoot(document.getElementById("root")!).render(
       <ThemeProvider>
         <TooltipProvider delayDuration={300}>
           <ModeProvider>
-            <MockPrototypeAuthProvider users={MOCK_PROTOTYPE_USERS}>
-              <App />
-            </MockPrototypeAuthProvider>
+            <ProcertusCategorizationProvider>
+              <MockPrototypeAuthProvider users={MOCK_PROTOTYPE_USERS}>
+                <App />
+              </MockPrototypeAuthProvider>
+            </ProcertusCategorizationProvider>
           </ModeProvider>
         </TooltipProvider>
       </ThemeProvider>

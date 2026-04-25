@@ -13,3 +13,8 @@ export type {
   PrototypeSurfaceMarqueeProps,
   TokenSwatchProps,
 } from "./components/design-tokens-showcase";
+export {
+  ProcertusCategorizationTreeView,
+  type CertificationLabelKey,
+  type ProcertusCategorizationTreeViewProps,
+} from "./components/procertus-categorization-tree-view";

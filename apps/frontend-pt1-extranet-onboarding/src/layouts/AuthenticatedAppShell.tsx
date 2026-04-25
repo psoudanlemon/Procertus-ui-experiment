@@ -2,6 +2,7 @@ import type { IconSvgElement } from "@hugeicons/react";
 import {
   BookOpen01Icon,
   HelpCircleIcon,
+  HierarchySquare02Icon,
   Home01Icon,
   Setting06Icon,
 } from "@hugeicons/core-free-icons";
@@ -40,6 +41,7 @@ export function AuthenticatedAppShell() {
 
   const sidebar: AppSidebarProps = useMemo(() => {
     const isHome = pathname === "/app" || pathname === "/app/";
+    const isCategorization = pathname.startsWith("/app/categorization");
     const isDesign = pathname.startsWith("/app/design-system");
     const workspaceId = session?.user.homeOrganization.id ?? "prototype";
     const workspaceName = session?.user.homeOrganization.name ?? "Workspace";
@@ -72,6 +74,12 @@ export function AuthenticatedAppShell() {
           isActive: isHome,
         },
         {
+          title: "Categorization",
+          url: "/app/categorization",
+          icon: HierarchySquare02Icon as IconSvgElement,
+          isActive: isCategorization,
+        },
+        {
           title: "Design system",
           url: "/app/design-system",
           icon: BookOpen01Icon as IconSvgElement,
@@ -88,7 +96,11 @@ export function AuthenticatedAppShell() {
   }, [pathname, session]);
 
   const header: AppHeaderProps = useMemo(() => {
-    const crumb = pathname.startsWith("/app/design-system") ? "Design system" : "Overview";
+    const crumb = pathname.startsWith("/app/categorization")
+      ? "Categorization"
+      : pathname.startsWith("/app/design-system")
+        ? "Design system"
+        : "Overview";
     const user = session?.user;
     return {
       showNavigation: false,

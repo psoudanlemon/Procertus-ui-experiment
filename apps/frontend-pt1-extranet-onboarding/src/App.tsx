@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthenticatedAppShell } from "./layouts/AuthenticatedAppShell";
 import { PublicAppShell } from "./layouts/PublicAppShell";
 import { AuthenticatedHomePage } from "./pages/AuthenticatedHomePage";
+import { CategorizationDemoPage } from "./pages/CategorizationDemoPage";
 import { DesignSystemPage } from "./pages/DesignSystemPage";
 import { OnboardingEntryPlaceholderPage } from "./pages/OnboardingEntryPlaceholderPage";
 import { WelcomePage } from "./pages/WelcomePage";
@@ -27,6 +28,7 @@ export default function App() {
       <Route element={<RequireAuth />}>
         <Route element={<AuthenticatedAppShell />}>
           <Route path="/app" element={<AuthenticatedHomePage />} />
+          <Route path="/app/categorization" element={<CategorizationDemoPage />} />
           <Route path="/app/design-system" element={<DesignSystemPage />} />
         </Route>
       </Route>
