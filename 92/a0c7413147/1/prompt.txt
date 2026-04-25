@@ -1,0 +1,60 @@
+@procertus-docs/apps/frontend-docs/docs/pt1/task-b-decision-tree-data-module.md please set up a data provider to expose the entire process categorization, together with helper functions and clean queries, to be available as easy-to-use hooks in the application. Be inspired by @procertus-docs/apps/frontend-docs/src/components/analysis/q2b-categorization-tree.tsx
+
+---
+
+@procertus-docs/apps/frontend-docs/docs/pt1/task-b-decision-tree-data-module.md please set up a data provider to expose the entire process categorization, together with helper functions and clean queries, to be available as easy-to-use hooks in the application. Be inspired by @procertus-docs/apps/frontend-docs/src/components/analysis/q2b-categorization-tree.tsx
+
+---
+
+Move this entire data organization, including the core data, to a reusable client side package so it can be reused across different applications.
+
+---
+
+Move this entire data organization, including the core data, to a reusable client side package so it can be reused across different applications.
+
+---
+
+@Procertus-ui-experiment/packages/procertus-categorization/package.json I have copied this package into another repository to use the data in the prototype apps. Make sure the package is renamed to fit the new model-equal setup and can be used inside the first prototype application.
+
+Provide all of the categorization data in the prototype app. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/main.tsx
+
+---
+
+Now set up a new demo route inside the prototype application to browse the nested tree of categorization items. Much like in the docs application, a UI component was set up to do exactly this.
+@procertus-docs/apps/frontend-docs/src/components/analysis/procertus-categorization-tree.tsx 
+Move this UI, without data dependencies, to a new component scaffolded inside the UILib package.@procertus-docs/ui-experiment/packages/ui-lib/src/index.ts
+
+---
+
+Sorry—I want you to use the scaffold tool to scaffold a new UI component inside the UI library and start from there.
+
+---
+
+Sorry—I want you to use the scaffold tool to scaffold a new UI component inside the UI library and start from there.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx 
+
+[plugin:vite:import-analysis] Failed to resolve import "@/categorization" from "src/pages/CategorizationDemoPage.tsx". Does the file exist?
+/Users/psoudan/workspace/05-Procertus/Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/CategorizationDemoPage.tsx:1:46
+1  |  import { useProcertusCategorizationDoc } from "@/categorization";
+   |                                                 ^
+2  |  import { ProcertusCategorizationTreeView } from "@procertus-ui/ui-lib";
+3  |  import { P } from "@procertus-ui/ui";
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/CategorizationDemoPage.tsx:1 why not just import from `@procertus-ui/procertus-categorization`
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/CategorizationDemoPage.tsx:1 why not just import from `@procertus-ui/procertus-categorization`
+
+---
+
+Use a Commit Kit skill to commit all changes.
+
+---
+
+Use a Commit Kit skill to commit all changes.
