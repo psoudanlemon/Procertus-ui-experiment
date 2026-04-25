@@ -6,6 +6,8 @@ export { DensityProvider, useDensity, DENSITIES, type Density } from "./componen
 export { ModeToggle } from "./components/mode-toggle";
 /** Primitives: one re-export per file in `components/ui/` — tree-shakeable when apps use named imports. */
 export * from "./components/ui";
+/** ReUI registry components (e.g. stepper) — see `components/reui/`. */
+export * from "./components/reui";
 /** Composed application shell components. */
 export * from "./components/app-sidebar";
 export * from "./components/app-header";

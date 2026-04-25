@@ -18,3 +18,16 @@ export {
   type CertificationLabelKey,
   type ProcertusCategorizationTreeViewProps,
 } from "./components/procertus-categorization-tree-view";
+export { StepLayout, useStepLayout } from "./components/step-layout";
+export type {
+  StepLayoutAction,
+  StepLayoutProps,
+  UseStepLayoutOptions,
+} from "./components/step-layout";
+export {
+  OnboardingStepper,
+} from "./components/onboarding-stepper";
+export type {
+  OnboardingStepperProps,
+  OnboardingStepperStep,
+} from "./components/onboarding-stepper";
