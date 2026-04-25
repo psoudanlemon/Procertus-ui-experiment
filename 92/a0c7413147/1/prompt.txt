@@ -58,3 +58,11 @@ Use a Commit Kit skill to commit all changes.
 ---
 
 Use a Commit Kit skill to commit all changes.
+
+---
+
+I said to use a commit skill to commit all changes.
+
+---
+
+I said to use a commit skill to commit all changes.
