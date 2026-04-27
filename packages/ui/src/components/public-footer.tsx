@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cn, Separator } from "@procertus-ui/ui";
+import { cn } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -14,12 +14,12 @@ export type FooterLinkGroup = {
 export type CompanyDetail = {
   /** The text or label to display. */
   label: string;
-  /** Optional URL — renders the detail as a link. */
+  /** Optional URL, renders the detail as a link. */
   url?: string;
 };
 
 export type PublicRegistryFooterProps = {
-  /** App logo — render any React node. */
+  /** App logo, render any React node. */
   logo?: React.ReactNode;
   /** Tagline shown below the logo. */
   tagline?: string;
@@ -27,11 +27,11 @@ export type PublicRegistryFooterProps = {
   linkGroups?: FooterLinkGroup[];
   /** Legal/bottom-bar links (privacy, terms, etc.). */
   legalLinks?: { label: string; url: string }[];
-  /** Compact company info line — displayed as a single bar with bullet separators. */
+  /** Compact company info line, displayed as a single bar with bullet separators. */
   companyDetails?: CompanyDetail[];
-  /** Copyright notice — defaults to current year + PROCERTUS. */
+  /** Copyright notice, defaults to current year + PROCERTUS. */
   copyright?: string;
-  /** Visual variant — "default" uses sidebar tokens, "transparent" uses background. */
+  /** Visual variant. "default" uses sidebar tokens, "transparent" uses background. */
   variant?: "default" | "transparent";
 };
 
@@ -45,12 +45,12 @@ function PublicRegistryFooter({
   linkGroups = [],
   legalLinks = [],
   companyDetails = [],
-  copyright = `\u00A9 ${new Date().getFullYear()} PROCERTUS. Alle rechten voorbehouden.`,
+  copyright = `© ${new Date().getFullYear()} PROCERTUS. Alle rechten voorbehouden.`,
   variant = "default",
 }: PublicRegistryFooterProps) {
   return (
     <footer data-slot="public-registry-footer">
-      {/* Expanded footer — link groups, logo, tagline */}
+      {/* Expanded footer, link groups, logo, tagline */}
       {(logo || tagline || linkGroups.length > 0) && (
         <div className="border-t border-border bg-card">
           <div className="mx-auto max-w-7xl px-boundary">
@@ -89,12 +89,14 @@ function PublicRegistryFooter({
       )}
 
       {/* Company info bar */}
-      <div className={cn(
-        "border-t",
-        variant === "transparent"
-          ? "border-border bg-background text-foreground"
-          : "border-sidebar-border bg-sidebar text-sidebar-foreground",
-      )}>
+      <div
+        className={cn(
+          "border-t",
+          variant === "transparent"
+            ? "border-border bg-background text-foreground"
+            : "border-sidebar-border bg-sidebar text-sidebar-foreground",
+        )}
+      >
         <div className="flex flex-wrap items-center gap-x-micro gap-y-micro px-boundary py-component text-xs leading-relaxed text-sidebar-foreground/60">
           {companyDetails.map((detail, index) => (
             <React.Fragment key={detail.label}>

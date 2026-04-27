@@ -4,11 +4,11 @@ import { FilePlusIcon } from "@hugeicons/core-free-icons";
 
 import {
   Button,
+  PublicRegistryFooter,
+  type PublicRegistryFooterProps,
   PublicRegistryHeader,
   type PublicRegistryHeaderProps,
 } from "@procertus-ui/ui";
-
-import { PublicRegistryFooter, type PublicRegistryFooterProps } from "./PublicRegistryFooter";
 
 // ---------------------------------------------------------------------------
 // Types
