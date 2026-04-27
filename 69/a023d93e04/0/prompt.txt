@@ -308,3 +308,11 @@ Only when the request editing route is used (/request/create/[id]/edit)  do we d
 Progress of the request creation should not be stored in local storage. It should be derived from the route information or persisted state in the url.
 
 Only when the request editing route is used (/request/create/[id]/edit)  do we derive the exact state of the UI from the persistent state of the specific request entity and the persistent UI state for this request ID. This route always loads the wizard in step two or later. Of course, Step 1 can still be selected if the user wants to change their intent for the given request ID.
+
+---
+
+Commit all changes. Use the Commit skill.
+
+---
+
+Commit all changes. Use the Commit skill.
