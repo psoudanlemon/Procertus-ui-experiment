@@ -210,7 +210,7 @@ export const WithLine: Story = {
     const { tree, items } = useStoryTree("ui");
 
     return (
-      <div className="w-full max-w-sm rounded-xl border bg-card p-3">
+      <div className="w-full max-w-sm rounded-xl border bg-card p-section">
         <Tree
           tree={tree}
           className="relative before:absolute before:top-8 before:bottom-2 before:left-3 before:w-px before:bg-border"
@@ -231,7 +231,7 @@ export const WithIcon: Story = {
     const { tree, items } = useStoryTree("ui-lib");
 
     return (
-      <Tree tree={tree} className="w-full max-w-md rounded-xl border bg-card p-3">
+      <Tree tree={tree} className="w-full max-w-md rounded-xl border bg-card p-section">
         {items.map((item) => (
           <TreeItem key={item.getId()} item={item as never}>
             <NodeLabel item={item} withIcon />
@@ -250,7 +250,7 @@ export const PlusMinusIcons: Story = {
       <Tree
         tree={tree}
         toggleIconType="plus-minus"
-        className="w-full max-w-sm rounded-xl border bg-card p-3"
+        className="w-full max-w-sm rounded-xl border bg-card p-section"
       >
         {items.map((item) => (
           <TreeItem key={item.getId()} item={item as never}>
@@ -267,7 +267,7 @@ export const DragLine: Story = {
     const { tree, items } = useStoryTree();
 
     return (
-      <div className="relative w-full max-w-sm rounded-xl border bg-card p-3">
+      <div className="relative w-full max-w-sm rounded-xl border bg-card p-section">
         <Tree tree={tree}>
           {items.map((item) => (
             <TreeItem key={item.getId()} item={item as never}>

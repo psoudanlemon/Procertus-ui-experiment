@@ -31,7 +31,7 @@ const emphases = ["primary", "secondary", "tertiary"] as const;
 function RowEmphasesSingle() {
   const [v, setV] = useState("primary-option");
   return (
-    <RadioGroup value={v} onValueChange={setV} className="flex w-full max-w-md flex-col gap-3">
+    <RadioGroup value={v} onValueChange={setV} className="flex w-full max-w-md flex-col gap-component">
       {emphases.map((e) => (
         <SelectChoiceCard
           key={e}
@@ -53,7 +53,7 @@ export const DefaultEmphasesSingle = {
 function HeroSingleStory() {
   const choice = useChoiceSelection({ mode: "single", defaultSelectedId: "plans" });
   return (
-    <div className="flex w-full max-w-5xl flex-col gap-6">
+    <div className="flex w-full max-w-5xl flex-col gap-region">
       <SelectChoiceCardGroup
         legend="Hero appearance"
         hint="Large type, padded, centered — control is visually hidden."
@@ -104,7 +104,7 @@ function MultipleWithHookStory() {
   const choice = useChoiceSelection({ mode: "multiple", defaultSelectedIds: ["a"] });
   const ids = ["a", "b", "c"] as const;
   return (
-    <div className="w-full max-w-4xl space-y-3">
+    <div className="w-full max-w-4xl space-y-component">
       <SelectChoiceCardGroup selectionMode="multiple" legend="Pick any" layout="grid">
         {ids.map((id) => (
           <SelectChoiceCard

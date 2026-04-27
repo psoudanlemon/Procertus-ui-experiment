@@ -74,9 +74,9 @@ function OnboardingFlowStory() {
       }}
       secondaryAction={flow.isLast ? { label: "Edit profile", onClick: () => flow.goToStep(1) } : undefined}
     >
-      <div className="space-y-3 text-sm text-muted-foreground">
+      <div className="space-y-component text-sm text-muted-foreground">
         <p>Place step fields, checklists, or any content in this slot. This story uses a single prerequisite flag per step.</p>
-        <label className="flex cursor-pointer items-center gap-2 text-foreground">
+        <label className="flex cursor-pointer items-center gap-component text-foreground">
           <input
             type="checkbox"
             className="size-4 rounded border"
@@ -131,7 +131,7 @@ function WithTopStepperStory() {
         disabled: flow.isLast ? !flow.stepAdvanceAllowed : !flow.canGoForward,
       }}
     >
-      <label className="flex items-center gap-2 text-sm text-muted-foreground">
+      <label className="flex items-center gap-component text-sm text-muted-foreground">
         <input
           type="checkbox"
           className="size-4 rounded border"
@@ -239,7 +239,7 @@ function WizardStepStory() {
       }}
     >
       {step === 0 ? (
-        <label className="flex items-center gap-2 text-sm">
+        <label className="flex items-center gap-component text-sm">
           <input
             type="checkbox"
             className="size-4"
@@ -288,8 +288,8 @@ function FillLayoutStory() {
       }}
       secondaryAction={{ label: "Save draft", onClick: () => undefined }}
     >
-      <div className="space-y-4 text-sm text-muted-foreground">
-        <label className="flex items-center gap-2 text-foreground">
+      <div className="space-y-section text-sm text-muted-foreground">
+        <label className="flex items-center gap-component text-foreground">
           <input
             type="checkbox"
             className="size-4 rounded border"
@@ -321,7 +321,7 @@ function ParentFillWithRailStory() {
   }
 
   return (
-    <div className="h-[70svh] min-h-0 w-full min-w-0 bg-muted/20 p-4">
+    <div className="h-[70svh] min-h-0 w-full min-w-0 bg-muted/20 p-section">
       <StepLayout
         className="max-w-none"
         layout="fill-parent"
@@ -346,7 +346,7 @@ function ParentFillWithRailStory() {
           onClick: () => (flow.isLast ? undefined : flow.goForward()),
         }}
       >
-        <div className="space-y-4 text-sm text-muted-foreground">
+        <div className="space-y-section text-sm text-muted-foreground">
           {fillerParagraphs.concat(fillerParagraphs).map((line, index) => (
             <p key={`${line}-${index}`}>{line}</p>
           ))}

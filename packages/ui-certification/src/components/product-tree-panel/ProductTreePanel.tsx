@@ -86,16 +86,17 @@ type TreeItemProps = {
 };
 
 function TreeItem({ node, depth, maxDepth, expandedIds, onToggle, onSelectProduct }: TreeItemProps) {
-  const pad = Math.min(depth, maxDepth) * 12;
+  const indentLevel = Math.min(depth, maxDepth);
+  const indentStyle = { paddingLeft: `calc(${indentLevel} * var(--spacing-section))` };
   if (node.kind === "product") {
     const selectable = node.selectable !== false;
     return (
-      <div style={{ paddingLeft: pad }} className="min-w-0">
+      <div style={indentStyle} className="min-w-0">
         <Button
           type="button"
           variant="ghost"
           className={cn(
-            "h-auto w-full min-w-0 flex-col items-stretch justify-start gap-0.5 rounded-md border px-3 py-2 text-left transition",
+            "h-auto w-full min-w-0 flex-col items-stretch justify-start gap-micro rounded-md border px-component py-component text-left transition",
             node.selected
               ? "border-primary/60 bg-primary/5 hover:border-primary/70 hover:bg-primary/10"
               : "border-transparent hover:border-border/60 hover:bg-muted/30",
@@ -109,7 +110,7 @@ function TreeItem({ node, depth, maxDepth, expandedIds, onToggle, onSelectProduc
             }
           }}
         >
-          <span className="flex w-full min-w-0 flex-wrap items-start gap-2">
+          <span className="flex w-full min-w-0 flex-wrap items-start gap-component">
             <span className="min-w-0 flex-1 wrap-break-word font-medium text-foreground">{node.label}</span>
             {node.statusLabel ? (
               <Badge
@@ -134,13 +135,13 @@ function TreeItem({ node, depth, maxDepth, expandedIds, onToggle, onSelectProduc
   const open = expandedIds.has(node.id);
   if (!node.children.length) {
     return (
-      <div style={{ paddingLeft: pad }} className="min-w-0 text-sm text-muted-foreground">
+      <div style={indentStyle} className="min-w-0 text-sm text-muted-foreground">
         {node.label} (empty)
       </div>
     );
   }
   return (
-    <div style={{ paddingLeft: pad }} className="min-w-0">
+    <div style={indentStyle} className="min-w-0">
       <Collapsible
         open={open}
         onOpenChange={(o) => {
@@ -158,19 +159,19 @@ function TreeItem({ node, depth, maxDepth, expandedIds, onToggle, onSelectProduc
             <Button
               type="button"
               variant="ghost"
-              className="h-auto w-full min-w-0 items-start justify-between gap-2 rounded-none px-3 py-2.5 text-left font-medium hover:bg-muted/30"
+              className="h-auto w-full min-w-0 items-start justify-between gap-component rounded-none px-component py-component text-left font-medium hover:bg-muted/30"
             >
               <span className="min-w-0 wrap-break-word">{node.label}</span>
               <HugeiconsIcon
                 icon={ArrowRight01Icon}
-                className="mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-90"
+                className="mt-micro size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-90"
                 strokeWidth={1.5}
                 aria-hidden
               />
             </Button>
           </CollapsibleTrigger>
           <CollapsibleContent>
-            <div className="flex flex-col gap-0.5 border-t border-border/30 px-1.5 py-1.5">
+            <div className="flex flex-col gap-micro border-t border-border/30 p-micro">
               {node.children.map((c) => (
                 <TreeItem
                   key={c.id}
@@ -230,25 +231,25 @@ export function ProductTreePanel({
   const set = new Set(expanded);
   return (
     <Card className={cn("mx-auto w-full max-w-5xl overflow-hidden", className)}>
-      <CardHeader className="gap-4">
+      <CardHeader className="gap-section">
         <div>
           <CardTitle>{title}</CardTitle>
           {description ? <CardDescription>{description}</CardDescription> : null}
         </div>
         {showSearch && onSearchChange ? (
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-component sm:flex-row sm:items-center sm:justify-between">
             <SearchInput
               value={searchValue}
               onChange={onSearchChange}
               placeholder={searchPlaceholder}
             />
-            {actions ? <div className="flex shrink-0 flex-wrap gap-2">{actions}</div> : null}
+            {actions ? <div className="flex shrink-0 flex-wrap gap-component">{actions}</div> : null}
           </div>
         ) : actions ? (
-          <div className="flex flex-wrap justify-end gap-2">{actions}</div>
+          <div className="flex flex-wrap justify-end gap-component">{actions}</div>
         ) : null}
       </CardHeader>
-      <CardContent className="space-y-2 px-4 pb-6 sm:px-6">
+      <CardContent className="space-y-component px-section pb-section">
         {nodes.length === 0 ? (
           (emptyState ?? (
             <Empty>
@@ -258,7 +259,7 @@ export function ProductTreePanel({
             </Empty>
           ))
         ) : (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-component">
             {nodes.map((n) => (
               <TreeItem
                 key={n.id}

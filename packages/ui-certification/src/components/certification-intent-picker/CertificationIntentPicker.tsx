@@ -152,7 +152,7 @@ export function CertificationIntentPicker({
           }
         }}
       >
-        <div className={cn("grid w-full grid-cols-1 gap-3", layout === "grid" && "md:grid-cols-3")}>
+        <div className={cn("grid w-full grid-cols-1 gap-section", layout === "grid" && "md:grid-cols-3")}>
           {mainOptions.map((opt) => {
             const selected = value === opt.id;
             return (
@@ -173,11 +173,11 @@ export function CertificationIntentPicker({
           })}
         </div>
         {additionalOptions.length > 0 ? (
-          <div className="mt-4 flex w-full flex-col gap-2 border-t border-border/60 pt-4">
+          <div className="mt-region flex w-full flex-col gap-component border-t border-border/60 pt-region">
             <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
               Other request types
             </p>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-3">
+            <div className="grid w-full grid-cols-1 gap-component md:grid-cols-3">
               {additionalOptions.map((opt) => (
                 <SelectChoiceCard
                   key={opt.id}

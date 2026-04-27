@@ -37,7 +37,7 @@ function ListStory() {
   ]);
   const [last, setLast] = useState("");
   return (
-    <div className="space-y-2">
+    <div className="space-y-component">
       <DraftRequestList
         title="Draft requests"
         description="Edit opens an editor in the app; remove drops the draft in session."

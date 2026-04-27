@@ -116,7 +116,7 @@ function FiltersDemo({
   const [filters, setFilters] = useState<Filter<FilterValue>[]>(initialFilters);
 
   return (
-    <div className="flex w-full max-w-4xl flex-col gap-4">
+    <div className="flex w-full max-w-4xl flex-col gap-section">
       <Filters
         filters={filters}
         fields={fields}
@@ -128,7 +128,7 @@ function FiltersDemo({
         i18n={i18n}
         enableShortcut
       />
-      <pre className="max-h-64 overflow-auto rounded-lg border bg-muted/30 p-3 text-xs text-muted-foreground">
+      <pre className="max-h-64 overflow-auto rounded-lg border bg-muted/30 p-section text-xs text-muted-foreground">
         {JSON.stringify(filters, null, 2)}
       </pre>
     </div>
@@ -156,7 +156,7 @@ export const TriggerButton: Story = {
       trigger={
         <Button variant="secondary">
           Add condition
-          <Badge variant="outline" className="ml-1">
+          <Badge variant="outline" className="ml-micro">
             F
           </Badge>
         </Button>

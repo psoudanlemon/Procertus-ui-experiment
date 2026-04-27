@@ -106,8 +106,8 @@ function UploadCard({ item, dense = false }: { item: UploadItem; dense?: boolean
     >
       <CardContent
         className={cn(
-          "flex items-center gap-3",
-          dense ? "px-3 py-2" : "px-4 py-3"
+          "flex items-center gap-component",
+          dense ? "px-component py-component" : "px-section py-component"
         )}
       >
         <DragHandle />
@@ -117,7 +117,7 @@ function UploadCard({ item, dense = false }: { item: UploadItem; dense?: boolean
             {item.description}
           </div>
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-component">
           <Badge variant={typeVariant[item.type]}>{item.type}</Badge>
           <span className="hidden text-xs text-muted-foreground sm:inline">
             {item.size}
@@ -137,7 +137,7 @@ export const Vertical: Story = {
         value={items}
         onValueChange={setItems}
         getItemValue={(item) => item.id}
-        className="flex w-full max-w-2xl flex-col gap-2"
+        className="flex w-full max-w-2xl flex-col gap-component"
       >
         {items.map((item) => (
           <SortableItem key={item.id} value={item.id}>
@@ -159,12 +159,12 @@ export const Grid: Story = {
         onValueChange={setItems}
         getItemValue={(item) => item.id}
         strategy="grid"
-        className="grid w-full max-w-4xl grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
+        className="grid w-full max-w-4xl grid-cols-1 gap-component sm:grid-cols-2 lg:grid-cols-3"
       >
         {items.map((item) => (
           <SortableItem key={item.id} value={item.id}>
-            <Card className="h-full gap-3 p-4 shadow-sm data-[dragging=true]:shadow-lg">
-              <div className="flex items-start justify-between gap-3">
+            <Card className="h-full gap-component p-section shadow-sm data-[dragging=true]:shadow-lg">
+              <div className="flex items-start justify-between gap-component">
                 <div className="min-w-0">
                   <CardTitle className="truncate text-sm">{item.title}</CardTitle>
                   <CardDescription className="truncate">
@@ -200,7 +200,7 @@ export const NestedSections: Story = {
 
     const renderOption = (item: (typeof colors)[number]) => (
       <SortableItem key={item.id} value={item.id}>
-        <div className="flex items-center gap-3 rounded-lg border bg-card p-3 shadow-xs">
+        <div className="flex items-center gap-component rounded-lg border bg-card p-section shadow-xs">
           <DragHandle />
           <div className="min-w-0">
             <div className="text-sm font-medium">{item.title}</div>
@@ -211,7 +211,7 @@ export const NestedSections: Story = {
     );
 
     return (
-      <div className="grid w-full max-w-4xl gap-4 md:grid-cols-2">
+      <div className="grid w-full max-w-4xl gap-section md:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Colors</CardTitle>
@@ -222,7 +222,7 @@ export const NestedSections: Story = {
               value={colors}
               onValueChange={setColors}
               getItemValue={(item) => item.id}
-              className="flex flex-col gap-2"
+              className="flex flex-col gap-component"
             >
               {colors.map(renderOption)}
             </Sortable>
@@ -238,7 +238,7 @@ export const NestedSections: Story = {
               value={sizes}
               onValueChange={setSizes}
               getItemValue={(item) => item.id}
-              className="flex flex-col gap-2"
+              className="flex flex-col gap-component"
             >
               {sizes.map(renderOption)}
             </Sortable>
@@ -258,7 +258,7 @@ export const DisabledItem: Story = {
         value={items}
         onValueChange={setItems}
         getItemValue={(item) => item.id}
-        className="flex w-full max-w-2xl flex-col gap-2"
+        className="flex w-full max-w-2xl flex-col gap-component"
       >
         {items.map((item) => (
           <SortableItem

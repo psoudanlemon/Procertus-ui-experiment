@@ -45,19 +45,19 @@ export function CertificationBadgeRow({
     );
   }
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
+    <div className={cn("flex flex-col gap-component", className)}>
       {leading ? (
         <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
           {leading}
         </div>
       ) : null}
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-micro">
         {items.map((it) => {
           if (it.presentation === "not-offered" || it.presentation === "muted") {
             return (
               <div
                 key={it.id}
-                className="inline-flex min-w-0 max-w-full flex-col gap-0.5 rounded-md border px-2 py-1 text-left text-xs leading-snug"
+                className="inline-flex min-w-0 max-w-full flex-col gap-micro rounded-md border px-component py-micro text-left text-xs leading-snug"
                 data-presentation={it.presentation}
               >
                 <span className="font-medium text-foreground">{it.shortLabel}</span>
@@ -86,7 +86,7 @@ export function CertificationBadgeRow({
               title={it.subline}
             >
               <span className="font-medium">{it.shortLabel}</span>
-              {it.text ? <span className="ml-1 font-normal opacity-90">: {it.text}</span> : null}
+              {it.text ? <span className="ml-micro font-normal opacity-90">: {it.text}</span> : null}
             </Badge>
           );
         })}

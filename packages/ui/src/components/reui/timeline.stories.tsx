@@ -124,7 +124,7 @@ export const LeftAlignedDates: Story = {
         <TimelineItem
           key={item.step}
           step={item.step}
-          className="grid grid-cols-[7rem_1fr] gap-x-6"
+          className="grid grid-cols-[7rem_1fr] gap-x-region"
         >
           <TimelineDate className="col-start-1 row-start-1 text-right">
             {item.date}
@@ -195,7 +195,7 @@ export const AlternatingLayout: Story = {
 export const Horizontal: Story = {
   render: () => (
     <Card className="w-full max-w-4xl">
-      <CardContent className="pt-8">
+      <CardContent className="pt-region">
         <Timeline defaultValue={2} orientation="horizontal" className="w-full">
           {roadmap.map((item) => (
             <TimelineItem key={item.step} step={item.step}>
@@ -219,7 +219,7 @@ export const ActivityFeed: Story = {
     <Timeline defaultValue={2} className="w-full max-w-2xl">
       {activity.map((item) => (
         <TimelineItem key={item.step} step={item.step}>
-          <TimelineHeader className="flex flex-wrap items-center gap-2">
+          <TimelineHeader className="flex flex-wrap items-center gap-component">
             <TimelineTitle>{item.title}</TimelineTitle>
             <Badge
               variant={
@@ -253,8 +253,8 @@ export const Controlled: Story = {
     const [value, setValue] = useState(2);
 
     return (
-      <div className="flex w-full max-w-xl flex-col gap-4">
-        <div className="flex flex-wrap gap-2">
+      <div className="flex w-full max-w-xl flex-col gap-section">
+        <div className="flex flex-wrap gap-component">
           {roadmap.map((item) => (
             <Button
               key={item.step}

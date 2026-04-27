@@ -53,7 +53,7 @@ export function RequestPackageReview({
         <CardTitle>{title}</CardTitle>
         {description ? <CardDescription>{description}</CardDescription> : null}
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-component">
         {notice ? <div className="text-sm text-muted-foreground">{notice}</div> : null}
         {rows.length === 0 ? (
           (emptyState ?? <p className="text-sm text-muted-foreground" role="status">Nothing to review — add at least one request.</p>)

@@ -61,7 +61,7 @@ function HorizontalWithStepLayout() {
         disabled: flow.isLast ? !flow.stepAdvanceAllowed : !flow.canGoForward,
       }}
     >
-      <label className="flex items-center gap-2 text-sm">
+      <label className="flex items-center gap-component text-sm">
         <input
           type="checkbox"
           className="size-4 rounded border"
@@ -86,7 +86,7 @@ export const WithStepLayout = {
 
 function VerticalReadOnly() {
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-4 md:flex-row">
+    <div className="mx-auto flex max-w-3xl flex-col gap-section md:flex-row">
       <OnboardingStepper
         className="shrink-0"
         steps={stepDefs}

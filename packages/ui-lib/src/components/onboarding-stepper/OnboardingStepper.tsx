@@ -138,10 +138,10 @@ function OnboardingStepperItem({ n, step, interactive, isLast, orientation }: It
         )}
       >
         <StepperIndicator>{n}</StepperIndicator>
-        <div className="min-w-0 flex-1 text-start">
+        <div className="flex min-w-0 flex-1 flex-col gap-micro text-start">
           <StepperTitle className="line-clamp-2 font-semibold text-foreground">{step.title}</StepperTitle>
           {step.description ? (
-            <p className="mt-0.5 line-clamp-2 text-xs leading-[1.6] text-muted-foreground">{step.description}</p>
+            <p className="line-clamp-2 text-xs leading-[1.6] text-muted-foreground">{step.description}</p>
           ) : null}
         </div>
       </StepperTrigger>

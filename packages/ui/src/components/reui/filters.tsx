@@ -232,13 +232,13 @@ const useFilterContext = () => useContext(FilterContext)
 const filtersContainerVariants = cva("flex flex-wrap items-center", {
   variants: {
     variant: {
-      solid: "gap-2",
+      solid: "gap-component",
       default: "",
     },
     size: {
-      sm: "gap-1.5",
-      default: "gap-2.5",
-      lg: "gap-3.5",
+      sm: "gap-micro",
+      default: "gap-component",
+      lg: "gap-section",
     },
   },
   defaultVariants: {
@@ -776,7 +776,7 @@ function SelectOptionsPopover<T = unknown>({
               field.label || ""
             )}
             className={cn(
-              "border-input h-8 rounded-none border-0 bg-transparent! px-2 text-sm shadow-none",
+              "border-input h-8 rounded-none border-0 bg-transparent! px-component text-sm shadow-none",
               "focus-visible:border-border focus-visible:ring-0 focus-visible:ring-offset-0"
             )}
             value={searchInput}
@@ -970,7 +970,7 @@ function SelectOptionsPopover<T = unknown>({
     >
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size={context.size}>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-micro">
             {field.customValueRenderer ? (
               field.customValueRenderer(values, field.options || [])
             ) : (
@@ -1241,7 +1241,7 @@ function FilterSubmenuContent<T = unknown>({
             }
             placeholder={i18n.placeholders.searchField(field.label || "")}
             className={cn(
-              "h-8 rounded-none border-0 bg-transparent! px-2 text-sm shadow-none",
+              "h-8 rounded-none border-0 bg-transparent! px-component text-sm shadow-none",
               "focus-visible:border-border focus-visible:ring-0 focus-visible:ring-offset-0"
             )}
             value={searchInput}
@@ -1598,7 +1598,7 @@ export function Filters<T = unknown>({
                       }
                       placeholder={mergedI18n.searchFields}
                       className={cn(
-                        "h-8 rounded-none border-0 bg-transparent! px-2 text-sm shadow-none",
+                        "h-8 rounded-none border-0 bg-transparent! px-component text-sm shadow-none",
                         "focus-visible:border-border focus-visible:ring-0 focus-visible:ring-offset-0"
                       )}
                       value={menuSearchInput}
