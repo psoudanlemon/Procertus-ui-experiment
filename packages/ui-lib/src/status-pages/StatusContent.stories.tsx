@@ -35,7 +35,7 @@ import type { NavGroup, NavItem, Workspace } from "@procertus-ui/ui";
 
 import logomark from "@procertus-ui/ui/assets/logomark.svg";
 
-import { ManagementAppShell } from "../management-interface/app-shell/ManagementAppShell";
+import { ManagementAppShell } from "@procertus-ui/ui";
 
 // ---------------------------------------------------------------------------
 // Shared app-shell mock data
@@ -137,7 +137,7 @@ const headerProps = {
 // ---------------------------------------------------------------------------
 
 const meta = {
-  title: "Management interface/Status pages/Logged in",
+  title: "Custom components/Status pages/Logged in",
   component: Empty,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

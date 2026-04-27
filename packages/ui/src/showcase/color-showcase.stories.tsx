@@ -44,7 +44,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Muted } from "@/components/ui/typography";
 
-import { ManagementAppShell } from "../../../ui-lib/src/management-interface/app-shell/ManagementAppShell";
+import { ManagementAppShell } from "@/components/app-shell";
 import type { Workspace, NavItem, NavGroup } from "@/components/app-sidebar";
 
 /* ---------------------------------------------------------------------------

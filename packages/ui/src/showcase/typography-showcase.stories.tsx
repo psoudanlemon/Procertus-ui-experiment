@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/table";
 import { P, Muted, Blockquote, List } from "@/components/ui/typography";
 
-import { ManagementAppShell } from "../../../ui-lib/src/management-interface/app-shell/ManagementAppShell";
+import { ManagementAppShell } from "@/components/app-shell";
 import type { Workspace, NavItem, NavGroup } from "@/components/app-sidebar";
 
 /* ---------------------------------------------------------------------------
@@ -359,7 +359,7 @@ export const Shell: StoryObj = {
     docs: {
       description: {
         story:
-          "**Architecture Demo** — The real ManagementAppShell from ui-lib. " +
+          "**Architecture Demo** — The real ManagementAppShell from the design system. " +
           "Proves the Recessed Workspace (sidebar frame in white, main area " +
           "rounded with bg-background on a sidebar-toned floor), Structural " +
           "Caps in sidebar group labels, and the scroll-fade gradient.",

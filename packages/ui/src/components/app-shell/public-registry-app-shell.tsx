@@ -3,16 +3,14 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { FilePlusIcon } from "@hugeicons/core-free-icons";
 
 import {
-  Button,
   PublicRegistryFooter,
   type PublicRegistryFooterProps,
+} from "@/components/public-footer";
+import {
   PublicRegistryHeader,
   type PublicRegistryHeaderProps,
-} from "@procertus-ui/ui";
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
+} from "@/components/public-header";
+import { Button } from "@/components/ui/button";
 
 export type PublicRegistryAppShellProps = {
   header: PublicRegistryHeaderProps;
@@ -28,10 +26,6 @@ export type PublicRegistryAppShellProps = {
   children: React.ReactNode;
 };
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-
 function PublicRegistryAppShell({
   header,
   footer,
@@ -44,23 +38,24 @@ function PublicRegistryAppShell({
   return (
     <div data-slot="public-registry-app-shell" className="flex min-h-svh flex-col bg-background">
       <PublicRegistryHeader {...header} variant={variant} />
-      <main className="flex-1">{children}</main>
-      {footer && <PublicRegistryFooter {...footer} variant={variant} />}
+      <main className="relative flex-1">
+        {children}
 
-      {/* FAB — Request certificate */}
-      {!hideFab && (
-        <Button
-          size="lg"
-          className="fixed right-boundary bottom-boundary z-40 h-12 gap-component rounded-full px-component shadow-[var(--shadow-proc-lg)]"
-          asChild
-        >
-          <a href={requestUrl} onClick={onRequestCertificate}>
-            <HugeiconsIcon icon={FilePlusIcon} className="size-5" />
-            <span className="hidden sm:inline">Certificaat aanvragen</span>
-            <span className="sm:hidden">Aanvragen</span>
-          </a>
-        </Button>
-      )}
+        {!hideFab && (
+          <Button
+            size="lg"
+            className="absolute right-boundary bottom-boundary z-40 h-12 gap-component rounded-full px-component shadow-[var(--shadow-proc-lg)]"
+            asChild
+          >
+            <a href={requestUrl} onClick={onRequestCertificate}>
+              <HugeiconsIcon icon={FilePlusIcon} className="size-5" />
+              <span className="hidden sm:inline">Certificaat aanvragen</span>
+              <span className="sm:hidden">Aanvragen</span>
+            </a>
+          </Button>
+        )}
+      </main>
+      {footer && <PublicRegistryFooter {...footer} variant={variant} />}
     </div>
   );
 }

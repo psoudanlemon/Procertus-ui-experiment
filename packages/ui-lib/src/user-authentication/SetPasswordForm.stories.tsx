@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SetPasswordForm } from "./SetPasswordForm";
 
 const meta = {
-  title: "Management interface/Authentication/Forms/Set password",
+  title: "Custom components/Authentication/Forms/Set password",
   component: SetPasswordForm,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

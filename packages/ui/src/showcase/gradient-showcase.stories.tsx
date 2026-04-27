@@ -20,7 +20,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { Muted } from "@/components/ui/typography";
 
-import { ManagementAppShell } from "../../../ui-lib/src/management-interface/app-shell/ManagementAppShell";
+import { ManagementAppShell } from "@/components/app-shell";
 import type { Workspace, NavItem, NavGroup } from "@/components/app-sidebar";
 
 /* ---------------------------------------------------------------------------

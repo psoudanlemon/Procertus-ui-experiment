@@ -1,6 +1,7 @@
 export * from "./accordion";
 export * from "./alert";
 export * from "./alert-dialog";
+export * from "./alert-dialog-provider";
 export * from "./avatar";
 export * from "./badge";
 export * from "./breadcrumb";
@@ -18,6 +19,7 @@ export * from "./context-menu";
 export * from "./data-table";
 export * from "./date-picker";
 export * from "./dialog";
+export * from "./dialog-provider";
 export * from "./drawer";
 export * from "./dropdown-menu";
 export * from "./empty";
