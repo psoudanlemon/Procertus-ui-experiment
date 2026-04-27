@@ -1,0 +1,26 @@
+<script>
+  // Same contract as packages/ui — embedded docs portal vs standalone Storybook.
+  (function () {
+    var root = document.documentElement;
+    if (window.parent !== window) {
+      root.classList.remove('light', 'dark');
+      root.classList.add('light');
+      root.dataset.theme = 'default';
+      root.dataset.density = 'operational';
+      return;
+    }
+    var mode = localStorage.getItem('sb-ui-lib-mode') || 'light';
+    var theme = localStorage.getItem('sb-ui-lib-theme') || 'default';
+    var density = localStorage.getItem('sb-ui-lib-density') || 'operational';
+    root.classList.remove('light', 'dark');
+    if (mode === 'system') {
+      root.classList.add(
+        window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      );
+    } else {
+      root.classList.add(mode);
+    }
+    root.dataset.theme = theme;
+    root.dataset.density = density;
+  })();
+</script>

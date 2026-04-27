@@ -26,10 +26,18 @@ export type StepLayoutProps = {
    */
   variant?: "onboarding" | "wizard";
   /**
-   * `default` — centered max-width card. `fill` — full width and viewport height (`100svh`);
-   * header and footer stay visible; the main body scrolls.
+   * `default` — centered max-width card.
+   * `fill` — full width and viewport height (`100svh`).
+   * `fill-parent` — full width/height of the available parent container.
+   * Fill layouts keep header/footer visible while the main body scrolls internally.
    */
-  layout?: "default" | "fill";
+  layout?: "default" | "fill" | "fill-parent";
+  /**
+   * Removes only the outer rail padding. Internal header/content/footer spacing remains intact.
+   * Useful when the parent surface already owns the edge spacing and the step layout should
+   * stretch flush to the available region.
+   */
+  flush?: boolean;
   /**
    * Optional process UI (e.g. `OnboardingStepper` or `Stepper` from `@procertus-ui/ui`).
    * - `top` — full width above the title block in the header.
@@ -87,7 +95,7 @@ function StepLayoutHeaderBlock({
     <>
       {stepLabel ? (
         <p
-          className="text-xs font-semibold uppercase leading-normal tracking-[0.1em] text-muted-foreground"
+          className="text-xs font-semibold uppercase leading-normal tracking-widest text-muted-foreground"
           aria-hidden={false}
         >
           {stepLabel}
@@ -109,6 +117,7 @@ export function StepLayout({
   className,
   variant = "onboarding",
   layout = "default",
+  flush = false,
   stepper,
   stepperPosition = "top",
   title,
@@ -119,7 +128,9 @@ export function StepLayout({
   primaryAction,
   secondaryAction,
 }: StepLayoutProps) {
-  const isFill = layout === "fill";
+  const isFill = layout === "fill" || layout === "fill-parent";
+  const isViewportFill = layout === "fill";
+  const isParentFill = layout === "fill-parent";
   const hasStepper = stepper != null;
   const rail = hasStepper && stepperPosition === "start";
 
@@ -129,6 +140,7 @@ export function StepLayout({
       ? "flex min-h-0 flex-col !py-0 ring-0"
       : cn("mx-auto", variantClass[variant]),
     isFill && "rounded-none",
+    isFill && "bg-transparent shadow-none ring-0",
     !isFill && "rounded-xl",
   );
 
@@ -141,7 +153,7 @@ export function StepLayout({
         )}
       >
         {!rail && hasStepper ? (
-          <div className="w-full pb-2 [&:not(:empty)]:mb-0">{stepper}</div>
+          <div className="w-full pb-2 not-empty:mb-0">{stepper}</div>
         ) : null}
         <StepLayoutHeaderBlock
           variant={variant}
@@ -164,7 +176,7 @@ export function StepLayout({
           "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between",
           "min-h-11 sm:min-h-0",
           variant === "wizard" ? "py-3" : "py-4",
-          isFill && "shrink-0",
+          isFill && "shrink-0 bg-transparent",
         )}
       >
         <div className="flex w-full min-h-11 min-w-0 items-center sm:min-h-0">
@@ -210,15 +222,17 @@ export function StepLayout({
       <Card
         className={cn(
           cardClass,
-          isFill && "h-svh",
+          isViewportFill && "h-svh",
+          isParentFill && "h-full min-h-0",
           "flex flex-col gap-0 md:flex-row",
           className,
         )}
       >
         <div
           className={cn(
-            "shrink-0 border-border md:w-56 md:min-w-[12rem] md:max-w-xs md:border-r",
+            "shrink-0 border-border md:w-56 md:min-w-48 md:max-w-xs md:border-r",
             isFill ? "border-b p-4 md:max-h-none md:overflow-y-auto" : "border-b p-4 md:overflow-y-auto",
+            isParentFill && "min-h-0",
           )}
         >
           {stepper}
@@ -236,7 +250,14 @@ export function StepLayout({
   }
 
   return (
-    <Card className={cn(cardClass, isFill && "h-svh flex flex-col", className)}>
+    <Card
+      className={cn(
+        cardClass,
+        isViewportFill && "h-svh flex flex-col",
+        isParentFill && "h-full min-h-0 flex flex-col",
+        className,
+      )}
+    >
       {mainColumn}
     </Card>
   );

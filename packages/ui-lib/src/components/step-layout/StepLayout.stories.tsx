@@ -312,3 +312,53 @@ export const OnboardingStepFill = {
   },
   render: () => <FillLayoutStory />,
 } as unknown as StoryObj<typeof meta>;
+
+function ParentFillWithRailStory() {
+  const flow = useStepLayout({ totalSteps: 3, canAdvanceFrom: () => true });
+  const s = stepperSteps[flow.activeStep];
+  if (!s) {
+    return null;
+  }
+
+  return (
+    <div className="h-[70svh] min-h-0 w-full min-w-0 bg-muted/20 p-4">
+      <StepLayout
+        className="max-w-none"
+        layout="fill-parent"
+        stepperPosition="start"
+        stepper={
+          <OnboardingStepper
+            className="max-w-none"
+            steps={stepperSteps}
+            activeStep={flow.activeStep}
+            onStepChange={flow.goToStep}
+            orientation="vertical"
+            interactive
+          />
+        }
+        variant="wizard"
+        title={s.title}
+        description="Parent-fill layout fills the available app-shell region; the body scrolls internally and actions stay docked at the bottom."
+        stepLabel={`Step ${flow.activeStep + 1} of ${flow.totalSteps}`}
+        backAction={flow.isFirst ? undefined : { label: "Back", onClick: flow.goBack }}
+        primaryAction={{
+          label: flow.isLast ? "Done" : "Next",
+          onClick: () => (flow.isLast ? undefined : flow.goForward()),
+        }}
+      >
+        <div className="space-y-4 text-sm text-muted-foreground">
+          {fillerParagraphs.concat(fillerParagraphs).map((line, index) => (
+            <p key={`${line}-${index}`}>{line}</p>
+          ))}
+        </div>
+      </StepLayout>
+    </div>
+  );
+}
+
+export const ParentFillWithStartStepper = {
+  parameters: {
+    layout: "fullscreen",
+  },
+  render: () => <ParentFillWithRailStory />,
+} as unknown as StoryObj<typeof meta>;

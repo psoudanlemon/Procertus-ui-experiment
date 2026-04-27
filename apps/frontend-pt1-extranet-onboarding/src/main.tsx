@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import { ModeProvider, ThemeProvider, TooltipProvider } from "@procertus-ui/ui";
-import { ProcertusCategorizationProvider } from "@procertus-ui/procertus-categorization";
+import { ProcertusCategorizationProvider } from "@procertus-ui/ui-certification";
 
 import { MockPrototypeAuthProvider } from "@procertus-ui/ui-pt1-prototype";
 

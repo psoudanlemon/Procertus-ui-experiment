@@ -1,5 +1,7 @@
-import { useProcertusCategorizationDoc } from "@procertus-ui/procertus-categorization";
-import { ProcertusCategorizationTreeView } from "@procertus-ui/ui-lib";
+import {
+  ProcertusCategorizationTreeView,
+  useProcertusCategorizationDoc,
+} from "@procertus-ui/ui-certification";
 import { P } from "@procertus-ui/ui";
 
 export function CategorizationDemoPage() {

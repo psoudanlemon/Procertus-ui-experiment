@@ -11,8 +11,8 @@ import { AuthLayout, LoginForm } from "@procertus-ui/ui-lib";
 
 const AUTH_PANEL = {
   gradient: true,
-  title: "Certification that builds trust",
-  subtitle: "Sign in to continue to your workspace.",
+  title: "Aanvragen zonder drempel",
+  subtitle: "Nieuwe klanten starten met hun certificatievraag. Registratie volgt pas bij indiening.",
 } as const;
 
 export function WelcomePage() {
@@ -26,12 +26,23 @@ export function WelcomePage() {
 
   return (
     <AuthLayout
-      title="Welcome back"
-      description="Sign in to your PROCERTUS account"
+      title="Start een PROCERTUS-aanvraag"
+      description="Maak eerst duidelijk wat je wilt certificeren of attesteren. Aanmelden kan nog steeds voor bestaande vertegenwoordigers."
       panel={AUTH_PANEL}
     >
-      <div className="mb-6 space-y-2">
-        <p className="text-muted-foreground text-sm">Prototype: mock user session</p>
+      <div className="mb-8 rounded-xl border border-border/70 bg-card p-4 shadow-proc-xs">
+        <p className="text-sm font-medium text-foreground">Nieuw bij PROCERTUS?</p>
+        <p className="mt-1 text-sm leading-6 text-muted-foreground">
+          Start de aanvraagwizard zonder account. Je maakt pas een account aan wanneer je het aanvraagpakket indient.
+        </p>
+        <Button asChild className="mt-4 w-full">
+          <Link to="/welcome/start">Start certificatieaanvraag</Link>
+        </Button>
+      </div>
+
+      <div className="mb-4 space-y-2 border-t border-border/70 pt-6">
+        <p className="text-sm font-medium text-foreground">Bestaande gebruiker</p>
+        <p className="text-muted-foreground text-sm">Prototype: kies een mock gebruiker om aan te melden.</p>
         <MockPrototypeUserSelect className="w-full" aria-label="Prototype user" />
       </div>
       <LoginForm
@@ -47,11 +58,6 @@ export function WelcomePage() {
           navigate("/app", { replace: true });
         }}
       />
-      <div className="mt-section text-center">
-        <Button variant="link" asChild className="h-auto p-0 text-sm font-normal">
-          <Link to="/welcome/start">Start onboarding instead</Link>
-        </Button>
-      </div>
     </AuthLayout>
   );
 }

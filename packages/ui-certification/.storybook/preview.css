@@ -1,0 +1,27 @@
+/**
+ * Storybook wraps the story in `#storybook-root` / `.sb-show-main` above `body`. The `html`
+ * element uses `var(--sidebar)` so the iOS overscroll rubber-band bounce matches the app chrome.
+ * Visible layers use `var(--background)` to stay in sync when Mode / Theme toggle.
+ */
+html {
+  background-color: var(--sidebar);
+}
+
+body,
+#storybook-root,
+#storybook-docs,
+.sb-show-main {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/**
+ * Docs tab: the Canvas block uses `getBlockBackgroundStyle` on `.sbdocs-preview` (Storybook theme),
+ * not app tokens. Override only that shell so embedded stories match Mode + Theme. `!important`
+ * beats emotion styles.
+ */
+#storybook-docs .sbdocs-preview {
+  background-color: var(--background) !important;
+  color: var(--foreground);
+  border-color: var(--border) !important;
+}

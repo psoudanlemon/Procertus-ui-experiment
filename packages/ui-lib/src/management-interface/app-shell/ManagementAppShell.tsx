@@ -5,6 +5,7 @@ import {
   type AppHeaderProps,
   AppSidebar,
   type AppSidebarProps,
+  cn,
   SidebarProvider,
 } from "@procertus-ui/ui";
 
@@ -12,9 +13,10 @@ export type ManagementAppShellProps = {
   sidebar: AppSidebarProps;
   header: AppHeaderProps;
   children: React.ReactNode;
+  mainClassName?: string;
 };
 
-function ManagementAppShell({ sidebar, header, children }: ManagementAppShellProps) {
+function ManagementAppShell({ sidebar, header, children, mainClassName }: ManagementAppShellProps) {
   const [scrolled, setScrolled] = React.useState(false);
 
   React.useEffect(() => {
@@ -30,12 +32,14 @@ function ManagementAppShell({ sidebar, header, children }: ManagementAppShellPro
         <div className="sticky top-0 z-20 bg-sidebar">
           <AppHeader {...header} />
           <div
-            className="pointer-events-none mx-section -mb-8 h-8 bg-gradient-to-b from-sidebar to-transparent transition-opacity duration-200"
+            className="pointer-events-none mx-section -mb-8 h-8 bg-linear-to-b from-sidebar to-transparent transition-opacity duration-200"
             style={{ opacity: scrolled ? 1 : 0 }}
           />
         </div>
         <div className="mx-section flex flex-1 flex-col pb-section">
-          <main className="flex-1 rounded-xl bg-background p-boundary">{children}</main>
+          <main className={cn("flex-1 rounded-xl bg-background p-boundary", mainClassName)}>
+            {children}
+          </main>
         </div>
       </div>
     </SidebarProvider>

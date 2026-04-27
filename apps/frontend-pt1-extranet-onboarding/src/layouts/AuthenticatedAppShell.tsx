@@ -1,11 +1,3 @@
-import type { IconSvgElement } from "@hugeicons/react";
-import {
-  BookOpen01Icon,
-  HelpCircleIcon,
-  HierarchySquare02Icon,
-  Home01Icon,
-  Setting06Icon,
-} from "@hugeicons/core-free-icons";
 import type { AppHeaderProps, AppSidebarProps } from "@procertus-ui/ui";
 import { useSidebar } from "@procertus-ui/ui";
 import logomark from "@procertus-ui/ui/assets/logomark.svg";
@@ -14,6 +6,7 @@ import { useLayoutEffect, useMemo } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { useMockPrototypeLogout, useMockPrototypeSession } from "@procertus-ui/ui-pt1-prototype";
+import { PROTOTYPE_PRIMARY_NAV, PROTOTYPE_SECONDARY_NAV } from "../navConfig";
 
 /** Collapses the mobile sheet after in-app navigation so the new page isn’t hidden behind the drawer. */
 function CloseMobileSidebarOnRouteChange() {
@@ -38,11 +31,9 @@ export function AuthenticatedAppShell() {
   const session = useMockPrototypeSession();
   const logout = useMockPrototypeLogout();
   const pathname = location.pathname;
+  const flushMain = pathname === "/requests/create" || pathname.endsWith("/edit");
 
   const sidebar: AppSidebarProps = useMemo(() => {
-    const isHome = pathname === "/app" || pathname === "/app/";
-    const isCategorization = pathname.startsWith("/app/categorization");
-    const isDesign = pathname.startsWith("/app/design-system");
     const workspaceId = session?.user.homeOrganization.id ?? "prototype";
     const workspaceName = session?.user.homeOrganization.name ?? "Workspace";
     const plan = session
@@ -66,45 +57,31 @@ export function AuthenticatedAppShell() {
       activeWorkspaceId: workspaceId,
       showSearch: false,
       stickyNav: false,
-      navItems: [
-        {
-          title: "Home",
-          url: "/app",
-          icon: Home01Icon as IconSvgElement,
-          isActive: isHome,
-        },
-        {
-          title: "Categorization",
-          url: "/app/categorization",
-          icon: HierarchySquare02Icon as IconSvgElement,
-          isActive: isCategorization,
-        },
-        {
-          title: "Design system",
-          url: "/app/design-system",
-          icon: BookOpen01Icon as IconSvgElement,
-          isActive: isDesign,
-        },
-      ],
+      navItems: PROTOTYPE_PRIMARY_NAV.map((item) => ({
+        title: item.title,
+        url: item.url,
+        icon: item.icon,
+        isActive: item.url === "/requests" ? pathname.startsWith("/requests") : pathname.startsWith(item.url),
+      })),
       navGroups: [],
-      secondaryItems: [
-        { title: "Help", url: "#", icon: HelpCircleIcon as IconSvgElement },
-        { title: "Settings", url: "#", icon: Setting06Icon as IconSvgElement },
-      ],
+      secondaryItems: PROTOTYPE_SECONDARY_NAV.map((item) => ({
+        title: item.title,
+        url: item.url,
+        icon: item.icon,
+      })),
       NavLink: Link,
     };
   }, [pathname, session]);
 
   const header: AppHeaderProps = useMemo(() => {
-    const crumb = pathname.startsWith("/app/categorization")
-      ? "Categorization"
-      : pathname.startsWith("/app/design-system")
-        ? "Design system"
-        : "Overview";
+    const crumb =
+      PROTOTYPE_PRIMARY_NAV.find((item) =>
+        item.url === "/requests" ? pathname.startsWith("/requests") : pathname.startsWith(item.url),
+      )?.title ?? "Aanvragen";
     const user = session?.user;
     return {
       showNavigation: false,
-      breadcrumbs: [{ label: "Workspace", href: "/app" }, { label: crumb }],
+      breadcrumbs: [{ label: "Workspace", href: "/requests" }, { label: crumb }],
       user: user
         ? {
             name: user.displayName,
@@ -125,7 +102,7 @@ export function AuthenticatedAppShell() {
   }, [pathname, navigate, logout, session]);
 
   return (
-    <ManagementAppShell sidebar={sidebar} header={header}>
+    <ManagementAppShell sidebar={sidebar} header={header} mainClassName={flushMain ? "p-0!" : undefined}>
       <CloseMobileSidebarOnRouteChange />
       <Outlet />
     </ManagementAppShell>

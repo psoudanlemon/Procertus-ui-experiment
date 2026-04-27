@@ -13,11 +13,6 @@ export type {
   PrototypeSurfaceMarqueeProps,
   TokenSwatchProps,
 } from "./components/design-tokens-showcase";
-export {
-  ProcertusCategorizationTreeView,
-  type CertificationLabelKey,
-  type ProcertusCategorizationTreeViewProps,
-} from "./components/procertus-categorization-tree-view";
 export { StepLayout, useStepLayout } from "./components/step-layout";
 export type {
   StepLayoutAction,
@@ -45,32 +40,3 @@ export type {
   UseChoiceSelectionOptions,
   UseChoiceSelectionResult,
 } from "./components/select-choice-card";
-export {
-  CertificationIntentPicker,
-  CERTIFICATION_INTENT_IDS,
-  defaultCertificationIntentOptionsEn,
-} from "./components/certification-intent-picker";
-export type {
-  CertificationIntentId,
-  CertificationIntentOption,
-  CertificationIntentPickerProps,
-} from "./components/certification-intent-picker";
-export { ProductTreePanel } from "./components/product-tree-panel";
-export type {
-  ProductTreeNode,
-  ProductTreeGroupNode,
-  ProductTreeProductNode,
-  ProductTreePanelProps,
-} from "./components/product-tree-panel";
-export { ProductMultiSelect } from "./components/product-multi-select";
-export type { ProductMultiSelectOption, ProductMultiSelectProps } from "./components/product-multi-select";
-export { CertificationBadgeRow } from "./components/certification-badge-row";
-export type {
-  CertificationBadgeItem,
-  CertificationBadgePresentation,
-  CertificationBadgeRowProps,
-} from "./components/certification-badge-row";
-export { DraftRequestList } from "./components/draft-request-list";
-export type { DraftRequestItem, DraftRequestListProps } from "./components/draft-request-list";
-export { RequestPackageReview } from "./components/request-package-review";
-export type { RequestPackageRow, RequestPackageReviewProps } from "./components/request-package-review";

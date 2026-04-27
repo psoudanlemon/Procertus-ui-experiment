@@ -31,7 +31,11 @@ function HorizontalWithStepLayout() {
   const [prereq, setPrereq] = useState([true, true, true]);
   const canAdvance = (i: number) => prereq[i] === true;
   const flow = useStepLayout({ totalSteps: 3, canAdvanceFrom: canAdvance });
-  const s = stepDefs[flow.activeStep];
+  const guardedSteps = stepDefs.map((step, index) => ({
+    ...step,
+    available: index <= flow.activeStep || prereq.slice(0, index).every(Boolean),
+  }));
+  const s = guardedSteps[flow.activeStep];
   if (!s) {
     return null;
   }
@@ -40,7 +44,7 @@ function HorizontalWithStepLayout() {
       stepperPosition="top"
       stepper={
         <OnboardingStepper
-          steps={stepDefs}
+          steps={guardedSteps}
           activeStep={flow.activeStep}
           onStepChange={flow.goToStep}
           orientation="horizontal"

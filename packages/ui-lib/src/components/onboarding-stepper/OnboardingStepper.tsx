@@ -16,6 +16,8 @@ export type OnboardingStepperStep = {
   id: string;
   title: string;
   description?: string;
+  /** When false, the step remains visible but cannot be activated yet. */
+  available?: boolean;
 };
 
 export type OnboardingStepperProps = {
@@ -68,11 +70,17 @@ export function OnboardingStepper({
 
   return (
     <Stepper
-      className={cn(orientation === "vertical" && "w-full max-w-[14rem] sm:max-w-none", className)}
+      className={cn(orientation === "vertical" && "w-full max-w-56 sm:max-w-none", className)}
       value={value1}
       onValueChange={
         onStepChange && interactive
-          ? (v) => onStepChange(v - 1)
+          ? (v) => {
+              const target = v - 1;
+              if (steps[target]?.available === false) {
+                return;
+              }
+              onStepChange(target);
+            }
           : undefined
       }
       orientation={orientation}
@@ -114,16 +122,18 @@ type ItemProps = {
 };
 
 function OnboardingStepperItem({ n, step, interactive, isLast, orientation }: ItemProps) {
+  const available = step.available !== false;
   return (
     <StepperItem
       className={cn(orientation === "vertical" && "w-full", orientation === "horizontal" && "min-w-0 flex-1")}
       step={n}
-      disabled={!interactive}
+      disabled={!interactive || !available}
     >
       <StepperTrigger
         className={cn(
           "max-w-full min-w-0",
-          !interactive && "pointer-events-none cursor-default",
+          (!interactive || !available) && "pointer-events-none cursor-default",
+          !available && "opacity-55",
           orientation === "vertical" && "w-full"
         )}
       >
