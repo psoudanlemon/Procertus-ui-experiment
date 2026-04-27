@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
 import { useState } from "react";
+import { DragDropVerticalIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import {
   Card,
@@ -87,44 +89,45 @@ const typeVariant = {
 
 function DragHandle() {
   return (
-    <SortableItemHandle
-      aria-label="Drag item"
-      className="flex size-8 shrink-0 items-center justify-center rounded-md border bg-background text-muted-foreground shadow-xs"
-    >
-      ::
-    </SortableItemHandle>
+    <HugeiconsIcon
+      icon={DragDropVerticalIcon}
+      aria-hidden
+      className="size-6 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground group-data-[dragging=true]:text-foreground [&_path]:fill-current"
+    />
   );
 }
 
 function UploadCard({ item, dense = false }: { item: UploadItem; dense?: boolean }) {
   return (
-    <Card
-      className={cn(
-        "gap-0 py-0 shadow-sm transition-shadow data-[dragging=true]:shadow-lg",
-        dense ? "rounded-lg" : "rounded-xl"
-      )}
-    >
-      <CardContent
+    <SortableItemHandle asChild>
+      <Card
         className={cn(
-          "flex items-center gap-component",
-          dense ? "px-component py-component" : "px-section py-component"
+          "group gap-0 py-0 shadow-sm transition-shadow hover:shadow-md hover:border-foreground/15 data-[dragging=true]:shadow-lg",
+          dense ? "rounded-lg" : "rounded-xl"
         )}
       >
-        <DragHandle />
-        <div className="min-w-0 flex-1">
-          <div className="truncate text-sm font-medium">{item.title}</div>
-          <div className="truncate text-xs text-muted-foreground">
-            {item.description}
+        <CardContent
+          className={cn(
+            "flex items-center gap-component",
+            dense ? "p-component" : "p-section"
+          )}
+        >
+          <DragHandle />
+          <div className="min-w-0 flex-1">
+            <div className="truncate text-sm font-medium">{item.title}</div>
+            <div className="truncate text-xs text-muted-foreground">
+              {item.description}
+            </div>
           </div>
-        </div>
-        <div className="flex shrink-0 items-center gap-component">
-          <Badge variant={typeVariant[item.type]}>{item.type}</Badge>
-          <span className="hidden text-xs text-muted-foreground sm:inline">
-            {item.size}
-          </span>
-        </div>
-      </CardContent>
-    </Card>
+          <div className="flex shrink-0 items-center gap-component">
+            <span className="hidden text-xs text-muted-foreground sm:inline">
+              {item.size}
+            </span>
+            <Badge variant={typeVariant[item.type]}>{item.type}</Badge>
+          </div>
+        </CardContent>
+      </Card>
+    </SortableItemHandle>
   );
 }
 
@@ -137,7 +140,7 @@ export const Vertical: Story = {
         value={items}
         onValueChange={setItems}
         getItemValue={(item) => item.id}
-        className="flex w-full max-w-2xl flex-col gap-component"
+        className="flex w-full max-w-2xl flex-col gap-section"
       >
         {items.map((item) => (
           <SortableItem key={item.id} value={item.id}>
@@ -159,25 +162,31 @@ export const Grid: Story = {
         onValueChange={setItems}
         getItemValue={(item) => item.id}
         strategy="grid"
-        className="grid w-full max-w-4xl grid-cols-1 gap-component sm:grid-cols-2 lg:grid-cols-3"
+        className="grid w-full max-w-4xl grid-cols-1 gap-section sm:grid-cols-2 lg:grid-cols-3"
       >
         {items.map((item) => (
           <SortableItem key={item.id} value={item.id}>
-            <Card className="h-full gap-component p-section shadow-sm data-[dragging=true]:shadow-lg">
-              <div className="flex items-start justify-between gap-component">
-                <div className="min-w-0">
-                  <CardTitle className="truncate text-sm">{item.title}</CardTitle>
-                  <CardDescription className="truncate">
-                    {item.description}
-                  </CardDescription>
+            <SortableItemHandle asChild>
+              <Card className="group h-full gap-0 py-0 shadow-sm transition-shadow hover:shadow-md hover:border-foreground/15 data-[dragging=true]:shadow-lg">
+                <div className="flex flex-col gap-component p-section">
+                  <div className="flex items-center justify-between gap-component">
+                    <div className="min-w-0 flex-1">
+                      <CardTitle className="truncate text-sm">{item.title}</CardTitle>
+                      <CardDescription className="truncate">
+                        {item.description}
+                      </CardDescription>
+                    </div>
+                    <DragHandle />
+                  </div>
+                  <div className="flex items-center justify-between gap-component">
+                    <span className="truncate text-xs text-muted-foreground">
+                      {item.size}
+                    </span>
+                    <Badge variant={typeVariant[item.type]}>{item.type}</Badge>
+                  </div>
                 </div>
-                <DragHandle />
-              </div>
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <Badge variant={typeVariant[item.type]}>{item.type}</Badge>
-                <span>{item.size}</span>
-              </div>
-            </Card>
+              </Card>
+            </SortableItemHandle>
           </SortableItem>
         ))}
       </Sortable>
@@ -200,24 +209,26 @@ export const NestedSections: Story = {
 
     const renderOption = (item: (typeof colors)[number]) => (
       <SortableItem key={item.id} value={item.id}>
-        <div className="flex items-center gap-component rounded-lg border bg-card p-section shadow-xs">
-          <DragHandle />
-          <div className="min-w-0">
-            <div className="text-sm font-medium">{item.title}</div>
-            <div className="text-xs text-muted-foreground">{item.description}</div>
+        <SortableItemHandle asChild>
+          <div className="group flex items-center gap-component rounded-lg border bg-muted/25 p-component shadow-xs transition-shadow hover:shadow-sm hover:border-foreground/15 data-[dragging=true]:shadow-lg">
+            <DragHandle />
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-sm font-medium">{item.title}</div>
+              <div className="truncate text-xs text-muted-foreground">{item.description}</div>
+            </div>
           </div>
-        </div>
+        </SortableItemHandle>
       </SortableItem>
     );
 
     return (
       <div className="grid w-full max-w-4xl gap-section md:grid-cols-2">
-        <Card>
-          <CardHeader>
+        <Card className="py-section">
+          <CardHeader className="px-section">
             <CardTitle>Colors</CardTitle>
             <CardDescription>Reorder options inside this group.</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-section">
             <Sortable
               value={colors}
               onValueChange={setColors}
@@ -228,12 +239,12 @@ export const NestedSections: Story = {
             </Sortable>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
+        <Card className="py-section">
+          <CardHeader className="px-section">
             <CardTitle>Sizes</CardTitle>
             <CardDescription>Each section owns its own sortable value.</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-section">
             <Sortable
               value={sizes}
               onValueChange={setSizes}
@@ -258,7 +269,7 @@ export const DisabledItem: Story = {
         value={items}
         onValueChange={setItems}
         getItemValue={(item) => item.id}
-        className="flex w-full max-w-2xl flex-col gap-component"
+        className="flex w-full max-w-2xl flex-col gap-section"
       >
         {items.map((item) => (
           <SortableItem
