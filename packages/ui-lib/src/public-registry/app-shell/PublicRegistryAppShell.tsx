@@ -2,10 +2,13 @@ import * as React from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { FilePlusIcon } from "@hugeicons/core-free-icons";
 
-import { Button } from "@procertus-ui/ui";
+import {
+  Button,
+  PublicRegistryHeader,
+  type PublicRegistryHeaderProps,
+} from "@procertus-ui/ui";
 
 import { PublicRegistryFooter, type PublicRegistryFooterProps } from "./PublicRegistryFooter";
-import { PublicRegistryHeader, type PublicRegistryHeaderProps } from "./PublicRegistryHeader";
 
 // ---------------------------------------------------------------------------
 // Types
