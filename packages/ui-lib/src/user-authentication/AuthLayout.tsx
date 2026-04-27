@@ -7,7 +7,6 @@ import {
   H1,
 } from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
-import procertusLogoDark from "@procertus-ui/ui/assets/Marks_Procertus logo.svg";
 
 function ProcertusLogo({ className }: { className?: string }) {
   return (
@@ -121,7 +120,7 @@ function AuthLayout({
           {logo ?? (
             <>
               <img src={procertusLogo} alt="PROCERTUS, certification that builds trust" className="h-16 w-auto dark:hidden" />
-              <img src={procertusLogoDark} alt="PROCERTUS, certification that builds trust" className="hidden h-16 w-auto dark:block" />
+              <img src={procertusLogo} alt="PROCERTUS, certification that builds trust" className="hidden h-16 w-auto brightness-0 invert dark:block" />
             </>
           )}
         </div>
