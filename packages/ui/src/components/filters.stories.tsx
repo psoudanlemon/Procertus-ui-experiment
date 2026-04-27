@@ -97,7 +97,7 @@ const fields: FilterFieldConfig<FilterValue>[] = [
 ];
 
 const meta = {
-  title: "reui/Filters",
+  title: "components/Filters",
   component: Filters,
   tags: ["autodocs"],
   parameters: {

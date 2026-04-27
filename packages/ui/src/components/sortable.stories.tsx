@@ -10,10 +10,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { cn } from "../../lib/utils";
+} from "./ui/card";
+import { cn } from "../lib/utils";
 import { Sortable, SortableItem, SortableItemHandle } from "./sortable";
-import { Badge } from "../ui/badge";
+import { Badge } from "./ui/badge";
 
 type UploadItem = {
   id: string;
@@ -62,7 +62,7 @@ const uploads: UploadItem[] = [
 ];
 
 const meta = {
-  title: "reui/Sortable",
+  title: "components/Sortable",
   component: Sortable,
   tags: ["autodocs"],
   parameters: {
