@@ -16,21 +16,17 @@ import { cva } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
-  ButtonGroup,
-  ButtonGroupText,
-} from "@/components/ui/button-group"
-import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
 import {
   InputGroup,
@@ -39,7 +35,6 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "@/components/ui/input-group"
-import { Kbd } from "@/components/ui/kbd"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Tooltip,
@@ -49,9 +44,10 @@ import {
 } from "@/components/ui/tooltip"
 import {
   AlertCircleIcon,
+  ArrowDown01Icon,
   Cancel01Icon,
   PlusSignIcon,
-  Tick01Icon,
+  Tick02Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
@@ -75,6 +71,7 @@ export interface FilterI18nConfig {
   defaultCurrency: string
   defaultColor: string
   addFilterTitle: string
+  clearAll: string
 
   // Operators
   operators: {
@@ -97,6 +94,8 @@ export interface FilterI18nConfig {
     notEquals: string
     greaterThan: string
     lessThan: string
+    greaterThanOrEqual: string
+    lessThanOrEqual: string
     overlaps: string
     includes: string
     excludes: string
@@ -149,6 +148,7 @@ export const DEFAULT_I18N: FilterI18nConfig = {
   defaultCurrency: "$",
   defaultColor: "#000000",
   addFilterTitle: "Add filter",
+  clearAll: "Clear all filters",
 
   // Operators
   operators: {
@@ -169,8 +169,10 @@ export const DEFAULT_I18N: FilterI18nConfig = {
     isExactly: "is exactly",
     equals: "equals",
     notEquals: "not equals",
-    greaterThan: "greater than",
-    lessThan: "less than",
+    greaterThan: "is greater than",
+    lessThan: "is less than",
+    greaterThanOrEqual: "is greater than or equal to",
+    lessThanOrEqual: "is less than or equal to",
     overlaps: "overlaps",
     includes: "includes",
     excludes: "excludes",
@@ -410,37 +412,6 @@ function FilterInput<T = unknown>({
   )
 }
 
-interface FilterRemoveButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  icon?: React.ReactNode
-}
-
-function FilterRemoveButton({
-  className,
-  icon = (
-    <HugeiconsIcon icon={Cancel01Icon} />
-  ),
-  ...props
-}: FilterRemoveButtonProps) {
-  const context = useFilterContext()
-
-  return (
-    <Button
-      variant="outline"
-      className={className}
-      size={
-        context.size === "sm"
-          ? "icon-sm"
-          : context.size === "lg"
-            ? "icon-lg"
-            : "icon"
-      }
-      {...props}
-    >
-      {icon}
-    </Button>
-  )
-}
-
 // Generic types for flexible filter system
 export interface FilterOption<T = unknown> {
   value: T
@@ -479,7 +450,16 @@ export interface FilterFieldConfig<T = unknown> {
   key?: string
   label?: string
   icon?: React.ReactNode
-  type?: "select" | "multiselect" | "text" | "custom" | "separator"
+  type?:
+    | "select"
+    | "multiselect"
+    | "text"
+    | "number"
+    | "boolean"
+    | "date"
+    | "timestamp"
+    | "custom"
+    | "separator"
   // Group-level configuration
   group?: string
   fields?: FilterFieldConfig<T>[]
@@ -584,19 +564,51 @@ const createOperatorsFromI18n = (
     { value: "not_empty", label: i18n.operators.notEmpty },
   ],
   text: [
+    { value: "is", label: i18n.operators.is },
+    { value: "is_not", label: i18n.operators.isNot },
     { value: "contains", label: i18n.operators.contains },
     { value: "not_contains", label: i18n.operators.notContains },
     { value: "starts_with", label: i18n.operators.startsWith },
     { value: "ends_with", label: i18n.operators.endsWith },
-    { value: "is", label: i18n.operators.isExactly },
     { value: "empty", label: i18n.operators.empty },
     { value: "not_empty", label: i18n.operators.notEmpty },
   ],
+  number: [
+    { value: "is", label: i18n.operators.is },
+    { value: "is_not", label: i18n.operators.isNot },
+    { value: "gt", label: i18n.operators.greaterThan },
+    { value: "lt", label: i18n.operators.lessThan },
+    { value: "gte", label: i18n.operators.greaterThanOrEqual },
+    { value: "lte", label: i18n.operators.lessThanOrEqual },
+    { value: "between", label: i18n.operators.between },
+    { value: "not_empty", label: i18n.operators.notEmpty },
+    { value: "empty", label: i18n.operators.empty },
+  ],
+  boolean: [
+    { value: "is", label: i18n.operators.is },
+    { value: "is_not", label: i18n.operators.isNot },
+  ],
+  date: [
+    { value: "is", label: i18n.operators.is },
+    { value: "is_not", label: i18n.operators.isNot },
+    { value: "before", label: i18n.operators.before },
+    { value: "after", label: i18n.operators.after },
+    { value: "between", label: i18n.operators.between },
+    { value: "empty", label: i18n.operators.empty },
+    { value: "not_empty", label: i18n.operators.notEmpty },
+  ],
+  timestamp: [
+    { value: "is", label: i18n.operators.is },
+    { value: "is_not", label: i18n.operators.isNot },
+    { value: "before", label: i18n.operators.before },
+    { value: "after", label: i18n.operators.after },
+    { value: "between", label: i18n.operators.between },
+    { value: "not_empty", label: i18n.operators.notEmpty },
+    { value: "empty", label: i18n.operators.empty },
+  ],
   custom: [
     { value: "is", label: i18n.operators.is },
-    { value: "after", label: i18n.operators.after },
-    { value: "is", label: i18n.operators.is },
-    { value: "between", label: i18n.operators.between },
+    { value: "is_not", label: i18n.operators.isNot },
     { value: "empty", label: i18n.operators.empty },
     { value: "not_empty", label: i18n.operators.notEmpty },
   ],
@@ -658,10 +670,15 @@ function FilterOperatorDropdown<T = unknown>({
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          size={context.size}
-          className="text-muted-foreground hover:text-foreground"
+          size="xs"
+          className="font-medium normal-case tracking-normal text-muted-foreground hover:text-foreground"
         >
           {operatorLabel}
+          <HugeiconsIcon
+            icon={ArrowDown01Icon}
+            data-icon="inline-end"
+            className="opacity-70"
+          />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-fit min-w-fit">
@@ -675,7 +692,7 @@ function FilterOperatorDropdown<T = unknown>({
           >
             <span>{op.label}</span>
             <HugeiconsIcon
-              icon={Tick01Icon}
+              icon={Tick02Icon}
               className={cn(
                 "text-primary ms-auto",
                 op.value === operator ? "opacity-100" : "opacity-0"
@@ -696,311 +713,6 @@ interface FilterValueSelectorProps<T = unknown> {
   autoFocus?: boolean
 }
 
-interface SelectOptionsPopoverProps<T = unknown> {
-  field: FilterFieldConfig<T>
-  values: T[]
-  onChange: (values: T[]) => void
-  onClose?: () => void
-  inline?: boolean
-}
-
-function SelectOptionsPopover<T = unknown>({
-  field,
-  values,
-  onChange,
-  onClose,
-  inline = false,
-}: SelectOptionsPopoverProps<T>) {
-  const [open, setOpen] = useState(false)
-  const [searchInput, setSearchInput] = useState("")
-  const [highlightedIndex, setHighlightedIndex] = useState(-1)
-  const inputRef = useRef<HTMLInputElement>(null)
-  const context = useFilterContext()
-  const baseId = useId()
-
-  useEffect(() => {
-    setHighlightedIndex(-1)
-  }, [searchInput, open])
-
-  useEffect(() => {
-    if (highlightedIndex >= 0 && open) {
-      const element = document.getElementById(
-        `${baseId}-item-${highlightedIndex}`
-      )
-      element?.scrollIntoView({ block: "nearest" })
-    }
-  }, [highlightedIndex, open, baseId])
-
-  const isMultiSelect = field.type === "multiselect" || values.length > 1
-  const effectiveValues =
-    (field.value !== undefined ? (field.value as T[]) : values) || []
-
-  const selectedOptions =
-    field.options?.filter((opt) => effectiveValues.includes(opt.value)) || []
-  const unselectedOptions =
-    field.options?.filter((opt) => !effectiveValues.includes(opt.value)) || []
-
-  // Filter options based on search input
-  const filteredSelectedOptions = selectedOptions // Keep all selected visible
-  const filteredUnselectedOptions = unselectedOptions.filter((opt) =>
-    opt.label.toLowerCase().includes(searchInput.toLowerCase())
-  )
-
-  const allFilteredOptions = useMemo(
-    () => [...filteredSelectedOptions, ...filteredUnselectedOptions],
-    [filteredSelectedOptions, filteredUnselectedOptions]
-  )
-
-  const handleClose = () => {
-    setOpen(false)
-    onClose?.()
-  }
-
-  const renderMenuContent = () => (
-    <>
-      {field.searchable !== false && (
-        <>
-          <Input
-            ref={inputRef}
-            role="combobox"
-            aria-autocomplete="list"
-            aria-expanded={true}
-            aria-haspopup="listbox"
-            aria-controls={`${baseId}-listbox`}
-            aria-activedescendant={
-              highlightedIndex >= 0
-                ? `${baseId}-item-${highlightedIndex}`
-                : undefined
-            }
-            placeholder={context.i18n.placeholders.searchField(
-              field.label || ""
-            )}
-            className={cn(
-              "border-input h-8 rounded-none border-0 bg-transparent! px-component text-sm shadow-none",
-              "focus-visible:border-border focus-visible:ring-0 focus-visible:ring-offset-0"
-            )}
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => {
-              if (e.key === "ArrowDown") {
-                e.preventDefault()
-                if (allFilteredOptions.length > 0) {
-                  setHighlightedIndex((prev) =>
-                    prev < allFilteredOptions.length - 1 ? prev + 1 : 0
-                  )
-                }
-              } else if (e.key === "ArrowUp") {
-                e.preventDefault()
-                if (allFilteredOptions.length > 0) {
-                  setHighlightedIndex((prev) =>
-                    prev > 0 ? prev - 1 : allFilteredOptions.length - 1
-                  )
-                }
-              } else if (e.key === "ArrowLeft") {
-                e.preventDefault()
-                setOpen(false)
-              } else if (e.key === "Enter" && highlightedIndex >= 0) {
-                e.preventDefault()
-                const option = allFilteredOptions[highlightedIndex]
-                if (option) {
-                  const isSelected = effectiveValues.includes(option.value as T)
-                  const next = isSelected
-                    ? (effectiveValues.filter((v) => v !== option.value) as T[])
-                    : isMultiSelect
-                      ? ([...effectiveValues, option.value] as T[])
-                      : ([option.value] as T[])
-
-                  if (
-                    !isSelected &&
-                    isMultiSelect &&
-                    field.maxSelections &&
-                    next.length > field.maxSelections
-                  ) {
-                    return
-                  }
-
-                  if (field.onValueChange) {
-                    field.onValueChange(next)
-                  } else {
-                    onChange(next)
-                  }
-                  if (!isMultiSelect) handleClose()
-                }
-              }
-              e.stopPropagation()
-            }}
-          />
-          <DropdownMenuSeparator />
-        </>
-      )}
-      <div className="relative flex max-h-full">
-        <div
-          className="flex max-h-[min(var(--radix-dropdown-menu-content-available-height),24rem)] w-full scroll-pt-2 scroll-pb-2 flex-col overscroll-contain"
-          role="listbox"
-          id={`${baseId}-listbox`}
-        >
-          <ScrollArea className="size-full min-h-0 **:data-[slot=scroll-area-scrollbar]:m-0 **:data-[slot=scroll-area-viewport]:h-full **:data-[slot=scroll-area-viewport]:overscroll-contain">
-            {allFilteredOptions.length === 0 && (
-              <div className="text-muted-foreground py-2 text-center text-sm">
-                {context.i18n.noResultsFound}
-              </div>
-            )}
-
-            {/* Selected items */}
-            {filteredSelectedOptions.length > 0 && (
-              <DropdownMenuGroup className="px-1">
-                {filteredSelectedOptions.map((option, index) => {
-                  const isHighlighted = highlightedIndex === index
-                  const itemId = `${baseId}-item-${index}`
-
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={String(option.value)}
-                      id={itemId}
-                      role="option"
-                      aria-selected={isHighlighted}
-                      data-highlighted={isHighlighted || undefined}
-                      onMouseEnter={() => setHighlightedIndex(index)}
-                      checked={true}
-                      className={cn(
-                        "data-highlighted:bg-accent data-highlighted:text-accent-foreground",
-                        option.className
-                      )}
-                      onSelect={(e) => {
-                        if (isMultiSelect) e.preventDefault()
-                      }}
-                      onCheckedChange={() => {
-                        const next = effectiveValues.filter(
-                          (v) => v !== option.value
-                        ) as T[]
-                        if (field.onValueChange) {
-                          field.onValueChange(next)
-                        } else {
-                          onChange(next)
-                        }
-                        if (!isMultiSelect) handleClose()
-                      }}
-                    >
-                      {option.icon}
-                      <span className="truncate">{option.label}</span>
-                    </DropdownMenuCheckboxItem>
-                  )
-                })}
-              </DropdownMenuGroup>
-            )}
-
-            {/* Separator */}
-            {filteredSelectedOptions.length > 0 &&
-              filteredUnselectedOptions.length > 0 && (
-                <DropdownMenuSeparator className="mx-0" />
-              )}
-
-            {/* Available items */}
-            {filteredUnselectedOptions.length > 0 && (
-              <DropdownMenuGroup className="px-1">
-                {filteredUnselectedOptions.map((option, index) => {
-                  const overallIndex = index + filteredSelectedOptions.length
-                  const isHighlighted = highlightedIndex === overallIndex
-                  const itemId = `${baseId}-item-${overallIndex}`
-
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={String(option.value)}
-                      id={itemId}
-                      role="option"
-                      aria-selected={isHighlighted}
-                      data-highlighted={isHighlighted || undefined}
-                      onMouseEnter={() => setHighlightedIndex(overallIndex)}
-                      checked={false}
-                      className={cn(
-                        "data-highlighted:bg-accent data-highlighted:text-accent-foreground",
-                        option.className
-                      )}
-                      onSelect={(e) => {
-                        if (isMultiSelect) e.preventDefault()
-                      }}
-                      onCheckedChange={() => {
-                        const next = isMultiSelect
-                          ? ([...effectiveValues, option.value] as T[])
-                          : ([option.value] as T[])
-
-                        if (
-                          isMultiSelect &&
-                          field.maxSelections &&
-                          next.length > field.maxSelections
-                        ) {
-                          return
-                        }
-
-                        if (field.onValueChange) {
-                          field.onValueChange(next)
-                        } else {
-                          onChange(next)
-                        }
-                        if (!isMultiSelect) handleClose()
-                      }}
-                    >
-                      {option.icon}
-                      <span className="truncate">{option.label}</span>
-                    </DropdownMenuCheckboxItem>
-                  )
-                })}
-              </DropdownMenuGroup>
-            )}
-          </ScrollArea>
-        </div>
-      </div>
-    </>
-  )
-
-  if (inline) {
-    return <div className="w-full">{renderMenuContent()}</div>
-  }
-
-  return (
-    <DropdownMenu
-      open={open}
-      onOpenChange={(nextOpen) => {
-        setOpen(nextOpen)
-        if (!nextOpen) {
-          setTimeout(() => setSearchInput(""), 200)
-        }
-      }}
-    >
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size={context.size}>
-          <div className="flex items-center gap-micro">
-            {field.customValueRenderer ? (
-              field.customValueRenderer(values, field.options || [])
-            ) : (
-              <>
-                {selectedOptions.length > 0 && (
-                  <div className="flex items-center -space-x-1.5">
-                    {selectedOptions.slice(0, 3).map((option) => (
-                      <div key={String(option.value)}>{option.icon}</div>
-                    ))}
-                  </div>
-                )}
-                {selectedOptions.length === 1
-                  ? selectedOptions[0].label
-                  : selectedOptions.length > 1
-                    ? `${selectedOptions.length} ${context.i18n.selectedCount}`
-                    : context.i18n.select}
-              </>
-            )}
-          </div>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="start"
-        className={cn("w-[200px] px-0", field.className)}
-      >
-        {renderMenuContent()}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
 
 function FilterValueSelector<T = unknown>({
   field,
@@ -1015,9 +727,9 @@ function FilterValueSelector<T = unknown>({
 
   if (field.customRenderer) {
     return (
-      <ButtonGroupText className="hover:bg-accent aria-expanded:bg-accent bg-background dark:bg-input/30 text-start whitespace-nowrap outline-hidden">
+      <div className="w-full">
         {field.customRenderer({ field, values, onChange, operator })}
-      </ButtonGroupText>
+      </div>
     )
   }
 
@@ -1030,22 +742,502 @@ function FilterValueSelector<T = unknown>({
         placeholder={field.placeholder}
         pattern={field.pattern}
         field={field}
-        className={cn("w-36", field.className)}
+        className={cn("w-full", field.className)}
         autoFocus={autoFocus}
+      />
+    )
+  }
+
+  if (field.type === "number") {
+    if (operator === "between") {
+      return (
+        <BetweenInputs
+          values={values as unknown as (string | number)[]}
+          onChange={(next) => onChange(next as T[])}
+          inputType="number"
+          placeholder={field.placeholder}
+          autoFocus={autoFocus}
+        />
+      )
+    }
+    return (
+      <FilterInput
+        type="number"
+        value={(values[0] as string) || ""}
+        onChange={(e) => onChange([e.target.value] as T[])}
+        placeholder={field.placeholder}
+        field={field}
+        className={cn("w-full", field.className)}
+        autoFocus={autoFocus}
+      />
+    )
+  }
+
+  if (field.type === "timestamp") {
+    if (operator === "between") {
+      return (
+        <BetweenInputs
+          values={values as unknown as (string | number)[]}
+          onChange={(next) => onChange(next as T[])}
+          inputType="time"
+          step={1}
+          placeholder="00:00:00"
+          autoFocus={autoFocus}
+        />
+      )
+    }
+    return (
+      <FilterInput
+        type="time"
+        step={1}
+        value={(values[0] as string) || ""}
+        onChange={(e) => onChange([e.target.value] as T[])}
+        placeholder="00:00:00"
+        field={field}
+        className={cn("w-full", field.className)}
+        autoFocus={autoFocus}
+      />
+    )
+  }
+
+  if (field.type === "boolean") {
+    return (
+      <BooleanList<T>
+        values={values}
+        onChange={onChange}
       />
     )
   }
 
   if (field.type === "select" || field.type === "multiselect") {
     return (
-      <SelectOptionsPopover field={field} values={values} onChange={onChange} />
+      <InlineSelectList<T>
+        field={field}
+        values={values}
+        onChange={onChange}
+        isMultiSelect={field.type === "multiselect"}
+      />
     )
   }
 
   return (
-    <SelectOptionsPopover field={field} values={values} onChange={onChange} />
+    <InlineSelectList<T>
+      field={field}
+      values={values}
+      onChange={onChange}
+      isMultiSelect={false}
+    />
   )
 }
+
+function BetweenInputs({
+  values,
+  onChange,
+  inputType,
+  step,
+  placeholder,
+  autoFocus,
+}: {
+  values: (string | number)[]
+  onChange: (next: (string | number)[]) => void
+  inputType: "number" | "time"
+  step?: number
+  placeholder?: string
+  autoFocus?: boolean
+}) {
+  const a = values[0] ?? ""
+  const b = values[1] ?? ""
+  const context = useFilterContext()
+  return (
+    <div className="flex w-full items-center gap-component">
+      <InputGroup className="h-8 flex-1">
+        <InputGroupInput
+          type={inputType}
+          step={step}
+          value={String(a)}
+          placeholder={placeholder}
+          autoFocus={autoFocus}
+          onChange={(e) => onChange([e.target.value, b])}
+          className="h-8 text-sm"
+        />
+      </InputGroup>
+      <span className="text-xs font-medium text-muted-foreground">
+        {context.i18n.to.toUpperCase() === "TO" ? "AND" : context.i18n.to}
+      </span>
+      <InputGroup className="h-8 flex-1">
+        <InputGroupInput
+          type={inputType}
+          step={step}
+          value={String(b)}
+          placeholder={placeholder}
+          onChange={(e) => onChange([a, e.target.value])}
+          className="h-8 text-sm"
+        />
+      </InputGroup>
+    </div>
+  )
+}
+
+function BooleanList<T = unknown>({
+  values,
+  onChange,
+}: {
+  values: T[]
+  onChange: (values: T[]) => void
+}) {
+  const context = useFilterContext()
+  const current = values[0]
+  const options: { value: T; label: string }[] = [
+    { value: true as unknown as T, label: context.i18n.true },
+    { value: false as unknown as T, label: context.i18n.false },
+  ]
+  return (
+    <div className="flex flex-col gap-micro">
+      {options.map((option) => {
+        const isSelected = current === option.value
+        return (
+          <button
+            key={String(option.value)}
+            type="button"
+            role="option"
+            aria-selected={isSelected}
+            onClick={() => onChange([option.value])}
+            className={cn(
+              "flex h-8 items-center gap-micro rounded-sm px-component text-start text-sm outline-none transition-colors",
+              "hover:bg-accent hover:text-accent-foreground",
+              isSelected && "bg-accent text-accent-foreground",
+              "focus-visible:ring-2 focus-visible:ring-ring/50"
+            )}
+          >
+            <span className="truncate">{option.label}</span>
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+interface InlineSelectListProps<T = unknown> {
+  field: FilterFieldConfig<T>
+  values: T[]
+  onChange: (values: T[]) => void
+  isMultiSelect: boolean
+}
+
+function InlineSelectList<T = unknown>({
+  field,
+  values,
+  onChange,
+  isMultiSelect,
+}: InlineSelectListProps<T>) {
+  const context = useFilterContext()
+  const [searchInput, setSearchInput] = useState("")
+  const baseId = useId()
+
+  const effectiveValues =
+    field.value !== undefined ? (field.value as T[]) : values
+  const options = field.options || []
+  const filtered = options.filter((opt) =>
+    opt.label.toLowerCase().includes(searchInput.toLowerCase())
+  )
+
+  const toggle = (option: FilterOption<T>) => {
+    const isSelected = effectiveValues.includes(option.value)
+    const next = (isSelected
+      ? effectiveValues.filter((v) => v !== option.value)
+      : isMultiSelect
+        ? [...effectiveValues, option.value]
+        : [option.value]) as T[]
+
+    if (
+      !isSelected &&
+      isMultiSelect &&
+      field.maxSelections &&
+      next.length > field.maxSelections
+    ) {
+      return
+    }
+
+    if (field.onValueChange) {
+      field.onValueChange(next)
+    } else {
+      onChange(next)
+    }
+  }
+
+  return (
+    <div className="flex w-full flex-col gap-micro">
+      {field.searchable !== false && (
+        <InputGroup className="h-8 w-full">
+          <InputGroupInput
+            placeholder={context.i18n.placeholders.searchField(
+              field.label || ""
+            )}
+            className="h-8 text-sm"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
+        </InputGroup>
+      )}
+      <ScrollArea
+        className="max-h-60 **:data-[slot=scroll-area-scrollbar]:m-0"
+        role="listbox"
+        id={`${baseId}-listbox`}
+      >
+        <div className="flex flex-col gap-micro">
+          {filtered.length === 0 ? (
+            <div className="text-muted-foreground py-2 text-center text-sm">
+              {context.i18n.noResultsFound}
+            </div>
+          ) : (
+            filtered.map((option) => {
+              const isSelected = effectiveValues.includes(option.value)
+              return (
+                <button
+                  key={String(option.value)}
+                  type="button"
+                  role="option"
+                  aria-selected={isSelected}
+                  onClick={() => toggle(option)}
+                  className={cn(
+                    "flex h-8 items-center gap-micro rounded-sm px-component text-start text-sm outline-none transition-colors",
+                    "hover:bg-accent hover:text-accent-foreground",
+                    isSelected && "bg-accent text-accent-foreground",
+                    "focus-visible:ring-2 focus-visible:ring-ring/50",
+                    option.className
+                  )}
+                >
+                  {option.icon}
+                  <span className="truncate">{option.label}</span>
+                  {isMultiSelect && isSelected && (
+                    <HugeiconsIcon
+                      icon={Tick02Icon}
+                      className="ms-auto size-3.5"
+                    />
+                  )}
+                </button>
+              )
+            })
+          )}
+        </div>
+      </ScrollArea>
+    </div>
+  )
+}
+
+function getOperatorLabel<T = unknown>(
+  field: FilterFieldConfig<T>,
+  operator: string,
+  values: T[],
+  i18n: FilterI18nConfig
+): string {
+  const operators = getOperatorsForField(field, values, i18n)
+  return (
+    operators.find((op) => op.value === operator)?.label ||
+    i18n.helpers.formatOperator(operator)
+  )
+}
+
+function getValueSummary<T = unknown>(
+  field: FilterFieldConfig<T>,
+  values: T[],
+  operator: string,
+  i18n: FilterI18nConfig
+): React.ReactNode {
+  if (!values || values.length === 0) return null
+
+  const nonEmpty = values.filter(
+    (v) => v !== "" && v !== null && v !== undefined
+  )
+  if (nonEmpty.length === 0) return null
+
+  if (field.customValueRenderer) {
+    return field.customValueRenderer(values, field.options || [])
+  }
+
+  if (field.type === "boolean") {
+    return values[0] ? i18n.true : i18n.false
+  }
+
+  if (operator === "between" && nonEmpty.length >= 2) {
+    return `${nonEmpty[0]} – ${nonEmpty[1]}`
+  }
+
+  if (
+    field.type === "text" ||
+    field.type === "number" ||
+    field.type === "date" ||
+    field.type === "timestamp" ||
+    !field.options ||
+    field.options.length === 0
+  ) {
+    return nonEmpty.map(String).join(", ")
+  }
+
+  const selected = field.options.filter((opt) => values.includes(opt.value))
+  if (selected.length === 0) return null
+  if (selected.length === 1) return selected[0].label
+  return `${selected.length} ${i18n.selectedCount}`
+}
+
+const chipVariants = cva(
+  "group/chip inline-flex cursor-pointer items-center rounded-md border border-transparent bg-secondary text-secondary-foreground font-medium transition-[color,background-color,border-color,box-shadow] hover:bg-secondary/80 data-[open]:ring-2 data-[open]:ring-ring/50",
+  {
+    variants: {
+      size: {
+        sm: "h-8 text-xs",
+        default: "h-9 text-sm",
+        lg: "h-10 text-sm",
+      },
+    },
+    defaultVariants: { size: "default" },
+  }
+)
+
+const chipTriggerVariants = cva(
+  "group/chip-trigger inline-flex h-full cursor-pointer items-center gap-micro rounded-l-md text-start outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50 [&_svg]:pointer-events-none",
+  {
+    variants: {
+      size: {
+        sm: "ps-2.5 pe-1.5 [&_svg:not([class*='size-'])]:size-3",
+        default: "ps-3 pe-2 [&_svg:not([class*='size-'])]:size-3.5",
+        lg: "ps-4 pe-2.5 [&_svg:not([class*='size-'])]:size-4",
+      },
+    },
+    defaultVariants: { size: "default" },
+  }
+)
+
+const chipCloseVariants = cva(
+  "inline-flex h-full items-center justify-center rounded-r-md opacity-60 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring/50",
+  {
+    variants: {
+      size: {
+        sm: "w-5 pe-1 [&_svg]:size-3",
+        default: "w-6 pe-1.5 [&_svg]:size-3.5",
+        lg: "w-7 pe-2 [&_svg]:size-4",
+      },
+    },
+    defaultVariants: { size: "default" },
+  }
+)
+
+interface FilterChipProps<T = unknown> {
+  filter: Filter<T>
+  field: FilterFieldConfig<T>
+  initiallyOpen?: boolean
+  onUpdate: (updates: Partial<Filter<T>>) => void
+  onRemove: () => void
+}
+
+function FilterChip<T = unknown>({
+  filter,
+  field,
+  initiallyOpen,
+  onUpdate,
+  onRemove,
+}: FilterChipProps<T>) {
+  const context = useFilterContext()
+  const [open, setOpen] = useState(false)
+  const justMountedRef = useRef(true)
+
+  useEffect(() => {
+    if (!initiallyOpen) return
+    const id = window.setTimeout(() => setOpen(true), 50)
+    return () => window.clearTimeout(id)
+  }, [initiallyOpen])
+
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      justMountedRef.current = false
+    }, 200)
+    return () => window.clearTimeout(id)
+  }, [])
+
+  const valueSummary = getValueSummary(
+    field,
+    filter.values,
+    filter.operator,
+    context.i18n
+  )
+  const operatorLabel = getOperatorLabel(
+    field,
+    filter.operator,
+    filter.values,
+    context.i18n
+  )
+  const hasOperatorWithoutValue =
+    filter.operator === "empty" || filter.operator === "not_empty"
+  const isApplied = valueSummary != null || hasOperatorWithoutValue
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <div
+        data-active={isApplied || undefined}
+        data-open={open || undefined}
+        className={chipVariants({ size: context.size })}
+      >
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            className={chipTriggerVariants({ size: context.size })}
+          >
+            {field.icon}
+            <span>{field.label}</span>
+            {isApplied && (
+              <>
+                <span className="opacity-70 transition-opacity group-hover/chip-trigger:opacity-100">
+                  {operatorLabel}
+                </span>
+                {valueSummary != null && <span>{valueSummary}</span>}
+              </>
+            )}
+          </button>
+        </PopoverTrigger>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onRemove()
+          }}
+          aria-label="Remove filter"
+          className={chipCloseVariants({ size: context.size })}
+        >
+          <HugeiconsIcon icon={Cancel01Icon} />
+        </button>
+      </div>
+      <PopoverContent
+        align="start"
+        className="w-72 gap-component p-component"
+        onInteractOutside={(e) => {
+          if (justMountedRef.current) e.preventDefault()
+        }}
+      >
+        <div className="flex items-center gap-component">
+          <span className="text-sm font-medium text-muted-foreground">
+            {field.label}
+          </span>
+          <FilterOperatorDropdown<T>
+            field={field}
+            operator={filter.operator}
+            values={filter.values}
+            onChange={(operator) => onUpdate({ operator })}
+          />
+        </div>
+        {filter.operator !== "empty" && filter.operator !== "not_empty" && (
+          <FilterValueSelector<T>
+            field={field}
+            values={filter.values}
+            operator={filter.operator}
+            onChange={(values) => onUpdate({ values })}
+            autoFocus={initiallyOpen}
+          />
+        )}
+      </PopoverContent>
+    </Popover>
+  )
+}
+
 export interface Filter<T = unknown> {
   id: string
   field: string
@@ -1117,29 +1309,13 @@ export const FiltersContent = <T = unknown,>({
         if (!field) return null
 
         return (
-          <ButtonGroup key={filter.id}>
-            <ButtonGroupText>
-              {field.icon}
-              {field.label}
-            </ButtonGroupText>
-
-            <FilterOperatorDropdown<T>
-              field={field}
-              operator={filter.operator}
-              values={filter.values}
-              onChange={(operator) => updateFilter(filter.id, { operator })}
-            />
-
-            <FilterValueSelector<T>
-              field={field}
-              values={filter.values}
-              onChange={(values) => updateFilter(filter.id, { values })}
-              operator={filter.operator}
-              autoFocus={false}
-            />
-
-            <FilterRemoveButton onClick={() => removeFilter(filter.id)} />
-          </ButtonGroup>
+          <FilterChip<T>
+            key={filter.id}
+            filter={filter}
+            field={field}
+            onUpdate={(updates) => updateFilter(filter.id, updates)}
+            onRemove={() => removeFilter(filter.id)}
+          />
         )
       })}
     </div>
@@ -1165,218 +1341,6 @@ interface FiltersProps<T = unknown> {
   shortcutLabel?: string
 }
 
-interface FilterSubmenuContentProps<T = unknown> {
-  field: FilterFieldConfig<T>
-  currentValues: T[]
-  isMultiSelect: boolean
-  onToggle: (value: T, isSelected: boolean) => void
-  i18n: FilterI18nConfig
-  isActive?: boolean
-  onActive?: () => void
-  onBack?: () => void
-  onClose?: () => void
-}
-
-function FilterSubmenuContent<T = unknown>({
-  field,
-  currentValues,
-  isMultiSelect,
-  onToggle,
-  i18n,
-  isActive,
-  onActive,
-  onBack,
-  onClose,
-}: FilterSubmenuContentProps<T>) {
-  const [searchInput, setSearchInput] = useState("")
-  const [highlightedIndex, setHighlightedIndex] = useState(-1)
-  const inputRef = useRef<HTMLInputElement>(null)
-  const baseId = useId()
-
-  useEffect(() => {
-    setHighlightedIndex(-1)
-  }, [searchInput])
-
-  useEffect(() => {
-    if (highlightedIndex >= 0 && isActive) {
-      const element = document.getElementById(
-        `${baseId}-item-${highlightedIndex}`
-      )
-      element?.scrollIntoView({ block: "nearest" })
-    }
-  }, [highlightedIndex, isActive, baseId])
-
-  const filteredOptions = useMemo(() => {
-    return (
-      field.options?.filter((option) => {
-        const isSelected = currentValues.includes(option.value)
-        if (isSelected) return true
-        if (!searchInput) return true
-        return option.label.toLowerCase().includes(searchInput.toLowerCase())
-      }) || []
-    )
-  }, [field.options, searchInput, currentValues])
-
-  useEffect(() => {
-    if (isActive && filteredOptions.length > 0) {
-      setHighlightedIndex(0)
-    }
-  }, [isActive, filteredOptions.length])
-
-  return (
-    <div className="flex flex-col" onMouseEnter={onActive}>
-      {field.searchable !== false && (
-        <>
-          <Input
-            ref={inputRef}
-            role="combobox"
-            aria-autocomplete="list"
-            aria-expanded={true}
-            aria-haspopup="listbox"
-            aria-controls={`${baseId}-listbox`}
-            aria-activedescendant={
-              highlightedIndex >= 0
-                ? `${baseId}-item-${highlightedIndex}`
-                : undefined
-            }
-            placeholder={i18n.placeholders.searchField(field.label || "")}
-            className={cn(
-              "h-8 rounded-none border-0 bg-transparent! px-component text-sm shadow-none",
-              "focus-visible:border-border focus-visible:ring-0 focus-visible:ring-offset-0"
-            )}
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => {
-              if (e.key === "ArrowDown") {
-                e.preventDefault()
-                if (filteredOptions.length > 0) {
-                  setHighlightedIndex((prev) =>
-                    prev < filteredOptions.length - 1 ? prev + 1 : 0
-                  )
-                }
-              } else if (e.key === "ArrowUp") {
-                e.preventDefault()
-                if (filteredOptions.length > 0) {
-                  setHighlightedIndex((prev) =>
-                    prev > 0 ? prev - 1 : filteredOptions.length - 1
-                  )
-                }
-              } else if (e.key === "ArrowLeft") {
-                e.preventDefault()
-                onBack?.()
-              } else if (e.key === "Enter" && highlightedIndex >= 0) {
-                e.preventDefault()
-                const option = filteredOptions[highlightedIndex]
-                if (option) {
-                  onToggle(
-                    option.value as T,
-                    currentValues.includes(option.value)
-                  )
-                  if (!isMultiSelect) {
-                    onBack?.()
-                  }
-                }
-              } else if (e.key === "Escape") {
-                e.preventDefault()
-                onClose?.()
-              }
-              e.stopPropagation()
-            }}
-          />
-          <DropdownMenuSeparator />
-        </>
-      )}
-      <div className="relative flex max-h-full">
-        <div
-          className="flex max-h-[min(var(--radix-dropdown-menu-content-available-height),24rem)] w-full scroll-pt-2 scroll-pb-2 flex-col overscroll-contain outline-hidden"
-          role="listbox"
-          id={`${baseId}-listbox`}
-          tabIndex={field.searchable === false ? 0 : -1}
-          onKeyDown={(e) => {
-            if (field.searchable === false) {
-              if (e.key === "ArrowDown") {
-                e.preventDefault()
-                if (filteredOptions.length > 0) {
-                  setHighlightedIndex((prev) =>
-                    prev < filteredOptions.length - 1 ? prev + 1 : 0
-                  )
-                }
-              } else if (e.key === "ArrowUp") {
-                e.preventDefault()
-                if (filteredOptions.length > 0) {
-                  setHighlightedIndex((prev) =>
-                    prev > 0 ? prev - 1 : filteredOptions.length - 1
-                  )
-                }
-              } else if (e.key === "ArrowLeft") {
-                e.preventDefault()
-                onBack?.()
-              } else if (e.key === "Enter" && highlightedIndex >= 0) {
-                e.preventDefault()
-                const option = filteredOptions[highlightedIndex]
-                if (option) {
-                  onToggle(
-                    option.value as T,
-                    currentValues.includes(option.value)
-                  )
-                  if (!isMultiSelect) {
-                    onBack?.()
-                  }
-                }
-              } else if (e.key === "Escape") {
-                e.preventDefault()
-                onClose?.()
-              }
-              e.stopPropagation()
-            }
-          }}
-        >
-          <ScrollArea className="size-full min-h-0 **:data-[slot=scroll-area-scrollbar]:m-0 **:data-[slot=scroll-area-viewport]:h-full **:data-[slot=scroll-area-viewport]:overscroll-contain">
-            {filteredOptions.length === 0 ? (
-              <div className="text-muted-foreground py-2 text-center text-sm">
-                {i18n.noResultsFound}
-              </div>
-            ) : (
-              <DropdownMenuGroup>
-                {filteredOptions.map((option, index) => {
-                  const isSelected = currentValues.includes(option.value)
-                  const isHighlighted = highlightedIndex === index
-                  const itemId = `${baseId}-item-${index}`
-
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={String(option.value)}
-                      id={itemId}
-                      role="option"
-                      aria-selected={isHighlighted}
-                      data-highlighted={isHighlighted || undefined}
-                      onMouseEnter={() => setHighlightedIndex(index)}
-                      checked={isSelected}
-                      className={cn(
-                        "data-highlighted:bg-accent data-highlighted:text-accent-foreground",
-                        option.className
-                      )}
-                      onSelect={(e) => {
-                        if (isMultiSelect) e.preventDefault()
-                      }}
-                      onCheckedChange={() =>
-                        onToggle(option.value as T, isSelected)
-                      }
-                    >
-                      {option.icon}
-                      <span className="truncate">{option.label}</span>
-                    </DropdownMenuCheckboxItem>
-                  )
-                })}
-              </DropdownMenuGroup>
-            )}
-          </ScrollArea>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 export function Filters<T = unknown>({
   filters,
@@ -1393,12 +1357,10 @@ export function Filters<T = unknown>({
   menuPopupClassName,
   enableShortcut = false,
   shortcutKey = "f",
-  shortcutLabel = "F",
+  shortcutLabel = "⌘F",
 }: FiltersProps<T>) {
   const [addFilterOpen, setAddFilterOpen] = useState(false)
   const [menuSearchInput, setMenuSearchInput] = useState("")
-  const [activeMenu, setActiveMenu] = useState<string>("root")
-  const [openSubMenu, setOpenSubMenu] = useState<string | null>(null)
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const [lastAddedFilterId, setLastAddedFilterId] = useState<string | null>(
     null
@@ -1411,12 +1373,9 @@ export function Filters<T = unknown>({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (
+        (e.metaKey || e.ctrlKey) &&
         e.key.toLowerCase() === shortcutKey.toLowerCase() &&
-        !addFilterOpen &&
-        !(
-          document.activeElement instanceof HTMLInputElement ||
-          document.activeElement instanceof HTMLTextAreaElement
-        )
+        !addFilterOpen
       ) {
         e.preventDefault()
         setAddFilterOpen(true)
@@ -1439,18 +1398,6 @@ export function Filters<T = unknown>({
       element?.scrollIntoView({ block: "nearest" })
     }
   }, [highlightedIndex, addFilterOpen, rootId])
-
-  useEffect(() => {
-    if (!addFilterOpen) {
-      setOpenSubMenu(null)
-    }
-  }, [addFilterOpen])
-
-  // Track which filter instance is being built in the current Add Filter menu session
-  // Maps fieldKey -> unique filterId created during this open session
-  const [sessionFilterIds, setSessionFilterIds] = useState<
-    Record<string, string>
-  >({})
 
   useEffect(() => {
     if (lastAddedFilterId) {
@@ -1505,8 +1452,17 @@ export function Filters<T = unknown>({
       if (field && field.key) {
         const defaultOperator =
           field.defaultOperator ||
-          (field.type === "multiselect" ? "is_any_of" : "is")
-        const defaultValues: unknown[] = field.type === "text" ? [""] : []
+          (field.type === "multiselect"
+            ? "is_any_of"
+            : field.type === "text"
+              ? "contains"
+              : "is")
+        const defaultValues: unknown[] =
+          field.type === "text" || field.type === "number"
+            ? [""]
+            : field.type === "timestamp"
+              ? [""]
+              : []
         const newFilter = createFilter<T>(
           fieldKey,
           defaultOperator,
@@ -1566,16 +1522,17 @@ export function Filters<T = unknown>({
               setAddFilterOpen(open)
               if (!open) {
                 setMenuSearchInput("")
-                setSessionFilterIds({})
-              } else {
-                setActiveMenu("root")
               }
             }}
           >
             <DropdownMenuTrigger asChild>
               {trigger || (
-                <Button variant="outline">
-                  <HugeiconsIcon icon={PlusSignIcon} />
+                <Button
+                  variant="outline"
+                  size={size}
+                  className="font-medium normal-case tracking-normal"
+                >
+                  <HugeiconsIcon icon={PlusSignIcon} data-icon="inline-start" />
                   {mergedI18n.addFilter}
                 </Button>
               )}
@@ -1619,47 +1576,11 @@ export function Filters<T = unknown>({
                               prev > 0 ? prev - 1 : filteredFields.length - 1
                             )
                           }
-                        } else if (
-                          (e.key === "ArrowRight" || e.key === "ArrowLeft") &&
-                          highlightedIndex >= 0
-                        ) {
-                          const field = filteredFields[highlightedIndex]
-                          const hasSubMenu =
-                            field &&
-                            (field.type === "select" ||
-                              field.type === "multiselect") &&
-                            field.options?.length
-
-                          if (e.key === "ArrowRight" && hasSubMenu) {
-                            e.preventDefault()
-                            setOpenSubMenu(field.key || null)
-                            setActiveMenu(field.key || "root")
-                          } else if (e.key === "ArrowLeft") {
-                            e.preventDefault()
-                            if (openSubMenu) {
-                              setOpenSubMenu(null)
-                              setActiveMenu("root")
-                            }
-                          }
                         } else if (e.key === "Enter" && highlightedIndex >= 0) {
                           e.preventDefault()
                           const field = filteredFields[highlightedIndex]
                           if (field.key) {
-                            const hasSubMenu =
-                              (field.type === "select" ||
-                                field.type === "multiselect") &&
-                              field.options?.length
-                            if (!hasSubMenu) {
-                              addFilter(field.key)
-                            } else {
-                              if (openSubMenu === field.key) {
-                                setOpenSubMenu(null)
-                                setActiveMenu("root")
-                              } else {
-                                setOpenSubMenu(field.key)
-                                setActiveMenu(field.key)
-                              }
-                            }
+                            addFilter(field.key)
                           }
                         } else if (e.key === "Escape") {
                           setAddFilterOpen(false)
@@ -1667,11 +1588,6 @@ export function Filters<T = unknown>({
                         e.stopPropagation()
                       }}
                     />
-                    {enableShortcut && shortcutLabel && (
-                      <Kbd className="bg-background absolute top-1/2 right-2 -translate-y-1/2 border">
-                        {shortcutLabel}
-                      </Kbd>
-                    )}
                   </div>
                   <DropdownMenuSeparator />
                 </>
@@ -1696,121 +1612,6 @@ export function Filters<T = unknown>({
                       return filteredFields.map((field, index) => {
                         const isHighlighted = highlightedIndex === index
                         const itemId = `${rootId}-item-${index}`
-                        const hasSubMenu =
-                          (field.type === "select" ||
-                            field.type === "multiselect") &&
-                          field.options?.length
-
-                        if (hasSubMenu) {
-                          const isMultiSelect = field.type === "multiselect"
-                          const fieldKey = field.key as string
-                          const sessionFilterId = sessionFilterIds[fieldKey]
-                          const sessionFilter = sessionFilterId
-                            ? filters.find((f) => f.id === sessionFilterId)
-                            : null
-                          const currentValues = sessionFilter?.values || []
-
-                          return (
-                            <DropdownMenuSub
-                              key={fieldKey}
-                              open={openSubMenu === fieldKey}
-                              onOpenChange={(open) => {
-                                if (open) {
-                                  setOpenSubMenu((prev) =>
-                                    prev === fieldKey ? prev : fieldKey
-                                  )
-                                } else {
-                                  if (openSubMenu === fieldKey) {
-                                    setOpenSubMenu(null)
-                                    setActiveMenu("root")
-                                  }
-                                }
-                              }}
-                            >
-                              <DropdownMenuSubTrigger
-                                id={itemId}
-                                role="option"
-                                aria-selected={isHighlighted}
-                                data-highlighted={isHighlighted || undefined}
-                                onMouseEnter={() => setHighlightedIndex(index)}
-                                className="data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground"
-                              >
-                                {field.icon}
-                                <span>{field.label}</span>
-                              </DropdownMenuSubTrigger>
-                              <DropdownMenuSubContent className="w-[200px]">
-                                <FilterSubmenuContent
-                                  field={field}
-                                  currentValues={currentValues}
-                                  isMultiSelect={isMultiSelect}
-                                  i18n={mergedI18n}
-                                  isActive={activeMenu === fieldKey}
-                                  onActive={() => {
-                                    if (field.searchable !== false) {
-                                      setActiveMenu(fieldKey)
-                                    }
-                                  }}
-                                  onBack={() => {
-                                    setOpenSubMenu(null)
-                                    setActiveMenu("root")
-                                  }}
-                                  onClose={() => setAddFilterOpen(false)}
-                                  onToggle={(value, isSelected) => {
-                                    if (isMultiSelect) {
-                                      const nextValues = isSelected
-                                        ? (currentValues.filter(
-                                            (v) => v !== value
-                                          ) as T[])
-                                        : ([...currentValues, value] as T[])
-
-                                      if (sessionFilter) {
-                                        if (nextValues.length === 0) {
-                                          onChange(
-                                            filters.filter(
-                                              (f) => f.id !== sessionFilter.id
-                                            )
-                                          )
-                                          setSessionFilterIds((prev) => ({
-                                            ...prev,
-                                            [fieldKey]: "",
-                                          }))
-                                        } else {
-                                          onChange(
-                                            filters.map((f) =>
-                                              f.id === sessionFilter.id
-                                                ? { ...f, values: nextValues }
-                                                : f
-                                            )
-                                          )
-                                        }
-                                      } else {
-                                        const newFilter = createFilter<T>(
-                                          fieldKey,
-                                          field.defaultOperator || "is_any_of",
-                                          nextValues
-                                        )
-                                        onChange([...filters, newFilter])
-                                        setSessionFilterIds((prev) => ({
-                                          ...prev,
-                                          [fieldKey]: newFilter.id,
-                                        }))
-                                      }
-                                    } else {
-                                      const newFilter = createFilter<T>(
-                                        fieldKey,
-                                        field.defaultOperator || "is",
-                                        [value] as T[]
-                                      )
-                                      setLastAddedFilterId(newFilter.id)
-                                      onChange([...filters, newFilter])
-                                      setAddFilterOpen(false)
-                                    }
-                                  }}
-                                />
-                              </DropdownMenuSubContent>
-                            </DropdownMenuSub>
-                          )
-                        }
 
                         return (
                           <DropdownMenuItem
@@ -1840,28 +1641,26 @@ export function Filters<T = unknown>({
           const field = fieldsMap[filter.field]
           if (!field) return null
           return (
-            <ButtonGroup key={filter.id}>
-              <ButtonGroupText className="bg-background dark:bg-input/30">
-                {field.icon}
-                {field.label}
-              </ButtonGroupText>
-              <FilterOperatorDropdown<T>
-                field={field}
-                operator={filter.operator}
-                values={filter.values}
-                onChange={(operator) => updateFilter(filter.id, { operator })}
-              />
-              <FilterValueSelector<T>
-                field={field}
-                values={filter.values}
-                operator={filter.operator}
-                onChange={(values) => updateFilter(filter.id, { values })}
-                autoFocus={filter.id === lastAddedFilterId}
-              />
-              <FilterRemoveButton onClick={() => removeFilter(filter.id)} />
-            </ButtonGroup>
+            <FilterChip<T>
+              key={filter.id}
+              filter={filter}
+              field={field}
+              initiallyOpen={filter.id === lastAddedFilterId}
+              onUpdate={(updates) => updateFilter(filter.id, updates)}
+              onRemove={() => removeFilter(filter.id)}
+            />
           )
         })}
+
+        {filters.length > 0 && (
+          <button
+            type="button"
+            onClick={() => onChange([])}
+            className="cursor-pointer px-component text-sm font-medium text-muted-foreground transition-colors outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:rounded-md"
+          >
+            {mergedI18n.clearAll}
+          </button>
+        )}
       </div>
     </FilterContext.Provider>
   )
