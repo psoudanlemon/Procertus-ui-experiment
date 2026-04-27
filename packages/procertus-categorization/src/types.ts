@@ -6,17 +6,19 @@
 export type Certification = {
   ce: string;
   benor: string;
-  atg: string;
-  ssdInnovationAttest: string;
+  ssd: string;
 };
 
-export type Procedures = {
+export type ProductAttestations = {
+  atg: string;
   procertus: string;
-  partijkeuring: string;
   epd: string;
 };
 
-export type TreeNodeKind = 'group' | 'product';
+/** @deprecated Use {@link ProductAttestations}; kept for older consumers while the prototype migrates. */
+export type Procedures = ProductAttestations;
+
+export type TreeNodeKind = "group" | "product";
 
 export type TreeNode = {
   id: string;
@@ -25,7 +27,7 @@ export type TreeNode = {
   productTypeStreamLabel?: string;
   children?: TreeNode[];
   certification?: Certification;
-  procedures?: Procedures;
+  attestations?: ProductAttestations;
 };
 
 export type ProcertusSpreadsheetSource = {
@@ -38,10 +40,37 @@ export type ProcertusSpreadsheetSource = {
 };
 
 export type WizardEntryPoint =
-  | 'regulated-certificate'
-  | 'atg-attest'
-  | 'innovation-attest-ssd'
+  | "product-certification"
+  | "atg"
+  | "innovation-attest"
+  | "procertus"
+  | "epd"
+  | "partijkeuring"
   | (string & {});
+
+export type CertificationLabelKey = "ce" | "benor" | "ssd";
+
+export type ProductAttestationKey = "atg" | "procertus" | "epd";
+
+export type AvailableEntryKey =
+  | CertificationLabelKey
+  | ProductAttestationKey
+  | "innovation-attest"
+  | "partijkeuring"
+  | (string & {});
+
+export type AvailableEntryCategory = "certification" | "attest" | "document" | "inspection";
+
+export type AvailableEntry = {
+  id: AvailableEntryKey;
+  category: AvailableEntryCategory;
+  shortLabel: string;
+  label: string;
+  primaryInput: "product-selection" | "freeform-context";
+  productRelation: "required" | "optional";
+  productAvailabilityKey?: CertificationLabelKey | ProductAttestationKey;
+  description: string;
+};
 
 export type ProcertusCategorizationMeta = {
   schemaVersion: string;
@@ -49,14 +78,13 @@ export type ProcertusCategorizationMeta = {
   canonicalLocale: string;
   source: ProcertusSpreadsheetSource;
   wizard?: { entryPoints?: readonly WizardEntryPoint[] };
+  availableEntries?: readonly AvailableEntry[];
 };
 
 export type ProcertusCategorizationDoc = {
   meta: ProcertusCategorizationMeta;
   clusters: readonly TreeNode[];
 };
-
-export type CertificationLabelKey = 'ce' | 'benor' | 'atg' | 'ssd';
 
 export type FlatProductEntry = {
   path: string[];

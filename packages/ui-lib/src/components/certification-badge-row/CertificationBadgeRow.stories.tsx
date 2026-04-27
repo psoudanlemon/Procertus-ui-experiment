@@ -8,7 +8,7 @@ const allKinds: CertificationBadgeItem[] = [
   { id: "atg", shortLabel: "ATG", presentation: "muted", text: "N/A" },
   {
     id: "ssd",
-    shortLabel: "SSD / innovation",
+    shortLabel: "SSD",
     presentation: "not-offered",
     text: "— (not by us on this type)",
   },
@@ -40,16 +40,16 @@ export default meta;
 export const Mixed = {
   render: () => (
     <div className="max-w-2xl">
-      <CertificationBadgeRow
-        leading="Certification row (example)"
-        items={allKinds}
-      />
+      <CertificationBadgeRow leading="Certification row (example)" items={allKinds} />
     </div>
   ),
 } as unknown as StoryObj<typeof meta>;
 
 export const Empty = {
   render: () => (
-    <CertificationBadgeRow items={[]} emptyMessage="No certification data provided for this row (story)" />
+    <CertificationBadgeRow
+      items={[]}
+      emptyMessage="No certification data provided for this row (story)"
+    />
   ),
 } as unknown as StoryObj<typeof meta>;

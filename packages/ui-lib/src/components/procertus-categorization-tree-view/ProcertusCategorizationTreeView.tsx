@@ -5,19 +5,25 @@
 import {
   CERTIFICATION_LABEL_META,
   CERTIFICATION_LABEL_ORDER,
+  PRODUCT_ATTESTATION_META,
+  PRODUCT_ATTESTATION_ORDER,
   type Certification,
   type CertificationLabelKey,
+  type ProductAttestationKey,
+  type ProductAttestations,
   type ProcertusCategorizationDoc,
-  type Procedures,
   type TreeNode,
   chipDisplay,
   chipVariant,
   collectGroupIds,
+  filterClustersByAttestation,
   filterClustersByCertLabel,
   flattenProducts,
   getCertValue,
   getCertifiableRowsForLabel,
-  hasAnyProcedureData,
+  getProductAttestationValue,
+  getProductsForAttestation,
+  hasAnyProductAttestationData,
   hasCertifiableChip,
   statusTextWhenNoChip,
 } from "@procertus-ui/procertus-categorization";
@@ -63,28 +69,17 @@ function CertificationChipsRow({ certification }: { certification: Certification
   );
 }
 
-function ProcedureChipsRow({ procedures }: { procedures: Procedures }) {
-  if (!hasAnyProcedureData(procedures)) {
+function ProductAttestationChipsRow({ attestations }: { attestations: ProductAttestations }) {
+  if (!hasAnyProductAttestationData(attestations)) {
     return null;
   }
   const items: Array<{ key: string; label: string; v: string }> = [];
-  if (procedures.procertus.trim()) {
-    items.push({
-      key: "procertus",
-      label: "PROCERTUS",
-      v: procedures.procertus.trim(),
-    });
-  }
-  if (procedures.partijkeuring.trim()) {
-    items.push({
-      key: "partij",
-      label: "Partijkeuring",
-      v: procedures.partijkeuring.trim(),
-    });
-  }
-  if (procedures.epd.trim()) {
-    items.push({ key: "epd", label: "EPD", v: procedures.epd.trim() });
-  }
+  PRODUCT_ATTESTATION_ORDER.forEach((key) => {
+    const v = getProductAttestationValue(attestations, key);
+    if (v.trim()) {
+      items.push({ key, label: PRODUCT_ATTESTATION_META[key].short, v: v.trim() });
+    }
+  });
   if (items.length === 0) {
     return null;
   }
@@ -106,10 +101,10 @@ function ProcedureChipsRow({ procedures }: { procedures: Procedures }) {
 }
 
 function ProductRow({ node }: { node: TreeNode }) {
-  if (node.kind !== "product" || !node.certification || !node.procedures) {
+  if (node.kind !== "product" || !node.certification || !node.attestations) {
     return null;
   }
-  const { certification, procedures } = node;
+  const { certification, attestations } = node;
   return (
     <Collapsible className="group">
       <div className="rounded-md border border-border/40 bg-muted/5">
@@ -156,7 +151,7 @@ function ProductRow({ node }: { node: TreeNode }) {
               );
             })}
           </div>
-          <ProcedureChipsRow procedures={procedures} />
+          <ProductAttestationChipsRow attestations={attestations} />
         </CollapsibleContent>
       </div>
     </Collapsible>
@@ -318,6 +313,53 @@ function buildEmbeddedCertificationListItems(
   return out;
 }
 
+function buildEmbeddedAttestationListItems(
+  nodes: TreeNode[],
+  selected: ProductAttestationKey,
+): ReactNode[] {
+  const out: ReactNode[] = [];
+  let productRun: Array<{ id: string; text: string }> = [];
+
+  const flushProducts = () => {
+    if (productRun.length === 0) {
+      return;
+    }
+    out.push(
+      <li key={productRun.map((p) => p.id).join("\0")} className="text-sm text-foreground">
+        {productRun.map((p) => p.text).join(", ")}
+      </li>,
+    );
+    productRun = [];
+  };
+
+  for (const node of nodes) {
+    if (node.kind === "product") {
+      const attestations = node.attestations;
+      const v = attestations ? getProductAttestationValue(attestations, selected) : "";
+      if (!hasCertifiableChip(v)) {
+        continue;
+      }
+      productRun.push({ id: node.id, text: node.label });
+    } else if (node.kind === "group" && node.children?.length) {
+      flushProducts();
+      const inner = buildEmbeddedAttestationListItems(node.children, selected);
+      if (inner.length > 0) {
+        out.push(
+          <li key={node.id} className="text-sm">
+            <span className="font-medium text-foreground">{node.label}</span>
+            <ol className="mt-1.5 list-decimal space-y-1.5 pl-5 text-sm marker:text-muted-foreground">
+              {inner}
+            </ol>
+          </li>,
+        );
+      }
+    }
+  }
+
+  flushProducts();
+  return out;
+}
+
 function EmbeddedCertificationNestedList({
   clusters,
   selected,
@@ -341,6 +383,33 @@ function EmbeddedCertificationNestedList({
   );
 }
 
+function EmbeddedAttestationNestedList({
+  clusters,
+  selected,
+}: {
+  clusters: readonly TreeNode[];
+  selected: ProductAttestationKey;
+}) {
+  const filteredClusters = useMemo(
+    () => filterClustersByAttestation(clusters, selected),
+    [clusters, selected],
+  );
+  const items = useMemo(
+    () => buildEmbeddedAttestationListItems(filteredClusters, selected),
+    [filteredClusters, selected],
+  );
+
+  if (items.length === 0) {
+    return <p className="text-sm text-muted-foreground">Geen producten voor dit attest.</p>;
+  }
+
+  return (
+    <ol className="list-outside list-decimal space-y-2 pl-5 text-sm marker:text-muted-foreground">
+      {items}
+    </ol>
+  );
+}
+
 function EmbeddedCertificationDrilldown({
   clusters,
   flatProducts,
@@ -353,8 +422,9 @@ function EmbeddedCertificationDrilldown({
       <p className="text-xs leading-relaxed text-muted-foreground">
         Zelfde hiërarchie als de bron: geneste genummerde lijst per cluster. Bladproducten onder
         dezelfde ouder staan in één regel, komma-gescheiden; bij CE staat het niveau tussen haakjes
-        per product. Voor paden, chips en procedures: open het zijpaneel — het hele paneel scrollt
-        door tot het einde van de drilldown.
+        per product. ATG, PROCERTUS-attest en EPD staan apart als productgebonden attestaties. Voor
+        paden en chips: open het zijpaneel — het hele paneel scrollt door tot het einde van de
+        drilldown.
       </p>
       <div className="flex flex-col gap-2">
         {CERTIFICATION_LABEL_ORDER.map((labelKey) => {
@@ -387,12 +457,50 @@ function EmbeddedCertificationDrilldown({
           );
         })}
       </div>
+      <div className="mt-2 flex flex-col gap-2">
+        <div>
+          <h3 className="text-sm font-medium text-foreground">Productgebonden attestaties</h3>
+          <p className="text-xs text-muted-foreground">
+            ATG en EPD kunnen ook als vrije aanvraag starten; deze lijsten tonen alleen de producten
+            waarvoor de bron expliciet een koppeling aangeeft.
+          </p>
+        </div>
+        {PRODUCT_ATTESTATION_ORDER.map((attestationKey) => {
+          const count = getProductsForAttestation(flatProducts, attestationKey).length;
+          const { short, description } = PRODUCT_ATTESTATION_META[attestationKey];
+          return (
+            <Collapsible
+              key={attestationKey}
+              className="group rounded-lg border border-border/60 bg-muted/5"
+            >
+              <CollapsibleTrigger asChild>
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-between gap-3 px-3 py-2.5 text-left text-sm transition hover:bg-muted/40"
+                >
+                  <div className="min-w-0">
+                    <div className="font-medium text-foreground">{short}</div>
+                    <div className="text-xs text-muted-foreground">{description}</div>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <span className="text-xs tabular-nums text-muted-foreground">{count}</span>
+                    <ChevronRight className="size-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-90" />
+                  </div>
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="border-t border-border/50 px-3 py-2">
+                <EmbeddedAttestationNestedList clusters={clusters} selected={attestationKey} />
+              </CollapsibleContent>
+            </Collapsible>
+          );
+        })}
+      </div>
     </div>
   );
 }
 
 const sheetDescription =
-  "Scroll this panel to reach the end of the content. Use the product hierarchy tab for the full tree, or the certification tab to filter by CE, BENOR, ATG, or SSD and drill down the same organizational structure (only branches with at least one certifiable product for that label).";
+  "Scroll this panel to reach the end of the content. Use the product hierarchy tab for the full tree, or the certification tab to filter by CE, BENOR, or SSD and drill down the same organizational structure (only branches with at least one certifiable product for that label).";
 
 export type ProcertusCategorizationTreeViewProps = {
   /** Categorization snapshot (e.g. from `useProcertusCategorizationDoc()` or `defaultProcertusCategorizationDoc`). */
@@ -601,7 +709,7 @@ export function ProcertusCategorizationTreeView({
                 <span className="font-medium text-foreground">
                   {CERTIFICATION_LABEL_META[selectedLabel].short}
                 </span>{" "}
-                zijn weggefilterd. Vouw clusters open voor detail (alle labels en procedures per
+                zijn weggefilterd. Vouw clusters open voor detail (alle labels en attestaties per
                 product).
               </p>
               <div className="flex flex-wrap items-center gap-2">

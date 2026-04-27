@@ -131,6 +131,8 @@ export type SelectChoiceCardProps = {
    * Prominent centered icon (Empty-style circular well), **hero** layout.
    */
   icon?: ReactNode;
+  /** Styles the hero icon well as selected; useful when the hidden control is represented by the icon. */
+  iconSelected?: boolean;
   /** @default "primary" */
   emphasis?: SelectChoiceEmphasis;
   /** @default "default" — `hero` uses larger centered type and padding (empty-state outline). */
@@ -152,6 +154,7 @@ export function SelectChoiceCard({
   description,
   leading,
   icon,
+  iconSelected = false,
   emphasis = "primary",
   appearance = "default",
   selectionMode = "single",
@@ -192,6 +195,7 @@ export function SelectChoiceCard({
         orientation={isHero ? "vertical" : "horizontal"}
         className={cn(
           "items-stretch *:data-[slot=field-content]:min-w-0",
+          isHero && "relative",
           isHero && "items-center justify-center text-center",
           !isHero && "items-stretch",
         )}
@@ -205,7 +209,16 @@ export function SelectChoiceCard({
           )}
         >
           {showHeroIcon ? (
-            <EmptyIcon className="shrink-0 [&>svg]:size-7">{icon}</EmptyIcon>
+            <EmptyIcon
+              className={cn(
+                "shrink-0 transition-colors [&>svg]:size-7",
+                iconSelected &&
+                  "bg-primary text-primary-foreground ring-2 ring-primary/20 dark:bg-primary dark:text-primary-foreground",
+                !iconSelected && "bg-transparent text-muted-foreground",
+              )}
+            >
+              {icon}
+            </EmptyIcon>
           ) : null}
           {showLeading ? (
             <div className="shrink-0 self-start pt-0.5 text-muted-foreground [&_svg]:size-5">{leading}</div>
