@@ -8,6 +8,8 @@ export { ModeToggle } from "./components/mode-toggle";
 export * from "./components/ui";
 /** ReUI registry components (e.g. stepper) — see `components/reui/`. */
 export * from "./components/reui";
+/** Sewdn components copied from the local shadcn-based UI library. */
+export * from "./components/sewdn";
 /** Composed application shell components. */
 export * from "./components/app-sidebar";
 export * from "./components/app-header";

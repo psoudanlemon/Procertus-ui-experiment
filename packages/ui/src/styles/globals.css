@@ -17,6 +17,13 @@
 @import "./themes/default.css";
 
 @theme inline {
+  --container-xs: 20rem;
+  --container-sm: 40rem;
+  --container-md: 60rem;
+  --container-lg: 80rem;
+  --container-xl: 100rem;
+  --container-2xl: 150rem;
+
   /* Border radius — standard shadcn Nova scale derived from --radius (0.625rem). */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -48,6 +55,30 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+}
+
+@utility app-wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@utility app-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@utility app-scrollable {
+  overflow: auto;
+}
+
+@utility app-scroll {
+  overflow: auto;
 }
 
 @utility text-box-trim-cap {
