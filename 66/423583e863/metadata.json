@@ -1,0 +1,54 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "66423583e863",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "packages/ui-lib/src/components/certification-badge-row/COMPONENT.md",
+    "packages/ui-lib/src/components/certification-badge-row/CertificationBadgeRow.stories.tsx",
+    "packages/ui-lib/src/components/certification-badge-row/CertificationBadgeRow.tsx",
+    "packages/ui-lib/src/components/certification-badge-row/index.ts",
+    "packages/ui-lib/src/components/certification-intent-picker/COMPONENT.md",
+    "packages/ui-lib/src/components/certification-intent-picker/CertificationIntentPicker.stories.tsx",
+    "packages/ui-lib/src/components/certification-intent-picker/CertificationIntentPicker.tsx",
+    "packages/ui-lib/src/components/certification-intent-picker/index.ts",
+    "packages/ui-lib/src/components/draft-request-list/COMPONENT.md",
+    "packages/ui-lib/src/components/draft-request-list/DraftRequestList.stories.tsx",
+    "packages/ui-lib/src/components/draft-request-list/DraftRequestList.tsx",
+    "packages/ui-lib/src/components/draft-request-list/index.ts",
+    "packages/ui-lib/src/components/product-multi-select/COMPONENT.md",
+    "packages/ui-lib/src/components/product-multi-select/ProductMultiSelect.stories.tsx",
+    "packages/ui-lib/src/components/product-multi-select/ProductMultiSelect.tsx",
+    "packages/ui-lib/src/components/product-multi-select/index.ts",
+    "packages/ui-lib/src/components/product-tree-panel/COMPONENT.md",
+    "packages/ui-lib/src/components/product-tree-panel/ProductTreePanel.stories.tsx",
+    "packages/ui-lib/src/components/product-tree-panel/ProductTreePanel.tsx",
+    "packages/ui-lib/src/components/product-tree-panel/index.ts",
+    "packages/ui-lib/src/components/request-package-review/COMPONENT.md",
+    "packages/ui-lib/src/components/request-package-review/RequestPackageReview.stories.tsx",
+    "packages/ui-lib/src/components/request-package-review/RequestPackageReview.tsx",
+    "packages/ui-lib/src/components/request-package-review/index.ts",
+    "packages/ui-lib/src/components/select-choice-card/COMPONENT.md",
+    "packages/ui-lib/src/components/select-choice-card/SelectChoiceCard.stories.tsx",
+    "packages/ui-lib/src/components/select-choice-card/SelectChoiceCard.tsx",
+    "packages/ui-lib/src/components/select-choice-card/SelectChoiceCardGroup.tsx",
+    "packages/ui-lib/src/components/select-choice-card/index.ts",
+    "packages/ui-lib/src/index.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/66/423583e863/0/metadata.json",
+      "transcript": "/66/423583e863/0/full.jsonl",
+      "content_hash": "/66/423583e863/0/content_hash.txt",
+      "prompt": "/66/423583e863/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}

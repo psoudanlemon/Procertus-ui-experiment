@@ -1,0 +1,21 @@
+@procertus-docs/apps/frontend-docs/docs/pt1/task-d-ui-lib-certification-wizard.md I will continue with the next task to build presentation components in the UI library to implement a stepped onboarding flow for certification requests, management, and user onboarding. Please read the original analysis document again for a full understanding of how this flow should work. @procertus-docs/apps/frontend-docs/content/analysis/external-portal-cim-external-portal-1-analyse/certification-request-flow.mdx @procertus-docs/apps/frontend-docs/content/analysis/external-portal-cim-external-portal-1-analyse/onboarding-flow.mdx @procertus-docs/apps/frontend-docs/content/analysis/external-portal-cim-external-portal-1-analyse/request-management.mdx 
+
+Please focus first on listing all the presentation components needed to implement this flow. For instance, the wizard starts by clarifying intent. We should present possible certification options as selectable cards where only one card can be chosen.
+
+Before continuing, we should be able to set up these selectable cards in different modes so we can distinguish important options from lesser-important options. This is the first option to select the card; we should support multiple modes to visually and functionally differentiate option importance. 
+
+ please review all requirements, list all presentational components needed, and implement them one by one by scaffolding new presentational components in the uilib package. @Procertus-ui-experiment/packages/ui-lib/src/components
+
+---
+
+@procertus-docs/apps/frontend-docs/docs/pt1/task-d-ui-lib-certification-wizard.md I will continue with the next task to build presentation components in the UI library to implement a stepped onboarding flow for certification requests, management, and user onboarding. Please read the original analysis document again for a full understanding of how this flow should work. @procertus-docs/apps/frontend-docs/content/analysis/external-portal-cim-external-portal-1-analyse/certification-request-flow.mdx @procertus-docs/apps/frontend-docs/content/analysis/external-portal-cim-external-portal-1-analyse/onboarding-flow.mdx @procertus-docs/apps/frontend-docs/content/analysis/external-portal-cim-external-portal-1-analyse/request-management.mdx 
+
+Please focus first on listing all the presentation components needed to implement this flow. For instance, the wizard starts by clarifying intent. We should present possible certification options as selectable cards where only one card can be chosen.
+
+Before continuing, we should be able to set up these selectable cards in different modes so we can distinguish important options from lesser-important options. This is the first option to select the card; we should support multiple modes to visually and functionally differentiate option importance. 
+
+ please review all requirements, list all presentational components needed, and implement them one by one by scaffolding new presentational components in the uilib package. @Procertus-ui-experiment/packages/ui-lib/src/components
+
+---
+
+Yes, please continue.
