@@ -6,7 +6,7 @@ import { StepLayout } from "./StepLayout";
 import { useStepLayout } from "./useStepLayout";
 
 const meta = {
-  title: "ui-lib/StepLayout",
+  title: "UILib/StepLayout",
   component: StepLayout,
   parameters: {
     layout: "centered",

@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ProcertusCategorizationTreeView } from "./ProcertusCategorizationTreeView";
 
 const meta = {
-  title: "ui-lib/ProcertusCategorizationTreeView",
+  title: "Request Management/ProcertusCategorizationTreeView",
   component: ProcertusCategorizationTreeView,
   parameters: {
     layout: "padded",

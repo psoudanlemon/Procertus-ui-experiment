@@ -12,7 +12,7 @@ Scaffolded with `scaffold workspace-ui add-component DesignTokensShowcase --vari
 
 ## Consumption
 
-- **Storybook:** `ui-lib/DesignTokensShowcase` stories.
+- **Storybook:** `UILib/DesignTokensShowcase` stories.
 - **Apps (recommended):** `import { DesignTokensShowcase, … } from "@procertus-ui/ui-lib/design-tokens-showcase"` so `tsc` does not pull the whole ui-lib barrel.
 - **Barrel:** also re-exported from `@procertus-ui/ui-lib` root `index.ts`.
 

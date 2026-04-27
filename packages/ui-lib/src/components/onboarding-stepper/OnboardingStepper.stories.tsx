@@ -11,7 +11,7 @@ const stepDefs: OnboardingStepperStep[] = [
 ];
 
 const meta = {
-  title: "ui-lib/OnboardingStepper",
+  title: "UILib/OnboardingStepper",
   component: OnboardingStepper,
   parameters: {
     layout: "padded",

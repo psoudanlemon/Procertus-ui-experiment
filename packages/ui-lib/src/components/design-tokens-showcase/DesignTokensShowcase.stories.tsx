@@ -5,7 +5,7 @@ import { PrototypeSurfaceMarquee } from "./PrototypeSurfaceMarquee";
 import { TokenSwatch } from "./TokenSwatch";
 
 const meta = {
-  title: "ui-lib/DesignTokensShowcase",
+  title: "UILib/DesignTokensShowcase",
   component: DesignTokensShowcase,
   parameters: {
     layout: "fullscreen",
