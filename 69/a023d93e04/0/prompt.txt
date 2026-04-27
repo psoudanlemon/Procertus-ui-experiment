@@ -1,0 +1,310 @@
+@procertus-docs/apps/frontend-docs/docs/pt1/task-e-app-flow-wiring.md I now want you to build the entire onboarding flow in the prototype application located here. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src This application was already scaffolded, and routing was set up for both authenticated and unauthenticated users. Instead of focusing on the sign-in app when not logged in, I want to focus on onboarding new, unregistered users and make sign-in a secondary action.
+
+ the task description references analysis documents describing the entire user flow for both existing, logged-in users and new users without an account.  these analysis documents are located here. @procertus-docs/apps/frontend-docs/content/analysis/external-portal-cim-external-portal-1-analyse 
+
+ we have already set up several presentational components for building onboarding flows, step layouts, steppers, select cards, and so on. Please review all existing presentational components dedicated to building these kinds of work: onboarding flows and certification request management.  please, when needed, change the components in place in the UI and lib packages, and update stories to serve your goals when building and wiring the frontend application as a prototype. @Procertus-ui-experiment/packages/ui-lib All needed underlying primitives are available as components in the more generic UI package.@Procertus-ui-experiment/packages/ui 
+
+when you think new presentational UI components are needed, please scaffold them in the uilib package and set up stories for them. 
+
+ we have already set up a reusable package to expose the categorization data for Procertus certification and product overviews@Procertus-ui-experiment/packages/procertus-categorization . 
+
+ for users who are not logged in and do not have an account, the onboarding flow should first start the certification request wizard. We want to postpone user account and organization registration until the user is sure they want to file a new request for certification or attestation to procertus. 
+
+ the certification request wizard can also be used after registration and login when requesting a new certification or attestation. 
+
+ in this certification request wizard, the first step is to select your intent — what needs to be certified. As soon as the intent is selected, the user can continue to the next step. We should show in the stepper that the first step has been completed and display which certification or attestation intent the user selected.
+
+Depending on this first step, the second step can show different types of forms depending on the information required. 
+
+ when we need information about the exact product type that must be certified, the user should be presented with a product search/drill-down functionality so they can select their product within the correct available categorization.
+
+We must also highlight when the previously selected certification intent is not available for the chosen product. All product categories should always be presented, but some product types cannot be selected for the intended certification, and the user needs information on why a product cannot be selected. 
+
+it should be possible, when a product category has been found and selected, to choose additional available certification intents as a multi-select.
+
+For example, when a user is looking for Banner certification and selects a product with an available Banner option, they can also multi-select ATG to request an ATG for the same product. This will result in additional certification requests being added to the inquiry, but from the same wizard runthrough.
+
+---
+
+@procertus-docs/apps/frontend-docs/docs/pt1/task-e-app-flow-wiring.md I now want you to build the entire onboarding flow in the prototype application located here. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src This application was already scaffolded, and routing was set up for both authenticated and unauthenticated users. Instead of focusing on the sign-in app when not logged in, I want to focus on onboarding new, unregistered users and make sign-in a secondary action.
+
+ the task description references analysis documents describing the entire user flow for both existing, logged-in users and new users without an account.  these analysis documents are located here. @procertus-docs/apps/frontend-docs/content/analysis/external-portal-cim-external-portal-1-analyse 
+
+ we have already set up several presentational components for building onboarding flows, step layouts, steppers, select cards, and so on. Please review all existing presentational components dedicated to building these kinds of work: onboarding flows and certification request management.  please, when needed, change the components in place in the UI and lib packages, and update stories to serve your goals when building and wiring the frontend application as a prototype. @Procertus-ui-experiment/packages/ui-lib All needed underlying primitives are available as components in the more generic UI package.@Procertus-ui-experiment/packages/ui 
+
+when you think new presentational UI components are needed, please scaffold them in the uilib package and set up stories for them. 
+
+ we have already set up a reusable package to expose the categorization data for Procertus certification and product overviews@Procertus-ui-experiment/packages/procertus-categorization . 
+
+ for users who are not logged in and do not have an account, the onboarding flow should first start the certification request wizard. We want to postpone user account and organization registration until the user is sure they want to file a new request for certification or attestation to procertus. 
+
+ the certification request wizard can also be used after registration and login when requesting a new certification or attestation. 
+
+ in this certification request wizard, the first step is to select your intent — what needs to be certified. As soon as the intent is selected, the user can continue to the next step. We should show in the stepper that the first step has been completed and display which certification or attestation intent the user selected.
+
+Depending on this first step, the second step can show different types of forms depending on the information required. 
+
+ when we need information about the exact product type that must be certified, the user should be presented with a product search/drill-down functionality so they can select their product within the correct available categorization.
+
+We must also highlight when the previously selected certification intent is not available for the chosen product. All product categories should always be presented, but some product types cannot be selected for the intended certification, and the user needs information on why a product cannot be selected. 
+
+it should be possible, when a product category has been found and selected, to choose additional available certification intents as a multi-select.
+
+For example, when a user is looking for Banner certification and selects a product with an available Banner option, they can also multi-select ATG to request an ATG for the same product. This will result in additional certification requests being added to the inquiry, but from the same wizard runthrough.
+
+---
+
+It should be possible to change the step directly from the stepper, not only by using the Back and Next buttons in the flow layout.
+
+The stepper should be interactive, but only if the step is already available based on the data collected.
+
+When completing a package that needs to be reviewed and entering customer information, but later changing the package again, don't return to step one of the previous wizard. Instead, go to the list of drafts in the review package.
+
+---
+
+It should be possible to change the step directly from the stepper, not only by using the Back and Next buttons in the flow layout.
+
+The stepper should be interactive, but only if the step is already available based on the data collected.
+
+When completing a package that needs to be reviewed and entering customer information, but later changing the package again, don't return to step one of the previous wizard. Instead, go to the list of drafts in the review package.
+
+---
+
+@Procertus-ui-experiment/packages/procertus-categorization I want you to rename this package to a UI package called "ui-certification."
+ I now want you to set up a data context provider to manage the certification request.
+
+Using a React context and specific React hooks will greatly simplify the setup request wizard. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx
+
+---
+
+Don't show the labels with "Productcertificatie mogelijk" or "Productcertificatie niet mogelijk"
+ instead, show a toggle on top of the product selection component to filter out all products that are not available for the currently selected certification type.
+
+ After selecting a product type, whether it is available or not, show all possible certification intents in the right panel, but enable only those that are possible. This way the user can clearly see which certification types are not possible for the selected product.
+
+---
+
+Don't show the labels with "Productcertificatie mogelijk" or "Productcertificatie niet mogelijk"
+ instead, show a toggle on top of the product selection component to filter out all products that are not available for the currently selected certification type.
+
+ After selecting a product type, whether it is available or not, show all possible certification intents in the right panel, but enable only those that are possible. This way the user can clearly see which certification types are not possible for the selected product.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx:72 why do we need this transformer inside this component that does just the data binding? I think it should be part of the UI certification package.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx:72 why do we need this transformer inside this component that does just the data binding? I think it should be part of the UI certification package.
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/CertificationRequestContext.tsx currently, all state is persisted in memory using uState. Instead of storing state in memory, I want to store it in a persistence backend and set up different ports and adapters.
+
+A possible backend is local storage, which I want to use for this prototype. Later, I want to be able to store state in a server-side persistent backend as well. The server-side implementation is out of scope for the prototype; I just want to be able to quickly switch persistence layers.
+
+Set up a clean Data model using a domain package (scaffold this sub-domain package) and set up all needed Entities for how to store all needed data for organizing and creating new certification requests. use Effect4 library to organize alle entities models and schemas
+
+Set up CRUD operations for these entities as an abstract interface
+
+Create a first implementation for this interface withi the ui-certification package using local storage. Also setup another one to implement it using state (as a proof of concept)
+
+---
+
+There should also be a subdomain scaffold command—not for the shared domain, but for a specific subdomain.
+
+---
+
+There should also be a subdomain scaffold command—not for the shared domain, but for a specific subdomain.
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/persistence.ts please split different persistence backends into separate files.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx please look at the complexity of the certification request wizard. I would have expected this to be much more obvious: only selecting which persistence backend to use and providing the presentational component with all the needed data and interaction bindings. 
+
+ please review and make suggestions on how to improve maintainability and readability.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx please look at the complexity of the certification request wizard. I would have expected this to be much more obvious: only selecting which persistence backend to use and providing the presentational component with all the needed data and interaction bindings. 
+
+ please review and make suggestions on how to improve maintainability and readability.
+
+---
+
+Yes, do the highest-priority task as your next step. Then also do the second step to move the UI.
+
+The Roemappers are the app component. Also split the certification request context into different files for readability and maintainability.
+
+Also, I think it should be possible to swap the adapter at the provider level.
+
+---
+
+Yes, do the highest-priority task as your next step. Then also do the second step to move the UI.
+
+The Roemappers are the app component. Also split the certification request context into different files for readability and maintainability.
+
+Also, I think it should be possible to swap the adapter at the provider level.
+
+---
+
+UiLib cannot import UI-certification. The dependency should be set up in the other direction.
+
+---
+
+UiLib cannot import UI-certification. The dependency should be set up in the other direction.
+
+---
+
+I think all of the UI components that are certification-request-specific could be moved to the UI certification package.
+
+We would also need to set up a Storybook configuration just like we have for the UI and UI lib packages so we can keep the stories close to the implementation.
+
+---
+
+I think all of the UI components that are certification-request-specific could be moved to the UI certification package.
+
+We would also need to set up a Storybook configuration just like we have for the UI and UI lib packages so we can keep the stories close to the implementation.
+
+---
+
+Make sure the prototype uses the local storage backend to persist all new request data in local storage so we can refresh the browser and continue where we left off.
+
+---
+
+Make sure the prototype uses the local storage backend to persist all new request data in local storage so we can refresh the browser and continue where we left off
+
+---
+
+Make sure the prototype uses the local storage backend to persist all new request data in local storage so we can refresh the browser and continue where we left off
+
+---
+
+When logged in, I want the entire stepped flow layout to fill the available page. I want the navigation bar docked to the bottom of the screen and using internal scrolling for its content.
+
+Also display the stepper on the left side to better support widescreen use on desktop computers.
+
+These possibilities should be available in the presentation components.
+
+---
+
+When logged in, I want the entire stepped flow layout to fill the available page. I want the navigation bar docked to the bottom of the screen and using internal scrolling for its content.
+
+Also display the stepper on the left side to better support widescreen use on desktop computers.
+
+These possibilities should be available in the presentation components.
+
+---
+
+Organize the request creation on a different sub-route. First, create a request on the route /create, and as soon as a request is created, redirect to a sub-route using the newly created request ID.
+
+---
+
+Use the proper background color inside this step layout. Or don't use any background color so the parent component's background color is used. So the same step layout can be used both inside a mobile view and inside a full page, and be transparent so it adapts to the component it is rendered in and its background.
+
+---
+
+Use the proper background color inside this step layout. Or don't use any background color so the parent component's background color is used. So the same step layout can be used both inside a mobile view and inside a full page, and be transparent so it adapts to the component it is rendered in and its background.
+
+---
+
+There is padding inside the main view. I can imagine this padding needs to be there for normal content, but in this case I want the state layout to be fully stretched to the available space.
+
+---
+
+There is padding inside the main view. I can imagine this padding needs to be there for normal content, but in this case I want the state layout to be fully stretched to the available space.
+
+---
+
+I still see padding or margin.
+
+---
+
+I still see padding or margin.
+
+---
+
+Only half of the existing padding on the margin was removed.
+
+---
+
+Only half of the existing padding on the margin was removed.
+
+---
+
+No—don't remove the gaps. I just want to remove the outer margin or padding between the wizard's StepALyout and the main view's Layout.
+
+---
+
+No—don't remove the gaps. I just want to remove the outer margin or padding between the wizard's StepALyout and the main view's Layout.
+
+---
+
+main: p-boundary
+
+---
+
+main: p-boundary
+
+---
+
+Now introduce internal pairings inside the components of the step lower, so inside the slot that organizes the stepper.
+
+---
+
+Now introduce internal pairings inside the components of the step lower, so inside the slot that organizes the stepper.
+
+---
+
+Organize the request creation on a different sub-route. First, create a request on the route `/requests/create`, and as soon as a request is created, redirect to a sub-route using the newly created request ID. `/requests/[id]` 
+
+the index rout `/requests` should always display an overview of all requests, those in draft or already submitted
+
+`/request/[id]` should display the details of the request and if still possible `/request/[id]/edit` should allow the request to be edited
+
+---
+
+Organize the request creation on a different sub-route. First, create a request on the route `/requests/create`, and as soon as a request is created, redirect to a sub-route using the newly created request ID. `/requests/[id]` 
+
+the index rout `/requests` should always display an overview of all requests, those in draft or already submitted
+
+`/request/[id]` should display the details of the request and if still possible `/request/[id]/edit` should allow the request to be edited
+
+---
+
+No backward-compatibility redirects are needed.
+
+---
+
+No backward-compatibility redirects are needed.
+
+---
+
+As soon as the user submits the first step by selecting their certification intent, a new certification request in draft should be created and persisted locally. The user should be redirected to the edit route for the newly created request, which is now persisted and can be edited throughout each step of the wizard.
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/certification-request/drafts.ts:20-41 I think this should be part of the CRUD operations: to save or create a new certification request given the intent. It is the responsibility of the persistence layer to create the ID and return the persisted request package.
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/certification-request/drafts.ts:20-41 I think this should be part of the CRUD operations: to save or create a new certification request given the intent. It is the responsibility of the persistence layer to create the ID and return the persisted request package.
+
+---
+
+/requests/create the wizard should always load in the first step to select the intent.
+
+Progress of the request creation should not be stored in local storage. It should be derived from the route information or persisted state in the url.
+
+Only when the request editing route is used (/request/create/[id]/edit)  do we derive the exact state of the UI from the persistent state of the specific request entity and the persistent UI state for this request ID. This route always loads the wizard in step two or later. Of course, Step 1 can still be selected if the user wants to change their intent for the given request ID.
+
+---
+
+/requests/create the wizard should always load in the first step to select the intent.
+
+Progress of the request creation should not be stored in local storage. It should be derived from the route information or persisted state in the url.
+
+Only when the request editing route is used (/request/create/[id]/edit)  do we derive the exact state of the UI from the persistent state of the specific request entity and the persistent UI state for this request ID. This route always loads the wizard in step two or later. Of course, Step 1 can still be selected if the user wants to change their intent for the given request ID.
