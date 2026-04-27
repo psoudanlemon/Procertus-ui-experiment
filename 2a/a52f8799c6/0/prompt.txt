@@ -1,0 +1,105 @@
+@Procertus-ui-experiment/packages/procertus-categorization/src please look closely at the available categorization data or helper function, exposing all of the procedures, available certification entries, and product catalog tied to these certification possibilities. 
+
+ I first want to change the organization of the data to better align with how Procertus organizes its certification process.  please review the items discussed in the Stand van Zaken meeting and ensure the data organization aligns with those points. @procertus-docs/apps/frontend-docs/content/meetings/stavaza-04-2026-04-24.md  For instance, SSD is not the innovation attest. 
+
+The innovation attest needs to be added separately as an available attest to request.
+ also, the procertus attest is a separate attest that can be requested, but it is only linked to a few possible products.  also, ATG is an available attest, just like the EPD. It is available for a subset of possible products.  "Partijcuring" is also an available request or attestation to be requested for a batch of products, but it is not tied to a specific product type.  we just need freeform input fields for requests when they ask for an EPD, an ADG, or a partijkeuring.
+
+ when expressing the request intent and having all these different entry points, the user only needs to be able to select the most commonly used and available general certifications, like Benor and CE. They should be able to select the products or product types they want to get certified. 
+
+ when selecting a more ad hoc type of attest not tied to product types, users can optionally select products for certification or for their attest. This is optional and considered a secondary action.
+
+The primary action is drafting their request information and context in a free-form input field. @procertus-docs/apps/frontend-docs/content/meetings/stavaza-04-2026-04-24.md:98-103 @procertus-docs/apps/frontend-docs/content/meetings/stavaza-04-2026-04-24.md:56-96
+
+---
+
+@Procertus-ui-experiment/packages/procertus-categorization/src please look closely at the available categorization data or helper function, exposing all of the procedures, available certification entries, and product catalog tied to these certification possibilities. 
+
+ I first want to change the organization of the data to better align with how Procertus organizes its certification process.  please review the items discussed in the Stand van Zaken meeting and ensure the data organization aligns with those points. @procertus-docs/apps/frontend-docs/content/meetings/stavaza-04-2026-04-24.md  For instance, SSD is not the innovation attest. 
+
+The innovation attest needs to be added separately as an available attest to request.
+ also, the procertus attest is a separate attest that can be requested, but it is only linked to a few possible products.  also, ATG is an available attest, just like the EPD. It is available for a subset of possible products.  "Partijcuring" is also an available request or attestation to be requested for a batch of products, but it is not tied to a specific product type.  we just need freeform input fields for requests when they ask for an EPD, an ADG, or a partijkeuring.
+
+ when expressing the request intent and having all these different entry points, the user only needs to be able to select the most commonly used and available general certifications, like Benor and CE. They should be able to select the products or product types they want to get certified. 
+
+ when selecting a more ad hoc type of attest not tied to product types, users can optionally select products for certification or for their attest. This is optional and considered a secondary action.
+
+The primary action is drafting their request information and context in a free-form input field. @procertus-docs/apps/frontend-docs/content/meetings/stavaza-04-2026-04-24.md:98-103 @procertus-docs/apps/frontend-docs/content/meetings/stavaza-04-2026-04-24.md:56-96
+
+---
+
+@Procertus-ui-experiment/packages/ui-lib/src/components/certification-intent-picker/CertificationIntentPicker.tsx:18 I think this can just be called "ATG" and not "ATG Attest."
+
+---
+
+@Procertus-ui-experiment/packages/ui-lib/src/components/certification-intent-picker/CertificationIntentPicker.tsx if we organize all six possible intent options within the same data hierarchy, it will be confusing which to select. I think we should highlight the three main options,  product certification, ATG, and innovation, as prominent selection cards.
+
+Then add extra options such as Procertus-attest, EPD, or partijkeuring as less prominent selection cards.
+
+---
+
+For the hero cards, please use the same type of card for all three of them.
+
+---
+
+Also add a radio-button indicator in this hero card to clearly indicate whether this is a single-select or a multi-select option, just like the other cards.
+
+Also add a prominent icon to be used in all three hero cards.
+
+---
+
+Also add a radio-button indicator in this hero card to clearly indicate whether this is a single-select or a multi-select option, just like the other cards.
+
+Also add a prominent icon to be used in all three hero cards.
+
+---
+
+For a selected card, I want the hero icon to be inverted or shown as selected as well.
+ Replace the radio button element with the selected hero icon so the card appears ticked.
+
+Use a different icon for the unticked or unselected card.
+
+---
+
+For a selected card, I want the hero icon to be inverted or shown as selected as well.
+ Replace the radio button element with the selected hero icon so the card appears ticked.
+
+Use a different icon for the unticked or unselected card.
+
+---
+
+Use a better unselected icon that matches an empty select radio button or an empty selection, or just show nothing.
+
+For the selected state, make sure the foreground color is used.
+
+---
+
+Use a better unselected icon that matches an empty select radio button or an empty selection, or just show nothing.
+
+For the selected state, make sure the foreground color is used.
+
+---
+
+As you can see, the selected state of the prominent hero card is not correct. You cannot see the check mark. That is what I meant by using the correct foreground color. The primary color is used as the background, so we should have used the contrasting foreground color when using that background.
+
+---
+
+Please check the theme colors; I still don't see the correct combination being used.
+
+Please confirm whether the theme was set up correctly.@Procertus-ui-experiment/packages/ui/src/styles/themes/default.css
+
+---
+
+@Procertus-ui-experiment/packages/ui-lib/src/components/certification-intent-picker/CertificationIntentPicker.tsx:56-105 for the descriptions, please use Dutch wordings and make sure they describe the type of certification or attestation product, not the process of what to do after selection.  write this from the end user's perspective so they clearly know which option to select.
+
+---
+
+@Procertus-ui-experiment/packages/ui-lib/src/components/certification-intent-picker/CertificationIntentPicker.tsx:131-133 also this in Dutch, please.
+
+The legend is not about what you would like to do but about what you need. "Choose a starting point" is "Choose the correct certification or attestation product."  but use proper Dutch wording and be a bit more elaborate.
+
+---
+
+@Procertus-ui-experiment/packages/ui-lib/src/components/certification-intent-picker/CertificationIntentPicker.tsx:131-133 also this in Dutch, please.
+
+The legend is not about what you would like to do but about what you need. "Choose a starting point" is "Choose the correct certification or attestation product."  but use proper Dutch wording and be a bit more elaborate.
