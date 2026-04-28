@@ -10,9 +10,11 @@ import {
 import { HugeiconsIcon } from '@hugeicons/react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { AppShell } from '@/components/app-shell';
 import { Button } from '@/components/ui/button';
+import { DialogProvider, useDialog } from '@/components/ui/dialog-provider';
 import { Separator } from '@/components/ui/separator';
-import { AppLayout, useApp } from './AppShell';
+import { toast } from '@/components/ui/sonner';
 import { CoverView } from './CoverView';
 import { IconButton } from './IconButton';
 import { PanelsLayout, usePanelsContext } from './Panels';
@@ -133,33 +135,32 @@ const panelRegistry = {
 } satisfies Record<string, ComponentType<any>>;
 
 function DemoComponent() {
-  const app = useApp();
+  const dialog = useDialog();
 
   return (
     <div className="rounded-xl border bg-card p-4">
       <h3 className="font-semibold">App shell actions</h3>
       <p className="mt-1 text-sm text-muted-foreground">
-        These buttons use providers from the sewdn AppLayout.
+        These buttons use the consolidated app shell providers: sonner toasts mounted at the AppShell root and DialogProvider.
       </p>
       <div className="mt-3 flex flex-wrap gap-2">
         <Button
           size="sm"
           onClick={() =>
-            app.snackbar.addSnackbar({
-              title: 'Saved',
-              message: 'Snackbar rendered by AppShell.',
+            toast.success('Saved', {
+              description: 'Toast rendered by the AppShell Toaster.',
             })
           }
         >
-          Show snackbar
+          Show toast
         </Button>
         <Button
           size="sm"
           variant="outline"
           onClick={() =>
-            app.dialog?.openDialog({
+            dialog?.openDialog({
               title: 'Dialog',
-              description: 'Dialog rendered by AppProvider.',
+              description: 'Dialog rendered by DialogProvider.',
               content: <p className="text-sm">This dialog comes from the composed app shell.</p>,
             })
           }
@@ -213,18 +214,26 @@ const AppLayoutWithPanels = () => {
 };
 
 const meta = {
-  title: 'sewdn/Examples/App Layout with Detail Panels',
+  title: 'sewdn/Examples/App shell with detail panels',
   parameters: {
     layout: 'fullscreen',
+    docs: {
+      description: {
+        component:
+          'Composes the consolidated `AppShell` (sonner Toaster baked in) with `DialogProvider` and the sewdn `PanelsLayout` to demonstrate how a CoverView surface opens stacked detail panels and triggers toast/dialog overlays from a shared root.',
+      },
+    },
   },
   decorators: [
     (Story) => (
       <div className="h-screen w-full">
-        <AppLayout>
-          <PanelsLayout panelTypes={panelRegistry}>
-            <Story />
-          </PanelsLayout>
-        </AppLayout>
+        <AppShell>
+          <DialogProvider>
+            <PanelsLayout panelTypes={panelRegistry}>
+              <Story />
+            </PanelsLayout>
+          </DialogProvider>
+        </AppShell>
       </div>
     ),
   ],
