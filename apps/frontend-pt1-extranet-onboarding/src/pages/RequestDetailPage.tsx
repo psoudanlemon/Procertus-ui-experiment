@@ -4,8 +4,10 @@ import {
   DraftRequestList,
   RequestPackageReview,
 } from "@procertus-ui/ui-certification";
+import { useMockPrototypeSession } from "@procertus-ui/ui-pt1-prototype";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
+import { reviewRequesterFromSession } from "../features/certification-wizard/reviewRequesterFromSession";
 import {
   cancelAuthenticatedRequestPackage,
   requestApprovalStatus,
@@ -28,7 +30,9 @@ const formatDateTime = (value?: string) =>
 export function RequestDetailPage() {
   const navigate = useNavigate();
   const confirm = useConfirm();
+  const session = useMockPrototypeSession();
   const { requestId } = useParams();
+  const reviewRequester = reviewRequesterFromSession(session);
   const [requests, setRequests] = useAuthenticatedRequests();
   const request = requests.find((candidate) => candidate.id === requestId);
 
@@ -121,6 +125,7 @@ export function RequestDetailPage() {
       <RequestPackageReview
         title="Request details"
         description="Detailoverzicht van de geselecteerde aanvraag."
+        requester={reviewRequester}
         rows={[
           { id: "status", label: "Status", value: requestStatus(request) },
           { id: "handling", label: "Behandeling", value: requestApprovalStatus(request) },

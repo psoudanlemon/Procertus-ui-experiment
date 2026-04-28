@@ -13,7 +13,11 @@ import {
   Textarea,
 } from "@procertus-ui/ui";
 import { DraftRequestList, RequestPackageReview } from "@procertus-ui/ui-certification";
-import type { DraftRequestItem, RequestPackageRow } from "@procertus-ui/ui-certification";
+import type {
+  DraftRequestItem,
+  RequestPackageReviewRequesterPresentation,
+  RequestPackageRow,
+} from "@procertus-ui/ui-certification";
 import { OnboardingStepper, StepLayout } from "@procertus-ui/ui-lib";
 import type { OnboardingStepperStep } from "@procertus-ui/ui-lib";
 import { useMockPrototypeLogin } from "@procertus-ui/ui-pt1-prototype";
@@ -87,13 +91,32 @@ function draftItems(drafts: readonly CertificationWizardDraft[]): DraftRequestIt
   }));
 }
 
+function onboardingReviewRequesterFromContext(
+  context: CustomerContext,
+): RequestPackageReviewRequesterPresentation {
+  return {
+    context: {
+      requesterName: context.representativeName,
+      requesterEmail: context.representativeEmail,
+      organizationName: context.organizationName,
+      organizationDetails: (
+        <>
+          <p>{context.vatNumber}</p>
+          <p>{context.address}</p>
+        </>
+      ),
+    },
+    sectionTitle: "Aanvrager en organisatie",
+    requesterLabel: "Ingediend door",
+    requesterEmailLabel: "E-mail",
+    organizationLabel: "Organisatie",
+  };
+}
+
 function buildRows(context: CustomerContext, drafts: readonly CertificationWizardDraft[]): RequestPackageRow[] {
   return [
-    { id: "organization", label: "Organisatie", value: context.organizationName },
-    { id: "representative", label: "Vertegenwoordiger", value: context.representativeName },
-    { id: "email", label: "E-mail activatie", value: context.representativeEmail },
     { id: "country", label: "Herkomst", value: context.country },
-    { id: "vat", label: "Ondernemingsnummer", value: context.vatNumber },
+    { id: "kyc", label: "KYC-notities", value: context.kycNotes },
     ...drafts.map((draft, index) => ({
       id: draft.id,
       label: `Aanvraag ${index + 1}`,
@@ -216,6 +239,7 @@ export function AnonymousOnboardingFlow() {
           backendKind="localStorage"
           storageKey={CERTIFICATION_REQUEST_STORAGE_KEY}
           sessionId={ONBOARDING_CERTIFICATION_SESSION_ID}
+          reviewRequester={onboardingReviewRequesterFromContext(context)}
           onCancel={() => navigate("/welcome")}
           onComplete={(nextDrafts) => {
             setFlowState((prev) => ({
@@ -375,6 +399,7 @@ export function AnonymousOnboardingFlow() {
             <RequestPackageReview
               title="Coordinated intake"
               description="Klantcontext, validatiecontext en aanvraagset worden samen ingediend."
+              requester={onboardingReviewRequesterFromContext(context)}
               rows={buildRows(context, drafts)}
             />
             <DraftRequestList

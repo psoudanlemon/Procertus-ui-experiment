@@ -52,7 +52,11 @@ export const INITIAL_REQUESTS: AuthenticatedCertificationRequest[] = [
 ];
 
 function isRequestPackage(value: unknown): value is AuthenticatedCertificationRequest {
-  return typeof value === "object" && value != null && Array.isArray((value as { inquiries?: unknown }).inquiries);
+  return (
+    typeof value === "object" &&
+    value != null &&
+    Array.isArray((value as { inquiries?: unknown }).inquiries)
+  );
 }
 
 function legacyDraftToRequest(draft: CertificationRequestDraft): AuthenticatedCertificationRequest {
@@ -186,11 +190,16 @@ export function requestLifecycleEvents(
       title: "Ingediend",
       actorLabel: "Aanvrager",
       occurredAtLabel: formatLifecycleDateTime(request.submittedAt),
-      description: "Het pakket werd ingediend voor behandeling door Procertus.",
+      description: "Het pakket werd ingediend voor behandeling door PROCERTUS.",
     });
   }
 
-  if (request.status === "in-progress" || request.status === "approved" || request.status === "rejected" || request.status === "archived") {
+  if (
+    request.status === "in-progress" ||
+    request.status === "approved" ||
+    request.status === "rejected" ||
+    request.status === "archived"
+  ) {
     events.push({
       id: "in-progress",
       title: "In behandeling",
@@ -206,7 +215,8 @@ export function requestLifecycleEvents(
       title: "Goedgekeurd",
       actorLabel: "Procertus",
       occurredAtLabel: formatLifecycleDateTime(request.resolvedAt),
-      description: "Het aanvraagpakket werd goedgekeurd. De onderliggende certificatieprocessen starten apart.",
+      description:
+        "Het aanvraagpakket werd goedgekeurd. De onderliggende certificatieprocessen starten apart.",
       status: "success",
     });
   }
@@ -228,7 +238,8 @@ export function requestLifecycleEvents(
       title: "Geannuleerd",
       actorLabel: "Aanvrager",
       occurredAtLabel: formatLifecycleDateTime(request.resolvedAt),
-      description: "De aanvrager heeft de aanvraag geannuleerd. Dit kan niet ongedaan gemaakt worden.",
+      description:
+        "De aanvrager heeft de aanvraag geannuleerd. Dit kan niet ongedaan gemaakt worden.",
       status: "destructive",
     });
   }
@@ -280,7 +291,9 @@ export function inquiryTitle(inquiry: CertificationRequestInquiry) {
   return inquiry.productLabel ? `${inquiry.label} voor ${inquiry.productLabel}` : inquiry.label;
 }
 
-export function toDraftItems(inquiries: readonly CertificationRequestInquiry[]): DraftRequestItem[] {
+export function toDraftItems(
+  inquiries: readonly CertificationRequestInquiry[],
+): DraftRequestItem[] {
   return inquiries.map((inquiry) => ({
     id: inquiry.id,
     title: inquiryTitle(inquiry),
@@ -314,9 +327,11 @@ export function useAuthenticatedRequests() {
     setStoredRequests((current) => {
       const currentRequests = normalizeRequests(current);
       return typeof next === "function"
-        ? (next as (value: AuthenticatedCertificationRequest[]) => AuthenticatedCertificationRequest[])(
-            currentRequests,
-          )
+        ? (
+            next as (
+              value: AuthenticatedCertificationRequest[],
+            ) => AuthenticatedCertificationRequest[]
+          )(currentRequests)
         : next;
     });
   };

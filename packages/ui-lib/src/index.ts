@@ -38,3 +38,12 @@ export type {
   UseChoiceSelectionOptions,
   UseChoiceSelectionResult,
 } from "./components/select-choice-card";
+export {
+  DownloadableDocumentListItem,
+  DownloadableDocumentsList,
+} from "./components/downloadable-documents-list";
+export type {
+  DownloadableDocumentListItemData,
+  DownloadableDocumentListItemProps,
+  DownloadableDocumentsListProps,
+} from "./components/downloadable-documents-list";

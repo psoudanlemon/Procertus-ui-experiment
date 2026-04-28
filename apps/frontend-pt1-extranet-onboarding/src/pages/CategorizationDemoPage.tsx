@@ -12,7 +12,7 @@ export function CategorizationDemoPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Product categorization</h1>
         <P className="text-muted-foreground">
-          Browse the Procertus decision tree (demo data from the shared categorization package).
+          Browse the PROCERTUS decision tree (demo data from the shared categorization package).
         </P>
       </div>
       <ProcertusCategorizationTreeView doc={doc} />

@@ -11,13 +11,14 @@ export function BrandGradientHero() {
         style={{ background: "var(--gradient-primary)" }}
       >
         <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-          Procertus · PT1 extranet
+          PROCERTUS · PT1 extranet
         </p>
         <h2 className="text-balance text-3xl font-semibold text-heading-foreground sm:text-4xl">
           Onboarding prototype
         </h2>
         <Muted className="mx-auto max-w-xl text-pretty">
-          This route composes <code className="font-mono text-[0.8rem] text-foreground">@procertus-ui/ui-lib</code>{" "}
+          This route composes{" "}
+          <code className="font-mono text-[0.8rem] text-foreground">@procertus-ui/ui-lib</code>{" "}
           galleries with app-specific surfaces using CSS variables such as{" "}
           <code className="font-mono text-[0.8rem] text-foreground">--gradient-primary</code>.
         </Muted>

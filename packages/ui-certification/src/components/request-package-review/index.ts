@@ -1,2 +1,7 @@
 export { RequestPackageReview } from "./RequestPackageReview";
-export type { RequestPackageRow, RequestPackageReviewProps } from "./RequestPackageReview";
+export type {
+  RequestPackageRequesterContext,
+  RequestPackageReviewProps,
+  RequestPackageReviewRequesterPresentation,
+  RequestPackageRow,
+} from "./RequestPackageReview";

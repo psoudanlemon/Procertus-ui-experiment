@@ -10,6 +10,8 @@ export * from "./components/stepper";
 export * from "./components/timeline";
 /** Sewdn components copied from the local shadcn-based UI library. */
 export * from "./components/sewdn";
+/** ReUI: headless-tree based tree primitives. */
+export { Tree, TreeItem, TreeItemLabel, TreeDragLine } from "./components/reui/tree";
 /** Composed application shell components. */
 export * from "./components/app-sidebar";
 export * from "./components/app-header";

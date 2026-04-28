@@ -1,7 +1,9 @@
 import { useConfirm } from "@procertus-ui/ui";
+import { useMockPrototypeSession } from "@procertus-ui/ui-pt1-prototype";
 import { useNavigate } from "react-router-dom";
 
 import { CertificationRequestWizard } from "../features/certification-wizard/CertificationRequestWizard";
+import { reviewRequesterFromSession } from "../features/certification-wizard/reviewRequesterFromSession";
 import {
   createAuthenticatedRequestPackage,
   submitAuthenticatedRequestPackage,
@@ -11,7 +13,9 @@ import {
 export function RequestCreationPage() {
   const navigate = useNavigate();
   const confirm = useConfirm();
+  const session = useMockPrototypeSession();
   const [, setRequests] = useAuthenticatedRequests();
+  const reviewRequester = reviewRequesterFromSession(session);
 
   const handleCancel = async () => {
     const confirmed = confirm
@@ -30,11 +34,14 @@ export function RequestCreationPage() {
       <CertificationRequestWizard
         mode="authenticated"
         backendKind="memory"
+        reviewRequester={reviewRequester}
         onCancel={handleCancel}
         onRequestCreated={(draft) => {
           const createdRequest = createAuthenticatedRequestPackage({ inquiries: [draft] });
           setRequests((prev) => {
-            const byId = new Map(prev.map((storedRequest) => [storedRequest.id, storedRequest] as const));
+            const byId = new Map(
+              prev.map((storedRequest) => [storedRequest.id, storedRequest] as const),
+            );
             byId.set(createdRequest.id, createdRequest);
             return Array.from(byId.values());
           });
@@ -46,7 +53,9 @@ export function RequestCreationPage() {
             drafts,
           );
           setRequests((prev) => {
-            const byId = new Map(prev.map((storedRequest) => [storedRequest.id, storedRequest] as const));
+            const byId = new Map(
+              prev.map((storedRequest) => [storedRequest.id, storedRequest] as const),
+            );
             byId.set(createdRequest.id, createdRequest);
             return Array.from(byId.values());
           });

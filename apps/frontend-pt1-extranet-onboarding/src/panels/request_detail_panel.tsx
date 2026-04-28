@@ -1,5 +1,4 @@
 import {
-  Badge,
   Button,
   Card,
   CardContent,
@@ -13,17 +12,12 @@ import {
 } from "@procertus-ui/ui";
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  CertificationRequestLifecycleDetailTimeline,
-  type RequestPackageRow,
-} from "@procertus-ui/ui-certification";
+import { CertificationRequestLifecycleDetailTimeline } from "@procertus-ui/ui-certification";
 import { useNavigate } from "react-router-dom";
 
 import {
   cancelAuthenticatedRequestPackage,
-  requestApprovalStatus,
   requestLifecycleEvents,
-  requestSubtitle,
   requestStatus,
   requestTitle,
   toDraftItems,
@@ -36,14 +30,6 @@ export type RequestDetailPanelProps = {
   panelType?: string;
   requestId: string;
 };
-
-const formatDateTime = (value?: string) =>
-  value
-    ? new Intl.DateTimeFormat("nl-BE", {
-        dateStyle: "medium",
-        timeStyle: "short",
-      }).format(new Date(value))
-    : "Nog niet";
 
 function ClosePanelButton({ panelType = REQUEST_DETAIL_PANEL_TYPE }: { panelType?: string }) {
   const { removePanel } = usePanelsContext();
@@ -74,25 +60,14 @@ function PanelSection({
     <Card className="w-full min-w-0">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        {description ? <CardDescription className="whitespace-normal wrap-break-word">{description}</CardDescription> : null}
+        {description ? (
+          <CardDescription className="whitespace-normal wrap-break-word">
+            {description}
+          </CardDescription>
+        ) : null}
       </CardHeader>
       <CardContent className="min-w-0">{children}</CardContent>
     </Card>
-  );
-}
-
-function DetailRows({ rows }: { rows: RequestPackageRow[] }) {
-  return (
-    <dl className="grid gap-3">
-      {rows.map((row) => (
-        <div key={row.id} className="min-w-0 rounded-md border border-border/50 p-3">
-          <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{row.label}</dt>
-          <dd className="mt-1 min-w-0 whitespace-normal wrap-break-word text-sm font-medium text-foreground">
-            {row.value}
-          </dd>
-        </div>
-      ))}
-    </dl>
   );
 }
 
@@ -145,15 +120,33 @@ export function RequestDetailPanel({ panelType, requestId }: RequestDetailPanelP
     setRequests((prev) => prev.filter((candidate) => candidate.id !== request.id));
   };
 
-  const rows: RequestPackageRow[] = [
-    { id: "status", label: "Processtatus", value: requestStatus(request) },
-    { id: "approval", label: "Goedkeuringsstatus", value: requestApprovalStatus(request) },
-    { id: "created", label: "Aangemaakt", value: formatDateTime(request.createdAt) },
-    { id: "submitted", label: "Ingediend", value: formatDateTime(request.submittedAt) },
-    { id: "updated", label: "Laatst gewijzigd", value: formatDateTime(request.updatedAt) },
-    { id: "inquiries", label: "Onderliggende aanvragen", value: request.inquiries.length },
-    { id: "identifier", label: "Request ID", value: request.id },
-  ];
+  const items = (
+    <ul className="grid min-w-0 gap-3" role="list">
+      {toDraftItems(request.inquiries).map((inquiry) => (
+        <li key={inquiry.id} className="min-w-0 rounded-md border border-border/50 p-3">
+          <p className="min-w-0 whitespace-normal wrap-break-word text-sm font-medium text-foreground">
+            {inquiry.title}
+          </p>
+          <p className="mt-1 min-w-0 whitespace-normal wrap-break-word text-xs text-muted-foreground">
+            {inquiry.subtitle ?? "Contextaanvraag"}
+          </p>
+          {inquiry.details ? <div className="mt-component min-w-0">{inquiry.details}</div> : null}
+        </li>
+      ))}
+    </ul>
+  );
+
+  // const rows: RequestPackageRow[] = [
+  //   { id: "status", label: "Processtatus", value: requestStatus(request) },
+  //   { id: "approval", label: "Goedkeuringsstatus", value: requestApprovalStatus(request) },
+  //   { id: "created", label: "Aangemaakt", value: formatDateTime(request.createdAt) },
+  //   { id: "submitted", label: "Ingediend", value: formatDateTime(request.submittedAt) },
+  //   { id: "updated", label: "Laatst gewijzigd", value: formatDateTime(request.updatedAt) },
+  //   { id: "inquiries", label: "Onderliggende aanvragen", value: request.inquiries.length },
+  //   { id: "identifier", label: "Request ID", value: request.id },
+  // ];
+
+  const showActions = editable || cancellable;
 
   return (
     <CoverView
@@ -164,77 +157,50 @@ export function RequestDetailPanel({ panelType, requestId }: RequestDetailPanelP
       className="h-full"
     >
       <div className="space-y-4 p-4">
-        <div className="flex flex-wrap gap-2">
-          <Badge variant={editable ? "outline" : "secondary"}>{requestStatus(request)}</Badge>
-          <Badge variant="outline">{requestApprovalStatus(request)}</Badge>
-          <Badge variant="outline">{requestSubtitle(request)}</Badge>
-        </div>
-
-        <PanelSection
-          title="Volledige aanvraagdetails"
-          description="Alle beschikbare context voor deze certificatieaanvraag."
-        >
-          <DetailRows rows={rows} />
-        </PanelSection>
-
-        <PanelSection
-          title="Onderliggende aanvragen"
-          description="Deze vragen worden samen ingediend. Na goedkeuring start per vraag een eigen certificatieproces."
-        >
-          <ul className="grid min-w-0 gap-3" role="list">
-            {toDraftItems(request.inquiries).map((inquiry) => (
-              <li key={inquiry.id} className="min-w-0 rounded-md border border-border/50 p-3">
-                <p className="min-w-0 whitespace-normal wrap-break-word text-sm font-medium text-foreground">
-                  {inquiry.title}
-                </p>
-                <p className="mt-1 min-w-0 whitespace-normal wrap-break-word text-xs text-muted-foreground">
-                  {inquiry.subtitle ?? "Contextaanvraag"}
-                </p>
-                {inquiry.details ? <div className="mt-component min-w-0">{inquiry.details}</div> : null}
-              </li>
-            ))}
-          </ul>
-        </PanelSection>
-
+        {showActions ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>Vervolgacties</CardTitle>
+              <CardDescription>
+                Open de volledige route om te bewerken of beheer de aanvraag rechtstreeks vanuit dit
+                overzicht.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-2">
+              {editable ? (
+                <Button type="button" onClick={() => navigate(`/requests/${request.id}/edit`)}>
+                  Bewerken
+                </Button>
+              ) : null}
+              {editable ? (
+                <Button type="button" variant="destructive" onClick={removeDraftRequest}>
+                  Verwijderen
+                </Button>
+              ) : null}
+              {cancellable ? (
+                <Button type="button" variant="destructive" onClick={cancelRequest}>
+                  Annuleren
+                </Button>
+              ) : null}
+            </CardContent>
+          </Card>
+        ) : null}
         <PanelSection
           title="Levenscyclus"
           description="Historiek van acties op dit aanvraagpakket."
         >
           <CertificationRequestLifecycleDetailTimeline events={requestLifecycleEvents(request)} />
         </PanelSection>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Vervolgacties</CardTitle>
-            <CardDescription>
-              Open de volledige route om te bewerken of beheer de aanvraag rechtstreeks vanuit dit overzicht.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-wrap gap-2">
-            <Button type="button" variant="outline" onClick={() => navigate(`/requests/${request.id}`)}>
-              Route openen
-            </Button>
-            {editable ? (
-              <Button type="button" onClick={() => navigate(`/requests/${request.id}/edit`)}>
-                Bewerken
-              </Button>
-            ) : null}
-            {editable ? (
-              <Button
-                type="button"
-                variant="destructive"
-                onClick={removeDraftRequest}
-              >
-                Verwijderen
-              </Button>
-            ) : null}
-            {cancellable ? (
-              <Button type="button" variant="destructive" onClick={cancelRequest}>
-                Annuleren
-              </Button>
-            ) : null}
-          </CardContent>
-        </Card>
+        {request.inquiries.length > 1 ? (
+          <PanelSection
+            title="Onderliggende aanvragen"
+            description="Deze vragen worden samen ingediend. Na goedkeuring start per vraag een eigen certificatieproces."
+          >
+            {items}
+          </PanelSection>
+        ) : (
+          <>{items}</>
+        )}
       </div>
     </CoverView>
   );

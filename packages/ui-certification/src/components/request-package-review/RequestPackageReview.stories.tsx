@@ -20,6 +20,16 @@ export const BeforeSubmit = {
       title="Review your request package"
       description="Confirm the lines below, then continue to submission in the app."
       notice="Customer context and representative must be complete; at least one draft is required to submit (analysis)."
+      requester={{
+        context: {
+          requesterName: "Alex Rivera",
+          requesterEmail: "alex.rivera@example.com",
+          organizationName: "Demo Corp BV",
+          organizationDetails: (
+            <p className="text-sm">BE 0123.456.789 · Industrielaan 1, 1000 Brussels</p>
+          ),
+        },
+      }}
       rows={[
         { id: "1", label: "Certification / product 1", value: "Cement board — BENOR+CE (example)" },
         { id: "2", label: "Certification / product 2", value: "Metal composite — ATG (example)" },

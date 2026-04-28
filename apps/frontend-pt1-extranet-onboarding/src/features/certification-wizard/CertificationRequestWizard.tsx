@@ -47,8 +47,14 @@ import {
   RequestPackageReview,
   defaultCertificationIntentOptionsEn,
 } from "@procertus-ui/ui-certification";
-import type { CertificationIntentId, ProductTreeProductNode } from "@procertus-ui/ui-certification";
+import type {
+  CertificationIntentId,
+  ProductTreeProductNode,
+  RequestPackageReviewRequesterPresentation,
+} from "@procertus-ui/ui-certification";
+import type { DownloadableDocumentListItemData } from "@procertus-ui/ui-lib";
 import {
+  DownloadableDocumentsList,
   OnboardingStepper,
   SelectChoiceCard,
   SelectChoiceCardGroup,
@@ -69,6 +75,8 @@ export type CertificationRequestWizardProps = {
   onCancel?: () => void;
   onRequestCreated?: (draft: CertificationWizardDraft) => void;
   onComplete: (drafts: CertificationWizardDraft[]) => void;
+  /** Shown on the final review step: current user + company (prototype or real). */
+  reviewRequester?: RequestPackageReviewRequesterPresentation;
 };
 
 type WizardStepperModel = {
@@ -130,6 +138,32 @@ function CompactWizardTimeline({ model }: { model: WizardStepperModel }) {
   );
 }
 
+/** Mock ruleset / guidance PDFs for the review step (prototype — no real files). */
+const MOCK_RULESET_DOCUMENTS = [
+  {
+    id: "howto",
+    title: "How to list downloadable documents,",
+    description:
+      "Pattern reference voor dit prototype: eerste rij toont hoe documentlijsten in de reviewstap verschijnen.",
+    formatHint: "PDF · 120 KB",
+    href: "#procertus-doc-howto-list",
+  },
+  {
+    id: "ruleset-matrix",
+    title: "Ruleset matrix — geselecteerde certificeringen en attesten",
+    description:
+      "Overzicht van welke normenkaders van toepassing zijn op basis van je pakket (mock).",
+    formatHint: "PDF · 1.8 MB",
+    href: "#procertus-doc-ruleset-matrix",
+  },
+  {
+    id: "submission-checklist",
+    title: "Indien-checklist aanvraagpakket",
+    formatHint: "PDF · 640 KB",
+    href: "#procertus-doc-submission-checklist",
+  },
+] satisfies DownloadableDocumentListItemData[];
+
 function sortDraftsByIntentAndProduct(
   drafts: Array<CertificationWizardDraft & { title: string; subtitle?: string }>,
 ) {
@@ -183,7 +217,11 @@ function CertificationRequestWizardView({
   onCancel,
   onRequestCreated,
   onComplete,
-}: Pick<CertificationRequestWizardProps, "onCancel" | "onRequestCreated" | "onComplete">) {
+  reviewRequester,
+}: Pick<
+  CertificationRequestWizardProps,
+  "onCancel" | "onRequestCreated" | "onComplete" | "reviewRequester"
+>) {
   const model = useCertificationRequestWizardModel({ onCancel, onRequestCreated, onComplete });
   const confirm = useConfirm();
   const authenticated = model.mode === "authenticated";
@@ -281,7 +319,7 @@ function CertificationRequestWizardView({
             const confirmed = confirm
               ? await confirm(
                   "Aanvraagpakket indienen?",
-                  "Na indiening wordt dit pakket met alle onderliggende certificatie- en attestvragen doorgestuurd naar Procertus voor behandeling.",
+                  "Na indiening wordt dit pakket met alle onderliggende certificatie- en attestvragen doorgestuurd naar PROCERTUS voor behandeling.",
                 )
               : true;
             if (confirmed) {
@@ -510,29 +548,28 @@ function CertificationRequestWizardView({
       ) : null}
 
       {model.activeStep === 3 ? (
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
-          <RequestPackageReview
-            title="Aanvraagpakket"
-            description="Deze gegevens worden samen met de onboarding-intake of de gekende organisatiecontext ingediend."
-            rows={model.reviewStep.rows}
-            notice={
-              model.reviewStep.draftCount > 1 ? (
-                <span>
-                  <Badge variant="secondary">{model.reviewStep.draftCount} concepten</Badge> worden
-                  samen gebundeld in dit pakket.
-                </span>
-              ) : undefined
-            }
+        <div className="space-y-4">
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
+            <RequestPackageReview
+              title="Aanvraagdetails"
+              description="Deze gegevens worden samen met de onboarding-intake of de gekende organisatiecontext ingediend."
+              requester={reviewRequester}
+              rows={model.reviewStep.rows}
+              notice={
+                model.reviewStep.draftCount > 1 ? (
+                  <span>
+                    <Badge variant="secondary">{model.reviewStep.draftCount} vragen</Badge> worden
+                    samen gebundeld in deze aanvraag.
+                  </span>
+                ) : undefined
+              }
+            />
+          </div>
+          <DownloadableDocumentsList
+            title="Regels en documentatie"
+            description="Relevante documenten om de regelsets voor je gekozen certificeringen en attesten te begrijpen (prototype — downloadlinks zijn gemockt)."
+            items={MOCK_RULESET_DOCUMENTS}
           />
-          <Card className="h-fit">
-            <CardHeader>
-              <CardTitle>Prototypegedrag</CardTitle>
-              <CardDescription>
-                Er is nog geen API. De volgende stap bewaart de concepten in de app-state en
-                simuleert indien nodig accountactivatie.
-              </CardDescription>
-            </CardHeader>
-          </Card>
         </div>
       ) : null}
     </StepLayout>
@@ -550,6 +587,7 @@ export function CertificationRequestWizard({
   onCancel,
   onRequestCreated,
   onComplete,
+  reviewRequester,
 }: CertificationRequestWizardProps) {
   return (
     <CertificationRequestProvider
@@ -565,6 +603,7 @@ export function CertificationRequestWizard({
         onCancel={onCancel}
         onRequestCreated={onRequestCreated}
         onComplete={onComplete}
+        reviewRequester={reviewRequester}
       />
     </CertificationRequestProvider>
   );

@@ -75,3 +75,4 @@
 {"command":"domain","args":["certification"],"cwd":"/Users/psoudan/workspace/05-Procertus/Procertus-ui-experiment","durationMs":2248,"success":false,"ts":"2026-04-27T11:10:42.968Z"}
 {"command":"subdomain","args":["certification","--packages","domain","--non-interactive"],"cwd":"/Users/psoudan/workspace/05-Procertus/Procertus-ui-experiment","durationMs":1709,"success":false,"ts":"2026-04-27T11:12:12.324Z"}
 {"command":"workspace-ui","args":["add-component","CertificationRequestCard","--package","ui-certification"],"cwd":"/Users/psoudan/workspace/05-Procertus/Procertus-ui-experiment","durationMs":707,"success":true,"ts":"2026-04-28T07:53:45.815Z"}
+{"command":"workspace-ui","args":["add-component","DownloadableDocumentsList","--package","ui-lib"],"cwd":"/Users/psoudan/workspace/05-Procertus/Procertus-ui-experiment","durationMs":853,"success":true,"ts":"2026-04-28T17:27:38.795Z"}

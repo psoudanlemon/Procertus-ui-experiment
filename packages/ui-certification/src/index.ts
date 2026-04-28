@@ -43,7 +43,12 @@ export type {
   ProductTreeProductNode,
 } from "./components/product-tree-panel";
 export { RequestPackageReview } from "./components/request-package-review";
-export type { RequestPackageReviewProps, RequestPackageRow } from "./components/request-package-review";
+export type {
+  RequestPackageRequesterContext,
+  RequestPackageReviewProps,
+  RequestPackageReviewRequesterPresentation,
+  RequestPackageRow,
+} from "./components/request-package-review";
 export {
   ProcertusCategorizationTreeView,
 } from "./components/procertus-categorization-tree-view";

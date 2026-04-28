@@ -1,7 +1,9 @@
 import { useConfirm } from "@procertus-ui/ui";
+import { useMockPrototypeSession } from "@procertus-ui/ui-pt1-prototype";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { CertificationRequestWizard } from "../features/certification-wizard/CertificationRequestWizard";
+import { reviewRequesterFromSession } from "../features/certification-wizard/reviewRequesterFromSession";
 import {
   CERTIFICATION_REQUEST_STORAGE_KEY,
   submitAuthenticatedRequestPackage,
@@ -12,7 +14,9 @@ import {
 export function RequestEditPage() {
   const navigate = useNavigate();
   const confirm = useConfirm();
+  const session = useMockPrototypeSession();
   const { requestId } = useParams();
+  const reviewRequester = reviewRequesterFromSession(session);
   const [requests, setRequests] = useAuthenticatedRequests();
   const request = requests.find((candidate) => candidate.id === requestId);
 
@@ -41,6 +45,7 @@ export function RequestEditPage() {
         backendKind="localStorage"
         storageKey={CERTIFICATION_REQUEST_STORAGE_KEY}
         sessionId={request.sessionId}
+        reviewRequester={reviewRequester}
         onCancel={handleCancel}
         onComplete={(drafts) => {
           const updated = submitAuthenticatedRequestPackage(

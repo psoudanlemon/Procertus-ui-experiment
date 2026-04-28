@@ -1,3 +1,3 @@
 # RequestPackageReview
 
-Read-only `Table` of `rows` before submit. Parent builds labels and values from customer + draft state.
+Read-only summary before submit: optional **`requester`** block (who submits + company), then `notice`, then a `Table` of **`rows`**. Parent supplies all copy and values — no IO.
