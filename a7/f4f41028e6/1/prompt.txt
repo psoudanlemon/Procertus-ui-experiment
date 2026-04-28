@@ -1,0 +1,98 @@
+When canceled, please use a muted variant of the certification request card. also in the timeline use a destructiev color for the canceled event
+
+Also, when rejected, use a clear rejection color in the card—certainly for the label badge, but also for the timeline item in the life-cycle timeline—to indicate the rejection as a destructive event in the timeline.
+
+---
+
+Display the canceled event as a full event icon because that is the current status of the request. Do not show a hollow event dot.
+
+---
+
+Display the canceled event as a full event icon because that is the current status of the request. Do not show a hollow event dot.
+
+---
+
+Don't use the muted variant of the certification request card when cancelled. Just display the cancelled status and the cancelled lifecycle event.
+
+---
+
+Don't use the muted variant of the certification request card when cancelled. Just display the cancelled status and the cancelled lifecycle event.
+
+---
+
+Please add the request lifecycle timeline as a separate presentational component.
+
+Add specific stories to show all possible variations.
+
+---
+
+Please add the request lifecycle timeline as a separate presentational component.
+
+Add specific stories to show all possible variations.
+
+---
+
+When editing an existing request in draft, please go to the second-class step, Draft Overview, to edit the currently least-selected certification or attestation inquiries or add them if needed.
+
+---
+
+When editing an existing request in draft, please go to the second-class step, Draft Overview, to edit the currently least-selected certification or attestation inquiries or add them if needed.
+
+---
+
+Also, when cancelling a concept request or cancelling a submitted item, please always show a confirmation dialog because this is not reversible.
+
+---
+
+For the certification life cycle, use a vertical timeline with more details. Include the exact time (hour and minutes) and the person who executed each action.
+
+Please show this vertical timeline variant on the detail page and in the detail panel of a certification request.
+
+---
+
+For the certification life cycle, use a vertical timeline with more details. Include the exact time (hour and minutes) and the person who executed each action.
+
+Please show this vertical timeline variant on the detail page and in the detail panel of a certification request.
+
+---
+
+Please look at the cancelled state of a certification card. I want the "geannuleerd" badge in the top right to be fully colored in the destructive color. Also, the timeline event dot should be fully colorized in red, the main destructive color, not a washed-out shade.
+
+The label "geannuleerd" is currently not readable and should be made readable.
+
+---
+
+I thought I had requested a vertical variation of the life cycle timeline. I think you skipped it.
+
+For the certification life cycle, use a vertical timeline with more details. Include the exact time (hour and minutes) and the person who executed each action.
+
+Please show this vertical timeline variant on the detail page and in the detail panel of a certification request.
+
+---
+
+I thought I had requested a vertical variation of the life cycle timeline. I think you skipped it.
+
+For the certification life cycle, use a vertical timeline with more details. Include the exact time (hour and minutes) and the person who executed each action.
+
+Please show this vertical timeline variant on the detail page and in the detail panel of a certification request.
+
+---
+
+Please commit all current changes in the Word 3 document.
+Use the git commit skill.
+
+---
+
+For the code present, we get this error:
+```
+Module '"@procertus-ui/ui"' has no exported member 'Tree'.
+```
+Fix it, verify, and then give a concise explanation. @Procertus-ui-experiment/packages/ui-certification/src/components/product-tree-panel/ProductTreePanel.tsx:21-24
+
+---
+
+For the code present, we get this error:
+```
+Module '"@procertus-ui/ui"' has no exported member 'Tree'.
+```
+Fix it, verify, and then give a concise explanation. @Procertus-ui-experiment/packages/ui-certification/src/components/product-tree-panel/ProductTreePanel.tsx:21-24
