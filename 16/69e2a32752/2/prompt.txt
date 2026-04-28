@@ -1,0 +1,45 @@
+@ui-lib-shadcn/packages/ui-lib/src/stories/examples/AppLayoutPanel.stories.tsx please also set up this overarching Appliant panel story to showcase all of the newly added components together.
+
+---
+
+@ui-lib-shadcn/packages/ui-lib/src/stories/examples/AppLayoutPanel.stories.tsx please also set up this overarching Appliant panel story to showcase all of the newly added components together.
+
+---
+
+Please look at the demo application to see how the suiting layout components are being used, and re-implement the prototype application for managing certification requests by implementing the overview page for certifications.
+
+Display requests as a card list, where each certification request is a card that can show all needed context for the different embedded certification requests, including the approval status and related details. When a card is clicked, show a detailed panel that presents all information more thoroughly than what is shown on the card.@ui-lib-shadcn/packages/ui-demo @ui-lib-shadcn/apps/frontend-vite-frontend-vite-demo/src/App.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:36 @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:38
+
+---
+
+Please look at the demo application to see how the suiting layout components are being used, and re-implement the prototype application for managing certification requests by implementing the overview page for certifications.
+
+Display requests as a card list, where each certification request is a card that can show all needed context for the different embedded certification requests, including the approval status and related details. When a card is clicked, show a detailed panel that presents all information more thoroughly than what is shown on the card.@ui-lib-shadcn/packages/ui-demo @ui-lib-shadcn/apps/frontend-vite-frontend-vite-demo/src/App.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:36 @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:38
+
+---
+
+Please look at the demo application to see how the sewdn layout components are being used, and re-implement the prototype application for managing certification requests by implementing the overview page for certifications as a cardlist. Setup the Layout components for the sewdn app shell to be used and display details panels where needed
+
+Display request overview as a card list, where each certification request is a card that can show all needed context for the different embedded certification requests, including the approval status and related details. When a card is clicked, show a detailed panel that presents all information more thoroughly than what is shown on the card.@ui-lib-shadcn/packages/ui-demo @ui-lib-shadcn/apps/frontend-vite-frontend-vite-demo/src/App.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:36 @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:38
+
+---
+
+Please look at the demo application to see how the sewdn layout components are being used, and re-implement the prototype application for managing certification requests by implementing the overview page for certifications as a cardlist. Setup the Layout components for the sewdn app shell to be used and display details panels where needed
+
+Display request overview as a card list, where each certification request is a card that can show all needed context for the different embedded certification requests, including the approval status and related details. When a card is clicked, show a detailed panel that presents all information more thoroughly than what is shown on the card.@ui-lib-shadcn/packages/ui-demo @ui-lib-shadcn/apps/frontend-vite-frontend-vite-demo/src/App.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:36 @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:38
+
+---
+
+Please look at the design of the side-panel sheets in the Shaatzin component library. I want you to set up the same styling to be applied to the panels that are opened from the Suden panel library. 
+
+Please abstract the styling so it can be applied to both panels without needing to use the underlying Shaatzin panel. The panels are laid out and managed differently, so the styling should be reusable across both implementations.
+
+I want to set the same margins, rounded corners and elevation (shadows) for both panel stylings.@Procertus-ui-experiment/packages/ui/src/components/sewdn/Panels/Panel.tsx @Procertus-ui-experiment/packages/ui/src/components/ui/sheet.tsx
+
+---
+
+There is an extra vertical divider line in the student panels that can now be omitted, since we have a border around the entire panel.
+
+---
+
+There is an extra vertical divider line in the student panels that can now be omitted, since we have a border around the entire panel.

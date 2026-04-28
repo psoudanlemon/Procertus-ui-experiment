@@ -3,7 +3,7 @@
   "checkpoint_id": "1669e2a32752",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 24,
+  "checkpoints_count": 29,
   "files_touched": [
     ".scaffold/metrics/scaffold-commands.jsonl",
     ".scaffold/metrics/snapshots.jsonl",
@@ -57,6 +57,12 @@
       "transcript": "/16/69e2a32752/1/full.jsonl",
       "content_hash": "/16/69e2a32752/1/content_hash.txt",
       "prompt": "/16/69e2a32752/1/prompt.txt"
+    },
+    {
+      "metadata": "/16/69e2a32752/2/metadata.json",
+      "transcript": "/16/69e2a32752/2/full.jsonl",
+      "content_hash": "/16/69e2a32752/2/content_hash.txt",
+      "prompt": "/16/69e2a32752/2/prompt.txt"
     }
   ],
   "token_usage": {
