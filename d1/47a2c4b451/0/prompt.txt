@@ -75,3 +75,8 @@ I thought I had requested a vertical variation of the life cycle timeline. I thi
 For the certification life cycle, use a vertical timeline with more details. Include the exact time (hour and minutes) and the person who executed each action.
 
 Please show this vertical timeline variant on the detail page and in the detail panel of a certification request.
+
+---
+
+Please commit all current changes in the Word 3 document.
+Use the git commit skill.
