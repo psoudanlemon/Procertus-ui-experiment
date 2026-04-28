@@ -1,0 +1,29 @@
+@Procertus-ui-experiment/packages/ui/src/components/app-sidebar.tsx currently, AppSideboard is being used, but we also have a generic app shell. @Procertus-ui-experiment/packages/ui/src/components/generic-app-shell.tsx  don't consolidate yet, but make sure the app sidebar we currently use is also equipped to show active items, just like in the Genetic app shell.
+
+---
+
+@Procertus-ui-experiment/packages/ui/src/components/app-sidebar.tsx currently, AppSideboard is being used, but we also have a generic app shell. @Procertus-ui-experiment/packages/ui/src/components/generic-app-shell.tsx  don't consolidate yet, but make sure the app sidebar we currently use is also equipped to show active items, just like in the Genetic app shell.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/AuthenticatedHomePage.tsx rename this page, since it's not the authenticated homepage but just the request overview.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/AuthenticatedHomePage.tsx rename this page, since it's not the authenticated homepage but just the request overview.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/RequestsOverviewPage.tsx:32-89 move this presentational component to the UI library for certification. @Procertus-ui-experiment/packages/ui-certification/src/components
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/RequestsOverviewPage.tsx:32-89 move this presentational component to the UI library for certification. @Procertus-ui-experiment/packages/ui-certification/src/components
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/RequestsOverviewPage.tsx:32-89 move this presentational component to the UI library for certification. @Procertus-ui-experiment/packages/ui-certification/src/components  do this by first scaffolding a new presentation component in this UI library, then porting the guard implementation.  set up stories to display different states or variants.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/RequestsOverviewPage.tsx:32-89 move this presentational component to the UI library for certification. @Procertus-ui-experiment/packages/ui-certification/src/components  do this by first scaffolding a new presentation component in this UI library, then porting the guard implementation.  set up stories to display different states or variants.
