@@ -7,6 +7,35 @@ html {
   background-color: var(--sidebar);
 }
 
+/**
+ * Force operational desktop spacing tokens regardless of iframe viewport width.
+ *
+ * Storybook autodocs renders each story in its own iframe; those iframes are
+ * often narrower than the 768px responsive breakpoint defined in the theme,
+ * which silently swaps in mobile (touch) spacing values and makes the same
+ * component look chunkier in Docs than in Canvas. Locking the tokens to their
+ * desktop values keeps Canvas, Docs, and standalone MDX previews visually
+ * consistent. Density (operational vs spacious) is still toggled via the
+ * toolbar through `[data-density]`. `!important` is required to beat the
+ * `@media (min-width: 768px) :root` rule in `default.css`, which has the same
+ * specificity and would otherwise tie or win on viewport-dependent cascade.
+ */
+:root {
+  --spacing-micro: 0.25rem !important;
+  --spacing-component: 0.5rem !important;
+  --spacing-section: 1rem !important;
+  --spacing-region: 1.5rem !important;
+  --spacing-boundary: 2rem !important;
+}
+
+[data-density="spacious"] {
+  --spacing-micro: 0.5rem !important;
+  --spacing-component: 0.75rem !important;
+  --spacing-section: 1.5rem !important;
+  --spacing-region: 2rem !important;
+  --spacing-boundary: 3rem !important;
+}
+
 body,
 #storybook-root,
 #storybook-docs,
@@ -47,34 +76,37 @@ body:has(#storybook-docs:not(:empty)) {
   color: var(--foreground) !important;
 }
 
-/* Headings — remove Storybook's bottom border and use the semantic heading token */
-#storybook-docs h1,
-#storybook-docs h2,
-#storybook-docs h3,
-#storybook-docs h4,
-#storybook-docs h5,
-#storybook-docs h6 {
+/* Headings — remove Storybook's bottom border and use the semantic heading token.
+ * `:not(.sbdocs-preview *)` excludes headings rendered inside story previews so
+ * components like Card/Heading inside an autodocs Canvas keep their own typography
+ * instead of inheriting the prose-level overrides below. */
+#storybook-docs h1:not(.sbdocs-preview *),
+#storybook-docs h2:not(.sbdocs-preview *),
+#storybook-docs h3:not(.sbdocs-preview *),
+#storybook-docs h4:not(.sbdocs-preview *),
+#storybook-docs h5:not(.sbdocs-preview *),
+#storybook-docs h6:not(.sbdocs-preview *) {
   color: var(--heading-foreground) !important;
   border: none !important;
 }
 
-#storybook-docs h2,
-.sbdocs h2,
-.sbdocs-content h2 {
+#storybook-docs h2:not(.sbdocs-preview *),
+.sbdocs h2:not(.sbdocs-preview *),
+.sbdocs-content h2:not(.sbdocs-preview *) {
   margin-top: 4rem !important;
   margin-bottom: 0.25rem !important;
   padding-bottom: 0 !important;
   font-weight: 700 !important;
 }
 
-#storybook-docs h2 + p,
-.sbdocs h2 + p,
-.sbdocs-content h2 + p {
+#storybook-docs h2:not(.sbdocs-preview *) + p,
+.sbdocs h2:not(.sbdocs-preview *) + p,
+.sbdocs-content h2:not(.sbdocs-preview *) + p {
   margin-top: 0 !important;
 }
 
 
-#storybook-docs h3 {
+#storybook-docs h3:not(.sbdocs-preview *) {
   margin-top: 2rem !important;
   margin-bottom: 0.5rem !important;
   font-weight: 500 !important;

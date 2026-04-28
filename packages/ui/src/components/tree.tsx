@@ -24,17 +24,25 @@ interface TreeContextValue<T = any> {
   currentItem?: ItemInstance<T>
   tree?: any
   toggleIconType?: ToggleIconType
+  showLines?: boolean
 }
 
 const TreeContext = createContext<TreeContextValue>({
   indent: 20,
   currentItem: undefined,
   tree: undefined,
-  toggleIconType: "plus-minus",
+  toggleIconType: "chevron",
+  showLines: false,
 })
 
 function useTreeContext<T = any>() {
   return useContext(TreeContext) as TreeContextValue<T>
+}
+
+function hasChildren(item: { getChildren?: () => unknown }): boolean {
+  if (typeof item.getChildren !== "function") return true
+  const children = item.getChildren()
+  return Array.isArray(children) && children.length > 0
 }
 
 interface TreeProps extends HTMLAttributes<HTMLDivElement> {
@@ -42,6 +50,7 @@ interface TreeProps extends HTMLAttributes<HTMLDivElement> {
   tree?: any
   toggleIconType?: ToggleIconType
   asChild?: boolean
+  showLines?: boolean
 }
 
 function Tree({
@@ -50,6 +59,7 @@ function Tree({
   className,
   toggleIconType = "chevron",
   asChild = false,
+  showLines = false,
   ...props
 }: TreeProps) {
   const containerProps =
@@ -58,10 +68,8 @@ function Tree({
       : {}
   const mergedProps = { ...props, ...containerProps }
 
-  // Extract style from mergedProps to merge with our custom styles
   const { style: propStyle, ...otherProps } = mergedProps
 
-  // Merge styles
   const mergedStyle = {
     ...propStyle,
     "--tree-indent": `${indent}px`,
@@ -70,7 +78,7 @@ function Tree({
   const Comp = asChild ? Slot.Root : "div"
 
   return (
-    <TreeContext.Provider value={{ indent, tree, toggleIconType }}>
+    <TreeContext.Provider value={{ indent, tree, toggleIconType, showLines }}>
       <Comp
         data-slot="tree"
         style={mergedStyle}
@@ -98,16 +106,22 @@ function TreeItem<T = any>({
   ...props
 }: TreeItemProps<T>) {
   const parentContext = useTreeContext<T>()
-  const { indent } = parentContext
+  const { indent, showLines } = parentContext
 
   const itemProps = typeof item.getProps === "function" ? item.getProps() : {}
   const mergedProps = { ...props, children, ...itemProps }
 
-  // Extract style from mergedProps to merge with our custom styles
   const { style: propStyle, ...otherProps } = mergedProps
 
-  // Merge styles
   const mergedStyle = {
+    ...(showLines
+      ? {
+          backgroundImage:
+            "repeating-linear-gradient(to right, transparent 0, transparent calc(var(--spacing-component) + var(--spacing-micro) - 0.5px), var(--color-border) calc(var(--spacing-component) + var(--spacing-micro) - 0.5px), var(--color-border) calc(var(--spacing-component) + var(--spacing-micro) + 0.5px), transparent calc(var(--spacing-component) + var(--spacing-micro) + 0.5px), transparent var(--tree-indent))",
+          backgroundSize: "var(--tree-padding) 100%",
+          backgroundRepeat: "no-repeat",
+        }
+      : {}),
     ...propStyle,
     "--tree-padding": `${item.getItemMeta().level * indent}px`,
   } as CSSProperties
@@ -116,7 +130,7 @@ function TreeItem<T = any>({
     "data-slot": "tree-item",
     style: mergedStyle,
     className: cn(
-      "z-10 ps-(--tree-padding) outline-hidden select-none not-last:pb-0.5 focus:z-20 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "z-10 w-full ps-(--tree-padding) text-left outline-hidden select-none focus:z-20 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className
     ),
     "data-focus":
@@ -163,6 +177,7 @@ function TreeItemLabel<T = any>({
   children,
   className,
   asChild = false,
+  style: propStyle,
   ...props
 }: TreeItemLabelProps<T>) {
   const { currentItem, toggleIconType } = useTreeContext<T>()
@@ -175,13 +190,25 @@ function TreeItemLabel<T = any>({
 
   const Comp = asChild ? Slot.Root : "span"
 
+  const fallbackName =
+    typeof item.getItemName === "function" ? item.getItemName() : null
+  const rawContent = children ?? fallbackName
+  const content =
+    typeof rawContent === "string" ? (
+      <span className="min-w-0 flex-1 truncate">{rawContent}</span>
+    ) : (
+      rawContent
+    )
+
   return (
     <Comp
       data-slot="tree-item-label"
+      style={propStyle}
       className={cn(
-        "in-focus-visible:ring-ring/50 bg-background hover:bg-accent in-data-[selected=true]:bg-accent in-data-[selected=true]:text-accent-foreground in-data-[drag-target=true]:bg-accent flex items-center gap-micro transition-colors not-in-data-[folder=true]:ps-7 in-focus-visible:ring-[3px] in-data-[search-match=true]:bg-blue-50! [&_svg]:pointer-events-none [&_svg]:shrink-0",
-        "rounded-sm",
-        "py-component",
+        "flex w-full items-center gap-micro text-foreground transition-colors hover:bg-accent hover:text-accent-foreground in-focus-visible:ring-[3px] in-focus-visible:ring-ring/50 in-data-[selected=true]:bg-accent in-data-[selected=true]:font-medium in-data-[selected=true]:text-accent-foreground in-data-[drag-target=true]:bg-accent in-data-[search-match=true]:font-medium [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:stroke-[1.33px]",
+        "rounded-md",
+        "my-[2px]",
+        "py-micro",
         "px-component",
         "text-sm",
         className
@@ -189,18 +216,29 @@ function TreeItemLabel<T = any>({
       {...props}
     >
       <Fragment>
-        {item.isFolder() &&
-          (toggleIconType === "plus-minus" ? (
-            item.isExpanded() ? (
-              <HugeiconsIcon icon={MinusSignIcon} className="text-muted-foreground size-3.5" />
+        {content}
+        {item.isFolder() && hasChildren(item) && (
+          <span className="ms-auto flex shrink-0 ps-micro">
+            {toggleIconType === "plus-minus" ? (
+              item.isExpanded() ? (
+                <HugeiconsIcon
+                  icon={MinusSignIcon}
+                  className="size-4 text-muted-foreground"
+                />
+              ) : (
+                <HugeiconsIcon
+                  icon={PlusSignIcon}
+                  className="size-4 text-muted-foreground"
+                />
+              )
             ) : (
-              <HugeiconsIcon icon={PlusSignIcon} className="text-muted-foreground size-3.5" />
-            )
-          ) : (
-            <HugeiconsIcon icon={ArrowDown01Icon} className="text-muted-foreground size-4 in-aria-[expanded=false]:-rotate-90" />
-          ))}
-        {children ||
-          (typeof item.getItemName === "function" ? item.getItemName() : null)}
+              <HugeiconsIcon
+                icon={ArrowDown01Icon}
+                className="size-4 text-muted-foreground in-aria-[expanded=false]:-rotate-90"
+              />
+            )}
+          </span>
+        )}
       </Fragment>
     </Comp>
   )

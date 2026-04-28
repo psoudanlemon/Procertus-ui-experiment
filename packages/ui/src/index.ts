@@ -8,10 +8,9 @@ export { ModeToggle } from "./components/mode-toggle";
 export * from "./components/ui";
 export * from "./components/stepper";
 export * from "./components/timeline";
+export * from "./components/tree";
 /** Sewdn components copied from the local shadcn-based UI library. */
 export * from "./components/sewdn";
-/** ReUI: headless-tree based tree primitives. */
-export { Tree, TreeItem, TreeItemLabel, TreeDragLine } from "./components/reui/tree";
 /** Composed application shell components. */
 export * from "./components/app-sidebar";
 export * from "./components/app-header";
