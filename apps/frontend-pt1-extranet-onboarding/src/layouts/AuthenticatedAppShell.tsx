@@ -116,17 +116,15 @@ export function AuthenticatedAppShell() {
   }, [pathname, navigate, logout, session]);
 
   return (
-    <AppLayout>
-      <AppPanelsLayout>
-        <ManagementAppShell
-          sidebar={sidebar}
-          header={header}
-          mainClassName={flushMain ? "p-0!" : undefined}
-        >
-          <CloseMobileSidebarOnRouteChange />
-          <Outlet />
-        </ManagementAppShell>
-      </AppPanelsLayout>
-    </AppLayout>
+    <AppPanelsLayout>
+      <ManagementAppShell
+        sidebar={sidebar}
+        header={header}
+        mainClassName={flushMain ? "p-0!" : undefined}
+      >
+        <CloseMobileSidebarOnRouteChange />
+        <Outlet />
+      </ManagementAppShell>
+    </AppPanelsLayout>
   );
 }
