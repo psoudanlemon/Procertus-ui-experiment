@@ -1,13 +1,9 @@
 import * as React from "react";
 
-import {
-  AppHeader,
-  type AppHeaderProps,
-  AppSidebar,
-  type AppSidebarProps,
-  cn,
-  SidebarProvider,
-} from "@procertus-ui/ui";
+import { AppHeader, type AppHeaderProps } from "@/components/app-header";
+import { AppSidebar, type AppSidebarProps } from "@/components/app-sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 
 export type ManagementAppShellProps = {
   sidebar: AppSidebarProps;

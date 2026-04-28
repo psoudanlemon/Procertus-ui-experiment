@@ -9,7 +9,7 @@ import {
 import { StatusPage } from "./StatusPage";
 
 const meta = {
-  title: "Management interface/Status pages/Logged out",
+  title: "Custom components/Status pages/Logged out",
   component: StatusPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

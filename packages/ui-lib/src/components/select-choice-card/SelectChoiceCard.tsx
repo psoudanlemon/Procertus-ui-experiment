@@ -27,9 +27,9 @@ const shellVariants = cva(
   {
     variants: {
       appearance: {
-        default: "*:data-[slot=field]:p-2.5",
+        default: "*:data-[slot=field]:p-component",
         hero: [
-          "has-[>[data-slot=field]]:flex has-[>[data-slot=field]]:min-h-[220px] has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:items-center has-[>[data-slot=field]]:justify-center *:data-[slot=field]:p-8 *:data-[slot=field]:md:p-10",
+          "has-[>[data-slot=field]]:flex has-[>[data-slot=field]]:min-h-[220px] has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:items-center has-[>[data-slot=field]]:justify-center *:data-[slot=field]:p-region",
           "has-[>[data-slot=field]]:rounded-xl",
         ],
       },
@@ -43,7 +43,7 @@ const shellVariants = cva(
           "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-primary/30 has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:bg-muted/40",
         ],
         tertiary: [
-          "has-[>[data-slot=field]]:border-dashed has-[>[data-slot=field]]:border-muted-foreground/30 has-[>[data-slot=field]]:bg-muted/10 *:data-[slot=field]:p-2 has-data-checked:has-[>[data-slot=field]]:border-primary/25 has-data-checked:has-[>[data-slot=field]]:bg-muted/25",
+          "has-[>[data-slot=field]]:border-dashed has-[>[data-slot=field]]:border-muted-foreground/30 has-[>[data-slot=field]]:bg-muted/10 *:data-[slot=field]:p-component has-data-checked:has-[>[data-slot=field]]:border-primary/25 has-data-checked:has-[>[data-slot=field]]:bg-muted/25",
           "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-primary/25 has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:bg-muted/25",
         ],
       },
@@ -52,7 +52,7 @@ const shellVariants = cva(
       {
         appearance: "hero",
         emphasis: "tertiary",
-        class: "*:data-[slot=field]:!p-8 *:data-[slot=field]:md:!p-10",
+        class: "*:data-[slot=field]:!p-region",
       },
     ],
     defaultVariants: { appearance: "default", emphasis: "primary" },
@@ -167,8 +167,7 @@ export function SelectChoiceCard({
 
   const controlClass = cn(
     isHero && "sr-only",
-    !isHero && !isMultiple && "mt-1.5",
-    !isHero && isMultiple && "mt-1",
+    !isHero && "mt-micro",
   );
 
   const control =
@@ -204,7 +203,7 @@ export function SelectChoiceCard({
         {control}
         <FieldContent
           className={cn(
-            showLeading && "flex min-w-0 flex-row items-start gap-3",
+            showLeading && "flex min-w-0 flex-row items-start gap-component",
             isHero && "flex w-full flex-col items-center gap-section text-center",
           )}
         >
@@ -221,9 +220,9 @@ export function SelectChoiceCard({
             </EmptyIcon>
           ) : null}
           {showLeading ? (
-            <div className="shrink-0 self-start pt-0.5 text-muted-foreground [&_svg]:size-5">{leading}</div>
+            <div className="shrink-0 self-start pt-micro text-muted-foreground [&_svg]:size-5">{leading}</div>
           ) : null}
-          <div className={cn("min-w-0", !isHero && "flex-1", isHero && "flex flex-col items-center gap-2")}>
+          <div className={cn("flex min-w-0 flex-col gap-micro", !isHero && "flex-1", isHero && "items-center")}>
             <FieldTitle
               className={cn(
                 titleVariants({ appearance, emphasis }),
@@ -242,7 +241,7 @@ export function SelectChoiceCard({
               </Label>
             </FieldTitle>
             {description ? (
-              <FieldDescription className={cn(!isHero && "mt-1.5", isHero && "mt-0", descVariants({ appearance, emphasis }))}>
+              <FieldDescription className={cn(descVariants({ appearance, emphasis }))}>
                 {description}
               </FieldDescription>
             ) : null}

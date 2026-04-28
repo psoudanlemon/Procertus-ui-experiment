@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { VerifyCodeForm } from "./VerifyCodeForm";
 
 const meta = {
-  title: "Management interface/Authentication/Forms/Verify code",
+  title: "Custom components/Authentication/Forms/Verify code",
   component: VerifyCodeForm,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

@@ -71,17 +71,17 @@ export function DraftRequestList({
             <EmptyDescription>{emptyDescription}</EmptyDescription>
           </Empty>
         ) : (
-          <ul className="flex flex-col gap-0" role="list">
+          <ul className="flex flex-col" role="list">
             {drafts.map((d, i) => (
               <li key={d.id} className="min-w-0">
-                {i > 0 ? <Separator className="my-1" /> : null}
-                <div className="flex flex-col gap-2 py-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                {i > 0 ? <Separator className="my-micro" /> : null}
+                <div className="flex flex-col gap-component py-component sm:flex-row sm:items-start sm:justify-between sm:gap-section">
                   <div className="min-w-0 flex-1">
                     <p className="font-medium text-foreground">{d.title}</p>
                     {d.subtitle ? <p className="text-sm text-muted-foreground">{d.subtitle}</p> : null}
-                    {d.details ? <div className="mt-2 min-w-0">{d.details}</div> : null}
+                    {d.details ? <div className="mt-component min-w-0">{d.details}</div> : null}
                   </div>
-                  <div className="flex shrink-0 flex-wrap justify-end gap-2">
+                  <div className="flex shrink-0 flex-wrap justify-end gap-component">
                     <Button type="button" size="sm" variant="outline" onClick={() => onEdit(d.id)} aria-label={`${editLabel}: ${d.title}`}>
                       <HugeiconsIcon icon={PencilEdit02Icon} className="size-4" strokeWidth={1.5} />
                       {editLabel}

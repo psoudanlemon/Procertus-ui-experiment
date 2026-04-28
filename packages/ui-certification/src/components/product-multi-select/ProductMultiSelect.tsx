@@ -63,21 +63,21 @@ export function ProductMultiSelect({
 
   return (
     <FieldSet className={cn("w-full min-w-0", className)}>
-      <div className="mb-2 space-y-0.5">
+      <div className="mb-component space-y-micro">
         <div className="text-base font-semibold">{legend}</div>
         {description ? <p className="text-sm text-muted-foreground">{description}</p> : null}
       </div>
       {options.length === 0 ? (
-        <p className="rounded-md border border-dashed border-border/60 px-3 py-4 text-sm text-muted-foreground">{emptyMessage}</p>
+        <p className="rounded-md border border-dashed border-border/60 px-component py-section text-sm text-muted-foreground">{emptyMessage}</p>
       ) : (
-        <FieldGroup className="max-h-[min(50vh,28rem)] space-y-0 overflow-y-auto rounded-md border border-border/50 p-1">
+        <FieldGroup className="max-h-[min(50vh,28rem)] space-y-0 overflow-y-auto rounded-md border border-border/50 p-micro">
           {options.map((opt) => {
             const cbId = `${name}-${opt.id}`;
             const checked = set.has(opt.id);
             return (
               <Field
                 key={opt.id}
-                className="rounded-sm px-2 py-1.5 transition hover:bg-muted/20"
+                className="rounded-sm px-component py-component transition hover:bg-muted/20"
                 data-disabled={opt.disabled ? "true" : undefined}
                 orientation="horizontal"
               >
@@ -97,7 +97,7 @@ export function ProductMultiSelect({
                   <FieldLabel htmlFor={cbId} className="!block text-left font-medium">
                     {opt.label}
                     {opt.description ? (
-                      <span className="mt-0.5 block text-sm font-normal text-muted-foreground">{opt.description}</span>
+                      <span className="mt-micro block text-sm font-normal text-muted-foreground">{opt.description}</span>
                     ) : null}
                   </FieldLabel>
                 </FieldContent>

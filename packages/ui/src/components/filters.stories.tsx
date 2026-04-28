@@ -10,10 +10,8 @@ import {
   type FilterFieldConfig,
   type FilterI18nConfig,
 } from "./filters";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
 
-type FilterValue = string;
+type FilterValue = string | number | boolean;
 
 const priorityOptions = [
   { value: "low", label: "Low" },
@@ -59,28 +57,47 @@ const fields: FilterFieldConfig<FilterValue>[] = [
     maxSelections: 3,
   },
   {
-    key: "email",
-    label: "Email",
-    type: "text",
-    defaultOperator: "contains",
-    placeholder: "alex@example.com",
-    pattern: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
-    validation: (value) => ({
-      valid: typeof value === "string" && value.includes("@"),
-      message: "Enter a valid email address.",
-    }),
-  },
-  {
-    key: "query",
-    label: "Search",
+    key: "title",
+    label: "Title",
     type: "text",
     defaultOperator: "contains",
     placeholder: "Document title",
   },
+  {
+    key: "score",
+    label: "Score",
+    type: "number",
+    defaultOperator: "gte",
+    placeholder: "Enter number",
+  },
+  {
+    key: "amount",
+    label: "Amount",
+    type: "number",
+    defaultOperator: "between",
+    placeholder: "Enter number",
+  },
+  {
+    key: "isPublished",
+    label: "Published",
+    type: "boolean",
+  },
+  {
+    key: "renewalAt",
+    label: "Renewal time",
+    type: "timestamp",
+    defaultOperator: "before",
+  },
+  {
+    key: "shiftWindow",
+    label: "Shift window",
+    type: "timestamp",
+    defaultOperator: "between",
+  },
 ];
 
 const meta = {
-  title: "reui/Filters",
+  title: "components/Filters",
   component: Filters,
   tags: ["autodocs"],
   parameters: {
@@ -88,7 +105,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "ReUI filters for data-heavy surfaces. Supports text, select, multiselect, custom triggers, validation, size variants, keyboard shortcut hints, and i18n overrides.",
+          "ReUI filters for data-heavy surfaces. Supports text, number, boolean, timestamp, select, multiselect, custom triggers, size variants, keyboard shortcut hints, and i18n overrides.",
       },
     },
   },
@@ -103,20 +120,18 @@ function FiltersDemo({
   size = "default",
   variant = "default",
   radius = "default",
-  trigger,
   i18n,
 }: {
   initialFilters: Filter<FilterValue>[];
   size?: "sm" | "default" | "lg";
   variant?: "solid" | "default";
   radius?: "default" | "full";
-  trigger?: React.ReactNode;
   i18n?: Partial<FilterI18nConfig>;
 }) {
   const [filters, setFilters] = useState<Filter<FilterValue>[]>(initialFilters);
 
   return (
-    <div className="flex w-full max-w-4xl flex-col gap-4">
+    <div className="flex w-full max-w-5xl flex-col gap-section">
       <Filters
         filters={filters}
         fields={fields}
@@ -124,11 +139,10 @@ function FiltersDemo({
         size={size}
         variant={variant}
         radius={radius}
-        trigger={trigger}
         i18n={i18n}
         enableShortcut
       />
-      <pre className="max-h-64 overflow-auto rounded-lg border bg-muted/30 p-3 text-xs text-muted-foreground">
+      <pre className="max-h-64 overflow-auto rounded-lg border bg-muted/30 p-section text-xs text-muted-foreground">
         {JSON.stringify(filters, null, 2)}
       </pre>
     </div>
@@ -144,58 +158,92 @@ export const Default: Story = {
           "medium",
           "critical",
         ]),
+        createFilter<FilterValue>("title", "contains", ["renewal"]),
       ]}
     />
   ),
 };
 
-export const TriggerButton: Story = {
-  render: () => (
-    <FiltersDemo
-      initialFilters={[createFilter<FilterValue>("status", "is", ["active"])]}
-      trigger={
-        <Button variant="secondary">
-          Add condition
-          <Badge variant="outline" className="ml-1">
-            F
-          </Badge>
-        </Button>
-      }
-    />
-  ),
+export const Trigger: Story = {
+  render: () => <FiltersDemo initialFilters={[]} />,
 };
 
-export const SmallSize: Story = {
+export const Small: Story = {
   render: () => (
     <FiltersDemo
       size="sm"
       initialFilters={[
-        createFilter<FilterValue>("owner", "is_any_of", ["jd", "ab"]),
-        createFilter<FilterValue>("query", "contains", ["renewal"]),
+        createFilter<FilterValue>("priority", "is_any_of", [
+          "low",
+          "medium",
+          "critical",
+        ]),
+        createFilter<FilterValue>("title", "contains", ["renewal"]),
       ]}
     />
   ),
 };
 
-export const LargeSolid: Story = {
+export const Large: Story = {
   render: () => (
     <FiltersDemo
       size="lg"
-      variant="solid"
-      radius="full"
       initialFilters={[
-        createFilter<FilterValue>("priority", "is_any_of", ["high"]),
-        createFilter<FilterValue>("status", "is_not", ["archived"]),
+        createFilter<FilterValue>("priority", "is_any_of", [
+          "low",
+          "medium",
+          "critical",
+        ]),
+        createFilter<FilterValue>("title", "contains", ["renewal"]),
       ]}
     />
   ),
 };
 
-export const Validation: Story = {
+export const TextOperators: Story = {
   render: () => (
     <FiltersDemo
       initialFilters={[
-        createFilter<FilterValue>("email", "contains", ["invalid-email"]),
+        createFilter<FilterValue>("title", "is", ["Compliance handbook"]),
+        createFilter<FilterValue>("title", "contains", ["renewal"]),
+        createFilter<FilterValue>("title", "starts_with", ["Q3"]),
+      ]}
+    />
+  ),
+};
+
+export const NumberOperators: Story = {
+  render: () => (
+    <FiltersDemo
+      initialFilters={[
+        createFilter<FilterValue>("score", "is", [42]),
+        createFilter<FilterValue>("score", "gt", [10]),
+        createFilter<FilterValue>("score", "lte", [100]),
+        createFilter<FilterValue>("amount", "between", [50, 200]),
+      ]}
+    />
+  ),
+};
+
+export const SelectAndMultiselect: Story = {
+  render: () => (
+    <FiltersDemo
+      initialFilters={[
+        createFilter<FilterValue>("status", "is", ["active"]),
+        createFilter<FilterValue>("priority", "is_any_of", ["high", "critical"]),
+        createFilter<FilterValue>("owner", "includes_all", ["jd", "ab"]),
+      ]}
+    />
+  ),
+};
+
+export const BooleanAndTimestamp: Story = {
+  render: () => (
+    <FiltersDemo
+      initialFilters={[
+        createFilter<FilterValue>("isPublished", "is", [true]),
+        createFilter<FilterValue>("renewalAt", "before", ["18:00:00"]),
+        createFilter<FilterValue>("shiftWindow", "between", ["09:00:00", "17:30:00"]),
       ]}
     />
   ),
@@ -209,6 +257,7 @@ export const I18n: Story = {
         addFilter: "Filtrar",
         searchFields: "Buscar filtros...",
         selectedCount: "seleccionados",
+        clearAll: "Borrar todos los filtros",
         operators: {
           ...DEFAULT_I18N.operators,
           is: "es",

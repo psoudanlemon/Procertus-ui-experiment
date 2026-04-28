@@ -1,7 +1,6 @@
 import type { AppHeaderProps, AppSidebarProps } from "@procertus-ui/ui";
-import { AppLayout, useSidebar } from "@procertus-ui/ui";
+import { ManagementAppShell, useSidebar } from "@procertus-ui/ui";
 import logomark from "@procertus-ui/ui/assets/logomark.svg";
-import { ManagementAppShell } from "@procertus-ui/ui-lib";
 import { useLayoutEffect, useMemo } from "react";
 import { Link, matchPath, Outlet, useLocation, useNavigate } from "react-router-dom";
 

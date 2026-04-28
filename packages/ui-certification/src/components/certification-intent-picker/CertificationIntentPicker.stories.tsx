@@ -27,7 +27,7 @@ export default meta;
 function DefaultStory() {
   const [v, setV] = useState<CertificationIntentId | undefined>(undefined);
   return (
-    <div className="max-w-5xl space-y-4">
+    <div className="max-w-5xl space-y-section">
       <CertificationIntentPicker
         value={v}
         onValueChange={setV}

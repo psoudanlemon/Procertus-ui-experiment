@@ -29,7 +29,7 @@ export default meta;
 function StateStory() {
   const [ids, setIds] = useState<string[]>(["a"]);
   return (
-    <div className="max-w-lg space-y-2">
+    <div className="max-w-lg space-y-component">
       <ProductMultiSelect
         legend="Applicable product types"
         description="Select all that apply; each will become one draft in the list."

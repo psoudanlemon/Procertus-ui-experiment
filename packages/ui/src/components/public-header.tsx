@@ -12,12 +12,9 @@ import {
   Cancel01Icon,
 } from "@hugeicons/core-free-icons";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Button,
-  cn,
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
@@ -27,42 +24,47 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-  Input,
-  Separator,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@procertus-ui/ui";
+} from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-export type NavLink = {
+export type PublicHeaderNavLink = {
   title: string;
   url: string;
   isActive?: boolean;
 };
 
-export type Language = {
+export type PublicHeaderLanguage = {
   code: string;
   label: string;
   flag: string;
 };
 
-export type PublicRegistryUser = {
+export type PublicHeaderUser = {
   name?: string;
   email: string;
   avatar?: string;
+  /** Override the computed initials shown when no avatar image is present. */
+  avatarFallback?: React.ReactNode;
 };
 
 export type PublicRegistryHeaderProps = {
   /** App logo — render any React node (image, SVG, text). */
   logo?: React.ReactNode;
   /** Primary horizontal navigation links. */
-  navLinks?: NavLink[];
+  navLinks?: PublicHeaderNavLink[];
   /** Show the search bar in the header. */
   showSearch?: boolean;
   /** Placeholder text for the search input. */
@@ -70,13 +72,13 @@ export type PublicRegistryHeaderProps = {
   /** Callback when search value changes. */
   onSearch?: (query: string) => void;
   /** Available languages for the language switcher. */
-  languages?: Language[];
+  languages?: PublicHeaderLanguage[];
   /** Currently active language code. */
   activeLanguage?: string;
   /** Callback when language selection changes. */
   onLanguageChange?: (code: string) => void;
   /** Logged-in user — when absent the header shows login + CTA buttons. */
-  user?: PublicRegistryUser;
+  user?: PublicHeaderUser;
   /** URL for the login page. */
   loginUrl?: string;
   /** Callback when login button is clicked (overrides loginUrl). */
@@ -93,7 +95,7 @@ export type PublicRegistryHeaderProps = {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function getInitials(user: PublicRegistryUser): string {
+function getInitials(user: PublicHeaderUser): string {
   if (user.name) {
     const parts = user.name.split(" ");
     if (parts.length === 1 && Array.from(user.name).length <= 2) return user.name;
@@ -129,7 +131,6 @@ function PublicRegistryHeader({
   const searchRef = React.useRef<HTMLInputElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
-  // Cmd+K to focus search
   React.useEffect(() => {
     if (!showSearch) return;
     function handleKeyDown(e: KeyboardEvent) {
@@ -156,7 +157,6 @@ function PublicRegistryHeader({
       )}
     >
       <div className="flex h-16 items-center gap-component px-boundary">
-        {/* Mobile hamburger — left side */}
         <Button
           variant="ghost"
           size="icon-sm"
@@ -167,14 +167,12 @@ function PublicRegistryHeader({
           <span className="sr-only">Menu</span>
         </Button>
 
-        {/* Logo */}
         {logo && (
           <a href="/" className="flex shrink-0 items-center gap-component">
             {logo}
           </a>
         )}
 
-        {/* Desktop navigation */}
         <nav className="hidden items-center gap-section sm:flex">
           {navLinks.map((link) => (
             <a
@@ -192,11 +190,13 @@ function PublicRegistryHeader({
           ))}
         </nav>
 
-        {/* Desktop search (optional, centered) */}
         {showSearch && (
           <div className="mx-auto hidden w-full max-w-md sm:block">
             <div className="relative">
-              <HugeiconsIcon icon={Search01Icon} className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <HugeiconsIcon
+                icon={Search01Icon}
+                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              />
               <Input
                 ref={searchRef}
                 placeholder={searchPlaceholder}
@@ -210,9 +210,7 @@ function PublicRegistryHeader({
           </div>
         )}
 
-        {/* Right side actions */}
         <div className="ml-auto flex items-center gap-section">
-          {/* Auth area */}
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -225,28 +223,24 @@ function PublicRegistryHeader({
                       <AvatarImage src={user.avatar} alt={user.name ?? user.email} />
                     )}
                     <AvatarFallback className="bg-background">
-                      {initials}
+                      {user.avatarFallback ?? initials}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-64" align="end" sideOffset={8}>
-                <div className="flex items-center gap-section px-component py-component">
+                <div className="flex items-center gap-component px-component py-component">
                   <Avatar className="size-9">
                     {user.avatar && (
                       <AvatarImage src={user.avatar} alt={user.name ?? user.email} />
                     )}
                     <AvatarFallback className="bg-background">
-                      {initials}
+                      {user.avatarFallback ?? initials}
                     </AvatarFallback>
                   </Avatar>
                   <div className="grid text-sm leading-tight">
-                    {user.name && (
-                      <span className="truncate font-medium">{user.name}</span>
-                    )}
-                    <span className="truncate text-xs text-muted-foreground">
-                      {user.email}
-                    </span>
+                    {user.name && <span className="truncate font-medium">{user.name}</span>}
+                    <span className="truncate text-xs text-muted-foreground">{user.email}</span>
                   </div>
                 </div>
                 <DropdownMenuSeparator />
@@ -282,28 +276,20 @@ function PublicRegistryHeader({
                 {version && (
                   <>
                     <DropdownMenuSeparator />
-                    <div className="px-2 py-1.5 text-xs text-muted-foreground">
-                      {version}
-                    </div>
+                    <div className="px-2 py-1.5 text-xs text-muted-foreground">{version}</div>
                   </>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button
-              variant="secondary"
-              size="sm"
-              className="min-h-11 lg:min-h-0"
-              asChild
-            >
+            <Button variant="secondary" size="sm" className="min-h-11 lg:min-h-0" asChild>
               <a href={loginUrl} onClick={onLogin}>
                 Inloggen
               </a>
             </Button>
           )}
 
-          {/* Language switcher — desktop only */}
-          {languages.length > 1 && (
+          {!user && languages.length > 1 && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -334,7 +320,6 @@ function PublicRegistryHeader({
         </div>
       </div>
 
-      {/* Mobile sheet — nav links + language */}
       <style>{`
         [data-slot="public-registry-header"] [data-slot="sheet-overlay"] {
           background: rgb(0 0 0 / 0.10) !important;
@@ -367,7 +352,6 @@ function PublicRegistryHeader({
             </div>
             <Separator className="bg-sidebar-border" />
 
-            {/* Navigation links */}
             {navLinks.length > 0 && (
               <nav className="flex flex-col gap-0.5 p-component">
                 {navLinks.map((link) => (
@@ -388,7 +372,6 @@ function PublicRegistryHeader({
               </nav>
             )}
 
-            {/* Language selector */}
             {languages.length > 1 && (
               <>
                 <Separator className="bg-sidebar-border" />
@@ -402,8 +385,7 @@ function PublicRegistryHeader({
                       type="button"
                       className={cn(
                         "flex min-h-11 items-center justify-between rounded-md px-component text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                        lang.code === (activeLanguage ?? languages[0]?.code) &&
-                          "font-medium",
+                        lang.code === (activeLanguage ?? languages[0]?.code) && "font-medium",
                       )}
                       onClick={() => onLanguageChange?.(lang.code)}
                     >
@@ -411,7 +393,10 @@ function PublicRegistryHeader({
                         <span>{lang.flag}</span> {lang.label}
                       </span>
                       {lang.code === (activeLanguage ?? languages[0]?.code) && (
-                        <HugeiconsIcon icon={Tick01Icon} className="size-4 text-sidebar-accent-foreground" />
+                        <HugeiconsIcon
+                          icon={Tick01Icon}
+                          className="size-4 text-sidebar-accent-foreground"
+                        />
                       )}
                     </button>
                   ))}

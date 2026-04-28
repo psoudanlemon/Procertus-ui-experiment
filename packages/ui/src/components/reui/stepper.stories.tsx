@@ -50,7 +50,7 @@ export const Uncontrolled: Story = {
             { step: 3, label: "Done" },
           ].map((s, i, arr) => (
             <StepperItem key={s.step} step={s.step}>
-              <StepperTrigger className="w-full min-w-0 max-w-full flex-col gap-0.5 sm:flex-row sm:items-center sm:gap-2">
+              <StepperTrigger className="w-full min-w-0 max-w-full flex-col gap-micro sm:flex-row sm:items-center sm:gap-component">
                 <StepperIndicator>{s.step}</StepperIndicator>
                 <span className="sr-only sm:not-sr-only">
                   <StepperTitle className="text-left">{s.label}</StepperTitle>
@@ -70,10 +70,10 @@ export const Controlled: Story = {
   render: function ControlledRender() {
     const [value, setValue] = useState(2);
     return (
-      <div className="flex w-full max-w-3xl flex-col gap-4">
-        <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+      <div className="flex w-full max-w-3xl flex-col gap-section">
+        <div className="flex flex-wrap items-center gap-component text-sm text-muted-foreground">
           <span>Current 1-based value: {value}</span>
-          <div className="flex gap-2">
+          <div className="flex gap-component">
             <Button type="button" size="sm" variant="outline" onClick={() => setValue(1)}>
               Set 1
             </Button>
@@ -143,9 +143,9 @@ export const HorizontalTitleAndDescription: Story = {
         ].map((r, i, a) => (
           <StepperItem key={r.s} className="min-w-0 flex-1" step={r.s}>
             <StepperTrigger className="w-full min-w-0 max-w-sm flex-col items-stretch sm:flex-row sm:items-start">
-              <div className="flex shrink-0 items-start gap-2">
+              <div className="flex shrink-0 items-start gap-component">
                 <StepperIndicator />
-                <div className="min-w-0 space-y-1 text-left">
+                <div className="min-w-0 space-y-micro text-left">
                   <StepperTitle>{r.title}</StepperTitle>
                   <StepperDescription className="line-clamp-2 text-xs leading-[1.5]">{r.desc}</StepperDescription>
                 </div>
@@ -162,7 +162,7 @@ export const HorizontalTitleAndDescription: Story = {
 /** Read-heavy vertical rail (e.g. beside a form or `StepLayout` with `stepperPosition="start"`). */
 export const Vertical: Story = {
   render: () => (
-    <div className="flex w-full max-w-3xl flex-col gap-4 md:flex-row">
+    <div className="flex w-full max-w-3xl flex-col gap-section md:flex-row">
       <Stepper className="w-full max-w-full shrink-0 md:max-w-[12rem]" defaultValue={2} orientation="vertical">
         <StepperNav>
           {[
@@ -182,7 +182,7 @@ export const Vertical: Story = {
           ))}
         </StepperNav>
       </Stepper>
-      <p className="min-h-20 flex-1 rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
+      <p className="min-h-20 flex-1 rounded-xl border border-border bg-card p-section text-sm text-muted-foreground">
         Main content (form, `StepperContent`, or shell) sits beside the vertical stepper.
       </p>
     </div>
@@ -192,7 +192,7 @@ export const Vertical: Story = {
 /** Vertical: title + short description in the rail. */
 export const VerticalTitleAndDescription: Story = {
   render: () => (
-    <div className="flex w-full max-w-2xl flex-col gap-3 md:flex-row">
+    <div className="flex w-full max-w-2xl flex-col gap-component md:flex-row">
       <Stepper className="w-full max-w-full shrink-0 md:max-w-xs" defaultValue={2} orientation="vertical">
         <StepperNav>
           {[
@@ -201,10 +201,10 @@ export const VerticalTitleAndDescription: Story = {
             { s: 3, t: "Sign off", d: "Confirm" },
           ].map((r, i, a) => (
             <StepperItem key={r.s} className="w-full" step={r.s}>
-              <StepperTrigger className="w-full min-w-0 max-w-sm flex-col items-stretch !gap-2 !rounded-md py-0.5">
-                <div className="flex items-start gap-2">
+              <StepperTrigger className="w-full min-w-0 max-w-sm flex-col items-stretch !gap-component !rounded-md py-micro">
+                <div className="flex items-start gap-component">
                   <StepperIndicator>{r.s}</StepperIndicator>
-                  <div className="min-w-0 space-y-0.5 text-left">
+                  <div className="min-w-0 space-y-micro text-left">
                     <StepperTitle>{r.t}</StepperTitle>
                     <StepperDescription className="line-clamp-2 text-xs">{r.d}</StepperDescription>
                   </div>
@@ -215,7 +215,7 @@ export const VerticalTitleAndDescription: Story = {
           ))}
         </StepperNav>
       </Stepper>
-      <p className="min-h-24 flex-1 rounded-lg border border-dashed border-border p-3 text-xs text-muted-foreground">
+      <p className="min-h-24 flex-1 rounded-lg border border-dashed border-border p-section text-xs text-muted-foreground">
         Map 0-based flow state to this stepper with <code className="text-foreground">value = activeStep + 1</code> (or use
         `OnboardingStepper` in ui-lib).
       </p>
@@ -226,7 +226,7 @@ export const VerticalTitleAndDescription: Story = {
 /** All steps inert: display progress only. */
 export const AllStepsNonInteractive: Story = {
   render: () => (
-    <div className="w-full max-w-3xl space-y-2 text-xs text-muted-foreground">
+    <div className="w-full max-w-3xl space-y-component text-xs text-muted-foreground">
       <Stepper className="w-full" value={2}>
         <StepperNav>
           {[
@@ -245,9 +245,9 @@ export const AllStepsNonInteractive: Story = {
         </StepperNav>
       </Stepper>
       <p>
-        Controlled with <code className="rounded bg-muted px-1 py-0.5">value=2</code> and every
-        <code className="mx-0.5 rounded bg-muted px-1 py-0.5">StepperItem</code>
-        is <code className="rounded bg-muted px-1 py-0.5">disabled</code> (read-only rail).
+        Controlled with <code className="rounded bg-muted px-micro py-micro">value=2</code> and every
+        <code className="mx-micro rounded bg-muted px-micro py-micro">StepperItem</code>
+        is <code className="rounded bg-muted px-micro py-micro">disabled</code> (read-only rail).
       </p>
     </div>
   ),
@@ -263,7 +263,7 @@ const alert = <HugeiconsIcon icon={AlertCircleIcon} className="size-3.5 text-mut
 export const CustomIndicators: Story = {
   render: function CustomIndicatorsRender() {
     return (
-      <div className="w-full max-w-3xl space-y-2">
+      <div className="w-full max-w-3xl space-y-component">
         <p className="text-xs text-muted-foreground">Step 1 uses custom inactive/complete/active; step 2 is forced loading.</p>
         <Stepper
           className="w-full"
@@ -337,7 +337,7 @@ export const ItemPropsCompleted: Story = {
 /** `loading` on the **active** `StepperItem` shows the `indicators.loading` slot (or children fallback). */
 export const ItemPropsLoading: Story = {
   render: () => (
-    <div className="w-full max-w-sm space-y-1">
+    <div className="w-full max-w-sm space-y-micro">
       <p className="text-xs text-muted-foreground">Only the active step can be in a loading state.</p>
       <Stepper
         className="w-full"
@@ -359,7 +359,7 @@ export const ItemPropsLoading: Story = {
 
 export const ItemPropsDisabled: Story = {
   render: () => (
-    <div className="w-full max-w-3xl space-y-1">
+    <div className="w-full max-w-3xl space-y-micro">
       <p className="text-xs text-muted-foreground">Step 2 is disabled: click does not change value when active elsewhere.</p>
       <Stepper className="w-full" defaultValue={1} orientation="horizontal">
         <StepperNav>
@@ -411,7 +411,7 @@ export const IndicatorsOnly: Story = {
 /** `StepperPanel` + one `StepperContent` per step. */
 export const WithPanel: Story = {
   render: () => (
-    <div className="w-full max-w-2xl space-y-4">
+    <div className="w-full max-w-2xl space-y-section">
       <Stepper className="w-full" defaultValue={1}>
         <StepperNav>
           {[
@@ -428,7 +428,7 @@ export const WithPanel: Story = {
             </StepperItem>
           ))}
         </StepperNav>
-        <StepperPanel className="mt-4 rounded-lg border border-border bg-muted/20 p-4 text-sm text-foreground">
+        <StepperPanel className="mt-section rounded-lg border border-border bg-muted/20 p-section text-sm text-foreground">
           <StepperContent value={1}>Content for step 1. Switch step above.</StepperContent>
           <StepperContent value={2}>Content for step 2.</StepperContent>
           <StepperContent value={3}>Content for step 3.</StepperContent>
@@ -446,7 +446,7 @@ export const WithPanelForceMount: Story = {
   render: function ForceMount() {
     const [v, setV] = useState(1);
     return (
-      <div className="w-full max-w-2xl space-y-4">
+      <div className="w-full max-w-2xl space-y-section">
         <p className="text-xs text-muted-foreground">Both panels stay mounted; only one is visible.</p>
         <Stepper className="w-full" value={v} onValueChange={setV}>
           <StepperNav>
@@ -464,10 +464,10 @@ export const WithPanelForceMount: Story = {
               </StepperTrigger>
             </StepperItem>
           </StepperNav>
-          <StepperPanel className="mt-4 space-y-2 rounded-lg border p-3">
+          <StepperPanel className="mt-section space-y-component rounded-lg border p-section">
             <StepperContent value={1} forceMount>
               <input
-                className={cn("w-full rounded border border-border bg-background px-2 py-1 text-sm")}
+                className={cn("w-full rounded border border-border bg-background px-component py-micro text-sm")}
                 placeholder="Type here — value persists when switching…"
                 defaultValue=""
                 aria-label="Preserved field 1"
@@ -475,7 +475,7 @@ export const WithPanelForceMount: Story = {
             </StepperContent>
             <StepperContent value={2} forceMount>
               <input
-                className="w-full rounded border border-border bg-background px-2 py-1 text-sm"
+                className="w-full rounded border border-border bg-background px-component py-micro text-sm"
                 placeholder="Second form"
                 defaultValue=""
                 aria-label="Preserved field 2"

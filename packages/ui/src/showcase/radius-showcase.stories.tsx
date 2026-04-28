@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { ManagementAppShell } from "../../../ui-lib/src/management-interface/app-shell/ManagementAppShell";
+import { ManagementAppShell } from "@/components/app-shell";
 import type { Workspace, NavItem, NavGroup } from "@/components/app-sidebar";
 
 /* ---------------------------------------------------------------------------

@@ -1,13 +1,15 @@
-import * as React from 'react';
+"use client";
+
+import * as React from "react";
+
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 
-// State for dialog management
 export interface DialogState {
   isOpen: boolean;
   title?: string;
@@ -15,7 +17,7 @@ export interface DialogState {
   content?: React.ReactNode;
 }
 
-export interface DialogOptions extends Omit<DialogState, 'isOpen'> {
+export interface DialogOptions extends Omit<DialogState, "isOpen"> {
   onConfirm?: () => void;
 }
 
@@ -24,24 +26,26 @@ export interface DialogDispatch {
   closeDialog: () => void;
 }
 
-// Context for dialog state
 const DialogContext = React.createContext<DialogDispatch | undefined>(undefined);
 
 export interface DialogProviderProps {
   children: React.ReactNode;
 }
 
+/**
+ * Imperative wrapper around the {@link Dialog} primitive: lets descendants
+ * call `openDialog({ title, content })` from anywhere via {@link useDialog}
+ * instead of managing local state + JSX.
+ */
 export const DialogProvider = ({ children }: DialogProviderProps) => {
-  const [dialog, setDialog] = React.useState<DialogState>({
-    isOpen: false,
-  });
+  const [dialog, setDialog] = React.useState<DialogState>({ isOpen: false });
 
   const openDialog = React.useCallback((options: DialogOptions) => {
     setDialog({ ...options, isOpen: true });
   }, []);
 
   const closeDialog = React.useCallback(() => {
-    setDialog(prev => ({ ...prev, isOpen: false }));
+    setDialog((prev) => ({ ...prev, isOpen: false }));
   }, []);
 
   return (
@@ -49,7 +53,7 @@ export const DialogProvider = ({ children }: DialogProviderProps) => {
       {children}
       <Dialog
         open={dialog.isOpen}
-        onOpenChange={open => {
+        onOpenChange={(open) => {
           if (!open) closeDialog();
         }}
       >
@@ -57,7 +61,9 @@ export const DialogProvider = ({ children }: DialogProviderProps) => {
           {dialog.title && (
             <DialogHeader>
               <DialogTitle>{dialog.title}</DialogTitle>
-              {dialog.description && <DialogDescription>{dialog.description}</DialogDescription>}
+              {dialog.description && (
+                <DialogDescription>{dialog.description}</DialogDescription>
+              )}
             </DialogHeader>
           )}
           {dialog.content}
@@ -67,7 +73,4 @@ export const DialogProvider = ({ children }: DialogProviderProps) => {
   );
 };
 
-// Hook for using dialogs
-export const useDialog = () => {
-  return React.useContext(DialogContext);
-};
+export const useDialog = () => React.useContext(DialogContext);

@@ -6,7 +6,7 @@ import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui";
 import { useAutoElevate } from "@/hooks/use-auto-elevate";
 import { cn } from "@/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Tick01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { Tick02Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
 function DropdownMenu({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
   return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />;
@@ -104,7 +104,7 @@ function DropdownMenuCheckboxItem({
         data-slot="dropdown-menu-checkbox-item-indicator"
       >
         <DropdownMenuPrimitive.ItemIndicator>
-          <HugeiconsIcon icon={Tick01Icon} />
+          <HugeiconsIcon icon={Tick02Icon} />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}
@@ -141,7 +141,7 @@ function DropdownMenuRadioItem({
         data-slot="dropdown-menu-radio-item-indicator"
       >
         <DropdownMenuPrimitive.ItemIndicator>
-          <HugeiconsIcon icon={Tick01Icon} />
+          <HugeiconsIcon icon={Tick02Icon} />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}

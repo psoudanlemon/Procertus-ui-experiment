@@ -65,8 +65,8 @@ const variantClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
 };
 
 const headerClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
-  onboarding: "gap-2 pt-2",
-  wizard: "gap-1.5 py-1",
+  onboarding: "gap-micro pt-component",
+  wizard: "gap-micro py-micro",
 };
 
 const titleClass: Record<NonNullable<StepLayoutProps["variant"]>, string | undefined> = {
@@ -80,8 +80,8 @@ const descClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
 };
 
 const contentClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
-  onboarding: "space-y-4 pt-6",
-  wizard: "space-y-3 py-4 pt-4",
+  onboarding: "space-y-section pt-section",
+  wizard: "space-y-component py-component",
 };
 
 function StepLayoutHeaderBlock({
@@ -153,7 +153,7 @@ export function StepLayout({
         )}
       >
         {!rail && hasStepper ? (
-          <div className="w-full pb-2 not-empty:mb-0">{stepper}</div>
+          <div className="w-full pb-component not-empty:mb-0">{stepper}</div>
         ) : null}
         <StepLayoutHeaderBlock
           variant={variant}
@@ -173,9 +173,9 @@ export function StepLayout({
       </CardContent>
       <CardFooter
         className={cn(
-          "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between",
+          "flex flex-col gap-component sm:flex-row sm:items-center sm:justify-between",
           "min-h-11 sm:min-h-0",
-          variant === "wizard" ? "py-3" : "py-4",
+          variant === "wizard" ? "py-component" : "py-section",
           isFill && "shrink-0 bg-transparent",
         )}
       >
@@ -193,7 +193,7 @@ export function StepLayout({
             <span className="hidden sm:block sm:min-w-0" aria-hidden />
           )}
         </div>
-        <div className="flex w-full flex-wrap justify-end gap-2 sm:w-auto">
+        <div className="flex w-full flex-wrap justify-end gap-component sm:w-auto">
           {secondaryAction ? (
             <Button
               type="button"
@@ -231,7 +231,7 @@ export function StepLayout({
         <div
           className={cn(
             "shrink-0 border-border md:w-56 md:min-w-48 md:max-w-xs md:border-r",
-            isFill ? "border-b p-4 md:max-h-none md:overflow-y-auto" : "border-b p-4 md:overflow-y-auto",
+            isFill ? "border-b p-section md:max-h-none md:overflow-y-auto" : "border-b p-section md:overflow-y-auto",
             isParentFill && "min-h-0",
           )}
         >

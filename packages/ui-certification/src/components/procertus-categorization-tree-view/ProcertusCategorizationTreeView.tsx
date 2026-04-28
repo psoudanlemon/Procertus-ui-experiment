@@ -56,7 +56,7 @@ export type { CertificationLabelKey } from "../../types";
 
 function CertificationChipsRow({ certification }: { certification: Certification }) {
   return (
-    <div className="mt-1 flex flex-wrap gap-1">
+    <div className="mt-micro flex flex-wrap gap-micro">
       {CERTIFICATION_LABEL_ORDER.map((key) => {
         const v = getCertValue(certification, key);
         if (!hasCertifiableChip(v)) {
@@ -88,7 +88,7 @@ function ProductAttestationChipsRow({ attestations }: { attestations: ProductAtt
     return null;
   }
   return (
-    <div className="mt-2 flex flex-wrap gap-1 border-t border-border/30 pt-2">
+    <div className="mt-component flex flex-wrap gap-micro border-t border-border/30 pt-component">
       {items.map(({ key, label, v }) =>
         hasCertifiableChip(v) ? (
           <Badge key={key} variant={chipVariant(v)} className="font-normal">
@@ -115,23 +115,23 @@ function ProductRow({ node }: { node: TreeNode }) {
         <CollapsibleTrigger asChild>
           <button
             type="button"
-            className="flex w-full items-start justify-between gap-2 px-3 py-2 text-left text-sm transition hover:bg-muted/30"
+            className="flex w-full items-start justify-between gap-component px-component py-component text-left text-sm transition hover:bg-muted/30"
           >
             <div className="min-w-0 flex-1">
               <div className="font-medium text-foreground">{node.label}</div>
               {node.productTypeStreamLabel ? (
-                <div className="mt-0.5 text-xs text-muted-foreground">
+                <div className="mt-micro text-xs text-muted-foreground">
                   Product type{" "}
                   <span className="font-mono text-foreground">{node.productTypeStreamLabel}</span>
                 </div>
               ) : null}
               <CertificationChipsRow certification={certification} />
             </div>
-            <ChevronRight className="mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-90" />
+            <ChevronRight className="mt-micro size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-90" />
           </button>
         </CollapsibleTrigger>
-        <CollapsibleContent className="border-t border-border/40 px-3 py-2">
-          <p className="mb-2 text-[11px] leading-relaxed text-muted-foreground">
+        <CollapsibleContent className="border-t border-border/40 px-component py-component">
+          <p className="mb-component text-[11px] leading-relaxed text-muted-foreground">
             Symbolen: <span className="font-mono">/</span> = certificatie niet mogelijk;{" "}
             <span className="font-mono">-</span> = niet door ons;{" "}
             <span className="font-mono">(x)</span> = mogelijk later / via federatie; leeg = niet
@@ -139,7 +139,7 @@ function ProductRow({ node }: { node: TreeNode }) {
             <span className="font-mono">2+</span>) = certificeerbaar volgens bron.
           </p>
           <CertificationChipsRow certification={certification} />
-          <div className="mt-2 flex flex-col gap-1">
+          <div className="mt-component flex flex-col gap-micro">
             {CERTIFICATION_LABEL_ORDER.map((key) => {
               const v = getCertValue(certification, key);
               if (hasCertifiableChip(v)) {
@@ -191,13 +191,13 @@ function GroupBranch({
         <CollapsibleTrigger asChild>
           <button
             type="button"
-            className="flex w-full items-center justify-between gap-3 px-3 py-2.5 text-left transition hover:bg-muted/40"
+            className="flex w-full items-center justify-between gap-component px-component py-component text-left transition hover:bg-muted/40"
           >
             <span className="font-medium text-foreground">{node.label}</span>
             <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-90" />
           </button>
         </CollapsibleTrigger>
-        <CollapsibleContent className="border-t border-border/50 bg-muted/5 px-2 py-2">
+        <CollapsibleContent className="border-t border-border/50 bg-muted/5 p-component">
           <ProcertusTreeNodes
             nodes={node.children}
             openIds={openIds}
@@ -224,8 +224,8 @@ function ProcertusTreeNodes({
   return (
     <div
       className={cn(
-        "flex flex-col gap-1.5",
-        depth > 0 && "ml-1 border-l border-border/30 pl-2 sm:ml-2 sm:pl-3",
+        "flex flex-col gap-micro",
+        depth > 0 && "ml-micro border-l border-border/30 pl-component sm:ml-component sm:pl-component",
       )}
     >
       {nodes.map((node) =>
@@ -304,7 +304,7 @@ function buildEmbeddedCertificationListItems(
         out.push(
           <li key={node.id} className="text-sm">
             <span className="font-medium text-foreground">{node.label}</span>
-            <ol className="mt-1.5 list-decimal space-y-1.5 pl-5 text-sm marker:text-muted-foreground">
+            <ol className="mt-micro list-decimal space-y-micro pl-5 text-sm marker:text-muted-foreground">
               {inner}
             </ol>
           </li>,
@@ -351,7 +351,7 @@ function buildEmbeddedAttestationListItems(
         out.push(
           <li key={node.id} className="text-sm">
             <span className="font-medium text-foreground">{node.label}</span>
-            <ol className="mt-1.5 list-decimal space-y-1.5 pl-5 text-sm marker:text-muted-foreground">
+            <ol className="mt-micro list-decimal space-y-micro pl-5 text-sm marker:text-muted-foreground">
               {inner}
             </ol>
           </li>,
@@ -381,7 +381,7 @@ function EmbeddedCertificationNestedList({
   }
 
   return (
-    <ol className="list-outside list-decimal space-y-2 pl-5 text-sm marker:text-muted-foreground">
+    <ol className="list-outside list-decimal space-y-component pl-5 text-sm marker:text-muted-foreground">
       {items}
     </ol>
   );
@@ -408,7 +408,7 @@ function EmbeddedAttestationNestedList({
   }
 
   return (
-    <ol className="list-outside list-decimal space-y-2 pl-5 text-sm marker:text-muted-foreground">
+    <ol className="list-outside list-decimal space-y-component pl-5 text-sm marker:text-muted-foreground">
       {items}
     </ol>
   );
@@ -422,15 +422,15 @@ function EmbeddedCertificationDrilldown({
   flatProducts: ReturnType<typeof flattenProducts>;
 }) {
   return (
-    <div className="flex flex-col gap-2 px-3 py-3 sm:px-5 sm:py-4">
+    <div className="flex flex-col gap-component px-section py-section">
       <p className="text-xs leading-relaxed text-muted-foreground">
         Zelfde hiërarchie als de bron: geneste genummerde lijst per cluster. Bladproducten onder
         dezelfde ouder staan in één regel, komma-gescheiden; bij CE staat het niveau tussen haakjes
         per product. ATG, PROCERTUS-attest en EPD staan apart als productgebonden attestaties. Voor
-        paden en chips: open het zijpaneel — het hele paneel scrollt door tot het einde van de
+        paden en chips: open het zijpaneel, het hele paneel scrollt door tot het einde van de
         drilldown.
       </p>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-component">
         {CERTIFICATION_LABEL_ORDER.map((labelKey) => {
           const count = getCertifiableRowsForLabel(flatProducts, labelKey).length;
           const { short, description } = CERTIFICATION_LABEL_META[labelKey];
@@ -442,26 +442,26 @@ function EmbeddedCertificationDrilldown({
               <CollapsibleTrigger asChild>
                 <button
                   type="button"
-                  className="flex w-full items-center justify-between gap-3 px-3 py-2.5 text-left text-sm transition hover:bg-muted/40"
+                  className="flex w-full items-center justify-between gap-component px-component py-component text-left text-sm transition hover:bg-muted/40"
                 >
                   <div className="min-w-0">
                     <div className="font-medium text-foreground">{short}</div>
                     <div className="text-xs text-muted-foreground">{description}</div>
                   </div>
-                  <div className="flex shrink-0 items-center gap-2">
+                  <div className="flex shrink-0 items-center gap-component">
                     <span className="text-xs tabular-nums text-muted-foreground">{count}</span>
                     <ChevronRight className="size-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-90" />
                   </div>
                 </button>
               </CollapsibleTrigger>
-              <CollapsibleContent className="border-t border-border/50 px-3 py-2">
+              <CollapsibleContent className="border-t border-border/50 px-component py-component">
                 <EmbeddedCertificationNestedList clusters={clusters} selected={labelKey} />
               </CollapsibleContent>
             </Collapsible>
           );
         })}
       </div>
-      <div className="mt-2 flex flex-col gap-2">
+      <div className="mt-component flex flex-col gap-component">
         <div>
           <h3 className="text-sm font-medium text-foreground">Productgebonden attestaties</h3>
           <p className="text-xs text-muted-foreground">
@@ -480,19 +480,19 @@ function EmbeddedCertificationDrilldown({
               <CollapsibleTrigger asChild>
                 <button
                   type="button"
-                  className="flex w-full items-center justify-between gap-3 px-3 py-2.5 text-left text-sm transition hover:bg-muted/40"
+                  className="flex w-full items-center justify-between gap-component px-component py-component text-left text-sm transition hover:bg-muted/40"
                 >
                   <div className="min-w-0">
                     <div className="font-medium text-foreground">{short}</div>
                     <div className="text-xs text-muted-foreground">{description}</div>
                   </div>
-                  <div className="flex shrink-0 items-center gap-2">
+                  <div className="flex shrink-0 items-center gap-component">
                     <span className="text-xs tabular-nums text-muted-foreground">{count}</span>
                     <ChevronRight className="size-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-90" />
                   </div>
                 </button>
               </CollapsibleTrigger>
-              <CollapsibleContent className="border-t border-border/50 px-3 py-2">
+              <CollapsibleContent className="border-t border-border/50 px-component py-component">
                 <EmbeddedAttestationNestedList clusters={clusters} selected={attestationKey} />
               </CollapsibleContent>
             </Collapsible>
@@ -607,7 +607,7 @@ export function ProcertusCategorizationTreeView({
   );
 
   const toolbar = (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-wrap items-center gap-component">
       <Button
         type="button"
         variant="outline"
@@ -632,11 +632,11 @@ export function ProcertusCategorizationTreeView({
   const source = doc.meta.source.spreadsheetExport;
 
   return (
-    <div className={cn("not-prose flex flex-col gap-6", className)}>
+    <div className={cn("not-prose flex flex-col gap-region", className)}>
       <section className="overflow-hidden rounded-xl border border-border/60 bg-background">
-        <div className="flex flex-col gap-3 border-b border-border/60 px-5 py-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-          <div className="flex min-w-0 flex-col gap-1 text-sm text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5 text-foreground">
+        <div className="flex flex-col gap-component border-b border-border/60 px-section py-section sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex min-w-0 flex-col gap-micro text-sm text-muted-foreground">
+            <span className="inline-flex items-center gap-micro text-foreground">
               <FileJson2 className="size-4 shrink-0 text-primary" aria-hidden />
               <span className="font-medium">Data v{doc.meta.treeVersion}</span>
               <span className="text-muted-foreground">·</span>
@@ -654,7 +654,7 @@ export function ProcertusCategorizationTreeView({
             type="button"
             variant="outline"
             size="sm"
-            className="gap-1.5"
+            className="gap-micro"
             onClick={() => setSheetOpen(true)}
           >
             <PanelRightOpen className="size-4" aria-hidden />
@@ -666,8 +666,8 @@ export function ProcertusCategorizationTreeView({
       </section>
 
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetContent className="flex h-full max-h-dvh w-full flex-col gap-0 overflow-y-auto overscroll-y-contain border-l p-6 sm:max-w-3xl">
-          <SheetHeader className="space-y-1 p-0 text-left">
+        <SheetContent className="flex h-full max-h-dvh w-full flex-col gap-0 overflow-y-auto overscroll-y-contain border-l p-section sm:max-w-3xl">
+          <SheetHeader className="space-y-micro p-0 text-left">
             <SheetTitle className="pr-10 text-2xl leading-tight">{title}</SheetTitle>
             <SheetDescription>{sheetDescription}</SheetDescription>
           </SheetHeader>
@@ -675,7 +675,7 @@ export function ProcertusCategorizationTreeView({
           <Tabs
             value={sheetTab}
             onValueChange={(v) => setSheetTab(v as "tree" | "byLabel")}
-            className="mt-6 flex flex-col gap-4 pb-8"
+            className="mt-region flex flex-col gap-section pb-region"
           >
             <TabsList className="grid w-full max-w-md grid-cols-2">
               <TabsTrigger value="tree">Product hierarchy</TabsTrigger>
@@ -684,7 +684,7 @@ export function ProcertusCategorizationTreeView({
 
             <TabsContent
               value="tree"
-              className="mt-0 flex flex-col gap-4 focus-visible:outline-none"
+              className="mt-0 flex flex-col gap-section focus-visible:outline-none"
             >
               {toolbar}
               <div>{tree}</div>
@@ -692,9 +692,9 @@ export function ProcertusCategorizationTreeView({
 
             <TabsContent
               value="byLabel"
-              className="mt-0 flex flex-col gap-4 focus-visible:outline-none"
+              className="mt-0 flex flex-col gap-section focus-visible:outline-none"
             >
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-component">
                 {CERTIFICATION_LABEL_ORDER.map((key) => (
                   <Button
                     key={key}
@@ -716,7 +716,7 @@ export function ProcertusCategorizationTreeView({
                 zijn weggefilterd. Vouw clusters open voor detail (alle labels en attestaties per
                 product).
               </p>
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-component">
                 <Button
                   type="button"
                   variant="outline"

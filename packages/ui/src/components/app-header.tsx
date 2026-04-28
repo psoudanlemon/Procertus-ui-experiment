@@ -85,6 +85,8 @@ export type HeaderUserInfo = {
   email: string;
   role?: string;
   avatar?: string;
+  /** Override the computed initials shown when no avatar image is present. */
+  avatarFallback?: React.ReactNode;
 };
 
 export type AppHeaderProps = {
@@ -480,7 +482,9 @@ function AppHeader({
                 >
                   <Avatar className="size-8 after:border-0">
                     {user.avatar && <AvatarImage src={user.avatar} alt={user.name ?? user.email} />}
-                    <AvatarFallback className="bg-background">{initials}</AvatarFallback>
+                    <AvatarFallback className="bg-background">
+                      {user.avatarFallback ?? initials}
+                    </AvatarFallback>
                   </Avatar>
                 </Button>
                 <SheetContent
@@ -498,7 +502,7 @@ function AppHeader({
                         {user.avatar && (
                           <AvatarImage src={user.avatar} alt={user.name ?? user.email} />
                         )}
-                        <AvatarFallback>{initials}</AvatarFallback>
+                        <AvatarFallback>{user.avatarFallback ?? initials}</AvatarFallback>
                       </Avatar>
                       <div className="grid text-sm leading-tight">
                         <span className="truncate font-medium">{user.email}</span>
@@ -569,7 +573,9 @@ function AppHeader({
                       {user.avatar && (
                         <AvatarImage src={user.avatar} alt={user.name ?? user.email} />
                       )}
-                      <AvatarFallback className="bg-background">{initials}</AvatarFallback>
+                      <AvatarFallback className="bg-background">
+                      {user.avatarFallback ?? initials}
+                    </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>

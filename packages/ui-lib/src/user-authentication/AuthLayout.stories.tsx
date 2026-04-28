@@ -11,7 +11,7 @@ const panel = {
 };
 
 const meta = {
-  title: "Management interface/Authentication",
+  title: "Custom components/Authentication",
   component: AuthLayout,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

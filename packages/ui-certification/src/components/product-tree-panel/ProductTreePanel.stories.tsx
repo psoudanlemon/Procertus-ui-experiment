@@ -98,7 +98,7 @@ function WithTree() {
   );
 
   return (
-    <div className="max-w-5xl space-y-2">
+    <div className="max-w-5xl space-y-component">
       <ProductTreePanel
         title="Find your product"
         description="Reference fixture — 3 product rows under nested groups, including one unavailable row. Filter demo clears the tree on a long query (story-only)."

@@ -120,7 +120,7 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
-          "Management interface",
+          "Custom components",
           [
             "Application shell",
             "Authentication",

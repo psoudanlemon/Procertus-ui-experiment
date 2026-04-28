@@ -312,7 +312,7 @@ function StepperTrigger({ asChild = false, className, children, tabIndex, ...pro
       data-state={state}
       data-loading={isLoading}
       className={cn(
-        "inline-flex cursor-pointer items-center gap-2.5 rounded-full outline-none",
+        "inline-flex cursor-pointer items-center gap-micro rounded-full outline-none",
         "focus-visible:z-10 focus-visible:border-border focus-visible:ring-[3px] focus-visible:ring-ring/50",
         "disabled:pointer-events-none disabled:opacity-50",
         className
