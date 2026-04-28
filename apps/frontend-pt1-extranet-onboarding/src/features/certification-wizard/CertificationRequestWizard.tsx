@@ -599,7 +599,7 @@ function CertificationRequestWizardView({
           >
             <CardList
               items={sortDraftsByIntentAndProduct(model.draftsStep.drafts)}
-              widthClass="@sm:grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 @2xl:grid-cols-3"
+              widthClass="@min-[40rem]:grid-cols-1 @min-[60rem]:grid-cols-2 @min-[100rem]:grid-cols-3 @min-[150rem]:grid-cols-3"
             >
               {(draft) => (
                 <SelectChoiceCard

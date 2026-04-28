@@ -23,7 +23,8 @@ export function SnackbarContainer({
   align = 'center',
   className,
   snackbarClassName,
-  maxWidth = 'max-w-md',
+  // Pinned to legacy sewdn max-w-md (60rem) after globals.css revert.
+  maxWidth = 'max-w-[60rem]',
   maxVisible = 3,
   stackOffset = 12,
   stackScale = 0.95,

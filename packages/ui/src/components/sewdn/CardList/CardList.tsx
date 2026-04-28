@@ -29,11 +29,13 @@ export function CardList<T extends CardListItem>({
       <div
         className={cn(
           'grid w-full auto-rows-fr items-stretch gap-4',
-          '@xs:grid-cols-1',
-          '@sm:grid-cols-2',
-          '@md:grid-cols-3',
-          '@xl:grid-cols-4',
-          '@2xl:grid-cols-6',
+          // Pinned to the legacy sewdn container scale so sewdn breakpoints
+          // are not affected by the revert of --container-* in globals.css.
+          '@min-[20rem]:grid-cols-1',
+          '@min-[40rem]:grid-cols-2',
+          '@min-[60rem]:grid-cols-3',
+          '@min-[100rem]:grid-cols-4',
+          '@min-[150rem]:grid-cols-6',
           widthClass
         )}
       >

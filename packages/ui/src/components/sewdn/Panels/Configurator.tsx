@@ -48,7 +48,10 @@ export const DetailPanelsConfigurator: React.FC<ConfiguratorProps> = ({ config, 
   };
 
   return (
-    <div className="p-4 border rounded-lg bg-card text-card-foreground shadow-sm max-w-md mx-auto">
+    <div
+      // max-w pinned to legacy sewdn scale (60rem) after globals.css revert.
+      className="p-4 border rounded-lg bg-card text-card-foreground shadow-sm max-w-[60rem] mx-auto"
+    >
       <h3 className="text-lg font-semibold mb-4 text-center">Configure DetailPanels</h3>
 
       <ConfigItem label="Panel Width (px)" htmlFor="panelWidthSlider">
