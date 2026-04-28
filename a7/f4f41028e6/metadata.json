@@ -1,0 +1,42 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "a7f4f41028e6",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 7,
+  "files_touched": [
+    ".scaffold/metrics/scaffold-commands.jsonl",
+    ".scaffold/metrics/snapshots.jsonl",
+    "apps/frontend-pt1-extranet-onboarding/src/components/BrandGradientHero.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/reviewRequesterFromSession.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/requests/authenticatedRequestStore.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/CategorizationDemoPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/OrganizationPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/RequestCreationPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/RequestDetailPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/RequestEditPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/request_detail_panel.tsx",
+    "packages/ui-certification/src/components/request-package-review/COMPONENT.md",
+    "packages/ui-certification/src/components/request-package-review/RequestPackageReview.stories.tsx",
+    "packages/ui-certification/src/components/request-package-review/RequestPackageReview.tsx",
+    "packages/ui-certification/src/components/request-package-review/index.ts",
+    "packages/ui-certification/src/index.ts",
+    "packages/ui-lib/src/components/downloadable-documents-list/COMPONENT.md",
+    "packages/ui-lib/src/components/downloadable-documents-list/DownloadableDocumentsList.stories.tsx",
+    "packages/ui-lib/src/components/downloadable-documents-list/DownloadableDocumentsList.tsx",
+    "packages/ui-lib/src/components/downloadable-documents-list/index.ts",
+    "packages/ui-lib/src/index.ts",
+    "packages/ui/src/components/ui/card.tsx",
+    "packages/ui/src/index.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/a7/f4f41028e6/0/metadata.json",
+      "transcript": "/a7/f4f41028e6/0/full.jsonl",
+      "content_hash": "/a7/f4f41028e6/0/content_hash.txt",
+      "prompt": "/a7/f4f41028e6/0/prompt.txt"
+    }
+  ]
+}

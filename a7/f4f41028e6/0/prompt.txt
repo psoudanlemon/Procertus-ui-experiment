@@ -1,0 +1,63 @@
+For the code present, we get this error:
+```
+Module '"@procertus-ui/ui"' has no exported member 'TreeItem'.
+```
+Fix it, verify, and then give a concise explanation. @Procertus-ui-experiment/packages/ui-certification/src/components/product-tree-panel/ProductTreePanel.tsx:22-25
+
+---
+
+For the code present, we get this error:
+```
+Module '"@procertus-ui/ui"' has no exported member 'TreeItem'.
+```
+Fix it, verify, and then give a concise explanation. @Procertus-ui-experiment/packages/ui-certification/src/components/product-tree-panel/ProductTreePanel.tsx:22-25
+
+---
+
+For the code present, we get this error:
+```
+Module '"@procertus-ui/ui"' has no exported member 'TreeItem'.
+```
+Fix it, verify, and then give a concise explanation. @Procertus-ui-experiment/packages/ui-certification/src/components/product-tree-panel/ProductTreePanel.tsx:22-25
+
+---
+
+For the code present, we get this error:
+```
+Module '"@procertus-ui/ui"' has no exported member 'TreeItem'.
+```
+Fix it, verify, and then give a concise explanation. @Procertus-ui-experiment/packages/ui-certification/src/components/product-tree-panel/ProductTreePanel.tsx:22-25
+
+---
+
+In step four of the wizard, where we review all of the inquiries before submitting, we also want to list all of the relevant documents needed to understand the rulesets for the selected certifications or attestations.
+
+Please mock this by scaffolfind a new presentational UI component to list downloadable documents. Add this list item first to the UI library: "How to list downloadable documents," and then use this list item in a mocked list.
+
+---
+
+In step four of the wizard, where we review all of the inquiries before submitting, we also want to list all of the relevant documents needed to understand the rulesets for the selected certifications or attestations.
+
+Please mock this by scaffolfind a new presentational UI component to list downloadable documents. Add this list item first to the UI library: "How to list downloadable documents," and then use this list item in a mocked list.@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx
+
+---
+
+In step four of the wizard, where we review all of the inquiries before submitting, we also want to list all of the relevant documents needed to understand the rulesets for the selected certifications or attestations.
+
+Please mock this by scaffolfind a new presentational UI component to list downloadable documents. Add this list item first to the UI library: "How to list downloadable documents," and then use this list item in a mocked list.@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx
+
+---
+
+@Procertus-ui-experiment/packages/ui/src/components/ui/card.tsx:9-12 I want to add a CSS rule so every direct child item within a card item has at least a padding of B4.
+
+---
+
+@Procertus-ui-experiment/packages/ui/src/components/ui/card.tsx:9-12 I want to add a CSS rule so every direct child item within a card item has at least a padding of p-4.
+
+---
+
+@Procertus-ui-experiment/packages/ui/src/components/ui/card.tsx:9-12 I want to add a CSS rule so every direct child item within a card item has at least a padding of p-4.
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/components/request-package-review/RequestPackageReview.tsx since the request package is being created by the current user, we can also add context about the current user and the company related to them. This is crucial information for a request package.
