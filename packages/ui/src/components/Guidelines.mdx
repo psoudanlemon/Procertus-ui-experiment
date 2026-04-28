@@ -277,6 +277,40 @@ treatment declares which one immediately.
   </p>
 </div>
 
+### The composed-string exception
+
+<div className="mt-6 rounded-xl border-2 border-brand-primary-200 dark:border-brand-primary-800 bg-brand-primary-50 dark:bg-brand-primary-950 p-6">
+  <h4 className="font-sans text-base font-bold text-brand-primary-800 dark:text-brand-primary-200 m-0 mb-3">When frame fragments compose into a sentence, the whole string stays in sentence case.</h4>
+  <p className="text-base text-brand-primary-700 dark:text-brand-primary-300 leading-[1.6] m-0 mb-4">
+    The frame-vs-content rule assumes structural words sit on their own. Some
+    components, like filter pills, table conditions, or rule builders, fuse
+    field names, operators and values into a single readable phrase. Mixing
+    uppercase operators with sentence-case values would chop that phrase up
+    visually. In those cases the composition is read as one unit and the
+    entire string stays in sentence case, even though parts of it are
+    structurally chrome. The container itself (the pill, the badge, the
+    chip border) is the frame. The text inside is content.
+  </p>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="p-3 rounded-lg bg-card border border-border">
+      <span className="text-sm font-bold text-sys-success-600 dark:text-sys-success-400" style={{ display: 'block', marginBottom: '0.75rem' }}>Reads as one phrase</span>
+      <div className="inline-flex items-center gap-2 rounded-md bg-secondary px-3 py-1.5 text-sm font-medium text-secondary-foreground">
+        <span>Priority</span>
+        <span className="opacity-70">is any of</span>
+        <span>3 selected</span>
+      </div>
+    </div>
+    <div className="p-3 rounded-lg bg-card border border-border">
+      <span className="text-sm font-bold text-sys-destructive-600 dark:text-sys-destructive-400" style={{ display: 'block', marginBottom: '0.75rem' }}>Caps fracture the sentence</span>
+      <div className="inline-flex items-center gap-2 rounded-md bg-secondary px-3 py-1.5 text-sm font-medium text-secondary-foreground line-through decoration-sys-destructive-400/50">
+        <span>Priority</span>
+        <span className="uppercase" style={{ letterSpacing: '0.05em' }}>is any of</span>
+        <span>3 selected</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 ### The three-word threshold
 
 <div className="mt-8 rounded-xl border-2 border-sys-warning-300 dark:border-sys-warning-700 bg-sys-warning-50 dark:bg-sys-warning-950 p-6">
