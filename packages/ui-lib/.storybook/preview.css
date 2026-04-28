@@ -16,6 +16,19 @@ body,
 }
 
 /**
+ * `globals.css` (imported via `@procertus-ui/ui/globals.css`) locks `html`/`body`
+ * to `height:100%; overflow:hidden` so app shells can manage their own scroll
+ * containers. The Storybook docs page is a long, top-level scrollable document
+ * and needs that lock released whenever docs is the active view
+ * (`#storybook-docs` is populated, canvas isn't).
+ */
+html:has(#storybook-docs:not(:empty)),
+body:has(#storybook-docs:not(:empty)) {
+  overflow: auto;
+  height: auto;
+}
+
+/**
  * Docs tab: the Canvas block uses `getBlockBackgroundStyle` on `.sbdocs-preview` (Storybook theme),
  * not app tokens. Override only that shell so embedded stories match Mode + Theme. `!important`
  * beats emotion styles.

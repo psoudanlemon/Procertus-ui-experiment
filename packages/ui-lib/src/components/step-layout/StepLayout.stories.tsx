@@ -194,6 +194,10 @@ function WithStartStepperStory() {
 export const WithStartStepper = {
   parameters: {
     layout: "fullscreen",
+    docs: {
+      canvas: { layout: "fullscreen" },
+      story: { inline: false, iframeHeight: 700 },
+    },
   },
   render: () => <WithStartStepperStory />,
 } as unknown as StoryObj<typeof meta>;
@@ -309,6 +313,10 @@ function FillLayoutStory() {
 export const OnboardingStepFill = {
   parameters: {
     layout: "fullscreen",
+    docs: {
+      canvas: { layout: "fullscreen" },
+      story: { inline: false, iframeHeight: 700 },
+    },
   },
   render: () => <FillLayoutStory />,
 } as unknown as StoryObj<typeof meta>;
@@ -359,6 +367,10 @@ function ParentFillWithRailStory() {
 export const ParentFillWithStartStepper = {
   parameters: {
     layout: "fullscreen",
+    docs: {
+      canvas: { layout: "fullscreen" },
+      story: { inline: false, iframeHeight: 700 },
+    },
   },
   render: () => <ParentFillWithRailStory />,
 } as unknown as StoryObj<typeof meta>;

@@ -14,7 +14,13 @@ const meta = {
   title: "Custom components/Authentication",
   component: AuthLayout,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      canvas: { layout: "fullscreen" },
+      story: { inline: false, iframeHeight: 700 },
+    },
+  },
   args: { panel },
   decorators: [
     (Story) => (

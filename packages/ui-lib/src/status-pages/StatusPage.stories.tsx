@@ -12,7 +12,13 @@ const meta = {
   title: "Custom components/Status pages/Logged out",
   component: StatusPage,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      canvas: { layout: "fullscreen" },
+      story: { inline: false, iframeHeight: 700 },
+    },
+  },
   decorators: [
     (Story) => (
       <div data-density="operational" className="contents">
