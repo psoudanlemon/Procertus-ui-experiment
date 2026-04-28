@@ -26,26 +26,50 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const draftRequest: CertificationRequestCardProps = {
-  requestId: "draft-product-certification-001",
-  title: "BENOR voor prefab betonwand",
-  subtitle: "Beton > Prefab elementen > Wandpanelen",
+  requestId: "request-20260428091200",
+  status: "draft",
   statusLabel: "Concept",
-  approvalStatusLabel: "Nog niet ingediend",
-  typeLabel: "Productcertificatie",
-  productLabel: "Prefab betonwand",
-  valueLabel: "BENOR",
+  lifecycleDateLabels: {
+    draft: "28 apr",
+  },
+  inquiries: [
+    {
+      id: "inquiry-benor",
+      label: "BENOR-certificatie",
+      shortLabel: "BENOR",
+      productLabel: "Prefab betonwand",
+      productPath: "Beton > Prefab elementen > Wandpanelen",
+      value: "BENOR",
+    },
+    {
+      id: "inquiry-ce",
+      label: "CE-markering",
+      shortLabel: "CE",
+      productLabel: "Prefab betonwand",
+      value: "CE 2+",
+    },
+  ],
 };
 
 const submittedRequest: CertificationRequestCardProps = {
-  requestId: "submitted-product-certification-018",
-  title: "CE-markering voor dragend metselwerk",
-  subtitle: "Metselwerk > Dragende elementen",
-  statusLabel: "Ingediend",
+  requestId: "request-20260425133000",
+  status: "in-progress",
+  statusLabel: "In behandeling",
   statusVariant: "secondary",
-  approvalStatusLabel: "In behandeling",
-  typeLabel: "Productcertificatie",
-  productLabel: "Dragend metselwerk",
-  valueLabel: "CE 2+",
+  lifecycleDateLabels: {
+    draft: "25 apr",
+    submitted: "25 apr",
+    "in-progress": "26 apr",
+  },
+  inquiries: [
+    {
+      id: "inquiry-masonry-ce",
+      label: "CE-markering",
+      shortLabel: "CE",
+      productLabel: "Dragend metselwerk",
+      value: "CE 2+",
+    },
+  ],
 };
 
 function InteractiveCardStory(props: CertificationRequestCardProps) {
@@ -77,12 +101,48 @@ export const Submitted: Story = {
 export const WithoutProductOrValue: Story = {
   args: {
     requestId: "draft-context-003",
-    title: "Contextaanvraag voor innovatief attest",
-    subtitle: "Contextaanvraag",
+    status: "draft",
     statusLabel: "Concept",
-    approvalStatusLabel: "Nog aan te vullen",
-    typeLabel: "Innovatie-attest",
-    productLabel: "Niet-productgebonden",
+    lifecycleDateLabels: {
+      draft: "28 apr",
+    },
+    inquiries: [
+      {
+        id: "inquiry-context",
+        label: "Innovatie-attest",
+        shortLabel: "Innovatie",
+        context: "Technisch attest voor een innovatieve toepassing.",
+      },
+    ],
+  },
+  render: (args) => <InteractiveCardStory {...args} />,
+};
+
+export const Rejected: Story = {
+  args: {
+    ...submittedRequest,
+    requestId: "request-20260419090000",
+    status: "rejected",
+    statusLabel: "Geweigerd",
+    lifecycleDateLabels: {
+      draft: "19 apr",
+      submitted: "19 apr",
+      "in-progress": "20 apr",
+    },
+  },
+  render: (args) => <InteractiveCardStory {...args} />,
+};
+
+export const Cancelled: Story = {
+  args: {
+    ...draftRequest,
+    requestId: "request-20260421083000",
+    status: "cancelled",
+    statusLabel: "Geannuleerd",
+    lifecycleDateLabels: {
+      draft: "21 apr",
+      submitted: "21 apr",
+    },
   },
   render: (args) => <InteractiveCardStory {...args} />,
 };

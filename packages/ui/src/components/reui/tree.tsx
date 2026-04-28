@@ -1,12 +1,12 @@
 import {
-  ButtonHTMLAttributes,
   createContext,
-  CSSProperties,
   Fragment,
-  HTMLAttributes,
   useContext,
+  type ButtonHTMLAttributes,
+  type CSSProperties,
+  type HTMLAttributes,
 } from "react"
-import { ItemInstance } from "@headless-tree/core"
+import type { ItemInstance } from "@headless-tree/core"
 import { Slot } from "radix-ui"
 import {
   ArrowDown01Icon,

@@ -2,12 +2,10 @@ import { useMemo } from "react";
 
 import {
   CERTIFICATION_REQUEST_STEP_IDS,
-  PRODUCT_CERTIFICATION_ENTRY_IDS,
   type CertificationRequestDraft,
   type CertificationRequestIntentId,
 } from "./types";
 import {
-  getAvailableProductEntries,
   getCertificationOptionText,
   getCertificationProductAvailability,
   normalizeCertificationQuery,
@@ -56,6 +54,8 @@ export type CertificationWizardModel = {
     productTree: {
       nodes: ReturnType<typeof toCertificationProductTreeNodes>;
       expandedIds: string[];
+      expandAll: () => void;
+      collapseAll: () => void;
       onToggle: (groupId: string, open: boolean) => void;
       searchValue: string;
       onSearchChange: (value: string) => void;
@@ -77,7 +77,10 @@ export type CertificationWizardModel = {
     }>;
   };
   draftsStep: {
-    drafts: Array<{ id: string; title: string; subtitle?: string }>;
+    drafts: Array<CertificationRequestDraft & { title: string; subtitle?: string }>;
+    includedDraftIds: string[];
+    onIncludedDraftIdsChange: (ids: string[]) => void;
+    onAddAnother: () => void;
     onEdit: (id: string) => void;
     onRemove: (id: string) => void;
   };
@@ -97,12 +100,12 @@ export function useCertificationRequestWizardModel({
     mode,
     clusters,
     availableEntries,
-    productIndex,
     activeStep,
     intent,
     setIntent,
     expandedIds,
     setExpandedIds,
+    groupIds,
     searchValue,
     setSearchValue,
     hideUnavailableProducts,
@@ -114,6 +117,8 @@ export function useCertificationRequestWizardModel({
     requestText,
     setRequestText,
     drafts,
+    includedDraftIds,
+    setIncludedDraftIds,
     selectedProduct,
     selectedIntentLabel,
     productRequired,
@@ -149,7 +154,7 @@ export function useCertificationRequestWizardModel({
     {
       id: CERTIFICATION_REQUEST_STEP_IDS[2],
       title: "Drafts",
-      description: drafts.length === 1 ? "1 conceptaanvraag" : `${drafts.length} conceptaanvragen`,
+      description: includedDraftIds.length === 1 ? "1 conceptaanvraag" : `${includedDraftIds.length} conceptaanvragen`,
       available: canOpenDrafts,
     },
     {
@@ -194,6 +199,7 @@ export function useCertificationRequestWizardModel({
   );
 
   const draftItems = drafts.map((draft) => ({
+    ...draft,
     id: draft.id,
     title: draft.productLabel ? `${draft.label} voor ${draft.productLabel}` : draft.label,
     subtitle: draft.productPath ?? "Niet-productgebonden aanvraag",
@@ -206,10 +212,12 @@ export function useCertificationRequestWizardModel({
       label: "Context",
       value: mode === "onboarding" ? "Anonieme onboarding" : "Aangemelde aanvraag",
     },
-    ...drafts.map((draft, index) => ({
+    ...drafts.filter((draft) => includedDraftIds.includes(draft.id)).map((draft, index) => ({
       id: draft.id,
       label: `Aanvraag ${index + 1}`,
-      value: draft.productLabel ? `${draft.label} · ${draft.productLabel}` : draft.label,
+      value: draft.context
+        ? `${draft.label} · ${draft.context}`
+        : draft.productLabel ? `${draft.label} · ${draft.productLabel}` : draft.label,
     })),
   ];
 
@@ -225,7 +233,7 @@ export function useCertificationRequestWizardModel({
       replaceDraftsFromDetails();
     }
     if (activeStep === steps.length - 1) {
-      onComplete(drafts);
+      onComplete(drafts.filter((draft) => includedDraftIds.includes(draft.id)));
       return;
     }
     goToStep(activeStep + 1);
@@ -234,7 +242,7 @@ export function useCertificationRequestWizardModel({
   const primaryDisabled =
     (activeStep === 0 && !intent) ||
     (activeStep === 1 && !canContinueDetails) ||
-    (activeStep >= 2 && drafts.length === 0);
+    (activeStep >= 2 && includedDraftIds.length === 0);
 
   return {
     activeStep,
@@ -252,7 +260,9 @@ export function useCertificationRequestWizardModel({
               : "Aanvraagpakket controleren",
       description:
         activeStep === 0
-          ? "We starten met de inhoudelijke aanvraag. Account- en organisatieactivatie komen pas nadat je zeker bent dat je dit pakket wilt indienen."
+          ? mode === "onboarding"
+            ? "We starten met de inhoudelijke aanvraag. Account- en organisatieactivatie komen pas nadat je zeker bent dat je dit pakket wilt indienen."
+            : "Start een nieuwe aanvraag door te kiezen welk certificaat, attest of document je nodig hebt."
           : activeStep === 1
             ? productRequired
               ? "Alle productcategorieën blijven zichtbaar. Gebruik de filter om producttypes zonder match voor de gekozen intentie tijdelijk te verbergen."
@@ -267,12 +277,9 @@ export function useCertificationRequestWizardModel({
           : onCancel
             ? { label: "Annuleren", onClick: onCancel }
             : undefined,
-      secondaryAction:
-        activeStep === 2
-          ? { label: "Nog een aanvraag toevoegen", onClick: resetSelectionForNewRequest }
-          : undefined,
+      secondaryAction: undefined,
       primaryAction: {
-        label: activeStep === steps.length - 1 ? "Gebruik dit pakket" : "Verder",
+        label: activeStep === steps.length - 1 ? "Aanvraagpakket indienen" : "Verder",
         onClick: goNext,
         disabled: primaryDisabled,
       },
@@ -295,6 +302,8 @@ export function useCertificationRequestWizardModel({
       productTree: {
         nodes: productTreeNodes,
         expandedIds,
+      expandAll: () => setExpandedIds([...groupIds]),
+      collapseAll: () => setExpandedIds([]),
         onToggle: (groupId, open) => {
           setExpandedIds((prev) => {
             const set = new Set(prev);
@@ -309,13 +318,7 @@ export function useCertificationRequestWizardModel({
         onHideUnavailableProductsChange: setHideUnavailableProducts,
         onSelectProduct: (product) => {
           setSelectedProductId(product.id);
-          const selected = productIndex.get(product.id);
-          const available = getAvailableProductEntries(selected?.node, availableEntries);
-          const preferred =
-            intent === "product-certification"
-              ? available.filter(({ entry }) => PRODUCT_CERTIFICATION_ENTRY_IDS.has(entry.id))
-              : available.filter(({ entry }) => entry.id === intent);
-          setSelectedEntryIds(preferred.map(({ entry }) => entry.id));
+          setSelectedEntryIds([]);
         },
       },
       selectedProduct: selectedProduct
@@ -330,12 +333,15 @@ export function useCertificationRequestWizardModel({
     },
     draftsStep: {
       drafts: draftItems,
+      includedDraftIds,
+      onIncludedDraftIdsChange: setIncludedDraftIds,
+      onAddAnother: resetSelectionForNewRequest,
       onEdit: editDraft,
       onRemove: removeDraft,
     },
     reviewStep: {
       rows: reviewRows,
-      draftCount: drafts.length,
+      draftCount: includedDraftIds.length,
     },
   };
 }

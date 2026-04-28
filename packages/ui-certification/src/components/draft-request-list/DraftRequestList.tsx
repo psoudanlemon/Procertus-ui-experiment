@@ -43,6 +43,8 @@ export type DraftRequestListProps = {
   /** Edit / remove button labels. */
   editLabel?: string;
   removeLabel?: string;
+  showEdit?: boolean;
+  showRemove?: boolean;
 };
 
 export function DraftRequestList({
@@ -56,6 +58,8 @@ export function DraftRequestList({
   emptyDescription = "Add product types from the previous step, or return to the drilldown to add more.",
   editLabel = "Edit",
   removeLabel = "Remove",
+  showEdit = true,
+  showRemove = true,
 }: DraftRequestListProps) {
   return (
     <Card className={cn("w-full max-w-3xl overflow-hidden", className)}>
@@ -81,23 +85,29 @@ export function DraftRequestList({
                     {d.subtitle ? <p className="text-sm text-muted-foreground">{d.subtitle}</p> : null}
                     {d.details ? <div className="mt-component min-w-0">{d.details}</div> : null}
                   </div>
-                  <div className="flex shrink-0 flex-wrap justify-end gap-component">
-                    <Button type="button" size="sm" variant="outline" onClick={() => onEdit(d.id)} aria-label={`${editLabel}: ${d.title}`}>
-                      <HugeiconsIcon icon={PencilEdit02Icon} className="size-4" strokeWidth={1.5} />
-                      {editLabel}
-                    </Button>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="secondary"
-                      onClick={() => onRemove(d.id)}
-                      className="text-destructive-foreground hover:text-destructive-foreground"
-                      aria-label={`${removeLabel}: ${d.title}`}
-                    >
-                      <HugeiconsIcon icon={Delete02Icon} className="size-4" strokeWidth={1.5} />
-                      {removeLabel}
-                    </Button>
-                  </div>
+                  {showEdit || showRemove ? (
+                    <div className="flex shrink-0 flex-wrap justify-end gap-component">
+                      {showEdit ? (
+                        <Button type="button" size="sm" variant="outline" onClick={() => onEdit(d.id)} aria-label={`${editLabel}: ${d.title}`}>
+                          <HugeiconsIcon icon={PencilEdit02Icon} className="size-4" strokeWidth={1.5} />
+                          {editLabel}
+                        </Button>
+                      ) : null}
+                      {showRemove ? (
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => onRemove(d.id)}
+                          className="text-destructive-foreground hover:text-destructive-foreground"
+                          aria-label={`${removeLabel}: ${d.title}`}
+                        >
+                          <HugeiconsIcon icon={Delete02Icon} className="size-4" strokeWidth={1.5} />
+                          {removeLabel}
+                        </Button>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </div>
               </li>
             ))}

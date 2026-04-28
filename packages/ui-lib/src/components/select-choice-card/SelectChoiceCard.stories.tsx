@@ -129,6 +129,58 @@ function MultipleWithHookStory() {
   );
 }
 
+function SmallMultipleWithHookStory() {
+  const choice = useChoiceSelection({ mode: "multiple", defaultSelectedIds: ["benor", "epd"] });
+  const options = [
+    {
+      id: "ce",
+      title: "CE-markering",
+      description: "Productgebonden conformiteitsmarkering voor het traject dat de uitvoerder volgt.",
+    },
+    {
+      id: "benor",
+      title: "BENOR-certificatie",
+      description: "BENOR-beschikbaarheid voor deze productgroep.",
+    },
+    {
+      id: "epd",
+      title: "Environmental Product Declaration",
+      description: "Milieuproductverklaring die samen met andere aanvragen kan worden toegevoegd.",
+    },
+  ];
+
+  return (
+    <div className="w-full max-w-2xl space-y-component">
+      <SelectChoiceCardGroup
+        selectionMode="multiple"
+        legend="Small multi-select cards"
+        hint="Default-size cards for dense option lists. Multiple choices can be active at once."
+      >
+        {options.map((option) => (
+          <SelectChoiceCard
+            key={option.id}
+            selectionMode="multiple"
+            value={option.id}
+            controlId={`small-multi-${option.id}`}
+            name="small-multi"
+            title={option.title}
+            description={option.description}
+            checked={choice.isSelected(option.id)}
+            onCheckedChange={(checked) => choice.setIncluded(option.id, checked)}
+          />
+        ))}
+      </SelectChoiceCardGroup>
+      <p className="text-sm text-muted-foreground" role="status">
+        selectedIds: [{choice.selectedIds.join(", ") || " "}]
+      </p>
+    </div>
+  );
+}
+
+export const SmallCardsMultipleWithHook = {
+  render: () => <SmallMultipleWithHookStory />,
+} as unknown as StoryObj<typeof meta>;
+
 export const HeroMultipleWithHook = {
   render: () => <MultipleWithHookStory />,
 } as unknown as StoryObj<typeof meta>;

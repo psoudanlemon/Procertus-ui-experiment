@@ -1,11 +1,10 @@
 /**
- * Collapsible **group / product** tree for Procertus decision-tree drilldown (not Q2B as
- * the operational taxonomy). Parent holds expansion state; this component is presentational
- * only — no `fetch` or client-side graph resolution.
+ * Product tree for Procertus decision-tree drilldown. Parent holds expansion state;
+ * this component is presentational only — no `fetch` or client-side graph resolution.
  */
-import { ArrowRight01Icon, Search01Icon } from "@hugeicons/core-free-icons";
+import { Search01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import type { ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 import {
   Badge,
@@ -15,14 +14,14 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
   Empty,
   EmptyDescription,
   EmptyIcon,
   EmptyTitle,
   Input,
+  Tree,
+  TreeItem,
+  TreeItemLabel,
   cn,
 } from "@procertus-ui/ui";
 
@@ -62,7 +61,10 @@ function SearchInput({
 }) {
   return (
     <div className="relative max-w-md flex-1">
-      <div className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground" aria-hidden>
+      <div
+        className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground"
+        aria-hidden
+      >
         <HugeiconsIcon icon={Search01Icon} className="size-4" strokeWidth={1.5} />
       </div>
       <Input
@@ -77,117 +79,149 @@ function SearchInput({
 }
 
 type TreeItemProps = {
-  node: ProductTreeNode;
-  depth: number;
-  maxDepth: number;
-  expandedIds: ReadonlySet<string>;
-  onToggle: (id: string, open: boolean) => void;
-  onSelectProduct: (product: ProductTreeProductNode) => void;
+  item: ProductTreeItemInstance;
 };
 
-function TreeItem({ node, depth, maxDepth, expandedIds, onToggle, onSelectProduct }: TreeItemProps) {
-  const indentLevel = Math.min(depth, maxDepth);
-  const indentStyle = { paddingLeft: `calc(${indentLevel} * var(--spacing-section))` };
-  if (node.kind === "product") {
-    const selectable = node.selectable !== false;
+type ProductTreeItemInstance = {
+  id: string;
+  node: ProductTreeNode;
+  level: number;
+  getId: () => string;
+  getItemName: () => string;
+  getItemMeta: () => { level: number };
+  getProps: () => ButtonHTMLAttributes<HTMLButtonElement> & { "data-disabled"?: string };
+  isExpanded: () => boolean;
+  isFocused: () => boolean;
+  isFolder: () => boolean;
+  isSelected: () => boolean;
+  isDragTarget: () => boolean;
+  isMatchingSearch: () => boolean;
+};
+
+function buildTreeItems({
+  expandedIds,
+  level = 0,
+  nodes,
+  onSelectProduct,
+  onToggle,
+}: {
+  expandedIds: ReadonlySet<string>;
+  level?: number;
+  nodes: readonly ProductTreeNode[];
+  onSelectProduct: (product: ProductTreeProductNode) => void;
+  onToggle: (id: string, open: boolean) => void;
+}): ProductTreeItemInstance[] {
+  return nodes.flatMap((node) => {
+    const isGroup = node.kind === "group";
+    const expanded = isGroup && expandedIds.has(node.id);
+    const selectable = node.kind === "product" ? node.selectable !== false : true;
+    const item: ProductTreeItemInstance = {
+      id: node.id,
+      node,
+      level,
+      getId: () => node.id,
+      getItemName: () => node.label,
+      getItemMeta: () => ({ level }),
+      getProps: () => ({
+        type: "button",
+        "aria-disabled": node.kind === "product" && !selectable ? true : undefined,
+        onClick: () => {
+          if (node.kind === "group") {
+            onToggle(node.id, !expanded);
+            return;
+          }
+          if (selectable) {
+            onSelectProduct(node);
+          }
+        },
+      }),
+      isExpanded: () => expanded,
+      isFocused: () => false,
+      isFolder: () => isGroup,
+      isSelected: () => node.kind === "product" && Boolean(node.selected),
+      isDragTarget: () => false,
+      isMatchingSearch: () => false,
+    };
+
+    if (!isGroup || !expanded) return [item];
+    return [
+      item,
+      ...buildTreeItems({
+        expandedIds,
+        level: level + 1,
+        nodes: node.children,
+        onSelectProduct,
+        onToggle,
+      }),
+    ];
+  });
+}
+
+function ProductTreeItemLabel({ item }: TreeItemProps) {
+  const node = item.node;
+
+  if (node.kind === "group") {
     return (
-      <div style={indentStyle} className="min-w-0">
-        <Button
-          type="button"
-          variant="ghost"
-          className={cn(
-            "h-auto w-full min-w-0 flex-col items-stretch justify-start gap-micro rounded-md border px-component py-component text-left transition",
-            node.selected
-              ? "border-primary/60 bg-primary/5 hover:border-primary/70 hover:bg-primary/10"
-              : "border-transparent hover:border-border/60 hover:bg-muted/30",
-            !selectable && "cursor-not-allowed border-border/50 bg-muted/10 opacity-100 hover:bg-muted/10",
-          )}
-          disabled={!selectable}
-          aria-disabled={!selectable}
-          onClick={() => {
-            if (selectable) {
-              onSelectProduct(node);
-            }
-          }}
-        >
-          <span className="flex w-full min-w-0 flex-wrap items-start gap-component">
-            <span className="min-w-0 flex-1 wrap-break-word font-medium text-foreground">{node.label}</span>
-            {node.statusLabel ? (
-              <Badge
-                variant={selectable ? "secondary" : "outline"}
-                className="shrink-0 whitespace-normal text-left font-normal"
-              >
-                {node.statusLabel}
-              </Badge>
-            ) : null}
-          </span>
-          {node.productTypeId ? (
-            <span className="text-xs text-muted-foreground">Product type id: {node.productTypeId}</span>
-          ) : null}
-          {node.description ? <span className="text-xs text-muted-foreground">{node.description}</span> : null}
-          {!selectable && node.unavailableReason ? (
-            <span className="text-xs font-medium text-muted-foreground">{node.unavailableReason}</span>
-          ) : null}
-        </Button>
-      </div>
-    );
-  }
-  const open = expandedIds.has(node.id);
-  if (!node.children.length) {
-    return (
-      <div style={indentStyle} className="min-w-0 text-sm text-muted-foreground">
-        {node.label} (empty)
-      </div>
-    );
-  }
-  return (
-    <div style={indentStyle} className="min-w-0">
-      <Collapsible
-        open={open}
-        onOpenChange={(o) => {
-          onToggle(node.id, o);
-        }}
-        className="group"
+      <TreeItemLabel
+        className={cn(
+          "relative cursor-pointer bg-card before:absolute before:inset-x-0 before:-inset-y-0.5 before:-z-10 before:bg-card hover:bg-accent hover:text-accent-foreground in-data-[selected=true]:bg-muted/40",
+          "py-component text-sm font-semibold text-foreground",
+        )}
       >
-        <div
-          className={cn(
-            "overflow-hidden rounded-md border border-border/50 bg-muted/5",
-            depth > 0 && "border-border/30",
-          )}
-        >
-          <CollapsibleTrigger asChild>
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-auto w-full min-w-0 items-start justify-between gap-component rounded-none px-component py-component text-left font-medium hover:bg-muted/30"
+        <span className="min-w-0 wrap-break-word">{node.label}</span>
+        {node.children.length === 0 ? (
+          <span className="ml-auto text-xs font-normal text-muted-foreground">Leeg</span>
+        ) : null}
+      </TreeItemLabel>
+    );
+  }
+
+  const selectable = node.selectable !== false;
+  const selected = Boolean(node.selected);
+
+  return (
+    <TreeItemLabel
+      className={cn(
+        "relative cursor-pointer items-start bg-card before:absolute before:inset-x-0 before:-inset-y-0.5 before:-z-10 before:bg-card hover:bg-accent hover:text-accent-foreground in-data-[selected=true]:text-foreground",
+        selected &&
+          "border-l-4 border-l-accent-foreground bg-accent/40 pl-[calc(var(--spacing-component)-4px)] hover:bg-accent/50",
+        "py-component text-left transition-[background-color,border-color,color]",
+      )}
+    >
+      <span className="flex min-w-0 flex-1 flex-col gap-micro">
+        <span className="flex min-w-0 flex-wrap items-start gap-component">
+          <span
+            className={cn(
+              "min-w-0 flex-1 wrap-break-word text-sm",
+              selectable ? "font-medium text-foreground" : "font-normal text-muted-foreground",
+            )}
+          >
+            {node.label}
+          </span>
+          {node.statusLabel ? (
+            <Badge
+              variant={selectable ? "secondary" : "outline"}
+              className="shrink-0 whitespace-normal text-left font-normal"
             >
-              <span className="min-w-0 wrap-break-word">{node.label}</span>
-              <HugeiconsIcon
-                icon={ArrowRight01Icon}
-                className="mt-micro size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-90"
-                strokeWidth={1.5}
-                aria-hidden
-              />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <div className="flex flex-col gap-micro border-t border-border/30 p-micro">
-              {node.children.map((c) => (
-                <TreeItem
-                  key={c.id}
-                  node={c}
-                  depth={depth + 1}
-                  maxDepth={maxDepth}
-                  expandedIds={expandedIds}
-                  onToggle={onToggle}
-                  onSelectProduct={onSelectProduct}
-                />
-              ))}
-            </div>
-          </CollapsibleContent>
-        </div>
-      </Collapsible>
-    </div>
+              {node.statusLabel}
+            </Badge>
+          ) : null}
+        </span>
+        {node.productTypeId ? (
+          <span className="text-xs text-muted-foreground">
+            Product type id: {node.productTypeId}
+          </span>
+        ) : null}
+        {node.description ? (
+          <span className="text-xs leading-snug text-muted-foreground">{node.description}</span>
+        ) : null}
+        {!selectable && node.unavailableReason ? (
+          <span className="text-xs leading-snug text-muted-foreground">
+            {node.unavailableReason}
+          </span>
+        ) : null}
+      </span>
+    </TreeItemLabel>
   );
 }
 
@@ -204,12 +238,12 @@ export type ProductTreePanelProps = {
   nodes: ProductTreeNode[];
   /** Ids of **group** nodes that are expanded. */
   expandedIds: readonly string[];
+  onCollapseAll?: () => void;
+  onExpandAll?: () => void;
   onToggle: (groupId: string, open: boolean) => void;
   onSelectProduct: (product: ProductTreeProductNode) => void;
   /** `Empty` is shown when `nodes` is empty. Override for custom copy. */
   emptyState?: ReactNode;
-  /** Stops runaway margin at deep nesting. @default 8 */
-  maxDepth?: number;
 };
 
 export function ProductTreePanel({
@@ -223,12 +257,24 @@ export function ProductTreePanel({
   actions,
   nodes,
   expandedIds: expanded,
+  onCollapseAll,
+  onExpandAll,
   onToggle,
   onSelectProduct,
   emptyState,
-  maxDepth = 8,
 }: ProductTreePanelProps) {
   const set = new Set(expanded);
+  const items = buildTreeItems({
+    expandedIds: set,
+    nodes,
+    onSelectProduct,
+    onToggle,
+  });
+  const tree = {
+    getContainerProps: () => ({ role: "tree" }),
+    getItems: () => items,
+  };
+
   return (
     <Card className={cn("mx-auto w-full max-w-5xl overflow-hidden", className)}>
       <CardHeader className="gap-section">
@@ -243,10 +289,34 @@ export function ProductTreePanel({
               onChange={onSearchChange}
               placeholder={searchPlaceholder}
             />
-            {actions ? <div className="flex shrink-0 flex-wrap gap-component">{actions}</div> : null}
+            <div className="flex shrink-0 flex-wrap gap-micro">
+              {onCollapseAll ? (
+                <Button type="button" variant="outline" size="sm" onClick={onCollapseAll}>
+                  Collapse All
+                </Button>
+              ) : null}
+              {onExpandAll ? (
+                <Button type="button" variant="outline" size="sm" onClick={onExpandAll}>
+                  Expand All
+                </Button>
+              ) : null}
+              {actions}
+            </div>
           </div>
         ) : actions ? (
-          <div className="flex flex-wrap justify-end gap-component">{actions}</div>
+          <div className="flex flex-wrap justify-end gap-micro">
+            {onCollapseAll ? (
+              <Button type="button" variant="outline" size="sm" onClick={onCollapseAll}>
+                Collapse All
+              </Button>
+            ) : null}
+            {onExpandAll ? (
+              <Button type="button" variant="outline" size="sm" onClick={onExpandAll}>
+                Expand All
+              </Button>
+            ) : null}
+            {actions}
+          </div>
         ) : null}
       </CardHeader>
       <CardContent className="space-y-component px-section pb-section">
@@ -255,23 +325,23 @@ export function ProductTreePanel({
             <Empty>
               <EmptyIcon />
               <EmptyTitle>No product nodes</EmptyTitle>
-              <EmptyDescription>Adjust filters or start from another cluster (story / demo)</EmptyDescription>
+              <EmptyDescription>
+                Adjust filters or start from another cluster (story / demo)
+              </EmptyDescription>
             </Empty>
           ))
         ) : (
-          <div className="flex flex-col gap-component">
-            {nodes.map((n) => (
-              <TreeItem
-                key={n.id}
-                node={n}
-                depth={0}
-                maxDepth={maxDepth}
-                expandedIds={set}
-                onToggle={onToggle}
-                onSelectProduct={onSelectProduct}
-              />
+          <Tree
+            tree={tree}
+            indent={24}
+            className="relative min-w-0 before:absolute before:inset-0 before:-ms-1.25 before:bg-[repeating-linear-gradient(to_right,transparent_0,transparent_calc(var(--tree-indent)-1px),var(--border)_calc(var(--tree-indent)-1px),var(--border)_calc(var(--tree-indent)))]"
+          >
+            {items.map((item) => (
+              <TreeItem key={item.id} item={item as never} className="relative">
+                <ProductTreeItemLabel item={item} />
+              </TreeItem>
             ))}
-          </div>
+          </Tree>
         )}
       </CardContent>
     </Card>

@@ -18,88 +18,88 @@
   --brand-primary-400: oklch(0.6874 0.0812 213.45);
   --brand-primary-500: oklch(0.6063 0.0982 218.34);
   --brand-primary-600: oklch(0.5415 0.1026 222.71);
-  --brand-primary-700: oklch(0.4770 0.1022 226.54); /* Logo Anchor */
+  --brand-primary-700: oklch(0.477 0.1022 226.54); /* Logo Anchor */
   --brand-primary-800: oklch(0.4177 0.0865 228.43);
   --brand-primary-900: oklch(0.3717 0.0725 230.88);
   --brand-primary-950: oklch(0.2824 0.0555 233.12);
 
   /* Accent (Teal scale — OKLCH from brand-specified HEX) */
-  --brand-accent-50: oklch(0.9811 0.0120 170.52);
-  --brand-accent-100: oklch(0.9590 0.0206 170.33);
+  --brand-accent-50: oklch(0.9811 0.012 170.52);
+  --brand-accent-100: oklch(0.959 0.0206 170.33);
   --brand-accent-200: oklch(0.9154 0.0347 170.12);
   --brand-accent-300: oklch(0.8032 0.0727 172.88); /* Logo Anchor */
   --brand-accent-400: oklch(0.7337 0.0748 172.14);
   --brand-accent-500: oklch(0.6327 0.0704 172.07);
-  --brand-accent-600: oklch(0.5518 0.0617 172.90);
+  --brand-accent-600: oklch(0.5518 0.0617 172.9);
   --brand-accent-700: oklch(0.4808 0.0536 173.07);
-  --brand-accent-800: oklch(0.4139 0.0450 173.56);
+  --brand-accent-800: oklch(0.4139 0.045 173.56);
   --brand-accent-900: oklch(0.3573 0.0376 173.56);
   --brand-accent-950: oklch(0.2439 0.0234 174.47);
 
   /* Neutrals (Midnight — navy-tinted, hue 230 matching brand primary) */
-  --neutral-white: oklch(1.0000 0 none);
-  --neutral-25: oklch(0.9930 0.004 230);
-  --neutral-50: oklch(0.9850 0.008 230);
-  --neutral-100: oklch(0.9670 0.010 230);
-  --neutral-200: oklch(0.9200 0.013 230);
-  --neutral-300: oklch(0.8700 0.015 230);
-  --neutral-400: oklch(0.7050 0.015 230);
-  --neutral-500: oklch(0.5530 0.016 230);
-  --neutral-600: oklch(0.4420 0.018 230);
-  --neutral-700: oklch(0.3720 0.020 230);
-  --neutral-800: oklch(0.2790 0.023 230);
-  --neutral-900: oklch(0.2100 0.025 230);
-  --neutral-950: oklch(0.1410 0.025 230);
-  --neutral-black: oklch(0.0000 0 none);
+  --neutral-white: oklch(1 0 none);
+  --neutral-25: oklch(0.993 0.004 230);
+  --neutral-50: oklch(0.985 0.008 230);
+  --neutral-100: oklch(0.967 0.01 230);
+  --neutral-200: oklch(0.92 0.013 230);
+  --neutral-300: oklch(0.87 0.015 230);
+  --neutral-400: oklch(0.705 0.015 230);
+  --neutral-500: oklch(0.553 0.016 230);
+  --neutral-600: oklch(0.442 0.018 230);
+  --neutral-700: oklch(0.372 0.02 230);
+  --neutral-800: oklch(0.279 0.023 230);
+  --neutral-900: oklch(0.21 0.025 230);
+  --neutral-950: oklch(0.141 0.025 230);
+  --neutral-black: oklch(0 0 none);
 
   /* System semantic ramps (subdued OKLCH — chroma 0.04–0.07) */
-  --sys-destructive-50: oklch(0.9700 0.015 27);
-  --sys-destructive-100: oklch(0.9350 0.035 27);
-  --sys-destructive-200: oklch(0.8800 0.060 27);
-  --sys-destructive-300: oklch(0.8000 0.090 27);
-  --sys-destructive-400: oklch(0.7000 0.130 27);
-  --sys-destructive-500: oklch(0.6000 0.150 27);
-  --sys-destructive-600: oklch(0.5200 0.140 27);
-  --sys-destructive-700: oklch(0.4400 0.130 27);
-  --sys-destructive-800: oklch(0.3700 0.110 27);
-  --sys-destructive-900: oklch(0.3000 0.090 27);
-  --sys-destructive-950: oklch(0.2000 0.060 27);
+  --sys-destructive-50: oklch(0.97 0.015 27);
+  --sys-destructive-100: oklch(0.935 0.035 27);
+  --sys-destructive-200: oklch(0.88 0.06 27);
+  --sys-destructive-300: oklch(0.8 0.09 27);
+  --sys-destructive-400: oklch(0.7 0.13 27);
+  --sys-destructive-500: oklch(0.6 0.15 27);
+  --sys-destructive-600: oklch(0.52 0.14 27);
+  --sys-destructive-700: oklch(0.44 0.13 27);
+  --sys-destructive-800: oklch(0.37 0.11 27);
+  --sys-destructive-900: oklch(0.3 0.09 27);
+  --sys-destructive-950: oklch(0.2 0.06 27);
 
-  --sys-success-50: oklch(0.9700 0.015 150);
-  --sys-success-100: oklch(0.9350 0.035 150);
-  --sys-success-200: oklch(0.8800 0.060 150);
-  --sys-success-300: oklch(0.8000 0.090 150);
-  --sys-success-400: oklch(0.7000 0.130 150);
-  --sys-success-500: oklch(0.6000 0.150 150);
-  --sys-success-600: oklch(0.5200 0.140 150);
-  --sys-success-700: oklch(0.4400 0.130 150);
-  --sys-success-800: oklch(0.3700 0.110 150);
-  --sys-success-900: oklch(0.3000 0.090 150);
-  --sys-success-950: oklch(0.2000 0.060 150);
+  --sys-success-50: oklch(0.97 0.015 150);
+  --sys-success-100: oklch(0.935 0.035 150);
+  --sys-success-200: oklch(0.88 0.06 150);
+  --sys-success-300: oklch(0.8 0.09 150);
+  --sys-success-400: oklch(0.7 0.13 150);
+  --sys-success-500: oklch(0.6 0.15 150);
+  --sys-success-600: oklch(0.52 0.14 150);
+  --sys-success-700: oklch(0.44 0.13 150);
+  --sys-success-800: oklch(0.37 0.11 150);
+  --sys-success-900: oklch(0.3 0.09 150);
+  --sys-success-950: oklch(0.2 0.06 150);
 
-  --sys-warning-50: oklch(0.9750 0.015 90);
-  --sys-warning-100: oklch(0.9400 0.035 90);
-  --sys-warning-200: oklch(0.8900 0.060 90);
-  --sys-warning-300: oklch(0.8300 0.090 90);
-  --sys-warning-400: oklch(0.7600 0.130 90);
-  --sys-warning-500: oklch(0.6800 0.150 90);
-  --sys-warning-600: oklch(0.5800 0.140 90);
-  --sys-warning-700: oklch(0.4800 0.130 90);
-  --sys-warning-800: oklch(0.4000 0.110 90);
-  --sys-warning-900: oklch(0.3300 0.090 90);
-  --sys-warning-950: oklch(0.2200 0.060 90);
+  --sys-warning-50: oklch(0.975 0.015 90);
+  --sys-warning-100: oklch(0.94 0.035 90);
+  --sys-warning-200: oklch(0.89 0.06 90);
+  --sys-warning-300: oklch(0.83 0.09 90);
+  --sys-warning-400: oklch(0.76 0.13 90);
+  --sys-warning-500: oklch(0.68 0.15 90);
+  --sys-warning-600: oklch(0.58 0.14 90);
+  --sys-warning-700: oklch(0.48 0.13 90);
+  --sys-warning-800: oklch(0.4 0.11 90);
+  --sys-warning-900: oklch(0.33 0.09 90);
+  --sys-warning-950: oklch(0.22 0.06 90);
 
-  --sys-info-50: oklch(0.9700 0.015 255);
-  --sys-info-100: oklch(0.9350 0.035 255);
-  --sys-info-200: oklch(0.8800 0.060 255);
-  --sys-info-300: oklch(0.8000 0.090 255);
-  --sys-info-400: oklch(0.7000 0.130 255);
-  --sys-info-500: oklch(0.6000 0.150 255);
-  --sys-info-600: oklch(0.5200 0.140 255);
-  --sys-info-700: oklch(0.4400 0.130 255);
-  --sys-info-800: oklch(0.3700 0.110 255);
-  --sys-info-900: oklch(0.3000 0.090 255);
-  --sys-info-950: oklch(0.2000 0.060 255);
+  --sys-info-50: oklch(0.97 0.015 255);
+  --sys-info-100: oklch(0.935 0.035 255);
+  --sys-info-200: oklch(0.88 0.06 255);
+  --sys-info-300: oklch(0.8 0.09 255);
+  --sys-info-400: oklch(0.7 0.13 255);
+  --sys-info-500: oklch(0.6 0.15 255);
+  --sys-info-600: oklch(0.52 0.14 255);
+  --sys-info-700: oklch(0.44 0.13 255);
+  --sys-info-800: oklch(0.37 0.11 255);
+  --sys-info-900: oklch(0.3 0.09 255);
+  --sys-info-950: oklch(0.2 0.06 255);
 
   --sys-focus: oklch(0.8032 0.0727 172.88 / 50%);
 
@@ -118,7 +118,7 @@
   /* Shadcn Nova default radius (0.625rem / 10px) */
   --radius: 0.625rem;
 
-  --background: var(--neutral-50);
+  --background: var(--neutral-25);
   --foreground: var(--neutral-950);
   --card: var(--neutral-white);
   --card-foreground: var(--neutral-950);
@@ -149,7 +149,7 @@
   --info-foreground: var(--sys-info-800);
 
   --destructive: var(--sys-destructive-50);
-  --destructive-foreground: var(--sys-destructive-800);
+  --destructive-foreground: var(--sys-destructive-500);
 
   --border: var(--neutral-300);
   --input: var(--neutral-300);
@@ -247,8 +247,9 @@
   --sidebar-ring: var(--brand-accent-300);
 
   /* ── Dark-mode shadow overrides ────────────────────────────────────────── */
-  --shadow-proc-tactile: 0 1px 0 oklch(0.28 0.055 233 / 0.18), 0 1px 3px oklch(0.28 0.055 233 / 0.22);
-  --shadow-proc-xs: 0 1px 2px oklch(0.28 0.055 233 / 0.20);
+  --shadow-proc-tactile:
+    0 1px 0 oklch(0.28 0.055 233 / 0.18), 0 1px 3px oklch(0.28 0.055 233 / 0.22);
+  --shadow-proc-xs: 0 1px 2px oklch(0.28 0.055 233 / 0.2);
   --shadow-proc-sm: 0 2px 8px oklch(0.28 0.055 233 / 0.28);
   --shadow-proc-md: 0 8px 24px oklch(0.28 0.055 233 / 0.36);
   --shadow-proc-lg: 0 16px 48px oklch(0.28 0.055 233 / 0.44);
@@ -286,41 +287,41 @@
 
 /* Operational: mobile (touch) */
 :root {
-  --spacing-micro:      0.25rem;   /* 4px  */
-  --spacing-component:  0.75rem;   /* 12px — larger for touch */
-  --spacing-section:    1rem;      /* 16px */
-  --spacing-region:     1.25rem;   /* 20px */
-  --spacing-boundary:   1.5rem;    /* 24px */
+  --spacing-micro: 0.25rem; /* 4px  */
+  --spacing-component: 0.75rem; /* 12px — larger for touch */
+  --spacing-section: 1rem; /* 16px */
+  --spacing-region: 1.25rem; /* 20px */
+  --spacing-boundary: 1.5rem; /* 24px */
 }
 
 /* Operational: desktop */
 @media (min-width: 768px) {
   :root {
-    --spacing-micro:      0.25rem;   /* 4px  */
-    --spacing-component:  0.5rem;    /* 8px  */
-    --spacing-section:    1rem;      /* 16px */
-    --spacing-region:     1.5rem;    /* 24px */
-    --spacing-boundary:   2rem;      /* 32px */
+    --spacing-micro: 0.25rem; /* 4px  */
+    --spacing-component: 0.5rem; /* 8px  */
+    --spacing-section: 1rem; /* 16px */
+    --spacing-region: 1.5rem; /* 24px */
+    --spacing-boundary: 2rem; /* 32px */
   }
 }
 
 /* Spacious: mobile (touch) */
 [data-density="spacious"] {
-  --spacing-micro:      0.5rem;    /* 8px  */
-  --spacing-component:  1rem;      /* 16px — larger for touch */
-  --spacing-section:    1.25rem;   /* 20px */
-  --spacing-region:     1.5rem;    /* 24px */
-  --spacing-boundary:   2rem;      /* 32px */
+  --spacing-micro: 0.5rem; /* 8px  */
+  --spacing-component: 1rem; /* 16px — larger for touch */
+  --spacing-section: 1.25rem; /* 20px */
+  --spacing-region: 1.5rem; /* 24px */
+  --spacing-boundary: 2rem; /* 32px */
 }
 
 /* Spacious: desktop */
 @media (min-width: 768px) {
   [data-density="spacious"] {
-    --spacing-micro:      0.5rem;    /* 8px  */
-    --spacing-component:  0.75rem;   /* 12px */
-    --spacing-section:    1.5rem;    /* 24px */
-    --spacing-region:     2rem;      /* 32px */
-    --spacing-boundary:   3rem;      /* 48px */
+    --spacing-micro: 0.5rem; /* 8px  */
+    --spacing-component: 0.75rem; /* 12px */
+    --spacing-section: 1.5rem; /* 24px */
+    --spacing-region: 2rem; /* 32px */
+    --spacing-boundary: 3rem; /* 48px */
   }
 }
 
@@ -333,16 +334,16 @@
   /* ── Custom heading tokens (H1–H4 page-layout headings) ─────────────────
    * Separate from the standard Tailwind scale so heading sizes can be tuned
    * independently without affecting primitives (Button, Label, Badge, etc.). */
-  --text-heading-xl: 1.5rem;          /* 24px — H1 */
+  --text-heading-xl: 1.5rem; /* 24px — H1 */
   --text-heading-xl--line-height: 1.2;
   --text-heading-xl--letter-spacing: -0.03em;
-  --text-heading-lg: 1.25rem;         /* 20px — H2 */
+  --text-heading-lg: 1.25rem; /* 20px — H2 */
   --text-heading-lg--line-height: 1.2;
   --text-heading-lg--letter-spacing: -0.04em;
-  --text-heading-md: 1.125rem;        /* 18px — H3 */
+  --text-heading-md: 1.125rem; /* 18px — H3 */
   --text-heading-md--line-height: 1.2;
   --text-heading-md--letter-spacing: -0.03em;
-  --text-heading-sm: 0.875rem;        /* 14px — H4 */
+  --text-heading-sm: 0.875rem; /* 14px — H4 */
   --text-heading-sm--line-height: 1.2;
   --text-heading-sm--letter-spacing: 0.05em;
 
@@ -353,30 +354,30 @@
    * Letter-spacing: headings use negative tracking proportional to size. */
 
   /* Body range — 1.4× line-height */
-  --text-xs--line-height: 1.05rem;   /* 16.8px  (default: 1rem) */
-  --text-sm--line-height: 1.225rem;  /* 19.6px  (default: 1.25rem) */
-  --text-base--line-height: 1.4rem;  /* 22.4px  (default: 1.5rem) */
-  --text-lg--line-height: 1.575rem;  /* 25.2px  (default: 1.75rem) */
+  --text-xs--line-height: 1.05rem; /* 16.8px  (default: 1rem) */
+  --text-sm--line-height: 1.225rem; /* 19.6px  (default: 1.25rem) */
+  --text-base--line-height: 1.4rem; /* 22.4px  (default: 1.5rem) */
+  --text-lg--line-height: 1.575rem; /* 25.2px  (default: 1.75rem) */
   /* xl line-height matches Tailwind default (1.75rem) — no override needed */
 
   /* Heading range — 1.2× line-height, negative letter-spacing */
   --text-lg--letter-spacing: -0.02em;
   --text-xl--letter-spacing: -0.03em;
-  --text-2xl--line-height: 1.8rem;   /* 28.8px  (default: 2rem) */
+  --text-2xl--line-height: 1.8rem; /* 28.8px  (default: 2rem) */
   --text-2xl--letter-spacing: -0.04em;
   /* 3xl line-height matches Tailwind default (2.25rem) — no override needed */
   --text-3xl--letter-spacing: -0.03em;
-  --text-4xl--line-height: 2.7rem;   /* 43.2px  (default: 2.5rem) */
+  --text-4xl--line-height: 2.7rem; /* 43.2px  (default: 2.5rem) */
   --text-4xl--letter-spacing: -0.025em;
-  --text-5xl--line-height: 3.6rem;   /* 57.6px  (default: 1) */
+  --text-5xl--line-height: 3.6rem; /* 57.6px  (default: 1) */
   --text-5xl--letter-spacing: -0.025em;
-  --text-6xl--line-height: 4.5rem;   /* 72px    (default: 1) */
+  --text-6xl--line-height: 4.5rem; /* 72px    (default: 1) */
   --text-6xl--letter-spacing: -0.025em;
-  --text-7xl--line-height: 5.4rem;   /* 86.4px  (default: 1) */
+  --text-7xl--line-height: 5.4rem; /* 86.4px  (default: 1) */
   --text-7xl--letter-spacing: -0.025em;
-  --text-8xl--line-height: 7.2rem;   /* 115.2px (default: 1) */
+  --text-8xl--line-height: 7.2rem; /* 115.2px (default: 1) */
   --text-8xl--letter-spacing: -0.025em;
-  --text-9xl--line-height: 9.6rem;   /* 153.6px (default: 1) */
+  --text-9xl--line-height: 9.6rem; /* 153.6px (default: 1) */
   --text-9xl--letter-spacing: -0.025em;
 
   --spacing-ds-0: 0;
@@ -536,11 +537,11 @@
  * rules above. These initial values register the tokens with Tailwind
  * so it generates p-component, gap-region, m-boundary, etc. */
 @theme {
-  --spacing-micro:     0.25rem;
+  --spacing-micro: 0.25rem;
   --spacing-component: 0.5rem;
-  --spacing-section:   1rem;
-  --spacing-region:    1.5rem;
-  --spacing-boundary:  2rem;
+  --spacing-section: 1rem;
+  --spacing-region: 1.5rem;
+  --spacing-boundary: 2rem;
 }
 
 /* ─── Command button pulse ───────────────────────────────────────────────── */

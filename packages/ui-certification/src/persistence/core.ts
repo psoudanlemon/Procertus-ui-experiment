@@ -83,6 +83,7 @@ function makeSession(input: CreateCertificationRequestSession): CertificationReq
     selectedEntryIds: [...(input.selectedEntryIds ?? [])],
     requestText: input.requestText ?? "",
     drafts: [...(input.drafts ?? [])],
+    includedDraftIds: [...(input.includedDraftIds ?? input.drafts?.map((draft) => draft.id) ?? [])],
     customerContextId: input.customerContextId,
     createdAt: timestamp,
     updatedAt: timestamp,
@@ -111,9 +112,13 @@ function makePackage(input: CreateCertificationRequestPackage): CertificationReq
     id: createId("cert-package"),
     sessionId: input.sessionId,
     customerContextId: input.customerContextId,
-    draftIds: [...input.draftIds],
+    inquiries: [...input.inquiries],
     status: input.status,
+    handlingStatus: input.handlingStatus,
     createdAt: timestamp,
+    submittedAt: input.submittedAt,
+    resolvedAt: input.resolvedAt,
+    archivedAt: input.archivedAt,
     updatedAt: timestamp,
   };
 }

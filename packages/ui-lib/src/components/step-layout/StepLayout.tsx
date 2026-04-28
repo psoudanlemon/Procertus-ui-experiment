@@ -173,13 +173,13 @@ export function StepLayout({
       </CardContent>
       <CardFooter
         className={cn(
-          "flex flex-col gap-component sm:flex-row sm:items-center sm:justify-between",
-          "min-h-11 sm:min-h-0",
-          variant === "wizard" ? "py-component" : "py-section",
+          "flex flex-row items-center justify-between gap-component",
+          "min-h-11",
+          variant === "wizard" ? "py-micro sm:py-component" : "py-component sm:py-section",
           isFill && "shrink-0 bg-transparent",
         )}
       >
-        <div className="flex w-full min-h-11 min-w-0 items-center sm:min-h-0">
+        <div className="flex min-h-10 min-w-0 items-center">
           {backAction ? (
             <Button
               type="button"
@@ -193,7 +193,7 @@ export function StepLayout({
             <span className="hidden sm:block sm:min-w-0" aria-hidden />
           )}
         </div>
-        <div className="flex w-full flex-wrap justify-end gap-component sm:w-auto">
+        <div className="flex min-w-0 flex-wrap justify-end gap-component">
           {secondaryAction ? (
             <Button
               type="button"

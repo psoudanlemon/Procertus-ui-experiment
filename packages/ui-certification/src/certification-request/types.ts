@@ -88,6 +88,7 @@ export type CertificationRequestContextValue = {
   setIntent: (intent: CertificationRequestIntentId) => void;
   expandedIds: string[];
   setExpandedIds: Dispatch<SetStateAction<string[]>>;
+  groupIds: readonly string[];
   searchValue: string;
   setSearchValue: (value: string) => void;
   hideUnavailableProducts: boolean;
@@ -100,6 +101,8 @@ export type CertificationRequestContextValue = {
   setRequestText: (value: string) => void;
   drafts: CertificationRequestDraft[];
   setDrafts: Dispatch<SetStateAction<CertificationRequestDraft[]>>;
+  includedDraftIds: string[];
+  setIncludedDraftIds: Dispatch<SetStateAction<string[]>>;
   selectedProduct: ProductIndexEntry | undefined;
   selectedIntentLabel: string | undefined;
   productRequired: boolean;

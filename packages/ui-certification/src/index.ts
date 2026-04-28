@@ -16,7 +16,21 @@ export type {
   CertificationBadgeRowProps,
 } from "./components/certification-badge-row";
 export { CertificationRequestCard } from "./components/certification-request-card";
-export type { CertificationRequestCardProps } from "./components/certification-request-card";
+export type {
+  CertificationRequestCardInquiry,
+  CertificationRequestCardProps,
+} from "./components/certification-request-card";
+export {
+  CertificationRequestLifecycleDetailTimeline,
+  CertificationRequestLifecycleTimeline,
+} from "./components/certification-request-lifecycle-timeline";
+export type {
+  CertificationRequestLifecycleDetailTimelineProps,
+  CertificationRequestLifecycleEvent,
+  CertificationRequestLifecycleStatus,
+  CertificationRequestLifecycleStepId,
+  CertificationRequestLifecycleTimelineProps,
+} from "./components/certification-request-lifecycle-timeline";
 export { DraftRequestList } from "./components/draft-request-list";
 export type { DraftRequestItem, DraftRequestListProps } from "./components/draft-request-list";
 export { ProductMultiSelect } from "./components/product-multi-select";
@@ -72,6 +86,10 @@ export type {
   CertificationWizardModel,
   CertificationWizardModelOptions,
 } from "./CertificationRequestContext";
+export type {
+  CertificationRequestInquiry,
+  CertificationRequestPackage,
+} from "@procertus-ui/domain-certification";
 export {
   CERTIFICATION_LABEL_META,
   CERTIFICATION_LABEL_ORDER,

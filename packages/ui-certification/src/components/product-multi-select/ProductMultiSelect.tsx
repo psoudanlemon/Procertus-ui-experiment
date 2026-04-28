@@ -6,14 +6,10 @@
 import { useId } from "react";
 
 import {
-  Checkbox,
-  Field,
-  FieldContent,
-  FieldGroup,
-  FieldLabel,
   FieldSet,
   cn,
 } from "@procertus-ui/ui";
+import { SelectChoiceCard, SelectChoiceCardGroup } from "@procertus-ui/ui-lib";
 
 export type ProductMultiSelectOption = {
   id: string;
@@ -61,51 +57,47 @@ export function ProductMultiSelect({
   const base = useId();
   const name = nameProp ?? `pms-${base}`;
 
-  return (
-    <FieldSet className={cn("w-full min-w-0", className)}>
-      <div className="mb-component space-y-micro">
-        <div className="text-base font-semibold">{legend}</div>
-        {description ? <p className="text-sm text-muted-foreground">{description}</p> : null}
-      </div>
-      {options.length === 0 ? (
+  if (options.length === 0) {
+    return (
+      <FieldSet className={cn("w-full min-w-0", className)}>
+        <div className="mb-component space-y-micro">
+          <div className="text-base font-semibold">{legend}</div>
+          {description ? <p className="text-sm text-muted-foreground">{description}</p> : null}
+        </div>
         <p className="rounded-md border border-dashed border-border/60 px-component py-section text-sm text-muted-foreground">{emptyMessage}</p>
-      ) : (
-        <FieldGroup className="max-h-[min(50vh,28rem)] space-y-0 overflow-y-auto rounded-md border border-border/50 p-micro">
-          {options.map((opt) => {
-            const cbId = `${name}-${opt.id}`;
-            const checked = set.has(opt.id);
-            return (
-              <Field
-                key={opt.id}
-                className="rounded-sm px-component py-component transition hover:bg-muted/20"
-                data-disabled={opt.disabled ? "true" : undefined}
-                orientation="horizontal"
-              >
-                <Checkbox
-                  name={name}
-                  id={cbId}
-                  checked={checked}
-                  onCheckedChange={(c) => {
-                    if (opt.disabled) {
-                      return;
-                    }
-                    onChange(toggleIn(selectedIds, opt.id, c === true));
-                  }}
-                  disabled={opt.disabled}
-                />
-                <FieldContent>
-                  <FieldLabel htmlFor={cbId} className="!block text-left font-medium">
-                    {opt.label}
-                    {opt.description ? (
-                      <span className="mt-micro block text-sm font-normal text-muted-foreground">{opt.description}</span>
-                    ) : null}
-                  </FieldLabel>
-                </FieldContent>
-              </Field>
-            );
-          })}
-        </FieldGroup>
-      )}
-    </FieldSet>
+      </FieldSet>
+    );
+  }
+
+  return (
+    <SelectChoiceCardGroup
+      selectionMode="multiple"
+      legend={legend}
+      hint={description}
+      className={cn("max-h-[min(50vh,28rem)] overflow-y-auto rounded-md border border-border/50 p-micro", className)}
+    >
+      {options.map((opt) => {
+        const cbId = `${name}-${opt.id}`;
+        const checked = set.has(opt.id);
+        return (
+          <SelectChoiceCard
+            key={opt.id}
+            selectionMode="multiple"
+            value={opt.id}
+            controlId={cbId}
+            name={name}
+            title={opt.label}
+            description={opt.description}
+            checked={checked}
+            disabled={opt.disabled}
+            emphasis={opt.disabled ? "tertiary" : "primary"}
+            onCheckedChange={(isChecked) => {
+              if (opt.disabled) return;
+              onChange(toggleIn(selectedIds, opt.id, isChecked));
+            }}
+          />
+        );
+      })}
+    </SelectChoiceCardGroup>
   );
 }

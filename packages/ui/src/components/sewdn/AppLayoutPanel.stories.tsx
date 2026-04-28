@@ -1,5 +1,4 @@
 import React, { useState, type ComponentType } from 'react';
-import type { IconSvgElement } from '@hugeicons/core-free-icons';
 import {
   Alert02Icon,
   Cancel01Icon,
@@ -8,11 +7,11 @@ import {
   UserIcon,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
+import type { IconSvgElement } from '@hugeicons/react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { AppLayout, useApp } from './AppShell';
+import { Button, Separator } from '@procertus-ui/ui';
+import { AppLayout, useApp } from './AppShell/index';
 import { CoverView } from './CoverView';
 import { IconButton } from './IconButton';
 import { PanelsLayout, usePanelsContext } from './Panels';
@@ -165,6 +164,22 @@ function DemoComponent() {
           }
         >
           Open dialog
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={async () => {
+            const confirmed = await app.confirm?.confirm(
+              'Confirm panel action',
+              'This confirmation dialog is provided by AppProvider.',
+            );
+            app.snackbar.addSnackbar({
+              title: confirmed ? 'Confirmed' : 'Cancelled',
+              message: confirmed ? 'The action was confirmed.' : 'The action was cancelled.',
+            });
+          }}
+        >
+          Confirm action
         </Button>
       </div>
     </div>

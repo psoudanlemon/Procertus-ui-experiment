@@ -1,9 +1,9 @@
 import {
   createContext,
-  HTMLAttributes,
   useCallback,
   useContext,
   useState,
+  type HTMLAttributes,
 } from "react"
 import { Slot } from "radix-ui"
 

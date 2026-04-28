@@ -2,12 +2,10 @@ import { useMockPrototypeIsAuthenticated } from "@procertus-ui/ui-pt1-prototype"
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthenticatedAppShell } from "./layouts/AuthenticatedAppShell";
 import { PublicAppShell } from "./layouts/PublicAppShell";
-import {
-  AuthenticatedRequestCreatePage,
-  AuthenticatedRequestDetailPage,
-  AuthenticatedRequestEditPage,
-  RequestsOverviewPage,
-} from "./pages/RequestsOverviewPage";
+import { RequestsOverviewPage } from "./pages/RequestsOverviewPage";
+import { RequestCreationPage } from "./pages/RequestCreationPage";
+import { RequestDetailPage } from "./pages/RequestDetailPage";
+import { RequestEditPage } from "./pages/RequestEditPage";
 import { CategorizationDemoPage } from "./pages/CategorizationDemoPage";
 import { DesignSystemPage } from "./pages/DesignSystemPage";
 import { AnonymousOnboardingFlow } from "./features/onboarding/AnonymousOnboardingFlow";
@@ -41,9 +39,9 @@ export default function App() {
       <Route element={<RequireAuth />}>
         <Route element={<AuthenticatedAppShell />}>
           <Route path="/requests" element={<RequestsOverviewPage />} />
-          <Route path="/requests/create" element={<AuthenticatedRequestCreatePage />} />
-          <Route path="/requests/:requestId" element={<AuthenticatedRequestDetailPage />} />
-          <Route path="/requests/:requestId/edit" element={<AuthenticatedRequestEditPage />} />
+          <Route path="/requests/create" element={<RequestCreationPage />} />
+          <Route path="/requests/:requestId" element={<RequestDetailPage />} />
+          <Route path="/requests/:requestId/edit" element={<RequestEditPage />} />
           <Route
             path="/app/certificates-attestations"
             element={

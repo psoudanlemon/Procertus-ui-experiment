@@ -1,2 +1,7 @@
 export { CertificationRequestCard } from "./CertificationRequestCard";
-export type { CertificationRequestCardProps } from "./CertificationRequestCard";
+export type {
+  CertificationRequestCardInquiry,
+  CertificationRequestCardProps,
+  CertificationRequestLifecycleStatus,
+  CertificationRequestLifecycleStepId,
+} from "./CertificationRequestCard";

@@ -23,7 +23,7 @@ import {
 export type SelectChoiceAppearance = "default" | "hero";
 
 const shellVariants = cva(
-  "group/choice w-full select-none has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border has-[>[data-slot=field]]:transition-[box-shadow,background-color,border-color,opacity]",
+  "group/choice w-full select-none has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:transition-[box-shadow,background-color,border-color,opacity]",
   {
     variants: {
       appearance: {
@@ -43,7 +43,7 @@ const shellVariants = cva(
           "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-primary/30 has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:bg-muted/40",
         ],
         tertiary: [
-          "has-[>[data-slot=field]]:border-dashed has-[>[data-slot=field]]:border-muted-foreground/30 has-[>[data-slot=field]]:bg-muted/10 *:data-[slot=field]:p-component has-data-checked:has-[>[data-slot=field]]:border-primary/25 has-data-checked:has-[>[data-slot=field]]:bg-muted/25",
+          "has-[>[data-slot=field]]:border-dashed has-[>[data-slot=field]]:border-muted-foreground/30 *:data-[slot=field]:p-component has-data-checked:has-[>[data-slot=field]]:border-primary/25 has-data-checked:has-[>[data-slot=field]]:bg-muted/25",
           "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-primary/25 has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:bg-muted/25",
         ],
       },
@@ -144,6 +144,8 @@ export type SelectChoiceCardProps = {
   checked?: boolean;
   /** Multiple mode — toggle handler */
   onCheckedChange?: (checked: boolean) => void;
+  /** Native control name, useful for checkbox groups and tests. */
+  name?: string;
 };
 
 export function SelectChoiceCard({
@@ -161,27 +163,25 @@ export function SelectChoiceCard({
   disabled = false,
   checked,
   onCheckedChange,
+  name,
 }: SelectChoiceCardProps) {
   const isHero = appearance === "hero";
   const isMultiple = selectionMode === "multiple";
 
-  const controlClass = cn(
-    isHero && "sr-only",
-    !isHero && "mt-micro",
-  );
+  const controlClass = cn(isHero && "sr-only", !isHero && "mt-micro");
 
-  const control =
-    isMultiple ? (
-      <Checkbox
-        id={controlId}
-        checked={checked}
-        onCheckedChange={(s) => onCheckedChange?.(s === true)}
-        disabled={disabled}
-        className={controlClass}
-      />
-    ) : (
-      <RadioGroupItem value={value} id={controlId} disabled={disabled} className={controlClass} />
-    );
+  const control = isMultiple ? (
+    <Checkbox
+      name={name}
+      id={controlId}
+      checked={checked}
+      onCheckedChange={(s) => onCheckedChange?.(s === true)}
+      disabled={disabled}
+      className={controlClass}
+    />
+  ) : (
+    <RadioGroupItem value={value} id={controlId} disabled={disabled} className={controlClass} />
+  );
 
   const showHeroIcon = isHero && icon !== undefined && icon !== null;
   const showLeading = !isHero && leading;
@@ -197,6 +197,7 @@ export function SelectChoiceCard({
           isHero && "relative",
           isHero && "items-center justify-center text-center",
           !isHero && "items-stretch",
+          disabled && "opacity-55",
         )}
         data-disabled={disabled ? "true" : undefined}
       >
@@ -220,9 +221,17 @@ export function SelectChoiceCard({
             </EmptyIcon>
           ) : null}
           {showLeading ? (
-            <div className="shrink-0 self-start pt-micro text-muted-foreground [&_svg]:size-5">{leading}</div>
+            <div className="shrink-0 self-start pt-micro text-muted-foreground [&_svg]:size-5">
+              {leading}
+            </div>
           ) : null}
-          <div className={cn("flex min-w-0 flex-col gap-micro", !isHero && "flex-1", isHero && "items-center")}>
+          <div
+            className={cn(
+              "flex min-w-0 flex-col gap-micro",
+              !isHero && "flex-1",
+              isHero && "items-center",
+            )}
+          >
             <FieldTitle
               className={cn(
                 titleVariants({ appearance, emphasis }),
@@ -233,7 +242,7 @@ export function SelectChoiceCard({
                 htmlFor={controlId}
                 className={cn(
                   !isHero && emphasis === "tertiary" && "text-muted-foreground",
-                  !isHero && "text-left leading-snug",
+                  !isHero && "text-left leading-snug whitespace-normal wrap-break-word",
                   isHero && "block text-center",
                 )}
               >
@@ -241,7 +250,12 @@ export function SelectChoiceCard({
               </Label>
             </FieldTitle>
             {description ? (
-              <FieldDescription className={cn(descVariants({ appearance, emphasis }))}>
+              <FieldDescription
+                className={cn(
+                  descVariants({ appearance, emphasis }),
+                  "whitespace-normal wrap-break-word",
+                )}
+              >
                 {description}
               </FieldDescription>
             ) : null}

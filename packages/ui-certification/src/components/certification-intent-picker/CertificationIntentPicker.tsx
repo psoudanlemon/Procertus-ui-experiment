@@ -126,8 +126,8 @@ export function CertificationIntentPicker({
   value,
   onValueChange,
   options,
-  legend = "Welke certificatie of attestering heb je nodig?",
-  hint = "Kies het certificatie- of attestproduct dat het best aansluit bij je vraag. Twijfel je tussen een productgebonden certificatie en een apart attest, kies dan de optie die het dichtst bij je concrete behoefte ligt.",
+  legend,
+  hint,
   layout = "grid",
   name,
 }: CertificationIntentPickerProps) {

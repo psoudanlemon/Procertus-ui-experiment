@@ -28,12 +28,27 @@ export const CertificationRequestDraft = Schema.Struct({
   label: Schema.String,
   shortLabel: Schema.String,
   productId: Schema.optional(Schema.String),
+  productTypeStreamLabel: Schema.optional(Schema.String),
   productLabel: Schema.optional(Schema.String),
   productPath: Schema.optional(Schema.String),
   value: Schema.optional(Schema.String),
   context: Schema.optional(Schema.String),
 });
 export type CertificationRequestDraft = typeof CertificationRequestDraft.Type;
+
+export const CertificationRequestLifecycleStatus = Schema.Literals([
+  "draft",
+  "submitted",
+  "in-progress",
+  "approved",
+  "archived",
+  "rejected",
+  "cancelled",
+]);
+export type CertificationRequestLifecycleStatus = typeof CertificationRequestLifecycleStatus.Type;
+
+export const CertificationRequestInquiry = CertificationRequestDraft;
+export type CertificationRequestInquiry = CertificationRequestDraft;
 
 export const CertificationCustomerContext = Schema.Struct({
   id: Schema.String,
@@ -61,6 +76,7 @@ export const CertificationRequestSession = Schema.Struct({
   selectedEntryIds: Schema.Array(Schema.String),
   requestText: Schema.String,
   drafts: Schema.Array(CertificationRequestDraft),
+  includedDraftIds: Schema.optional(Schema.Array(Schema.String)),
   customerContextId: Schema.optional(Schema.String),
   createdAt: Schema.String,
   updatedAt: Schema.String,
@@ -71,9 +87,13 @@ export const CertificationRequestPackage = Schema.Struct({
   id: Schema.String,
   sessionId: Schema.String,
   customerContextId: Schema.optional(Schema.String),
-  draftIds: Schema.Array(Schema.String),
-  status: Schema.Literals(["draft", "submitted", "activation-pending", "activated"]),
+  inquiries: Schema.Array(CertificationRequestInquiry),
+  status: CertificationRequestLifecycleStatus,
+  handlingStatus: Schema.optional(Schema.String),
   createdAt: Schema.String,
+  submittedAt: Schema.optional(Schema.String),
+  resolvedAt: Schema.optional(Schema.String),
+  archivedAt: Schema.optional(Schema.String),
   updatedAt: Schema.String,
 });
 export type CertificationRequestPackage = typeof CertificationRequestPackage.Type;
@@ -112,6 +132,7 @@ export const CreateCertificationRequestSession = Schema.Struct({
   selectedEntryIds: Schema.optional(Schema.Array(Schema.String)),
   requestText: Schema.optional(Schema.String),
   drafts: Schema.optional(Schema.Array(CertificationRequestDraft)),
+  includedDraftIds: Schema.optional(Schema.Array(Schema.String)),
   customerContextId: Schema.optional(Schema.String),
 });
 export type CreateCertificationRequestSession = typeof CreateCertificationRequestSession.Type;
@@ -127,6 +148,7 @@ export const UpdateCertificationRequestSession = Schema.Struct({
   selectedEntryIds: Schema.optional(Schema.Array(Schema.String)),
   requestText: Schema.optional(Schema.String),
   drafts: Schema.optional(Schema.Array(CertificationRequestDraft)),
+  includedDraftIds: Schema.optional(Schema.Array(Schema.String)),
   customerContextId: Schema.optional(Schema.String),
 });
 export type UpdateCertificationRequestSession = typeof UpdateCertificationRequestSession.Type;
@@ -134,15 +156,23 @@ export type UpdateCertificationRequestSession = typeof UpdateCertificationReques
 export const CreateCertificationRequestPackage = Schema.Struct({
   sessionId: Schema.String,
   customerContextId: Schema.optional(Schema.String),
-  draftIds: Schema.Array(Schema.String),
-  status: Schema.Literals(["draft", "submitted", "activation-pending", "activated"]),
+  inquiries: Schema.Array(CertificationRequestInquiry),
+  status: CertificationRequestLifecycleStatus,
+  handlingStatus: Schema.optional(Schema.String),
+  submittedAt: Schema.optional(Schema.String),
+  resolvedAt: Schema.optional(Schema.String),
+  archivedAt: Schema.optional(Schema.String),
 });
 export type CreateCertificationRequestPackage = typeof CreateCertificationRequestPackage.Type;
 
 export const UpdateCertificationRequestPackage = Schema.Struct({
   sessionId: Schema.optional(Schema.String),
   customerContextId: Schema.optional(Schema.String),
-  draftIds: Schema.optional(Schema.Array(Schema.String)),
-  status: Schema.optional(Schema.Literals(["draft", "submitted", "activation-pending", "activated"])),
+  inquiries: Schema.optional(Schema.Array(CertificationRequestInquiry)),
+  status: Schema.optional(CertificationRequestLifecycleStatus),
+  handlingStatus: Schema.optional(Schema.String),
+  submittedAt: Schema.optional(Schema.String),
+  resolvedAt: Schema.optional(Schema.String),
+  archivedAt: Schema.optional(Schema.String),
 });
 export type UpdateCertificationRequestPackage = typeof UpdateCertificationRequestPackage.Type;

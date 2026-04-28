@@ -75,10 +75,10 @@ export function CertificationRequestProvider({
     () => ({
       mode,
       activeStep: normalizeInitialStep(initialStep, initialDrafts.length > 0),
-      expandedIds: groupIds.slice(0, 4),
+      expandedIds: [],
       drafts: initialDrafts,
     }),
-    [groupIds, initialDrafts, initialStep, mode],
+    [initialDrafts, initialStep, mode],
   );
 
   const persistence = useMemo<CertificationRequestBackend>(
@@ -116,6 +116,9 @@ export function CertificationRequestProvider({
   const selectedEntryIds = [...session.selectedEntryIds];
   const requestText = session.requestText;
   const drafts = [...session.drafts];
+  const includedDraftIds = [
+    ...(session.includedDraftIds ?? session.drafts.map((draft) => draft.id)),
+  ];
 
   const setActiveStep = (step: number) => updateSession({ activeStep: step });
   const setExpandedIds: Dispatch<SetStateAction<string[]>> = (next) =>
@@ -131,6 +134,13 @@ export function CertificationRequestProvider({
     updateSession((current: CertificationRequestSession) => ({
       drafts: applySetState([...current.drafts], next),
     }));
+  const setIncludedDraftIds: Dispatch<SetStateAction<string[]>> = (next) =>
+    updateSession((current: CertificationRequestSession) => ({
+      includedDraftIds: applySetState(
+        [...(current.includedDraftIds ?? current.drafts.map((draft) => draft.id))],
+        next,
+      ),
+    }));
 
   const selectedProduct = selectedProductId ? productIndex.get(selectedProductId) : undefined;
   const selectedIntentLabel = entryLabelForIntent(intent, availableEntries);
@@ -143,7 +153,7 @@ export function CertificationRequestProvider({
     : canUseFreeform && requestText.trim().length >= 12;
   const canOpenDetails = intent != null;
   const canOpenDrafts = drafts.length > 0 || canContinueDetails;
-  const canOpenReview = drafts.length > 0;
+  const canOpenReview = includedDraftIds.length > 0;
 
   const setIntent = (nextIntent: CertificationRequestIntentId) => {
     updateSession({
@@ -161,12 +171,27 @@ export function CertificationRequestProvider({
         ? createDraftsForProduct({ selectedEntryIds, availableEntries, product: selectedProduct })
         : createContextDraft({ intent, availableEntries, requestText, selectedProduct });
 
-    setDrafts((prev) => {
-      const existingById = new Map(prev.map((draft) => [draft.id, draft] as const));
+    updateSession((current) => {
+      const existingDrafts =
+        selectedProduct && selectedEntryIds.length > 0
+          ? current.drafts.filter((draft) => draft.productId != null)
+          : current.drafts;
+      const existingById = new Map(existingDrafts.map((draft) => [draft.id, draft] as const));
       for (const draft of nextDrafts) {
         existingById.set(draft.id, draft);
       }
-      return Array.from(existingById.values());
+      const next = Array.from(existingById.values());
+      const nextIds = new Set(next.map((draft) => draft.id));
+      const currentIncludedIds = current.includedDraftIds ?? current.drafts.map((draft) => draft.id);
+      return {
+        drafts: next,
+        includedDraftIds: Array.from(
+          new Set([
+            ...currentIncludedIds.filter((id) => nextIds.has(id)),
+            ...nextDrafts.map((draft) => draft.id),
+          ]),
+        ),
+      };
     });
   };
 
@@ -222,6 +247,7 @@ export function CertificationRequestProvider({
       setIntent,
       expandedIds,
       setExpandedIds,
+      groupIds,
       searchValue,
       setSearchValue,
       hideUnavailableProducts,
@@ -234,6 +260,8 @@ export function CertificationRequestProvider({
       setRequestText,
       drafts,
       setDrafts,
+      includedDraftIds,
+      setIncludedDraftIds,
       selectedProduct,
       selectedIntentLabel,
       productRequired,
@@ -246,7 +274,10 @@ export function CertificationRequestProvider({
       canOpenReview,
       replaceDraftsFromDetails,
       createDraftFromIntent,
-      removeDraft: (id) => setDrafts((prev) => prev.filter((draft) => draft.id !== id)),
+      removeDraft: (id) => {
+        setDrafts((prev) => prev.filter((draft) => draft.id !== id));
+        setIncludedDraftIds((prev) => prev.filter((draftId) => draftId !== id));
+      },
       editDraft,
       resetSelectionForNewRequest,
       goToStep,
@@ -264,7 +295,9 @@ export function CertificationRequestProvider({
       detailsUseProductTree,
       drafts,
       expandedIds,
+      groupIds,
       hideUnavailableProducts,
+      includedDraftIds,
       intent,
       mode,
       productEntries,

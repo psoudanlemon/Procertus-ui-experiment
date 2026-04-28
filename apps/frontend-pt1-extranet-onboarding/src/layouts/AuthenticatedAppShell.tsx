@@ -1,5 +1,5 @@
 import type { AppHeaderProps, AppSidebarProps } from "@procertus-ui/ui";
-import { ManagementAppShell, useSidebar } from "@procertus-ui/ui";
+import { AlertDialogProvider, ManagementAppShell, useSidebar } from "@procertus-ui/ui";
 import logomark from "@procertus-ui/ui/assets/logomark.svg";
 import { useLayoutEffect, useMemo } from "react";
 import { Link, matchPath, Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -116,15 +116,17 @@ export function AuthenticatedAppShell() {
   }, [pathname, navigate, logout, session]);
 
   return (
-    <AppPanelsLayout>
-      <ManagementAppShell
-        sidebar={sidebar}
-        header={header}
-        mainClassName={flushMain ? "p-0!" : undefined}
-      >
-        <CloseMobileSidebarOnRouteChange />
-        <Outlet />
-      </ManagementAppShell>
-    </AppPanelsLayout>
+    <AlertDialogProvider>
+      <AppPanelsLayout>
+        <ManagementAppShell
+          sidebar={sidebar}
+          header={header}
+          mainClassName={flushMain ? "p-0!" : undefined}
+        >
+          <CloseMobileSidebarOnRouteChange />
+          <Outlet />
+        </ManagementAppShell>
+      </AppPanelsLayout>
+    </AlertDialogProvider>
   );
 }

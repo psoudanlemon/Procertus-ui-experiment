@@ -1,33 +1,86 @@
 import type { KeyboardEvent } from "react";
-import { Badge, Card, Separator, cn } from "@procertus-ui/ui";
+import { Badge, Card, cn } from "@procertus-ui/ui";
+
+export type {
+  CertificationRequestLifecycleStatus,
+  CertificationRequestLifecycleStepId,
+} from "../certification-request-lifecycle-timeline";
+
+import {
+  CertificationRequestLifecycleTimeline,
+  type CertificationRequestLifecycleStatus,
+  type CertificationRequestLifecycleStepId,
+} from "../certification-request-lifecycle-timeline";
+
+export type CertificationRequestCardInquiry = {
+  id: string;
+  label: string;
+  shortLabel?: string;
+  productLabel?: string;
+  productPath?: string;
+  value?: string;
+  context?: string;
+  statusLabel?: string;
+};
 
 export type CertificationRequestCardProps = {
-  approvalStatusLabel: string;
   className?: string;
-  productLabel: string;
+  inquiries: readonly CertificationRequestCardInquiry[];
+  lifecycleDateLabels: Partial<Record<CertificationRequestLifecycleStepId, string>>;
   requestId: string;
+  status: CertificationRequestLifecycleStatus;
   statusLabel: string;
   statusVariant?: "outline" | "secondary";
-  subtitle: string;
-  title: string;
-  typeLabel: string;
-  valueLabel?: string;
   onOpen?: (requestId: string) => void;
 };
 
+function InquirySummary({ inquiries }: { inquiries: readonly CertificationRequestCardInquiry[] }) {
+  return (
+    <div className="space-y-3">
+      <ul className="grid gap-2" role="list">
+        {inquiries.slice(0, 3).map((inquiry) => (
+          <li
+            key={inquiry.id}
+            className="min-w-0 rounded-lg border border-border/70 bg-muted/25 p-3 shadow-proc-xs"
+          >
+            <div className="flex min-w-0 items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="line-clamp-2 text-sm font-semibold text-foreground">
+                  {inquiry.label}
+                </p>
+                <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                  {inquiry.productLabel ?? "Niet-productgebonden"}
+                </p>
+              </div>
+              <div className="flex shrink-0 flex-wrap justify-end gap-1">
+                {inquiry.shortLabel ? <Badge variant="outline">{inquiry.shortLabel}</Badge> : null}
+                {inquiry.value ? <Badge variant="outline">{inquiry.value}</Badge> : null}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+      {inquiries.length > 3 ? (
+        <p className="text-xs text-muted-foreground">
+          +{inquiries.length - 3} extra aanvragen in dit pakket
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 export function CertificationRequestCard({
-  approvalStatusLabel,
   className,
-  productLabel,
+  inquiries,
+  lifecycleDateLabels,
   requestId,
+  status,
   statusLabel,
   statusVariant = "outline",
-  subtitle,
-  title,
-  typeLabel,
-  valueLabel,
   onOpen,
 }: CertificationRequestCardProps) {
+  const rejected = status === "rejected";
+  const cancelled = status === "cancelled";
   const interactiveProps = onOpen
     ? {
         role: "button",
@@ -45,42 +98,27 @@ export function CertificationRequestCard({
   return (
     <Card
       className={cn(
-        "h-full p-4 transition-colors",
-        onOpen && "cursor-pointer hover:bg-accent/50 focus-visible:ring-3 focus-visible:ring-ring/50",
+        "h-full overflow-visible p-4 transition-colors",
+        rejected && "border-destructive/30 bg-destructive/5",
+        onOpen &&
+          "cursor-pointer hover:bg-accent/50 focus-visible:ring-3 focus-visible:ring-ring/50",
         className,
       )}
       {...interactiveProps}
     >
       <div className="flex h-full flex-col gap-4">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h3 className="line-clamp-2 font-semibold">{title}</h3>
-            <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
-          </div>
-          <Badge variant={statusVariant}>{statusLabel}</Badge>
-        </div>
-
-        <div className="grid gap-2 text-sm text-muted-foreground">
-          <div className="flex items-center justify-between gap-2">
-            <span>Goedkeuring</span>
-            <span className="text-right font-medium text-foreground">{approvalStatusLabel}</span>
-          </div>
-          <div className="flex items-center justify-between gap-2">
-            <span>Type</span>
-            <span className="text-right font-medium text-foreground">{typeLabel}</span>
-          </div>
-          <div className="flex items-center justify-between gap-2">
-            <span>Product</span>
-            <span className="text-right font-medium text-foreground">{productLabel}</span>
-          </div>
-        </div>
-
-        <Separator />
-
-        <div className="mt-auto flex flex-wrap items-center gap-2">
-          {valueLabel ? <Badge variant="outline">{valueLabel}</Badge> : null}
+        <div className="flex flex-wrap items-start justify-between gap-2">
           <span className="font-mono text-xs text-muted-foreground">{requestId}</span>
+          <Badge variant={rejected || cancelled ? "destructive" : statusVariant}>
+            {statusLabel}
+          </Badge>
         </div>
+
+        <div className="pt-region">
+          <CertificationRequestLifecycleTimeline dateLabels={lifecycleDateLabels} status={status} />
+        </div>
+
+        <InquirySummary inquiries={inquiries} />
       </div>
     </Card>
   );
