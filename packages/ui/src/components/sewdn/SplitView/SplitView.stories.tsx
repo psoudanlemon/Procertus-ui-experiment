@@ -8,7 +8,13 @@ const meta = {
   title: "sewdn/SplitView",
   component: SplitView,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      canvas: { layout: "fullscreen" },
+      story: { inline: false, iframeHeight: 600 },
+    },
+  },
 } satisfies Meta<typeof SplitView>;
 
 export default meta;

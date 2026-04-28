@@ -235,6 +235,8 @@ const meta = {
   parameters: {
     layout: "fullscreen",
     docs: {
+      canvas: { layout: "fullscreen" },
+      story: { inline: false, iframeHeight: 800 },
       description: {
         component:
           "Composes the consolidated `AppShell` (sonner Toaster baked in) with `DialogProvider` and the sewdn `PanelsLayout` to demonstrate how a CoverView surface opens stacked detail panels and triggers toast/dialog overlays from a shared root.",

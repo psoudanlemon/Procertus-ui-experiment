@@ -70,6 +70,7 @@ const meta = {
     layout: "fullscreen",
     docs: {
       canvas: { layout: "fullscreen" },
+      story: { inline: false, iframeHeight: 700 },
     },
   },
 } satisfies Meta;
