@@ -7,6 +7,7 @@ export { ModeToggle } from "./components/mode-toggle";
 /** Primitives: one re-export per file in `components/ui/` — tree-shakeable when apps use named imports. */
 export * from "./components/ui";
 export * from "./components/stepper";
+export * from "./components/timeline";
 /** Sewdn components copied from the local shadcn-based UI library. */
 export * from "./components/sewdn";
 /** Composed application shell components. */
