@@ -138,31 +138,100 @@ function CompactWizardTimeline({ model }: { model: WizardStepperModel }) {
   );
 }
 
-/** Mock ruleset / guidance PDFs for the review step (prototype — no real files). */
-const MOCK_RULESET_DOCUMENTS = [
-  {
-    id: "howto",
-    title: "How to list downloadable documents,",
-    description:
-      "Pattern reference voor dit prototype: eerste rij toont hoe documentlijsten in de reviewstap verschijnen.",
-    formatHint: "PDF · 120 KB",
-    href: "#procertus-doc-howto-list",
-  },
-  {
+function slugForDocumentHref(raw: string): string {
+  const s = raw
+    .replace(/[^a-zA-Z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .toLowerCase();
+  return s.length > 0 ? s.slice(0, 48) : "item";
+}
+
+function isProductScopedInquiry(draft: CertificationWizardDraft): boolean {
+  return Boolean(
+    (draft.productId && draft.productId.trim().length > 0) ||
+    (draft.productLabel && draft.productLabel.trim().length > 0),
+  );
+}
+
+function productDedupKey(draft: CertificationWizardDraft): string | null {
+  if (!isProductScopedInquiry(draft)) return null;
+  const id = draft.productId?.trim();
+  if (id && id.length > 0) return id;
+  return draft.productLabel?.trim() ?? null;
+}
+
+/**
+ * Mock downloadable ruleset / PTV / programme documents for the review step.
+ * PTV rows are emitted once per distinct product among product-scoped inquiries;
+ * ATG and EPD programme overviews appear only when those intents are in the package.
+ */
+function buildRulesetDocumentsForInquiries(
+  inquiries: readonly CertificationWizardDraft[],
+): DownloadableDocumentListItemData[] {
+  if (inquiries.length === 0) return [];
+
+  const docs: DownloadableDocumentListItemData[] = [];
+
+  const seenProductKeys = new Set<string>();
+  for (const d of inquiries) {
+    const key = productDedupKey(d);
+    if (!key || seenProductKeys.has(key)) continue;
+    seenProductKeys.add(key);
+    const label = d.productLabel?.trim() || "Product";
+    const stream = d.productTypeStreamLabel?.trim();
+    docs.push({
+      id: `ptv-${slugForDocumentHref(key)}`,
+      title: `Producttechnische fiche (PTV) — ${label}`,
+      description: stream
+        ? `Technische specificaties en toepasselijke normsegmenten voor ${stream} (${label}) voor de productgebonden aanvragen in dit pakket (prototype).`
+        : `Technische specificaties en profieldelen voor ${label} voor de productgebonden aanvragen in dit pakket (prototype).`,
+      formatHint: "PDF · mock",
+      href: `#procertus-ptv-${slugForDocumentHref(key)}`,
+    });
+  }
+
+  if (inquiries.some((d) => d.entryId === "atg")) {
+    docs.push({
+      id: "atg-algemeen",
+      title: "ATG — algemene informatie en werkprocedure",
+      description:
+        "Programma-overzicht voor technische goedkeuring (ATG/BUTG) omdat dit pakket minstens één ATG-aanvraag bevat (prototype).",
+      formatHint: "PDF · mock",
+      href: "#procertus-atg-algemeen",
+    });
+  }
+
+  if (inquiries.some((d) => d.entryId === "epd")) {
+    docs.push({
+      id: "epd-algemeen",
+      title: "EPD — milieuprofiel en databanken",
+      description:
+        "Algemene EPD-werkwijze en referenties naar databanken omdat dit pakket minstens één EPD-aanvraag bevat (prototype).",
+      formatHint: "PDF · mock",
+      href: "#procertus-epd-algemeen",
+    });
+  }
+
+  const inquiryLabels = Array.from(new Set(inquiries.map((d) => d.shortLabel ?? d.label)));
+  docs.push({
     id: "ruleset-matrix",
     title: "Ruleset matrix — geselecteerde certificeringen en attesten",
-    description:
-      "Overzicht van welke normenkaders van toepassing zijn op basis van je pakket (mock).",
-    formatHint: "PDF · 1.8 MB",
+    description: `Normenkader en regelpaden voor: ${inquiryLabels.join(" · ")}.`,
+    formatHint: "PDF · mock",
     href: "#procertus-doc-ruleset-matrix",
-  },
-  {
+  });
+
+  docs.push({
     id: "submission-checklist",
     title: "Indien-checklist aanvraagpakket",
-    formatHint: "PDF · 640 KB",
+    description:
+      "Controlelijst afgestemd op de samenstelling van dit pakket vóór indiening (prototype).",
+    formatHint: "PDF · mock",
     href: "#procertus-doc-submission-checklist",
-  },
-] satisfies DownloadableDocumentListItemData[];
+  });
+
+  return docs;
+}
 
 function sortDraftsByIntentAndProduct(
   drafts: Array<CertificationWizardDraft & { title: string; subtitle?: string }>,
@@ -328,6 +397,16 @@ function CertificationRequestWizardView({
           },
         }
       : layout.primaryAction;
+
+  const includedReviewInquiries = useMemo(() => {
+    const selected = new Set(model.draftsStep.includedDraftIds);
+    return model.draftsStep.drafts.filter((d) => selected.has(d.id));
+  }, [model.draftsStep.drafts, model.draftsStep.includedDraftIds]);
+
+  const rulesetDocuments = useMemo(
+    () => buildRulesetDocumentsForInquiries(includedReviewInquiries),
+    [includedReviewInquiries],
+  );
 
   return (
     <StepLayout
@@ -549,26 +628,36 @@ function CertificationRequestWizardView({
 
       {model.activeStep === 3 ? (
         <div className="space-y-4">
-          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
-            <RequestPackageReview
-              title="Aanvraagdetails"
-              description="Deze gegevens worden samen met de onboarding-intake of de gekende organisatiecontext ingediend."
-              requester={reviewRequester}
-              rows={model.reviewStep.rows}
-              notice={
-                model.reviewStep.draftCount > 1 ? (
-                  <span>
-                    <Badge variant="secondary">{model.reviewStep.draftCount} vragen</Badge> worden
-                    samen gebundeld in deze aanvraag.
-                  </span>
-                ) : undefined
-              }
-            />
-          </div>
+          <RequestPackageReview
+            className="max-w-5xl"
+            title="Aanvraagdetails"
+            description="Deze gegevens worden samen met de onboarding-intake of de gekende organisatiecontext ingediend."
+            requester={reviewRequester}
+            rows={model.reviewStep.rows}
+            notice={
+              model.reviewStep.draftCount > 1 ? (
+                <span>
+                  <Badge variant="secondary">{model.reviewStep.draftCount} vragen</Badge> worden
+                  samen gebundeld in deze aanvraag.
+                </span>
+              ) : undefined
+            }
+          />
           <DownloadableDocumentsList
+            className="max-w-5xl"
             title="Regels en documentatie"
-            description="Relevante documenten om de regelsets voor je gekozen certificeringen en attesten te begrijpen (prototype — downloadlinks zijn gemockt)."
-            items={MOCK_RULESET_DOCUMENTS}
+            description={
+              includedReviewInquiries.length > 0
+                ? `Documenten op basis van je ${includedReviewInquiries.length} geselecteerde ${includedReviewInquiries.length === 1 ? "aanvraag" : "aanvragen"} (prototype — downloadlinks zijn gemockt).`
+                : "Selecteer eerst aanvragen in de vorige stap om relevante documenten te zien (prototype)."
+            }
+            items={rulesetDocuments}
+            emptyContent={
+              <p className="text-sm text-muted-foreground">
+                Geen geselecteerde aanvragen — vink in de vorige stap minstens één aanvraag aan om
+                documentatie te tonen.
+              </p>
+            }
           />
         </div>
       ) : null}
