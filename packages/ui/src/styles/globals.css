@@ -151,6 +151,15 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html,
+  body,
+  #root,
+  #__next {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
   [data-density] * {
     transition-property: padding, margin, gap, row-gap, column-gap;
     transition-duration: 300ms;

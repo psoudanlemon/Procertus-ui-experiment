@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Cancel01Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@/components/ui/button';
+import { sidePanelSurfaceClassName } from '@/components/ui/side-panel-surface';
 import { cn } from '@/lib/utils';
 import type { CalculatedPanelState } from './types';
 
@@ -74,15 +75,10 @@ export function Panel({ panel, onClose, onActivate }: PanelProps) {
       exit="exit"
       onClick={state === 'stacked' ? handleClick : undefined}
       className={cn(
-        // Base styles: Absolute positioning, right handled by animation
-        'absolute top-0 bottom-0 flex flex-col bg-panel',
-        // Conditional styles
+        'absolute inset-y-0 flex flex-col',
         {
-          'shadow-lg': mode === 'docked',
-          'inset-0 fixed z-50 shadow-lg': mode === 'overlay',
+          'fixed z-50': mode === 'overlay',
         },
-        'border-l border-border',
-        // Set cursor based on state
         state === 'stacked' ? 'cursor-pointer' : 'cursor-default'
       )}
       style={{
@@ -95,8 +91,12 @@ export function Panel({ panel, onClose, onActivate }: PanelProps) {
     >
       {/* Inner div ALWAYS uses position.width */}
       <div
-        className="flex flex-col h-full bg-card text-card-foreground"
-        style={{ width: `${position.width}px` }}
+        className={sidePanelSurfaceClassName({
+          inset: true,
+          padded: false,
+          className: "relative h-[calc(100%-2rem)] max-sm:h-full",
+        })}
+        style={{ width: `calc(${position.width}px - 2rem)` }}
       >
         {content}
         <Button

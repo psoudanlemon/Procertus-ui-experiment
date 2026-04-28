@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocalStorage } from '../hooks/use-local-storage';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -49,15 +49,26 @@ export function useNoPersistence(): PersistenceLayer {
 
   const subscribe = useCallback((_callback: () => void) => () => {}, []);
 
-  return {
-    getOpenPanelTypes,
-    getPanelPropsMap,
-    getActivePanelType,
-    setOpenPanelTypes,
-    setPanelPropsMap,
-    setActivePanelType,
-    subscribe,
-  };
+  return useMemo(
+    () => ({
+      getOpenPanelTypes,
+      getPanelPropsMap,
+      getActivePanelType,
+      setOpenPanelTypes,
+      setPanelPropsMap,
+      setActivePanelType,
+      subscribe,
+    }),
+    [
+      getOpenPanelTypes,
+      getPanelPropsMap,
+      getActivePanelType,
+      setOpenPanelTypes,
+      setPanelPropsMap,
+      setActivePanelType,
+      subscribe,
+    ]
+  );
 }
 
 // 2. LocalStorage Persistence
@@ -125,38 +136,59 @@ export function useLocalStoragePersistence(localStorageKey: string): Persistence
   };
 }
 
-// 3. URL Query Persistence (Simplified: Only stores types and active type)
+// 3. URL Query Persistence
 const URL_TYPES_PARAM = 'panels';
 const URL_ACTIVE_TYPE_PARAM = 'activePanel';
+const URL_PROPS_PARAM = 'panelProps';
 
 export function useUrlQueryPersistence(): PersistenceLayer {
   const location = useLocation();
   const navigate = useNavigate();
-  const [_, forceUpdate] = useState({});
 
-  // Read types and active type from URL
-  const { openPanelTypes, activePanelType } = useMemo(() => {
+  // Read panel state from URL query params.
+  const { openPanelTypes, activePanelType, panelPropsMap } = useMemo(() => {
     const params = new URLSearchParams(location.search);
     const typeString = params.get(URL_TYPES_PARAM);
     const types = typeString ? typeString.split(',') : [];
     const activeType = params.get(URL_ACTIVE_TYPE_PARAM) || null;
-    return { openPanelTypes: types, activePanelType: activeType };
+    const propsString = params.get(URL_PROPS_PARAM);
+    let propsMap: Record<string, SerializableProps> = {};
+
+    if (propsString) {
+      try {
+        propsMap = JSON.parse(propsString) as Record<string, SerializableProps>;
+      } catch (error) {
+        console.error('Error parsing panel props from URL query', error);
+      }
+    }
+
+    return { openPanelTypes: types, activePanelType: activeType, panelPropsMap: propsMap };
   }, [location.search]);
 
-  // This layer cannot persist props map
-  const getPanelPropsMap = useCallback((): Record<string, SerializableProps> => {
-    console.warn('useUrlQueryPersistence does not persist panel props.');
-    return {};
-  }, []);
-  const setPanelPropsMap = useCallback((_propsMap: Record<string, SerializableProps>) => {
-    console.warn('useUrlQueryPersistence does not persist panel props.');
-  }, []);
+  const stateRef = useRef({
+    openPanelTypes,
+    activePanelType,
+    panelPropsMap,
+  });
+
+  useEffect(() => {
+    stateRef.current = {
+      openPanelTypes,
+      activePanelType,
+      panelPropsMap,
+    };
+  }, [activePanelType, openPanelTypes, panelPropsMap]);
 
   const getOpenPanelTypes = useCallback(() => openPanelTypes, [openPanelTypes]);
   const getActivePanelType = useCallback(() => activePanelType, [activePanelType]);
+  const getPanelPropsMap = useCallback(() => panelPropsMap, [panelPropsMap]);
 
   const updateUrl = useCallback(
-    (newTypes: string[], newActiveType: string | null) => {
+    (
+      newTypes: string[],
+      newActiveType: string | null,
+      newPropsMap: Record<string, SerializableProps>
+    ) => {
       const params = new URLSearchParams(location.search);
       if (newTypes.length > 0) {
         params.set(URL_TYPES_PARAM, newTypes.join(','));
@@ -168,29 +200,45 @@ export function useUrlQueryPersistence(): PersistenceLayer {
       } else {
         params.delete(URL_ACTIVE_TYPE_PARAM);
       }
-      navigate(`${location.pathname}?${params.toString()}`, { replace: true });
+
+      const sanitizedPropsMap = JSON.parse(JSON.stringify(newPropsMap)) as Record<string, SerializableProps>;
+      if (Object.keys(sanitizedPropsMap).length > 0) {
+        params.set(URL_PROPS_PARAM, JSON.stringify(sanitizedPropsMap));
+      } else {
+        params.delete(URL_PROPS_PARAM);
+      }
+
+      const queryString = params.toString();
+      navigate(`${location.pathname}${queryString ? `?${queryString}` : ''}`, { replace: true });
     },
     [location.search, location.pathname, navigate]
   );
 
   const setOpenPanelTypes = useCallback(
     (types: string[]) => {
-      updateUrl(types, activePanelType);
+      stateRef.current = { ...stateRef.current, openPanelTypes: types };
+      updateUrl(types, stateRef.current.activePanelType, stateRef.current.panelPropsMap);
     },
-    [activePanelType, updateUrl]
+    [updateUrl]
+  );
+
+  const setPanelPropsMap = useCallback(
+    (propsMap: Record<string, SerializableProps>) => {
+      stateRef.current = { ...stateRef.current, panelPropsMap: propsMap };
+      updateUrl(stateRef.current.openPanelTypes, stateRef.current.activePanelType, propsMap);
+    },
+    [updateUrl]
   );
 
   const setActivePanelType = useCallback(
     (type: string | null) => {
-      updateUrl(openPanelTypes, type);
+      stateRef.current = { ...stateRef.current, activePanelType: type };
+      updateUrl(stateRef.current.openPanelTypes, type, stateRef.current.panelPropsMap);
     },
-    [openPanelTypes, updateUrl]
+    [updateUrl]
   );
 
-  const subscribe = useCallback((_callback: () => void) => {
-    forceUpdate({});
-    return () => {};
-  }, []);
+  const subscribe = useCallback((_callback: () => void) => () => {}, []);
 
   return {
     getOpenPanelTypes,

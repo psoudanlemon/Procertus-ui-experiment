@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AppProvider, type AppProviderProps } from './AppProvider';
-import { AppShell, AppShellProps } from './AppShell';
+import { AppShell, type AppShellProps } from './AppShell';
 
 // Combine AppProviderProps and relevant AppShellProps for AppLayout
 export interface AppLayoutProps

@@ -29,12 +29,12 @@ Create your panel components ensuring their props consist **only of serializable
 
 ```tsx
 // panelRegistry.ts
-import React, { useState } from 'react';
-import { Button, Card, CardContent, CardHeader, CardTitle, Checkbox, Label } from '@workspace/ui';
+import React, { useState } from "react";
+import { Button, Card, CardContent, CardHeader, CardTitle, Checkbox, Label } from "@workspace/ui";
 // Import the custom hook if you created one, otherwise import useDetailPanelsContext
-import { useAppDetailPanels } from '../hooks/useAppDetailPanels'; // Assuming custom hook exists
+import { useAppDetailPanels } from "../hooks/useAppDetailPanels"; // Assuming custom hook exists
 // Import SerializableProps if needed for strict typing
-import type { SerializableProps } from '@workspace/ui-lib';
+import type { SerializableProps } from "@workspace/ui-lib";
 
 // Base type describing the prop injected by the component
 interface InjectedPanelProps {
@@ -49,14 +49,14 @@ interface UserSettingsPanelProps {
 export const UserSettingsPanel: React.FC<UserSettingsPanelProps & InjectedPanelProps> = (
   {
     /* ... */
-  }
+  },
 ) => {
   // Use context hook for actions
   const { removePanel, activateStackedPanel } = useAppDetailPanels();
   const [isAdmin, setIsAdmin] = useState(initialAdminFlag);
   // ... render Card with Button actions using removePanel(panelType) etc.
   return (
-    <Card className="h-full flex flex-col border-l rounded-none">
+    <Card className="h-full flex flex-col rounded-none">
       {/* ... Card Header/Content ... */}
       <div className="p-4 border-t flex gap-2">
         <Button onClick={() => activateStackedPanel(panelType)} variant="outline" size="sm">
@@ -79,7 +79,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps & InjectedPane
   const { removePanel, activateStackedPanel } = useAppDetailPanels();
   // ... render Card with Button actions using removePanel(panelType) etc.
   return (
-    <Card className="h-full flex flex-col border-l rounded-none">
+    <Card className="h-full flex flex-col rounded-none">
       {/* ... Card Header/Content ... */}
       <div className="p-4 border-t flex gap-2">
         <Button onClick={() => activateStackedPanel(panelType)} variant="outline" size="sm">
@@ -108,7 +108,7 @@ You can optionally choose and instantiate a persistence layer using the provided
 
 ```tsx
 // To enable persistence (e.g., using localStorage):
-const persistenceLayer = useLocalStoragePersistence('myAppDetailPanels');
+const persistenceLayer = useLocalStoragePersistence("myAppDetailPanels");
 
 // To disable persistence (or if you omit the prop):
 // const persistenceLayer = useNoPersistence(); // Or simply don't pass the prop
@@ -126,7 +126,7 @@ const App: React.FC = () => {
   // Decide whether to persist state
   const shouldPersist = true; // Or false, or based on some condition
   const persistenceLayer = shouldPersist
-    ? useLocalStoragePersistence('myAppDetailPanels')
+    ? useLocalStoragePersistence("myAppDetailPanels")
     : undefined; // Pass undefined or omit the prop entirely for no persistence
 
   return (
@@ -160,8 +160,8 @@ As shown in the example above, creating a simple wrapper hook avoids repeating t
 
 ```tsx
 // hooks/useAppDetailPanels.ts
-import { useDetailPanelsContext, DetailPanelsContextType } from '@workspace/ui-lib';
-import type { AppPanelRegistry } from '../panelRegistry'; // Import your registry type
+import { useDetailPanelsContext, DetailPanelsContextType } from "@workspace/ui-lib";
+import type { AppPanelRegistry } from "../panelRegistry"; // Import your registry type
 
 export function useAppDetailPanels(): DetailPanelsContextType<AppPanelRegistry> {
   return useDetailPanelsContext<AppPanelRegistry>();
@@ -202,7 +202,7 @@ Import and use `DetailPanelsProvider`. Pass the `panelTypes` registry, and optio
 // ... imports ...
 
 const AppWithProvider: React.FC = () => {
-  const persistenceLayer = useLocalStoragePersistence('myAppDetailPanelsProvider'); // Or undefined
+  const persistenceLayer = useLocalStoragePersistence("myAppDetailPanelsProvider"); // Or undefined
 
   return (
     <DetailPanelsProvider
@@ -225,10 +225,10 @@ Within children of the provider (e.g., in `MyMainLayout`), use `useDetailPanelsC
 
 ```tsx
 // Example: MyMainLayout.tsx (for Provider usage)
-import React from 'react';
-import { useAppDetailPanels } from '../hooks/useAppDetailPanels'; // Use custom hook
-import { DetailPanels } from '@workspace/ui-lib'; // Presentational component
-import { Button } from '@workspace/ui';
+import React from "react";
+import { useAppDetailPanels } from "../hooks/useAppDetailPanels"; // Use custom hook
+import { DetailPanels } from "@workspace/ui-lib"; // Presentational component
+import { Button } from "@workspace/ui";
 
 // Component to open panels (same as before)
 const PanelOpener: React.FC = () => {

@@ -115,6 +115,7 @@ export type AppSidebarNavLinkProps = {
   className?: string;
   children?: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+  "aria-current"?: React.AriaAttributes["aria-current"];
 };
 
 export type AppSidebarNavLinkComponent = React.ComponentType<
@@ -155,22 +156,24 @@ function SidebarNavLink({
   className,
   children,
   onClick,
+  "aria-current": ariaCurrent,
 }: {
   NavLink?: AppSidebarNavLinkComponent;
   to: string;
   className?: string;
   children: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+  "aria-current"?: React.AriaAttributes["aria-current"];
 }) {
   if (NavLink) {
     return (
-      <NavLink to={to} className={className} onClick={onClick}>
+      <NavLink to={to} className={className} onClick={onClick} aria-current={ariaCurrent}>
         {children}
       </NavLink>
     );
   }
   return (
-    <a href={to} className={className} onClick={onClick}>
+    <a href={to} className={className} onClick={onClick} aria-current={ariaCurrent}>
       {children}
     </a>
   );
@@ -411,7 +414,7 @@ function NavPrimary({
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title} isActive={item.isActive}>
-                <SidebarNavLink NavLink={NavLink} to={item.url}>
+                <SidebarNavLink NavLink={NavLink} to={item.url} aria-current={item.isActive ? "page" : undefined}>
                   {item.icon && <SidebarNavIcon icon={item.icon} />}
                   <span>{item.title}</span>
                 </SidebarNavLink>
@@ -444,17 +447,21 @@ function NavCollapsible({
 
   const visibleItems = maxVisible && !expanded ? items.slice(0, maxVisible) : items;
   const hasMore = maxVisible != null && items.length > maxVisible;
+  const subtreeActive = (item: CollapsibleNavItem): boolean =>
+    Boolean(item.isActive) || Boolean(item.items?.some((subItem) => subItem.isActive));
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>{label}</SidebarGroupLabel>
       <SidebarMenu>
-        {visibleItems.map((item) =>
-          item.items?.length ? (
+        {visibleItems.map((item) => {
+          const itemSubtreeActive = subtreeActive(item);
+
+          return item.items?.length ? (
             <Collapsible
               key={item.title}
               asChild
-              defaultOpen={item.isActive}
+              defaultOpen={itemSubtreeActive}
               className="group/collapsible"
             >
               <SidebarMenuItem>
@@ -475,7 +482,11 @@ function NavCollapsible({
                     {item.items.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuSubButton asChild isActive={subItem.isActive}>
-                          <SidebarNavLink NavLink={NavLink} to={subItem.url}>
+                          <SidebarNavLink
+                            NavLink={NavLink}
+                            to={subItem.url}
+                            aria-current={subItem.isActive ? "page" : undefined}
+                          >
                             <span>{subItem.title}</span>
                           </SidebarNavLink>
                         </SidebarMenuSubButton>
@@ -488,14 +499,14 @@ function NavCollapsible({
           ) : (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title} isActive={item.isActive}>
-                <SidebarNavLink NavLink={NavLink} to={item.url}>
+                <SidebarNavLink NavLink={NavLink} to={item.url} aria-current={item.isActive ? "page" : undefined}>
                   {item.icon && <SidebarNavIcon icon={item.icon} />}
                   <span>{item.title}</span>
                 </SidebarNavLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          ),
-        )}
+          );
+        })}
         {hasMore && (
           <SidebarMenuItem>
             <SidebarMenuButton
@@ -539,7 +550,7 @@ function NavProjects({
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
             <SidebarMenuButton asChild isActive={item.isActive}>
-              <SidebarNavLink NavLink={NavLink} to={item.url}>
+              <SidebarNavLink NavLink={NavLink} to={item.url} aria-current={item.isActive ? "page" : undefined}>
                 <span className={`size-2.5 shrink-0 rounded-full ${item.color}`} />
                 <span>{item.title}</span>
               </SidebarNavLink>
@@ -579,8 +590,8 @@ function NavSecondary({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <SidebarNavLink NavLink={NavLink} to={item.url}>
+              <SidebarMenuButton asChild tooltip={item.title} isActive={item.isActive}>
+                <SidebarNavLink NavLink={NavLink} to={item.url} aria-current={item.isActive ? "page" : undefined}>
                   {item.icon && <SidebarNavIcon icon={item.icon} />}
                   <span>{item.title}</span>
                 </SidebarNavLink>
@@ -815,7 +826,9 @@ function AppSidebar({
         )}
 
         <ScrollFade>
-          {!stickyNav && <NavPrimary NavLink={NavLink} items={navItems} className="mt-micro mb-section" />}
+          {!stickyNav && navItems.length > 0 && (
+            <NavPrimary NavLink={NavLink} items={navItems} className="mt-micro mb-section" />
+          )}
 
           {navGroups.map((group) => (
             <NavCollapsible

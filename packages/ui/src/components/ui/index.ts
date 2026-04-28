@@ -43,6 +43,7 @@ export * from "./scroll-area";
 export * from "./select";
 export * from "./separator";
 export * from "./sheet";
+export * from "./side-panel-surface";
 export * from "./sidebar";
 export * from "./sidebar-nav-icon";
 export * from "./skeleton";

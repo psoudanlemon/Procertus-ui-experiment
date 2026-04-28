@@ -1,4 +1,5 @@
-import React, { ComponentType, useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import type { ComponentType } from 'react';
 import { PanelsProvider, PanelsContext } from './PanelsProvider'; // Assuming context exported from provider file
 import { Panels as PanelsPresentational } from './Panels'; // The presentational component
 import type { PersistenceLayer } from './persistence';

@@ -1,12 +1,18 @@
 import type { AppHeaderProps, AppSidebarProps } from "@procertus-ui/ui";
-import { useSidebar } from "@procertus-ui/ui";
+import { AppLayout, useSidebar } from "@procertus-ui/ui";
 import logomark from "@procertus-ui/ui/assets/logomark.svg";
 import { ManagementAppShell } from "@procertus-ui/ui-lib";
 import { useLayoutEffect, useMemo } from "react";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, matchPath, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { useMockPrototypeLogout, useMockPrototypeSession } from "@procertus-ui/ui-pt1-prototype";
-import { PROTOTYPE_PRIMARY_NAV, PROTOTYPE_SECONDARY_NAV } from "../navConfig";
+import { PROTOTYPE_NAV_GROUPS, PROTOTYPE_PRIMARY_NAV, PROTOTYPE_SECONDARY_NAV } from "../navConfig";
+import { AppPanelsLayout } from "../panels";
+
+const isNavItemActive = (itemUrl: string, pathname: string) => {
+  const pattern = itemUrl === "/requests" ? "/requests/*" : itemUrl;
+  return Boolean(matchPath({ path: pattern, end: itemUrl !== "/requests" }, pathname));
+};
 
 /** Collapses the mobile sheet after in-app navigation so the new page isn’t hidden behind the drawer. */
 function CloseMobileSidebarOnRouteChange() {
@@ -61,9 +67,17 @@ export function AuthenticatedAppShell() {
         title: item.title,
         url: item.url,
         icon: item.icon,
-        isActive: item.url === "/requests" ? pathname.startsWith("/requests") : pathname.startsWith(item.url),
+        isActive: isNavItemActive(item.url, pathname),
       })),
-      navGroups: [],
+      navGroups: PROTOTYPE_NAV_GROUPS.map((group) => ({
+        label: group.label,
+        items: group.items.map((item) => ({
+          title: item.title,
+          url: item.url,
+          icon: item.icon,
+          isActive: isNavItemActive(item.url, pathname),
+        })),
+      })),
       secondaryItems: PROTOTYPE_SECONDARY_NAV.map((item) => ({
         title: item.title,
         url: item.url,
@@ -74,9 +88,10 @@ export function AuthenticatedAppShell() {
   }, [pathname, session]);
 
   const header: AppHeaderProps = useMemo(() => {
+    const groupedNavItems = PROTOTYPE_NAV_GROUPS.flatMap((group) => group.items);
     const crumb =
-      PROTOTYPE_PRIMARY_NAV.find((item) =>
-        item.url === "/requests" ? pathname.startsWith("/requests") : pathname.startsWith(item.url),
+      [...PROTOTYPE_PRIMARY_NAV, ...groupedNavItems].find((item) =>
+        isNavItemActive(item.url, pathname),
       )?.title ?? "Aanvragen";
     const user = session?.user;
     return {
@@ -102,9 +117,17 @@ export function AuthenticatedAppShell() {
   }, [pathname, navigate, logout, session]);
 
   return (
-    <ManagementAppShell sidebar={sidebar} header={header} mainClassName={flushMain ? "p-0!" : undefined}>
-      <CloseMobileSidebarOnRouteChange />
-      <Outlet />
-    </ManagementAppShell>
+    <AppLayout>
+      <AppPanelsLayout>
+        <ManagementAppShell
+          sidebar={sidebar}
+          header={header}
+          mainClassName={flushMain ? "p-0!" : undefined}
+        >
+          <CloseMobileSidebarOnRouteChange />
+          <Outlet />
+        </ManagementAppShell>
+      </AppPanelsLayout>
+    </AppLayout>
   );
 }

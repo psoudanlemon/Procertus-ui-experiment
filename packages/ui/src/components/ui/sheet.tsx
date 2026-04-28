@@ -5,6 +5,7 @@ import { Dialog as SheetPrimitive } from "radix-ui";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { sidePanelSurfaceClassName } from "@/components/ui/side-panel-surface";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
 
@@ -57,7 +58,8 @@ function SheetContent({
         data-slot="sheet-content"
         data-side={side}
         className={cn(
-          "fixed z-20 flex flex-col overflow-hidden bg-popover bg-clip-padding p-section text-sm text-popover-foreground shadow-proc-md ring-1 ring-foreground/10 transition duration-200 ease-out data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:rounded-t-xl data-[side=left]:inset-y-4 data-[side=left]:left-4 data-[side=left]:h-auto data-[side=left]:w-80 data-[side=left]:rounded-xl data-[side=right]:inset-y-4 data-[side=right]:right-4 data-[side=right]:h-auto data-[side=right]:w-80 data-[side=right]:rounded-xl data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:rounded-b-xl max-sm:data-[side=left]:inset-0 max-sm:data-[side=left]:w-full max-sm:data-[side=left]:rounded-none max-sm:data-[side=left]:p-boundary max-sm:data-[side=right]:inset-0 max-sm:data-[side=right]:w-full max-sm:data-[side=right]:rounded-none max-sm:data-[side=right]:p-boundary data-open:animate-in data-open:fade-in-0 data-[side=bottom]:data-open:slide-in-from-bottom-10 data-[side=left]:data-open:slide-in-from-left-full data-[side=right]:data-open:slide-in-from-right-full data-[side=top]:data-open:slide-in-from-top-10 data-closed:animate-out data-closed:fade-out-0 data-[side=bottom]:data-closed:slide-out-to-bottom-10 data-[side=left]:data-closed:slide-out-to-left-full data-[side=right]:data-closed:slide-out-to-right-full data-[side=top]:data-closed:slide-out-to-top-10",
+          sidePanelSurfaceClassName(),
+          "fixed z-20 transition duration-200 ease-out data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:rounded-t-xl data-[side=left]:inset-y-4 data-[side=left]:left-4 data-[side=left]:h-auto data-[side=left]:w-80 data-[side=right]:inset-y-4 data-[side=right]:right-4 data-[side=right]:h-auto data-[side=right]:w-80 data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:rounded-b-xl max-sm:data-[side=left]:inset-0 max-sm:data-[side=left]:w-full max-sm:data-[side=right]:inset-0 max-sm:data-[side=right]:w-full data-open:animate-in data-open:fade-in-0 data-[side=bottom]:data-open:slide-in-from-bottom-10 data-[side=left]:data-open:slide-in-from-left-full data-[side=right]:data-open:slide-in-from-right-full data-[side=top]:data-open:slide-in-from-top-10 data-closed:animate-out data-closed:fade-out-0 data-[side=bottom]:data-closed:slide-out-to-bottom-10 data-[side=left]:data-closed:slide-out-to-left-full data-[side=right]:data-closed:slide-out-to-right-full data-[side=top]:data-closed:slide-out-to-top-10",
           className,
         )}
         {...props}
@@ -103,7 +105,7 @@ function SheetScrollFade({ className }: { className?: string }) {
       ref={ref}
       data-slot="sheet-scroll-fade"
       className={cn(
-        "pointer-events-none relative z-10 -mb-8 h-8 bg-gradient-to-b from-popover to-transparent transition-opacity duration-200",
+        "pointer-events-none relative z-10 -mb-8 h-8 bg-linear-to-b from-popover to-transparent transition-opacity duration-200",
         scrolled ? "opacity-100" : "opacity-0",
         className,
       )}
@@ -131,7 +133,7 @@ function SheetScrollFadeBottom({ className }: { className?: string }) {
       ref={ref}
       data-slot="sheet-scroll-fade-bottom"
       className={cn(
-        "pointer-events-none relative z-10 -mt-8 h-8 bg-gradient-to-t from-popover to-transparent transition-opacity duration-200",
+        "pointer-events-none relative z-10 -mt-8 h-8 bg-linear-to-t from-popover to-transparent transition-opacity duration-200",
         atBottom ? "opacity-0" : "opacity-100",
         className,
       )}

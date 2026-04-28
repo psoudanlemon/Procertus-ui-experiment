@@ -1,18 +1,14 @@
-import React, { useState } from 'react';
-import type { Meta, StoryObj, Args } from '@storybook/react-vite';
-import { Cancel01Icon } from '@hugeicons/core-free-icons';
-import { HugeiconsIcon } from '@hugeicons/react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  usePanelsContext,
-  PanelsLayout,
-  PanelsContextType,
-} from './index';
-import type { UsePanelsArgs } from './types';
+import React, { useState } from "react";
+import type { Meta, StoryObj, Args } from "@storybook/react-vite";
+import { Cancel01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { usePanelsContext, PanelsLayout, PanelsContextType } from "./index";
+import type { UsePanelsArgs } from "./types";
 
 const FullViewportDecorator = (Story: React.ComponentType) => (
   <div className="h-screen w-full">
@@ -41,7 +37,7 @@ interface DetailPanelProps extends BasePanelProps {
 const DetailPanelComponent: React.FC<DetailPanelProps> = ({ panelId, panelType }) => {
   // Use context hook for actions
   const { removePanel, activateStackedPanel } = useAppPanels();
-  const typeToUse = panelType ?? 'unknown'; // Fallback if somehow not passed
+  const typeToUse = panelType ?? "unknown"; // Fallback if somehow not passed
   return (
     <>
       <div className="flex items-center justify-between p-2 border-b border-border shrink-0">
@@ -56,7 +52,7 @@ const DetailPanelComponent: React.FC<DetailPanelProps> = ({ panelId, panelType }
           <HugeiconsIcon icon={Cancel01Icon} className="h-4 w-4" />
         </Button>
       </div>
-      <Card className="h-full flex flex-col border-l rounded-none">
+      <Card className="h-full flex flex-col rounded-none">
         <CardHeader>
           <CardTitle className="text-lg">Detail: {panelId}</CardTitle>
         </CardHeader>
@@ -101,9 +97,9 @@ const UserSettingsPanel: React.FC<UserSettingsPanelProps> = ({
   // Use context hook for actions
   const { removePanel, activateStackedPanel } = useAppPanels();
   const [isAdmin, setIsAdmin] = useState(initialAdminFlag);
-  const typeToUse = panelType ?? 'unknown';
+  const typeToUse = panelType ?? "unknown";
   return (
-    <Card className="h-full flex flex-col border-l rounded-none">
+    <Card className="h-full flex flex-col rounded-none">
       <CardHeader>
         <CardTitle className="text-lg">User Settings: {userId}</CardTitle>
       </CardHeader>
@@ -113,7 +109,7 @@ const UserSettingsPanel: React.FC<UserSettingsPanelProps> = ({
           <Checkbox
             id={`admin-${typeToUse}-${userId}`}
             checked={isAdmin}
-            onCheckedChange={checked => setIsAdmin(!!checked)}
+            onCheckedChange={(checked) => setIsAdmin(!!checked)}
           />
           <Label htmlFor={`admin-${typeToUse}-${userId}`}>Is Admin</Label>
         </div>
@@ -149,19 +145,19 @@ const NotificationListPanel: React.FC<NotificationListPanelProps> = ({ panelType
   // Use context hook for actions
   const { removePanel, activateStackedPanel } = useAppPanels();
   const notifications = [
-    { id: 1, text: 'New comment on your post' },
-    { id: 2, text: 'User X started following you' },
-    { id: 3, text: 'Your subscription is ending soon' },
+    { id: 1, text: "New comment on your post" },
+    { id: 2, text: "User X started following you" },
+    { id: 3, text: "Your subscription is ending soon" },
   ];
-  const typeToUse = panelType ?? 'unknown';
+  const typeToUse = panelType ?? "unknown";
   return (
-    <Card className="h-full flex flex-col border-l rounded-none">
+    <Card className="h-full flex flex-col rounded-none">
       <CardHeader>
         <CardTitle className="text-lg">Notifications</CardTitle>
       </CardHeader>
       <CardContent className="grow overflow-auto text-sm">
         <ul className="space-y-2">
-          {notifications.map(n => (
+          {notifications.map((n) => (
             <li key={n.id} className="border-b pb-1">
               {n.text}
             </li>
@@ -231,26 +227,26 @@ const MainContent: React.FC = () => {
   } = useAppPanels();
 
   // Default maxPanels if not provided by context (though Layout should provide it)
-  const currentMaxPanels = typeof maxPanels === 'number' ? maxPanels : 5;
+  const currentMaxPanels = typeof maxPanels === "number" ? maxPanels : 5;
 
   const [nextIdNum, setNextIdNum] = useState(1);
-  const [customId, setCustomId] = useState('');
-  const [userId, setUserId] = useState('user123');
+  const [customId, setCustomId] = useState("");
+  const [userId, setUserId] = useState("user123");
   const [isAdmin, setIsAdmin] = useState(false);
 
   const handleAddDetailPanel = (idToAdd?: string) => {
     const panelId = idToAdd || `p${nextIdNum}`;
-    if (!idToAdd) setNextIdNum(prev => prev + 1);
-    openPanel('detail', { panelId });
+    if (!idToAdd) setNextIdNum((prev) => prev + 1);
+    openPanel("detail", { panelId });
   };
 
   const handleAddUserPanel = () => {
     if (!userId) return;
-    openPanel('userSettings', { userId, initialAdminFlag: isAdmin });
+    openPanel("userSettings", { userId, initialAdminFlag: isAdmin });
   };
 
   const handleAddNotificationPanel = () => {
-    openPanel('notifications');
+    openPanel("notifications");
   };
 
   return (
@@ -291,7 +287,7 @@ const MainContent: React.FC = () => {
                 id="custom-id"
                 type="text"
                 value={customId}
-                onChange={e => setCustomId(e.target.value)}
+                onChange={(e) => setCustomId(e.target.value)}
                 placeholder="e.g., item-abc"
                 className="h-8 text-sm w-28"
               />
@@ -320,7 +316,7 @@ const MainContent: React.FC = () => {
                 id="user-id"
                 type="text"
                 value={userId}
-                onChange={e => setUserId(e.target.value)}
+                onChange={(e) => setUserId(e.target.value)}
                 className="h-8 text-sm w-28"
               />
             </div>
@@ -328,7 +324,7 @@ const MainContent: React.FC = () => {
               <Checkbox
                 id="is-admin"
                 checked={isAdmin}
-                onCheckedChange={checked => setIsAdmin(!!checked)}
+                onCheckedChange={(checked) => setIsAdmin(!!checked)}
               />
               <Label htmlFor="is-admin" className="text-sm">
                 Is Admin
@@ -362,10 +358,10 @@ const MainContent: React.FC = () => {
         <DemoComponent />
 
         <p className="text-xs text-muted-foreground">
-          Open Panel Types: {calculatedPanels.map(p => p.id).join(', ') || 'None'}
+          Open Panel Types: {calculatedPanels.map((p) => p.id).join(", ") || "None"}
         </p>
         <p className="text-xs text-muted-foreground mb-4">
-          Active Panel Type: {activePanelType || 'None'}
+          Active Panel Type: {activePanelType || "None"}
         </p>
       </div>
     </div>
@@ -377,7 +373,7 @@ const MainContent: React.FC = () => {
 interface StoryTemplateProps extends Args {
   // Add back specific config props needed ONLY for story variations
   maxVisiblePanels?: number;
-  breakpoint?: UsePanelsArgs['breakpoint'];
+  breakpoint?: UsePanelsArgs["breakpoint"];
 }
 
 const StoryTemplate: React.FC<StoryTemplateProps> = ({
@@ -404,16 +400,16 @@ const StoryTemplate: React.FC<StoryTemplateProps> = ({
 
 // --- Storybook Meta ---
 const meta: Meta<typeof StoryTemplate> = {
-  title: 'sewdn/Panels',
+  title: "sewdn/Panels",
   component: StoryTemplate,
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
     decorators: [FullViewportDecorator, AppLayoutDecorator],
     docs: {
-      story: { inline: false, height: '80vh' },
+      story: { inline: false, height: "80vh" },
       description: {
         component:
-          'Demonstrates the `<PanelsLayout>` convenience component showing default, stacking, and overlay behaviors. Persistence and configuration controls are removed for simplicity.',
+          "Demonstrates the `<PanelsLayout>` convenience component showing default, stacking, and overlay behaviors. Persistence and configuration controls are removed for simplicity.",
       },
     },
   },
@@ -442,26 +438,26 @@ type Story = StoryObj<typeof meta>;
 
 // Story 1: Default Layout
 export const DefaultLayout: Story = {
-  name: '1. Default Layout',
+  name: "1. Default Layout",
   // No specific args needed, uses component defaults
   args: {},
   parameters: {
-    viewport: { defaultViewport: 'responsive' },
+    viewport: { defaultViewport: "responsive" },
   },
 };
 
 // Story 2: Mobile Layout
 export const MobileLayout: Story = {
-  name: '2. Mobile Layout',
+  name: "2. Mobile Layout",
   // No specific args needed, uses component defaults and responsive behavior
   args: {},
   parameters: {
     // Set the initial viewport for this story using parameters.viewport.defaultViewport
-    viewport: { defaultViewport: 'mobile2' },
+    viewport: { defaultViewport: "mobile2" },
     docs: {
       description: {
         story:
-          'Demonstrates the default layout responsiveness on a small mobile viewport (using `parameters.viewport.defaultViewport`). Panels should switch to overlay mode based on the container width.',
+          "Demonstrates the default layout responsiveness on a small mobile viewport (using `parameters.viewport.defaultViewport`). Panels should switch to overlay mode based on the container width.",
       },
     },
   },

@@ -15,6 +15,8 @@ export type {
   CertificationBadgePresentation,
   CertificationBadgeRowProps,
 } from "./components/certification-badge-row";
+export { CertificationRequestCard } from "./components/certification-request-card";
+export type { CertificationRequestCardProps } from "./components/certification-request-card";
 export { DraftRequestList } from "./components/draft-request-list";
 export type { DraftRequestItem, DraftRequestListProps } from "./components/draft-request-list";
 export { ProductMultiSelect } from "./components/product-multi-select";

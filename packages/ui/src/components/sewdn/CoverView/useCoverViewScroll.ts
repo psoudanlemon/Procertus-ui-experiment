@@ -1,5 +1,5 @@
-import { RefObject } from 'react';
-import { useScroll, useTransform, MotionValue } from 'framer-motion';
+import type { RefObject } from 'react';
+import { useScroll, useTransform, type MotionValue } from 'framer-motion';
 
 import { APPBAR_HEIGHT, COVER_HEIGHT } from './CoverView';
 

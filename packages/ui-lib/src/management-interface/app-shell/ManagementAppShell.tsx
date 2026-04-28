@@ -26,18 +26,18 @@ function ManagementAppShell({ sidebar, header, children, mainClassName }: Manage
   }, []);
 
   return (
-    <SidebarProvider>
+    <SidebarProvider className="h-full min-h-0 overflow-hidden">
       <AppSidebar {...sidebar} />
-      <div className="flex min-h-svh flex-1 flex-col bg-sidebar">
-        <div className="sticky top-0 z-20 bg-sidebar">
+      <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-sidebar">
+        <div className="shrink-0 bg-sidebar">
           <AppHeader {...header} />
           <div
             className="pointer-events-none mx-section -mb-8 h-8 bg-linear-to-b from-sidebar to-transparent transition-opacity duration-200"
             style={{ opacity: scrolled ? 1 : 0 }}
           />
         </div>
-        <div className="mx-section flex flex-1 flex-col pb-section">
-          <main className={cn("flex-1 rounded-xl bg-background p-boundary", mainClassName)}>
+        <div className="mx-section flex min-h-0 flex-1 flex-col overflow-hidden pb-section">
+          <main className={cn("min-h-0 flex-1 overflow-hidden rounded-xl bg-background p-boundary", mainClassName)}>
             {children}
           </main>
         </div>

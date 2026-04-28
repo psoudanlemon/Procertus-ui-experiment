@@ -3,17 +3,17 @@ import React, {
   useState,
   useCallback,
   useEffect,
-  ComponentType,
   createElement,
 } from 'react';
-import { PanelsContext, PanelsContextType } from './PanelsContext';
+import type { ComponentType } from 'react';
+import { PanelsContext, type PanelsContextType } from './PanelsContext';
 import { usePanels } from './usePanels';
 import { useResponsivePanelDefaults } from './useResponsivePanelDefaults';
 import type {
   PanelData,
   PanelsConfigProps,
 } from './types';
-import { PersistenceLayer, SerializableProps, useNoPersistence } from './persistence';
+import { useNoPersistence, type PersistenceLayer, type SerializableProps } from './persistence';
 
 // --- Props (Accept containerWidth) ---
 type PanelsProviderProps<TPanelRegistry extends Record<string, ComponentType<any>>> =

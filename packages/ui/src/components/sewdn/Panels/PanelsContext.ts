@@ -1,4 +1,5 @@
-import { createContext, useContext, ComponentType } from 'react';
+import { createContext, useContext } from 'react';
+import type { ComponentType } from 'react';
 import type { UsePanelsArgs, CalculatedPanelState } from './types';
 import type { SerializableProps } from './persistence'; // Correct import for SerializableProps
 

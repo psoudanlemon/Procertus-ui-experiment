@@ -5,7 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Progress } from '@/components/ui/progress';
 import { useIsPhone } from '../hooks/use-is-phone';
 import { Scrim } from '../Scrim/Scrim'; // Corrected casing
-import { Toolbar, ToolbarColorScheme } from '../Toolbar/Toolbar'; // Corrected casing & import Color Scheme
+import { Toolbar, type ToolbarColorScheme } from '../Toolbar/Toolbar'; // Corrected casing & import Color Scheme
 import { useCoverViewScroll } from './useCoverViewScroll'; // Import the custom hook
 
 // Constants (adjust values as needed)

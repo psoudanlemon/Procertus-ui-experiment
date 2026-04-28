@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  ReactNode,
   createContext,
   useState,
   useContext,
@@ -10,7 +9,8 @@ import {
   useMemo,
   useRef,
 } from 'react';
-import { SnackbarProps as OriginalSnackbarProps } from './Snackbar'; // Assuming original props are needed
+import type { ReactNode } from 'react';
+import type { SnackbarProps as OriginalSnackbarProps } from './Snackbar'; // Assuming original props are needed
 
 // Define the shape of a snackbar instance within the provider
 interface SnackbarInstance
@@ -22,7 +22,7 @@ interface SnackbarInstance
 // Interface for tracked timer info
 interface SnackbarTimerInfo {
   dismissAt: number; // Timestamp when it should dismiss
-  timerId: NodeJS.Timeout | null;
+  timerId: ReturnType<typeof setTimeout> | null;
 }
 
 // Export the context type

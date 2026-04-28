@@ -3,17 +3,24 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthenticatedAppShell } from "./layouts/AuthenticatedAppShell";
 import { PublicAppShell } from "./layouts/PublicAppShell";
 import {
-  AuthenticatedHomePage,
   AuthenticatedRequestCreatePage,
   AuthenticatedRequestDetailPage,
   AuthenticatedRequestEditPage,
-} from "./pages/AuthenticatedHomePage";
+  RequestsOverviewPage,
+} from "./pages/RequestsOverviewPage";
 import { CategorizationDemoPage } from "./pages/CategorizationDemoPage";
 import { DesignSystemPage } from "./pages/DesignSystemPage";
 import { AnonymousOnboardingFlow } from "./features/onboarding/AnonymousOnboardingFlow";
+import { AppPlaceholderPage } from "./pages/AppPlaceholderPage";
 import { WelcomePage } from "./pages/WelcomePage";
 import { OrganizationPage } from "./pages/OrganizationPage";
 import { RequireAuth } from "./routes/RequireAuth";
+import { PROTOTYPE_NAV_GROUPS } from "./navConfig";
+
+const placeholderNavItems = PROTOTYPE_NAV_GROUPS.flatMap((group) => group.items);
+const certificatesNavItem = placeholderNavItems.find((item) => item.key === "certificates-attestations");
+const ordersNavItem = placeholderNavItems.find((item) => item.key === "orders");
+const invoicesNavItem = placeholderNavItems.find((item) => item.key === "invoices");
 
 function RootRedirect() {
   const isAuthenticated = useMockPrototypeIsAuthenticated();
@@ -33,10 +40,40 @@ export default function App() {
 
       <Route element={<RequireAuth />}>
         <Route element={<AuthenticatedAppShell />}>
-          <Route path="/requests" element={<AuthenticatedHomePage />} />
+          <Route path="/requests" element={<RequestsOverviewPage />} />
           <Route path="/requests/create" element={<AuthenticatedRequestCreatePage />} />
           <Route path="/requests/:requestId" element={<AuthenticatedRequestDetailPage />} />
           <Route path="/requests/:requestId/edit" element={<AuthenticatedRequestEditPage />} />
+          <Route
+            path="/app/certificates-attestations"
+            element={
+              <AppPlaceholderPage
+                title="Certificaten & Attesten"
+                description="Bekijk straks de certificaten en attesten die aan je organisatie zijn gekoppeld."
+                icon={certificatesNavItem!.icon}
+              />
+            }
+          />
+          <Route
+            path="/app/orders"
+            element={
+              <AppPlaceholderPage
+                title="Bestellingen"
+                description="Volg straks je openstaande en afgeronde bestellingen op."
+                icon={ordersNavItem!.icon}
+              />
+            }
+          />
+          <Route
+            path="/app/invoices"
+            element={
+              <AppPlaceholderPage
+                title="Facturen"
+                description="Raadpleeg straks facturen en betaalstatussen voor je organisatie."
+                icon={invoicesNavItem!.icon}
+              />
+            }
+          />
           <Route path="/app/organization" element={<OrganizationPage />} />
           <Route path="/app/categorization" element={<CategorizationDemoPage />} />
           <Route path="/app/design-system" element={<DesignSystemPage />} />
