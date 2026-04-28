@@ -24,7 +24,7 @@ function ManagementAppShell({ sidebar, header, children, mainClassName }: Manage
 
   return (
     <AlertDialogProvider>
-      <SidebarProvider className="h-full min-h-0 overflow-hidden">
+      <SidebarProvider className="h-svh overflow-hidden">
         <AppSidebar {...sidebar} />
         <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-sidebar">
           <div className="shrink-0 bg-sidebar">
