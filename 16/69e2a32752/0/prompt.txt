@@ -1,0 +1,120 @@
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:36 @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/AuthenticatedHomePage.tsx:367-368  make the AppLayout and PanelsLayout able to open panels from the application shell (part of the general application shell) and not only tied to a view page request. 
+
+ set up the detail panel to view a request's details. Configure this in the Dhritri Gold panels and register the panel in the Panels Registry, allowing other panels to be added later. 
+
+ make sure opening and closing panels are persisted as request parameters, as implemented in the specific hook. @Procertus-ui-experiment/packages/ui/src/components/sewdn/Panels/use-url-query-detail-panels.ts
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:36 @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/AuthenticatedHomePage.tsx:367-368  make the AppLayout and PanelsLayout able to open panels from the application shell (part of the general application shell) and not only tied to a view page request. 
+
+ set up the detail panel to view a request's details. Configure this in the Dhritri Gold panels and register the panel in the Panels Registry, allowing other panels to be added later. 
+
+ make sure opening and closing panels are persisted as request parameters, as implemented in the specific hook. @Procertus-ui-experiment/packages/ui/src/components/sewdn/Panels/use-url-query-detail-panels.ts
+
+---
+
+Now the app shell for the panels has been moved up in the rendering tree, this is now causing the same issues when resizing the window as only on the request overview before. So it is related to the rendering tree of this app shell. @ui-lib-shadcn/packages/ui/src/styles/globals.css:15-23 @ui-lib-shadcn/packages/ui-lib/src/styles/app-shell.css:3-25
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/dhritriGoldPanels.tsx this was a typo. 
+
+ set up a panel registry and a panels directory, and add a detail panel for all panels we need. Currently, this is only the request detail panel.
+
+Create a separate file named request_detail_panel and add a different file for the registry.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/panelRegistry.tsx make this a TypeScript file exporting the registry.
+
+Set up a separate TSX file for the panels layout using the EuroCannic persistence and bind the registry to the panels layout.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/panelRegistry.tsx make this a TypeScript file exporting the registry.
+
+Set up a separate TSX file for the panels layout using the EuroCannic persistence and bind the registry to the panels layout.
+
+---
+
+Too much application state has been persisted in local storage. Some extra redirect logic was added but was not needed.
+I just need to be routed to the create-route when a new request needs to be created. Nothing stored in localstorage for now. Only when the request was saved after selecting intent, a draft is created (and stored in localstorage) and the app is routed to the edit rote for that newly created entity. since this persisted state has no info other the the intent, the second step is loaded. On every step the entoty is mutated and the stepper step is updated
+
+---
+
+We have moved up the app shell for the panels in the app layout. It is currently placed within the chrome of the outer app shell, but I want this organized differently. The outermost app shell should manage the panel layout.
+
+As shown in the screenshot, the side panel is currently rendered within the main view beneath the application bar that contains the breadcrumb and user login. I want side panels to be loaded visually outside of this main view and outside the chrome of the application.
+
+---
+
+Remove organization context and prototype information from the certification request overview.
+
+I only want to show the card list together with the info header about the requests and the button to request a new one.
+
+---
+
+Remove organization context and prototype information from the certification request overview.
+
+I only want to show the card list together with the info header about the requests and the button to request a new one.
+
+---
+
+I can see that the side panel is in the right position and the hierarchy and rendering tree are correct for the upshell. I want to change the background color of the element where the side panels are rendered. It is currently light blue, but I want it to blend with the chrome of the entire application—either white or the same color as the app bar and side navigation.
+
+---
+
+I can see that the side panel is in the right position and the hierarchy and rendering tree are correct for the upshell. I want to change the background color of the element where the side panels are rendered. It is currently light blue, but I want it to blend with the chrome of the entire application—either white or the same color as the app bar and side navigation.
+
+---
+
+I want the site navigation organized into groups.
+
+Add a first group, "Certificatie," with two elements:
+- Aanvragen
+- Certificaten & Attesten
+
+ at a second group, "Financieel," with two elements: Bestellingen and Facturen. 
+
+ Use appropriate icons for all groups and items.
+
+---
+
+Use the empty state cards from the UI package to display "coming soon" information on the different pages.
+
+You removed the other routes or navigation elements from the sidebar that were not listed before. Please add them again and list them in the navgroups in a group "Demo".
+
+---
+
+Use the empty state cards from the UI package to display "coming soon" information on the different pages.
+
+You removed the other routes or navigation elements from the sidebar that were not listed before. Please add them again and list them in the navgroups in a group "Demo".
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/AppPlaceholderPage.tsx:16 make sure the empty card is centered within its flex layout.   both horizontally and vertically.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/AppPlaceholderPage.tsx:16 make sure the empty card is centered within its flex layout.   both horizontally and vertically.
+
+---
+
+Make sure to indicate in the navigation bar which item is currently active. Derive this fromthe current route path.
+
+---
+
+Make sure to indicate in the navigation bar which item is currently active. Derive this fromthe current route path.
+
+---
+
+Don't use icons for the groups in the side nav. @Procertus-ui-experiment/packages/ui/src/components/generic-app-shell.stories.tsx:63 also, as you can see, to express an active item we use its Active prop.
+
+---
+
+Don't use icons for the groups in the side nav. @Procertus-ui-experiment/packages/ui/src/components/generic-app-shell.stories.tsx:63 also, as you can see, to express an active item we use its Active prop.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/navConfig.ts:33 where can I see the isActive prop being set?

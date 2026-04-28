@@ -1,0 +1,55 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "1669e2a32752",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 19,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/App.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/requests/authenticatedRequestStore.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/navConfig.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/AppPlaceholderPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/AuthenticatedHomePage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/index.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/panelRegistry.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/panelsLayout.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/request_detail_panel.tsx",
+    "packages/ui-lib/src/management-interface/app-shell/ManagementAppShell.tsx",
+    "packages/ui/src/components/app-sidebar.tsx",
+    "packages/ui/src/components/sewdn/AppLayoutPanel.stories.tsx",
+    "packages/ui/src/components/sewdn/AppShell/AppLayout.tsx",
+    "packages/ui/src/components/sewdn/AppShell/AppShell.tsx",
+    "packages/ui/src/components/sewdn/CoverView/CoverView.tsx",
+    "packages/ui/src/components/sewdn/CoverView/useCoverViewScroll.ts",
+    "packages/ui/src/components/sewdn/Panels/Panel.tsx",
+    "packages/ui/src/components/sewdn/Panels/Panels.stories.tsx",
+    "packages/ui/src/components/sewdn/Panels/PanelsContext.ts",
+    "packages/ui/src/components/sewdn/Panels/PanelsLayout.tsx",
+    "packages/ui/src/components/sewdn/Panels/PanelsProvider.tsx",
+    "packages/ui/src/components/sewdn/Panels/README.md",
+    "packages/ui/src/components/sewdn/Panels/persistence.ts",
+    "packages/ui/src/components/sewdn/Snackbar/Snackbar.tsx",
+    "packages/ui/src/components/sewdn/Snackbar/SnackbarProvider.tsx",
+    "packages/ui/src/components/ui/index.ts",
+    "packages/ui/src/components/ui/sheet.tsx",
+    "packages/ui/src/components/ui/side-panel-surface.ts",
+    "packages/ui/src/components/ui/sidebar.tsx",
+    "packages/ui/src/styles/globals.css"
+  ],
+  "sessions": [
+    {
+      "metadata": "/16/69e2a32752/0/metadata.json",
+      "transcript": "/16/69e2a32752/0/full.jsonl",
+      "content_hash": "/16/69e2a32752/0/content_hash.txt",
+      "prompt": "/16/69e2a32752/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}
