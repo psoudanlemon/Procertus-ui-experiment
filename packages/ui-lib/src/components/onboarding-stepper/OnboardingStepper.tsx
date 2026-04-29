@@ -1,4 +1,4 @@
-import { Tick01Icon } from "@hugeicons/core-free-icons";
+import { Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@procertus-ui/ui";
 import {
@@ -48,8 +48,37 @@ export type OnboardingStepperProps = {
 };
 
 const completedIcon = (
-  <HugeiconsIcon icon={Tick01Icon} className="size-3.5 shrink-0 text-primary" />
+  <HugeiconsIcon
+    icon={Tick02Icon}
+    strokeWidth={2.5}
+    className="size-3.5 shrink-0 text-primary-foreground"
+  />
 );
+
+const indicators = { completed: completedIcon };
+
+// Indicator size scales with density: base 32px + a density-scaled component padding
+// (8/12/16px), giving roughly 40/44/48px circles. Every dependent measurement (line
+// center alignment, label `top`) is derived from the same calc so geometry stays correct.
+const indicatorClass =
+  "size-[calc(2rem+var(--spacing-component))] min-h-[calc(2rem+var(--spacing-component))] min-w-[calc(2rem+var(--spacing-component))] bg-secondary text-secondary-foreground ring-0 data-[state=completed]:border-primary/30 data-[state=completed]:bg-primary data-[state=completed]:text-primary-foreground";
+
+// Horizontal: line center = half the indicator size minus half the line thickness (1px).
+const horizontalSeparatorClass =
+  "group-data-[orientation=horizontal]/stepper-nav:mt-[calc((2rem+var(--spacing-component))/2-1px)]";
+
+// Horizontal trigger is a fixed-size box around the indicator so the connecting line
+// lands at the same gap from every indicator. The label group is positioned absolutely
+// below so its width never affects the trigger.
+const horizontalTriggerClass =
+  "relative w-fit min-h-20 shrink-0 flex-col items-center justify-start rounded-md px-section";
+const horizontalLabelClass =
+  "absolute left-1/2 top-[calc(2rem+var(--spacing-component)*2)] -translate-x-1/2 text-center";
+
+// Vertical: indicator + text group on a row, separator shifted right to align with the
+// indicator's center. `my-component` keeps line breathing room density-aware (8–12px).
+const verticalSeparatorClass =
+  "group-data-[orientation=vertical]/stepper-nav:ml-[calc((2rem+var(--spacing-component))/2-1px)] group-data-[orientation=vertical]/stepper-nav:my-component";
 
 export function OnboardingStepper({
   className,
@@ -84,15 +113,12 @@ export function OnboardingStepper({
           : undefined
       }
       orientation={orientation}
-      indicators={{
-        completed: completedIcon,
-      }}
+      indicators={indicators}
     >
       <StepperNav
         className={cn(
-          "gap-0",
-          orientation === "horizontal" && "items-start",
-          orientation === "vertical" && "items-stretch"
+          orientation === "horizontal" && "items-start justify-between gap-0",
+          orientation === "vertical" && "items-stretch gap-0"
         )}
       >
         {steps.map((s, i) => {
@@ -123,29 +149,63 @@ type ItemProps = {
 
 function OnboardingStepperItem({ n, step, interactive, isLast, orientation }: ItemProps) {
   const available = step.available !== false;
+  const inert = !interactive || !available;
+
+  if (orientation === "vertical") {
+    return (
+      <StepperItem
+        className="w-full !items-stretch !justify-start"
+        step={n}
+        disabled={inert}
+      >
+        <div className="flex items-center gap-component">
+          <StepperTrigger
+            className={cn(
+              "shrink-0 !rounded-md",
+              inert && "pointer-events-none cursor-default",
+              !available && "opacity-55"
+            )}
+          >
+            <StepperIndicator className={indicatorClass}>{n}</StepperIndicator>
+          </StepperTrigger>
+          <div className={cn("min-w-0 flex-1 text-left", !available && "opacity-55")}>
+            <StepperTitle className="line-clamp-2 font-semibold text-foreground">
+              {step.title}
+            </StepperTitle>
+            {step.description ? (
+              <p className="line-clamp-2 text-xs leading-[1.4] text-muted-foreground">
+                {step.description}
+              </p>
+            ) : null}
+          </div>
+        </div>
+        {isLast ? null : <StepperSeparator className={verticalSeparatorClass} />}
+      </StepperItem>
+    );
+  }
+
   return (
-    <StepperItem
-      className={cn(orientation === "vertical" && "w-full", orientation === "horizontal" && "min-w-0 flex-1")}
-      step={n}
-      disabled={!interactive || !available}
-    >
+    <StepperItem className="items-start" step={n} disabled={inert}>
       <StepperTrigger
         className={cn(
-          "max-w-full min-w-0",
-          (!interactive || !available) && "pointer-events-none cursor-default",
-          !available && "opacity-55",
-          orientation === "vertical" && "w-full"
+          horizontalTriggerClass,
+          inert && "pointer-events-none cursor-default",
+          !available && "opacity-55"
         )}
       >
-        <StepperIndicator>{n}</StepperIndicator>
-        <div className="flex min-w-0 flex-1 flex-col gap-micro text-start">
-          <StepperTitle className="line-clamp-2 font-semibold text-foreground">{step.title}</StepperTitle>
+        <StepperIndicator className={indicatorClass}>{n}</StepperIndicator>
+        <div className={horizontalLabelClass}>
+          <StepperTitle className="line-clamp-2 font-semibold text-foreground">
+            {step.title}
+          </StepperTitle>
           {step.description ? (
-            <p className="line-clamp-2 text-xs leading-[1.6] text-muted-foreground">{step.description}</p>
+            <p className="line-clamp-2 text-xs leading-[1.4] text-muted-foreground">
+              {step.description}
+            </p>
           ) : null}
         </div>
       </StepperTrigger>
-      {isLast ? null : <StepperSeparator />}
+      {isLast ? null : <StepperSeparator className={horizontalSeparatorClass} />}
     </StepperItem>
   );
 }
