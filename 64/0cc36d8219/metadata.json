@@ -1,0 +1,46 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "640cc36d8219",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "packages/ui-lib/src/components/page-header/PageHeader.stories.tsx",
+    "packages/ui-lib/src/components/page-header/PageHeader.tsx",
+    "packages/ui-lib/src/components/page-header/index.ts",
+    "packages/ui-lib/src/components/portal-chat/ChatPrimitives.stories.tsx",
+    "packages/ui-lib/src/components/portal-chat/PortalChatFullExperience.stories.tsx",
+    "packages/ui-lib/src/components/portal-chat/PortalChatWindow.stories.tsx",
+    "packages/ui-lib/src/components/portal-chat/PortalChatWindow.tsx",
+    "packages/ui-lib/src/components/portal-chat/chat-bubble-avatar.tsx",
+    "packages/ui-lib/src/components/portal-chat/chat-bubble-message.tsx",
+    "packages/ui-lib/src/components/portal-chat/chat-bubble.tsx",
+    "packages/ui-lib/src/components/portal-chat/chat-composer-toolbar.stories.tsx",
+    "packages/ui-lib/src/components/portal-chat/chat-composer-toolbar.tsx",
+    "packages/ui-lib/src/components/portal-chat/chat-default-emoji-presets.ts",
+    "packages/ui-lib/src/components/portal-chat/chat-list.tsx",
+    "packages/ui-lib/src/components/portal-chat/chat-loading-dots.tsx",
+    "packages/ui-lib/src/components/portal-chat/chat-thread-header.tsx",
+    "packages/ui-lib/src/components/portal-chat/chat-types.ts",
+    "packages/ui-lib/src/components/portal-chat/index.ts",
+    "packages/ui-lib/src/components/portal-chat/portal-chat-conversation-digest-item.tsx",
+    "packages/ui-lib/src/components/portal-chat/portal-chat-types.ts",
+    "packages/ui-lib/src/components/portal-chat/use-chat-auto-scroll.ts",
+    "packages/ui-lib/src/index.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/64/0cc36d8219/0/metadata.json",
+      "transcript": "/64/0cc36d8219/0/full.jsonl",
+      "content_hash": "/64/0cc36d8219/0/content_hash.txt",
+      "prompt": "/64/0cc36d8219/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}
