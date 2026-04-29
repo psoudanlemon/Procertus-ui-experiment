@@ -5,7 +5,7 @@ import { useAutoElevate } from "@/hooks/use-auto-elevate";
 import { cn } from "@/lib/utils";
 import { FadingScrollList } from "@/components/ui/fading-scroll-list";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowRight01Icon, Tick01Icon } from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 
 function ContextMenu({ ...props }: React.ComponentProps<typeof ContextMenuPrimitive.Root>) {
   return <ContextMenuPrimitive.Root data-slot="context-menu" {...props} />;
@@ -168,7 +168,7 @@ function ContextMenuCheckboxItem({
     >
       <span className="pointer-events-none absolute right-component">
         <ContextMenuPrimitive.ItemIndicator>
-          <HugeiconsIcon icon={Tick01Icon} />
+          <HugeiconsIcon icon={Tick02Icon} />
         </ContextMenuPrimitive.ItemIndicator>
       </span>
       {children}
@@ -196,7 +196,7 @@ function ContextMenuRadioItem({
     >
       <span className="pointer-events-none absolute right-component">
         <ContextMenuPrimitive.ItemIndicator>
-          <HugeiconsIcon icon={Tick01Icon} />
+          <HugeiconsIcon icon={Tick02Icon} />
         </ContextMenuPrimitive.ItemIndicator>
       </span>
       {children}

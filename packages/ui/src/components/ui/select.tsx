@@ -4,7 +4,7 @@ import { Select as SelectPrimitive } from "radix-ui";
 import { useAutoElevate } from "@/hooks/use-auto-elevate";
 import { cn } from "@/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowDown01Icon, Tick01Icon, ArrowUp01Icon } from "@hugeicons/core-free-icons";
+import { ArrowDown01Icon, Tick02Icon, ArrowUp01Icon } from "@hugeicons/core-free-icons";
 
 function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root data-slot="select" {...props} />;
@@ -120,7 +120,7 @@ function SelectItem({
     >
       <span className="pointer-events-none absolute right-component flex size-4 items-center justify-center">
         <SelectPrimitive.ItemIndicator>
-          <HugeiconsIcon icon={Tick01Icon} className="pointer-events-none" />
+          <HugeiconsIcon icon={Tick02Icon} className="pointer-events-none" />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>

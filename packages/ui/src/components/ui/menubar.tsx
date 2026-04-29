@@ -4,7 +4,7 @@ import { Menubar as MenubarPrimitive } from "radix-ui";
 import { useAutoElevate } from "@/hooks/use-auto-elevate";
 import { cn } from "@/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Tick01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { Tick02Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
 function Menubar({ className, ...props }: React.ComponentProps<typeof MenubarPrimitive.Root>) {
   return (
@@ -123,7 +123,7 @@ function MenubarCheckboxItem({
     >
       <span className="pointer-events-none absolute left-component flex size-4 items-center justify-center [&_svg:not([class*='size-'])]:size-4">
         <MenubarPrimitive.ItemIndicator>
-          <HugeiconsIcon icon={Tick01Icon} />
+          <HugeiconsIcon icon={Tick02Icon} />
         </MenubarPrimitive.ItemIndicator>
       </span>
       {children}
@@ -151,7 +151,7 @@ function MenubarRadioItem({
     >
       <span className="pointer-events-none absolute left-component flex size-4 items-center justify-center [&_svg:not([class*='size-'])]:size-4">
         <MenubarPrimitive.ItemIndicator>
-          <HugeiconsIcon icon={Tick01Icon} />
+          <HugeiconsIcon icon={Tick02Icon} />
         </MenubarPrimitive.ItemIndicator>
       </span>
       {children}

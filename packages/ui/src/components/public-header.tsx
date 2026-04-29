@@ -3,7 +3,7 @@
 import * as React from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Tick01Icon,
+  Tick02Icon,
   ArrowDown01Icon,
   GlobeIcon,
   Logout01Icon,
@@ -394,7 +394,7 @@ function PublicRegistryHeader({
                       </span>
                       {lang.code === (activeLanguage ?? languages[0]?.code) && (
                         <HugeiconsIcon
-                          icon={Tick01Icon}
+                          icon={Tick02Icon}
                           className="size-4 text-sidebar-accent-foreground"
                         />
                       )}

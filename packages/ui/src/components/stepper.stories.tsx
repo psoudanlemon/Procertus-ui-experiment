@@ -1,4 +1,4 @@
-import { Tick01Icon, Tick02Icon, AlertCircleIcon } from "@hugeicons/core-free-icons";
+import { Tick02Icon, AlertCircleIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
@@ -289,7 +289,7 @@ export const AllStepsNonInteractive: Story = {
   ),
 };
 
-const tick = <HugeiconsIcon icon={Tick01Icon} className="size-3.5 text-primary" />;
+const tick = <HugeiconsIcon icon={Tick02Icon} className="size-3.5 text-primary" />;
 const alert = <HugeiconsIcon icon={AlertCircleIcon} className="size-3.5 text-muted-foreground" />;
 
 /**

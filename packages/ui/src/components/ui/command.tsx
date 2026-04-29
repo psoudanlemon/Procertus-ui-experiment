@@ -12,7 +12,7 @@ import {
 import { FadingScrollList } from "@/components/ui/fading-scroll-list";
 import { InputGroup, InputGroupAddon } from "@/components/ui/input-group";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Search01Icon, Tick01Icon } from "@hugeicons/core-free-icons";
+import { Search01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
   return (
@@ -158,7 +158,7 @@ function CommandItem({
       {...props}
     >
       {children}
-      <HugeiconsIcon icon={Tick01Icon} className="ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100" />
+      <HugeiconsIcon icon={Tick02Icon} className="ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100" />
     </CommandPrimitive.Item>
   );
 }

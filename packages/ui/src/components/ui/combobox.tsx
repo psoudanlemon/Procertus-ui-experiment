@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Tick01Icon, ArrowUpDownIcon } from "@hugeicons/core-free-icons";
+import { Tick02Icon, ArrowUpDownIcon } from "@hugeicons/core-free-icons";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -83,7 +83,7 @@ function Combobox({
                 >
                   {option.label}
                   <HugeiconsIcon
-                    icon={Tick01Icon}
+                    icon={Tick02Icon}
                     className={cn(
                       "ml-auto size-4",
                       value === option.value ? "opacity-100" : "opacity-0",

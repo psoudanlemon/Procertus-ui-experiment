@@ -6,7 +6,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowLeft01Icon,
   ArrowRight01Icon,
-  Tick01Icon,
+  Tick02Icon,
   ArrowDown01Icon,
   GlobeIcon,
   Logout01Icon,
@@ -526,7 +526,7 @@ function AppHeader({
                         <span className="flex items-center gap-micro">
                           <span>🇳🇱</span> Nederlands
                         </span>
-                        <HugeiconsIcon icon={Tick01Icon} className="size-4 text-accent-foreground" />
+                        <HugeiconsIcon icon={Tick02Icon} className="size-4 text-accent-foreground" />
                       </button>
                       <button
                         type="button"
