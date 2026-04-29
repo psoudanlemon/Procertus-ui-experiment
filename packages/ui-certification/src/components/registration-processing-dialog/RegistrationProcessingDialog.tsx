@@ -75,33 +75,33 @@ export function RegistrationProcessingDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className={cn("max-w-lg gap-5 sm:max-w-lg", contentClassName)}
+        className={cn("max-w-lg gap-section sm:max-w-lg", contentClassName)}
       >
         <DialogHeader className="text-left">
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription className="text-pretty">{description}</DialogDescription>
         </DialogHeader>
-        <div className="flex items-start gap-3 rounded-lg border border-border bg-muted/30 px-4 py-3">
+        <div className="flex items-start gap-component rounded-lg border border-border bg-muted/30 p-section">
           <HugeiconsIcon
             icon={Loading03Icon}
-            className="mt-0.5 size-8 shrink-0 animate-spin text-primary"
+            className="mt-0.5 size-8 shrink-0 animate-spin [animation-duration:3s] [animation-timing-function:linear] text-primary"
             strokeWidth={1.75}
             aria-hidden
           />
           <div className="min-w-0 text-left text-sm leading-relaxed text-muted-foreground">
             <p className="m-0 font-medium text-foreground">{statusTitle}</p>
-            <p className="mt-1 m-0">{statusBody}</p>
+            <p className="mt-micro m-0">{statusBody}</p>
           </div>
         </div>
-        <div className="space-y-2">
-          <div className="flex items-center justify-between gap-2 text-sm">
+        <div className="space-y-component">
+          <div className="flex items-center justify-between gap-component text-sm">
             <span className="font-medium text-foreground">{progressLabel}</span>
             <span className="tabular-nums text-muted-foreground">{Math.round(progress)}%</span>
           </div>
           <Progress value={progress} className="h-2" aria-label={progressAriaLabel} />
         </div>
         <ul
-          className="max-h-[min(40vh,16rem)] space-y-2.5 overflow-y-auto pr-1 text-left"
+          className="max-h-[min(40vh,16rem)] space-y-component overflow-y-auto pr-1 text-left"
           aria-live="polite"
         >
           {steps.map((item, index) => {
@@ -111,13 +111,13 @@ export function RegistrationProcessingDialog({
               <li
                 key={item.id}
                 className={cn(
-                  "flex gap-3 text-sm transition-colors",
+                  "flex items-center gap-component text-sm transition-colors",
                   done || active ? "text-foreground" : "text-muted-foreground",
                 )}
               >
                 <span
                   className={cn(
-                    "mt-0.5 size-2 shrink-0 rounded-full",
+                    "size-2 shrink-0 rounded-full",
                     done
                       ? "bg-primary"
                       : active
