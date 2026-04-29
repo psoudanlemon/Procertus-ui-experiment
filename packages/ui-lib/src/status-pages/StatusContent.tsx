@@ -49,13 +49,13 @@ function StatusContent({
         ) : null}
 
         {/* Copy */}
-        <div className="space-y-2">
+        <div className="space-y-micro">
           <H1>{heading}</H1>
           {description != null &&
           (typeof description === "string" ? (
             <p className="text-base leading-relaxed text-muted-foreground">{description}</p>
           ) : (
-            <div className="space-y-4 text-balance text-base leading-relaxed text-muted-foreground [&_strong]:font-semibold [&_strong]:text-foreground [&_a]:font-medium [&_a]:text-primary [&_a]:underline-offset-4 hover:[&_a]:underline">
+            <div className="space-y-section text-balance text-base leading-relaxed text-muted-foreground [&_strong]:font-semibold [&_strong]:text-foreground [&_a]:font-medium [&_a]:text-primary [&_a]:underline-offset-4 hover:[&_a]:underline">
               {description}
             </div>
           ))}
