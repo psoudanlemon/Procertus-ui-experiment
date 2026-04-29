@@ -1,0 +1,53 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "66e9eae3a5ab",
+  "session_id": "f01cf9db-e7f0-4a81-8a3c-34f01adcfe21",
+  "strategy": "manual-commit",
+  "created_at": "2026-04-29T11:09:42.259107Z",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/SignupPage.tsx",
+    "packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-constants.ts",
+    "packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-flow-helpers.tsx",
+    "packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-shell.tsx",
+    "packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-types.ts",
+    "packages/ui-certification/src/anonymous-onboarding/lib/onboardingRegistrationCompleteSession.ts",
+    "packages/ui-certification/src/anonymous-onboarding/lib/registrationPersonOptions.ts",
+    "packages/ui-certification/src/anonymous-onboarding/lib/registrationSubmitSimulation.ts",
+    "packages/ui-certification/src/anonymous-onboarding/lib/useLocalStorageState.ts",
+    "packages/ui-certification/src/anonymous-onboarding/lib/vatPrototypePresets.ts",
+    "packages/ui-certification/src/components/certification-request-wizard/CertificationRequestWizard.tsx",
+    "packages/ui-certification/src/components/registration-processing-dialog/RegistrationProcessingDialog.stories.tsx",
+    "packages/ui-certification/src/components/registration-processing-dialog/RegistrationProcessingDialog.tsx",
+    "packages/ui-certification/src/components/registration-processing-dialog/index.ts",
+    "packages/ui-certification/src/index.ts",
+    "packages/ui-lib/src/components/prefill-field-skeleton/PrefillFieldSkeleton.stories.tsx",
+    "packages/ui-lib/src/components/prefill-field-skeleton/PrefillFieldSkeleton.tsx",
+    "packages/ui-lib/src/components/prefill-field-skeleton/index.ts",
+    "packages/ui-lib/src/index.ts"
+  ],
+  "agent": "Claude Code",
+  "model": "composer-2",
+  "turn_id": "8fbceec01221",
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "session_metrics": {
+    "turn_count": 4
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-04-29T11:09:42.237134Z",
+    "agent_lines": 1691,
+    "human_added": 2001,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 3692,
+    "agent_percentage": 45.80173347778981
+  }
+}
