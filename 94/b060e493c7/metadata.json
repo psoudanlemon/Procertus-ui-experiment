@@ -1,0 +1,40 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "94b060e493c7",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 40,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/App.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/onboarding/onboardingRegistrationCompleteSession.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/onboarding/vatPrototypePresets.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingRegistrationCompletePage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/SignupPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/WelcomePage.tsx",
+    "packages/ui-certification/src/certification-request/model.ts",
+    "packages/ui-lib/src/components/step-layout/StepLayout.tsx",
+    "packages/ui-lib/src/user-authentication/AuthLayout.stories.tsx",
+    "packages/ui-lib/src/user-authentication/AuthLayout.tsx",
+    "packages/ui-lib/src/user-authentication/LoginForm.stories.tsx",
+    "packages/ui-lib/src/user-authentication/LoginForm.tsx",
+    "packages/ui-pt1-prototype/src/index.ts",
+    "packages/ui-pt1-prototype/src/mock-prototype-auth/MockPrototypePasswordlessLoginForm.tsx",
+    "packages/ui-pt1-prototype/src/mock-prototype-auth/PrototypeCard.tsx",
+    "packages/ui-pt1-prototype/src/mock-prototype-auth/mock-prototype-passwordless-login-form.stories.tsx",
+    "packages/ui-pt1-prototype/src/mock-prototype-auth/prototype-card.stories.tsx",
+    "packages/ui/src/components/ui/alert.tsx",
+    "packages/ui/src/styles/globals.css",
+    "packages/ui/src/styles/themes/default.css"
+  ],
+  "sessions": [
+    {
+      "metadata": "/94/b060e493c7/0/metadata.json",
+      "transcript": "/94/b060e493c7/0/full.jsonl",
+      "content_hash": "/94/b060e493c7/0/content_hash.txt",
+      "prompt": "/94/b060e493c7/0/prompt.txt"
+    }
+  ]
+}

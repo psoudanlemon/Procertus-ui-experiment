@@ -1,0 +1,54 @@
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:842-865 use the newly introduced prototype card instead.
+
+---
+
+Also add the dropdown selector to the prototype card.
+This is part of the demo.
+
+---
+
+On the next step, after selecting the demo VAT number, we simulate a loading progress.
+
+We also know which fields are being fetched. Please set up skeletons for the form that we are trying to pre-fill.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:1282-1298 use the newly set-up prototype card to display this extra information for the demo.
+
+---
+
+@Procertus-ui-experiment/packages/ui-pt1-prototype/src/mock-prototype-auth/PrototypeCard.tsx I am now using this prototype card in all places where I want to show extra information that will not be added in the eventual application. 
+
+ if there is a problem, the correct styling is not applied. I can see styling like the board dashed, but the prototype colors are not being applied correctly. Please see the screenshot of how this looks in the prototype application.
+
+When I run the stories for this prototype card in the dedicated Storybook, the colors are applied correctly. Please see the screenshot. 
+
+ please investigate what is going wrong.
+
+---
+
+@Procertus-ui-experiment/packages/ui-pt1-prototype/src/mock-prototype-auth/PrototypeCard.tsx I am now using this prototype card in all places where I want to show extra information that will not be added in the eventual application. 
+
+ if there is a problem, the correct styling is not applied. I can see styling like the board dashed, but the prototype colors are not being applied correctly. Please see the screenshot of how this looks in the prototype application.
+
+When I run the stories for this prototype card in the dedicated Storybook, the colors are applied correctly. Please see the screenshot. 
+
+ please investigate what is going wrong.
+
+---
+
+@Procertus-ui-experiment/packages/ui-pt1-prototype/src/mock-prototype-auth/PrototypeCard.tsx I am now using this prototype card in all places where I want to show extra information that will not be added in the eventual application. 
+
+ if there is a problem, the correct styling is not applied. I can see styling like the board dashed, but the prototype colors are not being applied correctly. Please see the screenshot of how this looks in the prototype application.
+
+When I run the stories for this prototype card in the dedicated Storybook, the colors are applied correctly. Please see the screenshot. 
+
+ please investigate what is going wrong.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:1263-1277 use an alert to display the outcome message. Warning
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:1263-1277 use an alert to display the outcome message. Warning
