@@ -10,7 +10,7 @@ import {
   Textarea,
 } from "@procertus-ui/ui";
 
-import { StepLayout, useStepLayout } from "../../../components/step-layout";
+import { StepLayout, useStepLayout } from "../step-layout";
 import { OnboardingStepper, type OnboardingStepperStep } from "./OnboardingStepper";
 
 const stepDefs: OnboardingStepperStep[] = [

@@ -271,7 +271,7 @@ function CertificationRequestWizardView({
 
   return (
     <StepLayout
-      className={authenticated ? "max-w-none" : "w-full"}
+      className={authenticated ? "max-w-none" : "w-full max-w-5xl"}
       layout={authenticated ? "fill-parent" : "default"}
       flush={authenticated}
       stepperPosition={authenticated ? "start" : "top"}

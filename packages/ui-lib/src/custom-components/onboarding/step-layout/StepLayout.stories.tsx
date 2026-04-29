@@ -10,15 +10,15 @@ import {
   Textarea,
 } from "@procertus-ui/ui";
 
-import { OnboardingStepper, type OnboardingStepperStep } from "../../custom-components/onboarding/onboarding-stepper";
+import { OnboardingStepper, type OnboardingStepperStep } from "../onboarding-stepper";
 import { StepLayout } from "./StepLayout";
 import { useStepLayout } from "./useStepLayout";
 
 const meta = {
-  title: "UILib/StepLayout",
+  title: "Custom Components/Onboarding/StepLayout",
   component: StepLayout,
   parameters: {
-    layout: "centered",
+    layout: "padded",
     docs: {
       description: {
         component:
@@ -70,6 +70,7 @@ function OnboardingFlowStory() {
       title={["Welcome", "Profile basics", "Review & finish"][step] ?? "Step"}
       description="Supportive copy lives here. Mark the prerequisite below to enable Next, or go Back to change a previous step."
       stepLabel={`Step ${step + 1} of ${flow.totalSteps}`}
+      cancelAction={{ label: "Cancel", onClick: () => undefined }}
       backAction={
         flow.isFirst
           ? undefined
@@ -259,7 +260,7 @@ function WithTopStepperStory() {
       variant="onboarding"
       title={s.title}
       description={s.description}
-      stepLabel={`Step ${flow.activeStep + 1} of ${flow.totalSteps}`}
+      cancelAction={{ label: "Cancel", onClick: () => undefined }}
       backAction={flow.isFirst ? undefined : { label: "Back", onClick: flow.goBack }}
       primaryAction={{
         label: flow.isLast ? "Done" : "Next",
@@ -423,33 +424,44 @@ function WithStartStepperStory() {
     return null;
   }
   return (
-    <div className="w-full min-w-0 max-w-4xl">
-      <StepLayout
-        stepperPosition="start"
-        layout="fill"
-        stepper={
-          <OnboardingStepper
-            className="max-w-none"
-            steps={stepperSteps}
-            activeStep={flow.activeStep}
-            onStepChange={flow.goToStep}
-            orientation="vertical"
-            interactive
-          />
-        }
-        variant="onboarding"
-        title={s.title}
-        description={s.description}
-        stepLabel={`Step ${flow.activeStep + 1} of ${flow.totalSteps}`}
-        backAction={flow.isFirst ? undefined : { label: "Back", onClick: flow.goBack }}
-        primaryAction={{
-          label: flow.isLast ? "Done" : "Next",
-          onClick: () => (flow.isLast ? undefined : flow.goForward()),
-        }}
-      >
-        <p className="text-sm text-muted-foreground">Start rail: vertical stepper in the `stepper` slot with `stepperPosition="start"`. On small screens the rail stacks above the main column.</p>
-      </StepLayout>
-    </div>
+    <StepLayout
+      className="max-w-none"
+      stepperPosition="start"
+      layout="fill"
+      stepper={
+        <OnboardingStepper
+          className="max-w-none"
+          steps={stepperSteps}
+          activeStep={flow.activeStep}
+          onStepChange={flow.goToStep}
+          orientation="vertical"
+          interactive
+        />
+      }
+      variant="onboarding"
+      title={s.title}
+      description={s.description}
+      cancelAction={{ label: "Cancel", onClick: () => undefined }}
+      backAction={flow.isFirst ? undefined : { label: "Back", onClick: flow.goBack }}
+      primaryAction={{
+        label: flow.isLast ? "Done" : "Next",
+        onClick: () => (flow.isLast ? undefined : flow.goForward()),
+      }}
+    >
+      <FieldGroup>
+        <Field>
+          <FieldLabel htmlFor="rail-email">Email</FieldLabel>
+          <Input id="rail-email" type="email" placeholder="you@example.com" />
+          <FieldDescription>
+            Start rail: vertical stepper in the `stepper` slot with `stepperPosition="start"`. On small screens the rail stacks above the main column.
+          </FieldDescription>
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="rail-password">Password</FieldLabel>
+          <Input id="rail-password" type="password" placeholder="At least 8 characters" />
+        </Field>
+      </FieldGroup>
+    </StepLayout>
   );
 }
 
@@ -490,8 +502,9 @@ function WizardStepStory() {
     <StepLayout
       variant="wizard"
       title={step === 0 ? "Intent" : "Confirm"}
-      stepLabel={step === 0 ? "Step 1" : "Step 2 of 2"}
+      stepLabel={`Step ${step + 1} of ${flow.totalSteps}`}
       description="Footer emphasizes the primary “Next” action; use optional outline secondary actions when needed."
+      cancelAction={{ label: "Cancel", onClick: () => undefined }}
       backAction={
         flow.isFirst ? undefined : { label: "Back", onClick: flow.goBack, disabled: !flow.canGoBack }
       }
@@ -534,7 +547,7 @@ const fillerParagraphs = Array.from(
 function FillLayoutStory() {
   const [ok, setOk] = useState(false);
   const flow = useStepLayout({
-    totalSteps: 1,
+    totalSteps: 3,
     canAdvanceFrom: () => ok,
   });
 
@@ -546,7 +559,8 @@ function FillLayoutStory() {
       variant="onboarding"
       title="Scrollable full-screen step"
       description='Set the layout prop to "fill" when the layout should occupy the viewport. The main region scrolls; header and footer stay put.'
-      stepLabel="Step 1 of 1"
+      stepLabel={`Step ${flow.activeStep + 1} of ${flow.totalSteps}`}
+      cancelAction={{ label: "Cancel", onClick: () => undefined }}
       primaryAction={{
         label: "Continue",
         onClick: () => undefined,
@@ -610,6 +624,7 @@ function ParentFillWithRailStory() {
         title={s.title}
         description="Parent-fill layout fills the available app-shell region; the body scrolls internally and actions stay docked at the bottom."
         stepLabel={`Step ${flow.activeStep + 1} of ${flow.totalSteps}`}
+        cancelAction={{ label: "Cancel", onClick: () => undefined }}
         backAction={flow.isFirst ? undefined : { label: "Back", onClick: flow.goBack }}
         primaryAction={{
           label: flow.isLast ? "Done" : "Next",

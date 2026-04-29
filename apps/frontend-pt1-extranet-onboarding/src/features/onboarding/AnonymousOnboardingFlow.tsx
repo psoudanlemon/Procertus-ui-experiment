@@ -899,7 +899,7 @@ export function AnonymousOnboardingFlow() {
         pageDescription={REGISTRATION_PHASE_DESCRIPTION}
       >
         <StepLayout
-          className="w-full"
+          className="w-full max-w-5xl"
           variant="onboarding"
           stepper={
             <OnboardingStepper

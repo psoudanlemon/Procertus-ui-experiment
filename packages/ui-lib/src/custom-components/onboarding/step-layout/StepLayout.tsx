@@ -10,7 +10,16 @@
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
-import { Button, Card, CardContent, CardFooter, CardHeader, H1, P } from "@procertus-ui/ui";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  FadingScrollList,
+  H1,
+  P,
+} from "@procertus-ui/ui";
 
 export type StepLayoutAction = {
   label: string;
@@ -58,26 +67,23 @@ export type StepLayoutProps = {
   /** Omitted when there is no footer CTA (e.g. terminal “check your email” step). */
   primaryAction?: StepLayoutAction;
   secondaryAction?: StepLayoutAction;
+  /** Ghost-styled escape hatch rendered at the far-left of the footer (e.g. “Cancel”). */
+  cancelAction?: StepLayoutAction;
 };
 
 const variantClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
-  onboarding: "max-w-5xl",
-  wizard: "max-w-5xl",
+  onboarding: "max-w-3xl",
+  wizard: "max-w-2xl",
 };
 
 const cardGapClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
   onboarding: "gap-region",
-  wizard: "gap-component",
+  wizard: "gap-region",
 };
 
 const cardTopPadClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
   onboarding: "sm:pt-boundary",
-  wizard: "pt-micro",
-};
-
-const headerClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
-  onboarding: "flex flex-col gap-region sm:px-boundary",
-  wizard: "flex flex-col gap-component px-micro sm:px-component",
+  wizard: "sm:pt-boundary",
 };
 
 const titleGroupClass = "flex flex-col gap-micro";
@@ -90,11 +96,6 @@ const titleClass: Record<NonNullable<StepLayoutProps["variant"]>, string | undef
 const descClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
   onboarding: "text-base leading-[1.6]",
   wizard: "text-sm leading-[1.6]",
-};
-
-const contentClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
-  onboarding: "space-y-section sm:px-boundary sm:pb-section",
-  wizard: "space-y-component px-micro sm:px-component",
 };
 
 function StepLayoutHeaderBlock({
@@ -140,6 +141,7 @@ export function StepLayout({
   backAction,
   primaryAction,
   secondaryAction,
+  cancelAction,
 }: StepLayoutProps) {
   const isFill = layout === "fill" || layout === "fill-parent";
   const isViewportFill = layout === "fill";
@@ -150,80 +152,115 @@ export function StepLayout({
   const cardClass = cn(
     "w-full overflow-hidden shadow-proc-xs",
     cardGapClass[variant],
-    !isFill && cardTopPadClass[variant],
+    !rail && cardTopPadClass[variant],
     isFill
-      ? "flex min-h-0 flex-col !py-0 ring-0"
+      ? "flex min-h-0 flex-col"
       : cn("mx-auto", variantClass[variant]),
-    isFill && "rounded-none",
-    isFill && "bg-transparent shadow-none ring-0",
-    !isFill && "rounded-xl",
+    rail && "!py-0",
+    isViewportFill && !rail && "!pb-0",
+    isViewportFill && "rounded-none bg-transparent shadow-none ring-0",
+    !isViewportFill && "rounded-xl",
   );
 
-  const mainColumn = (
-    <>
-      {!rail && hasStepper ? (
-        <div className="mx-auto w-[90%]">{stepper}</div>
+  const headerNode = (
+    <CardHeader
+      className={cn(
+        "flex flex-col gap-region",
+        rail ? "!px-0" : "sm:px-boundary",
+        isFill && "shrink-0",
+      )}
+    >
+      <div className={titleGroupClass}>
+        <StepLayoutHeaderBlock
+          variant={variant}
+          title={title}
+          description={description}
+          stepLabel={stepLabel}
+        />
+      </div>
+    </CardHeader>
+  );
+
+  const railContentClass = "space-y-section !px-0";
+  const stackedContentClass = "space-y-section sm:px-boundary sm:pb-section";
+
+  const contentNode = (
+    <CardContent
+      className={cn(
+        isFill
+          ? "flex min-h-0 flex-1 flex-col !p-0"
+          : (rail ? railContentClass : stackedContentClass),
+      )}
+    >
+      {isFill ? (
+        <FadingScrollList
+          fadeColor={isViewportFill ? "from-background" : "from-card"}
+          wrapperClassName="flex min-h-0 flex-1 flex-col"
+          className={cn(
+            rail ? railContentClass : stackedContentClass,
+            "min-h-0 flex-1",
+          )}
+        >
+          {children}
+        </FadingScrollList>
+      ) : (
+        children
+      )}
+    </CardContent>
+  );
+
+  const footerNode = (
+    <CardFooter
+      className={cn(
+        "flex flex-row flex-wrap items-center justify-end gap-component",
+        "min-h-11",
+        "p-section",
+        isFill && "shrink-0",
+        isViewportFill && "bg-transparent",
+      )}
+    >
+      {cancelAction ? (
+        <Button
+          type="button"
+          variant="ghost"
+          className="mr-auto"
+          disabled={cancelAction.disabled}
+          onClick={cancelAction.onClick}
+        >
+          {cancelAction.label}
+        </Button>
       ) : null}
-      <CardHeader
-        className={cn(
-          headerClass[variant],
-          isFill && "shrink-0",
-        )}
-      >
-        <div className={titleGroupClass}>
-          <StepLayoutHeaderBlock
-            variant={variant}
-            title={title}
-            description={description}
-            stepLabel={stepLabel}
-          />
-        </div>
-      </CardHeader>
-      <CardContent
-        className={cn(contentClass[variant], isFill && "min-h-0 flex-1 overflow-y-auto")}
-      >
-        {children}
-      </CardContent>
-      <CardFooter
-        className={cn(
-          "flex flex-row flex-wrap items-center justify-end gap-component",
-          "min-h-11",
-          variant === "wizard" ? "p-micro sm:p-component" : "py-section px-component sm:px-boundary",
-          isFill && "shrink-0 bg-transparent",
-        )}
-      >
-        {backAction ? (
-          <Button
-            type="button"
-            variant="outline"
-            disabled={backAction.disabled}
-            onClick={backAction.onClick}
-          >
-            {backAction.label}
-          </Button>
-        ) : null}
-        {secondaryAction ? (
-          <Button
-            type="button"
-            variant="outline"
-            disabled={secondaryAction.disabled}
-            onClick={secondaryAction.onClick}
-          >
-            {secondaryAction.label}
-          </Button>
-        ) : null}
-        {primaryAction ? (
-          <Button
-            type="button"
-            disabled={primaryAction.disabled || primaryAction.loading}
-            onClick={primaryAction.onClick}
-            aria-busy={primaryAction.loading === true}
-          >
-            {primaryAction.label}
-          </Button>
-        ) : null}
-      </CardFooter>
-    </>
+      {backAction ? (
+        <Button
+          type="button"
+          variant="outline"
+          disabled={backAction.disabled}
+          onClick={backAction.onClick}
+        >
+          {backAction.label}
+        </Button>
+      ) : null}
+      {secondaryAction ? (
+        <Button
+          type="button"
+          variant="outline"
+          disabled={secondaryAction.disabled}
+          onClick={secondaryAction.onClick}
+        >
+          {secondaryAction.label}
+        </Button>
+      ) : null}
+      {primaryAction ? (
+        <Button
+          type="button"
+          disabled={primaryAction.disabled || primaryAction.loading}
+          onClick={primaryAction.onClick}
+          aria-busy={primaryAction.loading === true}
+        >
+          {primaryAction.label}
+        </Button>
+      ) : null}
+    </CardFooter>
   );
 
   if (rail) {
@@ -233,24 +270,39 @@ export function StepLayout({
           cardClass,
           isViewportFill && "h-svh",
           isParentFill && "h-full min-h-0",
-          "flex flex-col gap-0 md:flex-row",
+          "flex flex-col !gap-0",
           className,
         )}
       >
         <div
           className={cn(
-            "shrink-0 border-border md:w-56 md:min-w-48 md:max-w-xs md:border-r",
-            isFill
-              ? "border-b p-section md:max-h-none md:overflow-y-auto"
-              : "border-b p-section md:overflow-y-auto",
-            isParentFill && "min-h-0",
+            "flex min-w-0 flex-col md:flex-row",
+            isFill && "min-h-0 flex-1",
           )}
         >
-          {stepper}
+          <div
+            className={cn(
+              "shrink-0 border-border md:w-56 md:min-w-48 md:max-w-xs md:border-r",
+              isFill
+                ? "border-b p-section md:max-h-none md:border-b-0 md:overflow-y-auto"
+                : "border-b p-section md:border-b-0 md:overflow-y-auto",
+              isParentFill && "min-h-0",
+            )}
+          >
+            {stepper}
+          </div>
+          <div
+            className={cn(
+              "flex min-h-0 min-w-0 flex-1 flex-col p-section",
+              cardGapClass[variant],
+              isFill && "min-h-0 flex-1",
+            )}
+          >
+            {headerNode}
+            {contentNode}
+          </div>
         </div>
-        <div className={cn("flex min-h-0 min-w-0 flex-1 flex-col", isFill && "min-h-0 flex-1")}>
-          {mainColumn}
-        </div>
+        {footerNode}
       </Card>
     );
   }
@@ -264,7 +316,10 @@ export function StepLayout({
         className,
       )}
     >
-      {mainColumn}
+      {hasStepper ? <div className="mx-auto w-[90%]">{stepper}</div> : null}
+      {headerNode}
+      {contentNode}
+      {footerNode}
     </Card>
   );
 }
