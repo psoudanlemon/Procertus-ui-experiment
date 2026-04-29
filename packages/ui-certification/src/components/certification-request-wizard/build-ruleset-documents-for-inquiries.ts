@@ -1,5 +1,6 @@
-import type { CertificationRequestDraft } from "@procertus-ui/ui-certification";
 import type { DownloadableDocumentListItemData } from "@procertus-ui/ui-lib";
+
+import type { CertificationRequestDraft } from "../../certification-request/types";
 
 function slugForDocumentHref(raw: string): string {
   const s = raw
@@ -12,7 +13,7 @@ function slugForDocumentHref(raw: string): string {
 function isProductScopedInquiry(draft: CertificationRequestDraft): boolean {
   return Boolean(
     (draft.productId && draft.productId.trim().length > 0) ||
-    (draft.productLabel && draft.productLabel.trim().length > 0),
+      (draft.productLabel && draft.productLabel.trim().length > 0),
   );
 }
 

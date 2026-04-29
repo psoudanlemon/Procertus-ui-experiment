@@ -14,7 +14,6 @@ import { AuthLayout } from "@procertus-ui/ui-lib";
 /** Same asset as Storybook `AuthLayout` carousel 1 — served from `public/auth-carousel-1.png`. */
 const AUTH_PANEL = {
   image: "/auth-carousel-1.png",
-  title: "Aanvragen zonder drempel",
   subtitle:
     "Nieuwe klanten starten met hun certificatievraag. Registratie volgt pas bij indiening.",
 } as const;

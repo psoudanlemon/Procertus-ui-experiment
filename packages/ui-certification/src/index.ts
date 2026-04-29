@@ -42,6 +42,22 @@ export type {
   ProductTreePanelProps,
   ProductTreeProductNode,
 } from "./components/product-tree-panel";
+export {
+  CertificationRequestWizard,
+  CertificationRequestWizardView,
+  CompactWizardTimeline,
+  DraftCardDescription,
+  sortDraftsByIntentAndProduct,
+  buildRulesetDocumentsForInquiries,
+  useCertificationRequestWizardView,
+} from "./components/certification-request-wizard";
+export type {
+  CertificationRequestWizardProps,
+  CertificationWizardDraft,
+  CertificationRequestWizardViewProps,
+  UseCertificationRequestWizardViewOptions,
+  WizardStepperModel,
+} from "./components/certification-request-wizard";
 export { RequestPackageReview } from "./components/request-package-review";
 export type {
   RequestPackageRequesterContext,
@@ -49,6 +65,13 @@ export type {
   RequestPackageReviewRequesterPresentation,
   RequestPackageRow,
 } from "./components/request-package-review";
+export {
+  RegistrationProcessingDialog,
+} from "./components/registration-processing-dialog";
+export type {
+  RegistrationProcessingDialogProps,
+  RegistrationProcessingStep,
+} from "./components/registration-processing-dialog";
 export {
   ProcertusCategorizationTreeView,
 } from "./components/procertus-categorization-tree-view";
@@ -103,6 +126,29 @@ export {
 } from "./constants";
 export * from "./helpers";
 export * from "./hooks";
+export {
+  AnonymousOnboardingCompanyPrefillSkeleton,
+  AnonymousOnboardingContextField,
+  AnonymousOnboardingFlowView,
+  clearAnonymousOnboardingStorage,
+  ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY,
+  ONBOARDING_FLOW_STORAGE_KEY,
+  ONBOARDING_REGISTRATION_COMPLETE_PATH,
+  ONBOARDING_REGISTRATION_COMPLETE_SESSION_KEY,
+  ONBOARDING_REGISTRATION_COMPLETE_STORAGE_KEY,
+  ONBOARDING_STEPS,
+  readOnboardingRegistrationCompletePayload,
+  useAnonymousOnboardingFlow,
+  writeOnboardingRegistrationCompletePayload,
+} from "./anonymous-onboarding";
+export type {
+  AnonymousOnboardingFlowState,
+  AnonymousOnboardingFlowViewProps,
+  CustomerContext,
+  OnboardingRegistrationCompletePayload,
+  OnboardingStep,
+  UseAnonymousOnboardingFlowOptions,
+} from "./anonymous-onboarding";
 export {
   ProcertusCategorizationProvider,
   type ProcertusCategorizationProviderProps,

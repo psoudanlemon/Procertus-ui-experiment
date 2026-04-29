@@ -26,7 +26,7 @@ import {
   toDraftItems,
   useAuthenticatedRequests,
 } from "../features/requests/authenticatedRequestStore";
-import { buildRulesetDocumentsForInquiries } from "../features/requests/rulesetDocuments";
+import { buildRulesetDocumentsForInquiries } from "@procertus-ui/ui-certification";
 
 export const REQUEST_DETAIL_PANEL_TYPE = "requestDetail";
 

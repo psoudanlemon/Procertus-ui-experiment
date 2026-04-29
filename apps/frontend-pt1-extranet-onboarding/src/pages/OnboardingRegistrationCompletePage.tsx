@@ -10,7 +10,7 @@ import {
   clearAnonymousOnboardingStorage,
   readOnboardingRegistrationCompletePayload,
   type OnboardingRegistrationCompletePayload,
-} from "../features/onboarding/onboardingRegistrationCompleteSession";
+} from "@procertus-ui/ui-certification";
 
 /**
  * Dedicated full-viewport status experience after mock onboarding submit — not the onboarding shell / StepLayout.

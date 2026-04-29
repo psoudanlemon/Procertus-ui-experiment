@@ -2,7 +2,7 @@ import { useConfirm } from "@procertus-ui/ui";
 import { useMockPrototypeSession } from "@procertus-ui/ui-pt1-prototype";
 import { useNavigate } from "react-router-dom";
 
-import { CertificationRequestWizard } from "../features/certification-wizard/CertificationRequestWizard";
+import { CertificationRequestWizard } from "@procertus-ui/ui-certification";
 import { reviewRequesterFromSession } from "../features/certification-wizard/reviewRequesterFromSession";
 import {
   createAuthenticatedRequestPackage,

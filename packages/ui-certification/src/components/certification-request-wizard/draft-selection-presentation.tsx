@@ -1,7 +1,10 @@
 import { Badge } from "@procertus-ui/ui";
-import type { CertificationRequestDraft } from "@procertus-ui/ui-certification";
 
-export function sortDraftsByIntentAndProduct(drafts: CertificationRequestDraft[]) {
+import type { CertificationRequestDraft } from "../../certification-request/types";
+
+export function sortDraftsByIntentAndProduct(
+  drafts: CertificationRequestDraft[],
+): CertificationRequestDraft[] {
   return [...drafts].sort((a, b) => {
     const intent = (a.shortLabel ?? a.label).localeCompare(b.shortLabel ?? b.label);
     if (intent !== 0) return intent;
