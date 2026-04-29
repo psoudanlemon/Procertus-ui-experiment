@@ -1,21 +1,20 @@
-/** Organization attached to a prototype user (home tenant vs represented party). */
-export interface MockPrototypeOrganization {
-  id: string;
-  name: string;
-}
+import type {
+  MockPrototypeSession,
+  MockPrototypeUser,
+  PrototypeOrganizationRef,
+} from "../schema/prototype-profile-schemas";
 
-/** App-defined prototype persona with organizational context for mock sessions. */
-export interface MockPrototypeUser {
-  id: string;
-  displayName: string;
-  email: string;
-  role?: string;
-  /** Organization the user belongs to (e.g. employer / PROCERTUS tenant). */
-  homeOrganization: MockPrototypeOrganization;
-  /** Organization this user represents in the prototype (e.g. auditee / client org). */
-  representedOrganization: MockPrototypeOrganization;
-}
+/** Session organization row (id + display name). */
+export type MockPrototypeOrganization = PrototypeOrganizationRef;
 
-export interface MockPrototypeSession {
-  user: MockPrototypeUser;
+export type { MockPrototypeSession, MockPrototypeUser };
+
+/** Resolves the organization list used for switching (defaults to the user’s home org only). */
+export function mockPrototypeMembershipsForUser(user: MockPrototypeUser): MockPrototypeOrganization[] {
+  const raw = user.organizations?.length ? [...user.organizations] : [user.homeOrganization];
+  const byId = new Map<string, MockPrototypeOrganization>();
+  for (const org of raw) {
+    byId.set(org.id, org);
+  }
+  return Array.from(byId.values());
 }

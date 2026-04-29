@@ -45,6 +45,8 @@ export interface CoverViewProps extends React.HTMLAttributes<HTMLDivElement> {
   stickyContent?: React.ReactNode;
   /** Optional progress value (0-100) for the loading indicator */
   loadingProgress?: number;
+  /** Classes merged onto the padded wrapper around `children` (both scroll modes). Use `p-0` for edge-to-edge body content. */
+  contentClassName?: string;
 }
 
 /**
@@ -69,6 +71,7 @@ export const CoverView = React.forwardRef<HTMLDivElement, CoverViewProps>(
       coverFullscreen = false,
       stickyContent,
       loadingProgress,
+      contentClassName,
       ...props
     },
     ref
@@ -335,7 +338,7 @@ export const CoverView = React.forwardRef<HTMLDivElement, CoverViewProps>(
                   }}
                 />
                 {/* Add back the original padding */}
-                <div className="p-6">
+                <div className={cn('p-6', contentClassName)}>
                   {/* Padding top is handled by the spacer div */}
                   {/* Conditionally render children only when not fullscreen */}
                   {!coverFullscreen && children}
@@ -343,18 +346,16 @@ export const CoverView = React.forwardRef<HTMLDivElement, CoverViewProps>(
               </div>
             </ScrollArea>
           ) : (
-            // Non-scrollable content also needs the top padding/spacer
-            <div
-              className={cn('h-full overflow-auto')} // Removed padding class here
-            >
+            // Non-scrollable: no outer ScrollArea — fill height below the header spacer so nested
+            // regions (e.g. chat) can use min-h-0 + flex-1 + overflow-y-auto without double scrollbars.
+            <div className="flex h-full min-h-0 flex-col overflow-hidden">
               <div
+                className="shrink-0"
                 style={{
                   height: coverFullscreen ? '100vh' : coverMinimal ? APPBAR_HEIGHT : COVER_HEIGHT,
                 }}
               />
-              {/* Add padding to content wrapper */}
-              <div className="p-6">
-                {/* Conditionally render children only when not fullscreen */}
+              <div className={cn('flex min-h-0 flex-1 flex-col overflow-hidden p-6', contentClassName)}>
                 {!coverFullscreen && children}
               </div>
             </div>

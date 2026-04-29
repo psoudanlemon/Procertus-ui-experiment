@@ -8,10 +8,13 @@ import {
   ArrowRight01Icon,
   Tick02Icon,
   ArrowDown01Icon,
+  Building02Icon,
+  CubeIcon,
   GlobeIcon,
   Logout01Icon,
   Menu01Icon,
   Search01Icon,
+  UserIcon,
 } from "@hugeicons/core-free-icons";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -87,6 +90,23 @@ export type HeaderUserInfo = {
   avatar?: string;
   /** Override the computed initials shown when no avatar image is present. */
   avatarFallback?: React.ReactNode;
+  /** When set, a profile entry is shown in the user menu (uses `NavLink` when provided on the header). */
+  profileHref?: string;
+  profileLabel?: string;
+  /** Active organization / tenant shown in the user menu. */
+  company?: {
+    name: string;
+    description?: string;
+    /** SPA link to the organization profile page. */
+    organizationProfileHref?: string;
+    organizationProfileLabel?: string;
+    /** When more than one organization exists, show a switcher (e.g. radio group). */
+    organizationSwitcher?: {
+      organizations: { id: string; name: string }[];
+      activeOrganizationId: string;
+      onSelectOrganization: (organizationId: string) => void;
+    };
+  };
 };
 
 export type AppHeaderProps = {
@@ -504,16 +524,119 @@ function AppHeader({
                         )}
                         <AvatarFallback>{user.avatarFallback ?? initials}</AvatarFallback>
                       </Avatar>
-                      <div className="grid text-sm leading-tight">
+                      <div className="grid min-w-0 flex-1 text-sm leading-tight">
                         <span className="truncate font-medium">{user.email}</span>
                         {user.role && (
                           <span className="truncate text-xs text-sidebar-foreground/60">
                             {user.role}
                           </span>
                         )}
+                        {user.company && (
+                          <div className="mt-2 border-t border-sidebar-border pt-2">
+                            <span className="text-[10px] font-semibold uppercase tracking-wide text-sidebar-foreground/50">
+                              Organisatie
+                            </span>
+                            <span className="block truncate font-medium text-sidebar-foreground">
+                              {user.company.name}
+                            </span>
+                            {user.company.description ? (
+                              <span className="block truncate text-xs text-sidebar-foreground/60">
+                                {user.company.description}
+                              </span>
+                            ) : null}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <Separator className="bg-sidebar-border" />
+
+                    {user.profileHref ? (
+                      <div className="px-component pb-1 pt-0">
+                        {NavLink ? (
+                          <NavLink
+                            to={user.profileHref}
+                            className="flex min-h-11 items-center gap-micro rounded-md px-component text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                            onClick={() => setUserMenuOpen(false)}
+                          >
+                            <HugeiconsIcon icon={UserIcon} className="size-4 shrink-0" />
+                            <span>{user.profileLabel ?? "Mijn profiel"}</span>
+                          </NavLink>
+                        ) : (
+                          <a
+                            href={user.profileHref}
+                            className="flex min-h-11 items-center gap-micro rounded-md px-component text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                            onClick={() => setUserMenuOpen(false)}
+                          >
+                            <HugeiconsIcon icon={UserIcon} className="size-4 shrink-0" />
+                            <span>{user.profileLabel ?? "Mijn profiel"}</span>
+                          </a>
+                        )}
+                      </div>
+                    ) : null}
+
+                    {user.company?.organizationProfileHref ? (
+                      <div className="px-component pb-1 pt-0">
+                        {NavLink ? (
+                          <NavLink
+                            to={user.company.organizationProfileHref}
+                            className="flex min-h-11 items-center gap-micro rounded-md px-component text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                            onClick={() => setUserMenuOpen(false)}
+                          >
+                            <HugeiconsIcon icon={CubeIcon} className="size-4 shrink-0" />
+                            <span>{user.company.organizationProfileLabel ?? "Organisatieprofiel"}</span>
+                          </NavLink>
+                        ) : (
+                          <a
+                            href={user.company.organizationProfileHref}
+                            className="flex min-h-11 items-center gap-micro rounded-md px-component text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                            onClick={() => setUserMenuOpen(false)}
+                          >
+                            <HugeiconsIcon icon={CubeIcon} className="size-4 shrink-0" />
+                            <span>{user.company.organizationProfileLabel ?? "Organisatieprofiel"}</span>
+                          </a>
+                        )}
+                      </div>
+                    ) : null}
+
+                    {(() => {
+                      const switcher = user.company?.organizationSwitcher;
+                      if (!switcher || switcher.organizations.length <= 1) return null;
+                      return (
+                        <div className="px-component pb-2 pt-0">
+                          <div className="px-component py-1.5 text-xs font-medium text-sidebar-foreground/60">
+                            Wissel van organisatie
+                          </div>
+                          <div className="flex flex-col gap-0.5">
+                            {switcher.organizations.map((o) => {
+                              const active = o.id === switcher.activeOrganizationId;
+                              return (
+                                <button
+                                  key={o.id}
+                                  type="button"
+                                  className="flex min-h-11 items-center justify-between rounded-md px-component text-left text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                                  onClick={() => {
+                                    switcher.onSelectOrganization(o.id);
+                                    setUserMenuOpen(false);
+                                  }}
+                                >
+                                  <span className="truncate">{o.name}</span>
+                                  {active ? (
+                                    <HugeiconsIcon icon={Tick01Icon} className="size-4 shrink-0 text-accent-foreground" />
+                                  ) : null}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })()}
+
+                    {user.profileHref ||
+                    user.company?.organizationProfileHref ||
+                    (user.company?.organizationSwitcher &&
+                      user.company.organizationSwitcher.organizations.length > 1) ? (
+                      <Separator className="bg-sidebar-border" />
+                    ) : null}
 
                     <div className="flex flex-col p-component">
                       <div className="px-component py-1.5 text-xs font-medium text-sidebar-foreground/60">
@@ -580,21 +703,104 @@ function AppHeader({
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-64" align="end" sideOffset={8}>
-                  <div className="flex items-center gap-component px-component py-component">
-                    <Avatar className="size-9">
-                      {user.avatar && (
-                        <AvatarImage src={user.avatar} alt={user.name ?? user.email} />
-                      )}
-                      <AvatarFallback>{initials}</AvatarFallback>
-                    </Avatar>
-                    <div className="grid text-sm leading-tight">
-                      <span className="truncate font-medium">{user.email}</span>
-                      {user.role && (
-                        <span className="truncate text-xs text-muted-foreground">{user.role}</span>
-                      )}
+                  <div className="px-component py-component">
+                    <div className="flex items-center gap-component">
+                      <Avatar className="size-9">
+                        {user.avatar && (
+                          <AvatarImage src={user.avatar} alt={user.name ?? user.email} />
+                        )}
+                        <AvatarFallback>{initials}</AvatarFallback>
+                      </Avatar>
+                      <div className="grid min-w-0 flex-1 text-sm leading-tight">
+                        <span className="truncate font-medium">{user.email}</span>
+                        {user.role && (
+                          <span className="truncate text-xs text-muted-foreground">{user.role}</span>
+                        )}
+                      </div>
                     </div>
+                    {user.company ? (
+                      <div className="mt-3 border-t pt-3">
+                        <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                          Organisatie
+                        </p>
+                        <p className="truncate text-sm font-medium">{user.company.name}</p>
+                        {user.company.description ? (
+                          <p className="truncate text-xs text-muted-foreground">
+                            {user.company.description}
+                          </p>
+                        ) : null}
+                      </div>
+                    ) : null}
                   </div>
                   <DropdownMenuSeparator />
+
+                  {user.profileHref ? (
+                    NavLink ? (
+                      <DropdownMenuItem asChild>
+                        <NavLink to={user.profileHref}>
+                          <HugeiconsIcon icon={UserIcon} />
+                          <span>{user.profileLabel ?? "Mijn profiel"}</span>
+                        </NavLink>
+                      </DropdownMenuItem>
+                    ) : (
+                      <DropdownMenuItem asChild>
+                        <a href={user.profileHref}>
+                          <HugeiconsIcon icon={UserIcon} />
+                          <span>{user.profileLabel ?? "Mijn profiel"}</span>
+                        </a>
+                      </DropdownMenuItem>
+                    )
+                  ) : null}
+
+                  {user.company?.organizationProfileHref ? (
+                    NavLink ? (
+                      <DropdownMenuItem asChild>
+                        <NavLink to={user.company.organizationProfileHref}>
+                          <HugeiconsIcon icon={CubeIcon} />
+                          <span>{user.company.organizationProfileLabel ?? "Organisatieprofiel"}</span>
+                        </NavLink>
+                      </DropdownMenuItem>
+                    ) : (
+                      <DropdownMenuItem asChild>
+                        <a href={user.company.organizationProfileHref}>
+                          <HugeiconsIcon icon={CubeIcon} />
+                          <span>{user.company.organizationProfileLabel ?? "Organisatieprofiel"}</span>
+                        </a>
+                      </DropdownMenuItem>
+                    )
+                  ) : null}
+
+                  {(() => {
+                    const switcher = user.company?.organizationSwitcher;
+                    if (!switcher || switcher.organizations.length <= 1) return null;
+                    return (
+                      <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>
+                          <HugeiconsIcon icon={Building02Icon} />
+                          <span>Wissel van organisatie</span>
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent>
+                          <DropdownMenuRadioGroup
+                            value={switcher.activeOrganizationId}
+                            onValueChange={switcher.onSelectOrganization}
+                          >
+                            {switcher.organizations.map((o) => (
+                              <DropdownMenuRadioItem key={o.id} value={o.id}>
+                                {o.name}
+                              </DropdownMenuRadioItem>
+                            ))}
+                          </DropdownMenuRadioGroup>
+                        </DropdownMenuSubContent>
+                      </DropdownMenuSub>
+                    );
+                  })()}
+
+                  {user.profileHref ||
+                  user.company?.organizationProfileHref ||
+                  (user.company?.organizationSwitcher &&
+                    user.company.organizationSwitcher.organizations.length > 1) ? (
+                    <DropdownMenuSeparator />
+                  ) : null}
 
                   <DropdownMenuSub>
                     <DropdownMenuSubTrigger>

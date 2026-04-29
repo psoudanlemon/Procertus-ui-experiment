@@ -6,6 +6,7 @@ export function reviewRequesterFromSession(
   session: MockPrototypeSession | null,
 ): RequestPackageReviewRequesterPresentation {
   const user = session?.user;
+  const activeOrgName = session?.activeOrganization.name ?? user?.homeOrganization.name;
   return {
     context: {
       requesterName: user?.displayName ?? "Prototype gebruiker",
@@ -13,7 +14,7 @@ export function reviewRequesterFromSession(
       organizationName: user?.representedOrganization.name ?? "Vertegenwoordigde organisatie",
       organizationDetails: user ? (
         <span className="block text-sm leading-normal">
-          Workspace: {user.homeOrganization.name}
+          Workspace: {activeOrgName}
           {user.role ? (
             <>
               {" "}

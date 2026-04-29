@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { DownloadableDocumentListItem, PanelSection } from "@procertus-ui/ui-lib";
 import { useMemo } from "react";
 
+import { CONVERSATION_SUITE_CERTIFICATION } from "../features/conversations/conversation-detail-panel-mocks";
 import {
   cancelAuthenticatedRequestPackage,
   requestLifecycleEvents,
@@ -26,7 +27,11 @@ import {
   toDraftItems,
   useAuthenticatedRequests,
 } from "../features/requests/authenticatedRequestStore";
+import { ConversationDigestItem } from "./conversation_digest_item";
 import { buildRulesetDocumentsForInquiries } from "@procertus-ui/ui-certification";
+
+/** Must match `openPanel` when opening the full conversation from this dossier. */
+const REQUEST_DETAIL_CONVERSATION_SCENARIO = "short" as const;
 
 export const REQUEST_DETAIL_PANEL_TYPE = "requestDetail";
 
@@ -173,6 +178,12 @@ export function RequestDetailPanel({ panelType, requestId }: RequestDetailPanelP
         >
           <CertificationRequestLifecycleDetailTimeline events={requestLifecycleEvents(request)} />
         </PanelSection>
+        <ConversationDigestItem
+          key={requestId}
+          requestId={requestId}
+          suite={CONVERSATION_SUITE_CERTIFICATION}
+          scenario={REQUEST_DETAIL_CONVERSATION_SCENARIO}
+        />
         {request.inquiries.length > 1 ? (
           <PanelSection
             title="Onderliggende aanvragen"
@@ -192,7 +203,7 @@ export function RequestDetailPanel({ panelType, requestId }: RequestDetailPanelP
                   request.inquiries.length === 1
                     ? "de aanvraag in dit pakket"
                     : `de ${request.inquiries.length} aanvragen in dit pakket`
-                } (prototype — downloadlinks zijn gemockt).`
+                }.`
               : "Er zijn nog geen onderliggende aanvragen in dit pakket — voeg aanvragen toe om relevante documenten te zien."
           }
         >

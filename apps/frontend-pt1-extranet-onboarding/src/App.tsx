@@ -13,8 +13,14 @@ import { AppPlaceholderPage } from "./pages/AppPlaceholderPage";
 import { OnboardingRegistrationCompletePage } from "./pages/OnboardingRegistrationCompletePage";
 import { SignupPage } from "./pages/SignupPage";
 import { OrganizationPage } from "./pages/OrganizationPage";
+import { OrganizationProfilePage } from "./pages/OrganizationProfilePage";
+import { DashboardPage } from "./pages/DashboardPage";
+import { ProfileChangeRequestsPage } from "./pages/ProfileChangeRequestsPage";
+import { UserProfilePage } from "./pages/UserProfilePage";
 import { RequireAuth } from "./routes/RequireAuth";
-import { PROTOTYPE_NAV_GROUPS } from "./navConfig";
+import { PROTOTYPE_NAV_GROUPS, PROTOTYPE_PRIMARY_NAV } from "./navConfig";
+
+const primaryNavByKey = (key: string) => PROTOTYPE_PRIMARY_NAV.find((item) => item.key === key)!;
 
 const placeholderNavItems = PROTOTYPE_NAV_GROUPS.flatMap((group) => group.items);
 const certificatesNavItem = placeholderNavItems.find(
@@ -25,7 +31,7 @@ const invoicesNavItem = placeholderNavItems.find((item) => item.key === "invoice
 
 function RootRedirect() {
   const isAuthenticated = useMockPrototypeIsAuthenticated();
-  return <Navigate to={isAuthenticated ? "/requests" : "/welcome"} replace />;
+  return <Navigate to={isAuthenticated ? "/dashboard" : "/welcome"} replace />;
 }
 
 export default function App() {
@@ -41,12 +47,26 @@ export default function App() {
 
       <Route element={<RequireAuth />}>
         <Route element={<AuthenticatedAppShell />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route
+            path="/user-management"
+            element={
+              <AppPlaceholderPage
+                title="Gebruikersbeheer"
+                description="Nodig straks collega’s uit, wijs rollen toe en beheer toegang tot het extranet."
+                icon={primaryNavByKey("user-management").icon}
+              />
+            }
+          />
+          <Route path="/user-profile" element={<UserProfilePage />} />
+          <Route path="/organization-profile" element={<OrganizationProfilePage />} />
+          <Route path="/profile-change-requests" element={<ProfileChangeRequestsPage />} />
           <Route path="/requests" element={<RequestsOverviewPage />} />
           <Route path="/requests/create" element={<RequestCreationPage />} />
           <Route path="/requests/:requestId" element={<RequestDetailPage />} />
           <Route path="/requests/:requestId/edit" element={<RequestEditPage />} />
           <Route
-            path="/app/certificates-attestations"
+            path="/certificates-attestations"
             element={
               <AppPlaceholderPage
                 title="Certificaten & Attesten"
@@ -56,7 +76,7 @@ export default function App() {
             }
           />
           <Route
-            path="/app/orders"
+            path="/orders"
             element={
               <AppPlaceholderPage
                 title="Bestellingen"
@@ -66,7 +86,7 @@ export default function App() {
             }
           />
           <Route
-            path="/app/invoices"
+            path="/invoices"
             element={
               <AppPlaceholderPage
                 title="Facturen"
@@ -75,9 +95,9 @@ export default function App() {
               />
             }
           />
-          <Route path="/app/organization" element={<OrganizationPage />} />
-          <Route path="/app/categorization" element={<CategorizationDemoPage />} />
-          <Route path="/app/design-system" element={<DesignSystemPage />} />
+          <Route path="/organization" element={<OrganizationPage />} />
+          <Route path="/categorization" element={<CategorizationDemoPage />} />
+          <Route path="/design-system" element={<DesignSystemPage />} />
         </Route>
       </Route>
 

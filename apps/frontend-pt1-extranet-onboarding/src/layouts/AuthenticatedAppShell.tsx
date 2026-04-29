@@ -4,7 +4,11 @@ import logomark from "@procertus-ui/ui/assets/logomark.svg";
 import { useLayoutEffect, useMemo } from "react";
 import { Link, matchPath, Outlet, useLocation, useNavigate } from "react-router-dom";
 
-import { useMockPrototypeLogout, useMockPrototypeSession } from "@procertus-ui/ui-pt1-prototype";
+import {
+  useMockPrototypeLogout,
+  useMockPrototypeSession,
+  useMockPrototypeSetActiveOrganization,
+} from "@procertus-ui/ui-pt1-prototype";
 import { PROTOTYPE_NAV_GROUPS, PROTOTYPE_PRIMARY_NAV, PROTOTYPE_SECONDARY_NAV } from "../navConfig";
 import { AppPanelsLayout } from "../panels";
 
@@ -34,13 +38,14 @@ export function AuthenticatedAppShell() {
   const location = useLocation();
   const navigate = useNavigate();
   const session = useMockPrototypeSession();
+  const setActiveOrganization = useMockPrototypeSetActiveOrganization();
   const logout = useMockPrototypeLogout();
   const pathname = location.pathname;
   const flushMain = pathname === "/requests/create" || pathname.endsWith("/edit");
 
   const sidebar: AppSidebarProps = useMemo(() => {
-    const workspaceId = session?.user.homeOrganization.id ?? "prototype";
-    const workspaceName = session?.user.homeOrganization.name ?? "Workspace";
+    const workspaceId = session?.activeOrganization.id ?? "prototype";
+    const workspaceName = session?.activeOrganization.name ?? "Workspace";
     const plan = session
       ? `Represents ${session.user.representedOrganization.name}`
       : "Demo workspace";
@@ -88,45 +93,73 @@ export function AuthenticatedAppShell() {
 
   const header: AppHeaderProps = useMemo(() => {
     const groupedNavItems = PROTOTYPE_NAV_GROUPS.flatMap((group) => group.items);
+    const allSidebarNavItems = [...PROTOTYPE_PRIMARY_NAV, ...groupedNavItems];
     const crumb =
-      [...PROTOTYPE_PRIMARY_NAV, ...groupedNavItems].find((item) =>
-        isNavItemActive(item.url, pathname),
-      )?.title ?? "Aanvragen";
+      allSidebarNavItems.find((item) => isNavItemActive(item.url, pathname))?.title ?? "Aanvragen";
     const user = session?.user;
+    const activeOrganization = session?.activeOrganization;
+    const organizations = session?.organizations;
+    const userProfileHref =
+      PROTOTYPE_PRIMARY_NAV.find((item) => item.key === "user-profile")?.url ?? "/user-profile";
+    const organizationProfileHref =
+      PROTOTYPE_PRIMARY_NAV.find((item) => item.key === "organization-profile")?.url ??
+      "/organization-profile";
+    const showOrgSwitcher = organizations !== undefined && organizations.length > 1;
     return {
       showNavigation: false,
-      breadcrumbs: [{ label: "Workspace", href: "/requests" }, { label: crumb }],
-      user: user
-        ? {
-            name: user.displayName,
-            email: user.email,
-            role: user.role ?? "Prototype session",
-          }
-        : {
-            name: "Guest",
-            email: "",
-            role: "",
-          },
+      breadcrumbs: [{ label: "Workspace", href: "/" }, { label: crumb }],
+      user:
+        user && activeOrganization
+          ? {
+              name: user.displayName,
+              email: user.email,
+              role: user.role ?? "Prototype session",
+              profileHref: userProfileHref,
+              profileLabel: "Mijn profiel",
+              company: {
+                name: activeOrganization.name,
+                description:
+                  user.representedOrganization.id !== activeOrganization.id
+                    ? `Vertegenwoordigt: ${user.representedOrganization.name}`
+                    : undefined,
+                organizationProfileHref,
+                organizationProfileLabel: "Organisatieprofiel",
+                organizationSwitcher: showOrgSwitcher
+                  ? {
+                      organizations: organizations.map((o) => ({ id: o.id, name: o.name })),
+                      activeOrganizationId: activeOrganization.id,
+                      onSelectOrganization: setActiveOrganization,
+                    }
+                  : undefined,
+              },
+            }
+          : {
+              name: "Guest",
+              email: "",
+              role: "",
+            },
       onSignOut: () => {
         logout();
         navigate("/welcome", { replace: true });
       },
       NavLink: Link,
     };
-  }, [pathname, navigate, logout, session]);
+  }, [pathname, navigate, logout, session, setActiveOrganization]);
 
   return (
     <AlertDialogProvider>
-      <AppPanelsLayout>
-        <ManagementAppShell
-          sidebar={sidebar}
-          header={header}
-          mainClassName={flushMain ? "p-0!" : undefined}
-        >
-          <CloseMobileSidebarOnRouteChange />
-          <Outlet />
-        </ManagementAppShell>
-      </AppPanelsLayout>
+      <div className="h-full min-h-0 w-full">
+        <AppPanelsLayout>
+          <ManagementAppShell
+            sidebar={sidebar}
+            header={header}
+            mainClassName={flushMain ? "p-0!" : undefined}
+          >
+            <CloseMobileSidebarOnRouteChange />
+            <Outlet />
+          </ManagementAppShell>
+        </AppPanelsLayout>
+      </div>
     </AlertDialogProvider>
   );
 }

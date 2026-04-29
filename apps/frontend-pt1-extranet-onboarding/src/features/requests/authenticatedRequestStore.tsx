@@ -28,6 +28,21 @@ const statusLabels: Record<CertificationRequestLifecycleStatus, string> = {
   cancelled: "Geannuleerd",
 };
 
+export function certificationRequestStatusLabel(status: CertificationRequestLifecycleStatus): string {
+  return statusLabels[status] ?? "Concept";
+}
+
+/** Stable order for dashboards and filters. */
+export const REQUEST_LIFECYCLE_STATUS_ORDER: CertificationRequestLifecycleStatus[] = [
+  "draft",
+  "submitted",
+  "in-progress",
+  "approved",
+  "rejected",
+  "archived",
+  "cancelled",
+];
+
 export const INITIAL_REQUESTS: AuthenticatedCertificationRequest[] = [
   {
     id: "submitted-benor-demo",
@@ -161,7 +176,7 @@ export function cancelAuthenticatedRequestPackage(
 }
 
 export function requestStatus(request: AuthenticatedCertificationRequest) {
-  return statusLabels[request.status] ?? "Concept";
+  return certificationRequestStatusLabel(request.status);
 }
 
 function formatLifecycleDateTime(value: string) {

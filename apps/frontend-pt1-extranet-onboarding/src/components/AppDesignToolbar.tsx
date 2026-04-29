@@ -9,8 +9,9 @@ export function AppDesignToolbar() {
       <div>
         <p className="text-sm font-medium text-foreground">Design system</p>
         <p className="text-xs text-muted-foreground">
-          Route <code className="font-mono">/app/design-system</code> — light / dark / system via{" "}
-          <code className="font-mono">ModeProvider</code> + <code className="font-mono">ModeToggle</code>
+          Route <code className="font-mono">/design-system</code> — light / dark / system via{" "}
+          <code className="font-mono">ModeProvider</code> +{" "}
+          <code className="font-mono">ModeToggle</code>
         </p>
       </div>
       <ModeToggle />

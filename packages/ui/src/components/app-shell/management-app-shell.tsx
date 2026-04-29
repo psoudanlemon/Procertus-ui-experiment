@@ -15,16 +15,24 @@ export type ManagementAppShellProps = {
 
 function ManagementAppShell({ sidebar, header, children, mainClassName }: ManagementAppShellProps) {
   const [scrolled, setScrolled] = React.useState(false);
+  const mainRef = React.useRef<React.ElementRef<"main">>(null);
 
   React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 0);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const el = mainRef.current;
+    if (!el) return;
+    const onScroll = () => setScrolled(el.scrollTop > 0);
+    onScroll();
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <AlertDialogProvider>
-      <SidebarProvider className="h-svh overflow-hidden">
+      {/*
+        Fill the panels main region (h-full min-h-0) instead of forcing 100svh so scroll stays
+        inside <main> when nested under PanelsLayout.
+      */}
+      <SidebarProvider className="flex h-full min-h-0 w-full max-h-full overflow-hidden">
         <AppSidebar {...sidebar} />
         <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-sidebar">
           <div className="shrink-0 bg-sidebar">
@@ -35,7 +43,13 @@ function ManagementAppShell({ sidebar, header, children, mainClassName }: Manage
             />
           </div>
           <div className="mx-section flex min-h-0 flex-1 flex-col overflow-hidden pb-section">
-            <main className={cn("min-h-0 flex-1 overflow-hidden rounded-xl bg-background p-boundary", mainClassName)}>
+            <main
+              ref={mainRef}
+              className={cn(
+                "min-h-0 flex-1 overflow-y-auto overflow-x-hidden rounded-xl bg-background p-boundary",
+                mainClassName,
+              )}
+            >
               {children}
             </main>
           </div>

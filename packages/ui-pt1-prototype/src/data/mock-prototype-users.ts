@@ -1,0 +1,78 @@
+import { Schema } from "effect";
+
+import type { MockPrototypeUser } from "../schema/prototype-profile-schemas";
+import { MockPrototypeUserSchema } from "../schema/prototype-profile-schemas";
+
+const raw: readonly unknown[] = [
+  {
+    id: "demo-jane",
+    displayName: "Jane Doe",
+    givenName: "Jane",
+    familyName: "Doe",
+    email: "jane.doe@procertus.example",
+    workEmail: "jane.doe.work@procertus.example",
+    phone: "+32 2 555 01 00",
+    mobilePhone: "+32 470 12 34 56",
+    jobTitle: "Extranet coordinator",
+    department: "Customer operations",
+    locale: "nl-BE",
+    timeZone: "Europe/Brussels",
+    preferredLanguage: "nl",
+    salutation: "Mevr.",
+    employeeReference: "PROC-HR-10432",
+    role: "Extranet coordinator",
+    notes: "Primary demo persona for PROCERTUS-side flows.",
+    homeOrganization: { id: "org-procertus", name: "PROCERTUS" },
+    representedOrganization: { id: "org-acme", name: "Acme Packaging BV" },
+    organizations: [
+      { id: "org-procertus", name: "PROCERTUS" },
+      { id: "org-acme", name: "Acme Packaging BV" },
+    ],
+  },
+  {
+    id: "demo-liam",
+    displayName: "Liam Chen",
+    givenName: "Liam",
+    familyName: "Chen",
+    email: "liam.chen@acme.example",
+    workEmail: "liam.chen@acme.example",
+    phone: "+32 15 555 020",
+    mobilePhone: "+32 471 99 00 11",
+    jobTitle: "Plant quality lead",
+    department: "Quality assurance",
+    locale: "nl-BE",
+    timeZone: "Europe/Brussels",
+    preferredLanguage: "en",
+    salutation: "Dhr.",
+    employeeReference: "ACME-QA-8821",
+    role: "Plant quality lead",
+    notes: "Represents Acme Packaging as home tenant user.",
+    homeOrganization: { id: "org-acme", name: "Acme Packaging BV" },
+    representedOrganization: { id: "org-acme", name: "Acme Packaging BV" },
+  },
+  {
+    id: "demo-sofia",
+    displayName: "Sofia Martens",
+    givenName: "Sofia",
+    familyName: "Martens",
+    email: "sofia@greenleaf.example",
+    workEmail: "sofia.martens@greenleaf.example",
+    phone: "+32 9 555 03 40",
+    mobilePhone: "+32 472 44 55 66",
+    jobTitle: "Sustainability officer",
+    department: "ESG & sustainability",
+    locale: "nl-BE",
+    timeZone: "Europe/Brussels",
+    preferredLanguage: "nl",
+    salutation: "Mevr.",
+    employeeReference: "GL-ESG-3301",
+    role: "Sustainability officer",
+    notes: "Cross-tenant demo: home GreenLeaf, represents Northwind.",
+    homeOrganization: { id: "org-greenleaf", name: "GreenLeaf Ingredients" },
+    representedOrganization: { id: "org-northwind", name: "Northwind Foods" },
+  },
+];
+
+export const MOCK_PROTOTYPE_USERS: readonly MockPrototypeUser[] = Schema.decodeUnknownSync(
+  Schema.Array(MockPrototypeUserSchema),
+)(raw);

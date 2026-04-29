@@ -84,8 +84,8 @@ export type StepLayoutProps = {
 };
 
 const variantClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
-  onboarding: "max-w-3xl",
-  wizard: "max-w-2xl",
+  onboarding: "max-w-7xl",
+  wizard: "max-w-7xl",
 };
 
 const cardGapClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
@@ -174,9 +174,7 @@ export function StepLayout({
   const stepAnimClass = animateStep
     ? cn(
         "animate-in fade-in-0 duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-        directionRef.current === "forward"
-          ? "slide-in-from-right-2"
-          : "slide-in-from-left-2",
+        directionRef.current === "forward" ? "slide-in-from-right-2" : "slide-in-from-left-2",
       )
     : undefined;
 
@@ -184,9 +182,7 @@ export function StepLayout({
     "w-full overflow-hidden shadow-proc-xs",
     cardGapClass[variant],
     !rail && cardTopPadClass[variant],
-    isFill
-      ? "flex min-h-0 flex-col"
-      : cn("mx-auto", variantClass[variant]),
+    isFill ? "flex min-h-0 flex-col" : cn("mx-auto", variantClass[variant]),
     rail && "!py-0",
     isViewportFill && !rail && "!pb-0",
     isViewportFill && "rounded-none bg-transparent shadow-none ring-0",
@@ -223,23 +219,19 @@ export function StepLayout({
       className={cn(
         isFill
           ? "flex min-h-0 flex-1 flex-col !p-0"
-          : (rail ? railContentClass : stackedContentClass),
+          : rail
+            ? railContentClass
+            : stackedContentClass,
       )}
     >
       {isFill ? (
         <FadingScrollList
           fadeColor={isViewportFill ? "from-background" : "from-card"}
           wrapperClassName="flex min-h-0 flex-1 flex-col"
-          className={cn(
-            rail ? railContentClass : stackedContentClass,
-            "min-h-0 flex-1",
-          )}
+          className={cn(rail ? railContentClass : stackedContentClass, "min-h-0 flex-1")}
         >
           {animateStep ? (
-            <div
-              key={`body-${stepKey}`}
-              className={cn("space-y-section", stepAnimClass)}
-            >
+            <div key={`body-${stepKey}`} className={cn("space-y-section", stepAnimClass)}>
               {children}
             </div>
           ) : (
@@ -247,10 +239,7 @@ export function StepLayout({
           )}
         </FadingScrollList>
       ) : animateStep ? (
-        <div
-          key={`body-${stepKey}`}
-          className={cn("space-y-section", stepAnimClass)}
-        >
+        <div key={`body-${stepKey}`} className={cn("space-y-section", stepAnimClass)}>
           {children}
         </div>
       ) : (
@@ -324,12 +313,7 @@ export function StepLayout({
           className,
         )}
       >
-        <div
-          className={cn(
-            "flex min-w-0 flex-col md:flex-row",
-            isFill && "min-h-0 flex-1",
-          )}
-        >
+        <div className={cn("flex min-w-0 flex-col md:flex-row", isFill && "min-h-0 flex-1")}>
           <div
             className={cn(
               "shrink-0 border-border md:w-56 md:min-w-48 md:max-w-xs md:border-r",

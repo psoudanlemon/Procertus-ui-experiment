@@ -25,5 +25,15 @@ export type {
 } from "./components/downloadable-documents-list";
 export { PanelSection } from "./components/panel-section";
 export type { PanelSectionProps } from "./components/panel-section";
+export * from "./components/portal-chat";
 export { PrefillFieldSkeleton } from "./components/prefill-field-skeleton";
 export type { PrefillFieldSkeletonProps } from "./components/prefill-field-skeleton";
+export {
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderBelow,
+  PageHeaderDescription,
+  PageHeaderKicker,
+  PageHeaderMedia,
+} from "./components/page-header";
+export type { PageHeaderProps } from "./components/page-header";
