@@ -16,9 +16,12 @@ import {
   CardTitle,
   Empty,
   EmptyDescription,
-  EmptyIcon,
   EmptyTitle,
   Separator,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
   cn,
 } from "@procertus-ui/ui";
 
@@ -62,15 +65,15 @@ export function DraftRequestList({
   showRemove = true,
 }: DraftRequestListProps) {
   return (
-    <Card className={cn("w-full max-w-3xl overflow-hidden", className)}>
-      <CardHeader>
+    <Card className={cn("w-full max-w-3xl overflow-hidden gap-0 py-0", className)}>
+      <CardHeader className="gap-0 bg-muted/20 px-section pt-section pb-section">
         <CardTitle>{title}</CardTitle>
         {description ? <CardDescription>{description}</CardDescription> : null}
       </CardHeader>
-      <CardContent>
+      <Separator />
+      <CardContent className="px-0">
         {drafts.length === 0 ? (
-          <Empty>
-            <EmptyIcon />
+          <Empty className="m-section">
             <EmptyTitle>{emptyTitle}</EmptyTitle>
             <EmptyDescription>{emptyDescription}</EmptyDescription>
           </Empty>
@@ -79,7 +82,7 @@ export function DraftRequestList({
             {drafts.map((d, i) => (
               <li key={d.id} className="min-w-0">
                 {i > 0 ? <Separator className="my-micro" /> : null}
-                <div className="flex flex-col gap-component py-component sm:flex-row sm:items-start sm:justify-between sm:gap-section">
+                <div className="flex flex-col gap-component px-section py-section sm:flex-row sm:items-center sm:justify-between sm:gap-section">
                   <div className="min-w-0 flex-1">
                     <p className="font-medium text-foreground">{d.title}</p>
                     {d.subtitle ? <p className="text-sm text-muted-foreground">{d.subtitle}</p> : null}
@@ -87,23 +90,29 @@ export function DraftRequestList({
                   </div>
                   {showEdit || showRemove ? (
                     <div className="flex shrink-0 flex-wrap justify-end gap-component">
+                      {showRemove ? (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                type="button"
+                                size="icon-sm"
+                                variant="ghost"
+                                onClick={() => onRemove(d.id)}
+                                className="text-destructive-foreground hover:bg-destructive/20 hover:text-destructive-foreground dark:hover:bg-destructive/30"
+                                aria-label={`${removeLabel}: ${d.title}`}
+                              >
+                                <HugeiconsIcon icon={Delete02Icon} className="size-4" strokeWidth={1.5} />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">{removeLabel}</TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      ) : null}
                       {showEdit ? (
-                        <Button type="button" size="sm" variant="outline" onClick={() => onEdit(d.id)} aria-label={`${editLabel}: ${d.title}`}>
+                        <Button type="button" size="sm" variant="secondary" onClick={() => onEdit(d.id)} aria-label={`${editLabel}: ${d.title}`}>
                           <HugeiconsIcon icon={PencilEdit02Icon} className="size-4" strokeWidth={1.5} />
                           {editLabel}
-                        </Button>
-                      ) : null}
-                      {showRemove ? (
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="secondary"
-                          onClick={() => onRemove(d.id)}
-                          className="text-destructive-foreground hover:text-destructive-foreground"
-                          aria-label={`${removeLabel}: ${d.title}`}
-                        >
-                          <HugeiconsIcon icon={Delete02Icon} className="size-4" strokeWidth={1.5} />
-                          {removeLabel}
                         </Button>
                       ) : null}
                     </div>
