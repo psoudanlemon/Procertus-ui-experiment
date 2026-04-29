@@ -14,8 +14,6 @@ export type {
   OnboardingStepperProps,
   OnboardingStepperStep,
 } from "./custom-components/onboarding/onboarding-stepper";
-export { PanelSection } from "./components/panel-section";
-export type { PanelSectionProps } from "./components/panel-section";
 export * from "./components/portal-chat";
 export {
   PageHeader,

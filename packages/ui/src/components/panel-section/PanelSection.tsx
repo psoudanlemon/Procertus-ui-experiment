@@ -1,8 +1,7 @@
 import { useId, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
-
-import { H4 } from "@procertus-ui/ui";
+import { H4 } from "@/components/ui/heading";
 
 export type PanelSectionProps = {
   /** Section heading; omit for a headerless block (body only). */
@@ -24,7 +23,7 @@ function hasRenderableText(node: ReactNode): boolean {
 
 /**
  * Stack for detail panels: optional title (`h2`) and description, then `children`.
- * No card chrome — spacing and typography only (`min-w-0` for overflow-safe bodies).
+ * No card chrome, spacing and typography only (`min-w-0` for overflow-safe bodies).
  */
 export function PanelSection({
   title,
@@ -44,7 +43,7 @@ export function PanelSection({
       aria-labelledby={showTitle ? titleId : undefined}
     >
       {showIntro ? (
-        <header className="flex min-w-0 flex-col gap-1">
+        <header className="flex min-w-0 flex-col">
           {showTitle ? (
             <H4
               id={titleId}

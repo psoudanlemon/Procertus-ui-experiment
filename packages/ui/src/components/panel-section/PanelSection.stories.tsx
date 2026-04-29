@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { Button } from "@procertus-ui/ui";
+import { Button } from "@/components/ui/button";
 
 import { PanelSection } from "./PanelSection";
 
 const bodyPlaceholder = (
   <p className="text-sm leading-relaxed text-muted-foreground">
-    Hoofdinhoud van de sectie — tijdlijn, lijst, formulierfragmenten, enz.
+    Hoofdinhoud van de sectie, tijdlijn, lijst, formulierfragmenten, enz.
   </p>
 );
 
 const meta = {
-  title: "ui-lib/PanelSection",
+  title: "components/PanelSection",
   component: PanelSection,
   parameters: {
     layout: "padded",
@@ -51,7 +51,7 @@ export const DescriptionOnly: StoryObj<typeof meta> = {
   args: {
     title: undefined,
     description:
-      "Soms wil je alleen toelichtende copy zonder titelregel — de beschrijving staat dan alleen in de header.",
+      "Soms wil je alleen toelichtende copy zonder titelregel, de beschrijving staat dan alleen in de header.",
   },
 };
 
@@ -62,7 +62,7 @@ export const Headerless: StoryObj<typeof meta> = {
     description: undefined,
     children: (
       <div className="rounded-md border border-dashed border-border/60 p-4 text-sm text-muted-foreground">
-        Geen titel of beschrijving — alleen inhoud, bijvoorbeeld ingebedde kaarten of tabellen.
+        Geen titel of beschrijving, alleen inhoud, bijvoorbeeld ingebedde kaarten of tabellen.
       </div>
     ),
   },
@@ -75,15 +75,21 @@ export const FollowUpActions: StoryObj<typeof meta> = {
       <PanelSection
         title="Vervolgacties"
         description="Open de volledige route om te bewerken of beheer de aanvraag rechtstreeks vanuit dit overzicht."
-        contentClassName="flex flex-wrap gap-2"
+        contentClassName="flex flex-wrap items-center justify-between gap-2"
       >
-        <Button type="button">Bewerken</Button>
-        <Button type="button" variant="destructive">
-          Verwijderen
-        </Button>
-        <Button type="button" variant="destructive">
+        <Button type="button" variant="ghost">
           Annuleren
         </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            type="button"
+            variant="destructive"
+            className="hover:rounded-tl-[4px] hover:rounded-br-[4px] hover:rounded-tr-[var(--cmd-deep)] hover:rounded-bl-[var(--cmd-deep)]"
+          >
+            Verwijderen
+          </Button>
+          <Button type="button">Bewerken</Button>
+        </div>
       </PanelSection>
     </div>
   ),
@@ -101,7 +107,7 @@ export const LongDescription: StoryObj<typeof meta> = {
   args: {
     title: "Regels en documentatie",
     description:
-      "Documenten gekoppeld aan meerdere aanvragen in dit pakket. In een smalle kolom moet de beschrijving netjes afbreken zonder horizontaal te scrollen (prototype — downloadlinks zijn gemockt).",
+      "Documenten gekoppeld aan meerdere aanvragen in dit pakket. In een smalle kolom moet de beschrijving netjes afbreken zonder horizontaal te scrollen (prototype, downloadlinks zijn gemockt).",
   },
 };
 

@@ -1,11 +1,10 @@
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Button, Badge, CoverView, IconButton, usePanelsContext } from "@procertus-ui/ui";
+import { Button, Badge, CoverView, IconButton, PanelSection, usePanelsContext } from "@procertus-ui/ui";
 import {
   CertificationRequestLifecycleDetailTimeline,
   CertificationRequestLifecycleTimeline,
 } from "@procertus-ui/ui-certification";
-import { PanelSection } from "@procertus-ui/ui-lib";
 import { useCallback, useMemo } from "react";
 
 import { diffStringRecords } from "../features/profile-change-requests/flatten";

@@ -8,6 +8,7 @@ import {
   ItemDescription,
   ItemGroup,
   ItemTitle,
+  PanelSection,
   useConfirm,
   usePanelsContext,
 } from "@procertus-ui/ui";
@@ -16,7 +17,6 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { CertificationRequestLifecycleDetailTimeline } from "@procertus-ui/ui-certification";
 import { useNavigate } from "react-router-dom";
 
-import { PanelSection } from "@procertus-ui/ui-lib";
 import { useMemo } from "react";
 
 import { CONVERSATION_SUITE_CERTIFICATION } from "../features/conversations/conversation-detail-panel-mocks";
