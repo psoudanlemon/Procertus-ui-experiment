@@ -67,14 +67,14 @@ export const TypingBubble: StoryObj<typeof meta> = {
       <ChatBubbleAvatar>
         <AvatarFallback>…</AvatarFallback>
       </ChatBubbleAvatar>
-      <ChatBubbleMessage typing className="min-h-12 min-w-[4.5rem]" />
+      <ChatBubbleMessage typing />
     </ChatBubble>
   ),
 };
 
 export const ListWithScrollButton: StoryObj<typeof meta> = {
   render: () => (
-    <div className="h-72 max-w-md rounded-lg border border-border bg-card">
+    <div className="flex h-72 max-w-md flex-col rounded-lg border border-border bg-card">
       <ChatList>
         {Array.from({ length: 14 }, (_, i) => (
           <ChatBubble key={i} variant={i % 2 === 0 ? "received" : "sent"}>
@@ -82,10 +82,16 @@ export const ListWithScrollButton: StoryObj<typeof meta> = {
               <AvatarFallback>{i % 2 === 0 ? "P" : "U"}</AvatarFallback>
             </ChatBubbleAvatar>
             <ChatBubbleMessage>
-              <p className="text-sm">Regel {i + 1} — scroll omhoog om de “naar beneden”-knop te zien.</p>
+              <p className="text-sm">Regel {i + 1}, scroll omhoog om de “naar beneden”-knop te zien.</p>
             </ChatBubbleMessage>
           </ChatBubble>
         ))}
+        <ChatBubble variant="received">
+          <ChatBubbleAvatar>
+            <AvatarFallback>…</AvatarFallback>
+          </ChatBubbleAvatar>
+          <ChatBubbleMessage typing />
+        </ChatBubble>
       </ChatList>
     </div>
   ),

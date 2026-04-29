@@ -13,15 +13,18 @@ export function useChatAutoScroll() {
   const lastScrollHeightRef = useRef(0);
   const userHasScrolledRef = useRef(false);
   const [atBottom, setAtBottom] = useState(true);
+  const [atTop, setAtTop] = useState(true);
 
   const syncBottomState = useCallback(() => {
     const el = ref.current;
     if (!el) {
       setAtBottom(true);
+      setAtTop(true);
       return;
     }
     const bottom = isNearBottom(el);
     setAtBottom(bottom);
+    setAtTop(el.scrollTop <= 0);
     if (bottom) {
       userHasScrolledRef.current = false;
     } else {
@@ -45,6 +48,7 @@ export function useChatAutoScroll() {
     lastScrollHeightRef.current = el.scrollHeight;
     el.scrollTo({ top: el.scrollHeight, behavior: "auto" });
     setAtBottom(true);
+    setAtTop(el.scrollTop <= 0);
     userHasScrolledRef.current = false;
 
     const onScroll = () => {
@@ -74,5 +78,5 @@ export function useChatAutoScroll() {
     };
   }, [scrollToBottom, syncBottomState]);
 
-  return { ref, isAtBottom: atBottom, scrollToBottom };
+  return { ref, isAtBottom: atBottom, isAtTop: atTop, scrollToBottom };
 }
