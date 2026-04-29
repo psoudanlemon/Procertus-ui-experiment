@@ -74,7 +74,7 @@ export function ProductMultiSelect({
     <FadingScrollList
       maxHeight="min(50vh, 28rem)"
       fadeColor="from-background"
-      wrapperClassName={cn("rounded-md border border-border/50", className)}
+      wrapperClassName={cn("rounded-md border border-border/50 p-section", className)}
       className="p-micro"
     >
       <SelectChoiceCardGroup
@@ -96,7 +96,7 @@ export function ProductMultiSelect({
               description={opt.description}
               checked={checked}
               disabled={opt.disabled}
-              variant={opt.disabled ? "faded" : "elevated"}
+              variant={opt.disabled ? "faded" : "default"}
               onCheckedChange={(isChecked) => {
                 if (opt.disabled) return;
                 onChange(toggleIn(selectedIds, opt.id, isChecked));

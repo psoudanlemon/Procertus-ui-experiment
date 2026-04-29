@@ -188,7 +188,7 @@ export function SelectChoiceCard({
                   {leading}
                 </div>
               ) : null}
-              <div className="flex min-w-0 flex-1 flex-col gap-component">
+              <div className="flex min-w-0 flex-1 flex-col">
                 <FieldTitle className={titleVariants({ variant })}>
                   <Label htmlFor={controlId} className={titleLabelClass}>
                     {title}
