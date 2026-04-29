@@ -26,7 +26,9 @@ export type DownloadableDocumentListItemData = {
   id: string;
   title: string;
   description?: string;
-  /** Shown next to the action, e.g. "PDF · 1.2 MB" */
+  /** Date line, e.g. "15/09/2025" */
+  date?: string;
+  /** Format/size line, e.g. "PDF · 1.2 MB" or "39.2 MB" */
   formatHint?: string;
   href: string;
 };
@@ -41,6 +43,7 @@ export function DownloadableDocumentListItem({
   className,
   title,
   description,
+  date,
   formatHint,
   href,
   downloadAriaLabel,
@@ -53,19 +56,26 @@ export function DownloadableDocumentListItem({
           <HugeiconsIcon icon={File01Icon} className="size-5" strokeWidth={1.5} />
         </ItemMedia>
         <ItemContent>
-          <ItemTitle className="underline decoration-foreground/35 underline-offset-4 group-hover/item:decoration-foreground/80">
-            {title}
-          </ItemTitle>
-          {description ?? formatHint ? (
+          <ItemTitle>{title}</ItemTitle>
+          {description || date || formatHint ? (
             <ItemDescription>
               {description}
+              {date ? (
+                <span
+                  className={cn(
+                    "block text-xs text-muted-foreground/90",
+                    description ? "mt-1" : undefined,
+                  )}
+                >
+                  {date}
+                </span>
+              ) : null}
               {formatHint ? (
                 <span
-                  className={
-                    description
-                      ? "mt-1 block text-xs text-muted-foreground/90"
-                      : "block text-xs text-muted-foreground/90"
-                  }
+                  className={cn(
+                    "block text-xs text-muted-foreground/90",
+                    description || date ? "mt-1" : undefined,
+                  )}
                 >
                   {formatHint}
                 </span>
@@ -73,7 +83,7 @@ export function DownloadableDocumentListItem({
             </ItemDescription>
           ) : null}
         </ItemContent>
-        <ItemActions className="shrink-0 text-muted-foreground" aria-hidden>
+        <ItemActions className="shrink-0 self-center text-muted-foreground" aria-hidden>
           <HugeiconsIcon icon={Download01Icon} className="size-5" strokeWidth={1.5} />
         </ItemActions>
       </a>

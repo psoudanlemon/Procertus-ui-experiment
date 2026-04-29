@@ -27,41 +27,40 @@ export default meta;
 
 const mockItems = [
   {
-    id: "howto",
-    title: "How to list downloadable documents,",
-    description:
-      "Internal pattern doc for designers and engineers — shown first in prototype lists.",
-    formatHint: "PDF · 120 KB",
-    href: "#howto-list-downloadable-documents",
+    id: "client-report-q2",
+    title: "client_report_2025_q2.pdf",
+    date: "15/09/2025",
+    formatHint: "39.2 MB",
+    href: "#client-report-q2",
   },
   {
     id: "ce-marking",
-    title: "CE marking — consolidated requirements overview",
-    description: "High-level mapping of directives referenced by the selected product stream.",
-    formatHint: "PDF · 2.4 MB",
+    title: "ce_marking_overview.pdf",
+    date: "02/08/2025",
+    formatHint: "2.4 MB",
     href: "#ce-marking-overview",
   },
   {
     id: "attestation-template",
-    title: "Attestation of conformity — applicant checklist",
-    formatHint: "PDF · 890 KB",
+    title: "attestation_checklist.pdf",
+    date: "21/07/2025",
+    formatHint: "890 KB",
     href: "#attestation-checklist",
   },
 ] satisfies DownloadableDocumentListItemData[];
 
 export const Default: StoryObj<typeof meta> = {
   args: {
-    title: "Ruleset documentation",
-    description:
-      "Documents that help you understand the rulesets for the certifications or attestations in this package (mocked).",
+    title: "Uploaded documents",
+    description: "Documents shared with this request (mocked).",
     items: mockItems,
   },
 };
 
 export const SingleRow = {
   render: () => (
-    <ItemGroup className="max-w-xl rounded-lg border border-border/60 p-component">
-      <DownloadableDocumentListItem {...mockItems[0]} />
+    <ItemGroup className="max-w-xl">
+      <DownloadableDocumentListItem {...mockItems[0]} onDelete={() => {}} />
     </ItemGroup>
   ),
 } as unknown as StoryObj<typeof meta>;
