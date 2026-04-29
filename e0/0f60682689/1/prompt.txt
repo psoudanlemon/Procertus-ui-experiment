@@ -1,0 +1,15 @@
+@Procertus-ui-experiment/packages/ui-pt1-prototype/src/mock-prototype-auth/PrototypeCard.tsx please make sure this prototype card supports the dark theme as well.  
+Make sure the colors adjust correctly to dark theme settings.
+
+---
+
+@Procertus-ui-experiment/packages/ui-pt1-prototype/src/mock-prototype-auth/PrototypeCard.tsx please make sure this prototype card supports the dark theme as well.  
+Make sure the colors adjust correctly to dark theme settings.
+
+---
+
+Commit these changes. Use the git commit skill.
+
+---
+
+Commit these changes. Use the git commit skill.
