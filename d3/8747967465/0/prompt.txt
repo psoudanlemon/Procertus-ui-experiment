@@ -15,3 +15,11 @@ Move this presentational component with its custom hook to the certification UI 
 ---
 
 @Procertus-ui-experiment/packages/ui-certification/src/components/certification-request-wizard/CertificationRequestWizardView.tsx now set up stories to visualize this portal-presentational component and to contribute subcomponents in the Storybook setup. @Procertus-ui-experiment/packages/ui-certification/src/components/certification-request-wizard/CompactWizardTimeline.tsx
+
+---
+
+Please commit this port and refactoring using Git commit skill.
+
+---
+
+Please commit this port and refactoring using Git commit skill.
