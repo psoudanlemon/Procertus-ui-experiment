@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { ItemGroup } from "@procertus-ui/ui";
+
 import {
   DownloadableDocumentListItem,
   DownloadableDocumentsList,
@@ -48,19 +50,18 @@ const mockItems = [
 ] satisfies DownloadableDocumentListItemData[];
 
 export const Default: StoryObj<typeof meta> = {
-  render: () => (
-    <DownloadableDocumentsList
-      title="Ruleset documentation"
-      description="Documents that help you understand the rulesets for the certifications or attestations in this package (mocked)."
-      items={mockItems}
-    />
-  ),
+  args: {
+    title: "Ruleset documentation",
+    description:
+      "Documents that help you understand the rulesets for the certifications or attestations in this package (mocked).",
+    items: mockItems,
+  },
 };
 
-export const SingleRow: StoryObj<typeof meta> = {
+export const SingleRow = {
   render: () => (
-    <ul className="m-0 max-w-xl list-none rounded-lg border border-border/60 p-0">
+    <ItemGroup className="max-w-xl rounded-lg border border-border/60 p-component">
       <DownloadableDocumentListItem {...mockItems[0]} />
-    </ul>
+    </ItemGroup>
   ),
-};
+} as unknown as StoryObj<typeof meta>;

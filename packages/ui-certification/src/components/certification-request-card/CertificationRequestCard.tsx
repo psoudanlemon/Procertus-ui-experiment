@@ -1,5 +1,15 @@
 import type { KeyboardEvent } from "react";
-import { Badge, Card, cn } from "@procertus-ui/ui";
+import {
+  Badge,
+  Card,
+  cn,
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemTitle,
+} from "@procertus-ui/ui";
 
 export type {
   CertificationRequestLifecycleStatus,
@@ -37,29 +47,28 @@ export type CertificationRequestCardProps = {
 function InquirySummary({ inquiries }: { inquiries: readonly CertificationRequestCardInquiry[] }) {
   return (
     <div className="space-y-3">
-      <ul className="grid gap-2" role="list">
+      <ItemGroup className="w-full gap-2">
         {inquiries.slice(0, 3).map((inquiry) => (
-          <li
+          <Item
             key={inquiry.id}
-            className="min-w-0 rounded-lg border border-border/70 bg-muted/25 p-3 shadow-proc-xs"
+            role="listitem"
+            variant="outline"
+            size="sm"
+            className="min-w-0 border-border/70 bg-muted/25 shadow-proc-xs"
           >
-            <div className="flex min-w-0 items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="line-clamp-2 text-sm font-semibold text-foreground">
-                  {inquiry.label}
-                </p>
-                <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
-                  {inquiry.productLabel ?? "Niet-productgebonden"}
-                </p>
-              </div>
-              <div className="flex shrink-0 flex-wrap justify-end gap-1">
-                {inquiry.shortLabel ? <Badge variant="outline">{inquiry.shortLabel}</Badge> : null}
-                {inquiry.value ? <Badge variant="outline">{inquiry.value}</Badge> : null}
-              </div>
-            </div>
-          </li>
+            <ItemContent>
+              <ItemTitle className="line-clamp-2 font-semibold">{inquiry.label}</ItemTitle>
+              <ItemDescription className="line-clamp-2 text-xs">
+                {inquiry.productLabel ?? "Niet-productgebonden"}
+              </ItemDescription>
+            </ItemContent>
+            <ItemActions className="shrink-0 flex-wrap justify-end gap-1">
+              {inquiry.shortLabel ? <Badge variant="outline">{inquiry.shortLabel}</Badge> : null}
+              {inquiry.value ? <Badge variant="outline">{inquiry.value}</Badge> : null}
+            </ItemActions>
+          </Item>
         ))}
-      </ul>
+      </ItemGroup>
       {inquiries.length > 3 ? (
         <p className="text-xs text-muted-foreground">
           +{inquiries.length - 3} extra aanvragen in dit pakket

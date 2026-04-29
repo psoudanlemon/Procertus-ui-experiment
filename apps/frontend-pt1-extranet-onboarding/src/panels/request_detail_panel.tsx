@@ -1,12 +1,12 @@
 import {
   Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
   CoverView,
   IconButton,
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemTitle,
   useConfirm,
   usePanelsContext,
 } from "@procertus-ui/ui";
@@ -14,6 +14,9 @@ import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { CertificationRequestLifecycleDetailTimeline } from "@procertus-ui/ui-certification";
 import { useNavigate } from "react-router-dom";
+
+import { DownloadableDocumentListItem, PanelSection } from "@procertus-ui/ui-lib";
+import { useMemo } from "react";
 
 import {
   cancelAuthenticatedRequestPackage,
@@ -23,6 +26,7 @@ import {
   toDraftItems,
   useAuthenticatedRequests,
 } from "../features/requests/authenticatedRequestStore";
+import { buildRulesetDocumentsForInquiries } from "../features/requests/rulesetDocuments";
 
 export const REQUEST_DETAIL_PANEL_TYPE = "requestDetail";
 
@@ -47,35 +51,16 @@ function ClosePanelButton({ panelType = REQUEST_DETAIL_PANEL_TYPE }: { panelType
   );
 }
 
-function PanelSection({
-  title,
-  description,
-  children,
-}: {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <Card className="w-full min-w-0">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        {description ? (
-          <CardDescription className="whitespace-normal wrap-break-word">
-            {description}
-          </CardDescription>
-        ) : null}
-      </CardHeader>
-      <CardContent className="min-w-0">{children}</CardContent>
-    </Card>
-  );
-}
-
 export function RequestDetailPanel({ panelType, requestId }: RequestDetailPanelProps) {
   const navigate = useNavigate();
   const confirm = useConfirm();
   const [requests, setRequests] = useAuthenticatedRequests();
   const request = requests.find((candidate) => candidate.id === requestId);
+
+  const rulesetDocuments = useMemo(
+    () => (request ? buildRulesetDocumentsForInquiries(request.inquiries) : []),
+    [request],
+  );
 
   if (!request) {
     return (
@@ -121,19 +106,21 @@ export function RequestDetailPanel({ panelType, requestId }: RequestDetailPanelP
   };
 
   const items = (
-    <ul className="grid min-w-0 gap-3" role="list">
+    <ItemGroup className="w-full">
       {toDraftItems(request.inquiries).map((inquiry) => (
-        <li key={inquiry.id} className="min-w-0 rounded-md border border-border/50 p-3">
-          <p className="min-w-0 whitespace-normal wrap-break-word text-sm font-medium text-foreground">
-            {inquiry.title}
-          </p>
-          <p className="mt-1 min-w-0 whitespace-normal wrap-break-word text-xs text-muted-foreground">
-            {inquiry.subtitle ?? "Contextaanvraag"}
-          </p>
-          {inquiry.details ? <div className="mt-component min-w-0">{inquiry.details}</div> : null}
-        </li>
+        <Item key={inquiry.id} role="listitem" variant="outline" size="sm" className="min-w-0">
+          <ItemContent>
+            <ItemTitle className="line-clamp-none w-full max-w-full min-w-0 whitespace-normal wrap-break-word">
+              {inquiry.title}
+            </ItemTitle>
+            <ItemDescription className="line-clamp-none text-xs whitespace-normal wrap-break-word">
+              {inquiry.subtitle ?? "Contextaanvraag"}
+            </ItemDescription>
+            {inquiry.details ? <div className="mt-component min-w-0">{inquiry.details}</div> : null}
+          </ItemContent>
+        </Item>
       ))}
-    </ul>
+    </ItemGroup>
   );
 
   // const rows: RequestPackageRow[] = [
@@ -156,34 +143,29 @@ export function RequestDetailPanel({ panelType, requestId }: RequestDetailPanelP
       primaryAction={<ClosePanelButton panelType={panelType} />}
       className="h-full"
     >
-      <div className="space-y-4 p-4">
+      <div className="space-y-12 p-0">
         {showActions ? (
-          <Card>
-            <CardHeader>
-              <CardTitle>Vervolgacties</CardTitle>
-              <CardDescription>
-                Open de volledige route om te bewerken of beheer de aanvraag rechtstreeks vanuit dit
-                overzicht.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-wrap gap-2">
-              {editable ? (
-                <Button type="button" onClick={() => navigate(`/requests/${request.id}/edit`)}>
-                  Bewerken
-                </Button>
-              ) : null}
-              {editable ? (
-                <Button type="button" variant="destructive" onClick={removeDraftRequest}>
-                  Verwijderen
-                </Button>
-              ) : null}
-              {cancellable ? (
-                <Button type="button" variant="destructive" onClick={cancelRequest}>
-                  Annuleren
-                </Button>
-              ) : null}
-            </CardContent>
-          </Card>
+          <PanelSection
+            title="Vervolgacties"
+            description="Open de volledige route om te bewerken of beheer de aanvraag rechtstreeks vanuit dit overzicht."
+            contentClassName="flex flex-wrap gap-2"
+          >
+            {editable ? (
+              <Button type="button" onClick={() => navigate(`/requests/${request.id}/edit`)}>
+                Bewerken
+              </Button>
+            ) : null}
+            {editable ? (
+              <Button type="button" variant="destructive" onClick={removeDraftRequest}>
+                Verwijderen
+              </Button>
+            ) : null}
+            {cancellable ? (
+              <Button type="button" variant="destructive" onClick={cancelRequest}>
+                Annuleren
+              </Button>
+            ) : null}
+          </PanelSection>
         ) : null}
         <PanelSection
           title="Levenscyclus"
@@ -201,6 +183,32 @@ export function RequestDetailPanel({ panelType, requestId }: RequestDetailPanelP
         ) : (
           <>{items}</>
         )}
+        <PanelSection
+          className="max-w-5xl w-full min-w-0"
+          title="Regels en documentatie"
+          description={
+            request.inquiries.length > 0
+              ? `Documenten gekoppeld aan ${
+                  request.inquiries.length === 1
+                    ? "de aanvraag in dit pakket"
+                    : `de ${request.inquiries.length} aanvragen in dit pakket`
+                } (prototype — downloadlinks zijn gemockt).`
+              : "Er zijn nog geen onderliggende aanvragen in dit pakket — voeg aanvragen toe om relevante documenten te zien."
+          }
+        >
+          {rulesetDocuments.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Geen aanvragen in dit pakket — documentatie verschijnt zodra er minstens één aanvraag
+              is opgenomen.
+            </p>
+          ) : (
+            <ItemGroup className="w-full">
+              {rulesetDocuments.map((doc) => (
+                <DownloadableDocumentListItem key={doc.id} {...doc} />
+              ))}
+            </ItemGroup>
+          )}
+        </PanelSection>
       </div>
     </CoverView>
   );

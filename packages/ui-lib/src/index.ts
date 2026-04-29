@@ -37,3 +37,5 @@ export type {
   DownloadableDocumentListItemProps,
   DownloadableDocumentsListProps,
 } from "./components/downloadable-documents-list";
+export { PanelSection } from "./components/panel-section";
+export type { PanelSectionProps } from "./components/panel-section";
