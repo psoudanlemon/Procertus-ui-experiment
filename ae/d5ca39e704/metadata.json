@@ -1,0 +1,39 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "aed5ca39e704",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "bun.lock",
+    "packages/ui-pt1-prototype/package.json",
+    "packages/ui-pt1-prototype/src/data/mock-prototype-organization-profiles.ts",
+    "packages/ui-pt1-prototype/src/data/mock-prototype-users.ts",
+    "packages/ui-pt1-prototype/src/index.ts",
+    "packages/ui-pt1-prototype/src/lib/merge-prototype-organization-profile.ts",
+    "packages/ui-pt1-prototype/src/mock-prototype-auth/MockPrototypeAuthProvider.tsx",
+    "packages/ui-pt1-prototype/src/mock-prototype-auth/mock-prototype-auth-context.ts",
+    "packages/ui-pt1-prototype/src/mock-prototype-auth/mock-prototype-passwordless-login-form.stories.tsx",
+    "packages/ui-pt1-prototype/src/mock-prototype-auth/mock-prototype-user-select.stories.tsx",
+    "packages/ui-pt1-prototype/src/mock-prototype-auth/useMockPrototypePatchProfile.ts",
+    "packages/ui-pt1-prototype/src/mock-prototype-auth/useMockPrototypeResolveOrganizationProfile.ts",
+    "packages/ui-pt1-prototype/src/schema/prototype-profile-schemas.ts",
+    "packages/ui-pt1-prototype/src/types/mock-prototype-profile-patch.ts",
+    "packages/ui-pt1-prototype/src/types/mock-prototype-user.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/ae/d5ca39e704/0/metadata.json",
+      "transcript": "/ae/d5ca39e704/0/full.jsonl",
+      "content_hash": "/ae/d5ca39e704/0/content_hash.txt",
+      "prompt": "/ae/d5ca39e704/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}
