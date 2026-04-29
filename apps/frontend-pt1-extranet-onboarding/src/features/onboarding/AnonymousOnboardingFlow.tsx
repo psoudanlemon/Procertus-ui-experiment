@@ -29,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
   CardList,
+  FadingScrollList,
   cn,
 } from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
@@ -1505,37 +1506,40 @@ export function AnonymousOnboardingFlow() {
               aria-label="Voortgang registratie"
             />
           </div>
-          <ul
-            className="max-h-[min(40vh,16rem)] space-y-2.5 overflow-y-auto text-left pr-1"
-            aria-live="polite"
+          <FadingScrollList
+            maxHeight="min(40vh, 16rem)"
+            fadeColor="from-background"
+            className="pr-1"
           >
-            {registrationSimulationLabels.map((item, index) => {
-              const done = registrationStepIndex > index;
-              const active = registrationStepIndex === index;
-              return (
-                <li
-                  key={item.id}
-                  className={cn(
-                    "flex gap-3 text-sm transition-colors",
-                    done || active ? "text-foreground" : "text-muted-foreground",
-                  )}
-                >
-                  <span
+            <ul className="space-y-2.5 text-left" aria-live="polite">
+              {registrationSimulationLabels.map((item, index) => {
+                const done = registrationStepIndex > index;
+                const active = registrationStepIndex === index;
+                return (
+                  <li
+                    key={item.id}
                     className={cn(
-                      "mt-0.5 size-2 shrink-0 rounded-full",
-                      done
-                        ? "bg-primary"
-                        : active
-                          ? "animate-pulse bg-primary"
-                          : "bg-muted-foreground/30",
+                      "flex gap-3 text-sm transition-colors",
+                      done || active ? "text-foreground" : "text-muted-foreground",
                     )}
-                    aria-hidden
-                  />
-                  <span>{item.label}</span>
-                </li>
-              );
-            })}
-          </ul>
+                  >
+                    <span
+                      className={cn(
+                        "mt-0.5 size-2 shrink-0 rounded-full",
+                        done
+                          ? "bg-primary"
+                          : active
+                            ? "animate-pulse bg-primary"
+                            : "bg-muted-foreground/30",
+                      )}
+                      aria-hidden
+                    />
+                    <span>{item.label}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </FadingScrollList>
         </DialogContent>
       </Dialog>
     </>

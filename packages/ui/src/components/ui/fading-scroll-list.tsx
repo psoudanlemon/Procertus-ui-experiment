@@ -18,6 +18,11 @@ type FadingScrollListProps = {
   fadeHeight?: string;
   /** Classes applied to the inner scrollable container. */
   className?: string;
+  /**
+   * Classes applied to the outer relative wrapper. Use when the list must
+   * stretch to fill a flex parent (e.g. `flex flex-1 min-h-0 flex-col`).
+   */
+  wrapperClassName?: string;
 };
 
 /**
@@ -32,6 +37,7 @@ function FadingScrollList({
   fadeColor = "from-background",
   fadeHeight = "h-8",
   className,
+  wrapperClassName,
 }: FadingScrollListProps) {
   const ref = React.useRef<HTMLDivElement>(null);
   const [canScrollUp, setCanScrollUp] = React.useState(false);
@@ -58,7 +64,7 @@ function FadingScrollList({
   }, [updateScroll]);
 
   return (
-    <div data-slot="fading-scroll-list" className="relative">
+    <div data-slot="fading-scroll-list" className={cn("relative", wrapperClassName)}>
       <div
         ref={ref}
         className={cn("flex flex-col overflow-y-auto", className)}
