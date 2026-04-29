@@ -1,16 +1,6 @@
 export { cn } from "./lib/utils";
 export * from "./user-authentication";
 export * from "./status-pages";
-export {
-  DesignTokensShowcase,
-  PrototypeSurfaceMarquee,
-  TokenSwatch,
-} from "./components/design-tokens-showcase";
-export type {
-  DesignTokensShowcaseProps,
-  PrototypeSurfaceMarqueeProps,
-  TokenSwatchProps,
-} from "./components/design-tokens-showcase";
 export { StepLayout, useStepLayout } from "./components/step-layout";
 export type {
   StepLayoutAction,
