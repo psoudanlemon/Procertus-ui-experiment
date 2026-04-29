@@ -1,4 +1,3 @@
-export { DashboardWelcomeWidget } from "./DashboardWelcomeWidget";
 export { SessionContextWidget, type SessionContextWidgetProps } from "./SessionContextWidget";
 export { CertificationSummaryWidget, type CertificationSummaryWidgetProps } from "./CertificationSummaryWidget";
 export { LatestInvoicesWidget, type LatestInvoicesWidgetProps } from "./LatestInvoicesWidget";

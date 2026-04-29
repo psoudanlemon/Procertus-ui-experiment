@@ -1,13 +1,5 @@
-import {
-  Badge,
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardList,
-} from "@procertus-ui/ui";
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, CardList, H1 } from "@procertus-ui/ui";
+import { PageHeader } from "@procertus-ui/ui-lib";
 import { CertificationRequestCard } from "@procertus-ui/ui-certification";
 import { useNavigate } from "react-router-dom";
 
@@ -31,20 +23,17 @@ export function RequestsOverviewPage() {
   const [requests] = useAuthenticatedRequests();
 
   return (
-    <div className="flex w-full flex-col gap-6 px-4 py-6 max-w-[1600px]">
-      <div className="flex flex-col gap-4 rounded-xl border border-border/70 bg-card p-5 shadow-proc-xs md:flex-row md:items-start md:justify-between max-w-3xl">
-        <div className="max-w-2xl">
-          <Badge variant="secondary">Aangemelde omgeving</Badge>
-          <h1 className="mt-3 text-2xl font-semibold tracking-tight">Aanvragen</h1>
-          <p className="mt-2 text-sm leading-6 text-muted-foreground">
-            Concepten en ingestuurde aanvragen blijven zichtbaar in dit overzicht. Start een nieuwe
-            aanvraag of open een bestaande request voor detail en bewerking.
-          </p>
-        </div>
-        <Button type="button" onClick={() => navigate("/requests/create")}>
-          Nieuwe aanvraag
-        </Button>
-      </div>
+    <div className="flex w-full max-w-[1400px] flex-col gap-region px-4 py-6 text-left md:px-6 md:py-8">
+      <PageHeader
+        kicker="Aangemelde omgeving"
+        title={<H1>Aanvragen</H1>}
+        description="Concepten en ingestuurde aanvragen blijven zichtbaar in dit overzicht. Start een nieuwe aanvraag of open een bestaande request voor detail en bewerking."
+        actions={
+          <Button type="button" onClick={() => navigate("/requests/create")}>
+            Nieuwe aanvraag
+          </Button>
+        }
+      />
 
       <section className="min-w-0 space-y-4">
         {requests.length > 0 ? (

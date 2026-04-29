@@ -1,3 +1,5 @@
+import { formatPrototypePostalAddressLine, getPrototypeOrganizationProfile } from "@procertus-ui/ui-pt1-prototype";
+
 /** Static mock content for dashboard sections without live data binding (financiën, certificaat-teaser). */
 
 export const mockFinancialOverview = {
@@ -74,18 +76,15 @@ const MOCK_ORG_USER_COUNTS: Record<string, number> = {
 };
 
 export function mockOrganizationUserCount(organizationId: string): number {
+  const approx = getPrototypeOrganizationProfile(organizationId)?.employeeCountApprox;
+  if (typeof approx === "number" && Number.isFinite(approx)) return Math.max(0, Math.round(approx));
   return MOCK_ORG_USER_COUNTS[organizationId] ?? 8;
 }
 
-const MOCK_ORG_ADDRESSES: Record<string, string> = {
-  "org-procertus": "Koning Albert II-laan 37, 1030 Brussel",
-  "org-acme": "Industrielaan 42, 2800 Mechelen",
-  "org-greenleaf": "Havenkaai 5, 9000 Gent",
-  "org-northwind": "Zuiderlaan 88, 9000 Gent",
-};
-
 export function mockOrganizationAddress(organizationId: string): string {
-  return MOCK_ORG_ADDRESSES[organizationId] ?? "Teststraat 1, 1000 Brussel";
+  const profile = getPrototypeOrganizationProfile(organizationId);
+  if (profile) return formatPrototypePostalAddressLine(profile.registeredAddress);
+  return "Teststraat 1, 1000 Brussel";
 }
 
 /** Source module for dashboard notification previews (prototype). */

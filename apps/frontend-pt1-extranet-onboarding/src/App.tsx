@@ -13,7 +13,10 @@ import { AppPlaceholderPage } from "./pages/AppPlaceholderPage";
 import { OnboardingRegistrationCompletePage } from "./pages/OnboardingRegistrationCompletePage";
 import { SignupPage } from "./pages/SignupPage";
 import { OrganizationPage } from "./pages/OrganizationPage";
+import { OrganizationProfilePage } from "./pages/OrganizationProfilePage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { ProfileChangeRequestsPage } from "./pages/ProfileChangeRequestsPage";
+import { UserProfilePage } from "./pages/UserProfilePage";
 import { RequireAuth } from "./routes/RequireAuth";
 import { PROTOTYPE_NAV_GROUPS, PROTOTYPE_PRIMARY_NAV } from "./navConfig";
 
@@ -55,26 +58,9 @@ export default function App() {
               />
             }
           />
-          <Route
-            path="/user-profile"
-            element={
-              <AppPlaceholderPage
-                title="Mijn profiel"
-                description="Werk straks je persoonlijke gegevens, voorkeuren en notificaties hier bij."
-                icon={primaryNavByKey("user-profile").icon}
-              />
-            }
-          />
-          <Route
-            path="/organization-profile"
-            element={
-              <AppPlaceholderPage
-                title="Organisatieprofiel"
-                description="Beheer straks de publieke gegevens en instellingen van je organisatie op één plek."
-                icon={primaryNavByKey("organization-profile").icon}
-              />
-            }
-          />
+          <Route path="/user-profile" element={<UserProfilePage />} />
+          <Route path="/organization-profile" element={<OrganizationProfilePage />} />
+          <Route path="/profile-change-requests" element={<ProfileChangeRequestsPage />} />
           <Route path="/requests" element={<RequestsOverviewPage />} />
           <Route path="/requests/create" element={<RequestCreationPage />} />
           <Route path="/requests/:requestId" element={<RequestDetailPage />} />

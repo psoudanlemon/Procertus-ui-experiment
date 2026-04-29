@@ -66,6 +66,12 @@ export const PROTOTYPE_NAV_GROUPS: PrototypeNavGroup[] = [
         icon: FileEditIcon as IconSvgElement,
       },
       {
+        key: "profile-change-requests",
+        title: "Profielwijzigingen",
+        url: "/profile-change-requests",
+        icon: FileEditIcon as IconSvgElement,
+      },
+      {
         key: "certificates-attestations",
         title: "Certificaten & Attesten",
         url: "/certificates-attestations",
