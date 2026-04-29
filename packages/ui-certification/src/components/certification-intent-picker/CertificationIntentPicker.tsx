@@ -140,7 +140,12 @@ export function CertificationIntentPicker({
           }
         }}
       >
-        <div className={cn("grid w-full grid-cols-1 gap-section", layout === "grid" && "md:grid-cols-3")}>
+        <div
+          className={cn(
+            "grid w-full grid-cols-1 gap-section",
+            layout === "grid" && "md:grid-cols-3",
+          )}
+        >
           {mainOptions.map((opt) => (
             <SelectChoiceCard
               key={opt.id}
@@ -154,28 +159,20 @@ export function CertificationIntentPicker({
               disabled={opt.disabled}
             />
           ))}
+          {additionalOptions.map((opt) => (
+            <SelectChoiceCard
+              key={opt.id}
+              value={opt.id}
+              controlId={`${base}-${opt.id}`}
+              title={opt.title}
+              description={opt.description}
+              leading={opt.leading}
+              variant={opt.variant}
+              controlPosition="trailing"
+              disabled={opt.disabled}
+            />
+          ))}
         </div>
-        {additionalOptions.length > 0 ? (
-          <div className="mt-region flex w-full flex-col gap-component border-t border-border/60 pt-region">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Other request types
-            </p>
-            <div className="grid w-full grid-cols-1 gap-component md:grid-cols-3">
-              {additionalOptions.map((opt) => (
-                <SelectChoiceCard
-                  key={opt.id}
-                  value={opt.id}
-                  controlId={`${base}-${opt.id}`}
-                  title={opt.title}
-                  description={opt.description}
-                  leading={opt.leading}
-                  variant={opt.variant}
-                  disabled={opt.disabled}
-                />
-              ))}
-            </div>
-          </div>
-        ) : null}
       </SelectChoiceCardGroup>
     </div>
   );

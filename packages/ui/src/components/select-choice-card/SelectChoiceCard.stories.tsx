@@ -217,3 +217,62 @@ function FieldsetGridStory() {
 export const GroupWithLegend = {
   render: () => <FieldsetGridStory />,
 } as unknown as StoryObj<typeof meta>;
+
+function ControlPositionStory() {
+  const [v, setV] = useState("trailing-b");
+  return (
+    <div className="flex w-full max-w-2xl flex-col gap-section">
+      <SelectChoiceCardGroup
+        legend="Leading control (default)"
+        hint="Radio renders before the title — the original layout."
+        value={v}
+        onValueChange={setV}
+        selectionMode="single"
+      >
+        <SelectChoiceCard
+          value="leading-a"
+          controlId="cp-leading-a"
+          title="Product certification"
+          description="Control sits at the start of the row."
+        />
+        <SelectChoiceCard
+          value="leading-b"
+          controlId="cp-leading-b"
+          title="ATG"
+          description="Control sits at the start of the row."
+        />
+      </SelectChoiceCardGroup>
+      <SelectChoiceCardGroup
+        legend="Trailing control"
+        hint="Pair non-hero cards with hero cards above to keep the radio aligned to the right."
+        value={v}
+        onValueChange={setV}
+        selectionMode="single"
+      >
+        <SelectChoiceCard
+          value="trailing-a"
+          controlId="cp-trailing-a"
+          title="PROCERTUS attest"
+          description="Control sits at the end of the row."
+          controlPosition="trailing"
+          variant="faded"
+        />
+        <SelectChoiceCard
+          value="trailing-b"
+          controlId="cp-trailing-b"
+          title="EPD"
+          description="Control sits at the end of the row."
+          controlPosition="trailing"
+          variant="faded"
+        />
+      </SelectChoiceCardGroup>
+      <p className="text-sm text-muted-foreground" role="status">
+        Selected: {v}
+      </p>
+    </div>
+  );
+}
+
+export const ControlPosition = {
+  render: () => <ControlPositionStory />,
+} as unknown as StoryObj<typeof meta>;

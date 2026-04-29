@@ -28,7 +28,7 @@ const shellVariants = cva(
   {
     variants: {
       appearance: {
-        default: "*:data-[slot=field]:p-component",
+        default: "*:data-[slot=field]:p-section",
         hero: "has-[>[data-slot=field]]:overflow-hidden has-[>[data-slot=field]]:rounded-xl *:data-[slot=field]:p-0",
       },
       variant: {
@@ -90,6 +90,8 @@ export type SelectChoiceCardProps = {
   variant?: SelectChoiceVariant;
   /** @default "default" — `hero` uses a two-zone (header + body) tier-card layout. */
   appearance?: SelectChoiceAppearance;
+  /** @default "leading" — only applies when `appearance="default"`; ignored for hero. */
+  controlPosition?: "leading" | "trailing";
   /** @default "single" — use with `RadioGroup`; `multiple` uses `Checkbox` + `checked` props. */
   selectionMode?: ChoiceSelectionMode;
   disabled?: boolean;
@@ -110,6 +112,7 @@ export function SelectChoiceCard({
   leading,
   variant = "default",
   appearance = "default",
+  controlPosition = "leading",
   selectionMode = "single",
   disabled = false,
   checked,
@@ -176,7 +179,7 @@ export function SelectChoiceCard({
           </div>
         ) : (
           <>
-            {control}
+            {controlPosition === "leading" ? control : null}
             <FieldContent
               className={cn(showLeading && "flex min-w-0 flex-row items-start gap-component")}
             >
@@ -185,7 +188,7 @@ export function SelectChoiceCard({
                   {leading}
                 </div>
               ) : null}
-              <div className="flex min-w-0 flex-1 flex-col">
+              <div className="flex min-w-0 flex-1 flex-col gap-component">
                 <FieldTitle className={titleVariants({ variant })}>
                   <Label htmlFor={controlId} className={titleLabelClass}>
                     {title}
@@ -200,6 +203,7 @@ export function SelectChoiceCard({
                 ) : null}
               </div>
             </FieldContent>
+            {controlPosition === "trailing" ? control : null}
           </>
         )}
       </Field>
