@@ -54,7 +54,7 @@ function DurationRow({
 }
 
 /**
- * The four duration tiers that govern all interactive and ambient motion
+ * The five duration tiers that govern all interactive and ambient motion
  * in the system.
  */
 export const DurationScale: Story = {
@@ -66,7 +66,7 @@ export const DurationScale: Story = {
           Duration scale
         </h2>
         <p className="m-0 mt-1 text-sm text-muted-foreground">
-          The four duration tiers that cover every animation in the system.
+          The five duration tiers that cover every animation in the system.
         </p>
       </div>
 
@@ -109,7 +109,15 @@ export const DurationScale: Story = {
           "Density spacing",
           "Nav menu content",
           "Nav trigger icon",
+          "Stepper indicator",
+          "Stepper separator",
         ]}
+      />
+
+      <DurationRow
+        tier="Deliberate"
+        duration="500ms"
+        components={["Step layout body"]}
       />
 
       <DurationRow
@@ -171,6 +179,9 @@ const entries: MotionEntry[] = [
   { component: "Density spacing", easing: "ease-out", duration: "Emphasis", pattern: "Transition" },
   { component: "Nav menu content", easing: "Expressive", duration: "Emphasis", pattern: "Slide + fade" },
   { component: "Nav trigger icon", easing: "ease-out", duration: "Emphasis", pattern: "Rotate" },
+  { component: "Stepper indicator", easing: "ease-out", duration: "Emphasis", pattern: "Transition + fade" },
+  { component: "Stepper separator", easing: "ease-out", duration: "Emphasis", pattern: "Transition" },
+  { component: "Step layout body", easing: "Expressive", duration: "Deliberate", pattern: "Slide + fade" },
   { component: "Spinner", easing: "ease-out", duration: "Ambient", pattern: "Continuous loop" },
   { component: "Skeleton", easing: "ease-out", duration: "Ambient", pattern: "Continuous loop" },
   { component: "Caret blink", easing: "ease-out", duration: "Ambient", pattern: "Continuous loop" },

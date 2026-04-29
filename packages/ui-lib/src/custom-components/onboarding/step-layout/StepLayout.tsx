@@ -7,7 +7,7 @@
  * `@procertus-ui/ui` (see Shadow, Elevation, Color, Radius, Typography). No promotional
  * gradient on the default surface unless you add it in `children` or a custom `className`.
  */
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -69,6 +69,18 @@ export type StepLayoutProps = {
   secondaryAction?: StepLayoutAction;
   /** Ghost-styled escape hatch rendered at the far-left of the footer (e.g. “Cancel”). */
   cancelAction?: StepLayoutAction;
+  /**
+   * Stable key for the active step. When supplied and changed, the title block and
+   * body slide-fade in to soften the transition. Direction (forward vs backward)
+   * is inferred from numeric keys, so passing the active step index from
+   * {@link useStepLayout} gives the most natural feel.
+   *
+   * Uses the **Deliberate** motion tier (`duration-500`) paired with the expressive easing
+   * curve, `slide-in-from-right-2` / `slide-in-from-left-2`, and `fade-in-0`. The longer
+   * 500ms dwell makes step navigation feel considered rather than reactive. Honours
+   * `prefers-reduced-motion` globally.
+   */
+  stepKey?: string | number;
 };
 
 const variantClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
@@ -142,12 +154,31 @@ export function StepLayout({
   primaryAction,
   secondaryAction,
   cancelAction,
+  stepKey,
 }: StepLayoutProps) {
   const isFill = layout === "fill" || layout === "fill-parent";
   const isViewportFill = layout === "fill";
   const isParentFill = layout === "fill-parent";
   const hasStepper = stepper != null;
   const rail = hasStepper && stepperPosition === "start";
+
+  const prevStepKeyRef = useRef(stepKey);
+  const directionRef = useRef<"forward" | "backward">("forward");
+  if (stepKey !== undefined && prevStepKeyRef.current !== stepKey) {
+    if (typeof stepKey === "number" && typeof prevStepKeyRef.current === "number") {
+      directionRef.current = stepKey > prevStepKeyRef.current ? "forward" : "backward";
+    }
+    prevStepKeyRef.current = stepKey;
+  }
+  const animateStep = stepKey !== undefined;
+  const stepAnimClass = animateStep
+    ? cn(
+        "animate-in fade-in-0 duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        directionRef.current === "forward"
+          ? "slide-in-from-right-2"
+          : "slide-in-from-left-2",
+      )
+    : undefined;
 
   const cardClass = cn(
     "w-full overflow-hidden shadow-proc-xs",
@@ -170,7 +201,10 @@ export function StepLayout({
         isFill && "shrink-0",
       )}
     >
-      <div className={titleGroupClass}>
+      <div
+        key={animateStep ? `title-${stepKey}` : undefined}
+        className={cn(titleGroupClass, stepAnimClass)}
+      >
         <StepLayoutHeaderBlock
           variant={variant}
           title={title}
@@ -201,8 +235,24 @@ export function StepLayout({
             "min-h-0 flex-1",
           )}
         >
-          {children}
+          {animateStep ? (
+            <div
+              key={`body-${stepKey}`}
+              className={cn("space-y-section", stepAnimClass)}
+            >
+              {children}
+            </div>
+          ) : (
+            children
+          )}
         </FadingScrollList>
+      ) : animateStep ? (
+        <div
+          key={`body-${stepKey}`}
+          className={cn("space-y-section", stepAnimClass)}
+        >
+          {children}
+        </div>
       ) : (
         children
       )}

@@ -67,6 +67,7 @@ function OnboardingFlowStory() {
   return (
     <StepLayout
       variant="onboarding"
+      stepKey={step}
       title={["Welcome", "Profile basics", "Review & finish"][step] ?? "Step"}
       description="Supportive copy lives here. Mark the prerequisite below to enable Next, or go Back to change a previous step."
       stepLabel={`Step ${step + 1} of ${flow.totalSteps}`}
@@ -248,6 +249,7 @@ function WithTopStepperStory() {
   return (
     <StepLayout
       stepperPosition="top"
+      stepKey={flow.activeStep}
       stepper={
         <OnboardingStepper
           steps={stepperSteps}
@@ -428,6 +430,7 @@ function WithStartStepperStory() {
       className="max-w-none"
       stepperPosition="start"
       layout="fill"
+      stepKey={flow.activeStep}
       stepper={
         <OnboardingStepper
           className="max-w-none"
@@ -501,6 +504,7 @@ function WizardStepStory() {
   return (
     <StepLayout
       variant="wizard"
+      stepKey={step}
       title={step === 0 ? "Intent" : "Confirm"}
       stepLabel={`Step ${step + 1} of ${flow.totalSteps}`}
       description="Footer emphasizes the primary “Next” action; use optional outline secondary actions when needed."
@@ -557,6 +561,7 @@ function FillLayoutStory() {
     <StepLayout
       layout="fill"
       variant="onboarding"
+      stepKey={flow.activeStep}
       title="Scrollable full-screen step"
       description='Set the layout prop to "fill" when the layout should occupy the viewport. The main region scrolls; header and footer stay put.'
       stepLabel={`Step ${flow.activeStep + 1} of ${flow.totalSteps}`}
@@ -610,6 +615,7 @@ function ParentFillWithRailStory() {
         className="max-w-none"
         layout="fill-parent"
         stepperPosition="start"
+        stepKey={flow.activeStep}
         stepper={
           <OnboardingStepper
             className="max-w-none"
