@@ -1,0 +1,33 @@
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx:146-535 make this component a APO representational component.  
+Set up a dedicated custom hook to combine all state L.Props that can be propagated to this presentational component.  
+Move this presentational component with its custom hook to the certification UI library. @Procertus-ui-experiment/packages/ui-certification/src
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx:146-535 make this component a APO representational component.  
+Set up a dedicated custom hook to combine all state L.Props that can be propagated to this presentational component.  
+Move this presentational component with its custom hook to the certification UI library. @Procertus-ui-experiment/packages/ui-certification/src
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/components/certification-request-wizard/CertificationRequestWizardView.tsx now set up stories to visualize this portal-presentational component and to contribute subcomponents in the Storybook setup. @Procertus-ui-experiment/packages/ui-certification/src/components/certification-request-wizard/CompactWizardTimeline.tsx
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/components/certification-request-wizard/CertificationRequestWizardView.tsx now set up stories to visualize this portal-presentational component and to contribute subcomponents in the Storybook setup. @Procertus-ui-experiment/packages/ui-certification/src/components/certification-request-wizard/CompactWizardTimeline.tsx
+
+---
+
+Please commit this port and refactoring using Git commit skill.
+
+---
+
+Please commit this port and refactoring using Git commit skill.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:1467-1540 please also port this dialog to a separate presentation component in the certification UILab.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:430-455 set up this field skeleton as a reusable presentation component in the ui-lib package.
