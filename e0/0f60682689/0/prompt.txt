@@ -1,0 +1,309 @@
+Please set up extra routes and navigation in the sidebar for a dashboard, user management, user profile, and organization profile.@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/navConfig.ts 
+
+ Don't group these new navigation items; just add them as the first available. They are top-level navigation items.
+
+When setting up the routing, please create a "Coming Soon" page, like the others, for roads that don't exist yet. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:51-55 
+
+ come up with appropriate icons and use them both in the navigation and in the placeholder pages.
+
+---
+
+Please set up extra routes and navigation in the sidebar for a dashboard, user management, user profile, and organization profile.@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/navConfig.ts 
+
+ Don't group these new navigation items; just add them as the first available. They are top-level navigation items.
+
+When setting up the routing, please create a "Coming Soon" page, like the others, for roads that don't exist yet. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:51-55 
+
+ come up with appropriate icons and use them both in the navigation and in the placeholder pages.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx:98-108 also add a link to the personal user profile from the header menu.
+
+Also add information about the current company where the user is logged in.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx:98-108 also add a link to the personal user profile from the header menu.
+
+Also add information about the current company where the user is logged in.
+
+---
+
+Also allow linking to the organization profile and, if multiple organizations are available for the currently locked-in account, also allow switching company.
+
+---
+
+Also allow linking to the organization profile and, if multiple organizations are available for the currently locked-in account, also allow switching company.
+
+---
+
+Please construct a good-looking Bento grid–based dashboard for the current prototype application.
+
+Display a block in this grid for each of the available items in the side menu, organized in the same groups as currently laid out.
+
+Include:
+- A block for the current logged-in user.
+- A block for the current organization where this user is logged in, with a small overview of certification requests.
+- A small overview of certificates for the logged-in user and organization.
+- A small overview of user management: how many users and roles are currently being managed within the application.
+- And so forth.
+
+Provide mock data for all blocks. Do not make it dynamic. Just add mocks.
+
+ at the top of the page, please add a welcome image and make it Procertus-branded using the Procertus logo. Make it quite large.
+
+---
+
+It's okay to set a max width for this dashboard, but please don't center the page.
+
+The intro with the logo block is too large; make it smaller.
+
+You imagined too much—please stick to the actual intended content of the prototype application. Don't add information about documents to be signed or other items that are not currently part of the navigation setup.
+
+Remove the dashboard block from the dashboard altogether.  
+It doesn't make sense to add a dashboard block on the dashboard page itself.
+
+ Please start with a small block about the currently logged-in user. Don't use mock data; use data from the authentication provider.
+
+Then show a block for the currently logged-in organization. Use the authentication context to display the correct current information about the organization linked to the currently logged-in user.
+
+ Please add a block about a certification that shows both information about active requests and active certifications.
+
+Use correct information about the active requests. A data binding is available to retrieve information about these requests; please look at the request overview page to see how to get this information.
+
+ Finally, add a mocked block about financial information: invoices, payment spending, and orders to be invoiced.
+
+---
+
+It's okay to set a max width for this dashboard, but please don't center the page.
+
+The intro with the logo block is too large; make it smaller.
+
+You imagined too much—please stick to the actual intended content of the prototype application. Don't add information about documents to be signed or other items that are not currently part of the navigation setup.
+
+Remove the dashboard block from the dashboard altogether.  
+It doesn't make sense to add a dashboard block on the dashboard page itself.
+
+ Please start with a small block about the currently logged-in user. Don't use mock data; use data from the authentication provider.
+
+Then show a block for the currently logged-in organization. Use the authentication context to display the correct current information about the organization linked to the currently logged-in user.
+
+ Please add a block about a certification that shows both information about active requests and active certifications.
+
+Use correct information about the active requests. A data binding is available to retrieve information about these requests; please look at the request overview page to see how to get this information.
+
+ Finally, add a mocked block about financial information: invoices, payment spending, and orders to be invoiced.
+
+---
+
+I noticed that page scroll is currently broken. This is because of the app shell setup for displaying the main view and a stack of stacked panels.@Procertus-ui-experiment/packages/ui/src/components/sewdn/Panels/PanelsLayout.tsx @Procertus-ui-experiment/packages/ui/src/components/sewdn/Panels/PANELS_AI_GUIDE.md  I would have expected the panels layout's main view to be internally scrollable, with everything rendering within this main view.
+
+Please check the current setup, how these panels should be used, and how to fix the issue. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx:151 
+
+ it's probably because of the combination of the AppPanels layout and the Management AppShell.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/RequestsOverviewPage.tsx don't set up internal scrolling within this page, because we have fixed the page scroll outside of this component in a more generic way.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/RequestsOverviewPage.tsx don't set up internal scrolling within this page, because we have fixed the page scroll outside of this component in a more generic way.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/DashboardPage.tsx make the dashboard cards less prominent by removing borders and elevation. 
+
+ also, the first element—the welcome hero—does not need to be placed inside a card and can just be displayed as the header of the page.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/DashboardPage.tsx make the dashboard cards less prominent by removing borders and elevation. 
+
+ also, the first element—the welcome hero—does not need to be placed inside a card and can just be displayed as the header of the page.
+
+---
+
+Please use appropriate spacing in the dashboard flatcards.  
+Please look at the design guides for spacing.@Procertus-ui-experiment/packages/ui/src/components/spacing-guidelines.mdx @Procertus-ui-experiment/packages/ui/src/components/spacing-radix.stories.tsx
+
+---
+
+I think the flat guards can use extra spacing or padding around the entire guard. It feels cramped currently.
+
+---
+
+I think the flat guards can use extra spacing or padding around the entire guard. It feels cramped currently.
+
+---
+
+I removed some items from the dashboard and changed the appearance of the cards, specifically the background color.
+
+Please merge the current dashboard cards for Profile and Organization into a single card, and add two links on the card to open the personal profile and the organization profile.
+
+Also merge the user management information into this card and display only the number of users for the current organization.  
+Add a link to User Management.
+
+---
+
+I removed some items from the dashboard and changed the appearance of the cards, specifically the background color.
+
+Please merge the current dashboard cards for Profile and Organization into a single card, and add two links on the card to open the personal profile and the organization profile.
+
+Also merge the user management information into this card and display only the number of users for the current organization.  
+Add a link to User Management.
+
+---
+
+Don't use horizontal rules or lines in this newly merged dashboard block.
+
+Make this dashboard block smaller in the Pentogrid.
+
+Add links to the different sections next to the content related to each section.
+ Show fictive address of the organization.  Show the number of users for the organization next to the organization's name. Don't create a separate section within this bento grid block.
+
+---
+
+Don't use horizontal rules or lines in this newly merged dashboard block.
+
+Make this dashboard block smaller in the Pentogrid.
+
+Add links to the different sections next to the content related to each section.
+ Show fictive address of the organization.  Show the number of users for the organization next to the organization's name. Don't create a separate section within this bento grid block.
+
+---
+
+instead of adding links with separate labels, make certain items interactive. Clicking your username should open the profile. Clicking the organization name should open the organization profile. Clicking the number of active users should open the user management section.
+
+---
+
+For the financial overview, use an item group with items displaying the latest three invoices.
+
+Each item for an invoice should display the invoice amount and a status indicating whether it has been paid or not.
+
+At the bottom of this widget, place "Show all" to go to the invoice overview.
+
+Same for the certificate overview.
+
+- Use list items to display the three latest requests together with their status in a show-out.
+- Also display mock data to show current active certificates for the organization.
+
+Realization: press a "Show all" button.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/LatestInvoicesWidget.tsx:45-55 use a multi-line item where the facture number is the item title.
+Put the status on the second line.
+At the end of the item, right-align the invoice amount.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/LatestInvoicesWidget.tsx:45-55 use a multi-line item where the facture number is the item title.
+Put the status on the second line.
+At the end of the item, right-align the invoice amount.
+
+---
+
+Please use the same kind of header for this invoice widget as is used on the certification widget. Place the icon next to the title + subtitle (description) and add a section label (H4) "Recente Facturen".
+
+---
+
+Please use the same kind of header for this invoice widget as is used on the certification widget. Place the icon next to the title + subtitle (description) and add a section label (H4) "Recente Facturen".
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/SessionContextWidget.tsx 
+
+Show the company information also in an item that is built using: item title, item content, item icon.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/SessionContextWidget.tsx 
+
+Show the company information also in an item that is built using: item title, item content, item icon.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/SessionContextWidget.tsx:100-109 can you display the number of users as an avatar-like icon aligned to the right of the item?  add a tooltip to indicate this numaber is the indication of the number of users.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/CertificationSummaryWidget.tsx:100-123 because we can click these items, they need to be indicated as interactive. We can use them as children, but make sure they are hoverable.
+
+I don't think we need to use a button inside them. 
+
+ also add a chevron-right to indicate we are going to open something to the right. 
+
+===
+
+import { BadgeCheckIcon, ChevronRightIcon } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item"
+
+export function ItemDemo() {
+  return (
+    <div className="flex w-full max-w-md flex-col gap-6">
+      <Item variant="outline">
+        <ItemContent>
+          <ItemTitle>Basic Item</ItemTitle>
+          <ItemDescription>
+            A simple item with title and description.
+          </ItemDescription>
+        </ItemContent>
+        <ItemActions>
+          <Button variant="outline" size="sm">
+            Action
+          </Button>
+        </ItemActions>
+      </Item>
+      <Item variant="outline" size="sm" asChild>
+        <a href="#">
+          <ItemMedia>
+            <BadgeCheckIcon className="size-5" />
+          </ItemMedia>
+          <ItemContent>
+            <ItemTitle>Your profile has been verified.</ItemTitle>
+          </ItemContent>
+          <ItemActions>
+            <ChevronRightIcon className="size-4" />
+          </ItemActions>
+        </a>
+      </Item>
+    </div>
+  )
+}
+
+---
+
+Now please add one more widget to list recent notifications.
+
+If you accept the notifications, you can add them. These are notifications about recent changes from the different modules within the application.
+
+For instance, for user management: "User [example username] has activated their account."  
+For certification requests: "Your certification request has been approved."  
+For invoicing: "A new invoice was added."
+
+Always style these notifications the same and always add a timestamp.
+
+ place this widget underneath the profile widget.  so both the profile widget and the notifications widget should be the same height as the invoice and certification widgets in the Bento grid.
+
+---
+
+Why are the bento grid widgets currently so large in height?
+
+---
+
+Please commit all changes to the exercise sections and the dashboard.
+
+Also commit all changes that are currently in the worktree.
+
+Please use the commit skill.

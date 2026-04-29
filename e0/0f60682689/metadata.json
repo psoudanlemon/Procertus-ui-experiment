@@ -1,0 +1,43 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "e00f60682689",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".scaffold/metrics/snapshots.jsonl",
+    "apps/frontend-pt1-extranet-onboarding/src/App.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/components/AppDesignToolbar.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/data/mock-prototype-users.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/reviewRequesterFromSession.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/requests/authenticatedRequestStore.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/navConfig.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/DashboardPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/RequestsOverviewPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-mock-data.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/CertificationSummaryWidget.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/DashboardWelcomeWidget.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/LatestInvoicesWidget.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/RecentNotificationsWidget.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/SessionContextWidget.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/constants.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/index.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/nav.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/e0/0f60682689/0/metadata.json",
+      "transcript": "/e0/0f60682689/0/full.jsonl",
+      "content_hash": "/e0/0f60682689/0/content_hash.txt",
+      "prompt": "/e0/0f60682689/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}
