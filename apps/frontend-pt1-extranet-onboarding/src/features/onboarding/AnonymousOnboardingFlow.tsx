@@ -1,6 +1,9 @@
-import { Loading03Icon } from "@hugeicons/core-free-icons";
+import { Alert01Icon, Loading03Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
   Badge,
   Button,
   Card,
@@ -19,6 +22,7 @@ import {
   FieldLabel,
   Input,
   Progress,
+  Skeleton,
   Select,
   SelectContent,
   SelectItem,
@@ -29,19 +33,34 @@ import {
 } from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { RequestPackageReview } from "@procertus-ui/ui-certification";
-import type { RequestPackageReviewRequesterPresentation, RequestPackageRow } from "@procertus-ui/ui-certification";
-import { OnboardingStepper, SelectChoiceCard, SelectChoiceCardGroup, StepLayout } from "@procertus-ui/ui-lib";
+import type {
+  RequestPackageReviewRequesterPresentation,
+  RequestPackageRow,
+} from "@procertus-ui/ui-certification";
+import { PrototypeCard } from "@procertus-ui/ui-pt1-prototype";
+import {
+  OnboardingStepper,
+  SelectChoiceCard,
+  SelectChoiceCardGroup,
+  StepLayout,
+} from "@procertus-ui/ui-lib";
 import type { OnboardingStepperStep, StepLayoutAction } from "@procertus-ui/ui-lib";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
 import {
   REGISTRATION_SUBMIT_REDIRECT_DELAY_MS,
   registrationSimulationStepLabels,
 } from "./registrationSubmitSimulation";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import { useLocalStorageState } from "../../hooks/useLocalStorageState";
-import { CertificationRequestWizard, type CertificationWizardDraft } from "../certification-wizard/CertificationRequestWizard";
-import { DraftCardDescription, sortDraftsByIntentAndProduct } from "../certification-wizard/draftSelectionPresentation";
+import {
+  CertificationRequestWizard,
+  type CertificationWizardDraft,
+} from "../certification-wizard/CertificationRequestWizard";
+import {
+  DraftCardDescription,
+  sortDraftsByIntentAndProduct,
+} from "../certification-wizard/draftSelectionPresentation";
 import {
   REPRESENTATIVE_ROLE_PRESETS,
   REPRESENTATIVE_TITLE_PRESETS,
@@ -49,6 +68,8 @@ import {
   titleLabelForPresetId,
 } from "./registrationPersonOptions";
 import {
+  companyFormFieldsPrefilledByMockLookup,
+  companyFormFieldsResolvedThroughLookupStep,
   DEFAULT_VAT_PROTOTYPE_PRESET_ID,
   enrichRegistrationContext,
   findVatPrototypePreset,
@@ -58,15 +79,20 @@ import {
   VAT_LOOKUP_OUTCOME_LABELS,
   VAT_PROTOTYPE_PRESETS,
   vatLookupSimulationStepsForPreset,
+  type CompanyFormFieldKey,
   type RegistrationEnrichmentHints,
   type VatLookupMockOutcome,
 } from "./vatPrototypePresets";
-import { writeOnboardingRegistrationCompletePayload } from "./onboardingRegistrationCompleteSession";
+import {
+  ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY,
+  readOnboardingRegistrationCompletePayload,
+  writeOnboardingRegistrationCompletePayload,
+} from "./onboardingRegistrationCompleteSession";
 
 /** Standalone status page (no onboarding shell) after mock registratie-indiening. */
 export const ONBOARDING_REGISTRATION_COMPLETE_PATH = "/registratie-voltooid";
 
-const ONBOARDING_STEPS = ["request", "customer", "company", "summary"] as const;
+const ONBOARDING_STEPS = ["request", "customer", "company", "review", "summary"] as const;
 
 type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
 
@@ -119,8 +145,12 @@ function formatRequesterStepperLabel(context: CustomerContext): string {
 }
 
 function formatPostalAddressDisplay(context: CustomerContext): string {
-  const line1 = [context.addressStreet?.trim(), context.addressHouseNumber?.trim()].filter(Boolean).join(" ");
-  const line2 = [context.addressPostalCode?.trim(), context.addressCity?.trim()].filter(Boolean).join(" ");
+  const line1 = [context.addressStreet?.trim(), context.addressHouseNumber?.trim()]
+    .filter(Boolean)
+    .join(" ");
+  const line2 = [context.addressPostalCode?.trim(), context.addressCity?.trim()]
+    .filter(Boolean)
+    .join(" ");
   return [line1, line2].filter(Boolean).join(", ") || "—";
 }
 
@@ -134,7 +164,11 @@ function hasStructuredPostalAddress(context: CustomerContext): boolean {
 }
 
 function normalizeCustomerContext(
-  ctx: Partial<CustomerContext> & { representativeName?: string; kycNotes?: string; address?: string },
+  ctx: Partial<CustomerContext> & {
+    representativeName?: string;
+    kycNotes?: string;
+    address?: string;
+  },
 ): CustomerContext {
   const { representativeName: _legacyName, ...rest } = ctx;
   const sanitized: Record<string, unknown> = { ...rest };
@@ -185,11 +219,19 @@ function normalizeCustomerContext(
 
 /** Safe context for render and writes: fills missing keys from persistance (first paint before effects). */
 function resolveFlowContext(
-  raw: Partial<CustomerContext> & { representativeName?: string; kycNotes?: string; address?: string },
+  raw: Partial<CustomerContext> & {
+    representativeName?: string;
+    kycNotes?: string;
+    address?: string;
+  },
 ): CustomerContext {
   const definedOnly = Object.fromEntries(
     Object.entries(raw).filter(([, v]) => v !== undefined && v !== null),
-  ) as Partial<CustomerContext> & { representativeName?: string; kycNotes?: string; address?: string };
+  ) as Partial<CustomerContext> & {
+    representativeName?: string;
+    kycNotes?: string;
+    address?: string;
+  };
   return normalizeCustomerContext({
     ...DEFAULT_CONTEXT,
     ...definedOnly,
@@ -314,11 +356,20 @@ function AnonymousOnboardingShell({
                 alt="PROCERTUS, certification that builds trust"
                 className="hidden h-16 w-auto brightness-0 invert dark:block"
               />
-              <h1 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">{pageTitle}</h1>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{pageDescription}</p>
+              <h1 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
+                {pageTitle}
+              </h1>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
+                {pageDescription}
+              </p>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
-              <Button type="button" variant="outline" className="justify-center" onClick={() => navigate("/welcome")}>
+              <Button
+                type="button"
+                variant="outline"
+                className="justify-center"
+                onClick={() => navigate("/welcome")}
+              >
                 Aanmelden
               </Button>
             </div>
@@ -364,6 +415,67 @@ function ContextField({
   );
 }
 
+const COMPANY_FORM_FIELD_LABELS: Record<CompanyFormFieldKey, string> = {
+  organizationName: "Bedrijfsnaam",
+  country: "Land",
+  addressStreet: "Straat",
+  addressHouseNumber: "Huisnummer",
+  addressPostalCode: "Postcode",
+  addressCity: "Plaats",
+};
+
+function CompanyPrefillFormSkeleton({
+  prefilledKeys,
+  resolvedKeys,
+}: {
+  prefilledKeys: ReadonlySet<CompanyFormFieldKey>;
+  resolvedKeys: ReadonlySet<CompanyFormFieldKey>;
+}) {
+  const FieldSkeleton = ({ field }: { field: CompanyFormFieldKey }) => {
+    const label = COMPANY_FORM_FIELD_LABELS[field];
+    if (!prefilledKeys.has(field)) {
+      return (
+        <Field>
+          <FieldLabel>{label}</FieldLabel>
+          <FieldContent>
+            <div className="flex h-9 items-center rounded-md border border-dashed border-border/60 bg-muted/10 px-3 text-xs text-muted-foreground">
+              Handmatig invullen
+            </div>
+          </FieldContent>
+        </Field>
+      );
+    }
+    const resolved = resolvedKeys.has(field);
+    return (
+      <Field>
+        <FieldLabel>{label}</FieldLabel>
+        <FieldContent>
+          <Skeleton
+            className={cn("h-9 w-full rounded-md", resolved ? "bg-muted/70" : "animate-pulse")}
+          />
+        </FieldContent>
+      </Field>
+    );
+  };
+
+  return (
+    <div
+      className="grid gap-4 md:grid-cols-2"
+      aria-busy="true"
+      aria-label="Velden die automatisch worden ingevuld"
+    >
+      <FieldSkeleton field="organizationName" />
+      <FieldSkeleton field="country" />
+      <div className="grid gap-4 sm:grid-cols-2 md:col-span-2">
+        <FieldSkeleton field="addressStreet" />
+        <FieldSkeleton field="addressHouseNumber" />
+        <FieldSkeleton field="addressPostalCode" />
+        <FieldSkeleton field="addressCity" />
+      </div>
+    </div>
+  );
+}
+
 const ADDRESS_DETAIL_KEYS: (keyof CustomerContext)[] = [
   "addressStreet",
   "addressHouseNumber",
@@ -380,8 +492,14 @@ export function AnonymousOnboardingFlow() {
     ONBOARDING_FLOW_STORAGE_KEY,
     DEFAULT_ONBOARDING_FLOW_STATE,
   );
-  const { drafts, step, wizardInitialStep, prototypeVatPresetId, companyFieldHints, summaryIncludedDraftIds } =
-    flowState;
+  const {
+    drafts,
+    step,
+    wizardInitialStep,
+    prototypeVatPresetId,
+    companyFieldHints,
+    summaryIncludedDraftIds,
+  } = flowState;
   const context = useMemo(() => resolveFlowContext(flowState.context), [flowState.context]);
   const companyHints = companyFieldHints ?? {};
 
@@ -491,8 +609,8 @@ export function AnonymousOnboardingFlow() {
       },
       {
         id: "summary",
-        title: "Indienen",
-        description: "Pakket controleren",
+        title: "Versturen",
+        description: "Annvraag controleren",
         available: hasDrafts && hasCustomerContext && hasCompanyContext,
       },
     ],
@@ -501,7 +619,7 @@ export function AnonymousOnboardingFlow() {
 
   const updateContext = (id: keyof CustomerContext, value: string) => {
     setFlowState((prev) => {
-      const nextHints = { ...(prev.companyFieldHints ?? {}) };
+      const nextHints = { ...prev.companyFieldHints };
       if (id === "organizationName" || id === "country") {
         delete nextHints[id];
       }
@@ -561,9 +679,9 @@ export function AnonymousOnboardingFlow() {
     [activeVatPreset],
   );
 
-  const [companyLookupPhase, setCompanyLookupPhase] = useState<
-    "idle" | "loading" | "ready"
-  >(readInitialCompanyLookupPhase);
+  const [companyLookupPhase, setCompanyLookupPhase] = useState<"idle" | "loading" | "ready">(
+    readInitialCompanyLookupPhase,
+  );
   const [lookupProgress, setLookupProgress] = useState(0);
   const [lookupStepIndex, setLookupStepIndex] = useState(-1);
 
@@ -628,6 +746,37 @@ export function AnonymousOnboardingFlow() {
     return () => timeoutIds.forEach((id) => window.clearTimeout(id));
   }, [step, prototypeVatPresetId, setFlowState]);
 
+  const companyPrefillFieldKeys = useMemo(
+    () =>
+      companyFormFieldsPrefilledByMockLookup({
+        vatNumber: context.vatNumber,
+        representativeEmail: context.representativeEmail,
+        preset: activeVatPreset,
+      }),
+    [activeVatPreset, context.representativeEmail, context.vatNumber],
+  );
+
+  const completedCompanySimulationStepIndex = useMemo(() => {
+    if (companyLookupPhase === "ready" || lookupProgress >= 100) return 4;
+    if (lookupStepIndex <= 0) return -1;
+    return Math.min(lookupStepIndex - 1, 4);
+  }, [companyLookupPhase, lookupProgress, lookupStepIndex]);
+
+  const companyFieldsResolvedInSimulation = useMemo(
+    () =>
+      companyFormFieldsResolvedThroughLookupStep(completedCompanySimulationStepIndex, {
+        vatNumber: context.vatNumber,
+        representativeEmail: context.representativeEmail,
+        preset: activeVatPreset,
+      }),
+    [
+      activeVatPreset,
+      completedCompanySimulationStepIndex,
+      context.representativeEmail,
+      context.vatNumber,
+    ],
+  );
+
   const vatNumberForDisplay = context.vatNumber.trim();
   const emailForDisplay = context.representativeEmail.trim();
 
@@ -656,9 +805,20 @@ export function AnonymousOnboardingFlow() {
     }));
   };
 
+  const registrationCompleteRedirect = useMemo(
+    () => readOnboardingRegistrationCompletePayload(),
+    [],
+  );
+  if (registrationCompleteRedirect) {
+    return <Navigate to={ONBOARDING_REGISTRATION_COMPLETE_PATH} replace />;
+  }
+
   if (step === "request") {
     return (
-      <AnonymousOnboardingShell pageTitle={CERTIFICATION_PHASE_TITLE} pageDescription={CERTIFICATION_PHASE_DESCRIPTION}>
+      <AnonymousOnboardingShell
+        pageTitle={CERTIFICATION_PHASE_TITLE}
+        pageDescription={CERTIFICATION_PHASE_DESCRIPTION}
+      >
         <CertificationRequestWizard
           mode="onboarding"
           initialDrafts={drafts}
@@ -695,552 +855,612 @@ export function AnonymousOnboardingFlow() {
   const primaryAction: StepLayoutAction =
     step === "customer"
       ? {
-          label: "Verder naar bedrijfsgegevens",
+          label: "Verder",
           onClick: () => goToOnboardingStep("company"),
           disabled: !hasCustomerContext,
         }
       : step === "company"
         ? {
-            label: "Verder naar samenvatting",
+            label: "Verder",
             onClick: () => setFlowState((prev) => ({ ...prev, step: "summary" })),
             disabled: !hasCompanyContext || companyLookupPhase !== "ready",
           }
         : step === "summary"
           ? {
-              label: "Registratie indienen",
+              label: "Versturen",
               onClick: () => {
+                const certificationStoreRaw =
+                  typeof localStorage !== "undefined"
+                    ? localStorage.getItem(ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY)
+                    : null;
                 writeOnboardingRegistrationCompletePayload({
                   representativeEmail: context.representativeEmail.trim(),
                   organizationName: context.organizationName.trim(),
                   includedInquiryCount: effectiveSummaryIncludedDraftIds.length,
+                  flowStateSnapshot: flowState,
+                  certificationStoreRaw,
                 });
                 setRegistrationProgress(0);
                 setRegistrationStepIndex(-1);
                 setRegistrationSubmitOpen(true);
               },
               disabled:
-                !hasDrafts || effectiveSummaryIncludedDraftIds.length === 0 || registrationSubmitOpen,
+                !hasDrafts ||
+                effectiveSummaryIncludedDraftIds.length === 0 ||
+                registrationSubmitOpen,
             }
           : { label: "Doorgaan", onClick: () => {}, disabled: true };
 
   return (
     <>
-      <AnonymousOnboardingShell pageTitle={REGISTRATION_PHASE_TITLE} pageDescription={REGISTRATION_PHASE_DESCRIPTION}>
-        <StepLayout
-        className="w-full"
-        variant="onboarding"
-        stepper={
-          <OnboardingStepper
-            steps={steps}
-            activeStep={activeStep}
-            onStepChange={(index) => {
-              const nextStep = ONBOARDING_STEPS[index];
-              if (nextStep) {
-                goToOnboardingStep(nextStep);
-              }
-            }}
-            interactive
-          />
-        }
-        title={
-          step === "customer"
-            ? "Uw gegevens"
-            : step === "company"
-              ? "Bedrijf en adres"
-              : "Samenvatting"
-        }
-        description={
-          step === "customer"
-            ? "Wie registreert en het btw- of ondernemingsnummer van uw organisatie."
-            : step === "company"
-              ? "We combineren uw nummer met openbare registers en, waar dat onvoldoende is, met gegevens over de onderneming achter uw e-maildomein (serverside)."
-              : "Controleer uw gegevens en de aanvragen voordat u indient."
-        }
-        stepLabel={`Onboarding · stap ${activeStep + 1} van ${steps.length}`}
-        backAction={{
-          label: step === "customer" ? "Terug naar aanvraag" : "Terug",
-          onClick: () => {
-            const previous = ONBOARDING_STEPS[Math.max(0, activeStep - 1)];
-            setFlowState((prev) => ({ ...prev, step: previous }));
-          },
-        }}
-        primaryAction={primaryAction}
+      <AnonymousOnboardingShell
+        pageTitle={REGISTRATION_PHASE_TITLE}
+        pageDescription={REGISTRATION_PHASE_DESCRIPTION}
       >
-        {step === "customer" ? (
-          <div className="space-y-6">
-            <Card className="border-dashed">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-base">Prototype</CardTitle>
-                <CardDescription>
-                  In deze demo kiest u een voorbeeldnummer uit de lijst. In de echte toepassing typt u uw eigen nummer in;
-                  we controleren of het geldig is opgebouwd vóór we gegevens ophalen. Bij een ander voorbeeld worden
-                  naam, titel, rol en het demo-e-mailadres automatisch aangepast; bedrijfsgegevens worden leeggemaakt tot
-                  na de mock-lookup.
-                </CardDescription>
-                {activeVatPreset.demoSupplementsOrgAddressFromEmailDomain ? (
-                  <p className="mt-3 border-t border-border pt-3 text-sm leading-relaxed text-muted-foreground">
-                    <span className="font-medium text-foreground">Dit voorbeeld (FR / DE / VS):</span> het register levert
-                    geen bedrijfsnaam noch vestigingsadres uit het nummer. In de demo worden die gegevens — als uw
-                    e-maildomein in de mock voorkomt — serverside ingevuld op basis van het{" "}
-                    <span className="font-medium text-foreground">registratiedomein</span> van uw e-mail (niet enkel het
-                    land uit de TLD).
-                  </p>
-                ) : null}
-              </CardHeader>
-            </Card>
-            <Field>
-              <FieldLabel htmlFor="prototype-vat-preset">Voorbeeld btw- / ondernemingsnummer</FieldLabel>
-              <FieldContent>
-                <Select
-                  value={prototypeVatPresetId}
-                  onValueChange={(id) => {
-                    const preset = findVatPrototypePreset(id) ?? VAT_PROTOTYPE_PRESETS[0];
-                    if (!preset) return;
-                    setFlowState((prev) => ({
-                      ...prev,
-                      prototypeVatPresetId: id,
-                      companyFieldHints: {},
-                      context: resolveFlowContext({
-                        ...prev.context,
-                        ...getPersonContextFieldsForPrototypePreset(preset),
-                        vatNumber: preset.vatNumber,
-                        organizationName: "",
-                        country: "",
-                        addressStreet: "",
-                        addressHouseNumber: "",
-                        addressPostalCode: "",
-                        addressCity: "",
-                      }),
-                    }));
-                  }}
-                >
-                  <SelectTrigger id="prototype-vat-preset" className="h-auto min-h-9 w-full py-2 whitespace-normal">
-                    <SelectValue placeholder="Kies" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {VAT_PROTOTYPE_PRESETS.map((p) => (
-                      <SelectItem key={p.id} value={p.id}>
-                        {p.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FieldContent>
-            </Field>
-            <ContextField
-              id="vatNumber"
-              label="Btw- of ondernemingsnummer"
-              value={context.vatNumber}
-              onChange={updateContext}
-              readOnly
+        <StepLayout
+          className="w-full"
+          variant="onboarding"
+          stepper={
+            <OnboardingStepper
+              steps={steps}
+              activeStep={activeStep}
+              onStepChange={(index) => {
+                const nextStep = ONBOARDING_STEPS[index];
+                if (nextStep) {
+                  goToOnboardingStep(nextStep);
+                }
+              }}
+              interactive
             />
-            <div className="grid gap-4 md:grid-cols-2">
-              <ContextField
-                id="representativeFirstName"
-                label="Voornaam"
-                value={context.representativeFirstName}
-                onChange={updateContext}
-              />
-              <ContextField
-                id="representativeLastName"
-                label="Achternaam"
-                value={context.representativeLastName}
-                onChange={updateContext}
-              />
-            </div>
-            <Field>
-              <FieldLabel htmlFor="representativeEmail">E-mail</FieldLabel>
-              <FieldContent>
-                <Input
-                  id="representativeEmail"
-                  type="email"
-                  autoComplete="email"
-                  value={context.representativeEmail}
-                  onChange={(event) => updateContext("representativeEmail", event.target.value)}
-                />
-              </FieldContent>
-            </Field>
-            <div className="space-y-4">
-              <Field>
-                <FieldLabel htmlFor="representativeTitlePreset">Titel</FieldLabel>
-                <FieldContent>
-                  <Select
-                    value={
-                      REPRESENTATIVE_TITLE_PRESETS.some((p) => p.id === context.representativeTitlePreset)
-                        ? context.representativeTitlePreset
-                        : "none"
-                    }
-                    onValueChange={(id) => {
-                      if (id === "other") {
-                        setFlowState((prev) => ({
-                          ...prev,
-                          context: resolveFlowContext({
-                            ...prev.context,
-                            representativeTitlePreset: id,
-                          }),
-                        }));
-                        return;
-                      }
-                      if (id === "none") {
-                        setFlowState((prev) => ({
-                          ...prev,
-                          context: resolveFlowContext({
-                            ...prev.context,
-                            representativeTitlePreset: id,
-                            representativeTitle: "",
-                          }),
-                        }));
-                        return;
-                      }
-                      const label = titleLabelForPresetId(id);
-                      setFlowState((prev) => ({
-                        ...prev,
-                        context: resolveFlowContext({
-                          ...prev.context,
-                          representativeTitlePreset: id,
-                          representativeTitle: label,
-                        }),
-                      }));
-                    }}
-                  >
-                    <SelectTrigger id="representativeTitlePreset" className="w-full">
-                      <SelectValue placeholder="Kies" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {REPRESENTATIVE_TITLE_PRESETS.map((p) => (
-                        <SelectItem key={p.id} value={p.id}>
-                          {p.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FieldContent>
-              </Field>
-              {context.representativeTitlePreset === "other" ? (
+          }
+          title={
+            step === "customer"
+              ? "Uw gegevens"
+              : step === "company"
+                ? "Bedrijf en adres"
+                : "Samenvatting"
+          }
+          description={
+            step === "customer"
+              ? "Wie registreert en het btw- of ondernemingsnummer van uw organisatie."
+              : step === "company"
+                ? "We combineren uw nummer met openbare registers en, waar dat onvoldoende is, met gegevens over de onderneming achter uw e-maildomein (serverside)."
+                : "Controleer uw gegevens en de aanvragen voordat u indient."
+          }
+          stepLabel={`Onboarding · stap ${activeStep + 1} van ${steps.length}`}
+          backAction={{
+            label: step === "customer" ? "Terug" : "Terug",
+            onClick: () => {
+              const previous = ONBOARDING_STEPS[Math.max(0, activeStep - 1)];
+              setFlowState((prev) => ({ ...prev, step: previous }));
+            },
+          }}
+          primaryAction={primaryAction}
+        >
+          {step === "customer" ? (
+            <div className="space-y-6">
+              <PrototypeCard
+                title="Prototype"
+                description={
+                  <>
+                    In deze demo kiest u een voorbeeldnummer uit de lijst. In de echte toepassing
+                    typt u uw eigen nummer in; we controleren of het geldig is opgebouwd vóór we
+                    gegevens ophalen. Bij een ander voorbeeld worden naam, titel, rol en het
+                    demo-e-mailadres automatisch aangepast; bedrijfsgegevens worden leeggemaakt tot
+                    na de mock-lookup.
+                  </>
+                }
+                notice={
+                  activeVatPreset.demoSupplementsOrgAddressFromEmailDomain ? (
+                    <>
+                      <span className="font-medium text-foreground">
+                        Dit voorbeeld (FR / DE / VS):
+                      </span>{" "}
+                      het register levert geen bedrijfsnaam noch vestigingsadres uit het nummer. In
+                      de demo worden die gegevens — als uw e-maildomein in de mock voorkomt —
+                      serverside ingevuld op basis van het{" "}
+                      <span className="font-medium text-foreground">registratiedomein</span> van uw
+                      e-mail (niet enkel het land uit de TLD).
+                    </>
+                  ) : undefined
+                }
+              >
                 <Field>
-                  <FieldLabel htmlFor="representativeTitle">Titel (vrij)</FieldLabel>
+                  <FieldLabel htmlFor="prototype-vat-preset">
+                    Voorbeeld btw- / ondernemingsnummer
+                  </FieldLabel>
                   <FieldContent>
-                    <Input
-                      id="representativeTitle"
-                      value={context.representativeTitle}
-                      onChange={(event) => updateContext("representativeTitle", event.target.value)}
-                      placeholder="Bv. lic., doctor honoris causa"
-                    />
-                    <FieldDescription>Vul uw titel.</FieldDescription>
+                    <Select
+                      value={prototypeVatPresetId}
+                      onValueChange={(id) => {
+                        const preset = findVatPrototypePreset(id) ?? VAT_PROTOTYPE_PRESETS[0];
+                        if (!preset) return;
+                        setFlowState((prev) => ({
+                          ...prev,
+                          prototypeVatPresetId: id,
+                          companyFieldHints: {},
+                          context: resolveFlowContext({
+                            ...prev.context,
+                            ...getPersonContextFieldsForPrototypePreset(preset),
+                            vatNumber: preset.vatNumber,
+                            organizationName: "",
+                            country: "",
+                            addressStreet: "",
+                            addressHouseNumber: "",
+                            addressPostalCode: "",
+                            addressCity: "",
+                          }),
+                        }));
+                      }}
+                    >
+                      <SelectTrigger
+                        id="prototype-vat-preset"
+                        className="h-auto min-h-9 w-full py-2 whitespace-normal"
+                      >
+                        <SelectValue placeholder="Kies" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {VAT_PROTOTYPE_PRESETS.map((p) => (
+                          <SelectItem key={p.id} value={p.id}>
+                            {p.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FieldContent>
                 </Field>
-              ) : null}
-            </div>
-            <div className="space-y-4">
+              </PrototypeCard>
+              <ContextField
+                id="vatNumber"
+                label="Btw- of ondernemingsnummer"
+                value={context.vatNumber}
+                onChange={updateContext}
+                readOnly
+              />
+              <div className="grid gap-4 md:grid-cols-2">
+                <ContextField
+                  id="representativeFirstName"
+                  label="Voornaam"
+                  value={context.representativeFirstName}
+                  onChange={updateContext}
+                />
+                <ContextField
+                  id="representativeLastName"
+                  label="Achternaam"
+                  value={context.representativeLastName}
+                  onChange={updateContext}
+                />
+              </div>
               <Field>
-                <FieldLabel htmlFor="representativeRolePreset">Rol binnen de organisatie</FieldLabel>
+                <FieldLabel htmlFor="representativeEmail">E-mail</FieldLabel>
                 <FieldContent>
-                  <Select
-                    value={
-                      REPRESENTATIVE_ROLE_PRESETS.some((p) => p.id === context.representativeRolePreset)
-                        ? context.representativeRolePreset
-                        : "managing_director"
-                    }
-                    onValueChange={(id) => {
-                      if (id === "other") {
+                  <Input
+                    id="representativeEmail"
+                    type="email"
+                    autoComplete="email"
+                    value={context.representativeEmail}
+                    onChange={(event) => updateContext("representativeEmail", event.target.value)}
+                  />
+                </FieldContent>
+              </Field>
+              <div className="space-y-4">
+                <Field>
+                  <FieldLabel htmlFor="representativeTitlePreset">Titel</FieldLabel>
+                  <FieldContent>
+                    <Select
+                      value={
+                        REPRESENTATIVE_TITLE_PRESETS.some(
+                          (p) => p.id === context.representativeTitlePreset,
+                        )
+                          ? context.representativeTitlePreset
+                          : "none"
+                      }
+                      onValueChange={(id) => {
+                        if (id === "other") {
+                          setFlowState((prev) => ({
+                            ...prev,
+                            context: resolveFlowContext({
+                              ...prev.context,
+                              representativeTitlePreset: id,
+                            }),
+                          }));
+                          return;
+                        }
+                        if (id === "none") {
+                          setFlowState((prev) => ({
+                            ...prev,
+                            context: resolveFlowContext({
+                              ...prev.context,
+                              representativeTitlePreset: id,
+                              representativeTitle: "",
+                            }),
+                          }));
+                          return;
+                        }
+                        const label = titleLabelForPresetId(id);
+                        setFlowState((prev) => ({
+                          ...prev,
+                          context: resolveFlowContext({
+                            ...prev.context,
+                            representativeTitlePreset: id,
+                            representativeTitle: label,
+                          }),
+                        }));
+                      }}
+                    >
+                      <SelectTrigger id="representativeTitlePreset" className="w-full">
+                        <SelectValue placeholder="Kies" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {REPRESENTATIVE_TITLE_PRESETS.map((p) => (
+                          <SelectItem key={p.id} value={p.id}>
+                            {p.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FieldContent>
+                </Field>
+                {context.representativeTitlePreset === "other" ? (
+                  <Field>
+                    <FieldLabel htmlFor="representativeTitle">Titel (vrij)</FieldLabel>
+                    <FieldContent>
+                      <Input
+                        id="representativeTitle"
+                        value={context.representativeTitle}
+                        onChange={(event) =>
+                          updateContext("representativeTitle", event.target.value)
+                        }
+                        placeholder="Bv. lic., doctor honoris causa"
+                      />
+                      <FieldDescription>Vul uw titel.</FieldDescription>
+                    </FieldContent>
+                  </Field>
+                ) : null}
+              </div>
+              <div className="space-y-4">
+                <Field>
+                  <FieldLabel htmlFor="representativeRolePreset">
+                    Rol binnen de organisatie
+                  </FieldLabel>
+                  <FieldContent>
+                    <Select
+                      value={
+                        REPRESENTATIVE_ROLE_PRESETS.some(
+                          (p) => p.id === context.representativeRolePreset,
+                        )
+                          ? context.representativeRolePreset
+                          : "managing_director"
+                      }
+                      onValueChange={(id) => {
+                        if (id === "other") {
+                          setFlowState((prev) => ({
+                            ...prev,
+                            context: resolveFlowContext({
+                              ...prev.context,
+                              representativeRolePreset: id,
+                              representativeRole: "",
+                            }),
+                          }));
+                          return;
+                        }
+                        const label = roleLabelForPresetId(id);
                         setFlowState((prev) => ({
                           ...prev,
                           context: resolveFlowContext({
                             ...prev.context,
                             representativeRolePreset: id,
-                            representativeRole: "",
+                            representativeRole: label,
                           }),
                         }));
-                        return;
-                      }
-                      const label = roleLabelForPresetId(id);
-                      setFlowState((prev) => ({
-                        ...prev,
-                        context: resolveFlowContext({
-                          ...prev.context,
-                          representativeRolePreset: id,
-                          representativeRole: label,
-                        }),
-                      }));
-                    }}
-                  >
-                    <SelectTrigger id="representativeRolePreset" className="w-full">
-                      <SelectValue placeholder="Kies" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {REPRESENTATIVE_ROLE_PRESETS.map((p) => (
-                        <SelectItem key={p.id} value={p.id}>
-                          {p.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FieldContent>
-              </Field>
-              {context.representativeRolePreset === "other" ? (
-                <Field>
-                  <FieldLabel htmlFor="representativeRole">Functieomschrijving</FieldLabel>
-                  <FieldContent>
-                    <Input
-                      id="representativeRole"
-                      value={context.representativeRole}
-                      onChange={(event) => updateContext("representativeRole", event.target.value)}
-                      placeholder="Bv. projectleider extern"
-                    />
-                    <FieldDescription>Verplicht: beschrijf uw rol.</FieldDescription>
+                      }}
+                    >
+                      <SelectTrigger id="representativeRolePreset" className="w-full">
+                        <SelectValue placeholder="Kies" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {REPRESENTATIVE_ROLE_PRESETS.map((p) => (
+                          <SelectItem key={p.id} value={p.id}>
+                            {p.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FieldContent>
                 </Field>
-              ) : null}
-            </div>
-          </div>
-        ) : null}
-
-        {step === "company" ? (
-          <div className="space-y-6">
-            <div className="rounded-lg border border-border bg-muted/30 px-4 py-3">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Btw-nummer</p>
-                  <p className="mt-1 font-mono text-sm text-foreground">{vatNumberForDisplay || "—"}</p>
-                </div>
-                <div>
-                  <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">E-mail</p>
-                  <p className="mt-1 break-all text-sm text-foreground">{emailForDisplay || "—"}</p>
-                </div>
-              </div>
-            </div>
-
-            {companyLookupPhase === "loading" ? (
-              <div className="space-y-5">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between gap-2 text-sm">
-                    <span className="font-medium text-foreground">Bezig met ophalen</span>
-                    <span className="tabular-nums text-muted-foreground">{Math.round(lookupProgress)}%</span>
-                  </div>
-                  <Progress value={lookupProgress} className="h-2" aria-label="Voortgang gegevensophaling" />
-                </div>
-                <ul className="space-y-2.5" aria-live="polite">
-                  {vatLookupStepLabels.map((item, index) => {
-                    const done = lookupStepIndex > index;
-                    const active = lookupStepIndex === index;
-                    return (
-                      <li
-                        key={item.id}
-                        className={cn(
-                          "flex gap-3 text-sm transition-colors",
-                          done || active ? "text-foreground" : "text-muted-foreground",
-                        )}
-                      >
-                        <span
-                          className={cn(
-                            "mt-0.5 size-2 shrink-0 rounded-full",
-                            done ? "bg-primary" : active ? "bg-primary animate-pulse" : "bg-muted-foreground/30",
-                          )}
-                          aria-hidden
-                        />
-                        <span>{item.label}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ) : null}
-
-            {companyLookupPhase === "ready" && activeVatPreset ? (
-              <>
-                <Card>
-                  <CardHeader className="pb-2">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <CardTitle className="text-base">{activeVatPreset.outcomeLabel}</CardTitle>
-                      <Badge variant="secondary">
-                        {VAT_LOOKUP_OUTCOME_LABELS[activeVatPreset.mock.outcome as VatLookupMockOutcome]}
-                      </Badge>
-                    </div>
-                    <CardDescription>{activeVatPreset.outcomeMessage}</CardDescription>
-                  </CardHeader>
-                </Card>
-                {activeVatPreset.demoSupplementsOrgAddressFromEmailDomain ? (
-                  <Card className="border-dashed border-primary/25 bg-muted/20">
-                    <CardHeader className="py-3 pb-3">
-                      <CardTitle className="text-sm font-medium">Prototype — aanvulling via e-maildomein</CardTitle>
-                      <CardDescription className="text-sm leading-relaxed">
-                        Voor dit scenario komt de <span className="font-medium text-foreground">bedrijfsnaam</span> en het{" "}
-                        <span className="font-medium text-foreground">volledige adres</span> niet uit het
-                        btw-/ondernemingsregister in de demo. Ze worden hier ingevuld via het{" "}
-                        <span className="font-medium text-foreground">registratiedomein</span> van het e-mailadres dat u
-                        eerder opgaf (serverside mock). Controleer de velden; bij een generiek mailboxdomein blijven ze
-                        leeg tot u ze zelf invult.
-                      </CardDescription>
-                    </CardHeader>
-                  </Card>
-                ) : null}
-                <div className="grid gap-4 md:grid-cols-2">
-                  <ContextField
-                    id="organizationName"
-                    label="Bedrijfsnaam"
-                    value={context.organizationName}
-                    onChange={updateContext}
-                    placeholder="Zoals geregistreerd"
-                    description={companyHints.organizationName}
-                  />
+                {context.representativeRolePreset === "other" ? (
                   <Field>
-                    <FieldLabel htmlFor="country">Land</FieldLabel>
+                    <FieldLabel htmlFor="representativeRole">Functieomschrijving</FieldLabel>
                     <FieldContent>
-                      <Select
-                        value={countrySelectValue}
-                        onValueChange={(v) =>
-                          updateContext("country", v === COUNTRY_SELECT_NONE ? "" : v)
+                      <Input
+                        id="representativeRole"
+                        value={context.representativeRole}
+                        onChange={(event) =>
+                          updateContext("representativeRole", event.target.value)
                         }
-                      >
-                        <SelectTrigger id="country" className="w-full">
-                          <SelectValue placeholder="Kies een land" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={COUNTRY_SELECT_NONE}>Kies een land</SelectItem>
-                          {countrySelectOptions.map((name) => (
-                            <SelectItem key={name} value={name}>
-                              {name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      {companyHints.country ? <FieldDescription>{companyHints.country}</FieldDescription> : null}
+                        placeholder="Bv. projectleider extern"
+                      />
+                      <FieldDescription>Verplicht: beschrijf uw rol.</FieldDescription>
                     </FieldContent>
                   </Field>
-                  <div className="grid gap-4 sm:grid-cols-2 md:col-span-2">
-                    <ContextField
-                      id="addressStreet"
-                      label="Straat"
-                      value={context.addressStreet}
-                      onChange={updateContext}
-                      placeholder="Straatnaam"
-                      description={companyHints.addressStreet}
-                    />
-                    <ContextField
-                      id="addressHouseNumber"
-                      label="Huisnummer"
-                      value={context.addressHouseNumber}
-                      onChange={updateContext}
-                      placeholder="Bv. 12 of 12B"
-                    />
-                    <ContextField
-                      id="addressPostalCode"
-                      label="Postcode"
-                      value={context.addressPostalCode}
-                      onChange={updateContext}
-                      placeholder="Post- of postcode"
-                    />
-                    <ContextField
-                      id="addressCity"
-                      label="Plaats"
-                      value={context.addressCity}
-                      onChange={updateContext}
-                      placeholder="Gemeente of stad"
-                    />
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+
+          {step === "company" ? (
+            <div className="space-y-6">
+              <div className="rounded-lg border border-border bg-muted/30 px-4 py-3">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                      Btw-nummer
+                    </p>
+                    <p className="mt-1 font-mono text-sm text-foreground">
+                      {vatNumberForDisplay || "—"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                      E-mail
+                    </p>
+                    <p className="mt-1 break-all text-sm text-foreground">
+                      {emailForDisplay || "—"}
+                    </p>
                   </div>
                 </div>
-              </>
-            ) : null}
-          </div>
-        ) : null}
+              </div>
 
-        {step === "summary" ? (
-          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,28rem)]">
-            <RequestPackageReview
-              title="Coordinated intake"
-              description="Klantcontext, validatiecontext en aanvraagset worden samen ingediend."
-              requester={onboardingReviewRequesterFromContext(context)}
-              rows={buildRows(context, drafts, effectiveSummaryIncludedDraftIds)}
-              notice={
-                drafts.length > 0 && effectiveSummaryIncludedDraftIds.length < drafts.length ? (
-                  <span className="inline-flex flex-wrap items-center gap-2">
-                    <Badge variant="secondary">
-                      {effectiveSummaryIncludedDraftIds.length} van {drafts.length} in pakket
-                    </Badge>
-                    <span>
-                      Uitgevinkte aanvragen blijven in de lijst rechts staan; alleen het overzicht links en de
-                      mock-indiening volgen uw selectie.
-                    </span>
-                  </span>
-                ) : undefined
-              }
-            />
-            <Card className="w-full max-w-3xl overflow-hidden lg:max-w-none">
-              <CardHeader>
-                <CardTitle>Aanvragen</CardTitle>
-                <CardDescription>
-                  Zelfde kaarten als in de certificatiewizard. Vink uit om een aanvraag tijdelijk uit het pakket te
-                  halen; de kaart blijft staan om opnieuw aan te vinken.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {drafts.length === 0 ? (
-                  <>
-                    <p className="m-0 text-sm text-muted-foreground" role="status">
-                      Geen conceptaanvragen.
-                    </p>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full sm:w-auto"
-                      onClick={() => goToOnboardingStep("request")}
-                    >
-                      Aanvraagpakket wijzigen
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <SelectChoiceCardGroup
-                      selectionMode="multiple"
-                      hint="Kaarten uit het pakket houden beïnvloeden het overzicht links."
-                    >
-                      <CardList
-                        items={sortDraftsByIntentAndProduct(drafts)}
-                        widthClass="@min-[40rem]:grid-cols-1"
-                      >
-                        {(draft) => (
-                          <SelectChoiceCard
-                            key={draft.id}
-                            selectionMode="multiple"
-                            value={draft.id}
-                            controlId={`onboarding-summary-draft-${draft.id}`}
-                            title={draft.label}
-                            description={<DraftCardDescription draft={draft} />}
-                            checked={effectiveSummaryIncludedDraftIds.includes(draft.id)}
-                            onCheckedChange={(checked) => {
-                              setFlowState((prev) => {
-                                const ids = prev.drafts.map((d) => d.id);
-                                const base = prev.summaryIncludedDraftIds ?? [...ids];
-                                const next = checked
-                                  ? Array.from(new Set([...base, draft.id]))
-                                  : base.filter((id) => id !== draft.id);
-                                return { ...prev, summaryIncludedDraftIds: next };
-                              });
-                            }}
-                            emphasis="primary"
+              {companyLookupPhase === "loading" ? (
+                <div className="space-y-5">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between gap-2 text-sm">
+                      <span className="font-medium text-foreground">Bezig met ophalen</span>
+                      <span className="tabular-nums text-muted-foreground">
+                        {Math.round(lookupProgress)}%
+                      </span>
+                    </div>
+                    <Progress
+                      value={lookupProgress}
+                      className="h-2"
+                      aria-label="Voortgang gegevensophaling"
+                    />
+                  </div>
+                  <ul className="space-y-2.5" aria-live="polite">
+                    {vatLookupStepLabels.map((item, index) => {
+                      const done = lookupStepIndex > index;
+                      const active = lookupStepIndex === index;
+                      return (
+                        <li
+                          key={item.id}
+                          className={cn(
+                            "flex gap-3 text-sm transition-colors",
+                            done || active ? "text-foreground" : "text-muted-foreground",
+                          )}
+                        >
+                          <span
+                            className={cn(
+                              "mt-0.5 size-2 shrink-0 rounded-full",
+                              done
+                                ? "bg-primary"
+                                : active
+                                  ? "bg-primary animate-pulse"
+                                  : "bg-muted-foreground/30",
+                            )}
+                            aria-hidden
                           />
-                        )}
-                      </CardList>
-                    </SelectChoiceCardGroup>
-                    <div className="border-t border-border/60 pt-4">
+                          <span>{item.label}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <CompanyPrefillFormSkeleton
+                    prefilledKeys={companyPrefillFieldKeys}
+                    resolvedKeys={companyFieldsResolvedInSimulation}
+                  />
+                </div>
+              ) : null}
+
+              {companyLookupPhase === "ready" && activeVatPreset ? (
+                <>
+                  <Alert variant="warning">
+                    <HugeiconsIcon icon={Alert01Icon} aria-hidden className="size-4 shrink-0" />
+                    <AlertTitle className="flex flex-wrap items-center gap-2">
+                      <span>{activeVatPreset.outcomeLabel}</span>
+                      <Badge variant="warning">
+                        {
+                          VAT_LOOKUP_OUTCOME_LABELS[
+                            activeVatPreset.mock.outcome as VatLookupMockOutcome
+                          ]
+                        }
+                      </Badge>
+                    </AlertTitle>
+                    <AlertDescription>{activeVatPreset.outcomeMessage}</AlertDescription>
+                  </Alert>
+                  {activeVatPreset.demoSupplementsOrgAddressFromEmailDomain ? (
+                    <PrototypeCard
+                      title="Aanvulling via e-maildomein"
+                      description={
+                        <>
+                          Voor dit scenario komt de{" "}
+                          <span className="font-medium text-foreground">bedrijfsnaam</span> en het{" "}
+                          <span className="font-medium text-foreground">volledige adres</span> niet
+                          uit het btw-/ondernemingsregister in de demo. Ze worden hier ingevuld via
+                          het <span className="font-medium text-foreground">registratiedomein</span>{" "}
+                          van het e-mailadres dat u eerder opgaf (serverside mock). Controleer de
+                          velden; bij een generiek mailboxdomein blijven ze leeg tot u ze zelf
+                          invult.
+                        </>
+                      }
+                      cardContentClassName="hidden"
+                    >
+                      {null}
+                    </PrototypeCard>
+                  ) : null}
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <ContextField
+                      id="organizationName"
+                      label="Bedrijfsnaam"
+                      value={context.organizationName}
+                      onChange={updateContext}
+                      placeholder="Zoals geregistreerd"
+                      description={companyHints.organizationName}
+                    />
+                    <Field>
+                      <FieldLabel htmlFor="country">Land</FieldLabel>
+                      <FieldContent>
+                        <Select
+                          value={countrySelectValue}
+                          onValueChange={(v) =>
+                            updateContext("country", v === COUNTRY_SELECT_NONE ? "" : v)
+                          }
+                        >
+                          <SelectTrigger id="country" className="w-full">
+                            <SelectValue placeholder="Kies een land" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value={COUNTRY_SELECT_NONE}>Kies een land</SelectItem>
+                            {countrySelectOptions.map((name) => (
+                              <SelectItem key={name} value={name}>
+                                {name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {companyHints.country ? (
+                          <FieldDescription>{companyHints.country}</FieldDescription>
+                        ) : null}
+                      </FieldContent>
+                    </Field>
+                    <div className="grid gap-4 sm:grid-cols-2 md:col-span-2">
+                      <ContextField
+                        id="addressStreet"
+                        label="Straat"
+                        value={context.addressStreet}
+                        onChange={updateContext}
+                        placeholder="Straatnaam"
+                        description={companyHints.addressStreet}
+                      />
+                      <ContextField
+                        id="addressHouseNumber"
+                        label="Huisnummer"
+                        value={context.addressHouseNumber}
+                        onChange={updateContext}
+                        placeholder="Bv. 12 of 12B"
+                      />
+                      <ContextField
+                        id="addressPostalCode"
+                        label="Postcode"
+                        value={context.addressPostalCode}
+                        onChange={updateContext}
+                        placeholder="Post- of postcode"
+                      />
+                      <ContextField
+                        id="addressCity"
+                        label="Plaats"
+                        value={context.addressCity}
+                        onChange={updateContext}
+                        placeholder="Gemeente of stad"
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : null}
+            </div>
+          ) : null}
+
+          {step === "summary" ? (
+            <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,28rem)]">
+              <RequestPackageReview
+                title="Coordinated intake"
+                description="Klantcontext, validatiecontext en aanvraagset worden samen ingediend."
+                requester={onboardingReviewRequesterFromContext(context)}
+                rows={buildRows(context, drafts, effectiveSummaryIncludedDraftIds)}
+                notice={
+                  drafts.length > 0 && effectiveSummaryIncludedDraftIds.length < drafts.length ? (
+                    <Badge variant="secondary">
+                      {effectiveSummaryIncludedDraftIds.length} van {drafts.length} in aanvraag
+                    </Badge>
+                  ) : (
+                    <Badge variant="secondary">
+                      {drafts.length} certificatievragen in aanvraag
+                    </Badge>
+                  )
+                }
+              />
+              <Card className="w-full max-w-3xl overflow-hidden lg:max-w-none">
+                <CardHeader>
+                  <CardTitle>Aanvragen</CardTitle>
+                  <CardDescription>
+                    Pas uw selectie van certificatieaanvragen nog aan.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {drafts.length === 0 ? (
+                    <>
+                      <p className="m-0 text-sm text-muted-foreground" role="status">
+                        Geen conceptaanvragen.
+                      </p>
                       <Button
                         type="button"
                         variant="outline"
                         className="w-full sm:w-auto"
                         onClick={() => goToOnboardingStep("request")}
                       >
-                        Aanvraagpakket wijzigen
+                        Aanvraag wijzigen
                       </Button>
-                      <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                        Ga terug naar de wizard om aanvragen toe te voegen, te verwijderen of opnieuw samen te stellen.
-                      </p>
-                    </div>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        ) : null}
+                    </>
+                  ) : (
+                    <>
+                      <SelectChoiceCardGroup selectionMode="multiple">
+                        <CardList
+                          items={sortDraftsByIntentAndProduct(drafts)}
+                          widthClass="@min-[40rem]:grid-cols-1"
+                        >
+                          {(draft) => (
+                            <SelectChoiceCard
+                              key={draft.id}
+                              selectionMode="multiple"
+                              value={draft.id}
+                              controlId={`onboarding-summary-draft-${draft.id}`}
+                              title={draft.label}
+                              description={<DraftCardDescription draft={draft} />}
+                              checked={effectiveSummaryIncludedDraftIds.includes(draft.id)}
+                              onCheckedChange={(checked) => {
+                                setFlowState((prev) => {
+                                  const ids = prev.drafts.map((d) => d.id);
+                                  const base = prev.summaryIncludedDraftIds ?? [...ids];
+                                  const next = checked
+                                    ? Array.from(new Set([...base, draft.id]))
+                                    : base.filter((id) => id !== draft.id);
+                                  return { ...prev, summaryIncludedDraftIds: next };
+                                });
+                              }}
+                              emphasis="primary"
+                            />
+                          )}
+                        </CardList>
+                      </SelectChoiceCardGroup>
+                      <div className="border-t border-border/60 pt-4">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="w-full sm:w-auto"
+                          onClick={() => goToOnboardingStep("request")}
+                        >
+                          Aanvraag wijzigen
+                        </Button>
+                        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                          Ga terug naar de wizard om aanvragen toe te voegen, te verwijderen of
+                          opnieuw samen te stellen.
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          ) : null}
         </StepLayout>
       </AnonymousOnboardingShell>
 
@@ -1267,19 +1487,28 @@ export function AnonymousOnboardingFlow() {
             <div className="min-w-0 text-left text-sm leading-relaxed text-muted-foreground">
               <p className="m-0 font-medium text-foreground">Registratie wordt voltooid</p>
               <p className="mt-1 m-0">
-                Prototype: we simuleren het aanmaken van uw account, het opslaan van uw gegevens en het koppelen van
-                uw aanvragen.
+                Prototype: we simuleren het aanmaken van uw account, het opslaan van uw gegevens en
+                het koppelen van uw aanvragen.
               </p>
             </div>
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-2 text-sm">
               <span className="font-medium text-foreground">Voortgang</span>
-              <span className="tabular-nums text-muted-foreground">{Math.round(registrationProgress)}%</span>
+              <span className="tabular-nums text-muted-foreground">
+                {Math.round(registrationProgress)}%
+              </span>
             </div>
-            <Progress value={registrationProgress} className="h-2" aria-label="Voortgang registratie" />
+            <Progress
+              value={registrationProgress}
+              className="h-2"
+              aria-label="Voortgang registratie"
+            />
           </div>
-          <ul className="max-h-[min(40vh,16rem)] space-y-2.5 overflow-y-auto text-left pr-1" aria-live="polite">
+          <ul
+            className="max-h-[min(40vh,16rem)] space-y-2.5 overflow-y-auto text-left pr-1"
+            aria-live="polite"
+          >
             {registrationSimulationLabels.map((item, index) => {
               const done = registrationStepIndex > index;
               const active = registrationStepIndex === index;
@@ -1294,7 +1523,11 @@ export function AnonymousOnboardingFlow() {
                   <span
                     className={cn(
                       "mt-0.5 size-2 shrink-0 rounded-full",
-                      done ? "bg-primary" : active ? "animate-pulse bg-primary" : "bg-muted-foreground/30",
+                      done
+                        ? "bg-primary"
+                        : active
+                          ? "animate-pulse bg-primary"
+                          : "bg-muted-foreground/30",
                     )}
                     aria-hidden
                   />

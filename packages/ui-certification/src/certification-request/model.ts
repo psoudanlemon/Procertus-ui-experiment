@@ -160,7 +160,9 @@ export function useCertificationRequestWizardModel({
             id: CERTIFICATION_REQUEST_STEP_IDS[2],
             title: "Drafts",
             description:
-              includedDraftIds.length === 1 ? "1 conceptaanvraag" : `${includedDraftIds.length} conceptaanvragen`,
+              includedDraftIds.length === 1
+                ? "1 conceptaanvraag"
+                : `${includedDraftIds.length} conceptaanvragen`,
             available: canOpenDrafts,
           },
           {
@@ -195,13 +197,15 @@ export function useCertificationRequestWizardModel({
             id: CERTIFICATION_REQUEST_STEP_IDS[2],
             title: "Drafts",
             description:
-              includedDraftIds.length === 1 ? "1 conceptaanvraag" : `${includedDraftIds.length} conceptaanvragen`,
+              includedDraftIds.length === 1
+                ? "1 conceptaanvraag"
+                : `${includedDraftIds.length} conceptaanvragen`,
             available: canOpenDrafts,
           },
           {
             id: CERTIFICATION_REQUEST_STEP_IDS[3],
             title: "Review",
-            description: "Indienen",
+            description: "Versturen",
             available: canOpenReview,
           },
         ];
@@ -253,13 +257,17 @@ export function useCertificationRequestWizardModel({
       label: "Context",
       value: mode === "onboarding" ? "Anonieme onboarding" : "Aangemelde aanvraag",
     },
-    ...drafts.filter((draft) => includedDraftIds.includes(draft.id)).map((draft, index) => ({
-      id: draft.id,
-      label: `Aanvraag ${index + 1}`,
-      value: draft.context
-        ? `${draft.label} · ${draft.context}`
-        : draft.productLabel ? `${draft.label} · ${draft.productLabel}` : draft.label,
-    })),
+    ...drafts
+      .filter((draft) => includedDraftIds.includes(draft.id))
+      .map((draft, index) => ({
+        id: draft.id,
+        label: `Aanvraag ${index + 1}`,
+        value: draft.context
+          ? `${draft.label} · ${draft.context}`
+          : draft.productLabel
+            ? `${draft.label} · ${draft.productLabel}`
+            : draft.label,
+      })),
   ];
 
   const goNext = async () => {
@@ -283,8 +291,7 @@ export function useCertificationRequestWizardModel({
   const primaryDisabled =
     (activeStep === 0 && !intent) ||
     (activeStep === 1 && !canContinueDetails) ||
-    ((activeStep === 2 || activeStep === reviewIdx) &&
-      includedDraftIds.length === 0);
+    ((activeStep === 2 || activeStep === reviewIdx) && includedDraftIds.length === 0);
 
   return {
     activeStep,
@@ -299,11 +306,11 @@ export function useCertificationRequestWizardModel({
               : "Beschrijf de aanvraagcontext"
             : activeStep === 2
               ? "Conceptaanvragen"
-              : "Aanvraagpakket controleren",
+              : "Aanvraag controleren",
       description:
         activeStep === 0
           ? mode === "onboarding"
-            ? "We starten met de inhoudelijke aanvraag. Account- en organisatieactivatie komen pas nadat je zeker bent dat je dit pakket wilt indienen."
+            ? "We starten met de inhoudelijke aanvraag. Account- en organisatieactivatie komen pas nadat je zeker bent dat je dit pakket wilt versturen."
             : "Start een nieuwe aanvraag door te kiezen welk certificaat, attest of document je nodig hebt."
           : activeStep === 1
             ? productRequired
@@ -326,11 +333,7 @@ export function useCertificationRequestWizardModel({
       secondaryAction: undefined,
       primaryAction: {
         label:
-          activeStep === reviewIdx
-            ? mode === "onboarding"
-              ? "Conceptaanvraag vastleggen en verder"
-              : "Aanvraagpakket indienen"
-            : "Verder",
+          activeStep === reviewIdx ? (mode === "onboarding" ? "Verder" : "Versturen") : "Verder",
         onClick: goNext,
         disabled: primaryDisabled,
       },
@@ -353,8 +356,8 @@ export function useCertificationRequestWizardModel({
       productTree: {
         nodes: productTreeNodes,
         expandedIds,
-      expandAll: () => setExpandedIds([...groupIds]),
-      collapseAll: () => setExpandedIds([]),
+        expandAll: () => setExpandedIds([...groupIds]),
+        collapseAll: () => setExpandedIds([]),
         onToggle: (groupId, open) => {
           setExpandedIds((prev) => {
             const set = new Set(prev);

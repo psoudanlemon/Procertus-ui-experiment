@@ -10,7 +10,16 @@
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
-import { Button, Card, CardContent, CardFooter, CardHeader, H1, P, Separator } from "@procertus-ui/ui";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  H1,
+  P,
+  Separator,
+} from "@procertus-ui/ui";
 
 export type StepLayoutAction = {
   label: string;
@@ -137,9 +146,7 @@ export function StepLayout({
 
   const cardClass = cn(
     "w-full overflow-hidden shadow-proc-xs",
-    isFill
-      ? "flex min-h-0 flex-col !py-0 ring-0"
-      : cn("mx-auto", variantClass[variant]),
+    isFill ? "flex min-h-0 flex-col !py-0 ring-0" : cn("mx-auto", variantClass[variant]),
     isFill && "rounded-none",
     isFill && "bg-transparent shadow-none ring-0",
     !isFill && "rounded-xl",
@@ -147,12 +154,7 @@ export function StepLayout({
 
   const mainColumn = (
     <>
-      <CardHeader
-        className={cn(
-          headerClass[variant],
-          isFill && "shrink-0",
-        )}
-      >
+      <CardHeader className={cn(headerClass[variant], isFill && "shrink-0")}>
         {!rail && hasStepper ? (
           <div className="w-full pb-component not-empty:mb-0">{stepper}</div>
         ) : null}
@@ -165,10 +167,7 @@ export function StepLayout({
       </CardHeader>
       <Separator className={isFill ? "shrink-0" : undefined} />
       <CardContent
-        className={cn(
-          contentClass[variant],
-          isFill && "min-h-0 flex-1 overflow-y-auto",
-        )}
+        className={cn(contentClass[variant], isFill && "min-h-0 flex-1 overflow-y-auto")}
       >
         {children}
       </CardContent>
@@ -234,18 +233,15 @@ export function StepLayout({
         <div
           className={cn(
             "shrink-0 border-border md:w-56 md:min-w-48 md:max-w-xs md:border-r",
-            isFill ? "border-b p-section md:max-h-none md:overflow-y-auto" : "border-b p-section md:overflow-y-auto",
+            isFill
+              ? "border-b p-section md:max-h-none md:overflow-y-auto"
+              : "border-b p-section md:overflow-y-auto",
             isParentFill && "min-h-0",
           )}
         >
           {stepper}
         </div>
-        <div
-          className={cn(
-            "flex min-h-0 min-w-0 flex-1 flex-col",
-            isFill && "min-h-0 flex-1",
-          )}
-        >
+        <div className={cn("flex min-h-0 min-w-0 flex-1 flex-col", isFill && "min-h-0 flex-1")}>
           {mainColumn}
         </div>
       </Card>

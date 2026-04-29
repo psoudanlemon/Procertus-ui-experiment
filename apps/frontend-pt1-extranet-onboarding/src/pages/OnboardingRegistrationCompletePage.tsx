@@ -1,10 +1,13 @@
-import { Mail01Icon } from "@hugeicons/core-free-icons";
+import { ArrowLeft01Icon, Mail01Icon, RefreshIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Button, ButtonGroup, ButtonGroupSeparator } from "@procertus-ui/ui";
 import { StatusPage } from "@procertus-ui/ui-lib";
 import { useMockPrototypeIsAuthenticated } from "@procertus-ui/ui-pt1-prototype";
 import { useLayoutEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 import {
+  clearAnonymousOnboardingStorage,
   readOnboardingRegistrationCompletePayload,
   type OnboardingRegistrationCompletePayload,
 } from "../features/onboarding/onboardingRegistrationCompleteSession";
@@ -15,6 +18,7 @@ import {
  */
 export function OnboardingRegistrationCompletePage() {
   const isAuthenticated = useMockPrototypeIsAuthenticated();
+  const navigate = useNavigate();
   const [payload] = useState<OnboardingRegistrationCompletePayload | null>(() =>
     readOnboardingRegistrationCompletePayload(),
   );
@@ -28,7 +32,7 @@ export function OnboardingRegistrationCompletePage() {
   }, []);
 
   if (isAuthenticated) {
-    return <Navigate to="/requests" replace />;
+    return <Navigate to="/" replace />;
   }
 
   if (!payload) {
@@ -46,30 +50,51 @@ export function OnboardingRegistrationCompletePage() {
           <>
             <p className="m-0 text-[1.0625rem] font-normal leading-[1.65] tracking-tight text-foreground/95">
               Uw dossier staat klaar bij{" "}
-              <strong className="font-semibold text-foreground">{organizationName}</strong>, met u als contact op{" "}
+              <strong className="font-semibold text-foreground">{organizationName}</strong>, met u
+              als contact op{" "}
               <strong className="font-semibold text-foreground">{representativeEmail}</strong>.
             </p>
             <p className="m-0 text-base leading-relaxed">
               {includedInquiryCount === 1
                 ? "Uw geselecteerde aanvraag is opgeslagen en gekoppeld aan dit account."
                 : `Uw ${includedInquiryCount} geselecteerde aanvragen zijn opgeslagen en gekoppeld aan dit account.`}{" "}
-                          </p>
-            
+            </p>
           </>
         }
-        actions={[
-
-        ]}
+        actions={[]}
       >
         <>
-        <p className="m-0 border-t border-border/60 pt-4 text-sm font-medium leading-relaxed text-foreground">
-              Activeer uw account via e-mail
-            </p>
-            <p className="m-0 text-sm leading-relaxed text-muted-foreground">
-              We hebben een bericht gestuurd naar uw mailbox met een persoonlijke link. Open die link om uw account te activeren. Tot die tijd kunt u nog niet inloggen op het portaal — dat volgt pas na bevestiging.
-            </p>
+          <p className="m-0 border-t border-border/60 pt-4 text-sm font-medium leading-relaxed text-foreground">
+            Activeer uw account via e-mail
+          </p>
+          <p className="m-0 text-sm leading-relaxed text-muted-foreground">
+            We hebben een bericht gestuurd naar uw mailbox met een persoonlijke link. Open die link
+            om uw account te activeren. Tot die tijd kunt u nog niet inloggen op het portaal — dat
+            volgt pas na bevestiging.
+          </p>
+          <ButtonGroup className="flex-wrap items-center gap-x-2 gap-y-2">
+            <Button asChild variant="link" className="text-sm text-muted-foreground">
+              <Link to="/">
+                <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4 shrink-0" aria-hidden />
+                Terug
+              </Link>
+            </Button>
+            <ButtonGroupSeparator orientation="vertical" className="mx-0.5 h-4 min-h-4 bg-border" />
+            <Button
+              type="button"
+              variant="link"
+              className="text-sm text-muted-foreground"
+              onClick={() => {
+                clearAnonymousOnboardingStorage();
+                navigate("/", { replace: true });
+              }}
+            >
+              <HugeiconsIcon icon={RefreshIcon} className="size-4 shrink-0" aria-hidden />
+              Reset
+            </Button>
+          </ButtonGroup>
         </>
-        </StatusPage>
+      </StatusPage>
     </div>
   );
 }

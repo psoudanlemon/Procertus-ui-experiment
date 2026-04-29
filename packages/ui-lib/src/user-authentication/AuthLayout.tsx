@@ -40,8 +40,18 @@ export type AuthLayoutProps = {
   title?: string;
   /** Card description shown below the title. Ignored when `card` is false. */
   description?: React.ReactNode;
+  /**
+   * Short instruction or notice below the description — smaller, muted text (e.g. prototype hints).
+   * Ignored when `card` is false.
+   */
+  notice?: React.ReactNode;
   /** Whether to wrap children in a Card shell. Defaults to true. Set to false for status/message pages. */
   card?: boolean;
+  /**
+   * Optional content rendered below the main card in the left column (e.g. a secondary CTA card).
+   * Spacing uses the same `gap-section` as between other blocks in the column.
+   */
+  belowCard?: React.ReactNode;
   /** Logo element. Defaults to the full PROCERTUS wordmark. */
   logo?: React.ReactNode;
   /** Right panel configuration. Pass `false` to hide entirely. */
@@ -101,7 +111,9 @@ function AuthLayout({
   children,
   title,
   description,
+  notice,
   card: showCard = true,
+  belowCard,
   logo,
   panel,
   className,
@@ -126,19 +138,26 @@ function AuthLayout({
         </div>
 
         <div className="flex w-full max-w-sm flex-1 flex-col justify-center gap-section">
-          {/* Content */}
           {showCard ? (
-            <Card className="gap-section py-section shadow-[var(--shadow-proc-md)] ring-0">
-              <CardHeader className="gap-0 px-section text-center">
-                <H1>{title}</H1>
-                {description && <p className="text-base leading-[1.4] text-muted-foreground mt-micro">{description}</p>}
-              </CardHeader>
-              <CardContent className="px-section">{children}</CardContent>
-            </Card>
+            <>
+              <Card className="gap-section py-section shadow-[var(--shadow-proc-md)] ring-0">
+                <CardHeader className="gap-0 px-section text-center">
+                  <H1>{title}</H1>
+                  {description && <p className="text-base leading-[1.4] text-muted-foreground mt-micro">{description}</p>}
+                  {notice && (
+                    <div className="mt-2 text-xs leading-relaxed text-muted-foreground">{notice}</div>
+                  )}
+                </CardHeader>
+                <CardContent className="px-section">{children}</CardContent>
+              </Card>
+              {belowCard}
+            </>
           ) : (
-            children
+            <>
+              {children}
+              {belowCard}
+            </>
           )}
-
         </div>
       </div>
 

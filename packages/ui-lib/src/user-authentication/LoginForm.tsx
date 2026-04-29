@@ -20,12 +20,17 @@ import { PasswordInput } from "./PasswordInput";
 // Types
 // ---------------------------------------------------------------------------
 
+export type LoginFormVariant = "password" | "passwordless";
+
 export type LoginFormProps = {
+  /** `"password"` shows email + password; `"passwordless"` shows email only (e.g. magic link). */
+  variant?: LoginFormVariant;
   email?: string;
   onEmailChange?: (value: string) => void;
   password?: string;
   onPasswordChange?: (value: string) => void;
-  onSubmit?: (data: { email: string; password: string }) => void;
+  /** For `variant="password"`, `password` is always passed. For passwordless, only `email` is passed. */
+  onSubmit?: (data: { email: string; password?: string }) => void;
   onForgotPassword?: () => void;
   isSubmitting?: boolean;
   error?: string;
@@ -33,6 +38,8 @@ export type LoginFormProps = {
     email?: string;
     password?: string;
   };
+  /** Overrides the default submit label (`Sign in` vs `Send sign-in link`). */
+  submitLabel?: string;
 };
 
 // ---------------------------------------------------------------------------
@@ -40,6 +47,7 @@ export type LoginFormProps = {
 // ---------------------------------------------------------------------------
 
 function LoginForm({
+  variant = "password",
   email = "",
   onEmailChange,
   password = "",
@@ -49,11 +57,21 @@ function LoginForm({
   isSubmitting = false,
   error,
   fieldErrors,
+  submitLabel,
 }: LoginFormProps) {
+  const isPasswordless = variant === "passwordless";
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit?.({ email, password });
+    if (isPasswordless) {
+      onSubmit?.({ email });
+    } else {
+      onSubmit?.({ email, password });
+    }
   };
+
+  const resolvedSubmitLabel =
+    submitLabel ?? (isPasswordless ? "Send sign-in link" : "Sign in");
 
   return (
     <form onSubmit={handleSubmit}>
@@ -79,35 +97,37 @@ function LoginForm({
           />
           {fieldErrors?.email && <FieldError errors={[{ message: fieldErrors.email }]} />}
         </Field>
-        <Field>
-          <div className="flex items-center">
-            <FieldLabel htmlFor="login-password">Password</FieldLabel>
-            {onForgotPassword && (
-              <Button
-                type="button"
-                variant="link"
-                size="xs"
-                onClick={onForgotPassword}
-                className="ml-auto h-auto p-0"
-              >
-                Forgot your password?
-              </Button>
-            )}
-          </div>
-          <PasswordInput
-            id="login-password"
-            value={password}
-            onChange={(e) => onPasswordChange?.(e.target.value)}
-            disabled={isSubmitting}
-            required
-            autoComplete="current-password"
-            aria-invalid={!!fieldErrors?.password}
-          />
-          {fieldErrors?.password && <FieldError errors={[{ message: fieldErrors.password }]} />}
-        </Field>
+        {!isPasswordless ? (
+          <Field>
+            <div className="flex items-center">
+              <FieldLabel htmlFor="login-password">Password</FieldLabel>
+              {onForgotPassword && (
+                <Button
+                  type="button"
+                  variant="link"
+                  size="xs"
+                  onClick={onForgotPassword}
+                  className="ml-auto h-auto p-0"
+                >
+                  Forgot your password?
+                </Button>
+              )}
+            </div>
+            <PasswordInput
+              id="login-password"
+              value={password}
+              onChange={(e) => onPasswordChange?.(e.target.value)}
+              disabled={isSubmitting}
+              required
+              autoComplete="current-password"
+              aria-invalid={!!fieldErrors?.password}
+            />
+            {fieldErrors?.password && <FieldError errors={[{ message: fieldErrors.password }]} />}
+          </Field>
+        ) : null}
         <Field className="mt-section">
           <Button type="submit" disabled={isSubmitting} className="w-full">
-            {isSubmitting ? <Spinner size="sm" className="text-current" /> : "Sign in"}
+            {isSubmitting ? <Spinner size="sm" className="text-current" /> : resolvedSubmitLabel}
           </Button>
         </Field>
       </FieldGroup>

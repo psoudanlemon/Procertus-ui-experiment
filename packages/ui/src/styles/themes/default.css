@@ -134,6 +134,10 @@
   --muted: var(--neutral-200);
   --muted-foreground: var(--neutral-700);
 
+  /** Surfaces and labels for prototype / demo-only UI (mirrors muted pairing, teal accent family). */
+  --prototype: var(--brand-accent-200);
+  --prototype-foreground: var(--brand-accent-500);
+
   --accent: var(--brand-accent-50);
   --accent-foreground: var(--brand-primary-700);
 
@@ -209,6 +213,9 @@
 
   --muted: var(--neutral-950);
   --muted-foreground: var(--neutral-300);
+
+  --prototype: var(--brand-accent-950);
+  --prototype-foreground: var(--brand-accent-200);
 
   --accent: var(--brand-accent-950);
   --accent-foreground: var(--brand-accent-300);

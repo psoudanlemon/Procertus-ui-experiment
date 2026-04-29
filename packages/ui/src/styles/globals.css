@@ -9,6 +9,8 @@
 @source "..";
 /* Sibling ui-lib: scan composed components for utilities. */
 @source "../../../ui-lib/src";
+/* PT1 prototype package (PrototypeCard, mock auth): prototype / prototype-foreground utilities */
+@source "../../../ui-pt1-prototype/src";
 
 @custom-variant dark (&:is(.dark *));
 @custom-variant density-spacious (&:is([data-density="spacious"] *));
@@ -34,6 +36,8 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-prototype: var(--prototype);
+  --color-prototype-foreground: var(--prototype-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-heading-foreground: var(--heading-foreground);

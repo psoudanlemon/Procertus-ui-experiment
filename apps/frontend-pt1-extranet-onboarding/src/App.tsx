@@ -11,13 +11,15 @@ import { DesignSystemPage } from "./pages/DesignSystemPage";
 import { AnonymousOnboardingFlow } from "./features/onboarding/AnonymousOnboardingFlow";
 import { AppPlaceholderPage } from "./pages/AppPlaceholderPage";
 import { OnboardingRegistrationCompletePage } from "./pages/OnboardingRegistrationCompletePage";
-import { WelcomePage } from "./pages/WelcomePage";
+import { SignupPage } from "./pages/SignupPage";
 import { OrganizationPage } from "./pages/OrganizationPage";
 import { RequireAuth } from "./routes/RequireAuth";
 import { PROTOTYPE_NAV_GROUPS } from "./navConfig";
 
 const placeholderNavItems = PROTOTYPE_NAV_GROUPS.flatMap((group) => group.items);
-const certificatesNavItem = placeholderNavItems.find((item) => item.key === "certificates-attestations");
+const certificatesNavItem = placeholderNavItems.find(
+  (item) => item.key === "certificates-attestations",
+);
 const ordersNavItem = placeholderNavItems.find((item) => item.key === "orders");
 const invoicesNavItem = placeholderNavItems.find((item) => item.key === "invoices");
 
@@ -30,11 +32,10 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<RootRedirect />} />
-      <Route path="/design-system" element={<Navigate to="/app/design-system" replace />} />
       <Route path="/registratie-voltooid" element={<OnboardingRegistrationCompletePage />} />
 
       <Route element={<PublicAppShell />}>
-        <Route path="/welcome" element={<WelcomePage />} />
+        <Route path="/welcome" element={<SignupPage />} />
         <Route path="/welcome/start" element={<AnonymousOnboardingFlow />} />
       </Route>
 

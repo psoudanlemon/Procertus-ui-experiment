@@ -342,7 +342,7 @@ function CertificationRequestWizardView({
           onClick: async () => {
             const confirmed = confirm
               ? await confirm(
-                  "Aanvraagpakket indienen?",
+                  "Aanvraagpakket versturen?",
                   "Na indiening wordt dit pakket met alle onderliggende certificatie- en attestvragen doorgestuurd naar PROCERTUS voor behandeling.",
                 )
               : true;
@@ -585,7 +585,11 @@ function CertificationRequestWizardView({
         <div className="space-y-4">
           <RequestPackageReview
             className="max-w-5xl"
-            title={model.mode === "onboarding" ? "Samenvatting van het aanvraagpakket" : "Aanvraagdetails"}
+            title={
+              model.mode === "onboarding"
+                ? "Samenvatting van het aanvraagpakket"
+                : "Aanvraagdetails"
+            }
             description={
               model.mode === "onboarding"
                 ? "Alleen de inhoudelijke aanvragen staan hieronder. Vertegenwoordiger en organisatie registreer je in de volgende stap."
@@ -596,8 +600,8 @@ function CertificationRequestWizardView({
             notice={
               model.reviewStep.draftCount > 1 ? (
                 <span>
-                  <Badge variant="secondary">{model.reviewStep.draftCount} vragen</Badge> worden samen
-                  gebundeld in deze aanvraag.
+                  <Badge variant="secondary">{model.reviewStep.draftCount} vragen</Badge> worden
+                  samen gebundeld in deze aanvraag.
                 </span>
               ) : undefined
             }

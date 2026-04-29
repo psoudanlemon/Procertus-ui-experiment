@@ -48,6 +48,21 @@ export const Login: Story = {
   },
 };
 
+/** Same as Login with an extra muted notice line under the description. */
+export const LoginWithNotice: Story = {
+  args: {
+    title: "Welcome back",
+    description: "Sign in to your PROCERTUS account",
+    notice: "If you were invited, use the same email as in your invitation message.",
+    children: (
+      <LoginForm
+        email="jane.doe@company.com"
+        onForgotPassword={() => {}}
+      />
+    ),
+  },
+};
+
 /** Invitation step 1: account details (email, name, terms). */
 export const AcceptInvitation: Story = {
   args: {

@@ -41,3 +41,28 @@ export const Submitting: Story = {
     isSubmitting: true,
   },
 };
+
+/** Email only — e.g. magic link or OTP; `onSubmit` receives `{ email }` (no `password`). */
+export const Passwordless: Story = {
+  args: {
+    variant: "passwordless",
+    email: "jane.doe@company.com",
+  },
+};
+
+export const PasswordlessWithError: Story = {
+  args: {
+    variant: "passwordless",
+    email: "not-an-email",
+    error: "We could not send a link to that address. Check the spelling and try again.",
+    fieldErrors: { email: "Enter a valid email address." },
+  },
+};
+
+export const PasswordlessSubmitting: Story = {
+  args: {
+    variant: "passwordless",
+    email: "jane.doe@company.com",
+    isSubmitting: true,
+  },
+};

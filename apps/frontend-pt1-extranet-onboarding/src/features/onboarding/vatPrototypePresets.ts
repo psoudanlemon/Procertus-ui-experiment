@@ -113,7 +113,10 @@ const GENERIC_ORG_EMAIL_DOMAINS = new Set([
 function hostnameFromEmail(email: string): string {
   const at = email.trim().lastIndexOf("@");
   if (at <= 0 || at === email.length - 1) return "";
-  return email.slice(at + 1).trim().toLowerCase();
+  return email
+    .slice(at + 1)
+    .trim()
+    .toLowerCase();
 }
 
 /**
@@ -453,9 +456,11 @@ export function enrichRegistrationContext(
   }
 
   const domainHintForField =
-    domainSource === "demo_default_mock" ? DEMO_DOMAIN_MOCK_FIELD_HELPER : domainHit
-      ? domainFieldHelper(domainHit.matchedHost)
-      : "";
+    domainSource === "demo_default_mock"
+      ? DEMO_DOMAIN_MOCK_FIELD_HELPER
+      : domainHit
+        ? domainFieldHelper(domainHit.matchedHost)
+        : "";
 
   if (organizationName) {
     if (hadRegisterOrg) {
@@ -465,7 +470,9 @@ export function enrichRegistrationContext(
     }
   }
 
-  const hasAnyAddress = [addressStreet, addressHouseNumber, addressPostalCode, addressCity].some((s) => s.length > 0);
+  const hasAnyAddress = [addressStreet, addressHouseNumber, addressPostalCode, addressCity].some(
+    (s) => s.length > 0,
+  );
   if (hasAnyAddress) {
     if (hadRegisterAddr) {
       hints.addressStreet = REGISTER_FIELD_HELPER;
@@ -485,13 +492,80 @@ export function enrichRegistrationContext(
   };
 }
 
+/** Company-step form fields the mock lookup can pre-fill (matches onboarding context keys). */
+export type CompanyFormFieldKey =
+  | "organizationName"
+  | "country"
+  | "addressStreet"
+  | "addressHouseNumber"
+  | "addressPostalCode"
+  | "addressCity";
+
+/** Fields that will receive non-empty values after {@link enrichRegistrationContext} for this input. */
+export function companyFormFieldsPrefilledByMockLookup(
+  input: RegistrationEnrichmentInput,
+): ReadonlySet<CompanyFormFieldKey> {
+  const e = enrichRegistrationContext(input);
+  const out = new Set<CompanyFormFieldKey>();
+  if (e.organizationName.trim()) out.add("organizationName");
+  if (e.country.trim()) out.add("country");
+  if (e.addressStreet.trim()) out.add("addressStreet");
+  if (e.addressHouseNumber.trim()) out.add("addressHouseNumber");
+  if (e.addressPostalCode.trim()) out.add("addressPostalCode");
+  if (e.addressCity.trim()) out.add("addressCity");
+  return out;
+}
+
+/**
+ * After each simulated lookup step completes (0 = prefix … 4 = e-mail), which company fields the
+ * narrative treats as resolved for loading UI. Aligns with {@link vatLookupSimulationStepsForPreset}.
+ */
+export function companyFormFieldsResolvedThroughLookupStep(
+  completedStepIndex: number,
+  input: RegistrationEnrichmentInput,
+): ReadonlySet<CompanyFormFieldKey> {
+  if (completedStepIndex < 0) return new Set();
+
+  const { preset, vatNumber } = input;
+  const steps = vatLookupSimulationStepsForPreset(preset);
+  const resolved = new Set<CompanyFormFieldKey>();
+
+  for (let i = 0; i <= completedStepIndex && i < steps.length; i++) {
+    const id = steps[i].id;
+
+    if (id === "prefix") {
+      const c = deriveCountryFromVat(vatNumber) || preset.mock.countryFallback;
+      if (c.trim()) resolved.add("country");
+    }
+
+    if (id === "registry") {
+      if (preset.mock.organizationName.trim()) resolved.add("organizationName");
+    }
+
+    if (id === "entity") {
+      const m = preset.mock;
+      if (m.addressStreet.trim()) resolved.add("addressStreet");
+      if (m.addressHouseNumber.trim()) resolved.add("addressHouseNumber");
+      if (m.addressPostalCode.trim()) resolved.add("addressPostalCode");
+      if (m.addressCity.trim()) resolved.add("addressCity");
+    }
+
+    if (id === "email") {
+      companyFormFieldsPrefilledByMockLookup(input).forEach((k) => resolved.add(k));
+    }
+  }
+
+  return resolved;
+}
+
 export const VAT_PROTOTYPE_PRESETS: readonly VatPrototypePreset[] = [
   {
     id: "be-kbo",
     label: "België — volledige registergegevens",
     vatNumber: "BE0403.107.223",
     outcomeLabel: "Gegevens gevonden",
-    outcomeMessage: "We vonden openbare gegevens bij dit nummer. Controleer onderstaande velden en pas ze zo nodig aan.",
+    outcomeMessage:
+      "We vonden openbare gegevens bij dit nummer. Controleer onderstaande velden en pas ze zo nodig aan.",
     demoSupplementsOrgAddressFromEmailDomain: false,
     demoPerson: {
       representativeFirstName: "Sophie",
@@ -516,7 +590,8 @@ export const VAT_PROTOTYPE_PRESETS: readonly VatPrototypePreset[] = [
     label: "Nederland — volledige registergegevens",
     vatNumber: "NL001234567B01",
     outcomeLabel: "Gegevens gevonden",
-    outcomeMessage: "We vonden openbare gegevens bij dit nummer. Controleer onderstaande velden en pas ze zo nodig aan.",
+    outcomeMessage:
+      "We vonden openbare gegevens bij dit nummer. Controleer onderstaande velden en pas ze zo nodig aan.",
     demoSupplementsOrgAddressFromEmailDomain: false,
     demoPerson: {
       representativeFirstName: "Lars",
@@ -594,7 +669,7 @@ export const VAT_PROTOTYPE_PRESETS: readonly VatPrototypePreset[] = [
     vatNumber: "US-EIN 12-3456789",
     outcomeLabel: "Aanvullen vereist",
     outcomeMessage:
-      "U gaf een niet-Europees identificatienummer op; het land is afgeleid uit het nummer. Registergegevens voor bedrijfsnaam en vestigingsadres ontbreken hier. In deze demo worden naam en volledig adres — straat, huisnummer, postcode, plaats — alsnog ingevuld via een serverside koppeling op het registratiedomein van uw e-mailadres (mock). Lukt die koppeling niet, dan vult u ze zelf in.",
+      "U gaf een niet-Europees identificatienummer op; het land is afgeleid uit het nummer. Registergegevens voor bedrijfsnaam en vestigingsadres hebben we niet automatisch kunnen ophalen. We probeerden informatie te vinden van uw bedrijfsgegevens op basis van uw e-mailadres. Gelieve na te kijken en te corrigeren indien nodig.",
     demoSupplementsOrgAddressFromEmailDomain: true,
     demoPerson: {
       representativeFirstName: "Jordan",
@@ -618,9 +693,7 @@ export const VAT_PROTOTYPE_PRESETS: readonly VatPrototypePreset[] = [
 
 export const DEFAULT_VAT_PROTOTYPE_PRESET_ID = VAT_PROTOTYPE_PRESETS[0]?.id ?? "be-kbo";
 
-export function findVatPrototypePreset(
-  id: string,
-): VatPrototypePreset | undefined {
+export function findVatPrototypePreset(id: string): VatPrototypePreset | undefined {
   return VAT_PROTOTYPE_PRESETS.find((p) => p.id === id);
 }
 
