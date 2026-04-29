@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PrefillFieldSkeleton } from "./PrefillFieldSkeleton";
 
 const meta = {
-  title: "ui-lib/PrefillFieldSkeleton",
+  title: "components/PrefillFieldSkeleton",
   component: PrefillFieldSkeleton,
   parameters: {
     layout: "padded",
@@ -25,7 +25,7 @@ const meta = {
 export default meta;
 
 export const LoadingPrefill: StoryObj<typeof meta> = {
-  name: "Prefilled — loading",
+  name: "Prefilled, loading",
   args: {
     prefilled: true,
     resolved: false,
@@ -33,7 +33,7 @@ export const LoadingPrefill: StoryObj<typeof meta> = {
 };
 
 export const ResolvedPrefill: StoryObj<typeof meta> = {
-  name: "Prefilled — resolved",
+  name: "Prefilled, resolved",
   args: {
     prefilled: true,
     resolved: true,

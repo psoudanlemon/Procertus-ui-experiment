@@ -1,4 +1,4 @@
-import type { DownloadableDocumentListItemData } from "@procertus-ui/ui-lib";
+import type { DownloadableDocumentListItemData } from "@procertus-ui/ui";
 
 import type { CertificationRequestDraft } from "../../certification-request/types";
 

@@ -35,9 +35,9 @@ import {
 import { RegistrationProcessingDialog } from "../components/registration-processing-dialog";
 import { RequestPackageReview } from "../components/request-package-review";
 import { PrototypeCard } from "@procertus-ui/ui-pt1-prototype";
+import { PrefillFieldSkeleton } from "@procertus-ui/ui";
 import {
   OnboardingStepper,
-  PrefillFieldSkeleton,
   StepLayout,
 } from "@procertus-ui/ui-lib";
 import {

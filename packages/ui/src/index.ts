@@ -6,6 +6,8 @@ export { DensityProvider, useDensity, DENSITIES, type Density } from "./componen
 export { ModeToggle } from "./components/mode-toggle";
 /** Primitives: one re-export per file in `components/ui/` — tree-shakeable when apps use named imports. */
 export * from "./components/ui";
+export * from "./components/downloadable-documents-list";
+export * from "./components/prefill-field-skeleton";
 export * from "./components/select-choice-card";
 export * from "./components/stepper";
 export * from "./components/timeline";

@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
-import { Field, FieldContent, FieldLabel, Skeleton } from "@procertus-ui/ui";
+import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export type PrefillFieldSkeletonProps = {
-  /** Field label (e.g. “Bedrijfsnaam”). */
+  /** Field label (e.g. "Bedrijfsnaam"). */
   label: ReactNode;
   /**
    * When `false`, shows a dashed affordance for manual entry. When `true`, shows a skeleton
@@ -26,8 +27,8 @@ export type PrefillFieldSkeletonProps = {
 const defaultManualHint = "Handmatig invullen";
 
 /**
- * **Form field** row for async “prefill” UIs: either a dashed manual placeholder, or a
- * skeleton that distinguishes loading vs resolved. Presentational only — parent decides
+ * **Form field** row for async "prefill" UIs: either a dashed manual placeholder, or a
+ * skeleton that distinguishes loading vs resolved. Presentational only, parent decides
  * `prefilled` / `resolved` from lookup or hydration state.
  */
 export function PrefillFieldSkeleton({
