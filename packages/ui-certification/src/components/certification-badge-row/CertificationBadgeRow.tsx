@@ -57,23 +57,22 @@ export function CertificationBadgeRow({
             return (
               <div
                 key={it.id}
-                className="inline-flex min-w-0 max-w-full flex-col gap-micro rounded-md border px-component py-micro text-left text-xs leading-snug"
+                className="inline-flex min-w-0 max-w-full items-center gap-micro rounded-md border px-component py-micro text-left text-xs leading-snug"
                 data-presentation={it.presentation}
+                title={it.subline}
               >
                 <span className="font-medium text-foreground">{it.shortLabel}</span>
                 {it.text ? (
                   <span
-                    className={
+                    className={cn(
+                      "truncate",
                       it.presentation === "not-offered"
                         ? "text-muted-foreground"
-                        : "text-muted-foreground/90"
-                    }
+                        : "text-muted-foreground/90",
+                    )}
                   >
-                    {it.text}
+                    : {it.text}
                   </span>
-                ) : null}
-                {it.subline ? (
-                  <span className="text-[11px] text-muted-foreground">{it.subline}</span>
                 ) : null}
               </div>
             );
