@@ -3,6 +3,7 @@ import { ContextMenu as ContextMenuPrimitive } from "radix-ui";
 
 import { useAutoElevate } from "@/hooks/use-auto-elevate";
 import { cn } from "@/lib/utils";
+import { FadingScrollList } from "@/components/ui/fading-scroll-list";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01Icon, Tick01Icon } from "@hugeicons/core-free-icons";
 
@@ -44,6 +45,7 @@ function ContextMenuRadioGroup({
 function ContextMenuContent({
   className,
   style,
+  children,
   ...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.Content> & {
   side?: "top" | "right" | "bottom" | "left";
@@ -57,12 +59,20 @@ function ContextMenuContent({
         ref={contentRef}
         data-slot="context-menu-content"
         className={cn(
-          "z-20 max-h-(--radix-context-menu-content-available-height) min-w-36 origin-(--radix-context-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-micro text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "z-20 min-w-36 origin-(--radix-context-menu-content-transform-origin) overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className,
         )}
         style={autoZIndex !== undefined ? { ...style, zIndex: autoZIndex } : style}
         {...props}
-      />
+      >
+        <FadingScrollList
+          maxHeight="var(--radix-context-menu-content-available-height)"
+          fadeColor="from-popover"
+          className="overflow-x-hidden p-micro"
+        >
+          {children}
+        </FadingScrollList>
+      </ContextMenuPrimitive.Content>
     </ContextMenuPrimitive.Portal>
   );
 }

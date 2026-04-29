@@ -57,15 +57,15 @@ const completedIcon = (
 
 const indicators = { completed: completedIcon };
 
-// Indicator size scales with density: base 32px + a density-scaled component padding
-// (8/12/16px), giving roughly 40/44/48px circles. Every dependent measurement (line
+// Indicator size scales with density: base 32px + a density-scaled micro padding
+// (4/4/8px), giving roughly 36/36/40px circles. Every dependent measurement (line
 // center alignment, label `top`) is derived from the same calc so geometry stays correct.
 const indicatorClass =
-  "size-[calc(2rem+var(--spacing-component))] min-h-[calc(2rem+var(--spacing-component))] min-w-[calc(2rem+var(--spacing-component))]";
+  "size-[calc(2rem+var(--spacing-micro))] min-h-[calc(2rem+var(--spacing-micro))] min-w-[calc(2rem+var(--spacing-micro))]";
 
 // Horizontal: line center = half the indicator size minus half the line thickness (1px).
 const horizontalSeparatorClass =
-  "group-data-[orientation=horizontal]/stepper-nav:mt-[calc((2rem+var(--spacing-component))/2-1px)]";
+  "group-data-[orientation=horizontal]/stepper-nav:mt-[calc((2rem+var(--spacing-micro))/2-1px)]";
 
 // Horizontal trigger is a fixed-size box around the indicator so the connecting line
 // lands at the same gap from every indicator. The label group is positioned absolutely
@@ -73,12 +73,12 @@ const horizontalSeparatorClass =
 const horizontalTriggerClass =
   "relative w-fit min-h-20 shrink-0 flex-col items-center justify-start rounded-md px-section";
 const horizontalLabelClass =
-  "absolute left-1/2 top-[calc(2rem+var(--spacing-component)*2)] -translate-x-1/2 text-center";
+  "absolute left-1/2 top-[calc(2rem+var(--spacing-micro)*2)] -translate-x-1/2 text-center";
 
 // Vertical: indicator + text group on a row, separator shifted right to align with the
 // indicator's center. `my-component` keeps line breathing room density-aware (8–12px).
 const verticalSeparatorClass =
-  "group-data-[orientation=vertical]/stepper-nav:ml-[calc((2rem+var(--spacing-component))/2-1px)] group-data-[orientation=vertical]/stepper-nav:my-component";
+  "group-data-[orientation=vertical]/stepper-nav:ml-[calc((2rem+var(--spacing-micro))/2-1px)] group-data-[orientation=vertical]/stepper-nav:my-component";
 
 export function OnboardingStepper({
   className,
@@ -99,7 +99,10 @@ export function OnboardingStepper({
 
   return (
     <Stepper
-      className={cn(orientation === "vertical" && "w-full max-w-56 sm:max-w-none", className)}
+      className={cn(
+        orientation === "vertical" && "flex w-full max-w-56 items-start justify-start sm:max-w-none",
+        className,
+      )}
       value={value1}
       onValueChange={
         onStepChange && interactive

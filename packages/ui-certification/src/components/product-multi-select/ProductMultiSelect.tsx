@@ -6,6 +6,7 @@
 import { useId } from "react";
 
 import {
+  FadingScrollList,
   FieldSet,
   cn,
 } from "@procertus-ui/ui";
@@ -70,34 +71,40 @@ export function ProductMultiSelect({
   }
 
   return (
-    <SelectChoiceCardGroup
-      selectionMode="multiple"
-      legend={legend}
-      hint={description}
-      className={cn("max-h-[min(50vh,28rem)] overflow-y-auto rounded-md border border-border/50 p-micro", className)}
+    <FadingScrollList
+      maxHeight="min(50vh, 28rem)"
+      fadeColor="from-background"
+      wrapperClassName={cn("rounded-md border border-border/50", className)}
+      className="p-micro"
     >
-      {options.map((opt) => {
-        const cbId = `${name}-${opt.id}`;
-        const checked = set.has(opt.id);
-        return (
-          <SelectChoiceCard
-            key={opt.id}
-            selectionMode="multiple"
-            value={opt.id}
-            controlId={cbId}
-            name={name}
-            title={opt.label}
-            description={opt.description}
-            checked={checked}
-            disabled={opt.disabled}
-            emphasis={opt.disabled ? "tertiary" : "primary"}
-            onCheckedChange={(isChecked) => {
-              if (opt.disabled) return;
-              onChange(toggleIn(selectedIds, opt.id, isChecked));
-            }}
-          />
-        );
-      })}
-    </SelectChoiceCardGroup>
+      <SelectChoiceCardGroup
+        selectionMode="multiple"
+        legend={legend}
+        hint={description}
+      >
+        {options.map((opt) => {
+          const cbId = `${name}-${opt.id}`;
+          const checked = set.has(opt.id);
+          return (
+            <SelectChoiceCard
+              key={opt.id}
+              selectionMode="multiple"
+              value={opt.id}
+              controlId={cbId}
+              name={name}
+              title={opt.label}
+              description={opt.description}
+              checked={checked}
+              disabled={opt.disabled}
+              emphasis={opt.disabled ? "tertiary" : "primary"}
+              onCheckedChange={(isChecked) => {
+                if (opt.disabled) return;
+                onChange(toggleIn(selectedIds, opt.id, isChecked));
+              }}
+            />
+          );
+        })}
+      </SelectChoiceCardGroup>
+    </FadingScrollList>
   );
 }

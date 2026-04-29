@@ -347,12 +347,18 @@ function StepperIndicator({ children, className }: ComponentProps<"div">) {
         "relative flex size-8 min-h-8 min-w-8 shrink-0 items-center justify-center overflow-hidden rounded-full",
         "border border-border bg-card text-sm font-medium text-muted-foreground ring-1 ring-foreground/10",
         "shadow-proc-tactile",
+        "transition-colors duration-300 ease-out",
         "data-[state=active]:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground",
         "data-[state=completed]:border-primary/30 data-[state=completed]:bg-primary data-[state=completed]:text-primary-foreground",
         className
       )}
     >
-      <div className="absolute inset-0 flex items-center justify-center">{slot ?? children}</div>
+      <div
+        key={`${state}:${isLoading ? "loading" : "idle"}`}
+        className="absolute inset-0 flex items-center justify-center animate-in fade-in-0 duration-300 ease-out"
+      >
+        {slot ?? children}
+      </div>
     </div>
   );
 }
@@ -366,6 +372,7 @@ function StepperSeparator({ className }: ComponentProps<"div">) {
         "group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:min-w-[0.5rem] group-data-[orientation=horizontal]/stepper-nav:flex-1",
         "group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:min-h-[0.5rem] group-data-[orientation=vertical]/stepper-nav:w-0.5",
         "rounded-sm",
+        "transition-colors duration-300 ease-out",
         "group-data-[state=completed]/step:bg-primary",
         className
       )}

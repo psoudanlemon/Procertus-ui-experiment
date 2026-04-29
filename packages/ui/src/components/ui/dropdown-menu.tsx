@@ -5,6 +5,7 @@ import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui";
 
 import { useAutoElevate } from "@/hooks/use-auto-elevate";
 import { cn } from "@/lib/utils";
+import { FadingScrollList } from "@/components/ui/fading-scroll-list";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Tick02Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
@@ -29,6 +30,7 @@ function DropdownMenuContent({
   align = "start",
   sideOffset = 4,
   style,
+  children,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
   const contentRef = React.useRef<HTMLDivElement>(null);
@@ -42,12 +44,20 @@ function DropdownMenuContent({
         sideOffset={sideOffset}
         align={align}
         className={cn(
-          "z-20 max-h-(--radix-dropdown-menu-content-available-height) w-(--radix-dropdown-menu-trigger-width) min-w-32 origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-micro text-popover-foreground shadow-proc-md ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:overflow-hidden data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "z-20 w-(--radix-dropdown-menu-trigger-width) min-w-32 origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-proc-md ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className,
         )}
         style={autoZIndex !== undefined ? { ...style, zIndex: autoZIndex } : style}
         {...props}
-      />
+      >
+        <FadingScrollList
+          maxHeight="var(--radix-dropdown-menu-content-available-height)"
+          fadeColor="from-popover"
+          className="overflow-x-hidden p-micro"
+        >
+          {children}
+        </FadingScrollList>
+      </DropdownMenuPrimitive.Content>
     </DropdownMenuPrimitive.Portal>
   );
 }

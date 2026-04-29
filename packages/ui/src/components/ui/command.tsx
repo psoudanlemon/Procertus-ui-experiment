@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { FadingScrollList } from "@/components/ui/fading-scroll-list";
 import { InputGroup, InputGroupAddon } from "@/components/ui/input-group";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Search01Icon, Tick01Icon } from "@hugeicons/core-free-icons";
@@ -78,16 +79,25 @@ function CommandInput({
   );
 }
 
-function CommandList({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.List>) {
+function CommandList({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof CommandPrimitive.List>) {
   return (
     <CommandPrimitive.List
       data-slot="command-list"
-      className={cn(
-        "no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none",
-        className,
-      )}
+      className={cn("scroll-py-1 overflow-hidden outline-none", className)}
       {...props}
-    />
+    >
+      <FadingScrollList
+        maxHeight="18rem"
+        fadeColor="from-popover"
+        className="no-scrollbar overflow-x-hidden"
+      >
+        {children}
+      </FadingScrollList>
+    </CommandPrimitive.List>
   );
 }
 
