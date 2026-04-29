@@ -36,11 +36,11 @@ export function DownloadableDocumentListItem({
   return (
     <li
       className={cn(
-        "flex flex-col gap-3 border-b border-border/60 py-component last:border-b-0 sm:flex-row sm:items-start sm:justify-between sm:gap-4",
+        "flex flex-col gap-component border-b border-border/60 py-component last:border-b-0 sm:flex-row sm:items-start sm:justify-between sm:gap-section",
         className,
       )}
     >
-      <div className="flex min-w-0 flex-1 gap-3">
+      <div className="flex min-w-0 flex-1 gap-component">
         <span className="mt-0.5 shrink-0 text-muted-foreground" aria-hidden>
           <HugeiconsIcon icon={File01Icon} className="size-5" strokeWidth={1.5} />
         </span>

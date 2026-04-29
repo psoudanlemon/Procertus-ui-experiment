@@ -104,7 +104,7 @@ function StatusPage({
         <div className="absolute top-boundary left-1/2 -translate-x-1/2">{logo}</div>
       )}
 
-      <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-8">
+      <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-region">
         <StatusContent
           icon={icon}
           illustration={illustration}
@@ -113,7 +113,7 @@ function StatusPage({
           actions={actions}
         />
         {children != null ? (
-          <div className="flex w-full flex-col items-center gap-4 text-center">{children}</div>
+          <div className="flex w-full flex-col items-center gap-section text-center">{children}</div>
         ) : null}
       </div>
     </div>

@@ -15,10 +15,10 @@ export type TokenSwatchProps = {
  */
 export function TokenSwatch({ label, swatchClassName, hint, className }: TokenSwatchProps) {
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
+    <div className={cn("flex flex-col gap-micro", className)}>
       <div
         className={cn(
-          "flex min-h-16 items-end justify-end rounded-lg border border-border p-3 text-xs font-medium shadow-[var(--shadow-proc-xs)]",
+          "flex min-h-16 items-end justify-end rounded-lg border border-border p-component text-xs font-medium shadow-[var(--shadow-proc-xs)]",
           swatchClassName,
         )}
       >
@@ -26,7 +26,7 @@ export function TokenSwatch({ label, swatchClassName, hint, className }: TokenSw
           Aa
         </span>
       </div>
-      <div className="space-y-0.5">
+      <div className="space-y-micro">
         <p className="text-xs font-medium text-foreground">{label}</p>
         {hint ? <p className="text-[11px] text-muted-foreground">{hint}</p> : null}
       </div>

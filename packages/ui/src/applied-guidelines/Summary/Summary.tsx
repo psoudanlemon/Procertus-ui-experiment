@@ -1,60 +1,57 @@
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-  Badge,
-  Button,
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-  Checkbox,
+} from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
   Field,
   FieldContent,
   FieldDescription,
   FieldGroup,
   FieldLabel,
-  H1,
-  H2,
-  H3,
-  Input,
-  Label,
-  Lead,
-  Muted,
-  P,
-  Progress,
-  Separator,
-  Slider,
-  Small,
-  Switch,
+} from "@/components/ui/field";
+import { H1, H2, H3 } from "@/components/ui/heading";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@procertus-ui/ui";
+} from "@/components/ui/tabs";
+import { Lead, Muted, P, Small } from "@/components/ui/typography";
 
 import { TokenSwatch } from "./TokenSwatch";
 
-export type DesignTokensShowcaseProps = {
+export type SummaryProps = {
   className?: string;
   /** Optional app-specific hero or chrome rendered above the gallery */
   headerAddon?: ReactNode;
 };
 
 /**
- * Presentational gallery: **semantic colors**, **typography**, **radius / shadow** tokens, and common **form primitives** — aligned with `@procertus-ui/ui` foundations.
+ * Presentational gallery summarizing **semantic colors**, **typography**, **radius / shadow** tokens, and common **form primitives** — a single page that ties the foundations together.
  */
-export function DesignTokensShowcase({ className, headerAddon }: DesignTokensShowcaseProps) {
+export function Summary({ className, headerAddon }: SummaryProps) {
   return (
-    <div className={cn("mx-auto w-full max-w-5xl space-y-8 px-4 py-8", className)}>
-      <header className="space-y-4">
+    <div className={cn("mx-auto w-full max-w-5xl space-y-region", className)}>
+      <header className="space-y-component">
         {headerAddon}
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="space-y-2">
+        <div className="flex flex-wrap items-end justify-between gap-section">
+          <div className="space-y-micro">
             <Badge variant="secondary">Design system</Badge>
             <H1 className="text-balance">Token & primitive reference</H1>
             <Lead className="max-w-2xl text-pretty">
@@ -63,7 +60,7 @@ export function DesignTokensShowcase({ className, headerAddon }: DesignTokensSho
               <code className="font-mono text-sm">@source</code> for your app so utilities compile.
             </Lead>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-micro">
             <Button type="button" variant="outline" size="sm">
               Secondary
             </Button>
@@ -77,7 +74,7 @@ export function DesignTokensShowcase({ className, headerAddon }: DesignTokensSho
         </div>
       </header>
 
-      <Tabs defaultValue="overview" className="gap-6">
+      <Tabs defaultValue="overview" className="gap-section">
         <TabsList variant="line" className="w-full min-w-0 flex-wrap justify-start sm:w-auto">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="surfaces">Semantic colors</TabsTrigger>
@@ -85,7 +82,7 @@ export function DesignTokensShowcase({ className, headerAddon }: DesignTokensSho
           <TabsTrigger value="controls">Form controls</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
+        <TabsContent value="overview" className="space-y-section">
           <Alert>
             <AlertTitle>Primitives + tokens</AlertTitle>
             <AlertDescription>
@@ -101,24 +98,24 @@ export function DesignTokensShowcase({ className, headerAddon }: DesignTokensSho
               <CardDescription>Heading scale uses <code className="font-mono">text-heading-*</code> +{" "}
                 <code className="font-mono">text-heading-foreground</code>; body uses foreground / muted pairs.</CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-6 md:grid-cols-2">
-              <div className="space-y-3">
+            <CardContent className="grid gap-section md:grid-cols-2">
+              <div className="space-y-component">
                 <H2>Heading 2</H2>
                 <H3>Heading 3</H3>
                 <P>Body paragraph — neutral foreground on elevated surfaces.</P>
                 <Muted>Muted helper — secondary reading priority.</Muted>
                 <Small>Small caption — metadata and table hints.</Small>
               </div>
-              <div className="rounded-lg border border-dashed border-border bg-muted/30 p-4">
+              <div className="rounded-lg border border-dashed border-border bg-muted/30 p-section">
                 <P className="font-mono text-sm">Inline code tokens</P>
-                <p className="mt-2 font-mono text-xs text-muted-foreground">
+                <p className="mt-micro font-mono text-xs text-muted-foreground">
                   --radius · --shadow-proc-* · --gradient-primary
                 </p>
               </div>
             </CardContent>
           </Card>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-section md:grid-cols-2">
             <Alert variant="success">
               <AlertTitle>Success tone</AlertTitle>
               <AlertDescription>Uses system success ramp on card surface.</AlertDescription>
@@ -130,13 +127,13 @@ export function DesignTokensShowcase({ className, headerAddon }: DesignTokensSho
           </div>
         </TabsContent>
 
-        <TabsContent value="surfaces" className="space-y-6">
+        <TabsContent value="surfaces" className="space-y-section">
           <Card>
             <CardHeader>
               <CardTitle>Semantic surfaces</CardTitle>
               <CardDescription>Each tile pairs background + on-color text from the default theme.</CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <CardContent className="grid gap-section sm:grid-cols-2 lg:grid-cols-3">
               <TokenSwatch label="background / foreground" swatchClassName="bg-background text-foreground" hint="App canvas" />
               <TokenSwatch label="card" swatchClassName="bg-card text-card-foreground" hint="Panels & dialogs" />
               <TokenSwatch label="primary" swatchClassName="bg-primary text-primary-foreground" hint="Main CTA fill" />
@@ -155,7 +152,7 @@ export function DesignTokensShowcase({ className, headerAddon }: DesignTokensSho
               <CardTitle>Brand primary ramp (CSS variables)</CardTitle>
               <CardDescription>Raw steps for illustrations and data viz — prefer semantic tokens for UI chrome.</CardDescription>
             </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-2 sm:grid-cols-5 lg:grid-cols-11">
+            <CardContent className="grid grid-cols-2 gap-micro sm:grid-cols-5 lg:grid-cols-11">
               {(
                 [
                   "50",
@@ -171,7 +168,7 @@ export function DesignTokensShowcase({ className, headerAddon }: DesignTokensSho
                   "950",
                 ] as const
               ).map((step) => (
-                <div key={step} className="space-y-1 text-center">
+                <div key={step} className="space-y-micro text-center">
                   <div
                     className="h-14 rounded-md border border-border/60 shadow-[var(--shadow-proc-xs)]"
                     style={{ background: `var(--brand-primary-${step})` }}
@@ -183,15 +180,15 @@ export function DesignTokensShowcase({ className, headerAddon }: DesignTokensSho
           </Card>
         </TabsContent>
 
-        <TabsContent value="shape" className="space-y-6">
+        <TabsContent value="shape" className="space-y-section">
           <Card>
             <CardHeader>
               <CardTitle>Radius scale</CardTitle>
               <CardDescription>Tailwind <code className="font-mono">rounded-*</code> mapped to <code className="font-mono">--radius</code> derivatives.</CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-wrap gap-4">
+            <CardContent className="flex flex-wrap gap-section">
               {(["rounded-sm", "rounded-md", "rounded-lg", "rounded-xl", "rounded-full"] as const).map((r) => (
-                <div key={r} className="flex flex-col items-center gap-2">
+                <div key={r} className="flex flex-col items-center gap-micro">
                   <div className={cn("size-16 border-2 border-primary/40 bg-accent/40", r)} />
                   <Small className="text-muted-foreground">{r}</Small>
                 </div>
@@ -204,29 +201,29 @@ export function DesignTokensShowcase({ className, headerAddon }: DesignTokensSho
               <CardTitle>Procertus elevation</CardTitle>
               <CardDescription>Shadow tokens from the default theme (<code className="font-mono">--shadow-proc-*</code>).</CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <CardContent className="grid gap-section sm:grid-cols-2 lg:grid-cols-4">
               {(["xs", "sm", "md", "lg"] as const).map((tier) => (
                 <div
                   key={tier}
-                  className="rounded-xl border border-border bg-card p-4 text-sm text-card-foreground"
+                  className="rounded-xl border border-border bg-card p-section text-sm text-card-foreground"
                   style={{ boxShadow: `var(--shadow-proc-${tier})` }}
                 >
                   <p className="font-medium">shadow-proc-{tier}</p>
-                  <Muted className="mt-1">Elevation preview</Muted>
+                  <Muted className="mt-micro">Elevation preview</Muted>
                 </div>
               ))}
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="controls" className="space-y-6">
+        <TabsContent value="controls" className="space-y-section">
           <Card>
             <CardHeader>
               <CardTitle>Inputs & toggles</CardTitle>
               <CardDescription><code className="font-mono">Field</code> + primitives for dense forms.</CardDescription>
             </CardHeader>
             <CardContent>
-              <FieldGroup className="max-w-md gap-6">
+              <FieldGroup className="max-w-md gap-section">
                 <Field>
                   <FieldLabel htmlFor="ds-email">Work email</FieldLabel>
                   <FieldContent>
@@ -240,7 +237,7 @@ export function DesignTokensShowcase({ className, headerAddon }: DesignTokensSho
                   <Switch id="ds-notify" defaultChecked />
                 </Field>
                 <Field orientation="horizontal">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-component">
                     <Checkbox id="ds-terms" defaultChecked />
                     <Label htmlFor="ds-terms" className="font-normal">
                       Remember workspace layout
@@ -249,7 +246,7 @@ export function DesignTokensShowcase({ className, headerAddon }: DesignTokensSho
                 </Field>
                 <Field>
                   <FieldLabel>Completion</FieldLabel>
-                  <FieldContent className="gap-3">
+                  <FieldContent className="gap-component">
                     <Progress value={62} />
                     <Slider defaultValue={[38]} max={100} aria-label="Demo slider" />
                   </FieldContent>

@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Badge } from "@procertus-ui/ui";
+import { Badge } from "@/components/ui/badge";
 
 export type PrototypeSurfaceMarqueeProps = {
   className?: string;
@@ -12,7 +12,7 @@ export function PrototypeSurfaceMarquee({ className }: PrototypeSurfaceMarqueePr
   return (
     <div
       className={cn(
-        "grid gap-3 rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-proc-sm)] sm:grid-cols-3",
+        "grid gap-component rounded-2xl border border-border bg-card p-section shadow-[var(--shadow-proc-sm)] sm:grid-cols-3",
         className,
       )}
     >
@@ -25,7 +25,7 @@ export function PrototypeSurfaceMarquee({ className }: PrototypeSurfaceMarqueePr
       ).map((tile) => (
         <div
           key={tile.label}
-          className="relative flex min-h-[5.5rem] flex-col justify-between overflow-hidden rounded-xl border border-border/60 p-3"
+          className="relative flex min-h-[5.5rem] flex-col justify-between overflow-hidden rounded-xl border border-border/60 p-component"
           style={tile.style}
         >
           <Badge variant="secondary" className="w-fit bg-background/70 text-foreground backdrop-blur-sm">

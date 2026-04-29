@@ -30,8 +30,8 @@ export type SelectChoiceCardGroupProps = Omit<ComponentProps<typeof RadioGroup>,
 
 const layoutClass = (layout: "stack" | "grid") =>
   cn(
-    "w-full gap-3 p-0",
-    layout === "grid" && "grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3",
+    "w-full gap-component p-0",
+    layout === "grid" && "grid grid-cols-1 gap-component md:grid-cols-2 xl:grid-cols-3",
     layout === "stack" && "flex flex-col",
   );
 
@@ -50,7 +50,7 @@ export function SelectChoiceCardGroup({
   return (
     <FieldSet className="w-full min-w-0">
       {legend ? <FieldLegend className="text-base font-semibold">{legend}</FieldLegend> : null}
-      {hint ? <p className="mb-3 text-sm text-muted-foreground">{hint}</p> : null}
+      {hint ? <p className="mb-component text-sm text-muted-foreground">{hint}</p> : null}
       {selectionMode === "multiple" ? (
         <div role="group" className={cn(layoutClass(layout), className)}>
           {children}

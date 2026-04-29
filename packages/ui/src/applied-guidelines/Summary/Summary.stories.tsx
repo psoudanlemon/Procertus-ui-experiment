@@ -1,35 +1,35 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { DesignTokensShowcase } from "./DesignTokensShowcase";
 import { PrototypeSurfaceMarquee } from "./PrototypeSurfaceMarquee";
+import { Summary } from "./Summary";
 import { TokenSwatch } from "./TokenSwatch";
 
 const meta = {
-  title: "UILib/DesignTokensShowcase",
-  component: DesignTokensShowcase,
+  title: "Applied guidelines/Summary",
+  component: Summary,
+  tags: ["!autodocs"],
   parameters: {
     layout: "fullscreen",
     docs: {
       description: {
         component:
-          "Prototype gallery for semantic tokens, typography, elevation, and form primitives from @procertus-ui/ui — composed for extranet / onboarding shells.",
+          "Single-page summary of the foundations: semantic colors, typography, elevation, and form primitives — a quick reference that ties the tokens together.",
       },
     },
   },
-  tags: ["autodocs"],
-} satisfies Meta<typeof DesignTokensShowcase>;
+} satisfies Meta<typeof Summary>;
 
 export default meta;
 
 export const Gallery: StoryObj<typeof meta> = {
   name: "Full gallery",
-  render: () => <DesignTokensShowcase />,
+  render: () => <Summary />,
 };
 
 export const WithHeaderSlot: StoryObj<typeof meta> = {
   name: "With header slot",
   render: () => (
-    <DesignTokensShowcase
+    <Summary
       headerAddon={
         <PrototypeSurfaceMarquee className="max-w-5xl border-dashed" />
       }
@@ -40,7 +40,7 @@ export const WithHeaderSlot: StoryObj<typeof meta> = {
 export const TokenSwatchOnly: StoryObj<typeof meta> = {
   name: "TokenSwatch (primitive)",
   render: () => (
-    <div className="mx-auto grid max-w-lg gap-4 p-8">
+    <div className="mx-auto grid max-w-lg gap-component p-region">
       <TokenSwatch label="primary" swatchClassName="bg-primary text-primary-foreground" hint="Main CTA" />
       <TokenSwatch label="muted" swatchClassName="bg-muted text-muted-foreground" hint="Secondary surfaces" />
     </div>
@@ -49,5 +49,5 @@ export const TokenSwatchOnly: StoryObj<typeof meta> = {
 
 export const MarqueeOnly: StoryObj<typeof meta> = {
   name: "PrototypeSurfaceMarquee",
-  render: () => <PrototypeSurfaceMarquee className="mx-auto max-w-3xl p-8" />,
+  render: () => <PrototypeSurfaceMarquee className="mx-auto max-w-3xl p-region" />,
 };

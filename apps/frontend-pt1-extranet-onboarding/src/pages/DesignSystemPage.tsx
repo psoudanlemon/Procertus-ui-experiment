@@ -1,5 +1,4 @@
-import { Separator } from "@procertus-ui/ui";
-import { DesignTokensShowcase, PrototypeSurfaceMarquee } from "@procertus-ui/ui-lib/design-tokens-showcase";
+import { PrototypeSurfaceMarquee, Separator, Summary } from "@procertus-ui/ui";
 
 import { AppDesignToolbar } from "../components/AppDesignToolbar";
 import { BrandGradientHero } from "../components/BrandGradientHero";
@@ -12,7 +11,7 @@ export function DesignSystemPage() {
         <BrandGradientHero />
         <PrototypeSurfaceMarquee />
         <Separator />
-        <DesignTokensShowcase className="mx-0 max-w-none px-0 py-0" />
+        <Summary className="mx-0 max-w-none" />
       </div>
     </div>
   );
