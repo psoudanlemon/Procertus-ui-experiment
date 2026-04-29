@@ -18,7 +18,7 @@ const uiPackageRoot = path.resolve(packageRoot, "..", "ui");
  */
 const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
-  staticDirs: ["../public"],
+  staticDirs: ["../public", "../../ui/Public"],
   addons: ["@storybook/addon-docs"],
   framework: "@storybook/react-vite",
   typescript: {

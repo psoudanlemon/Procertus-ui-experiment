@@ -1,8 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
-
-import { H1 } from "@procertus-ui/ui";
+import { H1 } from "@/components/ui/heading";
 
 function isTextNode(node: ReactNode): node is string | number {
   return typeof node === "string" || typeof node === "number";
@@ -114,9 +113,11 @@ function renderTitle(title: ReactNode) {
 }
 
 /**
- * Presentational page masthead: optional trailing {@link PageHeaderProps.icon} or
- * {@link PageHeaderProps.media} (mutually exclusive) aligns with the **kicker + title** block only;
- * description, `children`, and `actions` span the full width below that row.
+ * Presentational page masthead. Kicker, title, and description share one text column.
+ * {@link PageHeaderProps.media} floats top-right of that column on `sm`+;
+ * {@link PageHeaderProps.icon} (mutually exclusive with media) and `actions` float bottom-right.
+ * All trailing slots stack underneath the text column on mobile.
+ * `children` render full-width below the entire header row.
  */
 export function PageHeader({
   className,
@@ -129,27 +130,31 @@ export function PageHeader({
   actions,
   ...props
 }: PageHeaderProps) {
-  const trailing = icon ?? media;
   const descriptionNode = renderDescription(description);
 
   return (
-    <header className={cn("pb-region", className)} {...props}>
+    <header className={className} {...props}>
       <div className="flex flex-col gap-region">
-        <div className="flex min-w-0 flex-col gap-micro">
-          <div className="flex flex-col gap-micro sm:flex-row sm:items-start sm:justify-between sm:gap-region">
-            <div className="flex min-w-0 flex-1 flex-col gap-micro text-left">
+        <div className="flex flex-col gap-region sm:flex-row sm:justify-between sm:gap-region">
+          <div className="flex min-w-0 flex-1 flex-col [&_[data-slot=page-header-description]]:[text-box:trim-start_text]">
+            <div className="flex min-w-0 flex-col gap-component text-left [&_[data-slot=heading]]:[text-box:trim-end_text] [&_[data-slot=page-header-kicker]]:[text-box:trim-both_cap_alphabetic]">
               {renderKicker(kicker)}
               {renderTitle(title)}
             </div>
-            {trailing != null ? <PageHeaderMedia>{trailing}</PageHeaderMedia> : null}
+            {descriptionNode}
           </div>
-          {descriptionNode}
+          {media != null ? (
+            <PageHeaderMedia className="sm:self-start">{media}</PageHeaderMedia>
+          ) : null}
+          {icon != null ? (
+            <PageHeaderMedia className="sm:self-end">{icon}</PageHeaderMedia>
+          ) : null}
+          {actions != null ? (
+            <PageHeaderActions className="shrink-0 pt-0 sm:self-end">{actions}</PageHeaderActions>
+          ) : null}
         </div>
         {children != null ? (
           <PageHeaderBelow className="pt-0">{children}</PageHeaderBelow>
-        ) : null}
-        {actions != null ? (
-          <PageHeaderActions className="pt-0">{actions}</PageHeaderActions>
         ) : null}
       </div>
     </header>

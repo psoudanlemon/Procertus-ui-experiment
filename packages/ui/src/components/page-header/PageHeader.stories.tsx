@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { Button, H1 } from "@procertus-ui/ui";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { H1 } from "@/components/ui/heading";
 
 import {
   PageHeader,
@@ -10,14 +12,14 @@ import {
 } from "./PageHeader";
 
 const meta = {
-  title: "ui-lib/PageHeader",
+  title: "components/PageHeader",
   component: PageHeader,
   parameters: {
     layout: "padded",
     docs: {
       description: {
         component:
-          "Presentational masthead: optional trailing `icon` or `media` (mutually exclusive) aligns with the **kicker + title** row only (right-aligned in that column). Description, optional `children`, and `actions` span the full width below. Pass plain strings for kicker/description/title to get default typography, or pass custom nodes for full control.",
+          "Presentational masthead. Kicker, title, and description share one text column. `media` floats top-right of that column on `sm`+; `icon` (mutually exclusive with media) and `actions` float bottom-right. All trailing slots stack underneath on mobile. `children` render full-width below the entire header row. Pass plain strings for kicker/description/title to get default typography, or pass custom nodes for full control.",
       },
     },
   },
@@ -87,6 +89,15 @@ export const WithIcon: StoryObj<typeof meta> = {
   },
 };
 
+export const WithTitleBadge: StoryObj<typeof meta> = {
+  name: "Badge as kicker",
+  args: {
+    kicker: <Badge variant="success">In behandeling</Badge>,
+    title: "Aanvraag #2026-0142",
+    description: "Status van uw lopende certificatie-aanvraag.",
+  },
+};
+
 export const WithChildrenAndActions: StoryObj<typeof meta> = {
   name: "Below description + actions",
   args: {
@@ -118,25 +129,23 @@ export const CompositionSlots: StoryObj<typeof meta> = {
     title: "Slot composition demo",
   },
   render: () => (
-    <header className="pb-region">
-      <div className="flex flex-col gap-region">
-        <div className="flex min-w-0 flex-col gap-micro">
-          <div className="flex flex-col gap-micro sm:flex-row sm:items-start sm:justify-between sm:gap-region">
-            <div className="flex min-w-0 flex-1 flex-col gap-micro text-left">
-              <PageHeaderKicker>Custom kicker node</PageHeaderKicker>
-              <H1 className="text-balance">Hand-built title with extra classes</H1>
-            </div>
-            <PageHeaderMedia>
-              <div className="flex size-16 items-center justify-center rounded-lg bg-muted text-xs font-medium text-muted-foreground">
-                Logo
-              </div>
-            </PageHeaderMedia>
+    <header>
+      <div className="flex flex-col gap-region sm:flex-row sm:justify-between sm:gap-region">
+        <div className="flex min-w-0 flex-1 flex-col [&_[data-slot=page-header-description]]:[text-box:trim-start_text]">
+          <div className="flex min-w-0 flex-col gap-component text-left [&_[data-slot=heading]]:[text-box:trim-end_text] [&_[data-slot=page-header-kicker]]:[text-box:trim-both_cap_alphabetic]">
+            <PageHeaderKicker>Custom kicker node</PageHeaderKicker>
+            <H1 className="text-balance">Hand-built title with extra classes</H1>
           </div>
           <PageHeaderDescription>
-            Description spans the full width under the title row (same as{" "}
+            Description sits inside the text column, directly under the title (same as{" "}
             <code className="rounded bg-muted px-1 py-0.5 text-xs">PageHeader</code>).
           </PageHeaderDescription>
         </div>
+        <PageHeaderMedia className="sm:self-start">
+          <div className="flex size-16 items-center justify-center rounded-lg bg-muted text-xs font-medium text-muted-foreground">
+            Logo
+          </div>
+        </PageHeaderMedia>
       </div>
     </header>
   ),

@@ -1,5 +1,4 @@
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, CardList, H1 } from "@procertus-ui/ui";
-import { PageHeader } from "@procertus-ui/ui-lib";
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, CardList, H1, PageHeader } from "@procertus-ui/ui";
 import { CertificationRequestCard } from "@procertus-ui/ui-certification";
 import { useNavigate } from "react-router-dom";
 

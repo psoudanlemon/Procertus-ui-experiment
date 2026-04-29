@@ -15,12 +15,3 @@ export type {
   OnboardingStepperStep,
 } from "./custom-components/onboarding/onboarding-stepper";
 export * from "./components/portal-chat";
-export {
-  PageHeader,
-  PageHeaderActions,
-  PageHeaderBelow,
-  PageHeaderDescription,
-  PageHeaderKicker,
-  PageHeaderMedia,
-} from "./components/page-header";
-export type { PageHeaderProps } from "./components/page-header";

@@ -1,6 +1,4 @@
-import { H1 } from "@procertus-ui/ui";
-import { PageHeader } from "@procertus-ui/ui-lib";
-import { PrototypeSurfaceMarquee, Separator, Summary } from "@procertus-ui/ui";
+import { H1, PageHeader, PrototypeSurfaceMarquee, Separator, Summary } from "@procertus-ui/ui";
 
 import { AppDesignToolbar } from "../components/AppDesignToolbar";
 import { BrandGradientHero } from "../components/BrandGradientHero";

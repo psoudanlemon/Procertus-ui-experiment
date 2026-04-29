@@ -20,8 +20,9 @@ import {
   H1,
   iconStroke,
   Input,
+  PageHeader,
 } from "@procertus-ui/ui";
-import { OnboardingStepper, PageHeader, StepLayout, useStepLayout, type OnboardingStepperStep } from "@procertus-ui/ui-lib";
+import { OnboardingStepper, StepLayout, useStepLayout, type OnboardingStepperStep } from "@procertus-ui/ui-lib";
 import {
   type MockPrototypeUser,
   type PrototypeUserProfile,

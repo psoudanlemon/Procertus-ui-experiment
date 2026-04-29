@@ -1,8 +1,7 @@
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { IconSvgElement } from "@hugeicons/react";
 import { FileEditIcon } from "@hugeicons/core-free-icons";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, H1, iconStroke } from "@procertus-ui/ui";
-import { PageHeader } from "@procertus-ui/ui-lib";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, H1, iconStroke, PageHeader } from "@procertus-ui/ui";
 import { useCallback, useMemo } from "react";
 
 import { ProfileChangeRequestOverviewCard } from "../components/profile-change-requests/ProfileChangeRequestOverviewCard";

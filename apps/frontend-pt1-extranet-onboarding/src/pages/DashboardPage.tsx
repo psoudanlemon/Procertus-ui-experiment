@@ -1,7 +1,6 @@
 import { useMockPrototypeSession } from "@procertus-ui/ui-pt1-prototype";
 
-import { H1 } from "@procertus-ui/ui";
-import { PageHeader } from "@procertus-ui/ui-lib";
+import { H1, PageHeader } from "@procertus-ui/ui";
 
 import {
   CertificationSummaryWidget,
