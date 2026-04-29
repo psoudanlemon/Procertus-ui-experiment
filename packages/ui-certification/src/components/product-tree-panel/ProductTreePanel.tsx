@@ -5,12 +5,12 @@
 import { Search01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   Badge,
   Button,
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -39,6 +39,8 @@ export type ProductTreeProductNode = {
   unavailableReason?: string;
   statusLabel?: string;
   selected?: boolean;
+  /** When true, the row renders with the search-match treatment (bold). */
+  searchMatch?: boolean;
 };
 
 export type ProductTreeGroupNode = {
@@ -50,6 +52,51 @@ export type ProductTreeGroupNode = {
 
 export type ProductTreeNode = ProductTreeGroupNode | ProductTreeProductNode;
 
+function ScrollFades({
+  scrollerRef,
+}: {
+  scrollerRef: React.RefObject<HTMLDivElement | null>;
+}) {
+  const [scrolled, setScrolled] = useState(false);
+  const [atBottom, setAtBottom] = useState(true);
+
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      setScrolled(el.scrollTop > 0);
+      setAtBottom(el.scrollTop + el.clientHeight >= el.scrollHeight - 1);
+    };
+    onScroll();
+    el.addEventListener("scroll", onScroll, { passive: true });
+    const ro = new ResizeObserver(onScroll);
+    ro.observe(el);
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      ro.disconnect();
+    };
+  }, [scrollerRef]);
+
+  return (
+    <>
+      <div
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-linear-to-b from-card to-transparent transition-opacity duration-200",
+          scrolled ? "opacity-100" : "opacity-0",
+        )}
+      />
+      <div
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-x-0 bottom-0 z-10 h-8 bg-linear-to-t from-card to-transparent transition-opacity duration-200",
+          atBottom ? "opacity-0" : "opacity-100",
+        )}
+      />
+    </>
+  );
+}
+
 function SearchInput({
   value,
   onChange,
@@ -60,7 +107,7 @@ function SearchInput({
   placeholder: string;
 }) {
   return (
-    <div className="relative max-w-md flex-1">
+    <div className="relative flex-1">
       <div
         className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground"
         aria-hidden
@@ -98,66 +145,126 @@ type ProductTreeItemInstance = {
   isMatchingSearch: () => boolean;
 };
 
-function buildTreeItems({
-  expandedIds,
-  level = 0,
-  nodes,
+function makeTreeItemInstance({
+  node,
+  level,
+  expanded,
   onSelectProduct,
   onToggle,
 }: {
-  expandedIds: ReadonlySet<string>;
-  level?: number;
-  nodes: readonly ProductTreeNode[];
+  node: ProductTreeNode;
+  level: number;
+  expanded: boolean;
   onSelectProduct: (product: ProductTreeProductNode) => void;
   onToggle: (id: string, open: boolean) => void;
-}): ProductTreeItemInstance[] {
-  return nodes.flatMap((node) => {
-    const isGroup = node.kind === "group";
-    const expanded = isGroup && expandedIds.has(node.id);
-    const selectable = node.kind === "product" ? node.selectable !== false : true;
-    const item: ProductTreeItemInstance = {
-      id: node.id,
-      node,
-      level,
-      getId: () => node.id,
-      getItemName: () => node.label,
-      getItemMeta: () => ({ level }),
-      getProps: () => ({
-        type: "button",
-        "aria-disabled": node.kind === "product" && !selectable ? true : undefined,
-        onClick: () => {
-          if (node.kind === "group") {
-            onToggle(node.id, !expanded);
-            return;
-          }
-          if (selectable) {
-            onSelectProduct(node);
-          }
-        },
-      }),
-      isExpanded: () => expanded,
-      isFocused: () => false,
-      isFolder: () => isGroup,
-      isSelected: () => node.kind === "product" && Boolean(node.selected),
-      isDragTarget: () => false,
-      isMatchingSearch: () => false,
-    };
-
-    if (!isGroup || !expanded) return [item];
-    return [
-      item,
-      ...buildTreeItems({
-        expandedIds,
-        level: level + 1,
-        nodes: node.children,
-        onSelectProduct,
-        onToggle,
-      }),
-    ];
-  });
+}): ProductTreeItemInstance {
+  const isGroup = node.kind === "group";
+  const selectable = node.kind === "product" ? node.selectable !== false : true;
+  return {
+    id: node.id,
+    node,
+    level,
+    getId: () => node.id,
+    getItemName: () => node.label,
+    getItemMeta: () => ({ level }),
+    getProps: () => ({
+      type: "button",
+      "aria-disabled": node.kind === "product" && !selectable ? true : undefined,
+      onClick: () => {
+        if (node.kind === "group") {
+          onToggle(node.id, !expanded);
+          return;
+        }
+        if (selectable) {
+          onSelectProduct(node);
+        }
+      },
+    }),
+    isExpanded: () => expanded,
+    isFocused: () => false,
+    isFolder: () => isGroup,
+    isSelected: () => node.kind === "product" && Boolean(node.selected),
+    isDragTarget: () => false,
+    isMatchingSearch: () =>
+      node.kind === "product" && Boolean(node.searchMatch),
+  };
 }
 
-function ProductTreeItemLabel({ item }: TreeItemProps) {
+function ProductTreeNodeView({
+  node,
+  level,
+  expandedIds,
+  onSelectProduct,
+  onToggle,
+  searchQuery,
+}: {
+  node: ProductTreeNode;
+  level: number;
+  expandedIds: ReadonlySet<string>;
+  onSelectProduct: (product: ProductTreeProductNode) => void;
+  onToggle: (id: string, open: boolean) => void;
+  searchQuery?: string;
+}) {
+  const isGroup = node.kind === "group";
+  const expanded = isGroup && expandedIds.has(node.id);
+  const item = makeTreeItemInstance({ node, level, expanded, onSelectProduct, onToggle });
+
+  return (
+    <>
+      <TreeItem
+        item={item as never}
+        className="relative bg-[length:var(--tree-padding)_100%] bg-no-repeat bg-[repeating-linear-gradient(to_right,transparent_0,transparent_calc(var(--tree-indent)/2-0.5px),var(--border)_calc(var(--tree-indent)/2-0.5px),var(--border)_calc(var(--tree-indent)/2+0.5px),transparent_calc(var(--tree-indent)/2+0.5px),transparent_var(--tree-indent))]"
+      >
+        <ProductTreeItemLabel item={item} searchQuery={searchQuery} />
+      </TreeItem>
+      {isGroup ? (
+        <div
+          inert={!expanded}
+          aria-hidden={!expanded}
+          className={cn(
+            "grid transition-[grid-template-rows] duration-200 ease-out",
+            expanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+          )}
+        >
+          <div className="min-h-0 overflow-hidden">
+            {node.children.map((child) => (
+              <ProductTreeNodeView
+                key={child.id}
+                node={child}
+                level={level + 1}
+                expandedIds={expandedIds}
+                onSelectProduct={onSelectProduct}
+                onToggle={onToggle}
+                searchQuery={searchQuery}
+              />
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+function HighlightedLabel({ name, query }: { name: string; query?: string }) {
+  const q = query?.trim() ?? "";
+  if (!q) return <>{name}</>;
+  const idx = name.toLowerCase().indexOf(q.toLowerCase());
+  if (idx === -1) return <>{name}</>;
+  return (
+    <>
+      {name.slice(0, idx)}
+      <mark className="rounded-sm bg-secondary px-0.5 text-secondary-foreground">
+        {name.slice(idx, idx + q.length)}
+      </mark>
+      {name.slice(idx + q.length)}
+    </>
+  );
+}
+
+function ProductTreeItemLabel({
+  item,
+  searchQuery,
+}: TreeItemProps & { searchQuery?: string }) {
   const node = item.node;
 
   if (node.kind === "group") {
@@ -165,10 +272,12 @@ function ProductTreeItemLabel({ item }: TreeItemProps) {
       <TreeItemLabel
         className={cn(
           "relative cursor-pointer bg-card before:absolute before:inset-x-0 before:-inset-y-0.5 before:-z-10 before:bg-card hover:bg-accent hover:text-accent-foreground in-data-[selected=true]:bg-muted/40",
-          "py-component text-sm font-semibold text-foreground",
+          "py-component pl-component text-sm font-semibold text-foreground",
         )}
       >
-        <span className="min-w-0 wrap-break-word">{node.label}</span>
+        <span className="min-w-0 wrap-break-word">
+          <HighlightedLabel name={node.label} query={searchQuery} />
+        </span>
         {node.children.length === 0 ? (
           <span className="ml-auto text-xs font-normal text-muted-foreground">Leeg</span>
         ) : null}
@@ -182,10 +291,11 @@ function ProductTreeItemLabel({ item }: TreeItemProps) {
   return (
     <TreeItemLabel
       className={cn(
-        "relative cursor-pointer items-start bg-card before:absolute before:inset-x-0 before:-inset-y-0.5 before:-z-10 before:bg-card hover:bg-accent hover:text-accent-foreground in-data-[selected=true]:text-foreground",
-        selected &&
-          "border-l-4 border-l-accent-foreground bg-accent/40 pl-[calc(var(--spacing-component)-4px)] hover:bg-accent/50",
-        "py-component text-left transition-[background-color,border-color,color]",
+        "relative cursor-pointer items-start border border-transparent bg-card before:absolute before:inset-x-0 before:-inset-y-0.5 before:-z-10 before:bg-card",
+        "hover:bg-accent hover:text-accent-foreground",
+        "in-data-[selected=true]:border-primary in-data-[selected=true]:bg-accent in-data-[selected=true]:text-foreground",
+        "in-data-[selected=true]:hover:bg-accent in-data-[selected=true]:hover:text-foreground",
+        "py-component pl-component text-left transition-[background-color,border-color,color]",
       )}
     >
       <span className="flex min-w-0 flex-1 flex-col gap-micro">
@@ -194,9 +304,10 @@ function ProductTreeItemLabel({ item }: TreeItemProps) {
             className={cn(
               "min-w-0 flex-1 wrap-break-word text-sm",
               selectable ? "font-medium text-foreground" : "font-normal text-muted-foreground",
+              selectable && selected && "text-accent-foreground",
             )}
           >
-            {node.label}
+            <HighlightedLabel name={node.label} query={searchQuery} />
           </span>
           {node.statusLabel ? (
             <Badge
@@ -263,27 +374,28 @@ export function ProductTreePanel({
   onSelectProduct,
   emptyState,
 }: ProductTreePanelProps) {
-  const set = new Set(expanded);
-  const items = buildTreeItems({
-    expandedIds: set,
-    nodes,
-    onSelectProduct,
-    onToggle,
-  });
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const expandedSet = new Set(expanded);
   const tree = {
     getContainerProps: () => ({ role: "tree" }),
-    getItems: () => items,
+    getItems: () => [],
   };
 
+  const hasToolbarRow =
+    (showSearch && Boolean(onSearchChange)) ||
+    Boolean(actions) ||
+    Boolean(onCollapseAll) ||
+    Boolean(onExpandAll);
+
   return (
-    <Card className={cn("mx-auto w-full max-w-5xl overflow-hidden", className)}>
-      <CardHeader className="gap-section">
+    <Card className={cn("mx-auto w-full max-w-5xl overflow-hidden py-section", className)}>
+      <CardHeader className={cn("px-section", hasToolbarRow && "gap-section")}>
         <div>
           <CardTitle>{title}</CardTitle>
           {description ? <CardDescription>{description}</CardDescription> : null}
         </div>
         {showSearch && onSearchChange ? (
-          <div className="flex flex-col gap-component sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-component sm:flex-row sm:items-center sm:gap-0">
             <SearchInput
               value={searchValue}
               onChange={onSearchChange}
@@ -319,31 +431,40 @@ export function ProductTreePanel({
           </div>
         ) : null}
       </CardHeader>
-      <CardContent className="space-y-component px-section pb-section">
-        {nodes.length === 0 ? (
-          (emptyState ?? (
-            <Empty>
-              <EmptyIcon />
-              <EmptyTitle>No product nodes</EmptyTitle>
-              <EmptyDescription>
-                Adjust filters or start from another cluster (story / demo)
-              </EmptyDescription>
-            </Empty>
-          ))
-        ) : (
-          <Tree
-            tree={tree}
-            indent={24}
-            className="relative min-w-0 before:absolute before:inset-0 before:-ms-1.25 before:bg-[repeating-linear-gradient(to_right,transparent_0,transparent_calc(var(--tree-indent)-1px),var(--border)_calc(var(--tree-indent)-1px),var(--border)_calc(var(--tree-indent)))]"
-          >
-            {items.map((item) => (
-              <TreeItem key={item.id} item={item as never} className="relative">
-                <ProductTreeItemLabel item={item} />
-              </TreeItem>
-            ))}
-          </Tree>
-        )}
-      </CardContent>
+      <div className="relative flex min-h-0 flex-1 flex-col">
+        <ScrollFades scrollerRef={scrollerRef} />
+        <div
+          ref={scrollerRef}
+          data-slot="card-content"
+          className="min-h-0 flex-1 space-y-component overflow-y-auto px-section"
+        >
+          {nodes.length === 0 ? (
+            (emptyState ?? (
+              <Empty>
+                <EmptyIcon />
+                <EmptyTitle>No product nodes</EmptyTitle>
+                <EmptyDescription>
+                  Adjust filters or start from another cluster (story / demo)
+                </EmptyDescription>
+              </Empty>
+            ))
+          ) : (
+            <Tree tree={tree} indent={24} className="min-w-0">
+              {nodes.map((node) => (
+                <ProductTreeNodeView
+                  key={node.id}
+                  node={node}
+                  level={0}
+                  expandedIds={expandedSet}
+                  onSelectProduct={onSelectProduct}
+                  onToggle={onToggle}
+                  searchQuery={searchValue}
+                />
+              ))}
+            </Tree>
+          )}
+        </div>
+      </div>
     </Card>
   );
 }
