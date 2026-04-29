@@ -43,7 +43,11 @@ export function PrototypeCard({
   return (
     <Card
       className={cn(
-        "relative gap-0 border-2 bg-brand-accent-50 border-dashed border-prototype shadow-none ring-0",
+        "relative gap-0 border-2 border-dashed border-prototype shadow-none ring-0",
+        /* Tinted surface from semantic tokens so light/dark both read as a subtle prototype wash */
+        "bg-[color-mix(in_oklch,var(--prototype)_14%,var(--card))]",
+        /* In dark, --prototype is very dark; use foreground hue for a visible dashed frame */
+        "dark:border-prototype-foreground/40",
         className,
       )}
     >
