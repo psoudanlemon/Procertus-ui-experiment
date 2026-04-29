@@ -9,11 +9,11 @@ export type {
 } from "./components/step-layout";
 export {
   OnboardingStepper,
-} from "./components/onboarding-stepper";
+} from "./custom-components/onboarding/onboarding-stepper";
 export type {
   OnboardingStepperProps,
   OnboardingStepperStep,
-} from "./components/onboarding-stepper";
+} from "./custom-components/onboarding/onboarding-stepper";
 export {
   SelectChoiceCard,
   SelectChoiceCardGroup,

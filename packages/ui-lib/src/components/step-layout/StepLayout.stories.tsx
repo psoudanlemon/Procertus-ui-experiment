@@ -1,7 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useCallback, useState } from "react";
 
-import { OnboardingStepper, type OnboardingStepperStep } from "../onboarding-stepper";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  Input,
+  Textarea,
+} from "@procertus-ui/ui";
+
+import { OnboardingStepper, type OnboardingStepperStep } from "../../custom-components/onboarding/onboarding-stepper";
 import { StepLayout } from "./StepLayout";
 import { useStepLayout } from "./useStepLayout";
 
@@ -32,6 +41,8 @@ const stepperSteps: OnboardingStepperStep[] = [
 function OnboardingFlowStory() {
   const [perStepOk, setPerStepOk] = useState([false, false, true]);
   const [completed, setCompleted] = useState(false);
+  const [account, setAccount] = useState({ email: "", password: "", confirm: "" });
+  const [profile, setProfile] = useState({ org: "", vat: "", country: "", notes: "" });
 
   const canAdvanceFrom = useCallback(
     (step: number) => perStepOk[step] === true,
@@ -74,24 +85,147 @@ function OnboardingFlowStory() {
       }}
       secondaryAction={flow.isLast ? { label: "Edit profile", onClick: () => flow.goToStep(1) } : undefined}
     >
-      <div className="space-y-component text-sm text-muted-foreground">
-        <p>Place step fields, checklists, or any content in this slot. This story uses a single prerequisite flag per step.</p>
-        <label className="flex cursor-pointer items-center gap-component text-foreground">
-          <input
-            type="checkbox"
-            className="size-4 rounded border"
-            checked={perStepOk[step]}
-            onChange={() =>
-              setPerStepOk((prev) => {
-                const next = [...prev];
-                next[step] = !next[step];
-                return next;
-              })
-            }
-          />
-          Prerequisite for this step
-        </label>
-      </div>
+      {step === 0 ? (
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="ob-email">Email</FieldLabel>
+            <Input
+              id="ob-email"
+              type="email"
+              placeholder="you@example.com"
+              value={account.email}
+              onChange={(e) => setAccount((a) => ({ ...a, email: e.target.value }))}
+            />
+            <FieldDescription>We use this address to sign you in.</FieldDescription>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="ob-password">Password</FieldLabel>
+            <Input
+              id="ob-password"
+              type="password"
+              placeholder="At least 8 characters"
+              value={account.password}
+              onChange={(e) => setAccount((a) => ({ ...a, password: e.target.value }))}
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="ob-confirm">Confirm password</FieldLabel>
+            <Input
+              id="ob-confirm"
+              type="password"
+              value={account.confirm}
+              onChange={(e) => setAccount((a) => ({ ...a, confirm: e.target.value }))}
+            />
+          </Field>
+          <Field>
+            <label className="flex cursor-pointer items-center gap-component text-sm text-foreground">
+              <input
+                type="checkbox"
+                className="size-4 rounded border"
+                checked={perStepOk[step]}
+                onChange={() =>
+                  setPerStepOk((prev) => {
+                    const next = [...prev];
+                    next[step] = !next[step];
+                    return next;
+                  })
+                }
+              />
+              I have reviewed the credentials above.
+            </label>
+          </Field>
+        </FieldGroup>
+      ) : step === 1 ? (
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="ob-org">Organization name</FieldLabel>
+            <Input
+              id="ob-org"
+              placeholder="ACME International"
+              value={profile.org}
+              onChange={(e) => setProfile((p) => ({ ...p, org: e.target.value }))}
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="ob-vat">VAT number</FieldLabel>
+            <Input
+              id="ob-vat"
+              placeholder="BE0123456789"
+              value={profile.vat}
+              onChange={(e) => setProfile((p) => ({ ...p, vat: e.target.value }))}
+            />
+            <FieldDescription>Used to look up your registry record.</FieldDescription>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="ob-country">Country</FieldLabel>
+            <Input
+              id="ob-country"
+              placeholder="Belgium"
+              value={profile.country}
+              onChange={(e) => setProfile((p) => ({ ...p, country: e.target.value }))}
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="ob-notes">Notes (optional)</FieldLabel>
+            <Textarea
+              id="ob-notes"
+              rows={3}
+              placeholder="Anything we should know about your organization?"
+              value={profile.notes}
+              onChange={(e) => setProfile((p) => ({ ...p, notes: e.target.value }))}
+            />
+          </Field>
+          <Field>
+            <label className="flex cursor-pointer items-center gap-component text-sm text-foreground">
+              <input
+                type="checkbox"
+                className="size-4 rounded border"
+                checked={perStepOk[step]}
+                onChange={() =>
+                  setPerStepOk((prev) => {
+                    const next = [...prev];
+                    next[step] = !next[step];
+                    return next;
+                  })
+                }
+              />
+              Profile details look correct.
+            </label>
+          </Field>
+        </FieldGroup>
+      ) : (
+        <FieldGroup>
+          <Field>
+            <FieldLabel>Account</FieldLabel>
+            <FieldDescription>{account.email || "—"}</FieldDescription>
+          </Field>
+          <Field>
+            <FieldLabel>Organization</FieldLabel>
+            <FieldDescription>
+              {profile.org || "—"}
+              {profile.vat ? ` · ${profile.vat}` : ""}
+              {profile.country ? ` · ${profile.country}` : ""}
+            </FieldDescription>
+          </Field>
+          <Field>
+            <label className="flex cursor-pointer items-center gap-component text-sm text-foreground">
+              <input
+                type="checkbox"
+                className="size-4 rounded border"
+                checked={perStepOk[step]}
+                onChange={() =>
+                  setPerStepOk((prev) => {
+                    const next = [...prev];
+                    next[step] = !next[step];
+                    return next;
+                  })
+                }
+              />
+              I confirm the information above is correct.
+            </label>
+          </Field>
+        </FieldGroup>
+      )}
     </StepLayout>
   );
 }
@@ -102,6 +236,8 @@ export const OnboardingStep = {
 
 function WithTopStepperStory() {
   const [perStepOk, setPerStepOk] = useState([true, true, true]);
+  const [account, setAccount] = useState({ email: "", password: "", confirm: "" });
+  const [profile, setProfile] = useState({ org: "", vat: "", country: "", notes: "" });
   const canAdvance = (i: number) => perStepOk[i] === true;
   const flow = useStepLayout({ totalSteps: 3, canAdvanceFrom: canAdvance });
   const s = stepperSteps[flow.activeStep];
@@ -131,21 +267,147 @@ function WithTopStepperStory() {
         disabled: flow.isLast ? !flow.stepAdvanceAllowed : !flow.canGoForward,
       }}
     >
-      <label className="flex items-center gap-component text-sm text-muted-foreground">
-        <input
-          type="checkbox"
-          className="size-4 rounded border"
-          checked={perStepOk[flow.activeStep]}
-          onChange={() =>
-            setPerStepOk((p) => {
-              const n = [...p];
-              n[flow.activeStep] = !n[flow.activeStep];
-              return n;
-            })
-          }
-        />
-        Prerequisite for this step
-      </label>
+      {flow.activeStep === 0 ? (
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="story-email">Email</FieldLabel>
+            <Input
+              id="story-email"
+              type="email"
+              placeholder="you@example.com"
+              value={account.email}
+              onChange={(e) => setAccount((a) => ({ ...a, email: e.target.value }))}
+            />
+            <FieldDescription>We use this address to sign you in.</FieldDescription>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="story-password">Password</FieldLabel>
+            <Input
+              id="story-password"
+              type="password"
+              placeholder="At least 8 characters"
+              value={account.password}
+              onChange={(e) => setAccount((a) => ({ ...a, password: e.target.value }))}
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="story-confirm">Confirm password</FieldLabel>
+            <Input
+              id="story-confirm"
+              type="password"
+              value={account.confirm}
+              onChange={(e) => setAccount((a) => ({ ...a, confirm: e.target.value }))}
+            />
+          </Field>
+          <Field>
+            <label className="flex cursor-pointer items-center gap-component text-sm text-foreground">
+              <input
+                type="checkbox"
+                className="size-4 rounded border"
+                checked={perStepOk[flow.activeStep]}
+                onChange={() =>
+                  setPerStepOk((p) => {
+                    const n = [...p];
+                    n[flow.activeStep] = !n[flow.activeStep];
+                    return n;
+                  })
+                }
+              />
+              I have reviewed the credentials above.
+            </label>
+          </Field>
+        </FieldGroup>
+      ) : flow.activeStep === 1 ? (
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="story-org">Organization name</FieldLabel>
+            <Input
+              id="story-org"
+              placeholder="ACME International"
+              value={profile.org}
+              onChange={(e) => setProfile((p) => ({ ...p, org: e.target.value }))}
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="story-vat">VAT number</FieldLabel>
+            <Input
+              id="story-vat"
+              placeholder="BE0123456789"
+              value={profile.vat}
+              onChange={(e) => setProfile((p) => ({ ...p, vat: e.target.value }))}
+            />
+            <FieldDescription>Used to look up your registry record.</FieldDescription>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="story-country">Country</FieldLabel>
+            <Input
+              id="story-country"
+              placeholder="Belgium"
+              value={profile.country}
+              onChange={(e) => setProfile((p) => ({ ...p, country: e.target.value }))}
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="story-notes">Notes (optional)</FieldLabel>
+            <Textarea
+              id="story-notes"
+              rows={3}
+              placeholder="Anything we should know about your organization?"
+              value={profile.notes}
+              onChange={(e) => setProfile((p) => ({ ...p, notes: e.target.value }))}
+            />
+          </Field>
+          <Field>
+            <label className="flex cursor-pointer items-center gap-component text-sm text-foreground">
+              <input
+                type="checkbox"
+                className="size-4 rounded border"
+                checked={perStepOk[flow.activeStep]}
+                onChange={() =>
+                  setPerStepOk((p) => {
+                    const n = [...p];
+                    n[flow.activeStep] = !n[flow.activeStep];
+                    return n;
+                  })
+                }
+              />
+              Profile details look correct.
+            </label>
+          </Field>
+        </FieldGroup>
+      ) : (
+        <FieldGroup>
+          <Field>
+            <FieldLabel>Account</FieldLabel>
+            <FieldDescription>{account.email || "—"}</FieldDescription>
+          </Field>
+          <Field>
+            <FieldLabel>Organization</FieldLabel>
+            <FieldDescription>
+              {profile.org || "—"}
+              {profile.vat ? ` · ${profile.vat}` : ""}
+              {profile.country ? ` · ${profile.country}` : ""}
+            </FieldDescription>
+          </Field>
+          <Field>
+            <label className="flex items-center gap-component text-sm text-foreground">
+              <input
+                type="checkbox"
+                className="size-4 rounded border"
+                checked={perStepOk[flow.activeStep]}
+                onChange={() =>
+                  setPerStepOk((p) => {
+                    const n = [...p];
+                    n[flow.activeStep] = !n[flow.activeStep];
+                    return n;
+                  })
+                }
+              />
+              I confirm the information above is correct.
+            </label>
+          </Field>
+        </FieldGroup>
+      )}
     </StepLayout>
   );
 }
