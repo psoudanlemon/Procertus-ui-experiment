@@ -10,6 +10,7 @@ import { CategorizationDemoPage } from "./pages/CategorizationDemoPage";
 import { DesignSystemPage } from "./pages/DesignSystemPage";
 import { AnonymousOnboardingFlow } from "./features/onboarding/AnonymousOnboardingFlow";
 import { AppPlaceholderPage } from "./pages/AppPlaceholderPage";
+import { OnboardingRegistrationCompletePage } from "./pages/OnboardingRegistrationCompletePage";
 import { WelcomePage } from "./pages/WelcomePage";
 import { OrganizationPage } from "./pages/OrganizationPage";
 import { RequireAuth } from "./routes/RequireAuth";
@@ -30,6 +31,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<RootRedirect />} />
       <Route path="/design-system" element={<Navigate to="/app/design-system" replace />} />
+      <Route path="/registratie-voltooid" element={<OnboardingRegistrationCompletePage />} />
 
       <Route element={<PublicAppShell />}>
         <Route path="/welcome" element={<WelcomePage />} />
