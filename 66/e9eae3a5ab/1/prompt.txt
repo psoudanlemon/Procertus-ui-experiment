@@ -64,3 +64,7 @@ No — it is still a single column even on large screens. I think something else
 I can see that this is laid out correctly in Storybook when the component is checked in isolation, but when loaded in the prototype application it is not working. Please investigate why this is happening.
 
 First, refer to the previous changes.
+
+---
+
+Please commit all changes using git commit skill
