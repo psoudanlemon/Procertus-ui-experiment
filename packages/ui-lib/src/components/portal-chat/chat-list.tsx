@@ -20,7 +20,7 @@ export function ChatList({ className, children, ...props }: ChatListProps) {
       <div
         ref={ref}
         className={cn(
-          "flex h-full w-full flex-col gap-4 overflow-y-auto p-4 scroll-smooth",
+          "flex h-full w-full flex-col gap-component overflow-y-auto p-section scroll-smooth",
           "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
           className,
         )}

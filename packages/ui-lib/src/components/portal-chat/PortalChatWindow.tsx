@@ -96,7 +96,7 @@ export function PortalChatWindow({
 
       {showComposer ? (
         <>
-          {messages.length > 0 || useToolbar ? <Separator className="my-0.5" /> : null}
+          {!useToolbar && messages.length > 0 ? <Separator className="my-0.5" /> : null}
           {useToolbar && composer ? (
             <ChatComposerToolbar
               value={composer.value ?? ""}

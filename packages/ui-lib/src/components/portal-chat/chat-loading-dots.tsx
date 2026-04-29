@@ -25,7 +25,7 @@ export function ChatLoadingDots({ size = 4, className }: ChatLoadingDotsProps) {
         .portal-chat-loading-dot:nth-of-type(3) { animation-delay: 0.4s; }
       `}</style>
       <div
-        className={cn("inline-flex items-center gap-1", className)}
+        className={cn("inline-flex items-center gap-micro", className)}
         style={{ ["--loading-dot-size" as string]: px }}
       >
         {[0, 1, 2].map((i) => (

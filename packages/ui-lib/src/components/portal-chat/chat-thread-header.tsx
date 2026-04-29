@@ -22,11 +22,11 @@ export function ChatThreadHeader({ className, title, subtitle, avatar, actions }
   return (
     <div
       className={cn(
-        "bg-background flex place-items-center justify-between border-b border-border p-2",
+        "bg-background flex place-items-center justify-between border-b border-border p-section",
         className,
       )}
     >
-      <div className="flex min-w-0 place-items-center gap-2">
+      <div className="flex min-w-0 place-items-center gap-component">
         {avatar}
         <div className="flex min-w-0 flex-col">
           <span className="truncate text-sm font-medium">{title}</span>
@@ -35,7 +35,7 @@ export function ChatThreadHeader({ className, title, subtitle, avatar, actions }
           ) : null}
         </div>
       </div>
-      {actions ? <div className="flex shrink-0 place-items-center gap-0.5">{actions}</div> : null}
+      {actions ? <div className="flex shrink-0 place-items-center gap-micro">{actions}</div> : null}
     </div>
   );
 }

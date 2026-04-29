@@ -21,7 +21,7 @@ export const ChatBubble = React.forwardRef<HTMLDivElement, ChatBubbleProps>(func
       ref={forwardedRef}
       data-variant={variant}
       className={cn(
-        "group/chat-bubble flex max-w-[80%] flex-row place-items-end gap-2 data-[variant=sent]:place-self-end",
+        "group/chat-bubble flex max-w-[80%] flex-row place-items-end gap-component data-[variant=sent]:place-self-end",
         className,
       )}
       {...props}

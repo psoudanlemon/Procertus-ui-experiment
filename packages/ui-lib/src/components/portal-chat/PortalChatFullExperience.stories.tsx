@@ -99,7 +99,7 @@ export const ComposedThread: StoryObj<typeof meta> = {
           title={friend.name}
           subtitle="Active 2 mins ago"
           avatar={
-            <Avatar size="sm">
+            <Avatar className="size-9">
               <AvatarImage src={friend.img} alt={friend.username} />
               <AvatarFallback>{initials(friend.name)}</AvatarFallback>
             </Avatar>
@@ -125,7 +125,7 @@ export const ComposedThread: StoryObj<typeof meta> = {
                 {msg.avatarImageSrc ? <AvatarImage src={msg.avatarImageSrc} alt="" /> : null}
                 <AvatarFallback>{msg.avatarFallback ?? "?"}</AvatarFallback>
               </ChatBubbleAvatar>
-              <ChatBubbleMessage className="flex flex-col gap-1">
+              <ChatBubbleMessage className="flex flex-col gap-micro">
                 <p className="text-sm">{msg.body}</p>
                 <div
                   className={
@@ -179,7 +179,7 @@ export const PortalWindowWithToolbar: StoryObj<typeof meta> = {
     const [rows, setRows] = useState(seed.slice(0, 2));
 
     return (
-      <div className="mx-auto w-full max-w-md rounded-lg border border-border p-3">
+      <div className="mx-auto w-full max-w-md overflow-hidden rounded-lg border border-border bg-card">
         <PortalChatWindow
           messages={rows}
           scrollAreaClassName="max-h-64"

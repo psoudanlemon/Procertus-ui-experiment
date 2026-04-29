@@ -88,7 +88,7 @@ export function ChatComposerToolbar({
               <HugeiconsIcon icon={SmilePlusIcon} className="size-4" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent side="top" align="start" className="w-auto max-w-[min(100vw,280px)] gap-2 p-2">
+          <PopoverContent side="top" align="start" className="w-auto max-w-[min(100vw,280px)] gap-component p-component">
             <Input
               value={emojiQuery}
               onChange={(e) => setEmojiQuery(e.target.value)}
@@ -97,7 +97,7 @@ export function ChatComposerToolbar({
               aria-label="Zoek emoji"
             />
             <div className="max-h-[175px] overflow-y-auto">
-              <div className="grid grid-cols-5 gap-1">
+              <div className="grid grid-cols-5 gap-micro">
                 {filteredPresets.map((em, i) => (
                   <button
                     key={`${em}-${i}`}
@@ -137,7 +137,10 @@ export function ChatComposerToolbar({
     </>
   );
 
-  const innerClass = cn("flex place-items-center gap-2 p-2", className);
+  const innerClass = cn(
+    "flex place-items-center gap-component border-t border-border p-section",
+    className,
+  );
 
   if (asForm && onSubmit && !readOnly) {
     return (
