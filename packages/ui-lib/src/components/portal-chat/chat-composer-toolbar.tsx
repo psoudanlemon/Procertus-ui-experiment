@@ -46,6 +46,8 @@ export type ChatComposerToolbarProps = {
   sendDisabled?: boolean;
   /** Accessible label for the send control. */
   sendAriaLabel?: string;
+  /** Accessible label for the textarea (defaults to `placeholder`). */
+  "aria-label"?: string;
 };
 
 /**
@@ -70,6 +72,7 @@ export function ChatComposerToolbar({
   asForm = true,
   sendDisabled,
   sendAriaLabel = "Verzenden",
+  "aria-label": ariaLabel,
 }: ChatComposerToolbarProps) {
   const [emojiOpen, setEmojiOpen] = useState(false);
   const [emojiQuery, setEmojiQuery] = useState("");
@@ -132,7 +135,7 @@ export function ChatComposerToolbar({
         readOnly={readOnly}
         disabled={disabled}
         rows={1}
-        aria-label={placeholder}
+        aria-label={ariaLabel ?? placeholder}
         className="min-h-9 max-h-28 overflow-y-auto"
       />
       {showEmoji || showMention || showSend ? (

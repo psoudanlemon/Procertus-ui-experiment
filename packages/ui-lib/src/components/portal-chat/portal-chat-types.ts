@@ -35,11 +35,11 @@ export type PortalChatComposerProps = {
   disabled?: boolean;
   className?: string;
   "aria-label"?: string;
-  /** Called when the user sends (toolbar mode with `toolbar` enabled). */
+  /** Called when the user sends. */
   onSubmit?: () => void;
   /**
-   * When set, renders `ChatComposerToolbar` (Shadcn `Popover` emoji picker + rounded `Input` + send)
-   * instead of a plain `Input`. Ignored when `readOnly` is true (falls back to simple input).
+   * Optional `ChatComposerToolbar` overrides (emoji presets, send label, …).
+   * The toolbar is always rendered; pass `false`/omit to use defaults.
    */
   toolbar?: boolean | PortalChatComposerToolbarOptions;
 };

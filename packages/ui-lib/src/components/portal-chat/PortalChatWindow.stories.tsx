@@ -89,15 +89,17 @@ export const EditableComposer: StoryObj<typeof meta> = {
   render: (args) => {
     const [draft, setDraft] = useState("");
     return (
-      <div className="max-w-md rounded-lg border border-border/80 bg-card p-4">
+      <div className="mx-auto w-full max-w-md overflow-hidden rounded-lg border border-border bg-card">
         <PortalChatWindow
           {...args}
+          scrollAreaClassName="max-h-64"
           composer={{
             readOnly: false,
             placeholder: "Schrijf een bericht…",
             value: draft,
             onChange: setDraft,
             "aria-label": "Nieuw bericht",
+            onSubmit: () => setDraft(""),
           }}
         />
       </div>
