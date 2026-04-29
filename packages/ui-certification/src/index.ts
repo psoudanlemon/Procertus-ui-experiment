@@ -42,6 +42,19 @@ export type {
   ProductTreePanelProps,
   ProductTreeProductNode,
 } from "./components/product-tree-panel";
+export {
+  CertificationRequestWizardView,
+  CompactWizardTimeline,
+  DraftCardDescription,
+  sortDraftsByIntentAndProduct,
+  buildRulesetDocumentsForInquiries,
+  useCertificationRequestWizardView,
+} from "./components/certification-request-wizard";
+export type {
+  CertificationRequestWizardViewProps,
+  UseCertificationRequestWizardViewOptions,
+  WizardStepperModel,
+} from "./components/certification-request-wizard";
 export { RequestPackageReview } from "./components/request-package-review";
 export type {
   RequestPackageRequesterContext,

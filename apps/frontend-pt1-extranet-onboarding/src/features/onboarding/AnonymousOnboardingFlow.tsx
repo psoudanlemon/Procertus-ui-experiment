@@ -32,7 +32,11 @@ import {
   cn,
 } from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
-import { RequestPackageReview } from "@procertus-ui/ui-certification";
+import {
+  DraftCardDescription,
+  RequestPackageReview,
+  sortDraftsByIntentAndProduct,
+} from "@procertus-ui/ui-certification";
 import type {
   RequestPackageReviewRequesterPresentation,
   RequestPackageRow,
@@ -57,10 +61,6 @@ import {
   CertificationRequestWizard,
   type CertificationWizardDraft,
 } from "../certification-wizard/CertificationRequestWizard";
-import {
-  DraftCardDescription,
-  sortDraftsByIntentAndProduct,
-} from "../certification-wizard/draftSelectionPresentation";
 import {
   REPRESENTATIVE_ROLE_PRESETS,
   REPRESENTATIVE_TITLE_PRESETS,
