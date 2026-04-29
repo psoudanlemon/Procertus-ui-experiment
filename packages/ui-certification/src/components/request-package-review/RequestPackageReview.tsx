@@ -1,7 +1,7 @@
 /**
- * Read-only **request package** summary before submit. Parents pass rows built from
- * customer context + draft lines; optional **requester context** (who submits, for which
- * company) is surfaced prominently — no `fetch` here.
+ * Read-only **request package** summary before submit. Parents pass rows built from customer context +
+ * draft lines; optional **requester context** (who submits, for which company) appears when `requester`
+ * is set — omit it for anonymous onboarding previews where registratie nog volgt.
  */
 import type { ReactNode } from "react";
 

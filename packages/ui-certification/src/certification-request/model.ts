@@ -136,34 +136,75 @@ export function useCertificationRequestWizardModel({
     createDraftFromIntent,
   } = request;
 
-  const steps = [
-    {
-      id: CERTIFICATION_REQUEST_STEP_IDS[0],
-      title: "Intent",
-      description: selectedIntentLabel ?? "Kies wat je nodig hebt",
-      available: true,
-    },
-    {
-      id: CERTIFICATION_REQUEST_STEP_IDS[1],
-      title: productRequired ? "Product" : "Context",
-      description:
-        selectedProduct?.node.label ??
-        (productRequired ? "Zoek in de beslissingsboom" : "Beschrijf de aanvraag"),
-      available: canOpenDetails,
-    },
-    {
-      id: CERTIFICATION_REQUEST_STEP_IDS[2],
-      title: "Drafts",
-      description: includedDraftIds.length === 1 ? "1 conceptaanvraag" : `${includedDraftIds.length} conceptaanvragen`,
-      available: canOpenDrafts,
-    },
-    {
-      id: CERTIFICATION_REQUEST_STEP_IDS[3],
-      title: "Review",
-      description: "Controleer het pakket",
-      available: canOpenReview,
-    },
-  ];
+  const registrationIdx = CERTIFICATION_REQUEST_STEP_IDS.indexOf("registration");
+  const reviewIdx = CERTIFICATION_REQUEST_STEP_IDS.indexOf("review");
+
+  const steps =
+    mode === "onboarding"
+      ? [
+          {
+            id: CERTIFICATION_REQUEST_STEP_IDS[0],
+            title: "Intent",
+            description: selectedIntentLabel ?? "Kies wat je nodig hebt",
+            available: true,
+          },
+          {
+            id: CERTIFICATION_REQUEST_STEP_IDS[1],
+            title: productRequired ? "Product" : "Context",
+            description:
+              selectedProduct?.node.label ??
+              (productRequired ? "Zoek in de beslissingsboom" : "Beschrijf de aanvraag"),
+            available: canOpenDetails,
+          },
+          {
+            id: CERTIFICATION_REQUEST_STEP_IDS[2],
+            title: "Drafts",
+            description:
+              includedDraftIds.length === 1 ? "1 conceptaanvraag" : `${includedDraftIds.length} conceptaanvragen`,
+            available: canOpenDrafts,
+          },
+          {
+            id: CERTIFICATION_REQUEST_STEP_IDS[3],
+            title: "Review",
+            description: "Controleer het pakket",
+            available: canOpenReview,
+          },
+          {
+            id: CERTIFICATION_REQUEST_STEP_IDS[registrationIdx],
+            title: "Registratie",
+            description: "Volgt na bevestiging",
+            available: false,
+          },
+        ]
+      : [
+          {
+            id: CERTIFICATION_REQUEST_STEP_IDS[0],
+            title: "Intent",
+            description: selectedIntentLabel ?? "Kies wat je nodig hebt",
+            available: true,
+          },
+          {
+            id: CERTIFICATION_REQUEST_STEP_IDS[1],
+            title: productRequired ? "Product" : "Context",
+            description:
+              selectedProduct?.node.label ??
+              (productRequired ? "Zoek in de beslissingsboom" : "Beschrijf de aanvraag"),
+            available: canOpenDetails,
+          },
+          {
+            id: CERTIFICATION_REQUEST_STEP_IDS[2],
+            title: "Drafts",
+            description:
+              includedDraftIds.length === 1 ? "1 conceptaanvraag" : `${includedDraftIds.length} conceptaanvragen`,
+            available: canOpenDrafts,
+          },
+          {
+            id: CERTIFICATION_REQUEST_STEP_IDS[3],
+            title: "Review",
+            description: "Indienen",
+            available: canOpenReview,
+          },
+        ];
 
   const productTreeNodes = useMemo(
     () =>
@@ -232,7 +273,7 @@ export function useCertificationRequestWizardModel({
     if (activeStep === 1) {
       replaceDraftsFromDetails();
     }
-    if (activeStep === steps.length - 1) {
+    if (activeStep === reviewIdx) {
       onComplete(drafts.filter((draft) => includedDraftIds.includes(draft.id)));
       return;
     }
@@ -242,7 +283,8 @@ export function useCertificationRequestWizardModel({
   const primaryDisabled =
     (activeStep === 0 && !intent) ||
     (activeStep === 1 && !canContinueDetails) ||
-    (activeStep >= 2 && includedDraftIds.length === 0);
+    ((activeStep === 2 || activeStep === reviewIdx) &&
+      includedDraftIds.length === 0);
 
   return {
     activeStep,
@@ -269,7 +311,11 @@ export function useCertificationRequestWizardModel({
               : "Niet elke attestering begint bij een product. Geef eerst de aanvraagcontext; voeg optioneel een product toe wanneer dat helpt."
             : activeStep === 2
               ? "Een wizardrun kan meerdere conceptaanvragen toevoegen wanneer het gekozen product meerdere beschikbare certificaties of attesten ondersteunt."
-              : "Dit is de samenvatting die terugkeert naar de onboarding-intake of naar de aangemelde aanvraaglijst.",
+              : activeStep === reviewIdx
+                ? mode === "onboarding"
+                  ? "Controleer het inhoudelijke pakket. Na bevestiging start je meteen met organisatie en registratie buiten deze wizard."
+                  : "Dit is de samenvatting die terugkeert naar de onboarding-intake of naar de aangemelde aanvraaglijst."
+                : "",
       stepLabel: `Stap ${activeStep + 1} van ${steps.length}`,
       backAction:
         activeStep > 0
@@ -279,7 +325,12 @@ export function useCertificationRequestWizardModel({
             : undefined,
       secondaryAction: undefined,
       primaryAction: {
-        label: activeStep === steps.length - 1 ? "Aanvraagpakket indienen" : "Verder",
+        label:
+          activeStep === reviewIdx
+            ? mode === "onboarding"
+              ? "Conceptaanvraag vastleggen en verder"
+              : "Aanvraagpakket indienen"
+            : "Verder",
         onClick: goNext,
         disabled: primaryDisabled,
       },

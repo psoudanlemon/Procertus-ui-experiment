@@ -2,3 +2,28 @@
 
 /* Tailwind content: this app (ui package globals already scan packages/ui + ui-lib). */
 @source "./**/*.{ts,tsx}";
+
+/**
+ * Guest routes (`PublicAppShell`): restore viewport scrolling.
+ * Shared `@procertus-ui/ui/globals.css` uses height:100% + overflow:hidden on html/body/#root so the
+ * management shell owns scroll internally — full-page guest flows (welcome, anonymous onboarding)
+ * need the document to scroll instead.
+ */
+@layer base {
+  html[data-public-layout],
+  html[data-public-layout] body,
+  html[data-public-layout] #root {
+    height: auto;
+    min-height: 100%;
+  }
+
+  html[data-public-layout] {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  html[data-public-layout] body,
+  html[data-public-layout] #root {
+    overflow: visible;
+  }
+}

@@ -22,6 +22,7 @@ import { OnboardingStepper, StepLayout } from "@procertus-ui/ui-lib";
 import type { OnboardingStepperStep } from "@procertus-ui/ui-lib";
 import { useMockPrototypeLogin } from "@procertus-ui/ui-pt1-prototype";
 import { useMemo } from "react";
+import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useLocalStorageState } from "../../hooks/useLocalStorageState";
@@ -125,6 +126,46 @@ function buildRows(context: CustomerContext, drafts: readonly CertificationWizar
   ];
 }
 
+const CERTIFICATION_PHASE_TITLE = "Start je certificatieaanvraag";
+const CERTIFICATION_PHASE_DESCRIPTION =
+  "Kies eerst wat je wilt aanvragen. We vragen pas organisatie- en accountgegevens wanneer je een conceptaanvraag hebt samengesteld.";
+const REGISTRATION_PHASE_TITLE = "Registratie vertegenwoordiger en organisatie";
+const REGISTRATION_PHASE_DESCRIPTION =
+  "Nu je conceptaanvraag klaarstaat, verzamelen we wie namens welke organisatie werkt en doorlopen we KYC — nog steeds in deze flow en nog zonder bestaand PROCERTUS-account.";
+
+function AnonymousOnboardingShell({
+  pageTitle,
+  pageDescription,
+  children,
+}: {
+  pageTitle: string;
+  pageDescription: string;
+  children: ReactNode;
+}) {
+  const navigate = useNavigate();
+  return (
+    <div className="min-h-svh bg-background px-4 py-8">
+      <div className="mx-auto w-full max-w-5xl">
+        <header className="mb-8 flex flex-col gap-6 border-b border-border/70 pb-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0 flex-1">
+              <Badge variant="secondary">Geen account nodig om te starten</Badge>
+              <h1 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">{pageTitle}</h1>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{pageDescription}</p>
+            </div>
+            <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
+              <Button type="button" variant="outline" className="justify-center" onClick={() => navigate("/welcome")}>
+                Aanmelden
+              </Button>
+            </div>
+          </div>
+        </header>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function ContextField({
   id,
   label,
@@ -174,7 +215,12 @@ export function AnonymousOnboardingFlow() {
       {
         id: "request",
         title: "Aanvraag",
-        description: drafts.length ? `${drafts.length} concepten` : "Start zonder account",
+        description:
+          step !== "request" && drafts.length > 0
+            ? `${drafts.length} concept${drafts.length === 1 ? "" : "en"} vastgelegd`
+            : drafts.length > 0
+              ? `${drafts.length} concepten`
+              : "Start zonder account",
         available: true,
       },
       { id: "customer", title: "Organisatie", description: context.organizationName, available: hasDrafts },
@@ -218,20 +264,7 @@ export function AnonymousOnboardingFlow() {
 
   if (step === "request") {
     return (
-      <div className="min-h-svh bg-background px-4 py-8">
-        <div className="mx-auto mb-4 flex max-w-6xl items-center justify-between gap-4">
-          <div>
-            <Badge variant="secondary">Geen account nodig om te starten</Badge>
-            <h1 className="mt-3 text-2xl font-semibold tracking-tight">Start je certificatieaanvraag</h1>
-            <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
-              Kies eerst wat je wilt aanvragen. We vragen pas organisatie- en accountgegevens wanneer je een
-              conceptaanvraag hebt samengesteld.
-            </p>
-          </div>
-          <Button type="button" variant="outline" onClick={() => navigate("/welcome")}>
-            Aanmelden
-          </Button>
-        </div>
+      <AnonymousOnboardingShell pageTitle={CERTIFICATION_PHASE_TITLE} pageDescription={CERTIFICATION_PHASE_DESCRIPTION}>
         <CertificationRequestWizard
           mode="onboarding"
           initialDrafts={drafts}
@@ -250,7 +283,7 @@ export function AnonymousOnboardingFlow() {
             }));
           }}
         />
-      </div>
+      </AnonymousOnboardingShell>
     );
   }
 
@@ -284,9 +317,9 @@ export function AnonymousOnboardingFlow() {
   }[step];
 
   return (
-    <div className="min-h-svh bg-background px-4 py-8">
+    <AnonymousOnboardingShell pageTitle={REGISTRATION_PHASE_TITLE} pageDescription={REGISTRATION_PHASE_DESCRIPTION}>
       <StepLayout
-        className="max-w-5xl"
+        className="w-full"
         variant="onboarding"
         stepper={
           <OnboardingStepper
@@ -432,6 +465,6 @@ export function AnonymousOnboardingFlow() {
           </Card>
         ) : null}
       </StepLayout>
-    </div>
+    </AnonymousOnboardingShell>
   );
 }

@@ -8,9 +8,9 @@ import type {
 import {
   createContext,
   type Dispatch,
-  type ReactNode,
   type SetStateAction,
   useContext,
+  useLayoutEffect,
   useMemo,
   useSyncExternalStore,
 } from "react";
@@ -35,15 +35,23 @@ import {
   type CertificationRequestProviderProps,
 } from "./types";
 
+/** Session navigation stops at **review** (index 3). Onboarding still shows a 5th stepper segment (“registration”) as upcoming-only — it is not a navigable `activeStep`. */
+function maxCertificationStepIndex() {
+  return CERTIFICATION_REQUEST_STEP_IDS.indexOf("review");
+}
+
 function normalizeInitialStep(
   initialStep: CertificationRequestProviderProps["initialStep"],
   hasDrafts: boolean,
 ) {
+  const cap = maxCertificationStepIndex();
   if (typeof initialStep === "number") {
-    return Math.min(CERTIFICATION_REQUEST_STEP_IDS.length - 1, Math.max(0, initialStep));
+    return Math.min(cap, Math.max(0, initialStep));
   }
   if (initialStep != null) {
-    return CERTIFICATION_REQUEST_STEP_IDS.indexOf(initialStep);
+    const idx = CERTIFICATION_REQUEST_STEP_IDS.indexOf(initialStep);
+    if (idx < 0) return hasDrafts ? CERTIFICATION_REQUEST_STEP_IDS.indexOf("drafts") : 0;
+    return Math.min(cap, idx);
   }
   return hasDrafts
     ? CERTIFICATION_REQUEST_STEP_IDS.indexOf("drafts")
@@ -108,6 +116,15 @@ export function CertificationRequestProvider({
   ) => persistence.updateCurrentSession(input);
 
   const activeStep = session.activeStep;
+
+  /** Drop legacy persisted step index 4 — navigation ends at review for every mode. */
+  useLayoutEffect(() => {
+    const reviewIdx = CERTIFICATION_REQUEST_STEP_IDS.indexOf("review");
+    if (activeStep > reviewIdx) {
+      updateSession({ activeStep: reviewIdx });
+    }
+  }, [activeStep]);
+
   const intent = session.intent;
   const expandedIds = [...session.expandedIds];
   const searchValue = session.searchValue;
@@ -227,8 +244,21 @@ export function CertificationRequestProvider({
   };
 
   const goToStep = (targetStep: number) => {
-    const available = [true, canOpenDetails, canOpenDrafts, canOpenReview][targetStep] ?? false;
-    if (targetStep === activeStep || !available) return;
+    const maxStep = maxCertificationStepIndex();
+    if (targetStep < 0 || targetStep > maxStep) return;
+
+    const stepAvailable =
+      targetStep === 0
+        ? true
+        : targetStep === 1
+          ? canOpenDetails
+          : targetStep === 2
+            ? canOpenDrafts
+            : targetStep === CERTIFICATION_REQUEST_STEP_IDS.indexOf("review")
+              ? canOpenReview
+              : false;
+
+    if (targetStep === activeStep || !stepAvailable) return;
     if (activeStep === CERTIFICATION_REQUEST_STEP_IDS.indexOf("details") && targetStep > activeStep && canContinueDetails) {
       replaceDraftsFromDetails();
     }

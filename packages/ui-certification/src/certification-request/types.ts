@@ -18,7 +18,14 @@ export type {
   CertificationRequestSession,
 } from "@procertus-ui/domain-certification";
 
-export const CERTIFICATION_REQUEST_STEP_IDS = ["intent", "details", "drafts", "review"] as const;
+/** `registration` is onboarding-only stepper chrome (volgende fase); session navigation ends at **review**. */
+export const CERTIFICATION_REQUEST_STEP_IDS = [
+  "intent",
+  "details",
+  "drafts",
+  "review",
+  "registration",
+] as const;
 export type CertificationRequestStepId = (typeof CERTIFICATION_REQUEST_STEP_IDS)[number];
 
 export const PRODUCT_CERTIFICATION_ENTRY_IDS = new Set<AvailableEntryKey>([

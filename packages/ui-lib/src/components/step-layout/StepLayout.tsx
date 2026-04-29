@@ -60,8 +60,8 @@ export type StepLayoutProps = {
 };
 
 const variantClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
-  onboarding: "max-w-2xl",
-  wizard: "max-w-xl",
+  onboarding: "max-w-5xl",
+  wizard: "max-w-5xl",
 };
 
 const headerClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {

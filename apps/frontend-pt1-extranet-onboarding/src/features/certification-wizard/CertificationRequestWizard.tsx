@@ -1,5 +1,6 @@
 import {
   CertificationRequestProvider,
+  CERTIFICATION_REQUEST_STEP_IDS,
   useCertificationRequestWizardModel,
 } from "@procertus-ui/ui-certification";
 import { HierarchySquare02Icon } from "@hugeicons/core-free-icons";
@@ -62,6 +63,8 @@ import {
 } from "@procertus-ui/ui-lib";
 import { useMemo, useState } from "react";
 
+const CERT_STEP_REVIEW = CERTIFICATION_REQUEST_STEP_IDS.indexOf("review");
+
 export type CertificationWizardDraft = CertificationRequestDraft;
 
 export type CertificationRequestWizardProps = {
@@ -75,7 +78,7 @@ export type CertificationRequestWizardProps = {
   onCancel?: () => void;
   onRequestCreated?: (draft: CertificationWizardDraft) => void;
   onComplete: (drafts: CertificationWizardDraft[]) => void;
-  /** Shown on the final review step: current user + company (prototype or real). */
+  /** Shown on the final review step when `mode` is `authenticated`: current user + company. Omit on anonymous onboarding — registration follows in the next wizard step. */
   reviewRequester?: RequestPackageReviewRequesterPresentation;
 };
 
@@ -381,7 +384,7 @@ function CertificationRequestWizardView({
         }
       : model.layout;
   const primaryAction =
-    model.activeStep === model.stepper.steps.length - 1
+    model.activeStep === CERT_STEP_REVIEW
       ? {
           ...layout.primaryAction,
           onClick: async () => {
@@ -410,7 +413,7 @@ function CertificationRequestWizardView({
 
   return (
     <StepLayout
-      className={authenticated ? "max-w-none" : "max-w-6xl"}
+      className={authenticated ? "max-w-none" : "w-full"}
       layout={authenticated ? "fill-parent" : "default"}
       flush={authenticated}
       stepperPosition={authenticated ? "start" : "top"}
@@ -626,19 +629,23 @@ function CertificationRequestWizardView({
         </div>
       ) : null}
 
-      {model.activeStep === 3 ? (
+      {model.activeStep === CERT_STEP_REVIEW ? (
         <div className="space-y-4">
           <RequestPackageReview
             className="max-w-5xl"
-            title="Aanvraagdetails"
-            description="Deze gegevens worden samen met de onboarding-intake of de gekende organisatiecontext ingediend."
-            requester={reviewRequester}
+            title={model.mode === "onboarding" ? "Samenvatting van het aanvraagpakket" : "Aanvraagdetails"}
+            description={
+              model.mode === "onboarding"
+                ? "Alleen de inhoudelijke aanvragen staan hieronder. Vertegenwoordiger en organisatie registreer je in de volgende stap."
+                : "Deze gegevens worden samen met de onboarding-intake of de gekende organisatiecontext ingediend."
+            }
+            requester={model.mode === "authenticated" ? reviewRequester : undefined}
             rows={model.reviewStep.rows}
             notice={
               model.reviewStep.draftCount > 1 ? (
                 <span>
-                  <Badge variant="secondary">{model.reviewStep.draftCount} vragen</Badge> worden
-                  samen gebundeld in deze aanvraag.
+                  <Badge variant="secondary">{model.reviewStep.draftCount} vragen</Badge> worden samen
+                  gebundeld in deze aanvraag.
                 </span>
               ) : undefined
             }
