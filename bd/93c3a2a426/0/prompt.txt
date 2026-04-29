@@ -1,0 +1,61 @@
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx:609-624 I want this downloadable document list not only included in the wizard, but also shown in the detail panel when displaying the status of a certification request.
+
+It is important for the end user to always be able to view the relevant documents tied to their entire request. Please ensure this can be reused in the detail panel, and include the ruleset documents as well. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/request_detail_panel.tsx
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx:609-624 I want this downloadable document list not only included in the wizard, but also shown in the detail panel when displaying the status of a certification request.
+
+It is important for the end user to always be able to view the relevant documents tied to their entire request. Please ensure this can be reused in the detail panel, and include the ruleset documents as well. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/request_detail_panel.tsx
+
+---
+
+Place the "Download of documents" section at the bottom of the panel.
+
+---
+
+I want you to scaffold this component, not just generate the file.
+
+---
+
+I want you to scaffold this component, not just generate the file.
+
+---
+
+Don't display these sections in a card. Just add the appropriate headings for the title and typography for the description and spacing for all these + children.
+
+---
+
+Don't display these sections in a card. Just add the appropriate headings for the title and typography for the description and spacing for all these + children.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/request_detail_panel.tsx:173-192 also add this within a section. Instead of using the downloadable documents list, just use the underlined list items instead, so all of the Chrome is part of this section. Thank you.
+
+---
+
+@Procertus-ui-experiment/packages/ui-lib/src/components/downloadable-documents-list/DownloadableDocumentsList.tsx:98 it's this one I want to reuse.
+
+---
+
+@Procertus-ui-experiment/packages/ui-lib/src/components/downloadable-documents-list/DownloadableDocumentsList.tsx:98 it's this one I want to reuse.
+
+---
+
+Use the Shadcn Item component for this document's list items, and wrap them with the ItemGroup.@Procertus-ui-experiment/packages/ui/src/components/ui/item.tsx
+
+---
+
+@Procertus-ui-experiment/packages/ui-lib/src/components/downloadable-documents-list/DownloadableDocumentsList.tsx:51-90 since the entire list item can be used as the trigger to download, set this item up as a child and don't use a button as the item action. Instead, use a download icon. 
+
+Use the asChild prop to render the item as a link. The hover and focus states will be applied to the anchor element.
+
+https://ui.shadcn.com/docs/components/radix/item#
+
+---
+
+@Procertus-ui-experiment/packages/ui-lib/src/components/downloadable-documents-list/DownloadableDocumentsList.tsx:51-90 since the entire list item can be used as the trigger to download, set this item up as a child and don't use a button as the item action. Instead, use a download icon. 
+
+Use the asChild prop to render the item as a link. The hover and focus states will be applied to the anchor element.
+
+https://ui.shadcn.com/docs/components/radix/item#
