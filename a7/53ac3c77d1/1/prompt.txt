@@ -31,3 +31,8 @@ Please commit this port and refactoring using Git commit skill.
 ---
 
 @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:430-455 set up this field skeleton as a reusable presentation component in the ui-lib package.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx now also port the entire anonymous onboarding flow as a presentational component in the certification UI package.  
+Make sure to set up a custom hook that provides all context and state for this anonymous onboarding flow.  the same way you organized the port of the certification request wizard.
