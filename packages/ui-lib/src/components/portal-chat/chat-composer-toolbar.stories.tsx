@@ -10,7 +10,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Bottom compose row: Shadcn `Popover` + preset emoji grid + rounded `Input` + send. Use inside `PortalChatWindow` via `composer.toolbar` or compose manually.",
+          "Bottom compose row: auto-growing `InputGroupTextarea` with the emoji popover and send button as inline addons. Enter inserts a newline, Cmd/Ctrl+Enter submits. Use inside `PortalChatWindow` via `composer.toolbar` or compose manually.",
       },
     },
   },
