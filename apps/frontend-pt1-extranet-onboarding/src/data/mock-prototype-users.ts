@@ -8,6 +8,10 @@ export const MOCK_PROTOTYPE_USERS: MockPrototypeUser[] = [
     role: "Extranet coordinator",
     homeOrganization: { id: "org-procertus", name: "PROCERTUS" },
     representedOrganization: { id: "org-acme", name: "Acme Packaging BV" },
+    organizations: [
+      { id: "org-procertus", name: "PROCERTUS" },
+      { id: "org-acme", name: "Acme Packaging BV" },
+    ],
   },
   {
     id: "demo-liam",

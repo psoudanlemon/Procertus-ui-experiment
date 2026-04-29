@@ -31,7 +31,7 @@ export function RequestsOverviewPage() {
   const [requests] = useAuthenticatedRequests();
 
   return (
-    <div className="flex h-full w-full flex-col gap-6 overflow-auto px-4 py-6 max-w-[1600px]">
+    <div className="flex w-full flex-col gap-6 px-4 py-6 max-w-[1600px]">
       <div className="flex flex-col gap-4 rounded-xl border border-border/70 bg-card p-5 shadow-proc-xs md:flex-row md:items-start md:justify-between max-w-3xl">
         <div className="max-w-2xl">
           <Badge variant="secondary">Aangemelde omgeving</Badge>
