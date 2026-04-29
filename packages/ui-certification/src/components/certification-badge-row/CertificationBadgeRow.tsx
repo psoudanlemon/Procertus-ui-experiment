@@ -53,39 +53,28 @@ export function CertificationBadgeRow({
       ) : null}
       <div className="flex flex-wrap gap-micro">
         {items.map((it) => {
-          if (it.presentation === "not-offered" || it.presentation === "muted") {
-            return (
-              <div
-                key={it.id}
-                className="inline-flex min-w-0 max-w-full items-center gap-micro rounded-md border px-component py-micro text-left text-xs leading-snug"
-                data-presentation={it.presentation}
-                title={it.subline}
-              >
-                <span className="font-medium text-foreground">{it.shortLabel}</span>
-                {it.text ? (
-                  <span
-                    className={cn(
-                      "truncate",
-                      it.presentation === "not-offered"
-                        ? "text-muted-foreground"
-                        : "text-muted-foreground/90",
-                    )}
-                  >
-                    : {it.text}
-                  </span>
-                ) : null}
-              </div>
-            );
-          }
+          const variant = it.presentation === "chip" ? "secondary" : "outline";
           return (
             <Badge
               key={it.id}
-              variant="secondary"
+              variant={variant}
               className="max-w-full font-normal"
+              data-presentation={it.presentation}
               title={it.subline}
             >
               <span className="font-medium">{it.shortLabel}</span>
-              {it.text ? <span className="ml-micro font-normal opacity-90">: {it.text}</span> : null}
+              {it.text ? (
+                <span
+                  className={cn(
+                    "ml-micro font-normal",
+                    it.presentation === "not-offered"
+                      ? "text-muted-foreground"
+                      : "opacity-90",
+                  )}
+                >
+                  : {it.text}
+                </span>
+              ) : null}
             </Badge>
           );
         })}
