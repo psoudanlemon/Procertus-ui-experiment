@@ -15,20 +15,6 @@ export type {
   OnboardingStepperStep,
 } from "./custom-components/onboarding/onboarding-stepper";
 export {
-  SelectChoiceCard,
-  SelectChoiceCardGroup,
-  useChoiceSelection,
-} from "./components/select-choice-card";
-export type {
-  SelectChoiceAppearance,
-  SelectChoiceCardGroupProps,
-  SelectChoiceCardProps,
-  SelectChoiceEmphasis,
-  ChoiceSelectionMode,
-  UseChoiceSelectionOptions,
-  UseChoiceSelectionResult,
-} from "./components/select-choice-card";
-export {
   DownloadableDocumentListItem,
   DownloadableDocumentsList,
 } from "./components/downloadable-documents-list";

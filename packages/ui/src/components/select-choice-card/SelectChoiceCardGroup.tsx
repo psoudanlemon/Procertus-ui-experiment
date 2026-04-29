@@ -1,7 +1,8 @@
 import type { ComponentProps, ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
-import { FieldLegend, FieldSet, RadioGroup } from "@procertus-ui/ui";
+import { FieldLegend, FieldSet } from "@/components/ui/field";
+import { RadioGroup } from "@/components/ui/radio-group";
 
 import type { ChoiceSelectionMode } from "./useChoiceSelection";
 

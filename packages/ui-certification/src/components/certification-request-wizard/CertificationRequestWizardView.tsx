@@ -1,7 +1,5 @@
 import {
   DownloadableDocumentsList,
-  SelectChoiceCard,
-  SelectChoiceCardGroup,
   StepLayout,
 } from "@procertus-ui/ui-lib";
 import {
@@ -21,6 +19,8 @@ import {
   FieldContent,
   FieldGroup,
   FieldLabel,
+  SelectChoiceCard,
+  SelectChoiceCardGroup,
   Switch,
   Textarea,
 } from "@procertus-ui/ui";
@@ -233,7 +233,7 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
                   description={<DraftCardDescription draft={draft} />}
                   checked={draftsStep.includedDraftIds.includes(draft.id)}
                   onCheckedChange={(checked) => onDraftIncludedChange(draft.id, checked)}
-                  emphasis="primary"
+                  variant="elevated"
                 />
               )}
             </CardList>

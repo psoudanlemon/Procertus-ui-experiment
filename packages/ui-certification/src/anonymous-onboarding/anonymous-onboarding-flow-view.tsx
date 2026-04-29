@@ -18,6 +18,8 @@ import {
   Input,
   Progress,
   Select,
+  SelectChoiceCard,
+  SelectChoiceCardGroup,
   SelectContent,
   SelectItem,
   SelectTrigger,
@@ -36,8 +38,6 @@ import { PrototypeCard } from "@procertus-ui/ui-pt1-prototype";
 import {
   OnboardingStepper,
   PrefillFieldSkeleton,
-  SelectChoiceCard,
-  SelectChoiceCardGroup,
   StepLayout,
 } from "@procertus-ui/ui-lib";
 import {
@@ -750,7 +750,7 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
                                   return { ...prev, summaryIncludedDraftIds: next };
                                 });
                               }}
-                              emphasis="primary"
+                              variant="elevated"
                             />
                           )}
                         </CardList>

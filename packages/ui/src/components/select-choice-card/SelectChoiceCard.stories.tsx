@@ -1,23 +1,21 @@
-import { Tick01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 
-import { RadioGroup } from "@procertus-ui/ui";
+import { RadioGroup } from "@/components/ui/radio-group";
 
 import { SelectChoiceCard } from "./SelectChoiceCard";
 import { SelectChoiceCardGroup } from "./SelectChoiceCardGroup";
 import { useChoiceSelection } from "./useChoiceSelection";
 
 const meta = {
-  title: "UILib/SelectChoiceCard",
+  title: "components/SelectChoiceCard",
   component: SelectChoiceCard,
   parameters: {
     layout: "centered",
     docs: {
       description: {
         component:
-          "**Single** (`RadioGroup`) or **multiple** (`Checkbox`) selectable cards; `appearance=\"hero\"` matches empty-state prominence (centered, large type, optional icon well). Selection state via {@link useChoiceSelection}.",
+          "**Single** (`RadioGroup`) or **multiple** (`Checkbox`) selectable cards; `appearance=\"hero\"` gives a two-zone tier-card layout. Selection state via {@link useChoiceSelection}.",
       },
     },
   },
@@ -26,37 +24,37 @@ const meta = {
 
 export default meta;
 
-const emphases = ["primary", "secondary", "tertiary"] as const;
+const variants = ["elevated", "default", "faded"] as const;
 
-function RowEmphasesSingle() {
-  const [v, setV] = useState("primary-option");
+function RowVariantsSingle() {
+  const [v, setV] = useState("default-option");
   return (
     <RadioGroup value={v} onValueChange={setV} className="flex w-full max-w-md flex-col gap-component">
-      {emphases.map((e) => (
+      {variants.map((variant) => (
         <SelectChoiceCard
-          key={e}
-          value={`${e}-option`}
-          controlId={`sc-${e}`}
-          title={`${e[0]!.toUpperCase()}${e.slice(1)} path`}
-          description="Optional description that scales with the emphasis level."
-          emphasis={e}
+          key={variant}
+          value={`${variant}-option`}
+          controlId={`sc-${variant}`}
+          title={`${variant[0]!.toUpperCase()}${variant.slice(1)} variant`}
+          description="Optional description that scales with the variant."
+          variant={variant}
         />
       ))}
     </RadioGroup>
   );
 }
 
-export const DefaultEmphasesSingle = {
-  render: () => <RowEmphasesSingle />,
+export const Variants = {
+  render: () => <RowVariantsSingle />,
 } as unknown as StoryObj<typeof meta>;
 
 function HeroSingleStory() {
   const choice = useChoiceSelection({ mode: "single", defaultSelectedId: "plans" });
   return (
-    <div className="flex w-full max-w-5xl flex-col gap-region">
+    <div className="flex w-full max-w-5xl flex-col gap-section">
       <SelectChoiceCardGroup
         legend="Hero appearance"
-        hint="Large type, padded, centered — control is visually hidden."
+        hint="Two-zone tier-card layout — same variants as the default cards."
         layout="grid"
         selectionMode="single"
         value={choice.selectedId ?? ""}
@@ -64,29 +62,27 @@ function HeroSingleStory() {
       >
         <SelectChoiceCard
           appearance="hero"
+          variant="elevated"
           value="plans"
           controlId="hero-plans"
-          emphasis="primary"
-          icon={<HugeiconsIcon icon={Tick01Icon} strokeWidth={1.5} className="size-8" />}
-          title="Structured plans"
-          description="Highest emphasis path with icon in an Empty-style circular well."
+          title="Elevated"
+          description="Adds a soft drop shadow for the recommended path."
         />
         <SelectChoiceCard
           appearance="hero"
+          variant="default"
           value="consult"
           controlId="hero-consult"
-          emphasis="secondary"
-          icon={<HugeiconsIcon icon={Tick01Icon} strokeWidth={1.5} className="size-7 opacity-70" />}
-          title="Consulting attestation"
-          description="Secondary surface — still readable at a glance."
+          title="Default"
+          description="Standard surface with a clean border."
         />
         <SelectChoiceCard
           appearance="hero"
+          variant="faded"
           value="later"
           controlId="hero-later"
-          emphasis="tertiary"
-          title="Explore later"
-          description="De-emphasized tertiary card with dashed chrome when applicable."
+          title="Faded"
+          description="Dashed border and reduced opacity for de-emphasized routes."
         />
       </SelectChoiceCardGroup>
       <p className="text-sm text-muted-foreground" role="status">
@@ -113,10 +109,8 @@ function MultipleWithHookStory() {
             selectionMode="multiple"
             value={id}
             controlId={`multi-${id}`}
-            emphasis={id === "a" ? "primary" : id === "b" ? "secondary" : "tertiary"}
             checked={choice.isSelected(id)}
             onCheckedChange={(c) => choice.setIncluded(id, c === true)}
-            icon={<HugeiconsIcon icon={Tick01Icon} className="size-7" strokeWidth={1.5} />}
             title={id === "a" ? "First option" : id === "b" ? "Second option" : "Third option"}
             description="Checkbox-backed; each toggle updates useChoiceSelection."
           />
@@ -192,7 +186,7 @@ function FieldsetGridStory() {
       <SelectChoiceCardGroup
         layout="grid"
         legend="Pick one"
-        hint="Tertiary options are visually lighter for de-emphasized routes."
+        hint="All cards use the default variant; switch to elevated or faded per card when needed."
         value={v}
         onValueChange={setV}
         selectionMode="single"
@@ -200,23 +194,20 @@ function FieldsetGridStory() {
         <SelectChoiceCard
           value="a"
           controlId="fs-a"
-          title="Primary (product certification)"
-          description="Heaviest border and focus ring when selected."
-          emphasis="primary"
+          title="Product certification"
+          description="Standard card weight."
         />
         <SelectChoiceCard
           value="b"
           controlId="fs-b"
-          title="Secondary (ATG)"
+          title="ATG"
           description="Standard card weight."
-          emphasis="secondary"
         />
         <SelectChoiceCard
           value="c"
           controlId="fs-c"
-          title="Tertiary (innovation)"
-          description="Dashed border, compact padding."
-          emphasis="tertiary"
+          title="Innovation"
+          description="Standard card weight."
         />
       </SelectChoiceCardGroup>
     </div>

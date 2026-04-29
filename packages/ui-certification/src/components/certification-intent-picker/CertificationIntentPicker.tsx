@@ -5,12 +5,10 @@
  */
 import { useId } from "react";
 import type { ReactNode } from "react";
-import { Tick01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 
 import { cn } from "@procertus-ui/ui";
-import { SelectChoiceCard, SelectChoiceCardGroup } from "@procertus-ui/ui-lib";
-import type { SelectChoiceEmphasis } from "@procertus-ui/ui-lib";
+import { SelectChoiceCard, SelectChoiceCardGroup } from "@procertus-ui/ui";
+import type { SelectChoiceVariant } from "@procertus-ui/ui";
 
 /** Aligned with `meta.wizard.entryPoints` in the decision-tree JSON. */
 export const CERTIFICATION_INTENT_IDS = [
@@ -29,8 +27,8 @@ export type CertificationIntentOption = {
   title: ReactNode;
   description?: ReactNode;
   leading?: ReactNode;
-  /** Match {@link SelectChoiceEmphasis} — use **primary** for the main product path. */
-  emphasis: SelectChoiceEmphasis;
+  /** Match {@link SelectChoiceVariant} — use **elevated** for the main product path. */
+  variant: SelectChoiceVariant;
   prominence?: "main" | "additional";
   disabled?: boolean;
 };
@@ -57,7 +55,7 @@ export const defaultCertificationIntentOptionsEn: CertificationIntentOption[] = 
     title: "Product certification",
     description:
       "Voor een product of producttype waarvoor je een gangbaar certificatiemerk zoals CE, BENOR of SSD wilt aanvragen.",
-    emphasis: "primary",
+    variant: "elevated",
     prominence: "main",
   },
   {
@@ -65,7 +63,7 @@ export const defaultCertificationIntentOptionsEn: CertificationIntentOption[] = 
     title: "ATG",
     description:
       "Voor een technische goedkeuring of attestering via ATG/BUTG, wanneer je product of oplossing buiten een standaard CE- of BENOR-traject valt.",
-    emphasis: "primary",
+    variant: "elevated",
     prominence: "main",
   },
   {
@@ -73,7 +71,7 @@ export const defaultCertificationIntentOptionsEn: CertificationIntentOption[] = 
     title: "Innovation attest",
     description:
       "Voor een innovatief project, werf of toepassing waarvoor je een apart innovatie-attest nodig hebt.",
-    emphasis: "primary",
+    variant: "elevated",
     prominence: "main",
   },
   {
@@ -81,7 +79,7 @@ export const defaultCertificationIntentOptionsEn: CertificationIntentOption[] = 
     title: "PROCERTUS attest",
     description:
       "Voor een apart attest dat PROCERTUS zelf uitreikt voor een beperkt aantal specifieke producttypes.",
-    emphasis: "tertiary",
+    variant: "faded",
     prominence: "additional",
   },
   {
@@ -89,7 +87,7 @@ export const defaultCertificationIntentOptionsEn: CertificationIntentOption[] = 
     title: "EPD",
     description:
       "Voor een milieuproductverklaring met informatie over de milieu-impact van je product of toepassing.",
-    emphasis: "tertiary",
+    variant: "faded",
     prominence: "additional",
   },
   {
@@ -97,7 +95,7 @@ export const defaultCertificationIntentOptionsEn: CertificationIntentOption[] = 
     title: "Partijkeuring",
     description:
       "Voor een bijkomende keuring van een concrete partij of batch materialen, los van een volledig certificeringstraject.",
-    emphasis: "tertiary",
+    variant: "faded",
     prominence: "additional",
   },
 ];
@@ -110,16 +108,6 @@ const MAIN_INTENT_IDS = new Set<CertificationIntentId>([
 
 const getOptionProminence = (option: CertificationIntentOption): "main" | "additional" =>
   option.prominence ?? (MAIN_INTENT_IDS.has(option.id) ? "main" : "additional");
-
-function HeroIntentIcon({ selected }: { selected: boolean }) {
-  if (selected) {
-    return <HugeiconsIcon icon={Tick01Icon} aria-hidden className="size-8" strokeWidth={1.5} />;
-  }
-
-  return (
-    <span aria-hidden className="block size-8 rounded-full border-2 border-current opacity-70" />
-  );
-}
 
 export function CertificationIntentPicker({
   className,
@@ -153,24 +141,19 @@ export function CertificationIntentPicker({
         }}
       >
         <div className={cn("grid w-full grid-cols-1 gap-section", layout === "grid" && "md:grid-cols-3")}>
-          {mainOptions.map((opt) => {
-            const selected = value === opt.id;
-            return (
-              <SelectChoiceCard
-                key={opt.id}
-                value={opt.id}
-                controlId={`${base}-${opt.id}`}
-                title={opt.title}
-                description={opt.description}
-                leading={opt.leading}
-                icon={<HeroIntentIcon selected={selected} />}
-                iconSelected={selected}
-                emphasis="primary"
-                appearance="hero"
-                disabled={opt.disabled}
-              />
-            );
-          })}
+          {mainOptions.map((opt) => (
+            <SelectChoiceCard
+              key={opt.id}
+              value={opt.id}
+              controlId={`${base}-${opt.id}`}
+              title={opt.title}
+              description={opt.description}
+              leading={opt.leading}
+              variant="elevated"
+              appearance="hero"
+              disabled={opt.disabled}
+            />
+          ))}
         </div>
         {additionalOptions.length > 0 ? (
           <div className="mt-region flex w-full flex-col gap-component border-t border-border/60 pt-region">
@@ -186,7 +169,7 @@ export function CertificationIntentPicker({
                   title={opt.title}
                   description={opt.description}
                   leading={opt.leading}
-                  emphasis={opt.emphasis}
+                  variant={opt.variant}
                   disabled={opt.disabled}
                 />
               ))}

@@ -10,7 +10,7 @@ import {
   FieldSet,
   cn,
 } from "@procertus-ui/ui";
-import { SelectChoiceCard, SelectChoiceCardGroup } from "@procertus-ui/ui-lib";
+import { SelectChoiceCard, SelectChoiceCardGroup } from "@procertus-ui/ui";
 
 export type ProductMultiSelectOption = {
   id: string;
@@ -96,7 +96,7 @@ export function ProductMultiSelect({
               description={opt.description}
               checked={checked}
               disabled={opt.disabled}
-              emphasis={opt.disabled ? "tertiary" : "primary"}
+              variant={opt.disabled ? "faded" : "elevated"}
               onCheckedChange={(isChecked) => {
                 if (opt.disabled) return;
                 onChange(toggleIn(selectedIds, opt.id, isChecked));
