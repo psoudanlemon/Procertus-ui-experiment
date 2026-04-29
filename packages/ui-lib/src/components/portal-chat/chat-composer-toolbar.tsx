@@ -107,6 +107,12 @@ export function ChatComposerToolbar({
     if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
       submit();
+      return;
+    }
+    if ((e.key === "e" || e.key === "E") && (e.metaKey || e.ctrlKey)) {
+      if (hideEmojiPicker || readOnly || disabled) return;
+      e.preventDefault();
+      setEmojiOpen((open) => !open);
     }
   };
 
@@ -115,6 +121,9 @@ export function ChatComposerToolbar({
   const showEmoji = !hideEmojiPicker && !readOnly;
   const showMention = !hideMentionButton && !readOnly;
   const showSend = !readOnly && Boolean(onSubmit);
+
+  const lockRadius =
+    "hover:!rounded-[calc(var(--radius)-3px)] aria-expanded:!rounded-[calc(var(--radius)-3px)]";
 
   const handleMention = () => {
     if (disabled) return;
@@ -142,16 +151,30 @@ export function ChatComposerToolbar({
         <InputGroupAddon align="block-end">
           {showEmoji ? (
             <Popover open={emojiOpen} onOpenChange={setEmojiOpen}>
-              <PopoverTrigger asChild>
-                <InputGroupButton
-                  size="icon-xs"
-                  variant="ghost"
-                  disabled={disabled}
-                  aria-label="Emoji invoegen"
-                >
-                  <HugeiconsIcon icon={SmilePlusIcon} />
-                </InputGroupButton>
-              </PopoverTrigger>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <PopoverTrigger asChild>
+                      <InputGroupButton
+                        size="icon-xs"
+                        variant="ghost"
+                        disabled={disabled}
+                        aria-label="Emoji invoegen"
+                        className={lockRadius}
+                      >
+                        <HugeiconsIcon icon={SmilePlusIcon} />
+                      </InputGroupButton>
+                    </PopoverTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    <span>Emoji&apos;s</span>
+                    <KbdGroup>
+                      <Kbd>{modifierKey}</Kbd>
+                      <Kbd>E</Kbd>
+                    </KbdGroup>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               <PopoverContent
                 side="top"
                 align="end"
@@ -182,15 +205,28 @@ export function ChatComposerToolbar({
             </Popover>
           ) : null}
           {showMention ? (
-            <InputGroupButton
-              size="icon-xs"
-              variant="ghost"
-              disabled={disabled}
-              onClick={handleMention}
-              aria-label="Iemand vermelden"
-            >
-              <HugeiconsIcon icon={AtIcon} />
-            </InputGroupButton>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <InputGroupButton
+                    size="icon-xs"
+                    variant="ghost"
+                    disabled={disabled}
+                    onClick={handleMention}
+                    aria-label="Iemand vermelden"
+                    className={lockRadius}
+                  >
+                    <HugeiconsIcon icon={AtIcon} />
+                  </InputGroupButton>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  <span>Mentions</span>
+                  <KbdGroup>
+                    <Kbd>/</Kbd>
+                  </KbdGroup>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           ) : null}
           {showSend ? (
             <TooltipProvider>
@@ -203,7 +239,7 @@ export function ChatComposerToolbar({
                     disabled={sendBlocked}
                     onClick={asForm ? undefined : submit}
                     aria-label={sendAriaLabel}
-                    className="ml-auto"
+                    className={cn("ml-auto", lockRadius)}
                   >
                     <HugeiconsIcon icon={ArrowRight02Icon} />
                   </InputGroupButton>
