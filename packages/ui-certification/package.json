@@ -28,6 +28,7 @@
     "@procertus-ui/domain-certification": "workspace:*",
     "@procertus-ui/ui": "workspace:*",
     "@procertus-ui/ui-lib": "workspace:*",
+    "@procertus-ui/ui-pt1-prototype": "workspace:*",
     "lucide-react": "^0.486.0"
   },
   "peerDependencies": {

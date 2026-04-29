@@ -19,7 +19,8 @@ export const ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY = "pt1:certification-req
 export const ONBOARDING_REGISTRATION_COMPLETE_STORAGE_KEY = "pt1:onboarding-registration-complete";
 
 /** @deprecated use ONBOARDING_REGISTRATION_COMPLETE_STORAGE_KEY */
-export const ONBOARDING_REGISTRATION_COMPLETE_SESSION_KEY = ONBOARDING_REGISTRATION_COMPLETE_STORAGE_KEY;
+export const ONBOARDING_REGISTRATION_COMPLETE_SESSION_KEY =
+  ONBOARDING_REGISTRATION_COMPLETE_STORAGE_KEY;
 
 function migrateLegacySessionStoragePayload(): void {
   if (typeof sessionStorage === "undefined" || typeof localStorage === "undefined") return;
@@ -36,10 +37,7 @@ function migrateLegacySessionStoragePayload(): void {
 }
 
 export function writeOnboardingRegistrationCompletePayload(
-  payload: Omit<
-    OnboardingRegistrationCompletePayload,
-    "onboardingCompleted" | "completedAt"
-  > & {
+  payload: Omit<OnboardingRegistrationCompletePayload, "onboardingCompleted" | "completedAt"> & {
     flowStateSnapshot: unknown;
     certificationStoreRaw: string | null;
   },
@@ -71,7 +69,8 @@ function parsePayload(raw: string): OnboardingRegistrationCompletePayload | null
     const organizationName =
       typeof parsed.organizationName === "string" ? parsed.organizationName.trim() : "";
     const includedInquiryCount =
-      typeof parsed.includedInquiryCount === "number" && Number.isFinite(parsed.includedInquiryCount)
+      typeof parsed.includedInquiryCount === "number" &&
+      Number.isFinite(parsed.includedInquiryCount)
         ? Math.max(0, Math.floor(parsed.includedInquiryCount))
         : 0;
     if (!representativeEmail || !organizationName) return null;
@@ -101,8 +100,7 @@ function parsePayload(raw: string): OnboardingRegistrationCompletePayload | null
       includedInquiryCount,
       onboardingCompleted: true,
       completedAt,
-      flowStateSnapshot:
-        parsed.flowStateSnapshot !== undefined ? parsed.flowStateSnapshot : null,
+      flowStateSnapshot: parsed.flowStateSnapshot !== undefined ? parsed.flowStateSnapshot : null,
       certificationStoreRaw:
         typeof parsed.certificationStoreRaw === "string" || parsed.certificationStoreRaw === null
           ? (parsed.certificationStoreRaw ?? null)

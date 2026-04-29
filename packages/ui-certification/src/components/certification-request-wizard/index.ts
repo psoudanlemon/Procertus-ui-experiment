@@ -3,6 +3,11 @@ export type {
   UseCertificationRequestWizardViewOptions,
   WizardStepperModel,
 } from "./certification-request-wizard-types";
+export { CertificationRequestWizard } from "./CertificationRequestWizard";
+export type {
+  CertificationRequestWizardProps,
+  CertificationWizardDraft,
+} from "./CertificationRequestWizard";
 export { CertificationRequestWizardView } from "./CertificationRequestWizardView";
 export { useCertificationRequestWizardView } from "./use-certification-request-wizard-view";
 export {

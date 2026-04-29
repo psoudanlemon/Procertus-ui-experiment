@@ -115,7 +115,7 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
               className={
                 splitProductInquirySteps
                   ? "grid gap-4"
-                  : "grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)]"
+                  : "grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)]"
               }
             >
               {!splitProductInquirySteps || effectiveMobileDetailsStep === "product" ? (
@@ -149,7 +149,7 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
               ) : null}
               {(!splitProductInquirySteps || effectiveMobileDetailsStep === "inquiries") &&
               detailsStep.selectedProduct ? (
-                <Card className="h-fit xl:sticky xl:top-component xl:max-h-[calc(100svh-12rem)]">
+                <Card className="h-fit lg:sticky lg:top-component lg:max-h-[calc(100svh-12rem)]">
                   <CardHeader>
                     <CardTitle>Certificatie- en attesteringsopties</CardTitle>
                     <CardDescription>
@@ -157,7 +157,7 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
                       kunnen worden geselecteerd.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="min-h-0 space-y-4 xl:overflow-y-auto">
+                  <CardContent className="min-h-0 space-y-4 lg:overflow-y-auto">
                     <div className="rounded-md border border-border/60 bg-muted/20 p-3">
                       <p className="font-medium">{detailsStep.selectedProduct.label}</p>
                       <p className="text-sm text-muted-foreground">
@@ -175,7 +175,7 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
                   </CardContent>
                 </Card>
               ) : !splitProductInquirySteps ? (
-                <Card className="h-fit xl:sticky xl:top-component">
+                <Card className="h-fit lg:sticky lg:top-component">
                   <CardContent className="p-section">
                     <Empty>
                       <EmptyIcon>

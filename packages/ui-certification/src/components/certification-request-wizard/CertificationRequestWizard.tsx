@@ -1,13 +1,13 @@
 import {
   CertificationRequestProvider,
-  CertificationRequestWizardView,
-  type CertificationRequestBackend,
   type CertificationRequestDraft,
   type CertificationRequestProviderProps,
   type CertificationRequestStepId,
-  type RequestPackageReviewRequesterPresentation,
-  useCertificationRequestWizardView,
-} from "@procertus-ui/ui-certification";
+} from "../../CertificationRequestContext";
+import type { CertificationRequestBackend } from "../../persistence";
+import type { RequestPackageReviewRequesterPresentation } from "../request-package-review";
+import { CertificationRequestWizardView } from "./CertificationRequestWizardView";
+import { useCertificationRequestWizardView } from "./use-certification-request-wizard-view";
 
 export type CertificationWizardDraft = CertificationRequestDraft;
 
