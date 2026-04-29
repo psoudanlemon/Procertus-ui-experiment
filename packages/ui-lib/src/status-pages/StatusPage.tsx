@@ -25,10 +25,15 @@ export type StatusPageProps = {
   illustration?: React.ReactNode;
   /** Main heading. */
   heading: string;
-  /** Supporting description text. */
-  description?: string;
+  /** Supporting description — string or richer markup when passed through to {@link StatusContent}. */
+  description?: React.ReactNode;
   /** Action buttons. */
   actions?: StatusPageAction[];
+  /**
+   * Optional content rendered below the status card, centered and outside the card
+   * (same max width as the card for alignment).
+   */
+  children?: React.ReactNode;
   /** Additional className on the outer container. */
   className?: string;
 };
@@ -84,6 +89,7 @@ function StatusPage({
   heading,
   description,
   actions,
+  children,
   className,
 }: StatusPageProps) {
   return (
@@ -98,13 +104,18 @@ function StatusPage({
         <div className="absolute top-boundary left-1/2 -translate-x-1/2">{logo}</div>
       )}
 
-      <StatusContent
-        icon={icon}
-        illustration={illustration}
-        heading={heading}
-        description={description}
-        actions={actions}
-      />
+      <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-8">
+        <StatusContent
+          icon={icon}
+          illustration={illustration}
+          heading={heading}
+          description={description}
+          actions={actions}
+        />
+        {children != null ? (
+          <div className="flex w-full flex-col items-center gap-4 text-center">{children}</div>
+        ) : null}
+      </div>
     </div>
   );
 }

@@ -16,8 +16,8 @@ export type StatusContentProps = {
   illustration?: React.ReactNode;
   /** Main heading. */
   heading: string;
-  /** Supporting description text. */
-  description?: string;
+  /** Supporting description — string or richer markup (e.g. multiple paragraphs). */
+  description?: React.ReactNode;
   /** Action buttons. */
   actions?: StatusPageAction[];
   /** Additional className on the Card. */
@@ -51,9 +51,14 @@ function StatusContent({
         {/* Copy */}
         <div className="space-y-2">
           <H1>{heading}</H1>
-          {description && (
+          {description != null &&
+          (typeof description === "string" ? (
             <p className="text-base leading-relaxed text-muted-foreground">{description}</p>
-          )}
+          ) : (
+            <div className="space-y-4 text-balance text-base leading-relaxed text-muted-foreground [&_strong]:font-semibold [&_strong]:text-foreground [&_a]:font-medium [&_a]:text-primary [&_a]:underline-offset-4 hover:[&_a]:underline">
+              {description}
+            </div>
+          ))}
         </div>
 
         {/* Actions */}

@@ -55,7 +55,8 @@ export type StepLayoutProps = {
   stepLabel?: string;
   children?: ReactNode;
   backAction?: StepLayoutAction;
-  primaryAction: StepLayoutAction;
+  /** Omitted when there is no footer CTA (e.g. terminal “check your email” step). */
+  primaryAction?: StepLayoutAction;
   secondaryAction?: StepLayoutAction;
 };
 
@@ -101,7 +102,7 @@ function StepLayoutHeaderBlock({
           {stepLabel}
         </p>
       ) : null}
-      <H1 className={titleClass[variant]}>{title}</H1>
+      {title != null && title !== "" ? <H1 className={titleClass[variant]}>{title}</H1> : null}
       {description ? (
         typeof description === "string" ? (
           <P className={cn("text-muted-foreground", descClass[variant])}>{description}</P>
@@ -204,14 +205,16 @@ export function StepLayout({
               {secondaryAction.label}
             </Button>
           ) : null}
-          <Button
-            type="button"
-            disabled={primaryAction.disabled || primaryAction.loading}
-            onClick={primaryAction.onClick}
-            aria-busy={primaryAction.loading === true}
-          >
-            {primaryAction.label}
-          </Button>
+          {primaryAction ? (
+            <Button
+              type="button"
+              disabled={primaryAction.disabled || primaryAction.loading}
+              onClick={primaryAction.onClick}
+              aria-busy={primaryAction.loading === true}
+            >
+              {primaryAction.label}
+            </Button>
+          ) : null}
         </div>
       </CardFooter>
     </>
