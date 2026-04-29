@@ -1,28 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import type { MockPrototypeUser } from "../types/mock-prototype-user";
+import { MOCK_PROTOTYPE_USERS } from "../data/mock-prototype-users";
 import { MockPrototypeAuthProvider } from "./MockPrototypeAuthProvider";
 import { MockPrototypeUserSelect } from "./MockPrototypeUserSelect";
 import { useMockPrototypeAuth } from "./useMockPrototypeAuth";
-
-const SAMPLE_USERS: MockPrototypeUser[] = [
-  {
-    id: "u-1",
-    displayName: "Ava Vermeer",
-    email: "ava@procertus.example",
-    role: "Certification lead",
-    homeOrganization: { id: "org-procertus", name: "PROCERTUS" },
-    representedOrganization: { id: "org-northwind", name: "Northwind Foods" },
-  },
-  {
-    id: "u-2",
-    displayName: "Ben Okonkwo",
-    email: "ben@clientco.example",
-    role: "Quality manager",
-    homeOrganization: { id: "org-clientco", name: "ClientCo Manufacturing" },
-    representedOrganization: { id: "org-clientco", name: "ClientCo Manufacturing" },
-  },
-];
 
 function SessionReadout() {
   const { session, isAuthenticated } = useMockPrototypeAuth();
@@ -46,7 +27,7 @@ const meta: Meta<typeof MockPrototypeUserSelect> = {
   component: MockPrototypeUserSelect,
   decorators: [
     (Story) => (
-      <MockPrototypeAuthProvider users={SAMPLE_USERS}>
+      <MockPrototypeAuthProvider users={[...MOCK_PROTOTYPE_USERS]}>
         <div className="flex w-96 flex-col gap-4">
           <Story />
           <SessionReadout />
