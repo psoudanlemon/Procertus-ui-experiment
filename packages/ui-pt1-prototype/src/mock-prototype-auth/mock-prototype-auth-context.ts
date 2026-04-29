@@ -10,6 +10,8 @@ export type MockPrototypeAuthContextValue = {
   setSelectedUserId: (userId: string | null) => void;
   login: (userId?: string) => void;
   logout: () => void;
+  /** Switches the active prototype organization for the signed-in user (no-op if not authenticated or id unknown). */
+  setActiveOrganization: (organizationId: string) => void;
 };
 
 export const MockPrototypeAuthContext = React.createContext<MockPrototypeAuthContextValue | undefined>(
