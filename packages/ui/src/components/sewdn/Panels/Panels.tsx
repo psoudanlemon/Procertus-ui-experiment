@@ -41,15 +41,18 @@ export const Panels = React.forwardRef<HTMLDivElement, PanelsProps>(
         )}
         {...props}
       >
-        {/* Main View Area */}
-        <div className="detail-panels-main-view h-full overflow-auto" style={mainViewStyle}>
+        {/* Main view: flex column + min-h-0 so nested shells (e.g. ManagementAppShell) can own vertical scroll */}
+        <div
+          className="detail-panels-main-view flex h-full min-h-0 min-w-0 flex-col overflow-hidden"
+          style={mainViewStyle}
+        >
           {children}
         </div>
 
         {/* Panels Area (Docked) */}
         {displayMode === 'docked' && (
           <div
-            className="detail-panels-panels-area relative h-full flex-shrink-0"
+            className="detail-panels-panels-area relative h-full shrink-0"
             style={{ width: `${totalVisibleWidth}px` }}
           >
             <AnimatePresence mode="popLayout">

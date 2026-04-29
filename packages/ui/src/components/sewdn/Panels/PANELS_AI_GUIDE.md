@@ -79,3 +79,15 @@ Concise guide for using the DetailPanels component system.
 - `breakpoint`: (number | string) - Custom breakpoint for overlay switch.
 - `stackedPanelWidth`: (number)
 - `persistenceLayer`: (PersistenceLayer | undefined)
+
+---
+
+## `PanelsLayout` (sewdn, `@procertus-ui/ui`)
+
+This folder also implements **`PanelsLayout`** / **`Panels`** (used by PT1 extranet onboarding). Naming overlaps with the guide above, but the API is `PanelsLayout` + `panelTypes` + optional `useUrlQueryPersistence`.
+
+### Main region height & scrolling
+
+- The layout root is `flex … overflow-hidden`; the **main slot** (`.detail-panels-main-view`) is a **`flex h-full min-h-0 flex-col overflow-hidden`** column so children receive a bounded height.
+- **Do not** force `100svh` on content inside the main slot unless the app root is only this layout. Prefer **`h-full min-h-0`** so the shell fills the measured panel width/height.
+- **Scroll** should live in the app shell’s primary surface (e.g. `ManagementAppShell`’s `<main class="… min-h-0 flex-1 overflow-y-auto">`), not on `window`, so `html/body/#root { overflow: hidden }` remains valid.
