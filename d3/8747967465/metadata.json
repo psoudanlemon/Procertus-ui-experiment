@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "d38747967465",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/draftSelectionPresentation.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/requests/rulesetDocuments.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/request_detail_panel.tsx",
+    "packages/ui-certification/src/components/certification-request-wizard/CertificationRequestWizardView.stories.tsx",
+    "packages/ui-certification/src/components/certification-request-wizard/CertificationRequestWizardView.tsx",
+    "packages/ui-certification/src/components/certification-request-wizard/CompactWizardTimeline.stories.tsx",
+    "packages/ui-certification/src/components/certification-request-wizard/CompactWizardTimeline.tsx",
+    "packages/ui-certification/src/components/certification-request-wizard/build-ruleset-documents-for-inquiries.ts",
+    "packages/ui-certification/src/components/certification-request-wizard/certification-request-wizard-story-fixtures.tsx",
+    "packages/ui-certification/src/components/certification-request-wizard/certification-request-wizard-types.ts",
+    "packages/ui-certification/src/components/certification-request-wizard/draft-selection-presentation.tsx",
+    "packages/ui-certification/src/components/certification-request-wizard/index.ts",
+    "packages/ui-certification/src/components/certification-request-wizard/use-certification-request-wizard-view.tsx",
+    "packages/ui-certification/src/index.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/d3/8747967465/0/metadata.json",
+      "transcript": "/d3/8747967465/0/full.jsonl",
+      "content_hash": "/d3/8747967465/0/content_hash.txt",
+      "prompt": "/d3/8747967465/0/prompt.txt"
+    }
+  ]
+}

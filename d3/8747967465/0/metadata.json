@@ -1,0 +1,42 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "d38747967465",
+  "session_id": "f27e05d7-22d7-49e2-ab64-411d321970d5",
+  "strategy": "manual-commit",
+  "created_at": "2026-04-29T10:25:21.829198Z",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/CertificationRequestWizard.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/certification-wizard/draftSelectionPresentation.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/requests/rulesetDocuments.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/request_detail_panel.tsx",
+    "packages/ui-certification/src/components/certification-request-wizard/CertificationRequestWizardView.stories.tsx",
+    "packages/ui-certification/src/components/certification-request-wizard/CertificationRequestWizardView.tsx",
+    "packages/ui-certification/src/components/certification-request-wizard/CompactWizardTimeline.stories.tsx",
+    "packages/ui-certification/src/components/certification-request-wizard/CompactWizardTimeline.tsx",
+    "packages/ui-certification/src/components/certification-request-wizard/build-ruleset-documents-for-inquiries.ts",
+    "packages/ui-certification/src/components/certification-request-wizard/certification-request-wizard-story-fixtures.tsx",
+    "packages/ui-certification/src/components/certification-request-wizard/certification-request-wizard-types.ts",
+    "packages/ui-certification/src/components/certification-request-wizard/draft-selection-presentation.tsx",
+    "packages/ui-certification/src/components/certification-request-wizard/index.ts",
+    "packages/ui-certification/src/components/certification-request-wizard/use-certification-request-wizard-view.tsx",
+    "packages/ui-certification/src/index.ts"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "823e8824f453",
+  "session_metrics": {
+    "turn_count": 4
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-04-29T10:25:21.752191Z",
+    "agent_lines": 1546,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 1,
+    "total_committed": 1546,
+    "agent_percentage": 100
+  }
+}
