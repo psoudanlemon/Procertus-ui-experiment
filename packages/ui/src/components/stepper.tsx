@@ -348,7 +348,7 @@ function StepperIndicator({ children, className }: ComponentProps<"div">) {
         "border border-border bg-card text-sm font-medium text-muted-foreground ring-1 ring-foreground/10",
         "shadow-proc-tactile",
         "data-[state=active]:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground",
-        "data-[state=completed]:border-primary/25 data-[state=completed]:bg-primary/10 data-[state=completed]:text-primary",
+        "data-[state=completed]:border-primary/30 data-[state=completed]:bg-primary data-[state=completed]:text-primary-foreground",
         className
       )}
     >
@@ -366,6 +366,7 @@ function StepperSeparator({ className }: ComponentProps<"div">) {
         "group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:min-w-[0.5rem] group-data-[orientation=horizontal]/stepper-nav:flex-1",
         "group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:min-h-[0.5rem] group-data-[orientation=vertical]/stepper-nav:w-0.5",
         "rounded-sm",
+        "group-data-[state=completed]/step:bg-primary",
         className
       )}
     />
@@ -387,7 +388,7 @@ function StepperDescription({ children, className }: ComponentProps<"div">) {
   return (
     <div
       data-slot="stepper-description"
-      className={cn("text-sm leading-[1.6] text-muted-foreground", className)}
+      className={cn("whitespace-nowrap text-sm leading-[1.6] text-muted-foreground", className)}
     >
       {children}
     </div>

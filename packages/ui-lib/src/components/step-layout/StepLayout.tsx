@@ -10,16 +10,7 @@
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
-import {
-  Button,
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  H1,
-  P,
-  Separator,
-} from "@procertus-ui/ui";
+import { Button, Card, CardContent, CardFooter, CardHeader, H1, P } from "@procertus-ui/ui";
 
 export type StepLayoutAction = {
   label: string;
@@ -74,10 +65,22 @@ const variantClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
   wizard: "max-w-5xl",
 };
 
-const headerClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
-  onboarding: "gap-micro pt-component",
-  wizard: "gap-micro py-micro",
+const cardGapClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
+  onboarding: "gap-region",
+  wizard: "gap-component",
 };
+
+const cardTopPadClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
+  onboarding: "sm:pt-boundary",
+  wizard: "pt-micro",
+};
+
+const headerClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
+  onboarding: "flex flex-col gap-region sm:px-boundary",
+  wizard: "flex flex-col gap-component px-micro sm:px-component",
+};
+
+const titleGroupClass = "flex flex-col gap-micro";
 
 const titleClass: Record<NonNullable<StepLayoutProps["variant"]>, string | undefined> = {
   onboarding: undefined,
@@ -90,8 +93,8 @@ const descClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
 };
 
 const contentClass: Record<NonNullable<StepLayoutProps["variant"]>, string> = {
-  onboarding: "space-y-section pt-section",
-  wizard: "space-y-component py-component",
+  onboarding: "space-y-section sm:px-boundary sm:pb-section",
+  wizard: "space-y-component px-micro sm:px-component",
 };
 
 function StepLayoutHeaderBlock({
@@ -146,7 +149,11 @@ export function StepLayout({
 
   const cardClass = cn(
     "w-full overflow-hidden shadow-proc-xs",
-    isFill ? "flex min-h-0 flex-col !py-0 ring-0" : cn("mx-auto", variantClass[variant]),
+    cardGapClass[variant],
+    !isFill && cardTopPadClass[variant],
+    isFill
+      ? "flex min-h-0 flex-col !py-0 ring-0"
+      : cn("mx-auto", variantClass[variant]),
     isFill && "rounded-none",
     isFill && "bg-transparent shadow-none ring-0",
     !isFill && "rounded-xl",
@@ -154,18 +161,24 @@ export function StepLayout({
 
   const mainColumn = (
     <>
-      <CardHeader className={cn(headerClass[variant], isFill && "shrink-0")}>
-        {!rail && hasStepper ? (
-          <div className="w-full pb-component not-empty:mb-0">{stepper}</div>
-        ) : null}
-        <StepLayoutHeaderBlock
-          variant={variant}
-          title={title}
-          description={description}
-          stepLabel={stepLabel}
-        />
+      {!rail && hasStepper ? (
+        <div className="mx-auto w-[90%]">{stepper}</div>
+      ) : null}
+      <CardHeader
+        className={cn(
+          headerClass[variant],
+          isFill && "shrink-0",
+        )}
+      >
+        <div className={titleGroupClass}>
+          <StepLayoutHeaderBlock
+            variant={variant}
+            title={title}
+            description={description}
+            stepLabel={stepLabel}
+          />
+        </div>
       </CardHeader>
-      <Separator className={isFill ? "shrink-0" : undefined} />
       <CardContent
         className={cn(contentClass[variant], isFill && "min-h-0 flex-1 overflow-y-auto")}
       >
@@ -173,48 +186,42 @@ export function StepLayout({
       </CardContent>
       <CardFooter
         className={cn(
-          "flex flex-row items-center justify-between gap-component",
+          "flex flex-row flex-wrap items-center justify-end gap-component",
           "min-h-11",
-          variant === "wizard" ? "py-micro sm:py-component" : "py-component sm:py-section",
+          variant === "wizard" ? "p-micro sm:p-component" : "py-section px-component sm:px-boundary",
           isFill && "shrink-0 bg-transparent",
         )}
       >
-        <div className="flex min-h-10 min-w-0 items-center">
-          {backAction ? (
-            <Button
-              type="button"
-              variant="outline"
-              disabled={backAction.disabled}
-              onClick={backAction.onClick}
-            >
-              {backAction.label}
-            </Button>
-          ) : (
-            <span className="hidden sm:block sm:min-w-0" aria-hidden />
-          )}
-        </div>
-        <div className="flex min-w-0 flex-wrap justify-end gap-component">
-          {secondaryAction ? (
-            <Button
-              type="button"
-              variant="outline"
-              disabled={secondaryAction.disabled}
-              onClick={secondaryAction.onClick}
-            >
-              {secondaryAction.label}
-            </Button>
-          ) : null}
-          {primaryAction ? (
-            <Button
-              type="button"
-              disabled={primaryAction.disabled || primaryAction.loading}
-              onClick={primaryAction.onClick}
-              aria-busy={primaryAction.loading === true}
-            >
-              {primaryAction.label}
-            </Button>
-          ) : null}
-        </div>
+        {backAction ? (
+          <Button
+            type="button"
+            variant="outline"
+            disabled={backAction.disabled}
+            onClick={backAction.onClick}
+          >
+            {backAction.label}
+          </Button>
+        ) : null}
+        {secondaryAction ? (
+          <Button
+            type="button"
+            variant="outline"
+            disabled={secondaryAction.disabled}
+            onClick={secondaryAction.onClick}
+          >
+            {secondaryAction.label}
+          </Button>
+        ) : null}
+        {primaryAction ? (
+          <Button
+            type="button"
+            disabled={primaryAction.disabled || primaryAction.loading}
+            onClick={primaryAction.onClick}
+            aria-busy={primaryAction.loading === true}
+          >
+            {primaryAction.label}
+          </Button>
+        ) : null}
       </CardFooter>
     </>
   );

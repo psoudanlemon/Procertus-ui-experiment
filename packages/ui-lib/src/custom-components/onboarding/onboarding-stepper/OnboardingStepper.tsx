@@ -61,7 +61,7 @@ const indicators = { completed: completedIcon };
 // (8/12/16px), giving roughly 40/44/48px circles. Every dependent measurement (line
 // center alignment, label `top`) is derived from the same calc so geometry stays correct.
 const indicatorClass =
-  "size-[calc(2rem+var(--spacing-component))] min-h-[calc(2rem+var(--spacing-component))] min-w-[calc(2rem+var(--spacing-component))] bg-secondary text-secondary-foreground ring-0 data-[state=completed]:border-primary/30 data-[state=completed]:bg-primary data-[state=completed]:text-primary-foreground";
+  "size-[calc(2rem+var(--spacing-component))] min-h-[calc(2rem+var(--spacing-component))] min-w-[calc(2rem+var(--spacing-component))]";
 
 // Horizontal: line center = half the indicator size minus half the line thickness (1px).
 const horizontalSeparatorClass =
@@ -156,7 +156,7 @@ function OnboardingStepperItem({ n, step, interactive, isLast, orientation }: It
       <StepperItem
         className="w-full !items-stretch !justify-start"
         step={n}
-        disabled={inert}
+        disabled={!available}
       >
         <div className="flex items-center gap-component">
           <StepperTrigger
@@ -173,7 +173,7 @@ function OnboardingStepperItem({ n, step, interactive, isLast, orientation }: It
               {step.title}
             </StepperTitle>
             {step.description ? (
-              <p className="line-clamp-2 text-xs leading-[1.4] text-muted-foreground">
+              <p className="whitespace-nowrap text-xs leading-[1.4] text-muted-foreground">
                 {step.description}
               </p>
             ) : null}
@@ -199,7 +199,7 @@ function OnboardingStepperItem({ n, step, interactive, isLast, orientation }: It
             {step.title}
           </StepperTitle>
           {step.description ? (
-            <p className="line-clamp-2 text-xs leading-[1.4] text-muted-foreground">
+            <p className="whitespace-nowrap text-xs leading-[1.4] text-muted-foreground">
               {step.description}
             </p>
           ) : null}
