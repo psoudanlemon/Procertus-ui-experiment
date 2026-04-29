@@ -118,7 +118,7 @@
   /* Shadcn Nova default radius (0.625rem / 10px) */
   --radius: 0.625rem;
 
-  --background: var(--neutral-25);
+  --background: var(--neutral-50);
   --foreground: var(--neutral-950);
   --card: var(--neutral-white);
   --card-foreground: var(--neutral-950);
