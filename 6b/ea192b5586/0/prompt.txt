@@ -1,0 +1,25 @@
+There is currently a blocking issue when using the certification request wizard. After I select my intent in the first step, I expect to go to the second step.
+
+For intents that require product selection, select the product. For requests that require only additional context, provide that context. Instead, we are always redirected to step 3.
+
+This is the case because when adding an already existing request, it is intended—or the best approach—to go directly to step 3 to review the drafts. Of course, this should only happen if the user has already completed step 2.
+
+Therefore, the data should be used to determine which step to go to based on the state of the data. Alternatively, we should track which steps have already been visited in the data context to decide whether to redirect to step 3 when first editing a new or existing certification request.
+
+This currently only occurs when using the certification request wizard inside the authenticated application.@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/RequestCreationPage.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/RequestEditPage.tsx
+
+---
+
+There is currently a blocking issue when using the certification request wizard. After I select my intent in the first step, I expect to go to the second step.
+
+For intents that require product selection, select the product. For requests that require only additional context, provide that context. Instead, we are always redirected to step 3.
+
+This is the case because when adding an already existing request, it is intended—or the best approach—to go directly to step 3 to review the drafts. Of course, this should only happen if the user has already completed step 2.
+
+Therefore, the data should be used to determine which step to go to based on the state of the data. Alternatively, we should track which steps have already been visited in the data context to decide whether to redirect to step 3 when first editing a new or existing certification request.
+
+This currently only occurs when using the certification request wizard inside the authenticated application.@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/RequestCreationPage.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/RequestEditPage.tsx
+
+---
+
+Please commit. Use the commit skill.
