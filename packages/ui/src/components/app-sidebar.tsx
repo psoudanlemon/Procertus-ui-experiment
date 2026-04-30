@@ -150,34 +150,49 @@ export type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
 // Nav link (SPA vs full document navigation)
 // ---------------------------------------------------------------------------
 
-function SidebarNavLink({
-  NavLink,
-  to,
-  className,
-  children,
-  onClick,
-  "aria-current": ariaCurrent,
-}: {
+type SidebarNavLinkProps = {
   NavLink?: AppSidebarNavLinkComponent;
   to: string;
   className?: string;
   children: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
   "aria-current"?: React.AriaAttributes["aria-current"];
-}) {
-  if (NavLink) {
+} & Omit<React.ComponentPropsWithoutRef<"a">, "children" | "className" | "href" | "onClick">;
+
+/** Forwards ref + merged `Slot` props (`data-active`, `data-slot`, …) to the anchor so `SidebarMenuButton asChild` active styles apply. */
+const SidebarNavLink = React.forwardRef<HTMLAnchorElement, SidebarNavLinkProps>(
+  function SidebarNavLink(
+    { NavLink, to, className, children, onClick, "aria-current": ariaCurrent, ...rest },
+    ref,
+  ) {
+    if (NavLink) {
+      return (
+        <NavLink
+          ref={ref}
+          to={to}
+          className={className}
+          onClick={onClick}
+          aria-current={ariaCurrent}
+          {...rest}
+        >
+          {children}
+        </NavLink>
+      );
+    }
     return (
-      <NavLink to={to} className={className} onClick={onClick} aria-current={ariaCurrent}>
+      <a
+        ref={ref}
+        href={to}
+        className={className}
+        onClick={onClick}
+        aria-current={ariaCurrent}
+        {...rest}
+      >
         {children}
-      </NavLink>
+      </a>
     );
-  }
-  return (
-    <a href={to} className={className} onClick={onClick} aria-current={ariaCurrent}>
-      {children}
-    </a>
-  );
-}
+  },
+);
 
 // ---------------------------------------------------------------------------
 // MobileCloseButton
