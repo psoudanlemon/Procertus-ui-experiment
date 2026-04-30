@@ -1,0 +1,20 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "6cf9952ae25a",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/profile-change-requests/storage.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/profile-change-requests/use-profile-change-requests.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/profile_change_detail_panel.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/6c/f9952ae25a/0/metadata.json",
+      "transcript": "/6c/f9952ae25a/0/full.jsonl",
+      "content_hash": "/6c/f9952ae25a/0/content_hash.txt",
+      "prompt": "/6c/f9952ae25a/0/prompt.txt"
+    }
+  ]
+}
