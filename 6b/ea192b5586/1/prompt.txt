@@ -1,0 +1,44 @@
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingRegistrationCompletePage.tsx after onboarding registration, the user is redirected to this "Registration Complete" page. Currently, the flow automatically allows the user to log into their account. We aren't sure this is correct; please add a remark or question on this page using the prototype card to formulate it.
+
+Check with the client whether this request should be validated before the user can actually log in, including validation of all the user's and the organization's information along with the request itself. @Procertus-ui-experiment/packages/ui-pt1-prototype/src/mock-prototype-auth/PrototypeCard.tsx
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingRegistrationCompletePage.tsx after onboarding registration, the user is redirected to this "Registration Complete" page. Currently, the flow automatically allows the user to log into their account. We aren't sure this is correct; please add a remark or question on this page using the prototype card to formulate it.
+
+Check with the client whether this request should be validated before the user can actually log in, including validation of all the user's and the organization's information along with the request itself. @Procertus-ui-experiment/packages/ui-pt1-prototype/src/mock-prototype-auth/PrototypeCard.tsx
+
+---
+
+Position this card absolutely on the page.  
+Place it in the top-right with some margin.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingRegistrationCompletePage.tsx:46-65 set up a reusable pattern so absolutely positioned overlay cards can be displayed and transitioned onto pages.
+
+Allow users to dismiss and close the cards to remove them when desired.
+
+Ensure the overlays can obstruct anything in the application flow. 
+
+ set up a hook that can be used throughout the application to easily add these questions to pages.
+
+Set up a single element in the application layout to transition in when a page or another trigger requests these overly prototyped cards with questions or remarks. 
+
+ please be inspired by how the app shell currently allows confirmations or dialogues to be shown. @Procertus-ui-experiment/packages/ui/src/components/sewdn/AppShell/AppProvider.tsx
+
+---
+
+Please set a default delay for showing the question card, and set up a default transition in the animation.
+
+---
+
+Please use a slide-in and fade-in combination, with the slide-in moving from right to left.
+
+---
+
+Please commit. Use  Commit skill.
+
+---
+
+Please commit. Use  Commit skill.
