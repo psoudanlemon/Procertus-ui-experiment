@@ -44,6 +44,19 @@ export {
   type MockPrototypePasswordlessLoginFormProps,
 } from "./mock-prototype-auth/MockPrototypePasswordlessLoginForm";
 export { PrototypeCard, type PrototypeCardProps } from "./mock-prototype-auth/PrototypeCard";
+export {
+  PrototypeOverlayProvider,
+  usePrototypeOverlay,
+  type PrototypeOverlayDispatch,
+  type PrototypeOverlayProviderProps,
+} from "./prototype-overlay/PrototypeOverlayProvider";
+export type { PrototypeOverlayOptions } from "./prototype-overlay/prototype-overlay-types";
+export {
+  PROTOTYPE_OVERLAY_DEFAULT_EASING,
+  PROTOTYPE_OVERLAY_DEFAULT_SHOW_DELAY_MS,
+  PROTOTYPE_OVERLAY_DEFAULT_TRANSITION_MS,
+} from "./prototype-overlay/prototype-overlay-types";
+export { usePrototypeOverlayOnMount } from "./prototype-overlay/usePrototypeOverlayOnMount";
 export { useMockPrototypeAuthContext } from "./mock-prototype-auth/mock-prototype-auth-context";
 export { useMockPrototypeAuth } from "./mock-prototype-auth/useMockPrototypeAuth";
 export { useMockPrototypeIsAuthenticated } from "./mock-prototype-auth/useMockPrototypeIsAuthenticated";

@@ -187,6 +187,8 @@
       "name": "@procertus-ui/ui-pt1-prototype",
       "version": "0.1.0",
       "dependencies": {
+        "@hugeicons/core-free-icons": "^4.1.1",
+        "@hugeicons/react": "^1.1.6",
         "@procertus-ui/ui": "workspace:*",
         "@procertus-ui/ui-lib": "workspace:*",
         "class-variance-authority": "^0.7.1",

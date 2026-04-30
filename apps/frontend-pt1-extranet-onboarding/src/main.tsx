@@ -5,7 +5,11 @@ import { BrowserRouter } from "react-router-dom";
 import { ModeProvider, ThemeProvider, TooltipProvider } from "@procertus-ui/ui";
 import { ProcertusCategorizationProvider } from "@procertus-ui/ui-certification";
 
-import { MOCK_PROTOTYPE_USERS, MockPrototypeAuthProvider } from "@procertus-ui/ui-pt1-prototype";
+import {
+  MOCK_PROTOTYPE_USERS,
+  MockPrototypeAuthProvider,
+  PrototypeOverlayProvider,
+} from "@procertus-ui/ui-pt1-prototype";
 
 import App from "./App";
 import "./index.css";
@@ -18,7 +22,9 @@ createRoot(document.getElementById("root")!).render(
           <ModeProvider>
             <ProcertusCategorizationProvider>
               <MockPrototypeAuthProvider users={MOCK_PROTOTYPE_USERS}>
-                <App />
+                <PrototypeOverlayProvider>
+                  <App />
+                </PrototypeOverlayProvider>
               </MockPrototypeAuthProvider>
             </ProcertusCategorizationProvider>
           </ModeProvider>
