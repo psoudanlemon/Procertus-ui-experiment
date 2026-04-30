@@ -1,4 +1,5 @@
 import {
+  Spinner,
   Timeline,
   TimelineDate,
   TimelineHeader,
@@ -8,6 +9,7 @@ import {
   TimelineTitle,
   cn,
 } from "@procertus-ui/ui";
+import { Check, X } from "lucide-react";
 
 export type CertificationRequestLifecycleStatus =
   | "draft"
@@ -108,27 +110,38 @@ export function CertificationRequestLifecycleTimeline({
       aria-label="Aanvraaglevenscyclus"
     >
       {visibleLifecycle.map((step, index) => {
-        const completedOrActive = index <= activeIndex;
+        const completed = index < activeIndex;
         const current = index === activeIndex;
+        const completedOrActive = completed || current;
+        const inProgress = current && step === "in-progress";
         return (
           <TimelineItem
             key={step}
             step={index + 1}
-            className={cn("gap-1 pe-2 not-last:pe-4", !completedOrActive && "opacity-45")}
+            className={cn(
+              "pe-component not-last:pe-section",
+              !completedOrActive && "opacity-45",
+            )}
           >
             <TimelineIndicator
               className={cn(
                 "bg-card",
                 completedOrActive && "border-primary bg-primary/10",
-                current && "bg-primary",
-                destructive && current && "border-destructive! bg-destructive-foreground",
-                destructive && current && completedOrActive && "border-destructive-foreground",
+                completed && "bg-primary text-primary-foreground",
+                current && "bg-primary text-primary-foreground",
+                destructive &&
+                  current &&
+                  "border-destructive-foreground bg-destructive-foreground text-background",
               )}
-            />
+            >
+              {completed ? <Check className="size-3" strokeWidth={3} /> : null}
+              {inProgress ? <Spinner size="sm" className="size-3 text-primary-foreground" /> : null}
+              {destructive && current ? <X className="size-3" strokeWidth={3} /> : null}
+            </TimelineIndicator>
             <TimelineSeparator
               className={cn(
                 completedOrActive ? "bg-primary" : undefined,
-                destructive && index <= activeIndex && "bg-destructive",
+                destructive && index <= activeIndex && "bg-destructive-foreground",
               )}
             />
             <TimelineHeader>
@@ -143,7 +156,7 @@ export function CertificationRequestLifecycleTimeline({
                 {lifecycleLabels[step]}
               </TimelineTitle>
               {dateLabels[step] ? (
-                <TimelineDate className="mb-0 mt-0.5 text-[10px] font-normal leading-tight text-muted-foreground/70">
+                <TimelineDate className="mb-0 mt-micro text-xs font-normal leading-tight text-muted-foreground/70">
                   {dateLabels[step]}
                 </TimelineDate>
               ) : null}
