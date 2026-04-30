@@ -28,6 +28,7 @@ export type CertificationRequestWizardViewProps = {
     | "stepperPosition"
     | "variant"
     | "stepper"
+    | "minHeight"
     | "title"
     | "description"
     | "backAction"

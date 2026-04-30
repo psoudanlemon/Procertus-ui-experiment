@@ -621,7 +621,7 @@ function AppHeader({
                                 >
                                   <span className="truncate">{o.name}</span>
                                   {active ? (
-                                    <HugeiconsIcon icon={Tick01Icon} className="size-4 shrink-0 text-accent-foreground" />
+                                    <HugeiconsIcon icon={Tick02Icon} className="size-4 shrink-0 text-accent-foreground" />
                                   ) : null}
                                 </button>
                               );
