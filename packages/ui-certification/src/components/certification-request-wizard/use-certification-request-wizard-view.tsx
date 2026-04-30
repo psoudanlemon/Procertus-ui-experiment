@@ -14,6 +14,13 @@ import type {
 
 const certStepReview = CERTIFICATION_REQUEST_STEP_IDS.indexOf("review");
 
+/**
+ * Stable card height for the anonymous wizard / step pages so they don't shrink to
+ * content height between steps. Ignored when StepLayout runs in `fill`/`fill-parent`
+ * (the authenticated wizard already pins height via the parent region).
+ */
+export const STABLE_STEP_MIN_HEIGHT = "min-h-[calc(100svh-12rem)]";
+
 export function useCertificationRequestWizardView(
   options: UseCertificationRequestWizardViewOptions,
 ): CertificationRequestWizardViewProps {
@@ -92,7 +99,6 @@ export function useCertificationRequestWizardView(
             effectiveMobileDetailsStep === "product"
               ? "Kies eerst een product in de beslissingsboom. Daarna selecteer je de beschikbare certificaten en attesten."
               : "Selecteer welke certificaten en attesten je voor dit product wilt toevoegen.",
-          stepLabel: `Stap ${mobileStepper.activeStep + 1} van ${mobileStepper.steps.length}`,
           backAction:
             effectiveMobileDetailsStep === "inquiries"
               ? { label: "Terug", onClick: () => setMobileDetailsStep("product") }
@@ -179,10 +185,11 @@ export function useCertificationRequestWizardView(
       stepperPosition: authenticated ? "start" : "top",
       variant: "wizard",
       stepper: stepperNode,
+      minHeight: STABLE_STEP_MIN_HEIGHT,
       title: layout.title,
       description: layout.description,
-      stepLabel: layout.stepLabel,
       backAction: layout.backAction,
+      cancelAction: layout.cancelAction,
       secondaryAction: layout.secondaryAction,
       primaryAction,
     },

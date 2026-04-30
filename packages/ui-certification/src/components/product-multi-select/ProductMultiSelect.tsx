@@ -25,8 +25,8 @@ export type ProductMultiSelectProps = {
   selectedIds: readonly string[];
   onChange: (ids: string[]) => void;
   options: ProductMultiSelectOption[];
-  /** Fieldset / group heading. */
-  legend: string;
+  /** Fieldset / group heading. Omit when the surrounding container already provides the title. */
+  legend?: string;
   description?: string;
   /** Renders when `options` is empty. */
   emptyMessage?: string;
@@ -61,10 +61,12 @@ export function ProductMultiSelect({
   if (options.length === 0) {
     return (
       <FieldSet className={cn("w-full min-w-0", className)}>
-        <div className="mb-component space-y-micro">
-          <div className="text-base font-semibold">{legend}</div>
-          {description ? <p className="text-sm text-muted-foreground">{description}</p> : null}
-        </div>
+        {legend || description ? (
+          <div className="mb-component space-y-micro">
+            {legend ? <div className="text-base font-semibold">{legend}</div> : null}
+            {description ? <p className="text-sm text-muted-foreground">{description}</p> : null}
+          </div>
+        ) : null}
         <p className="rounded-md border border-dashed border-border/60 px-component py-section text-sm text-muted-foreground">{emptyMessage}</p>
       </FieldSet>
     );
@@ -74,7 +76,7 @@ export function ProductMultiSelect({
     <FadingScrollList
       maxHeight="min(50vh, 28rem)"
       fadeColor="from-background"
-      wrapperClassName={cn("rounded-md border border-border/50 p-section", className)}
+      wrapperClassName={cn(className)}
       className="p-micro"
     >
       <SelectChoiceCardGroup

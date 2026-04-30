@@ -66,7 +66,6 @@ export const IntentStep: StoryObj<typeof meta> = {
             stepper: timelineStepper(0),
             title: "Wat wil je aanvragen?",
             description: "Kies het type certificatie of attest.",
-            stepLabel: "Stap 1 van 4",
           },
         })}
       />
@@ -95,7 +94,6 @@ function IntentInteractive() {
             stepper: timelineStepper(0),
             title: "Intent (interactive)",
             description: "Selection is held in local state for this story.",
-            stepLabel: "Stap 1 van 4",
           },
         })}
       />
@@ -123,8 +121,7 @@ export const DetailsProductTree: StoryObj<typeof meta> = {
             productTree: {
               nodes: storyProductTreeSample,
               expandedIds: ["g-clad", "g-facade"],
-              expandAll: noop,
-              collapseAll: noop,
+              toggleExpandAll: noop,
               onToggle: noop,
               searchValue: "",
               onSearchChange: noop,
@@ -157,7 +154,6 @@ export const DetailsProductTree: StoryObj<typeof meta> = {
             stepper: timelineStepper(1),
             title: "Product en aanvragen",
             description: "Fixturedata — boom + multi-select.",
-            stepLabel: "Stap 2 van 4",
           },
         })}
       />
@@ -184,7 +180,6 @@ export const DetailsFreeform: StoryObj<typeof meta> = {
             stepper: timelineStepper(1),
             title: "Beschrijf de aanvraagcontext",
             description: "Vrije tekst voor niet-productgebonden intenten.",
-            stepLabel: "Stap 2 van 4",
           },
         })}
       />
@@ -206,8 +201,7 @@ export const DetailsMobileSplitInquiries: StoryObj<typeof meta> = {
             productTree: {
               nodes: storyProductTreeSample,
               expandedIds: ["g-clad"],
-              expandAll: noop,
-              collapseAll: noop,
+              toggleExpandAll: noop,
               onToggle: noop,
               searchValue: "",
               onSearchChange: noop,
@@ -231,7 +225,6 @@ export const DetailsMobileSplitInquiries: StoryObj<typeof meta> = {
             stepper: timelineStepper(1),
             title: "Kies de aanvragen",
             description: "Tweede sub-stap op smalle viewports (fixture).",
-            stepLabel: "Stap 3 van 5",
           },
         })}
       />
@@ -257,7 +250,6 @@ export const DraftsBundling: StoryObj<typeof meta> = {
             stepper: timelineStepper(2),
             title: "Bundel aanvragen",
             description: "Fixture met twee concept-aanvragen.",
-            stepLabel: "Stap 3 van 4",
           },
         })}
       />
@@ -288,7 +280,6 @@ function DraftsInteractive() {
             stepper: timelineStepper(2),
             title: "Bundel (interactive)",
             description: "Toggle inclusion with local state.",
-            stepLabel: "Stap 3 van 4",
           },
         })}
       />
@@ -324,7 +315,6 @@ export const ReviewOnboarding: StoryObj<typeof meta> = {
             stepper: timelineStepper(3),
             title: "Samenvatting van het aanvraagpakket",
             description: "Onboarding — zonder requesterblok.",
-            stepLabel: "Stap 4 van 4",
             primaryAction: { label: "Aanvraagpakket versturen", onClick: noop },
           },
         })}
@@ -360,7 +350,6 @@ export const ReviewAuthenticated: StoryObj<typeof meta> = {
             stepper: timelineStepper(3),
             title: "Aanvraagdetails",
             description: "Authenticated extranet — inclusief aanvrager.",
-            stepLabel: "Stap 4 van 4",
             primaryAction: { label: "Aanvraagpakket versturen", onClick: noop },
           },
         })}
@@ -416,7 +405,6 @@ export const SubcomponentsShowcase: StoryObj<typeof meta> = {
             ),
             title: "Review (docs empty)",
             description: "Downloadlijst gebruikt `rulesetEmptyContent` wanneer er geen items zijn.",
-            stepLabel: "Stap 4 van 4",
           },
         })}
       />

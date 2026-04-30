@@ -28,6 +28,7 @@ import {
   cn,
 } from "@procertus-ui/ui";
 import { CertificationRequestWizard } from "../components/certification-request-wizard/CertificationRequestWizard";
+import { STABLE_STEP_MIN_HEIGHT } from "../components/certification-request-wizard/use-certification-request-wizard-view";
 import {
   DraftCardDescription,
   sortDraftsByIntentAndProduct,
@@ -183,6 +184,7 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
     goToOnboardingStep,
     primaryAction,
     backAction,
+    cancelAction,
     companyLookupPhase,
     lookupProgress,
     lookupStepIndex,
@@ -219,6 +221,7 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
       >
         <StepLayout
           className="w-full"
+          minHeight={STABLE_STEP_MIN_HEIGHT}
           variant="onboarding"
           stepper={
             <OnboardingStepper
@@ -247,9 +250,9 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
                 ? "We combineren uw nummer met openbare registers en, waar dat onvoldoende is, met gegevens over de onderneming achter uw e-maildomein (serverside)."
                 : "Controleer uw gegevens en de aanvragen voordat u indient."
           }
-          stepLabel={`Onboarding · stap ${activeStep + 1} van ${steps.length}`}
           backAction={backAction}
           primaryAction={primaryAction}
+          cancelAction={cancelAction}
         >
           {step === "customer" ? (
             <div className="space-y-6">
@@ -548,13 +551,13 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
                         <li
                           key={item.id}
                           className={cn(
-                            "flex gap-3 text-sm transition-colors",
+                            "flex items-center gap-3 text-sm transition-colors",
                             done || active ? "text-foreground" : "text-muted-foreground",
                           )}
                         >
                           <span
                             className={cn(
-                              "mt-0.5 size-2 shrink-0 rounded-full",
+                              "size-2 shrink-0 rounded-full",
                               done
                                 ? "bg-primary"
                                 : active
@@ -755,7 +758,7 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
                           )}
                         </CardList>
                       </SelectChoiceCardGroup>
-                      <div className="border-t border-border/60 pt-4">
+                      <div>
                         <Button
                           type="button"
                           variant="outline"

@@ -2,14 +2,14 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { AvatarFallback, AvatarImage } from "@procertus-ui/ui";
 
-import { ChatBubble } from "./chat-bubble";
-import { ChatBubbleAvatar } from "./chat-bubble-avatar";
-import { ChatBubbleMessage } from "./chat-bubble-message";
-import { ChatList } from "./chat-list";
-import { ChatLoadingDots } from "./chat-loading-dots";
+import { ChatBubble } from "../../components/portal-chat/chat-bubble";
+import { ChatBubbleAvatar } from "../../components/portal-chat/chat-bubble-avatar";
+import { ChatBubbleMessage } from "../../components/portal-chat/chat-bubble-message";
+import { ChatList } from "../../components/portal-chat/chat-list";
+import { ChatLoadingDots } from "../../components/portal-chat/chat-loading-dots";
 
 const meta = {
-  title: "ui-lib/Chat (primitives)",
+  title: "Custom Components/Chat/Chat (primitives)",
   parameters: {
     layout: "padded",
     docs: {

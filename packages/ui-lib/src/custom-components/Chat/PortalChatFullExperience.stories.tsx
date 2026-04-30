@@ -5,17 +5,17 @@ import { HugeiconsIcon } from "@hugeicons/react";
 
 import { Avatar, AvatarFallback, AvatarImage, Button } from "@procertus-ui/ui";
 
-import { ChatBubble } from "./chat-bubble";
-import { ChatBubbleAvatar } from "./chat-bubble-avatar";
-import { ChatBubbleMessage } from "./chat-bubble-message";
+import { ChatBubble } from "../../components/portal-chat/chat-bubble";
+import { ChatBubbleAvatar } from "../../components/portal-chat/chat-bubble-avatar";
+import { ChatBubbleMessage } from "../../components/portal-chat/chat-bubble-message";
+import { ChatList } from "../../components/portal-chat/chat-list";
+import { ChatThreadHeader } from "../../components/portal-chat/chat-thread-header";
+import type { PortalChatMessage } from "../../components/portal-chat/portal-chat-types";
 import { ChatComposerToolbar } from "./chat-composer-toolbar";
-import { ChatList } from "./chat-list";
-import { ChatThreadHeader } from "./chat-thread-header";
-import type { PortalChatMessage } from "./portal-chat-types";
 import { PortalChatWindow } from "./PortalChatWindow";
 
 const meta = {
-  title: "ui-lib/PortalChat full experience",
+  title: "Custom Components/Chat/PortalChat full experience",
   parameters: {
     layout: "padded",
     docs: {

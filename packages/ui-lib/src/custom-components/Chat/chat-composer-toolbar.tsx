@@ -20,7 +20,7 @@ import {
   cn,
 } from "@procertus-ui/ui";
 
-import { CHAT_COMPOSER_DEFAULT_EMOJI_PRESETS } from "./chat-default-emoji-presets";
+import { CHAT_COMPOSER_DEFAULT_EMOJI_PRESETS } from "../../components/portal-chat/chat-default-emoji-presets";
 
 export type ChatComposerToolbarProps = {
   value: string;

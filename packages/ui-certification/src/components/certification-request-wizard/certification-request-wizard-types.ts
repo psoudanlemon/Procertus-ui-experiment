@@ -30,8 +30,8 @@ export type CertificationRequestWizardViewProps = {
     | "stepper"
     | "title"
     | "description"
-    | "stepLabel"
     | "backAction"
+    | "cancelAction"
     | "secondaryAction"
     | "primaryAction"
   >;

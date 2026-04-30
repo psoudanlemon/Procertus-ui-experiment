@@ -194,6 +194,10 @@ export function baseAnonymousOnboardingFlowViewProps(
       label: "Terug",
       onClick: noop,
     },
+    cancelAction: {
+      label: "Annuleren",
+      onClick: noop,
+    },
     companyLookupPhase: "ready",
     lookupProgress: 100,
     lookupStepIndex: 4,

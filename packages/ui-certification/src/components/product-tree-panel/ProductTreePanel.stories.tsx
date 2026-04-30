@@ -309,7 +309,7 @@ function WithTree() {
   }, []);
 
   const onSelect = useCallback((p: ProductTreeProductNode) => {
-    setSelectedId(p.id);
+    setSelectedId((prev) => (prev === p.id ? null : p.id));
     setLog(`Selected: ${p.label} (${p.id})`);
   }, []);
 

@@ -40,6 +40,7 @@ export type AnonymousOnboardingFlowViewProps = {
   goToOnboardingStep: (nextStep: OnboardingStep) => void;
   primaryAction: StepLayoutAction;
   backAction: StepLayoutAction;
+  cancelAction?: StepLayoutAction;
   companyLookupPhase: "idle" | "loading" | "ready";
   lookupProgress: number;
   lookupStepIndex: number;

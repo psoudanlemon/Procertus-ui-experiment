@@ -25,3 +25,27 @@ body,
   color: var(--foreground);
   border-color: var(--border) !important;
 }
+
+/**
+ * Mirrors the production app's `PublicAppShell` unlock: `globals.css` locks html/body/#root to
+ * `height:100%; overflow:hidden` so the authenticated shell owns scroll. Full-page guest stories
+ * (anonymous onboarding) set `data-public-layout` on `<html>` to restore document scrolling.
+ */
+@layer base {
+  html[data-public-layout],
+  html[data-public-layout] body,
+  html[data-public-layout] #storybook-root {
+    height: auto;
+    min-height: 100%;
+  }
+
+  html[data-public-layout] {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  html[data-public-layout] body,
+  html[data-public-layout] #storybook-root {
+    overflow: visible;
+  }
+}

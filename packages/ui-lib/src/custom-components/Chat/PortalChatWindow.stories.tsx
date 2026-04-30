@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 
-import type { PortalChatMessage } from "./portal-chat-types";
+import type { PortalChatMessage } from "../../components/portal-chat/portal-chat-types";
 import { PortalChatWindow } from "./PortalChatWindow";
 
 const sampleMessages = [
@@ -29,7 +29,7 @@ const sampleMessages = [
 ] satisfies PortalChatMessage[];
 
 const meta = {
-  title: "ui-lib/PortalChatWindow",
+  title: "Custom Components/Chat/PortalChatWindow",
   component: PortalChatWindow,
   parameters: {
     layout: "padded",

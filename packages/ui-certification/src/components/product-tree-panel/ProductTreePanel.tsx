@@ -4,8 +4,9 @@
  */
 import { Search01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { ChevronsDownUp, ChevronsUpDown } from "lucide-react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   Badge,
@@ -51,6 +52,17 @@ export type ProductTreeGroupNode = {
 };
 
 export type ProductTreeNode = ProductTreeGroupNode | ProductTreeProductNode;
+
+function collectGroupIds(nodes: readonly ProductTreeNode[]): string[] {
+  const ids: string[] = [];
+  for (const node of nodes) {
+    if (node.kind === "group") {
+      ids.push(node.id);
+      ids.push(...collectGroupIds(node.children));
+    }
+  }
+  return ids;
+}
 
 function ScrollFades({
   scrollerRef,
@@ -349,8 +361,8 @@ export type ProductTreePanelProps = {
   nodes: ProductTreeNode[];
   /** Ids of **group** nodes that are expanded. */
   expandedIds: readonly string[];
-  onCollapseAll?: () => void;
-  onExpandAll?: () => void;
+  /** When provided, a single button toggles between fully expanded and fully collapsed. */
+  onToggleExpandAll?: () => void;
   onToggle: (groupId: string, open: boolean) => void;
   onSelectProduct: (product: ProductTreeProductNode) => void;
   /** `Empty` is shown when `nodes` is empty. Override for custom copy. */
@@ -368,8 +380,7 @@ export function ProductTreePanel({
   actions,
   nodes,
   expandedIds: expanded,
-  onCollapseAll,
-  onExpandAll,
+  onToggleExpandAll,
   onToggle,
   onSelectProduct,
   emptyState,
@@ -381,11 +392,13 @@ export function ProductTreePanel({
     getItems: () => [],
   };
 
+  const groupIds = useMemo(() => collectGroupIds(nodes), [nodes]);
+  const allExpanded = groupIds.length > 0 && groupIds.every((id) => expandedSet.has(id));
+
   const hasToolbarRow =
     (showSearch && Boolean(onSearchChange)) ||
     Boolean(actions) ||
-    Boolean(onCollapseAll) ||
-    Boolean(onExpandAll);
+    Boolean(onToggleExpandAll);
 
   return (
     <Card className={cn("mx-auto w-full max-w-5xl overflow-hidden py-section", className)}>
@@ -395,36 +408,54 @@ export function ProductTreePanel({
           {description ? <CardDescription>{description}</CardDescription> : null}
         </div>
         {showSearch && onSearchChange ? (
-          <div className="flex flex-col gap-component sm:flex-row sm:items-center sm:gap-0">
+          <div className="flex flex-col gap-component">
             <SearchInput
               value={searchValue}
               onChange={onSearchChange}
               placeholder={searchPlaceholder}
             />
-            <div className="flex shrink-0 flex-wrap gap-micro">
-              {onCollapseAll ? (
-                <Button type="button" variant="outline" size="sm" onClick={onCollapseAll}>
-                  Collapse All
-                </Button>
-              ) : null}
-              {onExpandAll ? (
-                <Button type="button" variant="outline" size="sm" onClick={onExpandAll}>
-                  Expand All
-                </Button>
-              ) : null}
-              {actions}
-            </div>
-          </div>
-        ) : actions ? (
-          <div className="flex flex-wrap justify-end gap-micro">
-            {onCollapseAll ? (
-              <Button type="button" variant="outline" size="sm" onClick={onCollapseAll}>
-                Collapse All
-              </Button>
+            {onToggleExpandAll || actions ? (
+              <div className="flex flex-wrap items-center justify-between gap-micro">
+                {onToggleExpandAll ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={onToggleExpandAll}
+                    className="gap-micro"
+                    aria-pressed={allExpanded}
+                  >
+                    {allExpanded ? (
+                      <ChevronsDownUp className="size-4" aria-hidden />
+                    ) : (
+                      <ChevronsUpDown className="size-4" aria-hidden />
+                    )}
+                    {allExpanded ? "Collapse all" : "Expand all"}
+                  </Button>
+                ) : (
+                  <span aria-hidden />
+                )}
+                {actions ? <div className="flex flex-wrap gap-micro">{actions}</div> : null}
+              </div>
             ) : null}
-            {onExpandAll ? (
-              <Button type="button" variant="outline" size="sm" onClick={onExpandAll}>
-                Expand All
+          </div>
+        ) : actions || onToggleExpandAll ? (
+          <div className="flex flex-wrap justify-end gap-micro">
+            {onToggleExpandAll ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={onToggleExpandAll}
+                className="gap-micro"
+                aria-pressed={allExpanded}
+              >
+                {allExpanded ? (
+                  <ChevronsDownUp className="size-4" aria-hidden />
+                ) : (
+                  <ChevronsUpDown className="size-4" aria-hidden />
+                )}
+                {allExpanded ? "Collapse all" : "Expand all"}
               </Button>
             ) : null}
             {actions}

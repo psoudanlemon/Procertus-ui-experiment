@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { ComponentType } from "react";
+import { useLayoutEffect, type ComponentType } from "react";
 
 import { ProcertusCategorizationProvider } from "../ProcertusCategorizationContext";
 import {
@@ -24,6 +24,22 @@ import {
   VAT_PROTOTYPE_PRESETS,
 } from "./lib/vatPrototypePresets";
 
+/**
+ * Mirrors `PublicAppShell` in the production app: sets `data-public-layout` on `<html>` so the
+ * Storybook preview CSS unlocks document scrolling (shared `globals.css` keeps html/body locked
+ * for the authenticated shell). Without this, tall guest-flow stories get clipped at viewport.
+ */
+const PublicLayoutDecorator = (Story: ComponentType) => {
+  useLayoutEffect(() => {
+    const el = document.documentElement;
+    el.dataset.publicLayout = "";
+    return () => {
+      delete el.dataset.publicLayout;
+    };
+  }, []);
+  return <Story />;
+};
+
 const meta = {
   title: "Anonymous onboarding/AnonymousOnboardingFlowView",
   parameters: {
@@ -35,6 +51,7 @@ const meta = {
       },
     },
   },
+  decorators: [PublicLayoutDecorator],
   tags: ["autodocs"],
 } satisfies Meta;
 

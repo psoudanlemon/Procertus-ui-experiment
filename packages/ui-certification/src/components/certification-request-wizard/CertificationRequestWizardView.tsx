@@ -16,7 +16,6 @@ import {
   Field,
   FieldContent,
   FieldGroup,
-  FieldLabel,
   SelectChoiceCard,
   SelectChoiceCardGroup,
   Switch,
@@ -77,7 +76,6 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
             <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)]">
               <FieldGroup>
                 <Field>
-                  <FieldLabel htmlFor="request-context">Aanvraagcontext</FieldLabel>
                   <FieldContent>
                     <Textarea
                       id="request-context"
@@ -89,7 +87,7 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
                   </FieldContent>
                 </Field>
               </FieldGroup>
-              <Card className="h-fit gap-section p-section">
+              <Card className="gap-section p-section">
                 <CardHeader className="gap-micro px-0">
                   <CardTitle>Wat moet je beschrijven?</CardTitle>
                   <CardDescription>
@@ -136,8 +134,7 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
                   }
                   nodes={detailsStep.productTree.nodes}
                   expandedIds={detailsStep.productTree.expandedIds}
-                  onCollapseAll={detailsStep.productTree.collapseAll}
-                  onExpandAll={detailsStep.productTree.expandAll}
+                  onToggleExpandAll={detailsStep.productTree.toggleExpandAll}
                   onToggle={detailsStep.productTree.onToggle}
                   onSelectProduct={(product: ProductTreeProductNode) =>
                     detailsStep.productTree.onSelectProduct(product)
@@ -151,23 +148,15 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
                   <CardHeader>
                     <CardTitle>Certificatie- en attesteringsopties</CardTitle>
                     <CardDescription>
-                      Bekijk alle mogelijke aanvragen voor dit product. Alleen mogelijke opties
-                      kunnen worden geselecteerd.
+                      Selecteer welke aanvragen je voor dit product wil toevoegen. Niet-beschikbare
+                      types blijven zichtbaar zodat duidelijk is waarom ze niet mogelijk zijn.
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="min-h-0 space-y-4 lg:overflow-y-auto">
-                    <div className="rounded-md border border-border/60 bg-muted/20 p-3">
-                      <p className="font-medium">{detailsStep.selectedProduct.label}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {detailsStep.selectedProduct.path}
-                      </p>
-                    </div>
                     <ProductMultiSelect
                       selectedIds={detailsStep.selectedEntryIds}
                       onChange={detailsStep.onSelectedEntryIdsChange}
                       options={detailsStep.productOptions}
-                      legend="Toe te voegen aanvragen"
-                      description="Niet-beschikbare types blijven zichtbaar zodat duidelijk is waarom ze niet kunnen worden aangevraagd."
                       emptyMessage="Selecteer eerst een producttype om de opties te zien."
                     />
                   </CardContent>

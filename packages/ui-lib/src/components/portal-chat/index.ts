@@ -1,7 +1,7 @@
 export { PortalChatConversationDigestItem } from "./portal-chat-conversation-digest-item";
 export type { PortalChatConversationDigestItemProps } from "./portal-chat-conversation-digest-item";
-export { ChatComposerToolbar } from "./chat-composer-toolbar";
-export type { ChatComposerToolbarProps } from "./chat-composer-toolbar";
+export { ChatComposerToolbar } from "../../custom-components/Chat/chat-composer-toolbar";
+export type { ChatComposerToolbarProps } from "../../custom-components/Chat/chat-composer-toolbar";
 export { CHAT_COMPOSER_DEFAULT_EMOJI_PRESETS } from "./chat-default-emoji-presets";
 export { ChatThreadHeader } from "./chat-thread-header";
 export type { ChatThreadHeaderProps } from "./chat-thread-header";
@@ -17,7 +17,7 @@ export { ChatLoadingDots } from "./chat-loading-dots";
 export type { ChatLoadingDotsProps } from "./chat-loading-dots";
 export { useChatAutoScroll } from "./use-chat-auto-scroll";
 export type { ChatBubbleVariant } from "./chat-types";
-export { PortalChatWindow } from "./PortalChatWindow";
+export { PortalChatWindow } from "../../custom-components/Chat/PortalChatWindow";
 export type {
   PortalChatComposerProps,
   PortalChatComposerToolbarOptions,

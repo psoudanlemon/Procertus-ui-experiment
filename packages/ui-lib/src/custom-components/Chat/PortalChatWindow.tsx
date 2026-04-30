@@ -2,17 +2,17 @@ import { AvatarFallback, AvatarImage } from "@procertus-ui/ui";
 
 import { cn } from "@/lib/utils";
 
-import { ChatBubble } from "./chat-bubble";
-import { ChatBubbleAvatar } from "./chat-bubble-avatar";
-import { ChatBubbleMessage } from "./chat-bubble-message";
-import { ChatComposerToolbar } from "./chat-composer-toolbar";
-import { ChatList } from "./chat-list";
+import { ChatBubble } from "../../components/portal-chat/chat-bubble";
+import { ChatBubbleAvatar } from "../../components/portal-chat/chat-bubble-avatar";
+import { ChatBubbleMessage } from "../../components/portal-chat/chat-bubble-message";
+import { ChatList } from "../../components/portal-chat/chat-list";
 import type {
   PortalChatComposerProps,
   PortalChatComposerToolbarOptions,
   PortalChatMessage,
   PortalChatWindowProps,
-} from "./portal-chat-types";
+} from "../../components/portal-chat/portal-chat-types";
+import { ChatComposerToolbar } from "./chat-composer-toolbar";
 
 const defaultFormatTimestamp = (iso: string) =>
   new Intl.DateTimeFormat("nl-BE", {

@@ -70,6 +70,13 @@ export type StepLayoutProps = {
   /** Ghost-styled escape hatch rendered at the far-left of the footer (e.g. “Cancel”). */
   cancelAction?: StepLayoutAction;
   /**
+   * Tailwind `min-h-*` class. Applied to the default-layout Card so the wizard keeps a
+   * stable height across steps. Card becomes `flex flex-col` and the body grows to push
+   * the footer to the bottom. Ignored in `fill`/`fill-parent` layouts (those already pin
+   * the footer via the viewport / parent).
+   */
+  minHeight?: string;
+  /**
    * Stable key for the active step. When supplied and changed, the title block and
    * body slide-fade in to soften the transition. Direction (forward vs backward)
    * is inferred from numeric keys, so passing the active step index from
@@ -154,6 +161,7 @@ export function StepLayout({
   primaryAction,
   secondaryAction,
   cancelAction,
+  minHeight,
   stepKey,
 }: StepLayoutProps) {
   const isFill = layout === "fill" || layout === "fill-parent";
@@ -161,6 +169,7 @@ export function StepLayout({
   const isParentFill = layout === "fill-parent";
   const hasStepper = stepper != null;
   const rail = hasStepper && stepperPosition === "start";
+  const stableHeight = !isFill && !rail && minHeight != null;
 
   const prevStepKeyRef = useRef(stepKey);
   const directionRef = useRef<"forward" | "backward">("forward");
@@ -187,6 +196,7 @@ export function StepLayout({
     isViewportFill && !rail && "!pb-0",
     isViewportFill && "rounded-none bg-transparent shadow-none ring-0",
     !isViewportFill && "rounded-xl",
+    stableHeight && cn("flex flex-col", minHeight),
   );
 
   const headerNode = (
@@ -221,7 +231,7 @@ export function StepLayout({
           ? "flex min-h-0 flex-1 flex-col !p-0"
           : rail
             ? railContentClass
-            : stackedContentClass,
+            : cn(stackedContentClass, stableHeight && "flex-1"),
       )}
     >
       {isFill ? (

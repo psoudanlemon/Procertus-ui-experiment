@@ -111,8 +111,7 @@ export function emptyDetailsStep(overrides?: Partial<CertificationWizardModel["d
     productTree: {
       nodes: [],
       expandedIds: [],
-      expandAll: noop,
-      collapseAll: noop,
+      toggleExpandAll: noop,
       onToggle: noop,
       searchValue: "",
       onSearchChange: noop,
@@ -163,7 +162,6 @@ export function baseCertificationRequestWizardViewProps(
       title: "Certification request (story)",
       description:
         "Presentational shell — state comes from the parent or useCertificationRequestWizardView.",
-      stepLabel: "Stap 1 van 4",
       backAction: { label: "Terug", onClick: noop },
       primaryAction: { label: "Verder", onClick: noop },
     },

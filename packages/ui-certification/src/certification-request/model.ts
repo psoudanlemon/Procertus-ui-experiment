@@ -31,9 +31,9 @@ export type CertificationWizardModel = {
   layout: {
     title: string;
     description: string;
-    stepLabel: string;
     primaryAction: CertificationWizardAction;
     backAction?: CertificationWizardAction;
+    cancelAction?: CertificationWizardAction;
     secondaryAction?: CertificationWizardAction;
   };
   stepper: {
@@ -54,8 +54,7 @@ export type CertificationWizardModel = {
     productTree: {
       nodes: ReturnType<typeof toCertificationProductTreeNodes>;
       expandedIds: string[];
-      expandAll: () => void;
-      collapseAll: () => void;
+      toggleExpandAll: () => void;
       onToggle: (groupId: string, open: boolean) => void;
       searchValue: string;
       onSearchChange: (value: string) => void;
@@ -323,13 +322,11 @@ export function useCertificationRequestWizardModel({
                   ? "Controleer het inhoudelijke pakket. Na bevestiging start je meteen met organisatie en registratie buiten deze wizard."
                   : "Dit is de samenvatting die terugkeert naar de onboarding-intake of naar de aangemelde aanvraaglijst."
                 : "",
-      stepLabel: `Stap ${activeStep + 1} van ${steps.length}`,
       backAction:
         activeStep > 0
           ? { label: "Terug", onClick: () => goToStep(Math.max(0, activeStep - 1)) }
-          : onCancel
-            ? { label: "Annuleren", onClick: onCancel }
-            : undefined,
+          : undefined,
+      cancelAction: onCancel ? { label: "Annuleren", onClick: onCancel } : undefined,
       secondaryAction: undefined,
       primaryAction: {
         label:
@@ -356,8 +353,11 @@ export function useCertificationRequestWizardModel({
       productTree: {
         nodes: productTreeNodes,
         expandedIds,
-        expandAll: () => setExpandedIds([...groupIds]),
-        collapseAll: () => setExpandedIds([]),
+        toggleExpandAll: () => {
+          const allExpanded =
+            groupIds.length > 0 && expandedIds.length === groupIds.length;
+          setExpandedIds(allExpanded ? [] : [...groupIds]);
+        },
         onToggle: (groupId, open) => {
           setExpandedIds((prev) => {
             const set = new Set(prev);
@@ -371,7 +371,7 @@ export function useCertificationRequestWizardModel({
         hideUnavailableProducts,
         onHideUnavailableProductsChange: setHideUnavailableProducts,
         onSelectProduct: (product) => {
-          setSelectedProductId(product.id);
+          setSelectedProductId(selectedProductId === product.id ? undefined : product.id);
           setSelectedEntryIds([]);
         },
       },

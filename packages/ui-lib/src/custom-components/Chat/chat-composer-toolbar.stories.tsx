@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ChatComposerToolbar } from "./chat-composer-toolbar";
 
 const meta = {
-  title: "ui-lib/ChatComposerToolbar",
+  title: "Custom Components/Chat/ChatComposerToolbar",
   parameters: {
     layout: "padded",
     docs: {
