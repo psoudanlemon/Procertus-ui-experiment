@@ -1,0 +1,73 @@
+fusionseal-ops fly deploy pt1
+[07:28:25.549] INFO (#2): ==> deploy: pt1-extranet-onboarding (procertus-pt1-extranet-onboarding)
+[07:28:25.549] INFO (#2): Building pt1-extranet-onboarding (Vite static)...
+$ tsc -b && vite build
+../../packages/ui-certification/src/components/certification-request-wizard/use-certification-request-wizard-view.tsx:188:7 - error TS2353: Object literal may only specify known properties, and 'minHeight' does not exist in type 'Pick<StepLayoutProps, "variant" | "title" | "className" | "layout" | "description" | "stepper" | "primaryAction" | "secondaryAction" | "flush" | "stepperPosition" | "backAction" | "cancelAction">'.
+
+188       minHeight: STABLE_STEP_MIN_HEIGHT,
+          ~~~~~~~~~
+
+  ../../packages/ui-certification/src/components/certification-request-wizard/certification-request-wizard-types.ts:23:3
+    23   stepLayout: Pick<
+         ~~~~~~~~~~
+    The expected type comes from property 'stepLayout' which is declared here on type 'CertificationRequestWizardViewProps'
+
+../../packages/ui-pt1-prototype/src/prototype-overlay/PrototypeOverlayProvider.tsx:1:30 - error TS2307: Cannot find module '@hugeicons/core-free-icons' or its corresponding type declarations.
+
+1 import { Cancel01Icon } from "@hugeicons/core-free-icons";
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+../../packages/ui-pt1-prototype/src/prototype-overlay/PrototypeOverlayProvider.tsx:2:31 - error TS2307: Cannot find module '@hugeicons/react' or its corresponding type declarations.
+
+2 import { HugeiconsIcon } from "@hugeicons/react";
+                                ~~~~~~~~~~~~~~~~~~
+
+../../packages/ui/src/components/app-header.tsx:624:58 - error TS2552: Cannot find name 'Tick01Icon'. Did you mean 'Tick02Icon'?
+
+624                                     <HugeiconsIcon icon={Tick01Icon} className="size-4 shrink-0 text-accent-foreground" />
+                                                             ~~~~~~~~~~
+
+
+Found 4 errors.
+
+[07:28:32.681] ERROR (#2): Error: Command failed (2): bun run build (cwd: /Users/psoudan/workspace/05-Procertus/procertus-docs/ui-experiment/apps/frontend-pt1-extranet-onboarding)
+    at <anonymous> (/Users/psoudan/workspace/05-Procertus/procertus-docs/apps/cli-ops/src/services/fly-operations-service.ts:143:19)
+    at processTicksAndRejections (native:7:39)@Procertus-ui-experiment/packages/ui-certification/src/components/certification-request-wizard/use-certification-request-wizard-view.tsx @Procertus-ui-experiment/packages/ui-pt1-prototype/src/prototype-overlay/PrototypeOverlayProvider.tsx @Procertus-ui-experiment/packages/ui-certification/src/components/certification-request-wizard/certification-request-wizard-types.ts @Procertus-ui-experiment/packages/ui/src/components/app-header.tsx
+
+---
+
+fusionseal-ops fly deploy pt1
+[07:28:25.549] INFO (#2): ==> deploy: pt1-extranet-onboarding (procertus-pt1-extranet-onboarding)
+[07:28:25.549] INFO (#2): Building pt1-extranet-onboarding (Vite static)...
+$ tsc -b && vite build
+../../packages/ui-certification/src/components/certification-request-wizard/use-certification-request-wizard-view.tsx:188:7 - error TS2353: Object literal may only specify known properties, and 'minHeight' does not exist in type 'Pick<StepLayoutProps, "variant" | "title" | "className" | "layout" | "description" | "stepper" | "primaryAction" | "secondaryAction" | "flush" | "stepperPosition" | "backAction" | "cancelAction">'.
+
+188       minHeight: STABLE_STEP_MIN_HEIGHT,
+          ~~~~~~~~~
+
+  ../../packages/ui-certification/src/components/certification-request-wizard/certification-request-wizard-types.ts:23:3
+    23   stepLayout: Pick<
+         ~~~~~~~~~~
+    The expected type comes from property 'stepLayout' which is declared here on type 'CertificationRequestWizardViewProps'
+
+../../packages/ui-pt1-prototype/src/prototype-overlay/PrototypeOverlayProvider.tsx:1:30 - error TS2307: Cannot find module '@hugeicons/core-free-icons' or its corresponding type declarations.
+
+1 import { Cancel01Icon } from "@hugeicons/core-free-icons";
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+../../packages/ui-pt1-prototype/src/prototype-overlay/PrototypeOverlayProvider.tsx:2:31 - error TS2307: Cannot find module '@hugeicons/react' or its corresponding type declarations.
+
+2 import { HugeiconsIcon } from "@hugeicons/react";
+                                ~~~~~~~~~~~~~~~~~~
+
+../../packages/ui/src/components/app-header.tsx:624:58 - error TS2552: Cannot find name 'Tick01Icon'. Did you mean 'Tick02Icon'?
+
+624                                     <HugeiconsIcon icon={Tick01Icon} className="size-4 shrink-0 text-accent-foreground" />
+                                                             ~~~~~~~~~~
+
+
+Found 4 errors.
+
+[07:28:32.681] ERROR (#2): Error: Command failed (2): bun run build (cwd: /Users/psoudan/workspace/05-Procertus/procertus-docs/ui-experiment/apps/frontend-pt1-extranet-onboarding)
+    at <anonymous> (/Users/psoudan/workspace/05-Procertus/procertus-docs/apps/cli-ops/src/services/fly-operations-service.ts:143:19)
+    at processTicksAndRejections (native:7:39)@Procertus-ui-experiment/packages/ui-certification/src/components/certification-request-wizard/use-certification-request-wizard-view.tsx @Procertus-ui-experiment/packages/ui-pt1-prototype/src/prototype-overlay/PrototypeOverlayProvider.tsx @Procertus-ui-experiment/packages/ui-certification/src/components/certification-request-wizard/certification-request-wizard-types.ts @Procertus-ui-experiment/packages/ui/src/components/app-header.tsx
