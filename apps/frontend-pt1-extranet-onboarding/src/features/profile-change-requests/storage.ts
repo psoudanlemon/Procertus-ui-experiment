@@ -1,6 +1,40 @@
-import type { ProfileChangeRequest, ProfileChangeRequestStore } from "./types";
+import type { ProfileChangeRequestStore } from "./types";
 
 export const PROFILE_CHANGE_REQUESTS_STORAGE_KEY = "pt1-profile-change-requests";
+
+/** Bumped on every successful in-app write so `useSyncExternalStore` consumers re-render together. */
+let profileChangeRequestStoreGeneration = 0;
+const profileChangeRequestStoreListeners = new Set<() => void>();
+
+function notifyProfileChangeRequestStoreListeners() {
+  profileChangeRequestStoreGeneration += 1;
+  profileChangeRequestStoreListeners.forEach((listener) => {
+    listener();
+  });
+}
+
+export function subscribeProfileChangeRequestStore(onStoreChange: () => void) {
+  profileChangeRequestStoreListeners.add(onStoreChange);
+  ensureCrossTabProfileChangeRequestSync();
+  return () => {
+    profileChangeRequestStoreListeners.delete(onStoreChange);
+  };
+}
+
+export function getProfileChangeRequestStoreGeneration(): number {
+  return profileChangeRequestStoreGeneration;
+}
+
+let crossTabSyncAttached = false;
+function ensureCrossTabProfileChangeRequestSync() {
+  if (typeof window === "undefined" || crossTabSyncAttached) return;
+  crossTabSyncAttached = true;
+  window.addEventListener("storage", (event) => {
+    if (event.key === PROFILE_CHANGE_REQUESTS_STORAGE_KEY) {
+      notifyProfileChangeRequestStoreListeners();
+    }
+  });
+}
 
 function emptyStore(): ProfileChangeRequestStore {
   return { requests: [] };
@@ -25,6 +59,7 @@ export function writeProfileChangeRequestStore(store: ProfileChangeRequestStore)
   if (typeof localStorage === "undefined") return;
   try {
     localStorage.setItem(PROFILE_CHANGE_REQUESTS_STORAGE_KEY, JSON.stringify(store));
+    notifyProfileChangeRequestStoreListeners();
   } catch {
     /* ignore */
   }

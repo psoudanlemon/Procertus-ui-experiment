@@ -1,6 +1,14 @@
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Button, Badge, CoverView, IconButton, PanelSection, usePanelsContext } from "@procertus-ui/ui";
+import {
+  Badge,
+  Button,
+  CoverView,
+  IconButton,
+  PanelSection,
+  useConfirm,
+  usePanelsContext,
+} from "@procertus-ui/ui";
 import {
   CertificationRequestLifecycleDetailTimeline,
   CertificationRequestLifecycleTimeline,
@@ -52,6 +60,7 @@ function ClosePanelButton({
 }
 
 export function ProfileChangeDetailPanel({ panelType, requestId }: ProfileChangeDetailPanelProps) {
+  const confirm = useConfirm();
   const { removePanel } = useAppPanels();
   const { requests, setStatus } = useProfileChangeRequests();
 
@@ -86,11 +95,18 @@ export function ProfileChangeDetailPanel({ panelType, requestId }: ProfileChange
   const pending = request ? isPendingProfileChangeStatus(request.status) : false;
 
   const onCancel = useCallback(
-    (id: string) => {
+    async (id: string) => {
+      const confirmed = confirm
+        ? await confirm(
+            "Aanvraag intrekken?",
+            "Intrekken kan niet ongedaan gemaakt worden. De aanvraag blijft geannuleerd tot ze wordt gearchiveerd.",
+          )
+        : false;
+      if (!confirmed) return;
       setStatus(id, "canceled");
       removePanel(panelType ?? PROFILE_CHANGE_DETAIL_PANEL_TYPE);
     },
-    [setStatus, removePanel, panelType],
+    [confirm, setStatus, removePanel, panelType],
   );
 
   if (!request) {
@@ -175,7 +191,7 @@ export function ProfileChangeDetailPanel({ panelType, requestId }: ProfileChange
                 type="button"
                 size="sm"
                 variant="outline"
-                onClick={() => onCancel(request.id)}
+                onClick={() => void onCancel(request.id)}
               >
                 Aanvraag intrekken
               </Button>

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useSyncExternalStore } from "react";
 
 import { applyOrganizationProfileChange } from "./apply-organization-profile-change";
 import { applyUserProfileChange } from "./apply-user-profile-change";
@@ -7,9 +7,11 @@ import {
   findPendingProfileChangeRequestForUser,
 } from "./profile-change-request-queries";
 import {
+  getProfileChangeRequestStoreGeneration,
   newChangeNoteId,
   newChangeRequestId,
   readProfileChangeRequestStore,
+  subscribeProfileChangeRequestStore,
   writeProfileChangeRequestStore,
 } from "./storage";
 import type { ProfileChangeNoteAuthor, ProfileChangeRequest, ProfileChangeRequestStatus } from "./types";
@@ -33,12 +35,15 @@ function nowIso(): string {
 }
 
 export function useProfileChangeRequests() {
-  const [version, setVersion] = useState(0);
-  const requests = useMemo(() => readProfileChangeRequestStore().requests, [version]);
+  const storeGeneration = useSyncExternalStore(
+    subscribeProfileChangeRequestStore,
+    getProfileChangeRequestStoreGeneration,
+    getProfileChangeRequestStoreGeneration,
+  );
+  const requests = useMemo(() => readProfileChangeRequestStore().requests, [storeGeneration]);
 
   const persist = useCallback((next: ProfileChangeRequest[]) => {
     writeProfileChangeRequestStore({ requests: next });
-    setVersion((v) => v + 1);
   }, []);
 
   const createRequest = useCallback(
