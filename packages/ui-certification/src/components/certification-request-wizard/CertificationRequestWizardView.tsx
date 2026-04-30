@@ -162,20 +162,16 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
                   </CardContent>
                 </Card>
               ) : !splitProductInquirySteps ? (
-                <Card className="h-fit lg:sticky lg:top-component">
-                  <CardContent className="p-section">
-                    <Empty>
-                      <EmptyIcon>
-                        <HugeiconsIcon icon={HierarchySquare02Icon} strokeWidth={1.5} />
-                      </EmptyIcon>
-                      <EmptyTitle>Selecteer eerst een producttype</EmptyTitle>
-                      <EmptyDescription>
-                        Kies links een product in de catalogus. Daarna tonen we hier de beschikbare
-                        certificaten en attesten die je aan deze aanvraag kunt toevoegen.
-                      </EmptyDescription>
-                    </Empty>
-                  </CardContent>
-                </Card>
+                <Empty className="lg:sticky lg:top-component">
+                  <EmptyIcon className="bg-secondary text-secondary-foreground">
+                    <HugeiconsIcon icon={HierarchySquare02Icon} strokeWidth={1.5} />
+                  </EmptyIcon>
+                  <EmptyTitle>Selecteer eerst een producttype</EmptyTitle>
+                  <EmptyDescription>
+                    Kies links een product in de catalogus. Daarna tonen we hier de beschikbare
+                    certificaten en attesten die je aan deze aanvraag kunt toevoegen.
+                  </EmptyDescription>
+                </Empty>
               ) : null}
             </div>
           ) : null}

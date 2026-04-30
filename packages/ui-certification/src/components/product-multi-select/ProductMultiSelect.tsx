@@ -75,7 +75,7 @@ export function ProductMultiSelect({
   return (
     <FadingScrollList
       maxHeight="min(50vh, 28rem)"
-      fadeColor="from-background"
+      fadeColor="from-card"
       wrapperClassName={cn(className)}
       className="p-micro"
     >
