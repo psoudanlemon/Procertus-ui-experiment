@@ -41,34 +41,42 @@ const renderStatus = (status: CertificationRequestLifecycleStatus) => (
 );
 
 export const Draft: Story = {
-  render: () => renderStatus("draft"),
+  args: { status: "draft" },
+  render: ({ status }) => renderStatus(status),
 };
 
 export const Submitted: Story = {
-  render: () => renderStatus("submitted"),
+  args: { status: "submitted" },
+  render: ({ status }) => renderStatus(status),
 };
 
 export const InProgress: Story = {
-  render: () => renderStatus("in-progress"),
+  args: { status: "in-progress" },
+  render: ({ status }) => renderStatus(status),
 };
 
 export const Approved: Story = {
-  render: () => renderStatus("approved"),
+  args: { status: "approved" },
+  render: ({ status }) => renderStatus(status),
 };
 
 export const Archived: Story = {
-  render: () => renderStatus("archived"),
+  args: { status: "archived" },
+  render: ({ status }) => renderStatus(status),
 };
 
 export const Rejected: Story = {
-  render: () => renderStatus("rejected"),
+  args: { status: "rejected" },
+  render: ({ status }) => renderStatus(status),
 };
 
 export const Cancelled: Story = {
-  render: () => renderStatus("cancelled"),
+  args: { status: "cancelled" },
+  render: ({ status }) => renderStatus(status),
 };
 
 export const DetailVertical: Story = {
+  args: { status: "in-progress" },
   render: () => (
     <div className="max-w-xl rounded-xl border bg-card p-section">
       <CertificationRequestLifecycleDetailTimeline

@@ -92,5 +92,11 @@ function AnimatedSimulation() {
 
 export const AnimatedFixture: StoryObj<typeof meta> = {
   name: "Animated (story timers)",
+  args: {
+    open: true,
+    progress: 0,
+    activeStepIndex: -1,
+    steps: sampleSteps,
+  },
   render: () => <AnimatedSimulation />,
 };

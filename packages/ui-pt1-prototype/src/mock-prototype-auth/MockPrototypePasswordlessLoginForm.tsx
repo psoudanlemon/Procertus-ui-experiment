@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Field, FieldDescription, FieldLabel } from "@procertus-ui/ui";
+import { Field, FieldDescription } from "@procertus-ui/ui";
 import { LoginForm } from "@procertus-ui/ui-lib";
 
 import { cn } from "../lib/utils";
