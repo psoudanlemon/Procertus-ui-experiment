@@ -3,7 +3,7 @@
   "checkpoint_id": "32e4cd2c6ba6",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 3,
+  "checkpoints_count": 5,
   "files_touched": [
     "apps/frontend-pt1-extranet-onboarding/src/pages/RequestEditPage.tsx",
     "packages/ui-certification/src/certification-request/context.tsx",
@@ -22,6 +22,12 @@
       "transcript": "/32/e4cd2c6ba6/1/full.jsonl",
       "content_hash": "/32/e4cd2c6ba6/1/content_hash.txt",
       "prompt": "/32/e4cd2c6ba6/1/prompt.txt"
+    },
+    {
+      "metadata": "/32/e4cd2c6ba6/2/metadata.json",
+      "transcript": "/32/e4cd2c6ba6/2/full.jsonl",
+      "content_hash": "/32/e4cd2c6ba6/2/content_hash.txt",
+      "prompt": "/32/e4cd2c6ba6/2/prompt.txt"
     }
   ],
   "token_usage": {
