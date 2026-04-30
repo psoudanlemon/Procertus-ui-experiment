@@ -1,0 +1,18 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "4cb250f14362",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "packages/ui/src/components/app-sidebar.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/4c/b250f14362/0/metadata.json",
+      "transcript": "/4c/b250f14362/0/full.jsonl",
+      "content_hash": "/4c/b250f14362/0/content_hash.txt",
+      "prompt": "/4c/b250f14362/0/prompt.txt"
+    }
+  ]
+}

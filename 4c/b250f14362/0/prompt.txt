@@ -1,0 +1,9 @@
+@Procertus-ui-experiment/packages/ui/src/components/app-shell/app-shell.stories.tsx:165 I can see that the nav items of the management app shell can be set active and are visualized correctly in the prototype. But when I use the same management app shell in the application and set the isActive properties based on the URL, I don't see them visually activated.
+
+Can you investigate what is going on or what is going wrong? Thank you. @Procertus-ui-experiment/packages/ui/src/components/app-shell/management-app-shell.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx:82 @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx:74
+
+---
+
+@Procertus-ui-experiment/packages/ui/src/components/app-shell/app-shell.stories.tsx:165 I can see that the nav items of the management app shell can be set active and are visualized correctly in the prototype. But when I use the same management app shell in the application and set the isActive properties based on the URL, I don't see them visually activated.
+
+Can you investigate what is going on or what is going wrong? Thank you. @Procertus-ui-experiment/packages/ui/src/components/app-shell/management-app-shell.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx:82 @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx:74
