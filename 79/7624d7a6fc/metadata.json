@@ -1,0 +1,18 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "797624d7a6fc",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingRegistrationCompletePage.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/79/7624d7a6fc/0/metadata.json",
+      "transcript": "/79/7624d7a6fc/0/full.jsonl",
+      "content_hash": "/79/7624d7a6fc/0/content_hash.txt",
+      "prompt": "/79/7624d7a6fc/0/prompt.txt"
+    }
+  ]
+}
