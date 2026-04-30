@@ -4,7 +4,6 @@ import {
   Badge,
   Button,
   CoverView,
-  IconButton,
   PanelSection,
   useConfirm,
   usePanelsContext,
@@ -45,17 +44,16 @@ function ClosePanelButton({
   panelType?: string;
 }) {
   const { removePanel } = usePanelsContext();
-  const CloseIcon = ({ className }: { className?: string }) => (
-    <HugeiconsIcon icon={Cancel01Icon} className={className} />
-  );
-
   return (
-    <IconButton
-      icon={CloseIcon}
+    <Button
+      variant="ghost"
+      size="icon"
+      inverse
       aria-label="Sluit detailpaneel"
       onClick={() => removePanel(panelType)}
-      invertColors
-    />
+    >
+      <HugeiconsIcon icon={Cancel01Icon} />
+    </Button>
   );
 }
 

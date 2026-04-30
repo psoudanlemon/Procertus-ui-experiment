@@ -7,22 +7,12 @@ import {
   UserIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import type { IconSvgElement } from "@hugeicons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Button, Separator } from "@procertus-ui/ui";
 import { AppLayout, useApp } from "./AppShell/index";
 import { CoverView } from "./CoverView";
-import { IconButton } from "./IconButton";
 import { PanelsLayout, usePanelsContext } from "./Panels";
-
-const icon =
-  (source: IconSvgElement) =>
-  ({ className }: { className?: string }) => <HugeiconsIcon icon={source} className={className} />;
-
-const menuIcon = icon(Menu01Icon as IconSvgElement);
-const settingsIcon = icon(Setting06Icon as IconSvgElement);
-const closeIcon = icon(Cancel01Icon as IconSvgElement);
 
 interface BasePanelProps {
   panelType?: string;
@@ -42,14 +32,21 @@ const SettingsPanel = ({ panelType = "settings", initialSetting }: SettingsPanel
       colorScheme="primary"
       cover="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1770&q=80"
       primaryAction={
-        <IconButton
-          icon={closeIcon}
+        <Button
+          variant="ghost"
+          size="icon"
+          inverse
           aria-label="Close settings"
           onClick={() => removePanel(panelType)}
-          invertColors
-        />
+        >
+          <HugeiconsIcon icon={Cancel01Icon} />
+        </Button>
       }
-      secondaryAction={<IconButton icon={settingsIcon} aria-label="Panel settings" invertColors />}
+      secondaryAction={
+        <Button variant="ghost" size="icon" inverse aria-label="Panel settings">
+          <HugeiconsIcon icon={Setting06Icon} />
+        </Button>
+      }
       className="h-full"
     >
       <div className="space-y-3 p-4">
@@ -74,15 +71,20 @@ const UserProfilePanel = ({ panelType = "userProfile", userId }: UserProfilePane
       colorScheme="primary"
       cover="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1770&q=80"
       primaryAction={
-        <IconButton
-          icon={closeIcon}
+        <Button
+          variant="ghost"
+          size="icon"
+          inverse
           aria-label="Close user profile"
           onClick={() => removePanel(panelType)}
-          invertColors
-        />
+        >
+          <HugeiconsIcon icon={Cancel01Icon} />
+        </Button>
       }
       secondaryAction={
-        <IconButton icon={settingsIcon} aria-label="User profile settings" invertColors />
+        <Button variant="ghost" size="icon" inverse aria-label="User profile settings">
+          <HugeiconsIcon icon={Setting06Icon} />
+        </Button>
       }
       className="h-full"
     >
@@ -104,13 +106,20 @@ const NotificationsPanel = ({ panelType = "notifications" }: BasePanelProps) => 
       title="Notifications"
       colorScheme="background"
       primaryAction={
-        <IconButton
-          icon={closeIcon}
+        <Button
+          variant="ghost"
+          size="icon"
           aria-label="Close notifications"
           onClick={() => removePanel(panelType)}
-        />
+        >
+          <HugeiconsIcon icon={Cancel01Icon} />
+        </Button>
       }
-      secondaryAction={<IconButton icon={settingsIcon} aria-label="Notification settings" />}
+      secondaryAction={
+        <Button variant="ghost" size="icon" aria-label="Notification settings">
+          <HugeiconsIcon icon={Setting06Icon} />
+        </Button>
+      }
       className="h-full"
     >
       <div className="space-y-2 p-4">
@@ -193,7 +202,11 @@ const AppLayoutWithPanels = () => {
     <CoverView
       title="App Main View Title"
       header={<div>Optional header content below title</div>}
-      primaryAction={<IconButton icon={menuIcon} aria-label="Open menu" invertColors />}
+      primaryAction={
+        <Button variant="ghost" size="icon" inverse aria-label="Open menu">
+          <HugeiconsIcon icon={Menu01Icon} />
+        </Button>
+      }
       colorScheme="primary"
       cover="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1770&q=80"
     >

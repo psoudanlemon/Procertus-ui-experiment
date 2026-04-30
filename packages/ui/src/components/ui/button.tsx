@@ -47,10 +47,53 @@ const buttonVariants = cva(
           "size-8 [--cmd-deep:12px] in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-10",
       },
+      // Inverse: re-skin variants for placement on dark / brand-colored surfaces.
+      inverse: {
+        true: "focus-visible:border-primary-foreground focus-visible:ring-primary-foreground/50",
+        false: "",
+      },
     },
+    compoundVariants: [
+      {
+        variant: "default",
+        inverse: true,
+        className:
+          "bg-primary-foreground text-primary hover:bg-primary-foreground/90",
+      },
+      {
+        variant: "destructive",
+        inverse: true,
+        className:
+          "bg-destructive-foreground text-destructive hover:bg-destructive-foreground/90",
+      },
+      {
+        variant: "outline",
+        inverse: true,
+        className:
+          "border-input bg-primary text-primary-foreground hover:bg-primary/80 hover:text-primary-foreground aria-expanded:bg-primary/80 aria-expanded:text-primary-foreground",
+      },
+      {
+        variant: "secondary",
+        inverse: true,
+        className:
+          "bg-secondary-foreground text-secondary hover:bg-secondary-foreground/80",
+      },
+      {
+        variant: "ghost",
+        inverse: true,
+        className:
+          "text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground aria-expanded:bg-primary-foreground/10 aria-expanded:text-primary-foreground",
+      },
+      {
+        variant: "link",
+        inverse: true,
+        className: "text-primary-foreground hover:text-primary-foreground/80",
+      },
+    ],
     defaultVariants: {
       variant: "default",
       size: "default",
+      inverse: false,
     },
   },
 );
@@ -59,6 +102,7 @@ function Button({
   className,
   variant = "default",
   size = "default",
+  inverse = false,
   asChild = false,
   ref,
   onPointerDown,
@@ -98,7 +142,8 @@ function Button({
       data-slot="button"
       data-variant={variant}
       data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
+      data-inverse={inverse ? "true" : undefined}
+      className={cn(buttonVariants({ variant, size, inverse, className }))}
       onPointerDown={(e) => {
         if (e.button === 0 && !e.currentTarget.disabled) triggerPulse();
         onPointerDown?.(e);
