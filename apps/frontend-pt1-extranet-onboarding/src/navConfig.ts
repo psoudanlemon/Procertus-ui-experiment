@@ -91,30 +91,30 @@ export const PROTOTYPE_NAV_GROUPS: PrototypeNavGroup[] = [
       },
     ],
   },
-  {
-    key: "demo",
-    label: "Demo",
-    items: [
-      {
-        key: "organization",
-        title: "Organisatie",
-        url: "/organization",
-        icon: Setting06Icon as IconSvgElement,
-      },
-      {
-        key: "categorization",
-        title: "Beslissingsboom",
-        url: "/categorization",
-        icon: HierarchySquare02Icon as IconSvgElement,
-      },
-      {
-        key: "design",
-        title: "Design system",
-        url: "/design-system",
-        icon: BookOpen01Icon as IconSvgElement,
-      },
-    ],
-  },
+  // {
+  //   key: "demo",
+  //   label: "Demo",
+  //   items: [
+  //     {
+  //       key: "organization",
+  //       title: "Organisatie",
+  //       url: "/organization",
+  //       icon: Setting06Icon as IconSvgElement,
+  //     },
+  //     {
+  //       key: "categorization",
+  //       title: "Beslissingsboom",
+  //       url: "/categorization",
+  //       icon: HierarchySquare02Icon as IconSvgElement,
+  //     },
+  //     {
+  //       key: "design",
+  //       title: "Design system",
+  //       url: "/design-system",
+  //       icon: BookOpen01Icon as IconSvgElement,
+  //     },
+  //   ],
+  // },
 ];
 
 export const PROTOTYPE_SECONDARY_NAV: PrototypeNavItem[] = [
