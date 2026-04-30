@@ -2,14 +2,8 @@ import * as React from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { FilePlusIcon } from "@hugeicons/core-free-icons";
 
-import {
-  PublicRegistryFooter,
-  type PublicRegistryFooterProps,
-} from "@/components/public-footer";
-import {
-  PublicRegistryHeader,
-  type PublicRegistryHeaderProps,
-} from "@/components/public-header";
+import { PublicRegistryFooter, type PublicRegistryFooterProps } from "@/components/public-footer";
+import { PublicRegistryHeader, type PublicRegistryHeaderProps } from "@/components/public-header";
 import { Button } from "@/components/ui/button";
 
 export type PublicRegistryAppShellProps = {

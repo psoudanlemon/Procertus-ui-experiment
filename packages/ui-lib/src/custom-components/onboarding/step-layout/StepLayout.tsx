@@ -228,7 +228,7 @@ export function StepLayout({
     <CardContent
       className={cn(
         isFill
-          ? "flex min-h-0 flex-1 flex-col !p-0"
+          ? "flex min-h-0 flex-1 flex-col !p-0 max-w-7xl"
           : rail
             ? railContentClass
             : cn(stackedContentClass, stableHeight && "flex-1"),
