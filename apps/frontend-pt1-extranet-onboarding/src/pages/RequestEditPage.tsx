@@ -41,7 +41,6 @@ export function RequestEditPage() {
       <CertificationRequestWizard
         mode="authenticated"
         initialDrafts={[...request.inquiries]}
-        initialStep="drafts"
         backendKind="localStorage"
         storageKey={CERTIFICATION_REQUEST_STORAGE_KEY}
         sessionId={request.sessionId}

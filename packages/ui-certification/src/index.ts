@@ -100,6 +100,7 @@ export {
   useCertificationRequest,
   useCertificationRequestWizardModel,
 } from "./CertificationRequestContext";
+export { certificationInquiriesNeedDetailsStep } from "./certification-request/drafts";
 export type {
   CertificationProductTreeNode,
   CertificationRequestContextValue,

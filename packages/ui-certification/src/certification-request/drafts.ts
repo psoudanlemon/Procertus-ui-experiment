@@ -6,13 +6,49 @@ import type {
 
 import { chipDisplay } from "../helpers";
 import type { AvailableEntry } from "../types";
+import { entryLabelForIntent, getCertificationProductAvailability } from "./product-tree";
 import {
   OPTIONAL_PRODUCT_INTENTS,
   PRODUCT_CERTIFICATION_ENTRY_IDS,
   PRODUCT_REQUIRED_INTENTS,
   type ProductIndexEntry,
 } from "./types";
-import { entryLabelForIntent, getCertificationProductAvailability } from "./product-tree";
+
+/** Row still on intent id (placeholder from {@link makeDraftFromIntent} / first wizard step). */
+const CERTIFICATION_INTENT_ENTRY_IDS = new Set<CertificationRequestIntentId>([
+  "product-certification",
+  "atg",
+  "innovation-attest",
+  "procertus",
+  "epd",
+  "partijkeuring",
+]);
+
+/**
+ * True when at least one inquiry still needs the details step (product tree and/or freeform context)
+ * before drafts/review. Mirrors when {@link useCertificationRequest} would have `canContinueDetails === false`
+ * for the persisted draft rows alone (no live UI selection).
+ */
+export function certificationInquiriesNeedDetailsStep(
+  drafts: readonly CertificationRequestDraft[],
+): boolean {
+  if (drafts.length === 0) return false;
+  return drafts.some((draft) => {
+    const entryId = draft.entryId;
+    const looksLikeIntentOnlyRow = CERTIFICATION_INTENT_ENTRY_IDS.has(
+      entryId as CertificationRequestIntentId,
+    );
+    const hasProduct = draft.productId != null;
+    const hasSubstantialContext = (draft.context?.trim().length ?? 0) >= 12;
+    const hasCertificationEntry = PRODUCT_CERTIFICATION_ENTRY_IDS.has(entryId as CertificationEntryId);
+
+    if (hasCertificationEntry && hasProduct) return false;
+    if (looksLikeIntentOnlyRow && hasSubstantialContext) return false;
+    if (looksLikeIntentOnlyRow && hasProduct) return false;
+    if (looksLikeIntentOnlyRow && !hasProduct && !hasSubstantialContext) return true;
+    return false;
+  });
+}
 
 export function getIntentDraftLabels({
   intent,

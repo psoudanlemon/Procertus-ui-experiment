@@ -27,7 +27,13 @@ import {
   entryLabelForIntent,
   getAvailableProductEntries,
 } from "./product-tree";
-import { createContextDraft, createDraftsForProduct, getIntentDraftLabels, intentForDraft } from "./drafts";
+import {
+  certificationInquiriesNeedDetailsStep,
+  createContextDraft,
+  createDraftsForProduct,
+  getIntentDraftLabels,
+  intentForDraft,
+} from "./drafts";
 import {
   CERTIFICATION_REQUEST_STEP_IDS,
   PRODUCT_REQUIRED_INTENTS,
@@ -42,20 +48,30 @@ function maxCertificationStepIndex() {
 
 function normalizeInitialStep(
   initialStep: CertificationRequestProviderProps["initialStep"],
-  hasDrafts: boolean,
+  drafts: readonly CertificationRequestDraft[],
 ) {
   const cap = maxCertificationStepIndex();
+  const detailsIdx = CERTIFICATION_REQUEST_STEP_IDS.indexOf("details");
+  const draftsIdx = CERTIFICATION_REQUEST_STEP_IDS.indexOf("drafts");
+  const needsDetails = certificationInquiriesNeedDetailsStep(drafts);
+
+  const clampPrematureDraftsOrReview = (idx: number) => {
+    if (needsDetails && idx >= draftsIdx) return detailsIdx;
+    return Math.min(cap, Math.max(0, idx));
+  };
+
   if (typeof initialStep === "number") {
-    return Math.min(cap, Math.max(0, initialStep));
+    return clampPrematureDraftsOrReview(initialStep);
   }
   if (initialStep != null) {
     const idx = CERTIFICATION_REQUEST_STEP_IDS.indexOf(initialStep);
-    if (idx < 0) return hasDrafts ? CERTIFICATION_REQUEST_STEP_IDS.indexOf("drafts") : 0;
-    return Math.min(cap, idx);
+    if (idx < 0) {
+      return drafts.length > 0 ? (needsDetails ? detailsIdx : draftsIdx) : 0;
+    }
+    return clampPrematureDraftsOrReview(idx);
   }
-  return hasDrafts
-    ? CERTIFICATION_REQUEST_STEP_IDS.indexOf("drafts")
-    : CERTIFICATION_REQUEST_STEP_IDS.indexOf("intent");
+  if (drafts.length === 0) return CERTIFICATION_REQUEST_STEP_IDS.indexOf("intent");
+  return needsDetails ? detailsIdx : draftsIdx;
 }
 
 const applySetState = <TValue,>(
@@ -82,9 +98,10 @@ export function CertificationRequestProvider({
   const initialSession = useMemo<CreateCertificationRequestSession>(
     () => ({
       mode,
-      activeStep: normalizeInitialStep(initialStep, initialDrafts.length > 0),
+      activeStep: normalizeInitialStep(initialStep, initialDrafts),
       expandedIds: [],
       drafts: initialDrafts,
+      intent: initialDrafts[0] ? intentForDraft(initialDrafts[0]) : undefined,
     }),
     [initialDrafts, initialStep, mode],
   );
@@ -117,6 +134,10 @@ export function CertificationRequestProvider({
 
   const activeStep = session.activeStep;
 
+  const draftsContentKey = session.drafts
+    .map((d) => `${d.id}\t${d.entryId}\t${d.productId ?? ""}\t${d.context ?? ""}`)
+    .join("\n");
+
   /** Drop legacy persisted step index 4 — navigation ends at review for every mode. */
   useLayoutEffect(() => {
     const reviewIdx = CERTIFICATION_REQUEST_STEP_IDS.indexOf("review");
@@ -124,6 +145,24 @@ export function CertificationRequestProvider({
       updateSession({ activeStep: reviewIdx });
     }
   }, [activeStep]);
+
+  /** Reconcile persisted session: intent seeding + do not skip details while inquiries are still placeholders. */
+  useLayoutEffect(() => {
+    const draftsStepIdx = CERTIFICATION_REQUEST_STEP_IDS.indexOf("drafts");
+    const detailsStepIdx = CERTIFICATION_REQUEST_STEP_IDS.indexOf("details");
+    const needsDetails = certificationInquiriesNeedDetailsStep(session.drafts);
+    const inferredIntent = session.drafts[0] ? intentForDraft(session.drafts[0]) : undefined;
+
+    const nextStep =
+      needsDetails && activeStep >= draftsStepIdx ? detailsStepIdx : undefined;
+    const nextIntent = !session.intent && inferredIntent ? inferredIntent : undefined;
+
+    if (nextStep == null && nextIntent == null) return;
+    updateSession({
+      ...(nextStep != null ? { activeStep: nextStep } : {}),
+      ...(nextIntent != null ? { intent: nextIntent } : {}),
+    });
+  }, [activeStep, draftsContentKey, session.intent]);
 
   const intent = session.intent;
   const expandedIds = [...session.expandedIds];
