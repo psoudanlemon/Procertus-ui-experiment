@@ -107,10 +107,10 @@ export function CertificationRequestCard({
   return (
     <Card
       className={cn(
-        "h-full overflow-visible p-4 transition-colors",
-        rejected && "border-destructive/30 bg-destructive/5",
+        "h-full overflow-visible p-4 transition-[box-shadow,background-color,border-color]",
+        rejected && "border-destructive/30 bg-card",
         onOpen &&
-          "cursor-pointer hover:bg-accent/50 focus-visible:ring-3 focus-visible:ring-ring/50",
+          "cursor-pointer hover:ring-primary/50 focus-visible:ring-3 focus-visible:ring-ring/50",
         className,
       )}
       {...interactiveProps}
