@@ -102,13 +102,13 @@ export function RequestPackageReview({
             >
               {sectionTitle}
             </h3>
-            <div className="mt-component grid gap-section sm:grid-cols-2">
-              <div className="flex min-w-0 flex-col gap-component">
+            <div className="mt-section grid gap-section sm:grid-cols-2">
+              <div className="flex min-w-0 flex-col gap-section">
                 <div className="flex flex-col gap-micro">
                   <p className="m-0 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
                     {requesterLabel}
                   </p>
-                  <p className="m-0 text-base font-bold leading-snug text-foreground">{rc.requesterName}</p>
+                  <p className="m-0 text-base font-semibold leading-snug text-foreground">{rc.requesterName}</p>
                 </div>
                 {rc.requesterEmail ? (
                   <div className="flex flex-col gap-micro">
@@ -126,12 +126,12 @@ export function RequestPackageReview({
                   </div>
                 ) : null}
               </div>
-              <div className="flex min-w-0 flex-col gap-component">
+              <div className="flex min-w-0 flex-col gap-section">
                 <div className="flex flex-col gap-micro">
                   <p className="m-0 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
                     {organizationLabel}
                   </p>
-                  <p className="m-0 text-base font-bold leading-snug text-foreground">{rc.organizationName}</p>
+                  <p className="m-0 text-base font-semibold leading-snug text-foreground">{rc.organizationName}</p>
                 </div>
                 {rc.organizationDetails ? (
                   <div className="text-base font-normal leading-[1.6] text-muted-foreground [&_p]:m-0 [&_p+p]:mt-micro">
@@ -165,7 +165,7 @@ export function RequestPackageReview({
                     <TableCell className="align-top whitespace-nowrap text-base font-normal text-muted-foreground">
                       {r.label}
                     </TableCell>
-                    <TableCell className="min-w-0 whitespace-normal wrap-break-word align-top text-base font-bold text-foreground">
+                    <TableCell className="min-w-0 whitespace-normal wrap-break-word align-top text-base font-semibold text-foreground">
                       {r.value}
                     </TableCell>
                   </TableRow>
