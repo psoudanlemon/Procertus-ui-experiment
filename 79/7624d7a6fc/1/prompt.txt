@@ -34,3 +34,11 @@ Please set a default delay for showing the question card, and set up a default t
 ---
 
 Please use a slide-in and fade-in combination, with the slide-in moving from right to left.
+
+---
+
+Please commit. Use  Commit skill.
+
+---
+
+Please commit. Use  Commit skill.
