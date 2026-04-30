@@ -31,6 +31,7 @@ export const CertificationPhaseChrome: StoryObj<typeof meta> = {
     pageTitle: CERTIFICATION_PHASE_TITLE,
     pageDescription: CERTIFICATION_PHASE_DESCRIPTION,
     onSignInClick: () => {},
+    children: null,
   },
   render: (args) => (
     <AnonymousOnboardingShell {...args}>
@@ -47,6 +48,7 @@ export const RegistrationPhaseChrome: StoryObj<typeof meta> = {
     pageTitle: REGISTRATION_PHASE_TITLE,
     pageDescription: REGISTRATION_PHASE_DESCRIPTION,
     onSignInClick: () => {},
+    children: null,
   },
   render: (args) => (
     <AnonymousOnboardingShell {...args}>

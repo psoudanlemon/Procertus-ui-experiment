@@ -1,4 +1,4 @@
-import { Button } from "@procertus-ui/ui";
+import { Button, H1 } from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import type { ReactNode } from "react";
 
@@ -16,7 +16,7 @@ export function AnonymousOnboardingShell({
   return (
     <div className="min-h-svh bg-background px-4 py-8">
       <div className="mx-auto w-full max-w-5xl">
-        <header className="mb-8 flex flex-col gap-6 border-b border-border/70 pb-8">
+        <header className="mb-8 flex flex-col gap-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0 flex-1">
               <img
@@ -29,9 +29,7 @@ export function AnonymousOnboardingShell({
                 alt="PROCERTUS, certification that builds trust"
                 className="hidden h-16 w-auto brightness-0 invert dark:block"
               />
-              <h1 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
-                {pageTitle}
-              </h1>
+              <H1 className="mt-3">{pageTitle}</H1>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
                 {pageDescription}
               </p>
