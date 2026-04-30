@@ -1,0 +1,21 @@
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/profile_change_detail_panel.tsx:173-182 canceling a request, since it is not reversible, should always be preceded by confirmation. 
+
+like here:
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/request_detail_panel.tsx:89-94
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/profile_change_detail_panel.tsx:173-182 canceling a request, since it is not reversible, should always be preceded by confirmation. 
+
+like here:
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/request_detail_panel.tsx:89-94
+
+---
+
+After removal, I can see the panel is being removed, but I cannot see in the main view the actual data change indicating that the request has been removed (no reactive update after data mutation).@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/OrganizationProfilePage.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/UserProfilePage.tsx 
+
+ since these requests can be added and removed on both organization profiles and user profiles, please implement reactive updates for both.
+
+---
+
+Please commit. Use the commit skill.
