@@ -233,10 +233,7 @@ function MasterCard({ service }: { service: WegwijzerService }) {
         <HoverCard>
           <HoverCardTrigger asChild>
             <Button asChild variant="link">
-              <Link to={EXPERT_CALL_PATH(entry.id)}>
-                <HugeiconsIcon icon={InformationCircleIcon} className="size-4" />
-                Hulp nodig?
-              </Link>
+              <Link to={EXPERT_CALL_PATH(entry.id)}>Hulp nodig?</Link>
             </Button>
           </HoverCardTrigger>
           <HoverCardContent align="start" className="w-80">
