@@ -1,5 +1,6 @@
+import { Button } from "@procertus-ui/ui";
 import { MockPrototypePasswordlessLoginForm } from "@procertus-ui/ui-pt1-prototype";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { AuthLayout } from "@procertus-ui/ui-lib";
 
@@ -16,6 +17,14 @@ export function SignupPage() {
       title="Welkom terug"
       description="Meld je aan met het e-mailadres waarmee je bij PROCERTUS geregistreerd staat."
       panel={AUTH_PANEL}
+      belowCard={
+        <p className="text-center text-sm text-muted-foreground">
+          Nog geen account?{" "}
+          <Button asChild variant="link" className="text-sm">
+            <Link to="/welcome">Start je aanvraag hier</Link>
+          </Button>
+        </p>
+      }
     >
       <MockPrototypePasswordlessLoginForm
         submitLabel="Inloggen"
