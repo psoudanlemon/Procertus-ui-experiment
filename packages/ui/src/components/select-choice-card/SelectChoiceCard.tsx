@@ -36,23 +36,23 @@ const shellVariants = cva(
       },
       variant: {
         elevated: [
-          "has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:shadow-proc-sm not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-primary/50 has-data-checked:has-[>[data-slot=field]]:border-primary has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
-          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-primary has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:shadow-proc-sm not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-accent-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:bg-accent not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:has-[>[data-slot=field]]:border-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-accent-foreground has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
         ],
         default: [
-          "has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:bg-card not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-primary/50 has-data-checked:has-[>[data-slot=field]]:border-primary has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
-          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-primary has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:bg-card not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-accent-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:bg-accent not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:has-[>[data-slot=field]]:border-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-accent-foreground has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
         ],
         faded: [
-          "opacity-90 has-[>[data-slot=field]]:border-dashed has-[>[data-slot=field]]:border-muted-foreground/40 not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:opacity-100 not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-primary/50 has-data-checked:opacity-100 has-data-checked:has-[>[data-slot=field]]:border-primary has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
-          "has-[[data-state=checked][data-slot=checkbox]]:opacity-100 has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-primary has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
+          "opacity-90 has-[>[data-slot=field]]:border-dashed has-[>[data-slot=field]]:border-muted-foreground/40 not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:opacity-100 not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-accent-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:bg-accent not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:opacity-100 has-data-checked:has-[>[data-slot=field]]:border-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[[data-state=checked][data-slot=checkbox]]:opacity-100 has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-accent-foreground has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
         ],
         ghost: [
-          "has-[>[data-slot=field]]:border-transparent has-[>[data-slot=field]]:bg-transparent has-[>[data-slot=field]]:shadow-none has-[>[data-slot=field]]:text-muted-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-foreground has-data-checked:has-[>[data-slot=field]]:text-foreground",
-          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-foreground",
+          "has-[>[data-slot=field]]:border-transparent has-[>[data-slot=field]]:bg-transparent has-[>[data-slot=field]]:shadow-none has-[>[data-slot=field]]:text-muted-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:bg-accent not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
         ],
         "no-border": [
-          "has-[>[data-slot=field]]:border-transparent has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:shadow-none has-[>[data-slot=field]]:text-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[>[data-slot=field]]:border-transparent has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:shadow-none has-[>[data-slot=field]]:text-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-accent-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:bg-accent not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
           "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
         ],
       },
@@ -66,7 +66,8 @@ const titleVariants = cva("text-sm font-medium", {
     variant: {
       elevated: "",
       default: "",
-      faded: "text-muted-foreground",
+      faded:
+        "text-muted-foreground group-hover/choice:text-accent-foreground group-has-data-checked/choice:text-accent-foreground group-has-[[data-state=checked][data-slot=checkbox]]/choice:text-accent-foreground",
       ghost: "",
       "no-border": "",
     },
@@ -173,7 +174,8 @@ export function SelectChoiceCard({
   const showLeading = !isHero && !isMinimal && leading;
   const titleLabelClass = cn(
     "block text-left text-sm font-medium normal-case leading-snug tracking-normal whitespace-normal wrap-break-word",
-    variant === "faded" && "text-muted-foreground",
+    variant === "faded" &&
+      "text-muted-foreground group-hover/choice:text-accent-foreground group-has-data-checked/choice:text-accent-foreground group-has-[[data-state=checked][data-slot=checkbox]]/choice:text-accent-foreground",
   );
 
   return (
