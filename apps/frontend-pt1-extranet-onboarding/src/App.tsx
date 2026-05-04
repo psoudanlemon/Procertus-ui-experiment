@@ -12,6 +12,10 @@ import { AnonymousOnboardingFlow } from "./features/onboarding/AnonymousOnboardi
 import { AppPlaceholderPage } from "./pages/AppPlaceholderPage";
 import { OnboardingRegistrationCompletePage } from "./pages/OnboardingRegistrationCompletePage";
 import { SignupPage } from "./pages/SignupPage";
+import { WegwijzerPage } from "./pages/WegwijzerPage";
+import { TriagePage } from "./pages/TriagePage";
+import { InfoRequestPlaceholderPage } from "./pages/InfoRequestPlaceholderPage";
+import { ExpertCallPlaceholderPage } from "./pages/ExpertCallPlaceholderPage";
 import { OrganizationPage } from "./pages/OrganizationPage";
 import { OrganizationProfilePage } from "./pages/OrganizationProfilePage";
 import { DashboardPage } from "./pages/DashboardPage";
@@ -41,8 +45,19 @@ export default function App() {
       <Route path="/registratie-voltooid" element={<OnboardingRegistrationCompletePage />} />
 
       <Route element={<PublicAppShell />}>
-        <Route path="/welcome" element={<SignupPage />} />
+        <Route path="/welcome" element={<WegwijzerPage />} />
+        <Route path="/welcome/login" element={<SignupPage />} />
         <Route path="/welcome/start" element={<AnonymousOnboardingFlow />} />
+        <Route path="/welcome/aanvraag/:serviceId" element={<TriagePage />} />
+        <Route
+          path="/welcome/info-request/:serviceId"
+          element={<InfoRequestPlaceholderPage />}
+        />
+        <Route path="/welcome/expert-call" element={<ExpertCallPlaceholderPage />} />
+        <Route
+          path="/welcome/expert-call/:serviceId"
+          element={<ExpertCallPlaceholderPage />}
+        />
       </Route>
 
       <Route element={<RequireAuth />}>
