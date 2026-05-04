@@ -13,6 +13,14 @@ import {
 } from "@hugeicons/core-free-icons";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -46,6 +54,11 @@ export type PublicHeaderNavLink = {
   isActive?: boolean;
 };
 
+export type PublicHeaderBreadcrumb = {
+  label: string;
+  href?: string;
+};
+
 export type PublicHeaderLanguage = {
   code: string;
   label: string;
@@ -65,6 +78,8 @@ export type PublicRegistryHeaderProps = {
   logo?: React.ReactNode;
   /** Primary horizontal navigation links. */
   navLinks?: PublicHeaderNavLink[];
+  /** Breadcrumb trail. When provided, it replaces `navLinks` in the same slot. */
+  breadcrumbs?: PublicHeaderBreadcrumb[];
   /** Show the search bar in the header. */
   showSearch?: boolean;
   /** Placeholder text for the search input. */
@@ -115,6 +130,7 @@ function getInitials(user: PublicHeaderUser): string {
 function PublicRegistryHeader({
   logo,
   navLinks = [],
+  breadcrumbs,
   showSearch = false,
   searchPlaceholder = "Zoek certificaten...",
   onSearch,
@@ -173,22 +189,44 @@ function PublicRegistryHeader({
           </a>
         )}
 
-        <nav className="hidden items-center gap-section sm:flex">
-          {navLinks.map((link) => (
-            <a
-              key={link.title}
-              href={link.url}
-              className={cn(
-                "rounded-md px-section py-component text-sm font-medium transition-colors",
-                link.isActive
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                  : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-              )}
-            >
-              {link.title}
-            </a>
-          ))}
-        </nav>
+        {breadcrumbs && breadcrumbs.length > 0 ? (
+          <Breadcrumb className="hidden sm:flex">
+            <BreadcrumbList>
+              {breadcrumbs.map((crumb, index) => {
+                const isLast = index === breadcrumbs.length - 1;
+                return (
+                  <React.Fragment key={`${crumb.label}-${index}`}>
+                    <BreadcrumbItem>
+                      {isLast ? (
+                        <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                      ) : (
+                        <BreadcrumbLink href={crumb.href ?? "#"}>{crumb.label}</BreadcrumbLink>
+                      )}
+                    </BreadcrumbItem>
+                    {!isLast && <BreadcrumbSeparator />}
+                  </React.Fragment>
+                );
+              })}
+            </BreadcrumbList>
+          </Breadcrumb>
+        ) : (
+          <nav className="hidden items-center gap-section sm:flex">
+            {navLinks.map((link) => (
+              <a
+                key={link.title}
+                href={link.url}
+                className={cn(
+                  "rounded-md px-section py-component text-sm font-medium transition-colors",
+                  link.isActive
+                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                    : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                )}
+              >
+                {link.title}
+              </a>
+            ))}
+          </nav>
+        )}
 
         {showSearch && (
           <div className="mx-auto hidden w-full max-w-md sm:block">
