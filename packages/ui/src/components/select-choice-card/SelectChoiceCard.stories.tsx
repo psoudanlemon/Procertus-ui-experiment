@@ -13,7 +13,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "**Single** (`RadioGroup`) or **multiple** (`Checkbox`) selectable cards across three appearances (`default`, `hero`, `minimal`) and three styles (`elevated`, `default`, `faded`). Selection state via {@link useChoiceSelection}.",
+          "**Single** (`RadioGroup`) or **multiple** (`Checkbox`) selectable cards across three appearances (`default`, `hero`, `minimal`) and five styles (`elevated`, `default`, `faded`, `ghost`, `no-border`). Selection state via {@link useChoiceSelection}.",
       },
     },
   },
@@ -43,8 +43,8 @@ export const Default = {
   render: () => <DefaultStory />,
 } as unknown as StoryObj<typeof meta>;
 
-// — — — Style: elevated · default · faded — — —
-const styleVariants = ["elevated", "default", "faded"] as const;
+// — — — Style: elevated · default · faded · no-border · ghost — — —
+const styleVariants = ["elevated", "default", "faded", "no-border", "ghost"] as const;
 
 function StyleVariantsStory() {
   const [v, setV] = useState("default-option");
@@ -52,7 +52,7 @@ function StyleVariantsStory() {
     <div className="w-full max-w-md">
       <SelectChoiceCardGroup
         legend="Style variants"
-        hint="elevated · default · faded — same chrome, different emphasis."
+        hint="elevated · default · faded · no-border · ghost — same chrome, different emphasis."
         value={v}
         onValueChange={setV}
         selectionMode="single"
@@ -146,6 +146,22 @@ function AppearanceHeroStory() {
           title="Faded"
           description="Dashed border and reduced opacity for de-emphasized routes."
         />
+        <SelectChoiceCard
+          appearance="hero"
+          variant="no-border"
+          value="no-border"
+          controlId="hero-no-border"
+          title="No-border"
+          description="Card surface without the border outline."
+        />
+        <SelectChoiceCard
+          appearance="hero"
+          variant="ghost"
+          value="ghost"
+          controlId="hero-ghost"
+          title="Ghost"
+          description="Surface-less option that lifts to foreground on hover and selection."
+        />
       </SelectChoiceCardGroup>
       <p className="text-sm text-muted-foreground" role="status">
         Hook: selectedId = {choice.selectedId ?? "(none)"}
@@ -191,6 +207,20 @@ function AppearanceMinimalStory() {
           value="min-faded"
           controlId="min-faded"
           title="Faded"
+        />
+        <SelectChoiceCard
+          appearance="minimal"
+          variant="no-border"
+          value="min-no-border"
+          controlId="min-no-border"
+          title="No-border"
+        />
+        <SelectChoiceCard
+          appearance="minimal"
+          variant="ghost"
+          value="min-ghost"
+          controlId="min-ghost"
+          title="Ghost"
         />
       </SelectChoiceCardGroup>
     </div>

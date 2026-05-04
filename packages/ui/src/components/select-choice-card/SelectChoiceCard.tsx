@@ -47,6 +47,14 @@ const shellVariants = cva(
           "opacity-90 has-[>[data-slot=field]]:border-dashed has-[>[data-slot=field]]:border-muted-foreground/40 not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:opacity-100 not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-primary/50 has-data-checked:opacity-100 has-data-checked:has-[>[data-slot=field]]:border-primary has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
           "has-[[data-state=checked][data-slot=checkbox]]:opacity-100 has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-primary has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
         ],
+        ghost: [
+          "has-[>[data-slot=field]]:border-transparent has-[>[data-slot=field]]:bg-transparent has-[>[data-slot=field]]:shadow-none has-[>[data-slot=field]]:text-muted-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-foreground has-data-checked:has-[>[data-slot=field]]:text-foreground",
+          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-foreground",
+        ],
+        "no-border": [
+          "has-[>[data-slot=field]]:border-transparent has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:shadow-none has-[>[data-slot=field]]:text-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
+        ],
       },
     },
     defaultVariants: { appearance: "default", variant: "default" },
@@ -59,6 +67,8 @@ const titleVariants = cva("text-sm font-medium", {
       elevated: "",
       default: "",
       faded: "text-muted-foreground",
+      ghost: "",
+      "no-border": "",
     },
   },
   defaultVariants: { variant: "default" },
@@ -70,6 +80,8 @@ const descVariants = cva("text-sm", {
       elevated: "",
       default: "",
       faded: "text-xs",
+      ghost: "",
+      "no-border": "",
     },
   },
   defaultVariants: { variant: "default" },
@@ -89,7 +101,13 @@ export type SelectChoiceCardProps = {
    * Inline icon for **default** layout (start column). Ignored when `appearance="hero"`.
    */
   leading?: ReactNode;
-  /** @default "default" — `elevated` adds a soft drop shadow, `faded` is dashed and de-emphasized. */
+  /**
+   * @default "default" — `elevated` adds a soft drop shadow, `faded` is dashed and
+   * de-emphasized, `ghost` drops the surface entirely (no background, no border) and
+   * uses muted-foreground text like `faded`, and `no-border` keeps the card surface
+   * but suppresses the border. `ghost` and `no-border` shift the text to
+   * `accent-foreground` on hover and when selected.
+   */
   variant?: SelectChoiceVariant;
   /**
    * @default "default" — `hero` uses a two-zone (header + body) tier-card layout;
@@ -174,7 +192,14 @@ export function SelectChoiceCard({
       >
         {isHero ? (
           <div className="flex w-full flex-1 flex-col">
-            <div className="flex w-full items-center justify-between gap-component border-b border-border/60 p-section">
+            <div
+              className={cn(
+                "flex w-full items-center justify-between gap-component border-b p-section transition-colors",
+                variant === "ghost"
+                  ? "border-transparent group-hover/choice:border-border/60 group-has-data-checked/choice:border-border/60 group-has-[[data-state=checked][data-slot=checkbox]]/choice:border-border/60"
+                  : "border-border/60",
+              )}
+            >
               <FieldTitle className={cn(titleVariants({ variant }), "min-w-0")}>
                 <Label htmlFor={controlId} className={cn(titleLabelClass, "text-base")}>
                   {title}
@@ -183,7 +208,14 @@ export function SelectChoiceCard({
               {control}
             </div>
             {description ? (
-              <div className="w-full flex-1 bg-muted/20 p-section">
+              <div
+                className={cn(
+                  "w-full flex-1 p-section transition-colors",
+                  variant === "ghost"
+                    ? "group-hover/choice:bg-muted/20 group-has-data-checked/choice:bg-muted/20 group-has-[[data-state=checked][data-slot=checkbox]]/choice:bg-muted/20"
+                    : "bg-muted/20",
+                )}
+              >
                 <FieldDescription
                   className={cn(descVariants({ variant }), "whitespace-normal wrap-break-word")}
                 >
