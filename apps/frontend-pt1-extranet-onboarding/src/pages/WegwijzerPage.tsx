@@ -236,7 +236,7 @@ function MasterCard({ service }: { service: WegwijzerService }) {
               <Link to={EXPERT_CALL_PATH(entry.id)}>Hulp nodig?</Link>
             </Button>
           </HoverCardTrigger>
-          <HoverCardContent align="start" className="w-80">
+          <HoverCardContent side="top" sideOffset={12} align="start" className="w-80">
             <p className="font-semibold text-heading-foreground">
               Hulp nodig bij uw {entry.shortLabel}-dossier?
             </p>
