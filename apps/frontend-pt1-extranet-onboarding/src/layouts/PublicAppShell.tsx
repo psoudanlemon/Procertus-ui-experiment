@@ -27,7 +27,7 @@ export function PublicAppShell() {
 
   return (
     <div data-density="operational" className="relative min-h-svh">
-      <div className="fixed right-4 top-4 z-50">
+      <div className="fixed bottom-4 right-4 z-50">
         <ModeToggle />
       </div>
       <Outlet />
