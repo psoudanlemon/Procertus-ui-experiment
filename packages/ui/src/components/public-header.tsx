@@ -328,11 +328,16 @@ function PublicRegistryHeader({
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button variant="secondary" size="sm" className="min-h-11 lg:min-h-0" asChild>
-              <a href={loginUrl} onClick={onLogin}>
-                Inloggen
-              </a>
-            </Button>
+            <div className="flex items-center gap-section">
+              <span className="hidden text-sm text-sidebar-foreground sm:inline">
+                Reeds een account?
+              </span>
+              <Button variant="secondary" size="sm" className="min-h-11 lg:min-h-0" asChild>
+                <a href={loginUrl} onClick={onLogin}>
+                  Log in
+                </a>
+              </Button>
+            </div>
           )}
 
           {!user && languages.length > 1 && (

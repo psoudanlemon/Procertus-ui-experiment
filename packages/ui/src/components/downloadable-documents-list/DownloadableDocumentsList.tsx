@@ -60,7 +60,13 @@ export function DownloadableDocumentListItem({
   const linkAriaLabel = downloadAriaLabel ?? `Download ${title}`;
   const deleteLabel = deleteAriaLabel ?? `Delete ${title}`;
   return (
-    <Item role="listitem" variant="outline" size="sm" className={cn("min-w-0 bg-card", className)}>
+    <Item
+      role="listitem"
+      variant="outline"
+      size="sm"
+      responsive
+      className={cn("min-w-0 bg-transparent", className)}
+    >
       <ItemMedia variant="icon" className="text-muted-foreground" aria-hidden>
         <HugeiconsIcon icon={File01Icon} className="size-5" strokeWidth={1.5} />
       </ItemMedia>
@@ -70,7 +76,7 @@ export function DownloadableDocumentListItem({
       </ItemContent>
       <ItemActions className="shrink-0">
         {date || formatHint ? (
-          <div className="flex flex-col items-end gap-micro text-xs leading-tight text-muted-foreground/90">
+          <div className="flex flex-col items-start gap-micro text-xs leading-tight text-muted-foreground/90 sm:items-end">
             {formatHint ? <span>{formatHint}</span> : null}
             {date ? <span>{date}</span> : null}
           </div>
@@ -82,7 +88,7 @@ export function DownloadableDocumentListItem({
             size="icon"
             onClick={onDelete}
             aria-label={deleteLabel}
-            className="ms-micro hover:rounded-tl-[4px] hover:rounded-br-[4px] hover:rounded-tr-[var(--cmd-deep)] hover:rounded-bl-[var(--cmd-deep)]"
+            className="ms-micro"
           >
             <HugeiconsIcon icon={Delete02Icon} className="size-5" strokeWidth={1.5} />
           </Button>
@@ -92,7 +98,7 @@ export function DownloadableDocumentListItem({
           variant="ghost"
           size="icon"
           aria-label={linkAriaLabel}
-          className="text-muted-foreground hover:rounded-tr-[4px] hover:rounded-bl-[4px] hover:rounded-tl-[var(--cmd-deep)] hover:rounded-br-[var(--cmd-deep)] hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground"
         >
           <a href={href} download rel="noopener noreferrer">
             <HugeiconsIcon icon={Download01Icon} className="size-5" strokeWidth={1.5} />

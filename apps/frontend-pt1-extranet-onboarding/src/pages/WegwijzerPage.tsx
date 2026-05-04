@@ -3,39 +3,36 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   Alert02Icon,
   ArrowRight02Icon,
-  Call02Icon,
   ClockIcon,
   InformationCircleIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
   Alert,
   AlertDescription,
   AlertTitle,
-  Badge,
   Button,
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
-  CardTitle,
   DensityProvider,
   DownloadableDocumentListItem,
   type DownloadableDocumentListItemData,
+  FadingScrollList,
   H1,
+  H2,
   H4,
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
   ItemGroup,
   PublicRegistryAppShell,
   SelectChoiceCard,
   SelectChoiceCardGroup,
   type SelectChoiceVariant,
-  Separator,
   Skeleton,
-  useIsMobile,
 } from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import procertusLogomark from "@procertus-ui/ui/assets/logomark.svg";
@@ -51,13 +48,6 @@ const LOGIN_PATH = "/welcome/login";
 const ONBOARDING_STEPPER_PATH = "/welcome/start";
 const EXPERT_CALL_PATH = (serviceId?: string) =>
   serviceId ? `/welcome/expert-call/${serviceId}` : "/welcome/expert-call";
-
-const CATEGORY_LABEL: Record<WegwijzerService["entry"]["category"], string> = {
-  certification: "Productcertificatie",
-  attest: "Attest",
-  document: "Document",
-  inspection: "Keuring",
-};
 
 const DEFAULT_ACTIVE_SERVICE = WEGWIJZER_SERVICES.find((s) => s.tier === 1) ?? WEGWIJZER_SERVICES[0];
 
@@ -99,13 +89,6 @@ export function WegwijzerPage() {
             {activeService ? <MasterCard service={activeService} /> : null}
           </div>
         </div>
-
-        <img
-          aria-hidden
-          src={procertusLogomark}
-          alt=""
-          className="pointer-events-none absolute right-0 bottom-0 size-96 select-none opacity-5"
-        />
       </PublicRegistryAppShell>
     </DensityProvider>
   );
@@ -135,47 +118,6 @@ function Hero() {
 }
 
 // ---------------------------------------------------------------------------
-// Contextual Expert Call — embedded in each Master Card, scoped to the service
-// ---------------------------------------------------------------------------
-
-function ContextualExpertCall({
-  serviceId,
-  serviceLabel,
-}: {
-  /** When omitted, the expert-call link is generic (no service context). */
-  serviceId?: string;
-  /** When omitted, copy falls back to a generic "uw keuze" phrasing. */
-  serviceLabel?: string;
-}) {
-  const heading = serviceLabel ? `Hulp nodig bij uw ${serviceLabel}-dossier?` : "Hulp nodig bij uw keuze?";
-  const description = serviceLabel
-    ? `Plan een online sessie van één uur en bereid uw ${serviceLabel}-dossier samen met een PROCERTUS-expert voor.`
-    : "Plan een online sessie van één uur en doorloop de vereisten samen met een PROCERTUS-expert.";
-  return (
-    <section
-      aria-label={serviceLabel ? `Expertbegeleiding voor ${serviceLabel}` : "Expertbegeleiding"}
-      className="flex flex-col gap-component rounded-lg border border-primary/20 bg-primary/5 p-section sm:flex-row sm:items-center sm:gap-section"
-    >
-      <div className="flex flex-1 flex-col gap-micro">
-        <p className="text-heading-sm font-semibold text-heading-foreground">{heading}</p>
-        <p className="text-sm leading-normal text-muted-foreground">{description}</p>
-      </div>
-      <Button
-        asChild
-        variant="outline"
-        className="w-full bg-background text-primary hover:bg-background/90 sm:w-auto"
-      >
-        <Link to={EXPERT_CALL_PATH(serviceId)}>
-          <HugeiconsIcon icon={Call02Icon} className="size-4" />
-          Boek expert-sessie (1u)
-          <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
-        </Link>
-      </Button>
-    </section>
-  );
-}
-
-// ---------------------------------------------------------------------------
 // Service ChoiceCards — selection grid (variants per spec)
 // ---------------------------------------------------------------------------
 
@@ -199,25 +141,27 @@ function ServiceChoiceCards({
   onChange: (id: string) => void;
 }) {
   return (
-    <SelectChoiceCardGroup
-      layout="stack"
-      value={activeId}
-      onValueChange={onChange}
-      aria-label="Kies een certificaat"
-      className="flex-row flex-nowrap overflow-x-auto"
-    >
-      {WEGWIJZER_SERVICES.map((service, index) => (
-        <SelectChoiceCard
-          key={service.entry.id}
-          value={service.entry.id}
-          controlId={`wegwijzer-pick-${service.entry.id}`}
-          title={service.pillLabel ?? service.entry.label}
-          variant={getCardVariant(service, activeId, index)}
-          appearance="minimal"
-          className="shrink-0 has-[>[data-slot=field]]:w-auto"
-        />
-      ))}
-    </SelectChoiceCardGroup>
+    <FadingScrollList orientation="horizontal" fadeColor="from-background">
+      <SelectChoiceCardGroup
+        layout="stack"
+        value={activeId}
+        onValueChange={onChange}
+        aria-label="Kies een certificaat"
+        className="flex-row flex-nowrap gap-component"
+      >
+        {WEGWIJZER_SERVICES.map((service, index) => (
+          <SelectChoiceCard
+            key={service.entry.id}
+            value={service.entry.id}
+            controlId={`wegwijzer-pick-${service.entry.id}`}
+            title={service.pillLabel ?? service.entry.label}
+            variant={getCardVariant(service, activeId, index)}
+            appearance="minimal"
+            className="shrink-0 has-[>[data-slot=field]]:w-auto"
+          />
+        ))}
+      </SelectChoiceCardGroup>
+    </FadingScrollList>
   );
 }
 
@@ -232,39 +176,32 @@ function MasterCard({ service }: { service: WegwijzerService }) {
   const documents = buildMockDocuments(service);
 
   return (
-    <Card className="flex flex-col gap-section py-region shadow-proc-xs md:shadow-proc-sm">
-      <CardHeader className="gap-section px-region">
-        <div className="flex items-center justify-between gap-section">
-          <div className="flex flex-col gap-micro">
-            <CardTitle className="text-heading-xl">{entry.label}</CardTitle>
-            <CardDescription className="max-w-2xl text-base leading-normal">
-              {entry.description}
-            </CardDescription>
-          </div>
-          <Badge variant="outline" className="shrink-0">
-            {CATEGORY_LABEL[entry.category]}
-          </Badge>
-        </div>
+    <Card className="flex flex-col gap-0 pt-0 shadow-proc-xs md:shadow-proc-sm">
+      <CardHeader className="gap-0 border-b bg-muted/40 px-region pt-region pb-section">
+        <H2>{entry.label}</H2>
+        <CardDescription className="text-base leading-normal">
+          {entry.description}
+        </CardDescription>
       </CardHeader>
 
-      {isExternal && externalReferral && (
-        <CardContent className="px-region">
+      <CardContent className="relative isolate flex flex-col gap-region overflow-hidden p-region">
+        <img
+          aria-hidden
+          src={procertusLogomark}
+          alt=""
+          className="pointer-events-none absolute -right-16 -bottom-16 -z-10 size-96 select-none opacity-10"
+        />
+        {isExternal && externalReferral && (
           <Alert>
             <HugeiconsIcon icon={InformationCircleIcon} />
             <AlertTitle>Externe verwijzing — {externalReferral.name}</AlertTitle>
             <AlertDescription>{externalReferral.description}</AlertDescription>
           </Alert>
-        </CardContent>
-      )}
+        )}
 
-      <Separator />
-
-      <CardContent className="flex flex-col gap-section px-region">
         <MasterCardSections service={service} />
-      </CardContent>
 
-      {isInnovation && (
-        <CardContent className="px-region">
+        {isInnovation && (
           <Alert>
             <HugeiconsIcon icon={Alert02Icon} />
             <AlertTitle>Richtwaarde formele opstart</AlertTitle>
@@ -273,41 +210,51 @@ function MasterCard({ service }: { service: WegwijzerService }) {
               definitieve offerte volgt na intake.
             </AlertDescription>
           </Alert>
-        </CardContent>
-      )}
+        )}
 
-      <CardContent className="px-region">
         <section className="flex flex-col gap-component">
-          <H4>Regels en documentatie</H4>
-          <p className="text-sm text-muted-foreground">
-            Documenten op basis van uw selectie voor {entry.shortLabel} (prototype — downloadlinks zijn gemockt).
-          </p>
+          <div className="flex flex-col">
+            <H4>Regels en documentatie</H4>
+            <p className="text-sm text-muted-foreground">
+              Documenten op basis van uw selectie voor {entry.shortLabel} (prototype — downloadlinks zijn gemockt).
+            </p>
+          </div>
           <ItemGroup className="w-full">
             {documents.map((doc) => (
               <DownloadableDocumentListItem key={doc.id} {...doc} />
             ))}
           </ItemGroup>
         </section>
-      </CardContent>
 
-      <CardContent className="px-region">
         <MasterCardTimeline service={service} />
       </CardContent>
 
-      <CardContent className="px-region">
-        <ContextualExpertCall serviceId={entry.id} serviceLabel={entry.shortLabel} />
-      </CardContent>
-
-      <Separator />
-
-      <CardContent className="flex px-region sm:justify-end">
-        <Button asChild size="lg" className="w-full justify-between sm:w-auto sm:min-w-72">
+      <CardFooter className="flex-wrap-reverse justify-end gap-component p-region sm:flex-nowrap sm:justify-between">
+        <HoverCard>
+          <HoverCardTrigger asChild>
+            <Button asChild variant="link">
+              <Link to={EXPERT_CALL_PATH(entry.id)}>
+                <HugeiconsIcon icon={InformationCircleIcon} className="size-4" />
+                Hulp nodig?
+              </Link>
+            </Button>
+          </HoverCardTrigger>
+          <HoverCardContent align="start" className="w-80">
+            <p className="font-semibold text-heading-foreground">
+              Hulp nodig bij uw {entry.shortLabel}-dossier?
+            </p>
+            <p className="text-muted-foreground">
+              Plan een online sessie van één uur en bereid uw {entry.shortLabel}-dossier samen met een PROCERTUS-expert voor.
+            </p>
+          </HoverCardContent>
+        </HoverCard>
+        <Button asChild size="lg">
           <Link to={ONBOARDING_STEPPER_PATH}>
-            Start aanvraag voor {entry.shortLabel}
+            Aanvragen
             <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
           </Link>
         </Button>
-      </CardContent>
+      </CardFooter>
     </Card>
   );
 }
@@ -346,46 +293,27 @@ function buildMockDocuments(service: WegwijzerService): DownloadableDocumentList
 function MasterCardSections({ service }: { service: WegwijzerService }) {
   const { entry } = service;
   const content = WEGWIJZER_SERVICE_CONTENT[entry.id];
-  const isMobile = useIsMobile();
 
   if (!content) return <MasterCardSkeleton />;
 
-  const whenToApplyBody = (
-    <ul className="flex flex-col gap-micro">
-      {content.whenToApply.map((item) => (
-        <li key={item} className="flex items-start gap-component text-sm leading-normal">
-          <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />
-          <span className="max-w-3xl">{item}</span>
-        </li>
-      ))}
-    </ul>
-  );
-
   return (
-    <div className="flex flex-col gap-section">
+    <div className="flex flex-col gap-region">
       <section className="flex flex-col gap-component">
-        <H4>Wat is een {entry.label}</H4>
-        <p className="max-w-3xl text-sm leading-normal">{content.what}</p>
+        <H4 className="leading-none">Wat is een {entry.label}</H4>
+        <p className="text-sm leading-normal">{content.what}</p>
       </section>
 
-      {isMobile ? (
-        <Accordion
-          type="single"
-          collapsible
-          defaultValue="wanneer"
-          className="rounded-md border"
-        >
-          <AccordionItem value="wanneer" className="px-section">
-            <AccordionTrigger>Wanneer vraag je dit het beste aan</AccordionTrigger>
-            <AccordionContent>{whenToApplyBody}</AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      ) : (
-        <section className="flex flex-col gap-component">
-          <H4>Wanneer vraag je dit het beste aan</H4>
-          {whenToApplyBody}
-        </section>
-      )}
+      <section className="flex flex-col gap-component">
+        <H4>Wanneer vraag je dit het beste aan</H4>
+        <ul className="flex flex-col gap-micro">
+          {content.whenToApply.map((item) => (
+            <li key={item} className="flex items-start gap-component text-sm leading-normal">
+              <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />
+              <span className="max-w-3xl">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }
@@ -394,12 +322,9 @@ function MasterCardTimeline({ service }: { service: WegwijzerService }) {
   const content = WEGWIJZER_SERVICE_CONTENT[service.entry.id];
   if (!content) return null;
   return (
-    <section className="flex flex-col gap-component">
-      <H4>Termijn</H4>
-      <div className="flex w-full items-start gap-component rounded-md border bg-muted/40 p-component">
-        <HugeiconsIcon icon={ClockIcon} className="mt-0.5 size-5 shrink-0 text-muted-foreground" />
-        <p className="text-sm leading-normal">{content.timeline}</p>
-      </div>
+    <section className="flex items-start gap-component self-start rounded-md bg-info p-component text-info-foreground">
+      <HugeiconsIcon icon={ClockIcon} className="mt-0.5 size-5 shrink-0" />
+      <p className="text-sm leading-normal">{content.timeline}</p>
     </section>
   );
 }
