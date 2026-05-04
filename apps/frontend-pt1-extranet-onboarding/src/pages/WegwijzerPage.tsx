@@ -296,12 +296,12 @@ function MasterCardSections({ service }: { service: WegwijzerService }) {
   return (
     <div className="flex flex-col gap-region">
       <section className="flex flex-col gap-component">
-        <H4 className="leading-none">Wat is een {entry.label}</H4>
+        <H4 className="leading-none">Wat is een {entry.label}?</H4>
         <p className="text-sm leading-normal">{content.what}</p>
       </section>
 
       <section className="flex flex-col gap-component">
-        <H4>Wanneer vraag je dit het beste aan</H4>
+        <H4>Wanneer vraag je dit het beste aan?</H4>
         <ul className="flex flex-col gap-micro">
           {content.whenToApply.map((item) => (
             <li key={item} className="flex items-start gap-component text-sm leading-normal">
