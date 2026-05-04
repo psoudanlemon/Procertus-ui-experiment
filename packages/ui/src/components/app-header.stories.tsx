@@ -82,7 +82,7 @@ type Story = StoryObj<typeof meta>;
 /**
  * Header with sidebar toggle, breadcrumbs, and avatar dropdown.
  */
-export const Default: Story = {
+export const Authenticated: Story = {
   render: () => (
     <AuthenticatedAppFrame>
       <AppHeader {...authenticatedAppArgs} />
@@ -91,10 +91,10 @@ export const Default: Story = {
 };
 
 /**
- * Adds a centered search bar (⌘K to focus) to the default header.
+ * Adds a centered search bar (⌘K to focus) to the authenticated header.
  */
 export const WithSearch: Story = {
-  name: "With search",
+  name: "Auth with search",
   render: () => (
     <AuthenticatedAppFrame>
       <AppHeader {...authenticatedAppArgs} showSearch />
@@ -119,7 +119,7 @@ export const Simple: Story = {
  * the avatar dropdown.
  */
 export const SimpleSignedIn: Story = {
-  name: "Simple signed in",
+  name: "Simple auth",
   render: () => (
     <PublicRegistryFrame>
       <PublicRegistryHeader
@@ -129,6 +129,24 @@ export const SimpleSignedIn: Story = {
           email: "somone@lemon.be",
           avatarFallback: "🍋",
         }}
+      />
+    </PublicRegistryFrame>
+  ),
+};
+
+/**
+ * Simple header variant with the Procertus logo on the far left and
+ * language + login on the right.
+ */
+export const Default: Story = {
+  render: () => (
+    <PublicRegistryFrame>
+      <PublicRegistryHeader
+        {...publicRegistryArgs}
+        navLinks={undefined}
+        logo={
+          <img src="/Procertus logo.svg" alt="Procertus" className="h-8 w-auto" />
+        }
       />
     </PublicRegistryFrame>
   ),
