@@ -87,6 +87,7 @@ function FadingScrollList({
         ref={ref}
         data-orientation={orientation}
         className={cn(
+          "no-scrollbar",
           isHorizontal ? "overflow-x-auto" : "flex flex-col overflow-y-auto",
           className,
         )}
