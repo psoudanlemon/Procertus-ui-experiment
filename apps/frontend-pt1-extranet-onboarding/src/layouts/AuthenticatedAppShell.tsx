@@ -11,6 +11,7 @@ import {
 } from "@procertus-ui/ui-pt1-prototype";
 import { PROTOTYPE_NAV_GROUPS, PROTOTYPE_PRIMARY_NAV, PROTOTYPE_SECONDARY_NAV } from "../navConfig";
 import { AppPanelsLayout } from "../panels";
+import { APP_FOOTER } from "./footerConfig";
 
 const isNavItemActive = (itemUrl: string, pathname: string) => {
   const pattern = itemUrl === "/requests" ? "/requests/*" : itemUrl;
@@ -153,6 +154,7 @@ export function AuthenticatedAppShell() {
           <ManagementAppShell
             sidebar={sidebar}
             header={header}
+            footer={APP_FOOTER}
             mainClassName={flushMain ? "p-0!" : undefined}
           >
             <CloseMobileSidebarOnRouteChange />
