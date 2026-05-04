@@ -230,8 +230,14 @@ const managementHeaderProps = {
  */
 export const Authenticated: Story = {
   render: () => (
-    <ManagementAppShell sidebar={managementSidebarProps} header={managementHeaderProps}>
-      <div className="min-h-[200vh] rounded-xl border border-dashed" />
-    </ManagementAppShell>
+    <div className="h-svh">
+      <ManagementAppShell
+        sidebar={managementSidebarProps}
+        header={managementHeaderProps}
+        footer={publicRegistryFooter}
+      >
+        <div className="min-h-[200vh] rounded-xl border border-dashed" />
+      </ManagementAppShell>
+    </div>
   ),
 };

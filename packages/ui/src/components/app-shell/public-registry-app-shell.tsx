@@ -2,13 +2,13 @@ import * as React from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { FilePlusIcon } from "@hugeicons/core-free-icons";
 
-import { PublicRegistryFooter, type PublicRegistryFooterProps } from "@/components/public-footer";
+import { Footer, type FooterProps } from "@/components/footer";
 import { PublicRegistryHeader, type PublicRegistryHeaderProps } from "@/components/public-header";
 import { Button } from "@/components/ui/button";
 
 export type PublicRegistryAppShellProps = {
   header: PublicRegistryHeaderProps;
-  footer?: PublicRegistryFooterProps;
+  footer?: FooterProps;
   /** Visual variant — "default" uses sidebar tokens, "transparent" uses background color throughout. */
   variant?: "default" | "transparent";
   /** URL for the request certificate flow. */
@@ -35,7 +35,7 @@ function PublicRegistryAppShell({
       className="flex min-h-svh flex-col bg-sidebar [&>header]:border-b-0"
     >
       <PublicRegistryHeader {...header} variant={variant} />
-      <main className="relative mt-micro mx-section flex-1 rounded-t-xl bg-background">
+      <main className="relative mt-micro mx-section flex-1 rounded-xl bg-background">
         {children}
 
         {!hideFab && (
@@ -52,7 +52,11 @@ function PublicRegistryAppShell({
           </Button>
         )}
       </main>
-      {footer && <PublicRegistryFooter {...footer} variant={variant} />}
+      {footer && (
+        <div className="mx-section">
+          <Footer {...footer} variant={variant} />
+        </div>
+      )}
     </div>
   );
 }

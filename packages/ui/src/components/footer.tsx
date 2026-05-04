@@ -18,7 +18,7 @@ export type CompanyDetail = {
   url?: string;
 };
 
-export type PublicRegistryFooterProps = {
+export type FooterProps = {
   /** App logo, render any React node. */
   logo?: React.ReactNode;
   /** Tagline shown below the logo. */
@@ -39,7 +39,7 @@ export type PublicRegistryFooterProps = {
 // Component
 // ---------------------------------------------------------------------------
 
-function PublicRegistryFooter({
+function Footer({
   logo,
   tagline,
   linkGroups = [],
@@ -47,13 +47,13 @@ function PublicRegistryFooter({
   companyDetails = [],
   copyright = `© ${new Date().getFullYear()} PROCERTUS. Alle rechten voorbehouden.`,
   variant = "default",
-}: PublicRegistryFooterProps) {
+}: FooterProps) {
   return (
-    <footer data-slot="public-registry-footer">
+    <footer data-slot="footer">
       {/* Expanded footer, link groups, logo, tagline */}
       {(logo || tagline || linkGroups.length > 0) && (
-        <div className="border-t border-border bg-card">
-          <div className="mx-auto max-w-7xl px-boundary">
+        <div className="bg-card">
+          <div className="mx-auto max-w-7xl">
             <div className="grid gap-section py-region md:grid-cols-2 lg:grid-cols-[1.5fr_repeat(auto-fit,1fr)]">
               <div className="flex flex-col gap-section">
                 {logo && <div className="flex items-center gap-component">{logo}</div>}
@@ -91,51 +91,58 @@ function PublicRegistryFooter({
       {/* Company info bar */}
       <div
         className={cn(
-          "border-t",
           variant === "transparent"
-            ? "border-border bg-background text-foreground"
-            : "border-sidebar-border bg-sidebar text-sidebar-foreground",
+            ? "bg-background text-foreground"
+            : "bg-sidebar text-sidebar-foreground",
         )}
       >
-        <div className="flex flex-wrap items-center gap-x-micro gap-y-micro px-boundary py-component text-xs leading-relaxed text-sidebar-foreground/60">
-          {companyDetails.map((detail, index) => (
-            <React.Fragment key={detail.label}>
-              {index > 0 && (
-                <span className="text-sidebar-foreground/30" aria-hidden>
-                  &bull;
-                </span>
-              )}
-              {detail.url ? (
-                <a
-                  href={detail.url}
-                  className="text-sidebar-accent-foreground transition-colors hover:text-sidebar-foreground"
-                >
-                  {detail.label}
-                </a>
-              ) : (
-                <span>{detail.label}</span>
-              )}
-            </React.Fragment>
-          ))}
-          {legalLinks.map((link) => (
-            <React.Fragment key={link.label}>
-              {(companyDetails.length > 0 || legalLinks.indexOf(link) > 0) && (
-                <span className="text-sidebar-foreground/30" aria-hidden>
-                  &bull;
-                </span>
-              )}
-              <a
-                href={link.url}
-                className="text-sidebar-accent-foreground transition-colors hover:text-sidebar-foreground"
-              >
-                {link.label}
-              </a>
-            </React.Fragment>
-          ))}
+        <div className="flex flex-wrap items-center gap-x-micro gap-y-micro px-component py-component text-xs leading-relaxed text-sidebar-foreground/60">
+          {companyDetails.length > 0 && (
+            <div className="flex flex-wrap items-center gap-x-micro">
+              {companyDetails.map((detail, index) => (
+                <React.Fragment key={detail.label}>
+                  {index > 0 && (
+                    <span className="text-sidebar-foreground/30" aria-hidden>
+                      &bull;
+                    </span>
+                  )}
+                  {detail.url ? (
+                    <a
+                      href={detail.url}
+                      className="text-sidebar-accent-foreground transition-colors hover:text-sidebar-foreground"
+                    >
+                      {detail.label}
+                    </a>
+                  ) : (
+                    <span>{detail.label}</span>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          )}
+          {legalLinks.length > 0 && (
+            <div className="ml-auto flex flex-wrap items-center gap-x-micro">
+              {legalLinks.map((link, index) => (
+                <React.Fragment key={link.label}>
+                  {index > 0 && (
+                    <span className="text-sidebar-foreground/30" aria-hidden>
+                      &bull;
+                    </span>
+                  )}
+                  <a
+                    href={link.url}
+                    className="text-sidebar-accent-foreground transition-colors hover:text-sidebar-foreground"
+                  >
+                    {link.label}
+                  </a>
+                </React.Fragment>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </footer>
   );
 }
 
-export { PublicRegistryFooter };
+export { Footer };
