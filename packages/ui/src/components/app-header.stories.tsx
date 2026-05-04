@@ -44,7 +44,7 @@ function AuthenticatedAppFrame({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       <div className="flex h-svh w-full flex-col bg-sidebar">
         {children}
-        <div className="mt-1 ml-3 mr-4 flex-1 rounded-t-xl bg-background p-6">
+        <div className="mt-micro mx-section flex-1 rounded-t-xl bg-background p-6">
           <div className="min-h-[50vh] rounded-xl border border-dashed" />
         </div>
       </div>
@@ -56,7 +56,7 @@ function PublicRegistryFrame({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-svh flex-col bg-sidebar [&>header]:border-b-0">
       {children}
-      <div className="mt-1 ml-3 mr-4 flex-1 rounded-t-xl bg-background p-6">
+      <div className="mt-micro mx-section flex-1 rounded-t-xl bg-background p-6">
         <div className="min-h-[50vh] rounded-xl border border-dashed" />
       </div>
     </div>

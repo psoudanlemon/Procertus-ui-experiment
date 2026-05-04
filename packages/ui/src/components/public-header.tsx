@@ -172,7 +172,7 @@ function PublicRegistryHeader({
           : "border-sidebar-border bg-sidebar text-sidebar-foreground",
       )}
     >
-      <div className="flex h-16 items-center gap-component px-boundary">
+      <div className="flex h-16 items-center gap-component px-section">
         <Button
           variant="ghost"
           size="icon-sm"

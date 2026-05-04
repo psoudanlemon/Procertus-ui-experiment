@@ -54,10 +54,7 @@ type Story = StoryObj;
 // ---------------------------------------------------------------------------
 
 const publicRegistryHeader = {
-  navLinks: [
-    { title: "Over", url: "#" },
-    { title: "Contact", url: "#" },
-  ],
+  logo: <img src="/Procertus logo.svg" alt="Procertus" className="h-8 w-auto" />,
   languages: [
     { code: "nl", label: "Nederlands", flag: "\u{1F1F3}\u{1F1F1}" },
     { code: "fr", label: "Français", flag: "\u{1F1EB}\u{1F1F7}" },

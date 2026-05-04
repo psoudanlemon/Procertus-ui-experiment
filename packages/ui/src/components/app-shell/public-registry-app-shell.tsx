@@ -30,9 +30,12 @@ function PublicRegistryAppShell({
   children,
 }: PublicRegistryAppShellProps) {
   return (
-    <div data-slot="public-registry-app-shell" className="flex min-h-svh flex-col bg-background">
+    <div
+      data-slot="public-registry-app-shell"
+      className="flex min-h-svh flex-col bg-sidebar [&>header]:border-b-0"
+    >
       <PublicRegistryHeader {...header} variant={variant} />
-      <main className="relative flex-1">
+      <main className="relative mt-micro mx-section flex-1 rounded-t-xl bg-background">
         {children}
 
         {!hideFab && (
