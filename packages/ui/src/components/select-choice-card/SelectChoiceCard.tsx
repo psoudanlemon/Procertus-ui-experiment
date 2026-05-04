@@ -1,8 +1,10 @@
 /**
  * Selectable choice card — **single** (`RadioGroup`) or **multiple** (`Checkbox`).
- * Same chrome (variant, hover, selected) for `appearance="default"` (inline radio + text)
- * and `appearance="hero"` (two-zone: header strip with title + control, body strip with
- * description). Pair with {@link useChoiceSelection}.
+ * Same chrome (variant, hover, selected) for `appearance="default"` (inline radio + text),
+ * `appearance="hero"` (two-zone: header strip with title + control, body strip with
+ * description), and `appearance="minimal"` (title-only chip with the native control kept
+ * accessible but visually hidden — `description` and `leading` are ignored). Pair with
+ * {@link useChoiceSelection}.
  */
 import { cva, type VariantProps } from "class-variance-authority";
 import type { ReactNode } from "react";
@@ -21,7 +23,7 @@ import { RadioGroupItem } from "@/components/ui/radio-group";
 
 import type { ChoiceSelectionMode } from "./useChoiceSelection";
 
-export type SelectChoiceAppearance = "default" | "hero";
+export type SelectChoiceAppearance = "default" | "hero" | "minimal";
 
 const shellVariants = cva(
   "group/choice w-full select-none has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:transition-[box-shadow,background-color,border-color,opacity]",
@@ -30,6 +32,7 @@ const shellVariants = cva(
       appearance: {
         default: "*:data-[slot=field]:p-section",
         hero: "has-[>[data-slot=field]]:overflow-hidden has-[>[data-slot=field]]:rounded-xl *:data-[slot=field]:p-0",
+        minimal: "*:data-[slot=field]:p-component",
       },
       variant: {
         elevated: [
@@ -88,7 +91,11 @@ export type SelectChoiceCardProps = {
   leading?: ReactNode;
   /** @default "default" — `elevated` adds a soft drop shadow, `faded` is dashed and de-emphasized. */
   variant?: SelectChoiceVariant;
-  /** @default "default" — `hero` uses a two-zone (header + body) tier-card layout. */
+  /**
+   * @default "default" — `hero` uses a two-zone (header + body) tier-card layout;
+   * `minimal` shows only the title and keeps the native control accessible but
+   * visually hidden (`description` and `leading` are ignored).
+   */
   appearance?: SelectChoiceAppearance;
   /** @default "leading" — only applies when `appearance="default"`; ignored for hero. */
   controlPosition?: "leading" | "trailing";
@@ -120,11 +127,12 @@ export function SelectChoiceCard({
   name,
 }: SelectChoiceCardProps) {
   const isHero = appearance === "hero";
+  const isMinimal = appearance === "minimal";
   const isMultiple = selectionMode === "multiple";
 
-  const controlClass = !isHero ? "mt-micro" : undefined;
+  const controlClass = isHero || isMinimal ? undefined : "mt-micro";
 
-  const control = isMultiple ? (
+  const rawControl = isMultiple ? (
     <Checkbox
       name={name}
       id={controlId}
@@ -137,7 +145,14 @@ export function SelectChoiceCard({
     <RadioGroupItem value={value} id={controlId} disabled={disabled} className={controlClass} />
   );
 
-  const showLeading = !isHero && leading;
+  // In minimal appearance the native control stays in the DOM for keyboard + a11y,
+  // but visually disappears AND must not occupy space. `sr-only` on the control
+  // itself doesn't beat the control's own `relative size-4` classes via tailwind-merge,
+  // so we wrap it in an absolutely-positioned (`sr-only`) span — that takes the
+  // element out of the parent flex flow.
+  const control = isMinimal ? <span className="sr-only">{rawControl}</span> : rawControl;
+
+  const showLeading = !isHero && !isMinimal && leading;
   const titleLabelClass = cn(
     "block text-left text-sm font-medium normal-case leading-snug tracking-normal whitespace-normal wrap-break-word",
     variant === "faded" && "text-muted-foreground",
@@ -177,6 +192,17 @@ export function SelectChoiceCard({
               </div>
             ) : null}
           </div>
+        ) : isMinimal ? (
+          <>
+            {control}
+            <FieldContent>
+              <FieldTitle className={titleVariants({ variant })}>
+                <Label htmlFor={controlId} className={titleLabelClass}>
+                  {title}
+                </Label>
+              </FieldTitle>
+            </FieldContent>
+          </>
         ) : (
           <>
             {controlPosition === "leading" ? control : null}

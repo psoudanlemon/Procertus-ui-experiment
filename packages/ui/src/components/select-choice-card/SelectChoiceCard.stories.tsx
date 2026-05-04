@@ -276,3 +276,48 @@ function ControlPositionStory() {
 export const ControlPosition = {
   render: () => <ControlPositionStory />,
 } as unknown as StoryObj<typeof meta>;
+
+function MinimalAppearanceStory() {
+  const [v, setV] = useState("minimal-default");
+  return (
+    <div className="flex w-full max-w-2xl flex-col gap-section">
+      <SelectChoiceCardGroup
+        legend="Minimal appearance"
+        hint="Title-only chip — no description, no leading icon. The native radio is kept accessible (sr-only) so keyboard + screen-reader behaviour is unchanged. Showcased here in the three styled variants."
+        layout="grid"
+        value={v}
+        onValueChange={setV}
+        selectionMode="single"
+      >
+        <SelectChoiceCard
+          appearance="minimal"
+          variant="default"
+          value="minimal-default"
+          controlId="minimal-default"
+          title="Default"
+        />
+        <SelectChoiceCard
+          appearance="minimal"
+          variant="elevated"
+          value="minimal-elevated"
+          controlId="minimal-elevated"
+          title="Elevated"
+        />
+        <SelectChoiceCard
+          appearance="minimal"
+          variant="faded"
+          value="minimal-faded"
+          controlId="minimal-faded"
+          title="Faded"
+        />
+      </SelectChoiceCardGroup>
+      <p className="text-sm text-muted-foreground" role="status">
+        Selected: {v}
+      </p>
+    </div>
+  );
+}
+
+export const MinimalAppearance = {
+  render: () => <MinimalAppearanceStory />,
+} as unknown as StoryObj<typeof meta>;
