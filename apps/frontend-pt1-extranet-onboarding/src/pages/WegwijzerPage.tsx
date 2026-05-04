@@ -5,6 +5,7 @@ import {
   ArrowRight02Icon,
   ClockIcon,
   InformationCircleIcon,
+  LinkSquare02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -27,7 +28,12 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
   ItemGroup,
+  ItemTitle,
   PublicRegistryAppShell,
   SelectChoiceCard,
   SelectChoiceCardGroup,
@@ -49,7 +55,13 @@ const ONBOARDING_STEPPER_PATH = "/welcome/start";
 const EXPERT_CALL_PATH = (serviceId?: string) =>
   serviceId ? `/welcome/expert-call/${serviceId}` : "/welcome/expert-call";
 
-const DEFAULT_ACTIVE_SERVICE = WEGWIJZER_SERVICES.find((s) => s.tier === 1) ?? WEGWIJZER_SERVICES[0];
+/** Sentinel id for the merged "Overige" pill that bundles all tier-3 external referrals. */
+const ANDERE_ID = "overige";
+
+const PRIMARY_SERVICES = WEGWIJZER_SERVICES.filter((s) => s.tier !== 3);
+const EXTERNAL_SERVICES = WEGWIJZER_SERVICES.filter((s) => s.tier === 3);
+
+const DEFAULT_ACTIVE_SERVICE = PRIMARY_SERVICES.find((s) => s.tier === 1) ?? PRIMARY_SERVICES[0];
 
 // ---------------------------------------------------------------------------
 // Page
@@ -86,7 +98,11 @@ export function WegwijzerPage() {
             key={activeId}
             className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 min-w-0"
           >
-            {activeService ? <MasterCard service={activeService} /> : null}
+            {activeId === ANDERE_ID ? (
+              <ExternalReferralGrid services={EXTERNAL_SERVICES} />
+            ) : activeService ? (
+              <MasterCard service={activeService} />
+            ) : null}
           </div>
         </div>
       </PublicRegistryAppShell>
@@ -121,16 +137,12 @@ function Hero() {
 // Service ChoiceCards — selection grid (variants per spec)
 // ---------------------------------------------------------------------------
 
-function getCardVariant(
-  service: WegwijzerService,
-  activeId: string,
-  index: number,
-): SelectChoiceVariant {
-  // First three pills (BENOR, CE, SSD) always render as elevated for emphasis.
+function getCardVariant(_service: WegwijzerService, index: number): SelectChoiceVariant {
+  // BENOR, CE, SSD always elevated; PROCERTUS-side pills (Innovation, PROCERTUS-attest,
+  // Partijkeuring) always faded. Selection state is shown by the variant's built-in
+  // `data-checked:border-primary` styling — not by swapping variants.
   if (index < 3) return "elevated";
-  if (service.entry.id === activeId) return "elevated";
-  if (service.tier === 3) return "faded";
-  return "default";
+  return "faded";
 }
 
 function ServiceChoiceCards({
@@ -149,19 +161,59 @@ function ServiceChoiceCards({
         aria-label="Kies een certificaat"
         className="flex-row flex-nowrap gap-component"
       >
-        {WEGWIJZER_SERVICES.map((service, index) => (
+        {PRIMARY_SERVICES.map((service, index) => (
           <SelectChoiceCard
             key={service.entry.id}
             value={service.entry.id}
             controlId={`wegwijzer-pick-${service.entry.id}`}
             title={service.pillLabel ?? service.entry.label}
-            variant={getCardVariant(service, activeId, index)}
+            variant={getCardVariant(service, index)}
             appearance="minimal"
             className="shrink-0 has-[>[data-slot=field]]:w-auto"
           />
         ))}
+        <SelectChoiceCard
+          value={ANDERE_ID}
+          controlId={`wegwijzer-pick-${ANDERE_ID}`}
+          title="Overige"
+          variant="ghost"
+          appearance="minimal"
+          className="shrink-0 has-[>[data-slot=field]]:w-auto"
+        />
       </SelectChoiceCardGroup>
     </FadingScrollList>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// External Referral Grid — shown when "Andere" is active
+// ---------------------------------------------------------------------------
+
+function ExternalReferralGrid({ services }: { services: readonly WegwijzerService[] }) {
+  return (
+    <ItemGroup className="gap-component">
+      {services.map((service) => (
+        <ExternalReferralItem key={service.entry.id} service={service} />
+      ))}
+    </ItemGroup>
+  );
+}
+
+function ExternalReferralItem({ service }: { service: WegwijzerService }) {
+  const { entry, externalReferral } = service;
+  if (!externalReferral) return null;
+  return (
+    <Item asChild variant="outline" role="listitem" className="bg-card">
+      <a href={externalReferral.url} target="_blank" rel="noopener noreferrer">
+        <ItemContent>
+          <ItemTitle>{entry.label}</ItemTitle>
+          <ItemDescription>{externalReferral.description}</ItemDescription>
+        </ItemContent>
+        <ItemActions className="text-muted-foreground" aria-hidden>
+          <HugeiconsIcon icon={LinkSquare02Icon} className="size-5" strokeWidth={1.5} />
+        </ItemActions>
+      </a>
+    </Item>
   );
 }
 

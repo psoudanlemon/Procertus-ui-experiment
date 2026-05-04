@@ -16,7 +16,8 @@ import {
  * Visual hierarchy:
  *  - 1 = focus (BENOR, CE) — prominent 2-koloms grid
  *  - 2 = bijkomende PROCERTUS-diensten (SSD, Innovation, PROCERTUS-attest, Partijkeuring)
- *  - 3 = externe verwijzing (ATG → BUtgb, EPD → EPD-Hub) — outline-kaarten
+ *  - 3 = externe verwijzing (ATG → BUtgb, EPD → EPD-Hub) — gebundeld onder de
+ *        "Andere"-pill (ghost variant) en getoond als 2-koloms verwijspaneel.
  */
 export type WegwijzerTier = 1 | 2 | 3;
 
@@ -24,7 +25,7 @@ export type WegwijzerService = {
   entry: AvailableEntry;
   tier: WegwijzerTier;
   icon: IconSvgElement;
-  externalReferral?: { name: string; description: string };
+  externalReferral?: { name: string; description: string; url: string };
   /**
    * Override label used in the choice-card pill on the Wegwijzer page.
    * Defaults to `entry.label` (same as the master-card title) — set this
@@ -59,6 +60,7 @@ export const WEGWIJZER_SERVICES: readonly WegwijzerService[] = [
       name: "BUtgb",
       description:
         "ATG-aanvragen worden door PROCERTUS doorgezet naar het Belgische technische goedkeuringsbureau (BUtgb).",
+      url: "https://www.butgb.be/",
     },
   },
   {
@@ -69,6 +71,7 @@ export const WEGWIJZER_SERVICES: readonly WegwijzerService[] = [
       name: "EPD-Hub",
       description:
         "Milieuverklaringen worden gepubliceerd via EPD-Hub; PROCERTUS verwijst u gericht door.",
+      url: "https://www.epdhub.com/",
     },
   },
 ];
