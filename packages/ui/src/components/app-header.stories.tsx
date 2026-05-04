@@ -54,9 +54,9 @@ function AuthenticatedAppFrame({ children }: { children: React.ReactNode }) {
 
 function PublicRegistryFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-svh flex-col bg-background">
+    <div className="flex min-h-svh flex-col bg-sidebar [&>header]:border-b-0">
       {children}
-      <div className="flex-1 px-boundary py-region">
+      <div className="mt-1 ml-3 mr-4 flex-1 rounded-t-xl bg-background p-6">
         <div className="min-h-[50vh] rounded-xl border border-dashed" />
       </div>
     </div>
