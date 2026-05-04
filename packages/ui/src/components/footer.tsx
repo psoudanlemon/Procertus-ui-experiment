@@ -96,7 +96,7 @@ function Footer({
             : "bg-sidebar text-sidebar-foreground",
         )}
       >
-        <div className="flex flex-wrap items-center justify-between gap-x-micro gap-y-micro px-component py-component text-xs leading-relaxed text-sidebar-foreground/60">
+        <div className="flex flex-wrap items-center justify-between gap-x-micro gap-y-micro px-section py-section text-xs leading-relaxed text-sidebar-foreground/60">
           {companyDetails.length > 0 && (
             <div className="flex flex-wrap items-center gap-x-micro">
               {companyDetails.map((detail, index) => (
