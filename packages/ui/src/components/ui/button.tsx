@@ -32,7 +32,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground hover:rounded-tr-[var(--cmd-deep)] hover:rounded-bl-[var(--cmd-deep)] hover:rounded-tl-[4px] hover:rounded-br-[4px]",
         ghost:
           "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 hover:rounded-tr-[var(--cmd-deep)] hover:rounded-bl-[var(--cmd-deep)] hover:rounded-tl-[4px] hover:rounded-br-[4px]",
-        link: "h-auto !rounded-none border-0 px-0 font-medium normal-case tracking-normal text-accent-foreground underline-offset-4 hover:!rounded-none hover:underline hover:text-accent-foreground/80 active:!rounded-none",
+        link: "!h-auto !rounded-none border-0 !px-0 font-medium normal-case tracking-normal text-accent-foreground underline-offset-4 hover:!rounded-none hover:underline hover:text-accent-foreground/80 active:!rounded-none",
       },
       size: {
         default:
@@ -88,6 +88,13 @@ const buttonVariants = cva(
         variant: "link",
         inverse: true,
         className: "text-primary-foreground hover:text-primary-foreground/80",
+      },
+      // Icon buttons keep the corner-shift only on the primary variant.
+      // For destructive/outline/secondary/ghost in any icon size, neutralize hover corners.
+      {
+        variant: ["destructive", "outline", "secondary", "ghost"],
+        size: ["icon", "icon-xs", "icon-sm", "icon-lg"],
+        className: "hover:rounded-[8px]",
       },
     ],
     defaultVariants: {
