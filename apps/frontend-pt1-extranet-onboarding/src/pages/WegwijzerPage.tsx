@@ -189,7 +189,7 @@ function MasterCard({ service }: { service: WegwijzerService }) {
           aria-hidden
           src={procertusLogomark}
           alt=""
-          className="pointer-events-none absolute -right-16 -bottom-16 -z-10 size-96 select-none opacity-10"
+          className="pointer-events-none absolute right-8 -bottom-16 -z-10 size-96 select-none opacity-10"
         />
         {isExternal && externalReferral && (
           <Alert>
