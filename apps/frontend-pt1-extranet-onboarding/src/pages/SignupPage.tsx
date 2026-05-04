@@ -14,8 +14,7 @@ export function SignupPage() {
   return (
     <AuthLayout
       title="Welkom terug"
-      description="Meld je aan met je e-mailadres waarmee je bij PROCERTUS geregistreerd staat."
-      notice="Let op! Je e-mailadres wordt steeds gekoppeld aan 1 account dat gelinked wordt aan 1 organisatie. Meld aan met het juiste e-mailadres om aan te melden bij de juiste organisatie."
+      description="Meld je aan met het e-mailadres waarmee je bij PROCERTUS geregistreerd staat."
       panel={AUTH_PANEL}
     >
       <MockPrototypePasswordlessLoginForm
