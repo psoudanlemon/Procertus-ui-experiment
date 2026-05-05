@@ -15,3 +15,12 @@ export type {
   OnboardingStepperStep,
 } from "./custom-components/onboarding/onboarding-stepper";
 export * from "./components/portal-chat";
+export {
+  ChoiceBar,
+  CertificationCard,
+} from "./custom-components/CatalogueExplorer";
+export type {
+  ChoiceBarItem,
+  ChoiceBarProps,
+  CertificationCardProps,
+} from "./custom-components/CatalogueExplorer";

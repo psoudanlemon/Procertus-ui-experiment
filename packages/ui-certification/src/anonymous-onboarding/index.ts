@@ -1,3 +1,5 @@
+export { CatalogueExplorer } from "./catalogue-explorer";
+export type { CatalogueExplorerProps } from "./catalogue-explorer";
 export { AnonymousOnboardingFlowView } from "./anonymous-onboarding-flow-view";
 export {
   AnonymousOnboardingCompanyPrefillSkeleton,

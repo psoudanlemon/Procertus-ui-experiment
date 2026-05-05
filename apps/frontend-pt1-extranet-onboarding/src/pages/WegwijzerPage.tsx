@@ -13,17 +13,10 @@ import {
   AlertDescription,
   AlertTitle,
   Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
   DensityProvider,
   DownloadableDocumentListItem,
   type DownloadableDocumentListItemData,
-  FadingScrollList,
   H1,
-  H2,
   H4,
   HoverCard,
   HoverCardContent,
@@ -35,13 +28,11 @@ import {
   ItemGroup,
   ItemTitle,
   PublicRegistryAppShell,
-  SelectChoiceCard,
-  SelectChoiceCardGroup,
-  type SelectChoiceVariant,
   Skeleton,
 } from "@procertus-ui/ui";
+import { CertificationCard, type ChoiceBarItem } from "@procertus-ui/ui-lib";
+import { CatalogueExplorer } from "@procertus-ui/ui-certification";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
-import procertusLogomark from "@procertus-ui/ui/assets/logomark.svg";
 import { APP_FOOTER } from "../layouts/footerConfig";
 import {
   WEGWIJZER_SERVICES,
@@ -91,19 +82,19 @@ export function WegwijzerPage() {
       >
         <Hero />
 
-        <div className="flex w-full flex-col gap-section px-boundary pb-boundary">
-          <ServiceChoiceCards activeId={activeId} onChange={setActiveId} />
-
-          <div
-            key={activeId}
-            className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 min-w-0"
+        <div className="px-boundary pb-boundary">
+          <CatalogueExplorer
+            items={CHOICE_BAR_ITEMS}
+            activeId={activeId}
+            onActiveIdChange={setActiveId}
+            ariaLabel="Kies een certificaat"
           >
             {activeId === ANDERE_ID ? (
               <ExternalReferralGrid services={EXTERNAL_SERVICES} />
             ) : activeService ? (
               <MasterCard service={activeService} />
             ) : null}
-          </div>
+          </CatalogueExplorer>
         </div>
       </PublicRegistryAppShell>
     </DensityProvider>
@@ -134,56 +125,19 @@ function Hero() {
 }
 
 // ---------------------------------------------------------------------------
-// Service ChoiceCards — selection grid (variants per spec)
+// Choice-bar items — primary services first (BENOR, CE, SSD elevated; the
+// PROCERTUS-side trio faded), trailing "Overige" ghost pill bundles tier-3
+// external referrals.
 // ---------------------------------------------------------------------------
 
-function getCardVariant(_service: WegwijzerService, index: number): SelectChoiceVariant {
-  // BENOR, CE, SSD always elevated; PROCERTUS-side pills (Innovation, PROCERTUS-attest,
-  // Partijkeuring) always faded. Selection state is shown by the variant's built-in
-  // `data-checked:border-primary` styling — not by swapping variants.
-  if (index < 3) return "elevated";
-  return "faded";
-}
-
-function ServiceChoiceCards({
-  activeId,
-  onChange,
-}: {
-  activeId: string;
-  onChange: (id: string) => void;
-}) {
-  return (
-    <FadingScrollList orientation="horizontal" fadeColor="from-background">
-      <SelectChoiceCardGroup
-        layout="stack"
-        value={activeId}
-        onValueChange={onChange}
-        aria-label="Kies een certificaat"
-        className="flex-row flex-nowrap gap-component"
-      >
-        {PRIMARY_SERVICES.map((service, index) => (
-          <SelectChoiceCard
-            key={service.entry.id}
-            value={service.entry.id}
-            controlId={`wegwijzer-pick-${service.entry.id}`}
-            title={service.pillLabel ?? service.entry.label}
-            variant={getCardVariant(service, index)}
-            appearance="minimal"
-            className="shrink-0 has-[>[data-slot=field]]:w-auto"
-          />
-        ))}
-        <SelectChoiceCard
-          value={ANDERE_ID}
-          controlId={`wegwijzer-pick-${ANDERE_ID}`}
-          title="Overige"
-          variant="ghost"
-          appearance="minimal"
-          className="shrink-0 has-[>[data-slot=field]]:w-auto"
-        />
-      </SelectChoiceCardGroup>
-    </FadingScrollList>
-  );
-}
+const CHOICE_BAR_ITEMS: readonly ChoiceBarItem[] = [
+  ...PRIMARY_SERVICES.map((service, index) => ({
+    value: service.entry.id,
+    label: service.pillLabel ?? service.entry.label,
+    variant: index < 3 ? ("elevated" as const) : ("faded" as const),
+  })),
+  { value: ANDERE_ID, label: "Overige", variant: "ghost" as const },
+];
 
 // ---------------------------------------------------------------------------
 // External Referral Grid — shown when "Andere" is active
@@ -228,83 +182,72 @@ function MasterCard({ service }: { service: WegwijzerService }) {
   const documents = buildMockDocuments(service);
 
   return (
-    <Card className="flex flex-col gap-0 pt-0 shadow-proc-xs md:shadow-proc-sm">
-      <CardHeader className="gap-0 border-b bg-muted/40 px-region pt-region pb-section">
-        <H2>{entry.label}</H2>
-        <CardDescription className="text-base leading-normal">
-          {entry.description}
-        </CardDescription>
-      </CardHeader>
+    <CertificationCard
+      title={entry.label}
+      description={entry.description}
+      footer={
+        <>
+          <HoverCard>
+            <HoverCardTrigger asChild>
+              <Button asChild variant="link">
+                <Link to={EXPERT_CALL_PATH(entry.id)}>Hulp nodig?</Link>
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent side="top" sideOffset={12} align="start" className="w-80">
+              <p className="font-semibold text-heading-foreground">
+                Hulp nodig bij uw {entry.shortLabel}-dossier?
+              </p>
+              <p className="text-muted-foreground">
+                Plan een online sessie van één uur en bereid uw {entry.shortLabel}-dossier samen met een PROCERTUS-expert voor.
+              </p>
+            </HoverCardContent>
+          </HoverCard>
+          <Button asChild size="lg">
+            <Link to={ONBOARDING_STEPPER_PATH}>
+              Aanvraag starten
+              <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
+            </Link>
+          </Button>
+        </>
+      }
+    >
+      {isExternal && externalReferral && (
+        <Alert>
+          <HugeiconsIcon icon={InformationCircleIcon} />
+          <AlertTitle>Externe verwijzing — {externalReferral.name}</AlertTitle>
+          <AlertDescription>{externalReferral.description}</AlertDescription>
+        </Alert>
+      )}
 
-      <CardContent className="relative isolate flex flex-col gap-region overflow-hidden p-region">
-        <img
-          aria-hidden
-          src={procertusLogomark}
-          alt=""
-          className="pointer-events-none absolute right-8 -bottom-16 -z-10 size-96 select-none opacity-10"
-        />
-        {isExternal && externalReferral && (
-          <Alert>
-            <HugeiconsIcon icon={InformationCircleIcon} />
-            <AlertTitle>Externe verwijzing — {externalReferral.name}</AlertTitle>
-            <AlertDescription>{externalReferral.description}</AlertDescription>
-          </Alert>
-        )}
+      <MasterCardSections service={service} />
 
-        <MasterCardSections service={service} />
+      {isInnovation && (
+        <Alert>
+          <HugeiconsIcon icon={Alert02Icon} />
+          <AlertTitle>Richtwaarde formele opstart</AlertTitle>
+          <AlertDescription>
+            De ontvankelijkheidsbeoordeling start vanaf <strong>€&nbsp;2.000 (excl. btw)</strong>. Een
+            definitieve offerte volgt na intake.
+          </AlertDescription>
+        </Alert>
+      )}
 
-        {isInnovation && (
-          <Alert>
-            <HugeiconsIcon icon={Alert02Icon} />
-            <AlertTitle>Richtwaarde formele opstart</AlertTitle>
-            <AlertDescription>
-              De ontvankelijkheidsbeoordeling start vanaf <strong>€&nbsp;2.000 (excl. btw)</strong>. Een
-              definitieve offerte volgt na intake.
-            </AlertDescription>
-          </Alert>
-        )}
+      <section className="flex flex-col gap-component">
+        <div className="flex flex-col">
+          <H4>Regels en documentatie</H4>
+          <p className="text-sm text-muted-foreground">
+            Documenten op basis van uw selectie voor {entry.shortLabel} (prototype — downloadlinks zijn gemockt).
+          </p>
+        </div>
+        <ItemGroup className="w-full">
+          {documents.map((doc) => (
+            <DownloadableDocumentListItem key={doc.id} {...doc} />
+          ))}
+        </ItemGroup>
+      </section>
 
-        <section className="flex flex-col gap-component">
-          <div className="flex flex-col">
-            <H4>Regels en documentatie</H4>
-            <p className="text-sm text-muted-foreground">
-              Documenten op basis van uw selectie voor {entry.shortLabel} (prototype — downloadlinks zijn gemockt).
-            </p>
-          </div>
-          <ItemGroup className="w-full">
-            {documents.map((doc) => (
-              <DownloadableDocumentListItem key={doc.id} {...doc} />
-            ))}
-          </ItemGroup>
-        </section>
-
-        <MasterCardTimeline service={service} />
-      </CardContent>
-
-      <CardFooter className="flex-wrap-reverse justify-end gap-component p-region sm:flex-nowrap sm:justify-between">
-        <HoverCard>
-          <HoverCardTrigger asChild>
-            <Button asChild variant="link">
-              <Link to={EXPERT_CALL_PATH(entry.id)}>Hulp nodig?</Link>
-            </Button>
-          </HoverCardTrigger>
-          <HoverCardContent side="top" sideOffset={12} align="start" className="w-80">
-            <p className="font-semibold text-heading-foreground">
-              Hulp nodig bij uw {entry.shortLabel}-dossier?
-            </p>
-            <p className="text-muted-foreground">
-              Plan een online sessie van één uur en bereid uw {entry.shortLabel}-dossier samen met een PROCERTUS-expert voor.
-            </p>
-          </HoverCardContent>
-        </HoverCard>
-        <Button asChild size="lg">
-          <Link to={ONBOARDING_STEPPER_PATH}>
-            Aanvraag starten
-            <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
-          </Link>
-        </Button>
-      </CardFooter>
-    </Card>
+      <MasterCardTimeline service={service} />
+    </CertificationCard>
   );
 }
 
