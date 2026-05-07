@@ -327,7 +327,7 @@ function MasterCard({ service }: { service: WegwijzerService }) {
           </HoverCard>
           <Button asChild size="lg">
             <Link to={ONBOARDING_STEPPER_PATH}>
-              Aanvraag starten
+              Start traject
               <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
             </Link>
           </Button>
