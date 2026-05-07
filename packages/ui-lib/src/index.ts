@@ -22,3 +22,5 @@ export type {
 } from "./custom-components/CatalogueExplorer";
 export { DetailCard } from "./custom-components/DetailCard";
 export type { DetailCardProps } from "./custom-components/DetailCard";
+export { BrowseCard } from "./custom-components/BrowseCard";
+export type { BrowseCardProps, BrowseCardVariant } from "./custom-components/BrowseCard";
