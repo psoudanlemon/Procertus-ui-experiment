@@ -1,0 +1,53 @@
+Given all of the available surfing schools from the data directly matched with the content collections, I want to quickly browse them on an interactive map.
+
+Show all the surfing schools on the map. Show a tooltip when hovering with extra information, and when clicked, open a detail panel with detailed information about the surfing school. Allow opening a new browsing window with the external link.
+
+From the surfing school detail panel, list available camping spots in the neighborhood and allow opening the detail panel of a camping spot. From each detail panel, provide a quick way to add or remove the camping spot or surfing school to favorites.
+
+To manage the detail panel, set up the app shell layout so the main view can open inside the panel views alongside dialogs and confirmation messages, as laid out in this package from the project.
+
+Please port all needed components to the existing UI package.@Procertus-ui-experiment/packages/ui/src/components/sewdn/AppShell @Procertus-ui-experiment/packages/ui/src/components/sewdn/CoverView @Procertus-ui-experiment/packages/ui/src/components/sewdn/CardList @Procertus-ui-experiment/packages/ui/src/components/sewdn/Panels 
+
+Also organize all card listings using the card disk component for responsive card columns in the application.@camping/apps/frontend-web/src/components/AppChrome.tsx @camping/apps/frontend-web/src/routes/explore.tsx
+
+---
+
+Given all of the available surfing schools from the data directly matched with the content collections, I want to quickly browse them on an interactive map.
+
+Show all the surfing schools on the map. Show a tooltip when hovering with extra information, and when clicked, open a detail panel with detailed information about the surfing school. Allow opening a new browsing window with the external link.
+
+From the surfing school detail panel, list available camping spots in the neighborhood and allow opening the detail panel of a camping spot. From each detail panel, provide a quick way to add or remove the camping spot or surfing school to favorites.
+
+To manage the detail panel, set up the app shell layout so the main view can open inside the panel views alongside dialogs and confirmation messages, as laid out in this package from the project.
+
+Please port all needed components to the existing UI package.@Procertus-ui-experiment/packages/ui/src/components/sewdn/AppShell @Procertus-ui-experiment/packages/ui/src/components/sewdn/CoverView @Procertus-ui-experiment/packages/ui/src/components/sewdn/CardList @Procertus-ui-experiment/packages/ui/src/components/sewdn/Panels 
+
+Also organize all card listings using the card disk component for responsive card columns in the application.@camping/apps/frontend-web/src/components/AppChrome.tsx @camping/apps/frontend-web/src/routes/explore.tsx
+
+---
+
+Please set up the detail panels and the panel registry in a separate folder, just like in the example project.@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/panelsLayout.tsx
+
+---
+
+Please, just like in the example implementation from the example project, use or persist the panel state in the URLs using the URL query detail panels hook.@Procertus-ui-experiment/packages/ui/src/components/sewdn/Panels/use-url-query-detail-panels.ts
+
+---
+
+Please, just like in the example implementation from the example project, use or persist the panel state in the URLs using the URL query detail panels hook.@Procertus-ui-experiment/packages/ui/src/components/sewdn/Panels/use-url-query-detail-panels.ts
+
+---
+
+Can't find variable: UserCampingState
+
+---
+
+Can't find variable: UserCampingState
+
+---
+
+I had an extra toggle on the map to only show favorite spots, like favorite camping spots and schools.
+
+---
+
+I had an extra toggle on the map to only show favorite spots, like favorite camping spots and schools.
