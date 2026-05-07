@@ -6,7 +6,7 @@
  * inside any shell.
  *
  * Body content is fully composed by the caller — typically a
- * `CertificationCard` for active items, or alternative UI (e.g. an external
+ * `DetailCard` for active items, or alternative UI (e.g. an external
  * referral grid) when the active id represents an "other / overflow" branch.
  */
 import type { ReactNode } from "react";

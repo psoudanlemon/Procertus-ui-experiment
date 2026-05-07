@@ -1,12 +1,13 @@
 /**
- * Detail card for a certification entry. Header with title + description on a
- * muted strip; isolate body with an optional Procertus watermark in the
- * bottom-right; optional footer slot. Pure shell — caller owns the body
- * sections (alerts, document lists, timelines, …).
+ * Opt-in "feature shell" card with a muted title strip, a body slot, and an
+ * optional muted footer strip. Picks up a Procertus logomark watermark in the
+ * bottom-right by default; pass `watermark` to override or `hideWatermark` to
+ * suppress. Use for detail / feature pages where one composed card frames the
+ * entire surface (catalogue detail, expert-call intake, …). For ordinary
+ * cards, keep using the base `Card` primitive from `@procertus-ui/ui`.
  *
  * **Design system:** `Card` family + `H2` + `CardDescription` from
- * `@procertus-ui/ui`. Default watermark is the Procertus logomark; pass
- * `watermark` to override or `hideWatermark` to suppress.
+ * `@procertus-ui/ui`.
  */
 import type { ReactNode } from "react";
 
@@ -21,7 +22,7 @@ import {
 } from "@procertus-ui/ui";
 import procertusLogomark from "@procertus-ui/ui/assets/logomark.svg";
 
-export type CertificationCardProps = {
+export type DetailCardProps = {
   title: ReactNode;
   description?: ReactNode;
   /**
@@ -47,7 +48,7 @@ const defaultWatermark = (
   />
 );
 
-export function CertificationCard({
+export function DetailCard({
   title,
   description,
   watermark,
@@ -55,7 +56,7 @@ export function CertificationCard({
   footer,
   children,
   className,
-}: CertificationCardProps) {
+}: DetailCardProps) {
   const watermarkNode = hideWatermark ? null : (watermark ?? defaultWatermark);
 
   return (

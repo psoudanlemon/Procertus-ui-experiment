@@ -61,8 +61,8 @@ export type StepLayoutProps = {
   /**
    * `card` — single surface, header flush with the body (default).
    * `banded` — header and footer sit on a tinted strip (`bg-muted/40`) with
-   * borders separating them from the body, mirroring the CertificationCard
-   * detail layout.
+   * borders separating them from the body, mirroring the DetailCard
+   * layout.
    */
   chromeStyle?: "card" | "banded";
   title: ReactNode;

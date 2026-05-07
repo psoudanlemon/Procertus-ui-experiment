@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ArrowRight02Icon, ClockIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Button, H4 } from "@procertus-ui/ui";
-import { CertificationCard, type ChoiceBarItem } from "@procertus-ui/ui-lib";
+import { DetailCard, type ChoiceBarItem } from "@procertus-ui/ui-lib";
 
 import { CatalogueExplorer } from "./CatalogueExplorer";
 
@@ -83,7 +83,7 @@ function DefaultStory() {
       ariaLabel="Kies een certificaat"
     >
       {service ? (
-        <CertificationCard
+        <DetailCard
           title={service.title}
           description={service.content.description}
           footer={
@@ -117,7 +117,7 @@ function DefaultStory() {
             <HugeiconsIcon icon={ClockIcon} className="mt-0.5 size-5 shrink-0" />
             <p className="text-sm leading-normal">{service.content.timeline}</p>
           </section>
-        </CertificationCard>
+        </DetailCard>
       ) : (
         <p className="text-sm text-muted-foreground">
           Inhoud voor dit onderdeel volgt — selecteer een ander certificaat hierboven.

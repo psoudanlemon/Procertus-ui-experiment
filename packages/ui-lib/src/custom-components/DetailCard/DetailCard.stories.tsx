@@ -3,28 +3,28 @@ import { ArrowRight02Icon, ClockIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Button, H4 } from "@procertus-ui/ui";
 
-import { CertificationCard } from "./CertificationCard";
+import { DetailCard } from "./DetailCard";
 
 const meta = {
-  title: "custom-components/CatalogueExplorer/CertificationCard",
-  component: CertificationCard,
+  title: "custom-components/DetailCard",
+  component: DetailCard,
   parameters: {
     layout: "padded",
     docs: {
       description: {
         component:
-          "Detail card shell used by the catalogue explorer. Header (title + description), body slot, optional footer. Defaults a Procertus logomark watermark in the bottom-right; pass `hideWatermark` to suppress or `watermark` to override.",
+          "Opt-in feature shell card. Title + description on a muted strip, free-form body with an optional watermark, optional footer strip. Use for detail / feature pages; for ordinary cards keep using the base `Card` primitive.",
       },
     },
   },
   tags: ["autodocs"],
-} satisfies Meta<typeof CertificationCard>;
+} satisfies Meta<typeof DetailCard>;
 
 export default meta;
 
 function DefaultStory() {
   return (
-    <CertificationCard
+    <DetailCard
       title="BENOR-certificatie"
       description="Productgebonden BENOR-certificatie."
       footer={
@@ -67,10 +67,42 @@ function DefaultStory() {
           Vanaf indiening van een volledig dossier verloopt het traject in 8 tot 12 weken.
         </p>
       </section>
-    </CertificationCard>
+    </DetailCard>
   );
 }
 
 export const Default = {
   render: () => <DefaultStory />,
+} as unknown as StoryObj<typeof meta>;
+
+function NoFooterStory() {
+  return (
+    <DetailCard
+      title="Detail card without footer"
+      description="A footer is optional. Useful for surfaces where the action lives elsewhere on the page."
+    >
+      <p className="text-sm leading-normal">Free-form body content.</p>
+    </DetailCard>
+  );
+}
+
+export const NoFooter = {
+  render: () => <NoFooterStory />,
+} as unknown as StoryObj<typeof meta>;
+
+function NoWatermarkStory() {
+  return (
+    <DetailCard
+      title="Detail card without watermark"
+      description="Use `hideWatermark` when the body is busy or includes a custom illustration."
+      hideWatermark
+      footer={<Button>Bevestigen</Button>}
+    >
+      <p className="text-sm leading-normal">Free-form body content.</p>
+    </DetailCard>
+  );
+}
+
+export const NoWatermark = {
+  render: () => <NoWatermarkStory />,
 } as unknown as StoryObj<typeof meta>;

@@ -204,7 +204,7 @@ function AllCertificatesGrid({
   const fadedTrailing = faded[2];
 
   return (
-    <div role="list" className="grid w-full grid-cols-4 gap-component">
+    <div role="list" className="grid w-full grid-cols-4 gap-section">
       {elevated.map((service) => (
         <CertificateSummaryCard
           key={service.entry.id}
