@@ -1,0 +1,35 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "28943b8f12fb",
+  "session_id": "9cc389fb-f758-4e75-b7b5-ec60bfc4f92e",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-07T12:24:50.704712Z",
+  "branch": "main",
+  "checkpoints_count": 8,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/index.css",
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/main.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/panelsLayout.tsx",
+    "packages/ui/src/components/sewdn/Panels/Panel.tsx",
+    "packages/ui/src/components/sewdn/Panels/Panels.tsx",
+    "packages/ui/src/components/sewdn/Panels/PanelsLayout.tsx"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "db6c3941623c",
+  "session_metrics": {
+    "turn_count": 16,
+    "context_tokens": 184551,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-07T12:24:50.658292Z",
+    "agent_lines": 96,
+    "human_added": 20,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 116,
+    "agent_percentage": 82.75862068965517
+  }
+}
