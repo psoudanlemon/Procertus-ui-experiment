@@ -1,14 +1,14 @@
+import { useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft01Icon,
-  Calendar01Icon,
   CheckmarkCircle02Icon,
-  ClockIcon,
   Video01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Button,
+  Calendar,
   Card,
   CardContent,
   CardDescription,
@@ -16,15 +16,12 @@ import {
   CardHeader,
   DensityProvider,
   Field,
-  FieldGroup,
   FieldLabel,
   H1,
   H2,
-  H4,
   Input,
   PublicRegistryAppShell,
   Separator,
-  Skeleton,
 } from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { APP_FOOTER } from "../layouts/footerConfig";
@@ -40,10 +37,34 @@ const SESSION_HIGHLIGHTS = [
   "Concrete inschatting van het te volgen traject",
 ] as const;
 
+const TIME_SLOTS = [
+  "09:00",
+  "09:15",
+  "09:30",
+  "09:45",
+  "10:00",
+  "10:15",
+  "10:30",
+  "10:45",
+  "11:00",
+] as const;
+
+const SELECTION_FORMATTER = new Intl.DateTimeFormat("nl-BE", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+});
+
 export function ExpertCallPlaceholderPage() {
   const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
   const service = findWegwijzerService(serviceId);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [selectedSlot, setSelectedSlot] = useState<string | undefined>(undefined);
+  const formattedSelection =
+    selectedDate && selectedSlot
+      ? `${SELECTION_FORMATTER.format(selectedDate)} om ${selectedSlot}`
+      : null;
 
   // /welcome/expert-call/:serviceId with an unknown id → fall back to overview.
   // /welcome/expert-call (no param) is the generic intake from the Hero banner.
@@ -114,34 +135,44 @@ export function ExpertCallPlaceholderPage() {
               <CardHeader className="px-section">
                 <H2 className="text-heading-md">Kies een moment</H2>
                 <CardDescription>
-                  De agendamodule wordt momenteel afgewerkt; hieronder ziet u de definitieve structuur.
+                  Sessies duren één uur en starten op het hele of halve uur.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="flex flex-col gap-section px-section">
-                <div className="flex flex-col gap-component">
-                  <H4>Datum</H4>
-                  <Skeleton
-                    aria-label="Agenda wordt voorbereid"
-                    className="h-44 w-full rounded-md border border-dashed bg-muted/10"
-                  />
-                  <p className="flex items-center gap-micro text-xs text-muted-foreground">
-                    <HugeiconsIcon icon={Calendar01Icon} className="size-3 text-accent-foreground" />
-                    Beschikbare slots verschijnen hier zodra de agenda is gekoppeld.
-                  </p>
-                </div>
-
-                <div className="flex flex-col gap-component">
-                  <H4>Tijdvak</H4>
-                  <div className="grid grid-cols-2 gap-micro sm:grid-cols-4">
-                    {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-                      <Skeleton key={i} className="h-9 rounded-md border border-dashed bg-muted/10" />
-                    ))}
+              <CardContent className="px-section">
+                <div className="flex flex-col gap-section md:flex-row md:items-stretch md:gap-0">
+                  <div className="flex flex-1 justify-center md:justify-start">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={setSelectedDate}
+                      className="w-fit"
+                    />
                   </div>
-                  <p className="flex items-center gap-micro text-xs text-muted-foreground">
-                    <HugeiconsIcon icon={ClockIcon} className="size-3 text-accent-foreground" />
-                    Sessies duren één uur en starten op het hele of halve uur.
-                  </p>
+                  <Separator orientation="vertical" className="hidden md:block" />
+                  <div className="flex max-h-80 flex-col gap-micro overflow-y-auto md:w-44 md:pl-section">
+                    {TIME_SLOTS.map((slot) => {
+                      const isSelected = selectedSlot === slot;
+                      return (
+                        <Button
+                          key={slot}
+                          type="button"
+                          variant={isSelected ? "default" : "outline"}
+                          onClick={() => setSelectedSlot(slot)}
+                          className="w-full justify-center"
+                          disabled={!selectedDate}
+                        >
+                          {slot}
+                        </Button>
+                      );
+                    })}
+                  </div>
                 </div>
+                {formattedSelection ? (
+                  <p className="mt-section text-sm text-muted-foreground">
+                    Uw expert call is gepland voor{" "}
+                    <span className="font-medium text-foreground">{formattedSelection}</span>.
+                  </p>
+                ) : null}
               </CardContent>
 
               <Separator />
@@ -150,7 +181,7 @@ export function ExpertCallPlaceholderPage() {
                 <H2 className="text-heading-md">Uw gegevens</H2>
               </CardHeader>
               <CardContent className="px-section">
-                <FieldGroup>
+                <div className="grid grid-cols-1 gap-section sm:grid-cols-2">
                   <Field>
                     <FieldLabel htmlFor="expert-call-firstname">Voornaam</FieldLabel>
                     <Input id="expert-call-firstname" autoComplete="given-name" />
@@ -167,7 +198,7 @@ export function ExpertCallPlaceholderPage() {
                     <FieldLabel htmlFor="expert-call-company">Bedrijfsnaam</FieldLabel>
                     <Input id="expert-call-company" autoComplete="organization" />
                   </Field>
-                </FieldGroup>
+                </div>
               </CardContent>
 
               <Separator />
