@@ -1,0 +1,35 @@
+Please organize the raw metrics per plot in both the detail panel and the edit panel. Group them by category and show the categories as listings. Make these categories collapsible.
+
+Also add an info icon to each criterion and category and show a tooltip.
+
+Allow clicking the icon to open a detail panel that shows the category or criterion. Set up these detail panels and allow editing of the criterion or category.
+
+Look at the current editor to see how editing works, but instead of doing this on a single page like the current editor, handle editing in the detail panels for criteria and categories.@portugal/apps/frontend-web/src/panels/plot-detail-panel.tsx @portugal/apps/frontend-web/src/panels/plot-edit-panel.tsx @portugal/apps/frontend-web/src/panels/panel-registry.tsx @portugal/apps/frontend-web/src/routes/config.tsx
+
+---
+
+Please organize the raw metrics per plot in both the detail panel and the edit panel. Group them by category and show the categories as listings. Make these categories collapsible.
+
+Also add an info icon to each criterion and category and show a tooltip.
+
+Allow clicking the icon to open a detail panel that shows the category or criterion. Set up these detail panels and allow editing of the criterion or category.
+
+Look at the current editor to see how editing works, but instead of doing this on a single page like the current editor, handle editing in the detail panels for criteria and categories.@portugal/apps/frontend-web/src/panels/plot-detail-panel.tsx @portugal/apps/frontend-web/src/panels/plot-edit-panel.tsx @portugal/apps/frontend-web/src/panels/panel-registry.tsx @portugal/apps/frontend-web/src/routes/config.tsx
+
+---
+
+Could you please try again, implementing your complete to-do from 1 to 6?  
+I don't know what went wrong in your previous attempts.
+
+---
+
+Could you please try again, implementing your complete to-do from 1 to 6?  
+I don't know what went wrong in your previous attempts.
+
+---
+
+Please commit all changes in this session. Use Commit Skill.
+
+---
+
+Please commit all changes in this session. Use Commit Skill.
