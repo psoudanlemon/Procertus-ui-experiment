@@ -131,6 +131,7 @@ export {
   AnonymousOnboardingCompanyPrefillSkeleton,
   AnonymousOnboardingContextField,
   AnonymousOnboardingFlowView,
+  CatalogueExplorer,
   clearAnonymousOnboardingStorage,
   ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY,
   ONBOARDING_FLOW_STORAGE_KEY,
@@ -145,6 +146,7 @@ export {
 export type {
   AnonymousOnboardingFlowState,
   AnonymousOnboardingFlowViewProps,
+  CatalogueExplorerProps,
   CustomerContext,
   OnboardingRegistrationCompletePayload,
   OnboardingStep,

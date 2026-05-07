@@ -1,8 +1,10 @@
 /**
  * Selectable choice card — **single** (`RadioGroup`) or **multiple** (`Checkbox`).
- * Same chrome (variant, hover, selected) for `appearance="default"` (inline radio + text)
- * and `appearance="hero"` (two-zone: header strip with title + control, body strip with
- * description). Pair with {@link useChoiceSelection}.
+ * Same chrome (variant, hover, selected) for `appearance="default"` (inline radio + text),
+ * `appearance="hero"` (two-zone: header strip with title + control, body strip with
+ * description), and `appearance="minimal"` (title-only chip with the native control kept
+ * accessible but visually hidden — `description` and `leading` are ignored). Pair with
+ * {@link useChoiceSelection}.
  */
 import { cva, type VariantProps } from "class-variance-authority";
 import type { ReactNode } from "react";
@@ -21,7 +23,7 @@ import { RadioGroupItem } from "@/components/ui/radio-group";
 
 import type { ChoiceSelectionMode } from "./useChoiceSelection";
 
-export type SelectChoiceAppearance = "default" | "hero";
+export type SelectChoiceAppearance = "default" | "hero" | "minimal";
 
 const shellVariants = cva(
   "group/choice w-full select-none has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:transition-[box-shadow,background-color,border-color,opacity]",
@@ -30,19 +32,28 @@ const shellVariants = cva(
       appearance: {
         default: "*:data-[slot=field]:p-section",
         hero: "has-[>[data-slot=field]]:overflow-hidden has-[>[data-slot=field]]:rounded-xl *:data-[slot=field]:p-0",
+        minimal: "*:data-[slot=field]:p-component",
       },
       variant: {
         elevated: [
-          "has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:shadow-proc-sm not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-primary/50 has-data-checked:has-[>[data-slot=field]]:border-primary has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
-          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-primary has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:shadow-proc-sm not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-accent-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:bg-accent not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:has-[>[data-slot=field]]:border-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-accent-foreground has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
         ],
         default: [
-          "has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:bg-card not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-primary/50 has-data-checked:has-[>[data-slot=field]]:border-primary has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
-          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-primary has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:bg-card not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-accent-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:bg-accent not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:has-[>[data-slot=field]]:border-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-accent-foreground has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
         ],
         faded: [
-          "opacity-90 has-[>[data-slot=field]]:border-dashed has-[>[data-slot=field]]:border-muted-foreground/40 not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:opacity-100 not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-primary/50 has-data-checked:opacity-100 has-data-checked:has-[>[data-slot=field]]:border-primary has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
-          "has-[[data-state=checked][data-slot=checkbox]]:opacity-100 has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-primary has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
+          "opacity-90 has-[>[data-slot=field]]:border-dashed has-[>[data-slot=field]]:border-muted-foreground/40 not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:opacity-100 not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-accent-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:bg-accent not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:opacity-100 has-data-checked:has-[>[data-slot=field]]:border-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[[data-state=checked][data-slot=checkbox]]:opacity-100 has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-accent-foreground has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
+        ],
+        ghost: [
+          "has-[>[data-slot=field]]:border-transparent has-[>[data-slot=field]]:bg-transparent has-[>[data-slot=field]]:shadow-none has-[>[data-slot=field]]:text-muted-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:bg-accent not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
+        ],
+        "no-border": [
+          "has-[>[data-slot=field]]:border-transparent has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:shadow-none has-[>[data-slot=field]]:text-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-accent-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:bg-accent not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
         ],
       },
     },
@@ -55,7 +66,10 @@ const titleVariants = cva("text-sm font-medium", {
     variant: {
       elevated: "",
       default: "",
-      faded: "text-muted-foreground",
+      faded:
+        "text-muted-foreground group-hover/choice:text-accent-foreground group-has-data-checked/choice:text-accent-foreground group-has-[[data-state=checked][data-slot=checkbox]]/choice:text-accent-foreground",
+      ghost: "",
+      "no-border": "",
     },
   },
   defaultVariants: { variant: "default" },
@@ -67,6 +81,8 @@ const descVariants = cva("text-sm", {
       elevated: "",
       default: "",
       faded: "text-xs",
+      ghost: "",
+      "no-border": "",
     },
   },
   defaultVariants: { variant: "default" },
@@ -86,9 +102,19 @@ export type SelectChoiceCardProps = {
    * Inline icon for **default** layout (start column). Ignored when `appearance="hero"`.
    */
   leading?: ReactNode;
-  /** @default "default" — `elevated` adds a soft drop shadow, `faded` is dashed and de-emphasized. */
+  /**
+   * @default "default" — `elevated` adds a soft drop shadow, `faded` is dashed and
+   * de-emphasized, `ghost` drops the surface entirely (no background, no border) and
+   * uses muted-foreground text like `faded`, and `no-border` keeps the card surface
+   * but suppresses the border. `ghost` and `no-border` shift the text to
+   * `accent-foreground` on hover and when selected.
+   */
   variant?: SelectChoiceVariant;
-  /** @default "default" — `hero` uses a two-zone (header + body) tier-card layout. */
+  /**
+   * @default "default" — `hero` uses a two-zone (header + body) tier-card layout;
+   * `minimal` shows only the title and keeps the native control accessible but
+   * visually hidden (`description` and `leading` are ignored).
+   */
   appearance?: SelectChoiceAppearance;
   /** @default "leading" — only applies when `appearance="default"`; ignored for hero. */
   controlPosition?: "leading" | "trailing";
@@ -120,11 +146,12 @@ export function SelectChoiceCard({
   name,
 }: SelectChoiceCardProps) {
   const isHero = appearance === "hero";
+  const isMinimal = appearance === "minimal";
   const isMultiple = selectionMode === "multiple";
 
-  const controlClass = !isHero ? "mt-micro" : undefined;
+  const controlClass = isHero || isMinimal ? undefined : "mt-micro";
 
-  const control = isMultiple ? (
+  const rawControl = isMultiple ? (
     <Checkbox
       name={name}
       id={controlId}
@@ -137,10 +164,18 @@ export function SelectChoiceCard({
     <RadioGroupItem value={value} id={controlId} disabled={disabled} className={controlClass} />
   );
 
-  const showLeading = !isHero && leading;
+  // In minimal appearance the native control stays in the DOM for keyboard + a11y,
+  // but visually disappears AND must not occupy space. `sr-only` on the control
+  // itself doesn't beat the control's own `relative size-4` classes via tailwind-merge,
+  // so we wrap it in an absolutely-positioned (`sr-only`) span — that takes the
+  // element out of the parent flex flow.
+  const control = isMinimal ? <span className="sr-only">{rawControl}</span> : rawControl;
+
+  const showLeading = !isHero && !isMinimal && leading;
   const titleLabelClass = cn(
     "block text-left text-sm font-medium normal-case leading-snug tracking-normal whitespace-normal wrap-break-word",
-    variant === "faded" && "text-muted-foreground",
+    variant === "faded" &&
+      "text-muted-foreground group-hover/choice:text-accent-foreground group-has-data-checked/choice:text-accent-foreground group-has-[[data-state=checked][data-slot=checkbox]]/choice:text-accent-foreground",
   );
 
   return (
@@ -159,7 +194,14 @@ export function SelectChoiceCard({
       >
         {isHero ? (
           <div className="flex w-full flex-1 flex-col">
-            <div className="flex w-full items-center justify-between gap-component border-b border-border/60 p-section">
+            <div
+              className={cn(
+                "flex w-full items-center justify-between gap-component border-b p-section transition-colors",
+                variant === "ghost"
+                  ? "border-transparent group-hover/choice:border-border/60 group-has-data-checked/choice:border-border/60 group-has-[[data-state=checked][data-slot=checkbox]]/choice:border-border/60"
+                  : "border-border/60",
+              )}
+            >
               <FieldTitle className={cn(titleVariants({ variant }), "min-w-0")}>
                 <Label htmlFor={controlId} className={cn(titleLabelClass, "text-base")}>
                   {title}
@@ -168,7 +210,14 @@ export function SelectChoiceCard({
               {control}
             </div>
             {description ? (
-              <div className="w-full flex-1 bg-muted/20 p-section">
+              <div
+                className={cn(
+                  "w-full flex-1 p-section transition-colors",
+                  variant === "ghost"
+                    ? "group-hover/choice:bg-muted/20 group-has-data-checked/choice:bg-muted/20 group-has-[[data-state=checked][data-slot=checkbox]]/choice:bg-muted/20"
+                    : "bg-muted/20",
+                )}
+              >
                 <FieldDescription
                   className={cn(descVariants({ variant }), "whitespace-normal wrap-break-word")}
                 >
@@ -177,6 +226,17 @@ export function SelectChoiceCard({
               </div>
             ) : null}
           </div>
+        ) : isMinimal ? (
+          <>
+            {control}
+            <FieldContent>
+              <FieldTitle className={titleVariants({ variant })}>
+                <Label htmlFor={controlId} className={titleLabelClass}>
+                  {title}
+                </Label>
+              </FieldTitle>
+            </FieldContent>
+          </>
         ) : (
           <>
             {controlPosition === "leading" ? control : null}

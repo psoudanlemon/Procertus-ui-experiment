@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 
-import { RadioGroup } from "@/components/ui/radio-group";
-
 import { SelectChoiceCard } from "./SelectChoiceCard";
 import { SelectChoiceCardGroup } from "./SelectChoiceCardGroup";
 import { useChoiceSelection } from "./useChoiceSelection";
@@ -15,7 +13,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "**Single** (`RadioGroup`) or **multiple** (`Checkbox`) selectable cards; `appearance=\"hero\"` gives a two-zone tier-card layout. Selection state via {@link useChoiceSelection}.",
+          "**Single** (`RadioGroup`) or **multiple** (`Checkbox`) selectable cards across three appearances (`default`, `hero`, `minimal`) and five styles (`elevated`, `default`, `faded`, `ghost`, `no-border`). Selection state via {@link useChoiceSelection}.",
       },
     },
   },
@@ -24,37 +22,101 @@ const meta = {
 
 export default meta;
 
-const variants = ["elevated", "default", "faded"] as const;
-
-function RowVariantsSingle() {
-  const [v, setV] = useState("default-option");
+// — — — Default — — —
+function DefaultStory() {
+  const [v, setV] = useState("default-card");
   return (
-    <RadioGroup value={v} onValueChange={setV} className="flex w-full max-w-md flex-col gap-component">
-      {variants.map((variant) => (
+    <div className="w-full max-w-md">
+      <SelectChoiceCardGroup value={v} onValueChange={setV} selectionMode="single">
         <SelectChoiceCard
-          key={variant}
-          value={`${variant}-option`}
-          controlId={`sc-${variant}`}
-          title={`${variant[0]!.toUpperCase()}${variant.slice(1)} variant`}
-          description="Optional description that scales with the variant."
-          variant={variant}
+          value="default-card"
+          controlId="default-card"
+          title="Product certification"
+          description="Canonical card — default style, default appearance, leading radio."
         />
-      ))}
-    </RadioGroup>
+      </SelectChoiceCardGroup>
+    </div>
   );
 }
 
-export const Variants = {
-  render: () => <RowVariantsSingle />,
+export const Default = {
+  render: () => <DefaultStory />,
 } as unknown as StoryObj<typeof meta>;
 
-function HeroSingleStory() {
+// — — — Style: elevated · default · faded · no-border · ghost — — —
+const styleVariants = ["elevated", "default", "faded", "no-border", "ghost"] as const;
+
+function StyleVariantsStory() {
+  const [v, setV] = useState("default-option");
+  return (
+    <div className="w-full max-w-md">
+      <SelectChoiceCardGroup
+        legend="Style variants"
+        hint="elevated · default · faded · no-border · ghost — same chrome, different emphasis."
+        value={v}
+        onValueChange={setV}
+        selectionMode="single"
+      >
+        {styleVariants.map((variant) => (
+          <SelectChoiceCard
+            key={variant}
+            value={`${variant}-option`}
+            controlId={`sc-${variant}`}
+            title={`${variant[0]!.toUpperCase()}${variant.slice(1)} variant`}
+            description="Optional description that scales with the variant."
+            variant={variant}
+          />
+        ))}
+      </SelectChoiceCardGroup>
+    </div>
+  );
+}
+
+export const StyleVariants = {
+  render: () => <StyleVariantsStory />,
+} as unknown as StoryObj<typeof meta>;
+
+// — — — Appearance: default — — —
+function AppearanceDefaultStory() {
+  const [v, setV] = useState("def-a");
+  return (
+    <div className="w-full max-w-md">
+      <SelectChoiceCardGroup
+        legend="Default appearance"
+        hint="Inline control + title with optional description below — the standard list layout."
+        value={v}
+        onValueChange={setV}
+        selectionMode="single"
+      >
+        <SelectChoiceCard
+          value="def-a"
+          controlId="def-a"
+          title="Product certification"
+          description="Inline description sits below the title."
+        />
+        <SelectChoiceCard
+          value="def-b"
+          controlId="def-b"
+          title="ATG"
+          description="Inline description sits below the title."
+        />
+      </SelectChoiceCardGroup>
+    </div>
+  );
+}
+
+export const AppearanceDefault = {
+  render: () => <AppearanceDefaultStory />,
+} as unknown as StoryObj<typeof meta>;
+
+// — — — Appearance: hero — — —
+function AppearanceHeroStory() {
   const choice = useChoiceSelection({ mode: "single", defaultSelectedId: "plans" });
   return (
     <div className="flex w-full max-w-5xl flex-col gap-section">
       <SelectChoiceCardGroup
         legend="Hero appearance"
-        hint="Two-zone tier-card layout — same variants as the default cards."
+        hint="Two-zone tier-card layout — title + control in the header strip, description in the body."
         layout="grid"
         selectionMode="single"
         value={choice.selectedId ?? ""}
@@ -84,6 +146,22 @@ function HeroSingleStory() {
           title="Faded"
           description="Dashed border and reduced opacity for de-emphasized routes."
         />
+        <SelectChoiceCard
+          appearance="hero"
+          variant="no-border"
+          value="no-border"
+          controlId="hero-no-border"
+          title="No-border"
+          description="Card surface without the border outline."
+        />
+        <SelectChoiceCard
+          appearance="hero"
+          variant="ghost"
+          value="ghost"
+          controlId="hero-ghost"
+          title="Ghost"
+          description="Surface-less option that lifts to foreground on hover and selection."
+        />
       </SelectChoiceCardGroup>
       <p className="text-sm text-muted-foreground" role="status">
         Hook: selectedId = {choice.selectedId ?? "(none)"}
@@ -92,38 +170,178 @@ function HeroSingleStory() {
   );
 }
 
-export const HeroAppearanceSingleWithHook = {
-  render: () => <HeroSingleStory />,
+export const AppearanceHero = {
+  render: () => <AppearanceHeroStory />,
 } as unknown as StoryObj<typeof meta>;
 
-function MultipleWithHookStory() {
-  const choice = useChoiceSelection({ mode: "multiple", defaultSelectedIds: ["a"] });
-  const ids = ["a", "b", "c"] as const;
+// — — — Appearance: minimal (also covers the “no visible control” case) — — —
+function AppearanceMinimalStory() {
+  const [v, setV] = useState("min-default");
   return (
-    <div className="w-full max-w-4xl space-y-component">
-      <SelectChoiceCardGroup selectionMode="multiple" legend="Pick any" layout="grid">
-        {ids.map((id) => (
-          <SelectChoiceCard
-            key={id}
-            appearance="hero"
-            selectionMode="multiple"
-            value={id}
-            controlId={`multi-${id}`}
-            checked={choice.isSelected(id)}
-            onCheckedChange={(c) => choice.setIncluded(id, c === true)}
-            title={id === "a" ? "First option" : id === "b" ? "Second option" : "Third option"}
-            description="Checkbox-backed; each toggle updates useChoiceSelection."
-          />
-        ))}
+    <div className="w-full max-w-2xl">
+      <SelectChoiceCardGroup
+        legend="Minimal appearance"
+        hint="Title-only chip — no description, no leading icon. The native control stays sr-only for keyboard + screen-reader access, so this also covers the “no visible control” case."
+        layout="grid"
+        value={v}
+        onValueChange={setV}
+        selectionMode="single"
+      >
+        <SelectChoiceCard
+          appearance="minimal"
+          variant="default"
+          value="min-default"
+          controlId="min-default"
+          title="Default"
+        />
+        <SelectChoiceCard
+          appearance="minimal"
+          variant="elevated"
+          value="min-elevated"
+          controlId="min-elevated"
+          title="Elevated"
+        />
+        <SelectChoiceCard
+          appearance="minimal"
+          variant="faded"
+          value="min-faded"
+          controlId="min-faded"
+          title="Faded"
+        />
+        <SelectChoiceCard
+          appearance="minimal"
+          variant="no-border"
+          value="min-no-border"
+          controlId="min-no-border"
+          title="No-border"
+        />
+        <SelectChoiceCard
+          appearance="minimal"
+          variant="ghost"
+          value="min-ghost"
+          controlId="min-ghost"
+          title="Ghost"
+        />
       </SelectChoiceCardGroup>
-      <p className="text-sm text-muted-foreground" role="status">
-        selectedIds: [{choice.selectedIds.join(", ") || " "}]
-      </p>
     </div>
   );
 }
 
-function SmallMultipleWithHookStory() {
+export const AppearanceMinimal = {
+  render: () => <AppearanceMinimalStory />,
+} as unknown as StoryObj<typeof meta>;
+
+// — — — Control position: leading — — —
+function ControlPositionLeadingStory() {
+  const [v, setV] = useState("");
+  return (
+    <div className="w-full max-w-md">
+      <SelectChoiceCardGroup
+        legend="Leading control"
+        hint="Control renders before the title — the default layout."
+        value={v}
+        onValueChange={setV}
+        selectionMode="single"
+      >
+        <SelectChoiceCard
+          value="lead-a"
+          controlId="lead-a"
+          title="Product certification"
+          description="Control sits at the start of the row."
+          controlPosition="leading"
+        />
+        <SelectChoiceCard
+          value="lead-b"
+          controlId="lead-b"
+          title="ATG"
+          description="Control sits at the start of the row."
+          controlPosition="leading"
+        />
+      </SelectChoiceCardGroup>
+    </div>
+  );
+}
+
+export const ControlPositionLeading = {
+  render: () => <ControlPositionLeadingStory />,
+} as unknown as StoryObj<typeof meta>;
+
+// — — — Control position: trailing — — —
+function ControlPositionTrailingStory() {
+  const [v, setV] = useState("");
+  return (
+    <div className="w-full max-w-md">
+      <SelectChoiceCardGroup
+        legend="Trailing control"
+        hint="Control renders after the title — useful when pairing non-hero cards with hero cards above."
+        value={v}
+        onValueChange={setV}
+        selectionMode="single"
+      >
+        <SelectChoiceCard
+          value="trail-a"
+          controlId="trail-a"
+          title="PROCERTUS attest"
+          description="Control sits at the end of the row."
+          controlPosition="trailing"
+        />
+        <SelectChoiceCard
+          value="trail-b"
+          controlId="trail-b"
+          title="EPD"
+          description="Control sits at the end of the row."
+          controlPosition="trailing"
+        />
+      </SelectChoiceCardGroup>
+    </div>
+  );
+}
+
+export const ControlPositionTrailing = {
+  render: () => <ControlPositionTrailingStory />,
+} as unknown as StoryObj<typeof meta>;
+
+// — — — Control type: radio (single) — — —
+function ControlRadioStory() {
+  const [v, setV] = useState("radio-a");
+  return (
+    <div className="w-full max-w-md">
+      <SelectChoiceCardGroup
+        legend="Radio control (single mode)"
+        hint="selectionMode=single — pick exactly one. RadioGroupItem under the hood."
+        value={v}
+        onValueChange={setV}
+        selectionMode="single"
+      >
+        <SelectChoiceCard
+          value="radio-a"
+          controlId="radio-a"
+          title="Option A"
+          description="Only one can be active."
+        />
+        <SelectChoiceCard
+          value="radio-b"
+          controlId="radio-b"
+          title="Option B"
+          description="Only one can be active."
+        />
+        <SelectChoiceCard
+          value="radio-c"
+          controlId="radio-c"
+          title="Option C"
+          description="Only one can be active."
+        />
+      </SelectChoiceCardGroup>
+    </div>
+  );
+}
+
+export const ControlRadio = {
+  render: () => <ControlRadioStory />,
+} as unknown as StoryObj<typeof meta>;
+
+// — — — Control type: checkbox (multiple) — — —
+function ControlCheckboxStory() {
   const choice = useChoiceSelection({ mode: "multiple", defaultSelectedIds: ["benor", "epd"] });
   const options = [
     {
@@ -142,21 +360,20 @@ function SmallMultipleWithHookStory() {
       description: "Milieuproductverklaring die samen met andere aanvragen kan worden toegevoegd.",
     },
   ];
-
   return (
     <div className="w-full max-w-2xl space-y-component">
       <SelectChoiceCardGroup
         selectionMode="multiple"
-        legend="Small multi-select cards"
-        hint="Default-size cards for dense option lists. Multiple choices can be active at once."
+        legend="Checkbox control (multiple mode)"
+        hint="selectionMode=multiple — pick any. Checkbox under the hood; pair with useChoiceSelection."
       >
         {options.map((option) => (
           <SelectChoiceCard
             key={option.id}
             selectionMode="multiple"
             value={option.id}
-            controlId={`small-multi-${option.id}`}
-            name="small-multi"
+            controlId={`check-${option.id}`}
+            name="check"
             title={option.title}
             description={option.description}
             checked={choice.isSelected(option.id)}
@@ -171,108 +388,6 @@ function SmallMultipleWithHookStory() {
   );
 }
 
-export const SmallCardsMultipleWithHook = {
-  render: () => <SmallMultipleWithHookStory />,
-} as unknown as StoryObj<typeof meta>;
-
-export const HeroMultipleWithHook = {
-  render: () => <MultipleWithHookStory />,
-} as unknown as StoryObj<typeof meta>;
-
-function FieldsetGridStory() {
-  const [v, setV] = useState("");
-  return (
-    <div className="w-full min-w-0 max-w-2xl">
-      <SelectChoiceCardGroup
-        layout="grid"
-        legend="Pick one"
-        hint="All cards use the default variant; switch to elevated or faded per card when needed."
-        value={v}
-        onValueChange={setV}
-        selectionMode="single"
-      >
-        <SelectChoiceCard
-          value="a"
-          controlId="fs-a"
-          title="Product certification"
-          description="Standard card weight."
-        />
-        <SelectChoiceCard
-          value="b"
-          controlId="fs-b"
-          title="ATG"
-          description="Standard card weight."
-        />
-        <SelectChoiceCard
-          value="c"
-          controlId="fs-c"
-          title="Innovation"
-          description="Standard card weight."
-        />
-      </SelectChoiceCardGroup>
-    </div>
-  );
-}
-
-export const GroupWithLegend = {
-  render: () => <FieldsetGridStory />,
-} as unknown as StoryObj<typeof meta>;
-
-function ControlPositionStory() {
-  const [v, setV] = useState("trailing-b");
-  return (
-    <div className="flex w-full max-w-2xl flex-col gap-section">
-      <SelectChoiceCardGroup
-        legend="Leading control (default)"
-        hint="Radio renders before the title — the original layout."
-        value={v}
-        onValueChange={setV}
-        selectionMode="single"
-      >
-        <SelectChoiceCard
-          value="leading-a"
-          controlId="cp-leading-a"
-          title="Product certification"
-          description="Control sits at the start of the row."
-        />
-        <SelectChoiceCard
-          value="leading-b"
-          controlId="cp-leading-b"
-          title="ATG"
-          description="Control sits at the start of the row."
-        />
-      </SelectChoiceCardGroup>
-      <SelectChoiceCardGroup
-        legend="Trailing control"
-        hint="Pair non-hero cards with hero cards above to keep the radio aligned to the right."
-        value={v}
-        onValueChange={setV}
-        selectionMode="single"
-      >
-        <SelectChoiceCard
-          value="trailing-a"
-          controlId="cp-trailing-a"
-          title="PROCERTUS attest"
-          description="Control sits at the end of the row."
-          controlPosition="trailing"
-          variant="faded"
-        />
-        <SelectChoiceCard
-          value="trailing-b"
-          controlId="cp-trailing-b"
-          title="EPD"
-          description="Control sits at the end of the row."
-          controlPosition="trailing"
-          variant="faded"
-        />
-      </SelectChoiceCardGroup>
-      <p className="text-sm text-muted-foreground" role="status">
-        Selected: {v}
-      </p>
-    </div>
-  );
-}
-
-export const ControlPosition = {
-  render: () => <ControlPositionStory />,
+export const ControlCheckbox = {
+  render: () => <ControlCheckboxStory />,
 } as unknown as StoryObj<typeof meta>;

@@ -32,7 +32,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground hover:rounded-tr-[var(--cmd-deep)] hover:rounded-bl-[var(--cmd-deep)] hover:rounded-tl-[4px] hover:rounded-br-[4px]",
         ghost:
           "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 hover:rounded-tr-[var(--cmd-deep)] hover:rounded-bl-[var(--cmd-deep)] hover:rounded-tl-[4px] hover:rounded-br-[4px]",
-        link: "h-auto !rounded-none border-0 px-0 font-medium normal-case tracking-normal text-accent-foreground underline-offset-4 hover:!rounded-none hover:underline hover:text-accent-foreground/80 active:!rounded-none",
+        link: "!h-auto !rounded-none border-0 !px-0 font-medium normal-case tracking-normal text-accent-foreground underline-offset-4 hover:!rounded-none hover:underline hover:text-accent-foreground/80 active:!rounded-none",
       },
       size: {
         default:
@@ -47,10 +47,60 @@ const buttonVariants = cva(
           "size-8 [--cmd-deep:12px] in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-10",
       },
+      // Inverse: re-skin variants for placement on dark / brand-colored surfaces.
+      inverse: {
+        true: "focus-visible:border-primary-foreground focus-visible:ring-primary-foreground/50",
+        false: "",
+      },
     },
+    compoundVariants: [
+      {
+        variant: "default",
+        inverse: true,
+        className:
+          "bg-primary-foreground text-primary hover:bg-primary-foreground/90",
+      },
+      {
+        variant: "destructive",
+        inverse: true,
+        className:
+          "bg-destructive-foreground text-destructive hover:bg-destructive-foreground/90",
+      },
+      {
+        variant: "outline",
+        inverse: true,
+        className:
+          "border-input bg-primary text-primary-foreground hover:bg-primary/80 hover:text-primary-foreground aria-expanded:bg-primary/80 aria-expanded:text-primary-foreground",
+      },
+      {
+        variant: "secondary",
+        inverse: true,
+        className:
+          "bg-secondary-foreground text-secondary hover:bg-secondary-foreground/80",
+      },
+      {
+        variant: "ghost",
+        inverse: true,
+        className:
+          "text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground aria-expanded:bg-primary-foreground/10 aria-expanded:text-primary-foreground",
+      },
+      {
+        variant: "link",
+        inverse: true,
+        className: "text-primary-foreground hover:text-primary-foreground/80",
+      },
+      // Icon buttons keep the corner-shift only on the primary variant.
+      // For destructive/outline/secondary/ghost in any icon size, neutralize hover corners.
+      {
+        variant: ["destructive", "outline", "secondary", "ghost"],
+        size: ["icon", "icon-xs", "icon-sm", "icon-lg"],
+        className: "hover:rounded-[8px]",
+      },
+    ],
     defaultVariants: {
       variant: "default",
       size: "default",
+      inverse: false,
     },
   },
 );
@@ -59,6 +109,7 @@ function Button({
   className,
   variant = "default",
   size = "default",
+  inverse = false,
   asChild = false,
   ref,
   onPointerDown,
@@ -98,7 +149,8 @@ function Button({
       data-slot="button"
       data-variant={variant}
       data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
+      data-inverse={inverse ? "true" : undefined}
+      className={cn(buttonVariants({ variant, size, inverse, className }))}
       onPointerDown={(e) => {
         if (e.button === 0 && !e.currentTarget.disabled) triggerPulse();
         onPointerDown?.(e);

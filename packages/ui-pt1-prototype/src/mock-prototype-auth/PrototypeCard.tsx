@@ -40,6 +40,16 @@ export function PrototypeCard({
 }: PrototypeCardProps) {
   const hasHeader = Boolean(title ?? description ?? notice);
 
+  const demoBadge = showDemoBadge ? (
+    <Badge
+      variant="outline"
+      title={demoBadgeTitle}
+      className="border-transparent bg-prototype text-prototype-foreground hover:bg-prototype"
+    >
+      {demoBadgeLabel}
+    </Badge>
+  ) : null;
+
   return (
     <Card
       className={cn(
@@ -51,19 +61,18 @@ export function PrototypeCard({
         className,
       )}
     >
-      {showDemoBadge ? (
-        <Badge
-          variant="outline"
-          title={demoBadgeTitle}
-          className="absolute top-3 right-3 z-10 border-transparent bg-prototype text-prototype-foreground hover:bg-prototype"
-        >
-          {demoBadgeLabel}
-        </Badge>
+      {demoBadge && !title ? (
+        <div className="absolute top-3 right-3 z-10">{demoBadge}</div>
       ) : null}
 
       {hasHeader ? (
-        <CardHeader className="gap-1 px-section pb-0 pt-section">
-          {title ? <CardTitle className="text-prototype-foreground">{title}</CardTitle> : null}
+        <CardHeader className="gap-1">
+          {title ? (
+            <div className="flex items-center justify-between gap-3">
+              <CardTitle className="text-prototype-foreground">{title}</CardTitle>
+              {demoBadge}
+            </div>
+          ) : null}
           {description ? (
             <CardDescription className="leading-6">{description}</CardDescription>
           ) : null}
@@ -73,13 +82,7 @@ export function PrototypeCard({
         </CardHeader>
       ) : null}
 
-      <CardContent
-        className={cn(
-          "space-y-4 px-section",
-          hasHeader ? "pb-section pt-4" : "py-section",
-          cardContentClassName,
-        )}
-      >
+      <CardContent className={cn("space-y-4", hasHeader && "pt-4", cardContentClassName)}>
         {children}
       </CardContent>
     </Card>

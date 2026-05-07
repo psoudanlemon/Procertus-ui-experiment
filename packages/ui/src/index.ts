@@ -20,7 +20,7 @@ export * from "./components/sewdn";
 export * from "./components/app-sidebar";
 export * from "./components/app-header";
 export * from "./components/public-header";
-export * from "./components/public-footer";
+export * from "./components/footer";
 export * from "./components/app-shell";
 /** Applied-guidelines summary: foundations gallery, also consumable at runtime. */
 export { Summary, type SummaryProps } from "./applied-guidelines/Summary/Summary";

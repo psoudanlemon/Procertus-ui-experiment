@@ -1,6 +1,6 @@
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { CoverView, IconButton, usePanelsContext } from "@procertus-ui/ui";
+import { Button, CoverView, usePanelsContext } from "@procertus-ui/ui";
 import { PortalChatWindow, type PortalChatMessage } from "@procertus-ui/ui-lib";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -28,17 +28,16 @@ export type ConversationDetailPanelProps = {
 
 function ClosePanelButton({ panelType = CONVERSATION_DETAIL_PANEL_TYPE }: { panelType?: string }) {
   const { removePanel } = usePanelsContext();
-  const CloseIcon = ({ className }: { className?: string }) => (
-    <HugeiconsIcon icon={Cancel01Icon} className={className} />
-  );
-
   return (
-    <IconButton
-      icon={CloseIcon}
+    <Button
+      variant="ghost"
+      size="icon"
+      inverse
       aria-label="Sluit conversatiepaneel"
       onClick={() => removePanel(panelType)}
-      invertColors
-    />
+    >
+      <HugeiconsIcon icon={Cancel01Icon} />
+    </Button>
   );
 }
 

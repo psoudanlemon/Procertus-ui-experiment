@@ -1,19 +1,13 @@
 // Import the container component which is the public interface
 import type React from 'react';
 import { CoverView } from './CoverView';
-import { IconButton } from '../IconButton'; // Use the new IconButton
-import type { IconSvgElement } from '@hugeicons/core-free-icons';
 import { ArrowLeft01Icon, Settings01Icon, TerminalIcon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'; // Example sticky content
+import { Button } from '@/components/ui/button';
 
 const fn = () => () => undefined;
-const icon =
-  (source: IconSvgElement) =>
-  ({ className }: { className?: string }) => (
-    <HugeiconsIcon icon={source} className={className} />
-  );
 const withFullViewport = (Story: React.ComponentType) => (
   <div className="h-screen w-full">
     <Story />
@@ -43,7 +37,11 @@ const meta = {
     primaryAction: {
       control: { type: 'boolean' },
       mapping: {
-        true: <IconButton icon={icon(ArrowLeft01Icon as IconSvgElement)} aria-label="Go Back" onClick={fn()} />,
+        true: (
+          <Button size="icon" variant="ghost" aria-label="Go Back" onClick={fn()}>
+            <HugeiconsIcon icon={ArrowLeft01Icon} />
+          </Button>
+        ),
         false: undefined,
       },
       description: 'Example primary action (top-left)',
@@ -51,7 +49,11 @@ const meta = {
     secondaryAction: {
       control: { type: 'boolean' },
       mapping: {
-        true: <IconButton icon={icon(Settings01Icon as IconSvgElement)} aria-label="Settings" onClick={fn()} />,
+        true: (
+          <Button size="icon" variant="ghost" aria-label="Settings" onClick={fn()}>
+            <HugeiconsIcon icon={Settings01Icon} />
+          </Button>
+        ),
         false: undefined,
       },
       description: 'Example secondary action (top-right)',
@@ -131,10 +133,14 @@ export const PrimaryColorScheme: Story = {
     title: 'Primary Color Scheme',
     colorScheme: 'primary',
     primaryAction: (
-      <IconButton icon={icon(ArrowLeft01Icon as IconSvgElement)} aria-label="Go Back" onClick={fn()} invertColors={true} />
+      <Button size="icon" variant="ghost" inverse aria-label="Go Back" onClick={fn()}>
+        <HugeiconsIcon icon={ArrowLeft01Icon} />
+      </Button>
     ),
     secondaryAction: (
-      <IconButton icon={icon(Settings01Icon as IconSvgElement)} aria-label="Settings" onClick={fn()} invertColors={true} />
+      <Button size="icon" variant="ghost" inverse aria-label="Settings" onClick={fn()}>
+        <HugeiconsIcon icon={Settings01Icon} />
+      </Button>
     ),
   },
 };
@@ -202,10 +208,14 @@ export const WithCover: Story = {
     cover:
       'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80',
     primaryAction: (
-      <IconButton icon={icon(ArrowLeft01Icon as IconSvgElement)} aria-label="Go Back" onClick={fn()} invertColors={true} />
+      <Button size="icon" variant="ghost" inverse aria-label="Go Back" onClick={fn()}>
+        <HugeiconsIcon icon={ArrowLeft01Icon} />
+      </Button>
     ),
     secondaryAction: (
-      <IconButton icon={icon(Settings01Icon as IconSvgElement)} aria-label="Settings" onClick={fn()} invertColors={true} />
+      <Button size="icon" variant="ghost" inverse aria-label="Settings" onClick={fn()}>
+        <HugeiconsIcon icon={Settings01Icon} />
+      </Button>
     ),
   },
 };
@@ -310,10 +320,14 @@ export const MinimalWithCover: Story = {
       'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80',
     header: 'This header content should be hidden',
     primaryAction: (
-      <IconButton icon={icon(ArrowLeft01Icon as IconSvgElement)} aria-label="Go Back" onClick={fn()} invertColors={true} />
+      <Button size="icon" variant="ghost" inverse aria-label="Go Back" onClick={fn()}>
+        <HugeiconsIcon icon={ArrowLeft01Icon} />
+      </Button>
     ),
     secondaryAction: (
-      <IconButton icon={icon(Settings01Icon as IconSvgElement)} aria-label="Settings" onClick={fn()} invertColors={true} />
+      <Button size="icon" variant="ghost" inverse aria-label="Settings" onClick={fn()}>
+        <HugeiconsIcon icon={Settings01Icon} />
+      </Button>
     ),
   },
 };
@@ -331,10 +345,14 @@ export const CombinedFeatures: Story = {
     cover:
       'https://images.unsplash.com/photo-1485470733090-0aae1788d5af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1800&q=80',
     primaryAction: (
-      <IconButton icon={icon(ArrowLeft01Icon as IconSvgElement)} aria-label="Go Back" onClick={fn()} invertColors={true} />
+      <Button size="icon" variant="ghost" inverse aria-label="Go Back" onClick={fn()}>
+        <HugeiconsIcon icon={ArrowLeft01Icon} />
+      </Button>
     ),
     secondaryAction: (
-      <IconButton icon={icon(Settings01Icon as IconSvgElement)} aria-label="Settings" onClick={fn()} invertColors={true} />
+      <Button size="icon" variant="ghost" inverse aria-label="Settings" onClick={fn()}>
+        <HugeiconsIcon icon={Settings01Icon} />
+      </Button>
     ),
   },
 };
