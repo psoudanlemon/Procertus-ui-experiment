@@ -1,0 +1,105 @@
+@portugal/packages/ui/src/components/sewdn/CoverView/COVERVIEW_AI_GUIDE.md @portugal/apps/frontend-web/src/panels/detail-panel-chrome.tsx  for all of the detail panels, please use the cover view component instead of the custom card-based detail panel chrome.
+
+---
+
+@portugal/packages/ui/src/components/sewdn/CoverView/COVERVIEW_AI_GUIDE.md @portugal/apps/frontend-web/src/panels/detail-panel-chrome.tsx  for all of the detail panels, please use the cover view component instead of the custom card-based detail panel chrome.
+
+---
+
+Since every detail panel will also have a corresponding route to display the same or more content about the same entity as a full page, please set up an action button in the CoverView's chrome action bar to always allow opening the page.
+
+Ensure the action button opens the same entity as a full page or navigates to a new route.
+
+Set this up for the plot detail page and the profile detail page.
+
+---
+
+Since every detail panel will also have a corresponding route to display the same or more content about the same entity as a full page, please set up an action button in the CoverView's chrome action bar to always allow opening the page.
+
+Ensure the action button opens the same entity as a full page or navigates to a new route.
+
+Set this up for the plot detail page and the profile detail page.
+
+---
+
+Since every detail panel will also have a corresponding edit panel, add extra action buttons to the chrome of the cover view for a detail panel to open the edit panel using an edit pencil icon in the action bar.
+
+---
+
+Since every detail panel will also have a corresponding edit panel, add extra action buttons to the chrome of the cover view for a detail panel to open the edit panel using an edit pencil icon in the action bar.
+
+---
+
+Please add the close button on the left-hand side and all other action buttons right-aligned on the right-hand side of the cover view, screw, or action bar.
+
+---
+
+Please add the close button on the left-hand side and all other action buttons right-aligned on the right-hand side of the cover view, screw, or action bar.
+
+---
+
+Please add the close button on the left-hand side and all other action buttons right-aligned on the right-hand side of the cover view's chrome, or action bar.
+
+---
+
+Please add the close button on the left-hand side and all other action buttons right-aligned on the right-hand side of the cover view's chrome, or action bar.
+
+---
+
+Use a background color for the cover view based on the color that indicates the quality of the plot score for the private profile.
+
+You have this section on the detail panel that visualizes the scores for the different profiles.
+SCORES BY INVESTMENT PROFILE
+Open a profile to adjust weights and compare rankings.
+
+Commercial rental
+1.37 / 5 · Σw·s 163.0
+
+Private use
+1.16 / 5 · Σw·s 136.0
+
+ on the dashboard, inside the widget for a profile, a plot listing or ranking is displayed. In this listing, the same scores are shown inside pills or badges with a color derived from a thresholded range based on each score. @portugal/packages/ui-lib/src/components/presentation/rankings-table.tsx
+
+---
+
+Use a background color for the cover view based on the color that indicates the quality of the plot score for the private profile.
+
+You have this section on the detail panel that visualizes the scores for the different profiles.
+SCORES BY INVESTMENT PROFILE
+Open a profile to adjust weights and compare rankings.
+
+Commercial rental
+1.37 / 5 · Σw·s 163.0
+
+Private use
+1.16 / 5 · Σw·s 136.0
+
+ on the dashboard, inside the widget for a profile, a plot listing or ranking is displayed. In this listing, the same scores are shown inside pills or badges with a color derived from a thresholded range based on each score. @portugal/packages/ui-lib/src/components/presentation/rankings-table.tsx
+
+---
+
+Please use the same scoring thresholds to find the color tone or color shades. Use these same threshold values in the table, because the table is currently based on rank. Thank you.
+
+---
+
+Please use the same scoring thresholds to find the color tone or color shades. Use these same threshold values in the table, because the table is currently based on rank. Thank you.
+
+---
+
+I think the cover view might have been hacked a bit to allow for the customization. Please make sure we can easily set this kind of customization by using CSS class names that are applied to the cover background and/or cover title.
+
+Please adapt the original cover view component so we don't need to hack the cover view.@portugal/packages/ui/src/components/sewdn/CoverView/CoverView.tsx
+
+---
+
+I think the cover view might have been hacked a bit to allow for the customization. Please make sure we can easily set this kind of customization by using CSS class names that are applied to the cover background and/or cover title.
+
+Please adapt the original cover view component so we don't need to hack the cover view.@portugal/packages/ui/src/components/sewdn/CoverView/CoverView.tsx
+
+---
+
+Please commit all changes in this session. Use Commit Skill.
+
+---
+
+Please commit all changes in this session. Use Commit Skill.
