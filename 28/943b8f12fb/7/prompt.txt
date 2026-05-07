@@ -1,0 +1,126 @@
+@portugal/apps/frontend-web/src/panels/plot-detail-panel.tsx please add a configurable map component that can be used to display embedded inline maps to show the plot's exact location on the map. 
+
+ when the plot ID changes in the detail panel, the data is refetched and new geo-coordinates are retrieved from the other plot.
+
+Ensure that the current state of the map transitions to the new coordinates by animating the zoom and pan.  use  leaflet library to implement this. Check out an example map explorer implementation. @camping/apps/frontend-web/src/components/explore-map.tsx
+
+---
+
+@portugal/apps/frontend-web/src/panels/plot-detail-panel.tsx please add a configurable map component that can be used to display embedded inline maps to show the plot's exact location on the map. 
+
+ when the plot ID changes in the detail panel, the data is refetched and new geo-coordinates are retrieved from the other plot.
+
+Ensure that the current state of the map transitions to the new coordinates by animating the zoom and pan.  use  leaflet library to implement this. Check out an example map explorer implementation. @camping/apps/frontend-web/src/components/explore-map.tsx
+
+---
+
+I'm not implementing the Leaflet integration because I get errors from my tanstack development runtime. I think this is because Leaflet is not supposed to run on the server. Please make sure this map is added client-side only.
+
+bun run dev
+$ vite dev --port 3000
+
+  VITE v8.0.8  ready in 1116 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+[vite] connected.
+ReferenceError: window is not defined
+    at <anonymous> (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/leaflet@1.9.4/node_modules/leaflet/src/core/Util.js:217:24)
+    ... 8 lines matching cause stack trace ...
+    at loadCJSModuleWithModuleLoad (node:internal/modules/esm/translators:339:3) {
+  cause: ReferenceError: window is not defined
+      at <anonymous> (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/leaflet@1.9.4/node_modules/leaflet/src/core/Util.js:217:24)
+      at /Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/leaflet@1.9.4/node_modules/leaflet/dist/leaflet-src.js:7:66
+      at Object.<anonymous> (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/leaflet@1.9.4/node_modules/leaflet/dist/leaflet-src.js:10:3)
+      at Module._compile (node:internal/modules/cjs/loader:1760:14)
+      at Object..js (node:internal/modules/cjs/loader:1892:10)
+      at Module.load (node:internal/modules/cjs/loader:1480:32)
+      at Module._load (node:internal/modules/cjs/loader:1299:12)
+      at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+      at loadCJSModuleWithModuleLoad (node:internal/modules/esm/translators:339:3),
+  status: 500,
+  statusText: undefined,
+  headers: undefined,
+  data: undefined,
+  body: undefined,
+  unhandled: true
+
+---
+
+Since implementing the Leaflet integration I get errors from my tanstack development runtime. I think this is because Leaflet is not supposed to run on the server. Please make sure this map is added client-side only.
+
+bun run dev
+$ vite dev --port 3000
+
+  VITE v8.0.8  ready in 1116 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+[vite] connected.
+ReferenceError: window is not defined
+    at <anonymous> (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/leaflet@1.9.4/node_modules/leaflet/src/core/Util.js:217:24)
+    ... 8 lines matching cause stack trace ...
+    at loadCJSModuleWithModuleLoad (node:internal/modules/esm/translators:339:3) {
+  cause: ReferenceError: window is not defined
+      at <anonymous> (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/leaflet@1.9.4/node_modules/leaflet/src/core/Util.js:217:24)
+      at /Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/leaflet@1.9.4/node_modules/leaflet/dist/leaflet-src.js:7:66
+      at Object.<anonymous> (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/leaflet@1.9.4/node_modules/leaflet/dist/leaflet-src.js:10:3)
+      at Module._compile (node:internal/modules/cjs/loader:1760:14)
+      at Object..js (node:internal/modules/cjs/loader:1892:10)
+      at Module.load (node:internal/modules/cjs/loader:1480:32)
+      at Module._load (node:internal/modules/cjs/loader:1299:12)
+      at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+      at loadCJSModuleWithModuleLoad (node:internal/modules/esm/translators:339:3),
+  status: 500,
+  statusText: undefined,
+  headers: undefined,
+  data: undefined,
+  body: undefined,
+  unhandled: true
+
+---
+
+Since implementing the Leaflet integration I get errors from my tanstack development runtime. I think this is because Leaflet is not supposed to run on the server. Please make sure this map is added client-side only.
+
+bun run dev
+$ vite dev --port 3000
+
+  VITE v8.0.8  ready in 1116 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+[vite] connected.
+ReferenceError: window is not defined
+    at <anonymous> (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/leaflet@1.9.4/node_modules/leaflet/src/core/Util.js:217:24)
+    ... 8 lines matching cause stack trace ...
+    at loadCJSModuleWithModuleLoad (node:internal/modules/esm/translators:339:3) {
+  cause: ReferenceError: window is not defined
+      at <anonymous> (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/leaflet@1.9.4/node_modules/leaflet/src/core/Util.js:217:24)
+      at /Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/leaflet@1.9.4/node_modules/leaflet/dist/leaflet-src.js:7:66
+      at Object.<anonymous> (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/leaflet@1.9.4/node_modules/leaflet/dist/leaflet-src.js:10:3)
+      at Module._compile (node:internal/modules/cjs/loader:1760:14)
+      at Object..js (node:internal/modules/cjs/loader:1892:10)
+      at Module.load (node:internal/modules/cjs/loader:1480:32)
+      at Module._load (node:internal/modules/cjs/loader:1299:12)
+      at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+      at loadCJSModuleWithModuleLoad (node:internal/modules/esm/translators:339:3),
+  status: 500,
+  statusText: undefined,
+  headers: undefined,
+  data: undefined,
+  body: undefined,
+  unhandled: true
+
+---
+
+Please commit all changes in this session. Use Commit Skill.
+
+---
+
+Please commit all changes in this session. Use Commit Skill.
