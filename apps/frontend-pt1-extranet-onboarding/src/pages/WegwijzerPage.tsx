@@ -13,8 +13,9 @@ import {
   AlertDescription,
   AlertTitle,
   Button,
+  cn,
   DensityProvider,
-  DownloadableDocumentListItem,
+  DownloadableDocumentGrid,
   type DownloadableDocumentListItemData,
   H1,
   H4,
@@ -91,7 +92,13 @@ export function WegwijzerPage() {
               ariaLabel="Kies een certificaat"
               navLabels={{ prev: "Vorige certificaat", next: "Volgende certificaat" }}
             >
-              {activeId === ALLE_ID ? null : activeId === ANDERE_ID ? (
+              {activeId === ALLE_ID ? (
+                <AllCertificatesGrid
+                  primary={PRIMARY_SERVICES}
+                  external={EXTERNAL_SERVICES}
+                  onSelect={setActiveId}
+                />
+              ) : activeId === ANDERE_ID ? (
                 <ExternalReferralGrid services={EXTERNAL_SERVICES} />
               ) : activeService ? (
                 <MasterCard service={activeService} />
@@ -144,12 +151,139 @@ const CHOICE_BAR_ITEMS: readonly ChoiceBarItem[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// All Certificates Grid — shown when "Alle certificaten" is active.
+// Three-tier visual hierarchy mirrors the choice-bar pill variants:
+//   elevated (full width)  → first 3 primary services (BENOR, CE, SSD)
+//   faded    (50/50 + 50%) → remaining primary services
+//   ghost    (25% each)    → tier-3 external referrals (ATG, EPD)
+// ---------------------------------------------------------------------------
+
+type SummaryTier = "elevated" | "faded" | "ghost";
+
+function AllCertificatesGrid({
+  primary,
+  external,
+  onSelect,
+}: {
+  primary: readonly WegwijzerService[];
+  external: readonly WegwijzerService[];
+  onSelect: (id: string) => void;
+}) {
+  const elevated = primary.slice(0, 3);
+  const faded = primary.slice(3);
+  const fadedRow = faded.slice(0, 2);
+  const fadedTrailing = faded[2];
+
+  return (
+    <div role="list" className="grid w-full grid-cols-4 gap-component">
+      {elevated.map((service) => (
+        <CertificateSummaryCard
+          key={service.entry.id}
+          service={service}
+          tier="elevated"
+          onSelect={onSelect}
+          className="col-span-4"
+        />
+      ))}
+      {fadedRow.map((service) => (
+        <CertificateSummaryCard
+          key={service.entry.id}
+          service={service}
+          tier="faded"
+          onSelect={onSelect}
+          className="col-span-4 md:col-span-2"
+        />
+      ))}
+      {fadedTrailing && (
+        <CertificateSummaryCard
+          key={fadedTrailing.entry.id}
+          service={fadedTrailing}
+          tier="faded"
+          onSelect={onSelect}
+          className="col-span-4 md:col-span-2"
+        />
+      )}
+      {external.map((service) => (
+        <CertificateSummaryCard
+          key={service.entry.id}
+          service={service}
+          tier="ghost"
+          onSelect={onSelect}
+          className="col-span-2 md:col-span-1"
+        />
+      ))}
+    </div>
+  );
+}
+
+function CertificateSummaryCard({
+  service,
+  tier,
+  onSelect,
+  className,
+}: {
+  service: WegwijzerService;
+  tier: SummaryTier;
+  onSelect: (id: string) => void;
+  className?: string;
+}) {
+  const { entry } = service;
+  const what = WEGWIJZER_SERVICE_CONTENT[entry.id]?.what;
+  const isExternal = service.tier === 3;
+
+  return (
+    <button
+      type="button"
+      role="listitem"
+      onClick={() => onSelect(entry.id)}
+      className={cn(
+        "group flex flex-col items-start gap-component rounded-md border bg-card text-left transition-all motion-safe:hover:-translate-y-0.5 hover:border-accent hover:bg-accent/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        tier === "elevated" && "p-region",
+        tier === "faded" && "p-section",
+        tier === "ghost" && "p-section bg-transparent",
+        className,
+      )}
+    >
+      <div className="flex w-full flex-col gap-micro">
+        {isExternal && (
+          <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            Externe verwijzing
+          </span>
+        )}
+        <h3
+          className={cn(
+            "font-semibold leading-tight text-heading-foreground",
+            tier === "elevated" && "text-heading-lg",
+            tier === "faded" && "text-heading-md",
+            tier === "ghost" && "text-base",
+          )}
+        >
+          {entry.label}
+        </h3>
+      </div>
+      {what && (
+        <p
+          className={cn(
+            "leading-normal text-muted-foreground",
+            tier === "elevated" && "text-base line-clamp-3",
+            tier === "faded" && "text-sm line-clamp-3",
+            tier === "ghost" && "text-sm line-clamp-2",
+          )}
+        >
+          {what}
+        </p>
+      )}
+    </button>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // External Referral Grid — shown when "Andere" is active
 // ---------------------------------------------------------------------------
 
 function ExternalReferralGrid({ services }: { services: readonly WegwijzerService[] }) {
   return (
-    <ItemGroup className="gap-component">
+    <ItemGroup className="grid w-full grid-cols-1 gap-section md:grid-cols-2">
       {services.map((service) => (
         <ExternalReferralItem key={service.entry.id} service={service} />
       ))}
@@ -243,11 +377,7 @@ function MasterCard({ service }: { service: WegwijzerService }) {
             Documenten op basis van uw selectie voor {entry.shortLabel} (prototype — downloadlinks zijn gemockt).
           </p>
         </div>
-        <ItemGroup className="grid w-full grid-cols-1 gap-section md:grid-cols-2">
-          {documents.map((doc) => (
-            <DownloadableDocumentListItem key={doc.id} {...doc} className="bg-card" />
-          ))}
-        </ItemGroup>
+        <DownloadableDocumentGrid items={documents} />
       </section>
 
       <MasterCardTimeline service={service} />
