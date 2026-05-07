@@ -141,13 +141,12 @@ function Hero() {
 // ---------------------------------------------------------------------------
 
 const CHOICE_BAR_ITEMS: readonly ChoiceBarItem[] = [
-  { value: ALLE_ID, label: "Alle certificaten", variant: "no-border" as const },
+  { value: ALLE_ID, label: "Alle", variant: "no-border" as const },
   ...PRIMARY_SERVICES.map((service, index) => ({
     value: service.entry.id,
     label: service.pillLabel ?? service.entry.label,
     variant: index < 3 ? ("elevated" as const) : ("faded" as const),
   })),
-  { value: ANDERE_ID, label: "Overige", variant: "ghost" as const },
 ];
 
 // ---------------------------------------------------------------------------
