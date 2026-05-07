@@ -1,0 +1,35 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "28943b8f12fb",
+  "session_id": "ae5053ba-24e0-407e-92aa-38eee5b7e8bd",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-07T12:24:50.778178Z",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "Procertus-ui-experiment.code-workspace",
+    "apps/frontend-pt1-extranet-onboarding/src/index.css",
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/main.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/panelsLayout.tsx",
+    "packages/ui/src/components/sewdn/Panels/Panel.tsx",
+    "packages/ui/src/components/sewdn/Panels/Panels.tsx",
+    "packages/ui/src/components/sewdn/Panels/PanelsLayout.tsx"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "9fc8d33409d0",
+  "session_metrics": {
+    "duration_ms": 4381948,
+    "turn_count": 4
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-07T12:24:50.758129Z",
+    "agent_lines": 116,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 116,
+    "agent_percentage": 100
+  }
+}

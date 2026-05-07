@@ -1,0 +1,1901 @@
+There is a problem with Storybook—build, runtime, or configuration—for the UILIP package. No components are rendering; I only see an endless spinning loading icon on every story page.
+
+Please compare the setup to the reference project that also runs several Storybook instances next to each other, all dependent on the central UI package.@Procertus-ui-experiment/packages/ui-lib 
+
+$ storybook dev -p 6007
+
+┌  storybook v10.3.5
+│
+●  Starting...
+│
+▲  No story files found for the specified pattern:
+│  ui/src/showcase/**/*.stories.@(js|jsx|mjs|ts|tsx)
+│ ╭──────────────────────────────────────────────────────────────────────────────────────────╮
+│ │   Storybook ready!                                                                       │
+│ │                                                                                          │
+│ │   - Local:                http://localhost:6007/                                         │
+│ │   - On your network:      http://192.168.1.106:6007/                                     │
+│ │                                                                                          │
+│ │                                                                                          │
+│ │   A new version (10.3.6) is available!                                                   │
+│ │                                                                                          │
+│ │   Upgrade now: npx storybook@latest upgrade                                              │
+│ │                                                                                          │
+│ │   Read full changelog: https://github.com/storybookjs/storybook/blob/main/CHANGELOG.md   │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────╯
+│
+●  128 ms for manager and 83 ms for preview
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/mode-toggle.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/mode-toggle.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/mode-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/mode-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/theme-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/theme-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/density-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/density-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/public-footer.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/public-footer.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/public-header.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/public-header.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-sidebar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-sidebar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-header.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-header.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/app-shell.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/app-shell.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/public-registry-app-shell.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/public-registry-app-shell.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/management-app-shell.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/management-app-shell.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/page-header/PageHeader.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/page-header/PageHeader.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/button.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/button.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dropdown-menu.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dropdown-menu.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert-dialog-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert-dialog-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert-dialog.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert-dialog.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/accordion.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/accordion.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/avatar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/avatar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/badge.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/badge.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/button-group.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/button-group.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/calendar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/calendar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/card.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/card.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/carousel.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/carousel.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/checkbox.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/checkbox.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/chart.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/chart.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/collapsible.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/collapsible.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/combobox.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/combobox.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/context-menu.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/context-menu.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/data-table.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/data-table.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dialog.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dialog.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/command.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/command.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dialog-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dialog-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/fading-scroll-list.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/fading-scroll-list.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/empty.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/empty.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/field.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/field.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/date-picker.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/date-picker.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/breadcrumb.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/breadcrumb.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/heading.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/heading.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/hover-card.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/hover-card.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/drawer.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/drawer.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input-group.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input-group.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/item.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/item.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input-otp.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input-otp.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/kbd.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/kbd.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/label.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/label.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/navigation-menu.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/navigation-menu.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/native-select.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/native-select.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/menubar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/menubar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/pagination.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/pagination.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/progress.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/progress.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/popover.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/popover.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/radio-group.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/radio-group.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/resizable.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/resizable.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/scroll-area.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/scroll-area.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sidebar-nav-icon.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sidebar-nav-icon.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sheet.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sheet.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/slider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/slider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/skeleton.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/skeleton.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sidebar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sidebar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/select.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/select.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/separator.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/separator.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sonner.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sonner.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/spinner.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/spinner.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/table.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/table.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/switch.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/switch.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/tabs.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/tabs.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/textarea.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/textarea.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/toggle.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/toggle.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/tooltip.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/tooltip.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/toggle-group.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/toggle-group.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/typography.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/typography.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Scrim/Scrim.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Scrim/Scrim.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/AppShell/AppProvider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/AppShell/AppProvider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/IconButton/IconButton.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/IconButton/IconButton.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/CardList/CardList.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/CardList/CardList.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/CoverView/CoverView.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/CoverView/CoverView.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/PanelsProvider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/PanelsProvider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Panels.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Panels.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/PanelsLayout.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/PanelsLayout.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Configurator.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Configurator.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Toolbar/Toolbar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Toolbar/Toolbar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/SplitView/SplitView.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/SplitView/SplitView.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Panel.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Panel.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Snackbar/SnackbarProvider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Snackbar/SnackbarProvider.tsx
+
+---
+
+There is a problem with Storybook—build, runtime, or configuration—for the UILIP package. No components are rendering; I only see an endless spinning loading icon on every story page.
+
+Please compare the setup to the reference project that also runs several Storybook instances next to each other, all dependent on the central UI package.@Procertus-ui-experiment/packages/ui-lib 
+
+$ storybook dev -p 6007
+
+┌  storybook v10.3.5
+│
+●  Starting...
+│
+▲  No story files found for the specified pattern:
+│  ui/src/showcase/**/*.stories.@(js|jsx|mjs|ts|tsx)
+│ ╭──────────────────────────────────────────────────────────────────────────────────────────╮
+│ │   Storybook ready!                                                                       │
+│ │                                                                                          │
+│ │   - Local:                http://localhost:6007/                                         │
+│ │   - On your network:      http://192.168.1.106:6007/                                     │
+│ │                                                                                          │
+│ │                                                                                          │
+│ │   A new version (10.3.6) is available!                                                   │
+│ │                                                                                          │
+│ │   Upgrade now: npx storybook@latest upgrade                                              │
+│ │                                                                                          │
+│ │   Read full changelog: https://github.com/storybookjs/storybook/blob/main/CHANGELOG.md   │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────╯
+│
+●  128 ms for manager and 83 ms for preview
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/mode-toggle.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/mode-toggle.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/mode-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/mode-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/theme-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/theme-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/density-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/density-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/public-footer.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/public-footer.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/public-header.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/public-header.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-sidebar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-sidebar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-header.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-header.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/app-shell.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/app-shell.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/public-registry-app-shell.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/public-registry-app-shell.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/management-app-shell.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/management-app-shell.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/page-header/PageHeader.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/page-header/PageHeader.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/button.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/button.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dropdown-menu.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dropdown-menu.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert-dialog-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert-dialog-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert-dialog.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert-dialog.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/accordion.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/accordion.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/avatar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/avatar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/badge.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/badge.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/button-group.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/button-group.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/calendar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/calendar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/card.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/card.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/carousel.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/carousel.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/checkbox.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/checkbox.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/chart.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/chart.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/collapsible.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/collapsible.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/combobox.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/combobox.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/context-menu.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/context-menu.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/data-table.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/data-table.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dialog.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dialog.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/command.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/command.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dialog-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dialog-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/fading-scroll-list.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/fading-scroll-list.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/empty.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/empty.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/field.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/field.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/date-picker.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/date-picker.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/breadcrumb.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/breadcrumb.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/heading.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/heading.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/hover-card.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/hover-card.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/drawer.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/drawer.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input-group.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input-group.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/item.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/item.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input-otp.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input-otp.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/kbd.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/kbd.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/label.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/label.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/navigation-menu.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/navigation-menu.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/native-select.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/native-select.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/menubar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/menubar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/pagination.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/pagination.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/progress.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/progress.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/popover.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/popover.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/radio-group.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/radio-group.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/resizable.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/resizable.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/scroll-area.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/scroll-area.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sidebar-nav-icon.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sidebar-nav-icon.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sheet.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sheet.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/slider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/slider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/skeleton.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/skeleton.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sidebar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sidebar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/select.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/select.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/separator.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/separator.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sonner.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sonner.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/spinner.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/spinner.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/table.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/table.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/switch.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/switch.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/tabs.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/tabs.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/textarea.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/textarea.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/toggle.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/toggle.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/tooltip.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/tooltip.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/toggle-group.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/toggle-group.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/typography.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/typography.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Scrim/Scrim.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Scrim/Scrim.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/AppShell/AppProvider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/AppShell/AppProvider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/IconButton/IconButton.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/IconButton/IconButton.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/CardList/CardList.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/CardList/CardList.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/CoverView/CoverView.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/CoverView/CoverView.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/PanelsProvider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/PanelsProvider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Panels.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Panels.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/PanelsLayout.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/PanelsLayout.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Configurator.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Configurator.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Toolbar/Toolbar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Toolbar/Toolbar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/SplitView/SplitView.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/SplitView/SplitView.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Panel.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Panel.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Snackbar/SnackbarProvider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Snackbar/SnackbarProvider.tsx
+
+---
+
+There is a problem with Storybook—build, runtime, or configuration—for the UILIP package. No components are rendering; I only see an endless spinning loading icon on every story page. @portugal/packages/ui-lib/.storybook @portugal/packages/ui-lib/vite.config.ts @portugal/packages/ui-lib/src/components/plot-profile-dashboard-widget/PlotProfileDashboardWidget.stories.tsx 
+
+Please compare the setup to the reference project that also runs several Storybook instances next to each other, all dependent on the central UI package.@Procertus-ui-experiment/packages/ui-lib 
+
+$ storybook dev -p 6007
+
+┌  storybook v10.3.5
+│
+●  Starting...
+│
+▲  No story files found for the specified pattern:
+│  ui/src/showcase/**/*.stories.@(js|jsx|mjs|ts|tsx)
+│ ╭──────────────────────────────────────────────────────────────────────────────────────────╮
+│ │   Storybook ready!                                                                       │
+│ │                                                                                          │
+│ │   - Local:                http://localhost:6007/                                         │
+│ │   - On your network:      http://192.168.1.106:6007/                                     │
+│ │                                                                                          │
+│ │                                                                                          │
+│ │   A new version (10.3.6) is available!                                                   │
+│ │                                                                                          │
+│ │   Upgrade now: npx storybook@latest upgrade                                              │
+│ │                                                                                          │
+│ │   Read full changelog: https://github.com/storybookjs/storybook/blob/main/CHANGELOG.md   │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────╯
+│
+●  128 ms for manager and 83 ms for preview
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/mode-toggle.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/mode-toggle.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/mode-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/mode-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/theme-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/theme-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/density-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/density-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/public-footer.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/public-footer.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/public-header.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/public-header.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-sidebar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-sidebar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-header.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-header.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/app-shell.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/app-shell.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/public-registry-app-shell.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/public-registry-app-shell.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/management-app-shell.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/app-shell/management-app-shell.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/page-header/PageHeader.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/page-header/PageHeader.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/button.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/button.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dropdown-menu.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dropdown-menu.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert-dialog-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert-dialog-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert-dialog.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/alert-dialog.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/accordion.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/accordion.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/avatar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/avatar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/badge.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/badge.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/button-group.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/button-group.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/calendar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/calendar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/card.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/card.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/carousel.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/carousel.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/checkbox.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/checkbox.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/chart.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/chart.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/collapsible.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/collapsible.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/combobox.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/combobox.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/context-menu.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/context-menu.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/data-table.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/data-table.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dialog.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dialog.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/command.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/command.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dialog-provider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/dialog-provider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/fading-scroll-list.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/fading-scroll-list.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/empty.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/empty.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/field.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/field.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/date-picker.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/date-picker.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/breadcrumb.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/breadcrumb.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/heading.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/heading.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/hover-card.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/hover-card.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/drawer.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/drawer.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input-group.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input-group.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/item.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/item.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input-otp.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/input-otp.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/kbd.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/kbd.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/label.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/label.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/navigation-menu.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/navigation-menu.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/native-select.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/native-select.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/menubar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/menubar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/pagination.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/pagination.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/progress.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/progress.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/popover.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/popover.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/radio-group.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/radio-group.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/resizable.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/resizable.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/scroll-area.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/scroll-area.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sidebar-nav-icon.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sidebar-nav-icon.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sheet.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sheet.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/slider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/slider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/skeleton.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/skeleton.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sidebar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sidebar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/select.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/select.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/separator.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/separator.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sonner.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/sonner.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/spinner.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/spinner.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/table.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/table.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/switch.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/switch.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/tabs.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/tabs.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/textarea.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/textarea.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/toggle.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/toggle.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/tooltip.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/tooltip.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/toggle-group.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/toggle-group.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/typography.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/ui/typography.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Scrim/Scrim.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Scrim/Scrim.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/AppShell/AppProvider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/AppShell/AppProvider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/IconButton/IconButton.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/IconButton/IconButton.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/CardList/CardList.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/CardList/CardList.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/CoverView/CoverView.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/CoverView/CoverView.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/PanelsProvider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/PanelsProvider.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Panels.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Panels.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/PanelsLayout.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/PanelsLayout.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Configurator.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Configurator.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Toolbar/Toolbar.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Toolbar/Toolbar.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/SplitView/SplitView.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/SplitView/SplitView.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Panel.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Panels/Panel.tsx
+│
+▲  Vite warning: Skipping docgen for
+│  "/Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Snackbar/SnackbarProvider.tsx"
+│  because it is not included in the active TypeScript project.
+│  Plugin: vite:react-docgen-typescript
+│  File:
+│  /Users/psoudan/workspace/11-personal/portugal/packages/ui/src/components/sewdn/Snackbar/SnackbarProvider.tsx
+
+---
+
+Please commit all changes in this session. Use Commit Skill.
+
+---
+
+Please commit all changes in this session. Use Commit Skill.
