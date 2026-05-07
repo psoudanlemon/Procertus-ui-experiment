@@ -1,0 +1,267 @@
+I have a reference project scaffolded with the same monorepo structure. In the UI package of that reference project, I added several extra components that I want to port to the existing project.@Procertus-ui-experiment/package.json 
+
+The first set of components is within the Sewdn namespace, and I want to port them all. @Procertus-ui-experiment/packages/ui/src/components/sewdn 
+
+The second set concerns the app shell and navigation: bar, site navigation, breadcrumb, and page header; I want to port these as well.@Procertus-ui-experiment/packages/ui/src/components/app-shell @Procertus-ui-experiment/packages/ui/src/components/page-header 
+
+Also, the underlying primitive components from Shadcn can all be overridden, since there are several updates within these components to respect some design guidelines. @Procertus-ui-experiment/packages/ui/src/components/ui @Procertus-ui-experiment/packages/ui/src/components/Guidelines.mdx @Procertus-ui-experiment/packages/ui/src/components/GradientGuidelines.mdx @Procertus-ui-experiment/packages/ui/src/components/spacing-guidelines.mdx @Procertus-ui-experiment/packages/ui/src/design-tokens/Motion/Guidelines.mdx @Procertus-ui-experiment/packages/ui/src/design-tokens/Shadow/Guidelines.mdx @Procertus-ui-experiment/packages/ui/src/design-tokens/Iconography/Guidelines.mdx 
+
+ for the iconography, it is okay to keep using the Lucid icons instead of the other icon set used in the reference project.
+
+I also want to set up the same Tailwind configuration and theming, but instead of porting the entire color schema from the reference project, keep the existing brand colors or theming from the current project. 
+
+Please support switching between dark, light, and system themes.  @Procertus-ui-experiment/packages/ui/src/styles/themes/default.css @Procertus-ui-experiment/packages/ui/src/styles/globals.css @Procertus-ui-experiment/packages/ui/src/lib/utils.ts @Procertus-ui-experiment/packages/ui/src/lib/themes.ts @Procertus-ui-experiment/packages/ui/src/styles/themes
+
+---
+
+I have a reference project scaffolded with the same monorepo structure. In the UI package of that reference project, I added several extra components that I want to port to the existing project.@Procertus-ui-experiment/package.json 
+
+The first set of components is within the Sewdn namespace, and I want to port them all. @Procertus-ui-experiment/packages/ui/src/components/sewdn 
+
+The second set concerns the app shell and navigation: bar, site navigation, breadcrumb, and page header; I want to port these as well.@Procertus-ui-experiment/packages/ui/src/components/app-shell @Procertus-ui-experiment/packages/ui/src/components/page-header 
+
+Also, the underlying primitive components from Shadcn can all be overridden, since there are several updates within these components to respect some design guidelines. @Procertus-ui-experiment/packages/ui/src/components/ui @Procertus-ui-experiment/packages/ui/src/components/Guidelines.mdx @Procertus-ui-experiment/packages/ui/src/components/GradientGuidelines.mdx @Procertus-ui-experiment/packages/ui/src/components/spacing-guidelines.mdx @Procertus-ui-experiment/packages/ui/src/design-tokens/Motion/Guidelines.mdx @Procertus-ui-experiment/packages/ui/src/design-tokens/Shadow/Guidelines.mdx @Procertus-ui-experiment/packages/ui/src/design-tokens/Iconography/Guidelines.mdx 
+
+ for the iconography, it is okay to keep using the Lucid icons instead of the other icon set used in the reference project.
+
+I also want to set up the same Tailwind configuration and theming, but instead of porting the entire color schema from the reference project, keep the existing brand colors or theming from the current project. 
+
+Please support switching between dark, light, and system themes.  @Procertus-ui-experiment/packages/ui/src/styles/themes/default.css @Procertus-ui-experiment/packages/ui/src/styles/globals.css @Procertus-ui-experiment/packages/ui/src/lib/utils.ts @Procertus-ui-experiment/packages/ui/src/lib/themes.ts @Procertus-ui-experiment/packages/ui/src/styles/themes
+
+---
+
+I have a reference project scaffolded with the same monorepo structure. In the UI package of that reference project, I added several extra components that I want to port to the existing project.@Procertus-ui-experiment/package.json 
+
+The first set of components is within the Sewdn namespace, and I want to port them all. @Procertus-ui-experiment/packages/ui/src/components/sewdn  To the existing ui package of the current project@portugal/packages/ui 
+
+The second set concerns the app shell and navigation: bar, site navigation, breadcrumb, and page header; I want to port these as well.@Procertus-ui-experiment/packages/ui/src/components/app-shell @Procertus-ui-experiment/packages/ui/src/components/page-header 
+
+Also, the underlying primitive components from Shadcn can all be overridden, since there are several updates within these components to respect some design guidelines. @Procertus-ui-experiment/packages/ui/src/components/ui @Procertus-ui-experiment/packages/ui/src/components/Guidelines.mdx @Procertus-ui-experiment/packages/ui/src/components/GradientGuidelines.mdx @Procertus-ui-experiment/packages/ui/src/components/spacing-guidelines.mdx @Procertus-ui-experiment/packages/ui/src/design-tokens/Motion/Guidelines.mdx @Procertus-ui-experiment/packages/ui/src/design-tokens/Shadow/Guidelines.mdx @Procertus-ui-experiment/packages/ui/src/design-tokens/Iconography/Guidelines.mdx 
+
+ for the iconography, it is okay to keep using the Lucid icons instead of the other icon set used in the reference project.
+
+I also want to set up the same Tailwind configuration and theming, but instead of porting the entire color schema from the reference project, keep the existing brand colors or theming from the current project. 
+
+Please support switching between dark, light, and system themes.  @Procertus-ui-experiment/packages/ui/src/styles/themes/default.css @Procertus-ui-experiment/packages/ui/src/styles/globals.css @Procertus-ui-experiment/packages/ui/src/lib/utils.ts @Procertus-ui-experiment/packages/ui/src/lib/themes.ts @Procertus-ui-experiment/packages/ui/src/styles/themes
+
+---
+
+I have a reference project scaffolded with the same monorepo structure. In the UI package of that reference project, I added several extra components that I want to port to the existing project.@Procertus-ui-experiment/package.json 
+
+The first set of components is within the Sewdn namespace, and I want to port them all. @Procertus-ui-experiment/packages/ui/src/components/sewdn  To the existing ui package of the current project@portugal/packages/ui 
+
+The second set concerns the app shell and navigation: bar, site navigation, breadcrumb, and page header; I want to port these as well.@Procertus-ui-experiment/packages/ui/src/components/app-shell @Procertus-ui-experiment/packages/ui/src/components/page-header 
+
+Also, the underlying primitive components from Shadcn can all be overridden, since there are several updates within these components to respect some design guidelines. @Procertus-ui-experiment/packages/ui/src/components/ui @Procertus-ui-experiment/packages/ui/src/components/Guidelines.mdx @Procertus-ui-experiment/packages/ui/src/components/GradientGuidelines.mdx @Procertus-ui-experiment/packages/ui/src/components/spacing-guidelines.mdx @Procertus-ui-experiment/packages/ui/src/design-tokens/Motion/Guidelines.mdx @Procertus-ui-experiment/packages/ui/src/design-tokens/Shadow/Guidelines.mdx @Procertus-ui-experiment/packages/ui/src/design-tokens/Iconography/Guidelines.mdx 
+
+ for the iconography, it is okay to keep using the Lucid icons instead of the other icon set used in the reference project.
+
+I also want to set up the same Tailwind configuration and theming, but instead of porting the entire color schema from the reference project, keep the existing brand colors or theming from the current project. 
+
+Please support switching between dark, light, and system themes.  @Procertus-ui-experiment/packages/ui/src/styles/themes/default.css @Procertus-ui-experiment/packages/ui/src/styles/globals.css @Procertus-ui-experiment/packages/ui/src/lib/utils.ts @Procertus-ui-experiment/packages/ui/src/lib/themes.ts @Procertus-ui-experiment/packages/ui/src/styles/themes
+
+---
+
+Next step: set up the app shell together with the site navigation, breadcrumb navigation, and panel configuration, just like the reference application.@portugal/apps/frontend-web/src/router.tsx @portugal/apps/frontend-web/src/routes/__root.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/panelsLayout.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/panelRegistry.ts @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels
+
+---
+
+Next step: set up the app shell together with the site navigation, breadcrumb navigation, and panel configuration, just like the reference application.@portugal/apps/frontend-web/src/router.tsx @portugal/apps/frontend-web/src/routes/__root.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/layouts/AuthenticatedAppShell.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/panelsLayout.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels/panelRegistry.ts @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/panels
+
+---
+
+bun run dev
+$ vite dev --port 3000
+3:56:09 PM [vite] (client) Re-optimizing dependencies because lockfile has changed
+
+  VITE v8.0.8  ready in 843 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+[vite] connected.
+Error: `Tooltip` must be used within `TooltipProvider`
+    at useContext2 (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/@radix-ui+react-context@1.1.2+b2e33729a97476bf/node_modules/@radix-ui/react-context/src/create-context.tsx:75:13)
+    at Tooltip (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/@radix-ui+react-tooltip@1.2.8+119c4f3973a6d299/node_modules/@radix-ui/react-tooltip/src/tooltip.tsx:162:27)
+    at Object.react_stack_bottom_frame (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:10288:18)
+    at renderWithHooks (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5298:19)
+    at renderElement (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5733:23)
+    at retryNode (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:6664:31)
+    at renderNodeDestructive (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:6614:11)
+    at finishFunctionComponent (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5342:13)
+    at renderElement (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5788:11)
+    at retryNode (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:6664:31)
+Error: `Tooltip` must be used within `TooltipProvider`
+    at useContext2 (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/@radix-ui+react-context@1.1.2+b2e33729a97476bf/node_modules/@radix-ui/react-context/src/create-context.tsx:75:13)
+    ... 8 lines matching cause stack trace ...
+    at retryNode (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:6664:31) {
+  cause: Error: `Tooltip` must be used within `TooltipProvider`
+      at useContext2 (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/@radix-ui+react-context@1.1.2+b2e33729a97476bf/node_modules/@radix-ui/react-context/src/create-context.tsx:75:13)
+      at Tooltip (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/@radix-ui+react-tooltip@1.2.8+119c4f3973a6d299/node_modules/@radix-ui/react-tooltip/src/tooltip.tsx:162:27)
+      at Object.react_stack_bottom_frame (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:10288:18)
+      at renderWithHooks (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5298:19)
+      at renderElement (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5733:23)
+      at retryNode (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:6664:31)
+      at renderNodeDestructive (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:6614:11)
+      at finishFunctionComponent (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5342:13)
+      at renderElement (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5788:11)
+      at retryNode (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:6664:31),
+  status: 500,
+  statusText: undefined,
+  headers: undefined,
+  data: undefined,
+  body: undefined,
+  unhandled: true
+}
+
+---
+
+bun run dev
+$ vite dev --port 3000
+3:56:09 PM [vite] (client) Re-optimizing dependencies because lockfile has changed
+
+  VITE v8.0.8  ready in 843 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+[vite] connected.
+Error: `Tooltip` must be used within `TooltipProvider`
+    at useContext2 (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/@radix-ui+react-context@1.1.2+b2e33729a97476bf/node_modules/@radix-ui/react-context/src/create-context.tsx:75:13)
+    at Tooltip (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/@radix-ui+react-tooltip@1.2.8+119c4f3973a6d299/node_modules/@radix-ui/react-tooltip/src/tooltip.tsx:162:27)
+    at Object.react_stack_bottom_frame (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:10288:18)
+    at renderWithHooks (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5298:19)
+    at renderElement (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5733:23)
+    at retryNode (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:6664:31)
+    at renderNodeDestructive (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:6614:11)
+    at finishFunctionComponent (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5342:13)
+    at renderElement (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5788:11)
+    at retryNode (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:6664:31)
+Error: `Tooltip` must be used within `TooltipProvider`
+    at useContext2 (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/@radix-ui+react-context@1.1.2+b2e33729a97476bf/node_modules/@radix-ui/react-context/src/create-context.tsx:75:13)
+    ... 8 lines matching cause stack trace ...
+    at retryNode (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:6664:31) {
+  cause: Error: `Tooltip` must be used within `TooltipProvider`
+      at useContext2 (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/@radix-ui+react-context@1.1.2+b2e33729a97476bf/node_modules/@radix-ui/react-context/src/create-context.tsx:75:13)
+      at Tooltip (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/@radix-ui+react-tooltip@1.2.8+119c4f3973a6d299/node_modules/@radix-ui/react-tooltip/src/tooltip.tsx:162:27)
+      at Object.react_stack_bottom_frame (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:10288:18)
+      at renderWithHooks (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5298:19)
+      at renderElement (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5733:23)
+      at retryNode (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:6664:31)
+      at renderNodeDestructive (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:6614:11)
+      at finishFunctionComponent (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5342:13)
+      at renderElement (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:5788:11)
+      at retryNode (/Users/psoudan/workspace/11-personal/portugal/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/cjs/react-dom-server.node.development.js:6664:31),
+  status: 500,
+  statusText: undefined,
+  headers: undefined,
+  data: undefined,
+  body: undefined,
+  unhandled: true
+}
+
+---
+
+Please commit all changes. Use the commit skill.
+
+---
+
+Please commit all changes. Use the commit skill.
+
+---
+
+@portugal/apps/frontend-web/src/lib/data/plots I have two seed plots but I want to replace them with actual seed plots. Please see these four URLs.
+
+Use a browser to scrape or look up all information about the plots at the URLs and try to fill in the data sheet as completely as possible. Also add the URL itself as an extra property for each plot so we can open an external reference link. 
+
+
+https://www.idealista.pt/imovel/33531311/
+https://www.idealista.pt/imovel/34219058/
+https://www.idealista.pt/imovel/34245884/
+https://www.idealista.pt/imovel/32605402/
+
+---
+
+@portugal/apps/frontend-web/src/lib/data/plots I have two seed plots but I want to replace them with actual seed plots. Please see these four URLs.
+
+Use a browser to scrape or look up all information about the plots at the URLs and try to fill in the data sheet as completely as possible. Also add the URL itself as an extra property for each plot so we can open an external reference link. 
+
+
+https://www.idealista.pt/imovel/33531311/
+https://www.idealista.pt/imovel/34219058/
+https://www.idealista.pt/imovel/34245884/
+https://www.idealista.pt/imovel/32605402/
+
+---
+
+All raw metrics are optional. If not provided, they can be filled in from local storage if the user has previously saved them.
+
+If local storage is not available, use empty form fields so the user can add the metrics later and store them in local storage until export. Do not override the persistent data file in the repository. Ensure that all values currently provided are exact and derived from the URL; if unable to read them, leave the fields empty.
+
+---
+
+All raw metrics are optional. If not provided, they can be filled in from local storage if the user has previously saved them.
+
+If local storage is not available, use empty form fields so the user can add the metrics later and store them in local storage until export. Do not override the persistent data file in the repository. Ensure that all values currently provided are exact and derived from the URL; if unable to read them, leave the fields empty.
+
+---
+
+@portugal/apps/frontend-web/src/routes/plots.index.tsx instead of showing a dropdown to select the profile, please set up a dashboard page using a bento grid that displays each profile and its images.
+
+For each profile, show a ranking of plots together with all other relevant cards for that profile. Allow opening the profile detail panel and opening each plot's detail panel from the ranking.
+
+On the plot detail panel, display all information such as external URL, photo, map integration, Google Maps link, and other profile information. Also show all raw metrics together with an Edit button to edit the raw metrics directly. For each raw metric, show the interpreted score as well.
+
+For each profile, show the weighted scoring for each metric and the total sum per profile. Also show the sum per profile's ranking in comparison to all other plots across profiles. 
+
+ also allow opening the detail panel of a profile from the detail panel of a plot. 
+ on the detail panel of a profile, please show the same widgets as on the homepage, such as the weights for this profile and the ranked plots, or at least the top five. 
+
+ also add an Edit button to allow editing the profile by changing all of the weights for each criterion. 
+
+ when changing the weights of the criteria, please maximize the sum of "always." Each profile should distribute the same number of marbles among its scoring criteria so they are interoperable.
+
+---
+
+@portugal/apps/frontend-web/src/routes/plots.index.tsx instead of showing a dropdown to select the profile, please set up a dashboard page using a bento grid that displays each profile and its images.
+
+For each profile, show a ranking of plots together with all other relevant cards for that profile. Allow opening the profile detail panel and opening each plot's detail panel from the ranking.
+
+On the plot detail panel, display all information such as external URL, photo, map integration, Google Maps link, and other profile information. Also show all raw metrics together with an Edit button to edit the raw metrics directly. For each raw metric, show the interpreted score as well.
+
+For each profile, show the weighted scoring for each metric and the total sum per profile. Also show the sum per profile's ranking in comparison to all other plots across profiles. 
+
+ also allow opening the detail panel of a profile from the detail panel of a plot. 
+ on the detail panel of a profile, please show the same widgets as on the homepage, such as the weights for this profile and the ranked plots, or at least the top five. 
+
+ also add an Edit button to allow editing the profile by changing all of the weights for each criterion. 
+
+ when changing the weights of the criteria, please maximize the sum of "always." Each profile should distribute the same number of marbles among its scoring criteria so they are interoperable.
+
+---
+
+Please set up a separate dashboard route and move all dashboard logic from the plot index to this dashboard route as a separate page component.
+
+The plot index should only display a guard list of all available plots. The dashboards should list only the top five for each profile. There may be more than two profiles.
+
+---
+
+Please set up a separate dashboard route and move all dashboard logic from the plot index to this dashboard route as a separate page component.
+
+The plot index should only display a guard list of all available plots. The dashboards should list only the top five for each profile. There may be more than two profiles.
+
+---
+
+Now open the detailed panels for the plots and for the profiles from the dashboard page. Don't go to the detailed pages; open the side panels using the appropriate "usePanels" hook.
+
+---
+
+Now open the detailed panels for the plots and for the profiles from the dashboard page. Don't go to the detailed pages; open the side panels using the appropriate "usePanels" hook.
+
+---
+
+Please commit all changes in this session. Use Commit Skill.
+
+---
+
+Please commit all changes in this session. Use Commit Skill.
