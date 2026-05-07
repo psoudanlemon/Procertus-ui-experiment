@@ -1,0 +1,20 @@
+{
+  "folders": [
+	{
+		"path": "."
+	},
+	{
+		"path": "../procertus-docs"
+	},
+	{
+		"path": "../../03-component-libs/ui-lib-shadcn"
+	},
+	{
+		"path": "../../02-reference/shadcn-svelte-extras"
+	}
+],
+  "settings": {
+    "oxc.enable.oxfmt": true,
+    "oxc.enable.oxlint": true
+  }
+}
