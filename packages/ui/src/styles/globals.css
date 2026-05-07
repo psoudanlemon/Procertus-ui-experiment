@@ -88,8 +88,10 @@
 /* ── Card grid (container-query stepped) ──────────────────────────────────
  * Responsive grid with explicit 1 / 2 / 3 column steps based on the
  * nearest query-container's inline size: 1 column under 42rem, 2 columns
- * at 42rem+, 3 columns at 64rem+. Predictable column count per breakpoint
- * (no auto-fill "phantom" empty tracks).
+ * at 42rem+, 3 columns at 80rem+. The 3-column step is set high on
+ * purpose — typical master-card bodies in this app land around 70–75rem,
+ * so they stay in the 2-column band as the design intends. 3 columns
+ * only kicks in on full-bleed surfaces wider than the standard page.
  *
  * Requires an ancestor with `container-type: inline-size` (Tailwind's
  * `@container` utility) so the @container queries have a target. Used by
@@ -105,7 +107,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @container (min-width: 64rem) {
+  @container (min-width: 80rem) {
     grid-template-columns: repeat(3, 1fr);
   }
 }

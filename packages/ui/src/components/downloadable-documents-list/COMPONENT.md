@@ -14,7 +14,7 @@ Presentational primitives for surfacing downloadable documents (rulesets, guides
 ## `variant="row"` vs `variant="card"`
 
 - **`row`** — file icon on the left, title + description in the middle, format hint and download/delete buttons on the right. Reflows to a stacked layout on small viewports via `Item`'s `responsive` flag. Pick this when documents sit in a vertical list and the title carries the visual weight. Each row reads as a line item, not a destination.
-- **`card`** — file icon top-left, title + description on top, format hint bottom-left, download affordance bottom-right. **Always stacked** (no breakpoint switching). Capped at `max-w-md` (28rem). Pick this when documents need more visual presence as discrete tiles — feature lists, knowledge-base previews, attachment galleries. When no `onDelete` is passed, the **entire card becomes the download anchor** (richer hit target, single click affordance).
+- **`card`** — file icon top-left, title + description on top, format hint bottom-left, download affordance bottom-right. **Always stacked** (no breakpoint switching). Cards fill their grid track (no internal width cap) — when used inside `DownloadableDocumentGrid`, the grid's stepped column count handles per-card sizing. Pick this when documents need more visual presence as discrete tiles — feature lists, knowledge-base previews, attachment galleries. When no `onDelete` is passed, the **entire card becomes the download anchor** (richer hit target, single click affordance).
 
 ## `DownloadableDocumentGrid`
 
@@ -24,7 +24,9 @@ Opinionated wrapper that renders each item as `variant="card"` inside a CSS Grid
 | --- | --- |
 | under 42rem (~672px) | 1 |
 | 42rem and up | 2 |
-| 64rem (~1024px) and up | 3 |
+| 80rem (~1280px) and up | 3 |
+
+The 3-column breakpoint sits intentionally high — typical master-card bodies in this app land around 70–75rem and should stay in the 2-column band. 3 columns only appears on full-bleed surfaces that exceed the standard page width.
 
 The steps are driven by **container queries** against the grid's own inline size, not by viewport breakpoints — so the column count adapts to wherever the grid sits (constrained reading column, full-width section, side panel, …) without per-page configuration.
 

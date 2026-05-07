@@ -75,7 +75,7 @@ export function DownloadableDocumentListItem({
 
   const itemClassName = cn(
     "min-w-0",
-    isCard ? "max-w-md bg-card grid grid-cols-[auto_1fr]" : "bg-transparent",
+    isCard ? "bg-card grid grid-cols-[auto_1fr]" : "bg-transparent",
     className,
   );
 
