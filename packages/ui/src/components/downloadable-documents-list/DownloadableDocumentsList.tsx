@@ -223,6 +223,8 @@ export type DownloadableDocumentsListProps = {
   onDelete?: (id: string) => void;
   /** Shown when `items` is empty */
   emptyContent?: ReactNode;
+  /** Drop the surrounding Card chrome so the list sits flush in its parent. */
+  chromeless?: boolean;
 };
 
 export function DownloadableDocumentsList({
@@ -232,30 +234,46 @@ export function DownloadableDocumentsList({
   items,
   onDelete,
   emptyContent,
+  chromeless,
 }: DownloadableDocumentsListProps) {
+  const body =
+    items.length === 0 ? (
+      emptyContent ?? (
+        <p className="text-sm text-muted-foreground">Geen documenten om weer te geven.</p>
+      )
+    ) : (
+      <ItemGroup className="w-full">
+        {items.map((item) => (
+          <DownloadableDocumentListItem
+            key={item.id}
+            {...item}
+            onDelete={onDelete ? () => onDelete(item.id) : undefined}
+          />
+        ))}
+      </ItemGroup>
+    );
+
+  if (chromeless) {
+    return (
+      <div className={cn("flex flex-col gap-section", className)}>
+        <div className="flex flex-col gap-micro">
+          <h3 className="text-heading-sm font-semibold leading-tight tracking-tight">{title}</h3>
+          {description ? (
+            <p className="text-sm text-muted-foreground">{description}</p>
+          ) : null}
+        </div>
+        {body}
+      </div>
+    );
+  }
+
   return (
     <Card className={cn("gap-section p-section", className)}>
       <CardHeader className="gap-micro px-0 pt-0">
         <CardTitle className="text-heading-sm">{title}</CardTitle>
         {description ? <CardDescription>{description}</CardDescription> : null}
       </CardHeader>
-      <CardContent className="px-0 pb-0">
-        {items.length === 0 ? (
-          emptyContent ?? (
-            <p className="text-sm text-muted-foreground">Geen documenten om weer te geven.</p>
-          )
-        ) : (
-          <ItemGroup className="w-full">
-            {items.map((item) => (
-              <DownloadableDocumentListItem
-                key={item.id}
-                {...item}
-                onDelete={onDelete ? () => onDelete(item.id) : undefined}
-              />
-            ))}
-          </ItemGroup>
-        )}
-      </CardContent>
+      <CardContent className="px-0 pb-0">{body}</CardContent>
     </Card>
   );
 }

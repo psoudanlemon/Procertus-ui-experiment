@@ -46,6 +46,8 @@ const ONBOARDING_STEPPER_PATH = "/welcome/start";
 const EXPERT_CALL_PATH = (serviceId?: string) =>
   serviceId ? `/welcome/expert-call/${serviceId}` : "/welcome/expert-call";
 
+/** Sentinel id for the leading "Alle certificaten" pill that resets the explorer to the overview. */
+const ALL_ID = "all";
 /** Sentinel id for the merged "Overige" pill that bundles all tier-3 external referrals. */
 const ANDERE_ID = "overige";
 
@@ -56,6 +58,7 @@ const PRIMARY_SERVICES = WEGWIJZER_SERVICES.filter((s) => s.tier !== 3);
 const EXTERNAL_SERVICES = WEGWIJZER_SERVICES.filter((s) => s.tier === 3);
 
 const VALID_SERVICE_IDS = new Set<string>([
+  ALL_ID,
   ANDERE_ID,
   ...WEGWIJZER_SERVICES.map((s) => s.entry.id),
 ]);
@@ -69,14 +72,14 @@ export function WegwijzerPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const rawParam = searchParams.get(SERVICE_PARAM);
-  const activeId = rawParam && VALID_SERVICE_IDS.has(rawParam) ? rawParam : "";
+  const activeId = rawParam && VALID_SERVICE_IDS.has(rawParam) ? rawParam : ALL_ID;
 
   const setActiveId = useCallback(
     (id: string) => {
       setSearchParams(
         (prev) => {
           const next = new URLSearchParams(prev);
-          if (!id) {
+          if (!id || id === ALL_ID) {
             next.delete(SERVICE_PARAM);
           } else {
             next.set(SERVICE_PARAM, id);
@@ -118,7 +121,7 @@ export function WegwijzerPage() {
               ariaLabel="Kies een certificaat"
               navLabels={{ prev: "Vorige certificaat", next: "Volgende certificaat" }}
             >
-              {!activeId ? (
+              {activeId === ALL_ID ? (
                 <AllCertificatesGrid
                   primary={PRIMARY_SERVICES}
                   external={EXTERNAL_SERVICES}
@@ -166,11 +169,14 @@ function Hero() {
 // external referrals.
 // ---------------------------------------------------------------------------
 
-const CHOICE_BAR_ITEMS: readonly ChoiceBarItem[] = PRIMARY_SERVICES.map((service, index) => ({
-  value: service.entry.id,
-  label: service.pillLabel ?? service.entry.label,
-  variant: index < 3 ? ("elevated" as const) : ("faded" as const),
-}));
+const CHOICE_BAR_ITEMS: readonly ChoiceBarItem[] = [
+  { value: ALL_ID, label: "Alle certificaten", variant: "elevated" as const },
+  ...PRIMARY_SERVICES.map((service, index) => ({
+    value: service.entry.id,
+    label: service.pillLabel ?? service.entry.label,
+    variant: index < 3 ? ("elevated" as const) : ("default" as const),
+  })),
+];
 
 // ---------------------------------------------------------------------------
 // All Certificates Grid — shown when "Alle certificaten" is active.
@@ -215,7 +221,7 @@ function AllCertificatesGrid({
           key={service.entry.id}
           title={service.entry.label}
           description={summary(service.entry.id)}
-          variant="faded"
+          variant="default"
           className="col-span-4 md:col-span-2"
           asChild
         >
@@ -227,7 +233,7 @@ function AllCertificatesGrid({
           key={fadedTrailing.entry.id}
           title={fadedTrailing.entry.label}
           description={summary(fadedTrailing.entry.id)}
-          variant="faded"
+          variant="default"
           className="col-span-4 md:col-span-2"
           asChild
         >
@@ -239,10 +245,13 @@ function AllCertificatesGrid({
           key={service.entry.id}
           title={service.entry.label}
           description={summary(service.entry.id)}
-          variant="ghost"
-          trailing={
-            <HugeiconsIcon icon={LinkSquare02Icon} className="size-5" strokeWidth={1.5} />
-          }
+          variant="faded"
+          cta={{
+            label: "Bezoek website",
+            icon: (
+              <HugeiconsIcon icon={LinkSquare02Icon} className="size-3.5" strokeWidth={1.5} />
+            ),
+          }}
           className="col-span-2 md:col-span-1"
           asChild
         >

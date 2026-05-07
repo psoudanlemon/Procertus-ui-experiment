@@ -80,18 +80,21 @@ export const AsLink: Story = {
     description: "Doorverwijzing naar BUtgb voor de afhandeling van uw aanvraag.",
     eyebrow: "Externe verwijzing",
     variant: "ghost",
-    trailing: <HugeiconsIcon icon={LinkSquare02Icon} className="size-5" strokeWidth={1.5} />,
+    cta: {
+      label: "Open externe site",
+      icon: <HugeiconsIcon icon={LinkSquare02Icon} className="size-3.5" strokeWidth={1.5} />,
+    },
     asChild: true,
     children: <a href="https://www.butgb.be" target="_blank" rel="noopener noreferrer" />,
   },
 };
 
-export const NoTrailing: Story = {
+export const NoCta: Story = {
   args: {
-    title: "Card zonder trailing icon",
-    description: "Pas `trailing={null}` toe als de affordance elders zit.",
+    title: "Card zonder cta",
+    description: "Pas `cta={null}` toe als de affordance elders zit.",
     variant: "default",
-    trailing: null,
+    cta: null,
     onClick: () => undefined,
   },
 };
@@ -132,6 +135,12 @@ function GridStory() {
         description="Een ATG-attest bevestigt de geschiktheid van een innovatief bouwproduct."
         eyebrow="Externe verwijzing"
         variant="ghost"
+        cta={{
+          label: "Open externe site",
+          icon: (
+            <HugeiconsIcon icon={LinkSquare02Icon} className="size-3.5" strokeWidth={1.5} />
+          ),
+        }}
         className="col-span-2 md:col-span-1"
         onClick={() => undefined}
       />
@@ -140,6 +149,12 @@ function GridStory() {
         description="Een EPD documenteert de milieuprestaties van een bouwproduct over de volledige levenscyclus."
         eyebrow="Externe verwijzing"
         variant="ghost"
+        cta={{
+          label: "Open externe site",
+          icon: (
+            <HugeiconsIcon icon={LinkSquare02Icon} className="size-3.5" strokeWidth={1.5} />
+          ),
+        }}
         className="col-span-2 md:col-span-1"
         onClick={() => undefined}
       />

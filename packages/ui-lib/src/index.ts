@@ -23,4 +23,4 @@ export type {
 export { DetailCard } from "./custom-components/DetailCard";
 export type { DetailCardProps } from "./custom-components/DetailCard";
 export { BrowseCard } from "./custom-components/BrowseCard";
-export type { BrowseCardProps, BrowseCardVariant } from "./custom-components/BrowseCard";
+export type { BrowseCardCta, BrowseCardProps, BrowseCardVariant } from "./custom-components/BrowseCard";

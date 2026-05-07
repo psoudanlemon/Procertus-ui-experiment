@@ -52,7 +52,7 @@ export type RequestPackageReviewRequesterPresentation = {
 
 export type RequestPackageReviewProps = {
   className?: string;
-  title: string;
+  title?: string;
   description?: string;
   /** Optional intro above the table. */
   notice?: ReactNode;
@@ -62,6 +62,8 @@ export type RequestPackageReviewProps = {
   emptyState?: ReactNode;
   /** Who is submitting and for which company — shown above `notice` / table when set. */
   requester?: RequestPackageReviewRequesterPresentation;
+  /** Drop the surrounding Card chrome so the summary sits flush in its parent. */
+  chromeless?: boolean;
 };
 
 const DEFAULT_SECTION = "Requester & organization";
@@ -77,21 +79,18 @@ export function RequestPackageReview({
   rows,
   emptyState,
   requester,
+  chromeless,
 }: RequestPackageReviewProps) {
   const rc = requester?.context;
   const sectionTitle = requester?.sectionTitle ?? DEFAULT_SECTION;
   const requesterLabel = requester?.requesterLabel ?? DEFAULT_LABEL_REQUESTER;
   const requesterEmailLabel = requester?.requesterEmailLabel ?? DEFAULT_LABEL_EMAIL;
   const organizationLabel = requester?.organizationLabel ?? DEFAULT_LABEL_ORG;
+  const showHeader = !chromeless && Boolean(title || description);
 
-  return (
-    <Card className={cn("w-full max-w-2xl overflow-hidden text-base leading-[1.6]", className)}>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        {description ? <CardDescription>{description}</CardDescription> : null}
-      </CardHeader>
-      <CardContent className="flex flex-col gap-section">
-        {rc ? (
+  const body = (
+    <>
+      {rc ? (
           <section
             className="rounded-xl border border-border/60 bg-muted/20 p-section"
             aria-labelledby="request-package-requester-heading"
@@ -173,8 +172,23 @@ export function RequestPackageReview({
               </TableBody>
             </Table>
           </div>
-        )}
-      </CardContent>
+      )}
+    </>
+  );
+
+  if (chromeless) {
+    return <div className={cn("flex flex-col gap-section", className)}>{body}</div>;
+  }
+
+  return (
+    <Card className={cn("w-full max-w-2xl overflow-hidden text-base leading-[1.6]", className)}>
+      {showHeader ? (
+        <CardHeader>
+          {title ? <CardTitle>{title}</CardTitle> : null}
+          {description ? <CardDescription>{description}</CardDescription> : null}
+        </CardHeader>
+      ) : null}
+      <CardContent className="flex flex-col gap-section">{body}</CardContent>
     </Card>
   );
 }

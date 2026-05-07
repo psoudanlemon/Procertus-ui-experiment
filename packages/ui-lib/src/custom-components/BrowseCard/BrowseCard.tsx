@@ -1,16 +1,16 @@
 /**
  * Clickable navigation card for catalogue / drill-down surfaces — title,
- * optional eyebrow + description, and a trailing affordance icon. Mirrors the
- * five chrome variants of `SelectChoiceCard` (`elevated`, `default`, `faded`,
- * `ghost`, `no-border`) without the form-control machinery, so callers can
- * tier a grid of cards with the same visual vocabulary as a `ChoiceBar`.
+ * optional eyebrow + description, and a ghost-button affordance below the
+ * description (label + trailing icon). Mirrors the five chrome variants of
+ * `SelectChoiceCard` (`elevated`, `default`, `faded`, `ghost`, `no-border`)
+ * without the form-control machinery, so callers can tier a grid of cards
+ * with the same visual vocabulary as a `ChoiceBar`.
  *
  * Built on top of the `Item` primitive: layout, focus-ring, and slot
- * conventions come from there; chrome is overridden per variant.
- *
- * Pass `asChild` with a single element child (`<a>`, `<button>`, `<Link>`) to
- * swap the root element. The element's own children are replaced by the
- * card's composed inner content.
+ * conventions come from there; chrome is overridden per variant. The cta is
+ * rendered as a visually-only ghost button (the entire card is the real
+ * click target — passing `asChild` swaps the root element to `<a>`,
+ * `<button>`, `<Link>`, …).
  *
  * **Design system:** `Item` family from `@procertus-ui/ui`, variant vocabulary
  * shared with `SelectChoiceCard` / `ChoiceBar`.
@@ -29,8 +29,8 @@ import { HugeiconsIcon } from "@hugeicons/react";
 
 import { cn } from "@/lib/utils";
 import {
+  Button,
   Item,
-  ItemActions,
   ItemContent,
   ItemDescription,
   ItemTitle,
@@ -59,6 +59,12 @@ const browseCardVariants = cva(
 
 export type BrowseCardVariant = NonNullable<VariantProps<typeof browseCardVariants>["variant"]>;
 
+export type BrowseCardCta = {
+  label: ReactNode;
+  /** Defaults to a chevron-right when omitted. Pass `null` to suppress. */
+  icon?: ReactNode | null;
+};
+
 export type BrowseCardProps = Omit<ComponentProps<"div">, "title" | "children"> & {
   title: ReactNode;
   description?: ReactNode;
@@ -72,9 +78,10 @@ export type BrowseCardProps = Omit<ComponentProps<"div">, "title" | "children"> 
    */
   variant?: BrowseCardVariant;
   /**
-   * Trailing affordance icon. Pass `null` to suppress; defaults to a chevron-right.
+   * Affordance shown below the description as a ghost button. Pass `null` to
+   * suppress; defaults to `{ label: "Meer info" }` with a chevron-right.
    */
-  trailing?: ReactNode | null;
+  cta?: BrowseCardCta | null;
   /**
    * When true, `children` must be a single React element (`<a>`, `<button>`,
    * `<Link>`, …) used as the card's root. The element's own children are
@@ -85,40 +92,50 @@ export type BrowseCardProps = Omit<ComponentProps<"div">, "title" | "children"> 
   children?: ReactNode;
 };
 
-const defaultTrailing = (
-  <HugeiconsIcon icon={ArrowRight02Icon} className="size-5" strokeWidth={1.5} />
+const defaultCtaIcon = (
+  <HugeiconsIcon icon={ArrowRight02Icon} className="size-3.5" strokeWidth={1.5} />
 );
+
+const defaultCta: BrowseCardCta = { label: "Meer info" };
 
 export function BrowseCard({
   title,
   description,
   eyebrow,
   variant = "default",
-  trailing,
+  cta,
   asChild = false,
   className,
   children,
   ...props
 }: BrowseCardProps) {
-  const trailingNode = trailing === null ? null : (trailing ?? defaultTrailing);
+  const ctaNode = cta === null ? null : (cta ?? defaultCta);
+  const ctaIcon = ctaNode ? (ctaNode.icon === null ? null : (ctaNode.icon ?? defaultCtaIcon)) : null;
 
   const inner = (
-    <>
-      <ItemContent className="gap-component">
-        {eyebrow ? (
-          <span className="text-xs font-medium tracking-wide uppercase text-muted-foreground">
-            {eyebrow}
-          </span>
-        ) : null}
-        <ItemTitle className="text-base leading-snug">{title}</ItemTitle>
-        {description ? <ItemDescription>{description}</ItemDescription> : null}
-      </ItemContent>
-      {trailingNode ? (
-        <ItemActions aria-hidden className="text-muted-foreground self-center">
-          {trailingNode}
-        </ItemActions>
+    <ItemContent className="gap-component">
+      {eyebrow ? (
+        <span className="text-xs font-medium tracking-wide uppercase text-muted-foreground">
+          {eyebrow}
+        </span>
       ) : null}
-    </>
+      <ItemTitle className="text-base leading-snug">{title}</ItemTitle>
+      {description ? <ItemDescription>{description}</ItemDescription> : null}
+      {ctaNode ? (
+        <Button
+          asChild
+          variant="ghost"
+          size="sm"
+          tabIndex={-1}
+          className="-ml-3 self-start pointer-events-none"
+        >
+          <span>
+            {ctaNode.label}
+            {ctaIcon}
+          </span>
+        </Button>
+      ) : null}
+    </ItemContent>
   );
 
   const itemClassName = cn(

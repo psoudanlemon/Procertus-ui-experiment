@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
-import {
-  ArrowLeft01Icon,
-  CheckmarkCircle02Icon,
-  Video01Icon,
-} from "@hugeicons/core-free-icons";
+import { CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Button,
@@ -104,21 +100,19 @@ export function ExpertCallPlaceholderPage() {
             title="Plan een expert call"
             description={intro}
             footer={
-              <>
+              <div className="ml-auto flex flex-wrap items-center justify-end gap-component">
                 <Button
                   type="button"
-                  variant="link"
+                  variant="outline"
+                  size="lg"
                   onClick={handleBack}
-                  className="text-muted-foreground"
                 >
-                  <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
                   Terug
                 </Button>
                 <Button size="lg" disabled>
-                  <HugeiconsIcon icon={Video01Icon} className="size-4" />
-                  Bevestig expert call
+                  Verzenden
                 </Button>
-              </>
+              </div>
             }
           >
             <section className="flex flex-col gap-component">
