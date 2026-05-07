@@ -85,6 +85,31 @@
   text-box-edge: cap alphabetic;
 }
 
+/* ── Card grid (container-query stepped) ──────────────────────────────────
+ * Responsive grid with explicit 1 / 2 / 3 column steps based on the
+ * nearest query-container's inline size: 1 column under 42rem, 2 columns
+ * at 42rem+, 3 columns at 64rem+. Predictable column count per breakpoint
+ * (no auto-fill "phantom" empty tracks).
+ *
+ * Requires an ancestor with `container-type: inline-size` (Tailwind's
+ * `@container` utility) so the @container queries have a target. Used by
+ * DownloadableDocumentGrid; reach for it directly whenever you need the
+ * same stepped card-grid behavior on another card-style surface.
+ * ──────────────────────────────────────────────────────────────────────── */
+
+@utility card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  @container (min-width: 42rem) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @container (min-width: 64rem) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 /* ── Branded glow (standout) ───────────────────────────────────────────────
  * Animated conic-gradient glow for the L1 Standout elevation tier.
  * Apply to a wrapper with `position: relative` around the target element.

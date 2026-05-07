@@ -38,6 +38,16 @@ export type DownloadableDocumentListItemData = {
 
 export type DownloadableDocumentListItemProps = DownloadableDocumentListItemData & {
   className?: string;
+  /**
+   * Layout variant.
+   * - `"row"` (default): traditional list row — file icon on the left, title/description in the
+   *   middle, format-hint and download/delete actions on the right. Reflows to a stacked layout
+   *   on small viewports via `Item`'s `responsive` flag.
+   * - `"card"`: always-stacked tile — title/description on top, format-hint bottom-left, download
+   *   affordance bottom-right. Pairs with `DownloadableDocumentGrid` to form a responsive 1/2/3-column
+   *   grid. When no `onDelete` is provided, the entire card becomes the download anchor.
+   */
+  variant?: "row" | "card";
   /** Accessible name for the row link; defaults to `Download ${title}` */
   downloadAriaLabel?: string;
   /** When provided, renders a delete button on the right of the row */
@@ -56,56 +66,147 @@ export function DownloadableDocumentListItem({
   downloadAriaLabel,
   onDelete,
   deleteAriaLabel,
+  variant = "row",
 }: DownloadableDocumentListItemProps) {
   const linkAriaLabel = downloadAriaLabel ?? `Download ${title}`;
   const deleteLabel = deleteAriaLabel ?? `Delete ${title}`;
+  const isCard = variant === "card";
+  const isInteractiveCard = isCard && !onDelete;
+
+  const itemClassName = cn(
+    "min-w-0",
+    isCard ? "max-w-md bg-card grid grid-cols-[auto_1fr]" : "bg-transparent",
+    className,
+  );
+
+  const formatHintNode = date || formatHint ? (
+    <div
+      className={cn(
+        "flex flex-col gap-micro text-xs leading-tight text-muted-foreground/90",
+        isCard ? "items-start" : "items-start sm:items-end",
+      )}
+    >
+      {formatHint ? <span>{formatHint}</span> : null}
+      {date ? <span>{date}</span> : null}
+    </div>
+  ) : null;
+
+  const fileIconNode = (
+    <ItemMedia variant="icon" className="text-muted-foreground" aria-hidden>
+      <HugeiconsIcon icon={File01Icon} className="size-5" strokeWidth={1.5} />
+    </ItemMedia>
+  );
+
+  const titleBlock = (
+    <ItemContent className="gap-0">
+      <ItemTitle>{title}</ItemTitle>
+      {description ? <ItemDescription>{description}</ItemDescription> : null}
+    </ItemContent>
+  );
+
+  if (isInteractiveCard) {
+    return (
+      <Item
+        asChild
+        role="listitem"
+        variant="outline"
+        size="sm"
+        className={itemClassName}
+      >
+        <a href={href} download rel="noopener noreferrer" aria-label={linkAriaLabel}>
+          {fileIconNode}
+          {titleBlock}
+          <ItemActions className="col-start-2 justify-between">
+            {formatHintNode ?? <span aria-hidden />}
+            <HugeiconsIcon
+              icon={Download01Icon}
+              className="size-5 text-muted-foreground"
+              strokeWidth={1.5}
+              aria-hidden
+            />
+          </ItemActions>
+        </a>
+      </Item>
+    );
+  }
+
   return (
     <Item
       role="listitem"
       variant="outline"
       size="sm"
-      responsive
-      className={cn("min-w-0 bg-transparent", className)}
+      responsive={!isCard}
+      className={itemClassName}
     >
-      <ItemMedia variant="icon" className="text-muted-foreground" aria-hidden>
-        <HugeiconsIcon icon={File01Icon} className="size-5" strokeWidth={1.5} />
-      </ItemMedia>
-      <ItemContent className="gap-0">
-        <ItemTitle>{title}</ItemTitle>
-        {description ? <ItemDescription>{description}</ItemDescription> : null}
-      </ItemContent>
-      <ItemActions className="shrink-0">
-        {date || formatHint ? (
-          <div className="flex flex-col items-start gap-micro text-xs leading-tight text-muted-foreground/90 sm:items-end">
-            {formatHint ? <span>{formatHint}</span> : null}
-            {date ? <span>{date}</span> : null}
-          </div>
-        ) : null}
-        {onDelete ? (
+      {fileIconNode}
+      {titleBlock}
+      <ItemActions className={cn("shrink-0", isCard && "col-start-2 justify-between")}>
+        {formatHintNode ?? (isCard ? <span aria-hidden /> : null)}
+        <div className="flex items-center gap-component">
+          {onDelete ? (
+            <Button
+              type="button"
+              variant="destructive"
+              size="icon"
+              onClick={onDelete}
+              aria-label={deleteLabel}
+            >
+              <HugeiconsIcon icon={Delete02Icon} className="size-5" strokeWidth={1.5} />
+            </Button>
+          ) : null}
           <Button
-            type="button"
-            variant="destructive"
+            asChild
+            variant="ghost"
             size="icon"
-            onClick={onDelete}
-            aria-label={deleteLabel}
-            className="ms-micro"
+            aria-label={linkAriaLabel}
+            className="text-muted-foreground hover:text-foreground"
           >
-            <HugeiconsIcon icon={Delete02Icon} className="size-5" strokeWidth={1.5} />
+            <a href={href} download rel="noopener noreferrer">
+              <HugeiconsIcon icon={Download01Icon} className="size-5" strokeWidth={1.5} />
+            </a>
           </Button>
-        ) : null}
-        <Button
-          asChild
-          variant="ghost"
-          size="icon"
-          aria-label={linkAriaLabel}
-          className="text-muted-foreground hover:text-foreground"
-        >
-          <a href={href} download rel="noopener noreferrer">
-            <HugeiconsIcon icon={Download01Icon} className="size-5" strokeWidth={1.5} />
-          </a>
-        </Button>
+        </div>
       </ItemActions>
     </Item>
+  );
+}
+
+export type DownloadableDocumentGridProps = {
+  className?: string;
+  items: DownloadableDocumentListItemData[];
+  /** When provided, each card renders a delete button calling this with the item id */
+  onDelete?: (id: string) => void;
+};
+
+/**
+ * Responsive grid of downloadable-document **card** tiles. Steps explicitly
+ * between 1 / 2 / 3 columns based on the grid's own inline size (via the
+ * `card-grid` utility's container queries): 1 column under 42rem, 2 columns
+ * at 42rem+, 3 columns at 64rem+. Predictable column count per breakpoint —
+ * no auto-fill "phantom" empty tracks. The outer `@container` wrapper
+ * establishes the query container the utility needs.
+ */
+export function DownloadableDocumentGrid({
+  className,
+  items,
+  onDelete,
+}: DownloadableDocumentGridProps) {
+  return (
+    <div className="@container w-full">
+      <div
+        role="list"
+        className={cn("card-grid gap-section", className)}
+      >
+        {items.map((item) => (
+          <DownloadableDocumentListItem
+            key={item.id}
+            variant="card"
+            {...item}
+            onDelete={onDelete ? () => onDelete(item.id) : undefined}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
