@@ -1,0 +1,49 @@
+Instead of inline editing when opening a detailed panel for a plot, also set up an edit panel for the plot. Asking to edit a plot from a detailed panel should open the edit panel for that same plot.
+
+This way, the information can be edited side by side while the detailed panel is also shown.
+
+Do the same for editing a profile.@portugal/apps/frontend-web/src/panels/plot-detail-panel.tsx @portugal/apps/frontend-web/src/panels/profile-detail-panel.tsx
+
+---
+
+Instead of inline editing when opening a detailed panel for a plot, also set up an edit panel for the plot. Asking to edit a plot from a detailed panel should open the edit panel for that same plot.
+
+This way, the information can be edited side by side while the detailed panel is also shown.
+
+Do the same for editing a profile.@portugal/apps/frontend-web/src/panels/plot-detail-panel.tsx @portugal/apps/frontend-web/src/panels/profile-detail-panel.tsx
+
+---
+
+please continue work
+
+---
+
+please continue work
+
+---
+
+I show a completeness metric for a plot detail and display this completeness as a progress bar to indicate how complete the plot's profile is.
+
+---
+
+I show a completeness metric for a plot detail and display this completeness as a progress bar to indicate how complete the plot's profile is.
+
+---
+
+When I run the detail panel of a plot now, I get this rendering error.
+
+Rendered more hooks than during the previous render.
+
+---
+
+When I run the detail panel of a plot now, I get this rendering error.
+
+Rendered more hooks than during the previous render.
+
+---
+
+Please commit all changes in this session. Use Commit Skill.
+
+---
+
+Please commit all changes in this session. Use Commit Skill.
