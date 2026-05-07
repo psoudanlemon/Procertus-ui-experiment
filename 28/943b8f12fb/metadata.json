@@ -3,7 +3,7 @@
   "checkpoint_id": "28943b8f12fb",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 32,
+  "checkpoints_count": 33,
   "files_touched": [
     "Procertus-ui-experiment.code-workspace",
     "apps/frontend-pt1-extranet-onboarding/src/index.css",
@@ -44,6 +44,12 @@
       "transcript": "/28/943b8f12fb/4/full.jsonl",
       "content_hash": "/28/943b8f12fb/4/content_hash.txt",
       "prompt": "/28/943b8f12fb/4/prompt.txt"
+    },
+    {
+      "metadata": "/28/943b8f12fb/5/metadata.json",
+      "transcript": "/28/943b8f12fb/5/full.jsonl",
+      "content_hash": "/28/943b8f12fb/5/content_hash.txt",
+      "prompt": "/28/943b8f12fb/5/prompt.txt"
     }
   ],
   "token_usage": {
