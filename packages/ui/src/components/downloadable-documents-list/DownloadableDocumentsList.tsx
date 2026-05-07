@@ -100,7 +100,11 @@ export function DownloadableDocumentListItem({
   const titleBlock = (
     <ItemContent className="gap-0">
       <ItemTitle>{title}</ItemTitle>
-      {description ? <ItemDescription>{description}</ItemDescription> : null}
+      {description ? (
+        <ItemDescription className={cn(isCard && "line-clamp-1")}>
+          {description}
+        </ItemDescription>
+      ) : null}
     </ItemContent>
   );
 
