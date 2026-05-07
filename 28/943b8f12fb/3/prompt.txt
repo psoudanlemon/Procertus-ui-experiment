@@ -1,0 +1,73 @@
+@solar/Scoring I have a React implementation using Material UI for a set of UI components that implement scoring list items. These list items (or scoring items) work together to distribute a fixed amount of scoring potential across different items.
+
+Please look at the stories and documentation for these scoring components, and port the UI components to ShaDcn-based items. Use the ShaDcn item component as the underlying primitive. Make sure to set up proper spacing and add stories for the scoring component.
+
+Please scaffold these components in the UI lib package. @portugal/packages/ui-lib/src
+
+---
+
+@solar/Scoring I have a React implementation using Material UI for a set of UI components that implement scoring list items. These list items (or scoring items) work together to distribute a fixed amount of scoring potential across different items.
+
+Please look at the stories and documentation for these scoring components, and port the UI components to ShaDcn-based items. Use the ShaDcn item component as the underlying primitive. Make sure to set up proper spacing and add stories for the scoring component.
+
+Please scaffold these components in the UI lib package. @portugal/packages/ui-lib/src
+
+---
+
+Please don't use internal scrolling; use the scrolling of the edit panel or the cover view scrolling.
+
+Dock the remainder on the bottom, fixed.
+
+---
+
+Please don't use internal scrolling; use the scrolling of the edit panel or the cover view scrolling.
+
+Dock the remainder on the bottom, fixed.
+
+---
+
+I think you may have misunderstood what I meant. I'll rephrase.
+
+Currently, the discrete progress bar shows a visualization for each score compared to the available minimum and maximum values. The maximum value for each score should be based on the current maximum score across all scores. This means the score that is currently the largest will show as 100% progress.
+
+As soon as another score increases beyond that previous highest score, the previous highest score will no longer be shown as 100% progress. I think that's the first thing I want to do with the previous highest score.
+
+---
+
+I think you may have misunderstood what I meant. I'll rephrase.
+
+Currently, the discrete progress bar shows a visualization for each score compared to the available minimum and maximum values. The maximum value for each score should be based on the current maximum score across all scores. This means the score that is currently the largest will show as 100% progress.
+
+As soon as another score increases beyond that previous highest score, the previous highest score will no longer be shown as 100% progress. I think that's the first thing I want to do with the previous highest score.
+
+---
+
+I think you may have misunderstood what I meant. I'll rephrase.
+
+Currently, the discrete progress bar shows a visualization for each score compared to the available minimum and maximum values. The maximum value for each score should be based on the current maximum score across all scores. This means the score that is currently the largest will show as 100% progress.
+
+As soon as another score increases beyond that previous highest score, the previous highest score will no longer be shown as 100% progress.
+
+---
+
+I think you may have misunderstood what I meant. I'll rephrase.
+
+Currently, the discrete progress bar shows a visualization for each score compared to the available minimum and maximum values. The maximum value for each score should be based on the current maximum score across all scores. This means the score that is currently the largest will show as 100% progress.
+
+As soon as another score increases beyond that previous highest score, the previous highest score will no longer be shown as 100% progress.
+
+---
+
+@portugal/apps/frontend-web/src/panels/profile-edit-panel.tsx:226 the button is currently disabled. Please make sure the app shell is set up correctly so we can use the "useConfirm" by setting up the app provider. @portugal/apps/frontend-web/src/routes/__root.tsx @portugal/packages/ui/src/components/sewdn/AppShell/AppProvider.tsx
+
+---
+
+@portugal/apps/frontend-web/src/panels/profile-edit-panel.tsx:226 the button is currently disabled. Please make sure the app shell is set up correctly so we can use the "useConfirm" by setting up the app provider. @portugal/apps/frontend-web/src/routes/__root.tsx @portugal/packages/ui/src/components/sewdn/AppShell/AppProvider.tsx
+
+---
+
+Please commit all changes in this session. Use Commit Skill.
+
+---
+
+Please commit all changes in this session. Use Commit Skill.
