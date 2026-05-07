@@ -1,0 +1,20 @@
+It is our goal to link surf schools and available camping spots in the region. Please set up content files for camping spots using web search, one by one.
+
+For each available surf school, use web search to find possible camping spots in the neighborhood and create content files for each camping spot, linking them to the original surf school.
+
+Add helper functions to list these camping spots as related nearby options on the surf school detail panel.@camping/packages/svc-camping-data/content/surf-schools/arcachon-la-lagune-ocean-roots-surf-school.yaml @camping/packages/svc-camping-data/content/camping-spots @camping/apps/frontend-web/src/panels/camping_spot_detail_panel.tsx @camping/apps/frontend-web/src/panels/surf_school_detail_panel.tsx
+
+---
+
+It is our goal to link surf schools and available camping spots in the region. Please set up content files for camping spots using web search, one by one.
+
+For each available surf school, use web search to find possible camping spots in the neighborhood and create content files for each camping spot, linking them to the original surf school.
+
+Add helper functions to list these camping spots as related nearby options on the surf school detail panel.@camping/packages/svc-camping-data/content/surf-schools/arcachon-la-lagune-ocean-roots-surf-school.yaml @camping/packages/svc-camping-data/content/camping-spots @camping/apps/frontend-web/src/panels/camping_spot_detail_panel.tsx @camping/apps/frontend-web/src/panels/surf_school_detail_panel.tsx
+
+---
+
+I also foudn this:
+https://www.camping-carcans-ocean.com 
+
+Please add
