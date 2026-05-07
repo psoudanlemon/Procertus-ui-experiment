@@ -1,11 +1,11 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Cancel01Icon } from '@hugeicons/core-free-icons';
-import { HugeiconsIcon } from '@hugeicons/react';
-import { Button } from '@/components/ui/button';
-import { sidePanelSurfaceClassName } from '@/components/ui/side-panel-surface';
-import { cn } from '@/lib/utils';
-import type { CalculatedPanelState } from './types';
+import React from "react";
+import { motion } from "framer-motion";
+import { Cancel01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Button } from "@/components/ui/button";
+import { sidePanelSurfaceClassName } from "@/components/ui/side-panel-surface";
+import { cn } from "@/lib/utils";
+import type { CalculatedPanelState } from "./types";
 
 // Expect the full state object
 interface PanelProps {
@@ -16,26 +16,26 @@ interface PanelProps {
 
 // Animation Variants - Refined logic
 const panelVariants = {
-  initial: (position: CalculatedPanelState['position']) => ({
+  initial: (position: CalculatedPanelState["position"]) => ({
     opacity: 0,
     right: -position.width,
   }),
   // Hidden state only affects opacity. `right` remains where it was.
-  hidden: (position: CalculatedPanelState['position']) => ({
+  hidden: (position: CalculatedPanelState["position"]) => ({
     opacity: 0,
     right: position.right,
   }),
   // Use calculated position.right for visible states
-  full: (position: CalculatedPanelState['position']) => ({
+  full: (position: CalculatedPanelState["position"]) => ({
     opacity: 1,
     right: position.right,
   }),
-  stacked: (position: CalculatedPanelState['position']) => ({
+  stacked: (position: CalculatedPanelState["position"]) => ({
     opacity: 1,
     right: position.right,
   }),
   // Exit animates fully off-screen
-  exit: (position: CalculatedPanelState['position']) => ({
+  exit: (position: CalculatedPanelState["position"]) => ({
     opacity: 0,
     right: -position.width, // Animate fully off-screen on exit
   }),
@@ -43,7 +43,7 @@ const panelVariants = {
 
 // Define the transition
 const panelTransition = {
-  type: 'spring' as const,
+  type: "spring" as const,
   stiffness: 400,
   damping: 40,
   // Transitions apply to properties being animated by the target variant
@@ -59,7 +59,7 @@ export function Panel({ panel, onClose, onActivate }: PanelProps) {
 
   // Add onClick handler for activation
   const handleClick = () => {
-    if (state === 'stacked') {
+    if (state === "stacked") {
       onActivate(id);
     }
   };
@@ -73,20 +73,20 @@ export function Panel({ panel, onClose, onActivate }: PanelProps) {
       animate={state} // Animate between hidden, full, stacked
       initial="initial" // Start hidden (opacity 0, initial right might be 0 or from initial render)
       exit="exit"
-      onClick={state === 'stacked' ? handleClick : undefined}
+      onClick={state === "stacked" ? handleClick : undefined}
       className={cn(
-        'absolute inset-y-0 flex flex-col',
+        "absolute inset-y-0 flex flex-col",
         {
-          'fixed z-50': mode === 'overlay',
+          "fixed z-50": mode === "overlay",
         },
-        state === 'stacked' ? 'cursor-pointer' : 'cursor-default'
+        state === "stacked" ? "cursor-pointer" : "cursor-default",
       )}
       style={{
-        // Right position is handled by animation variants
+        width: position.width,
         zIndex: position.zIndex,
-        overflow: 'hidden',
+        overflow: "hidden",
         // Set pointer events directly based on state, not animated
-        pointerEvents: state === 'hidden' ? 'none' : 'auto',
+        pointerEvents: state === "hidden" ? "none" : "auto",
       }}
     >
       {/* Inner div ALWAYS uses position.width */}

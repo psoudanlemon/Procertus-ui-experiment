@@ -26,4 +26,13 @@
   html[data-public-layout] #root {
     overflow: visible;
   }
+
+  /* Guest routes: don’t clip tall pages — signed-in shell uses overflow:hidden on `app-wrapper`. */
+  html[data-public-layout] .app-wrapper,
+  html[data-public-layout] .app-height-chain {
+    height: auto;
+    min-height: 100%;
+    flex: none;
+    overflow: visible;
+  }
 }

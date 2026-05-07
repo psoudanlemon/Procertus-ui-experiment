@@ -1,18 +1,20 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import type { ComponentType } from 'react';
-import { PanelsProvider, PanelsContext } from './PanelsProvider'; // Assuming context exported from provider file
-import { Panels as PanelsPresentational } from './Panels'; // The presentational component
-import type { PersistenceLayer } from './persistence';
-import type { PanelsConfigProps } from './types'; // Import the common config type
+import React, { useContext, useLayoutEffect, useRef, useState } from "react";
+import type { ComponentType } from "react";
+import { PanelsProvider, PanelsContext } from "./PanelsProvider"; // Assuming context exported from provider file
+import { Panels as PanelsPresentational } from "./Panels"; // The presentational component
+import type { PersistenceLayer } from "./persistence";
+import type { PanelsConfigProps } from "./types"; // Import the common config type
 
 function useElementWidth(ref: React.RefObject<HTMLElement | null>) {
   const [width, setWidth] = useState(0);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const element = ref.current;
     if (!element) return;
 
-    const updateWidth = () => setWidth(element.getBoundingClientRect().width);
+    const updateWidth = () => {
+      setWidth(element.getBoundingClientRect().width);
+    };
     updateWidth();
 
     const observer = new ResizeObserver(updateWidth);
@@ -53,7 +55,7 @@ const PanelsLayoutRenderer = React.forwardRef<
   if (!context) {
     // This should technically not happen if used correctly within the layout
     console.error(
-      'PanelsLayoutRenderer: Context is missing. Ensure it is rendered within PanelsProvider.'
+      "PanelsLayoutRenderer: Context is missing. Ensure it is rendered within PanelsProvider.",
     );
     return null;
   }
@@ -88,7 +90,7 @@ const PanelsLayoutRenderer = React.forwardRef<
     </PanelsPresentational>
   );
 });
-PanelsLayoutRenderer.displayName = 'PanelsLayoutRenderer';
+PanelsLayoutRenderer.displayName = "PanelsLayoutRenderer";
 
 /**
  * Convenience component combining PanelsProvider and the presentational
@@ -129,4 +131,4 @@ export const PanelsLayout = React.forwardRef<
     </PanelsProvider>
   );
 });
-PanelsLayout.displayName = 'PanelsLayout';
+PanelsLayout.displayName = "PanelsLayout";
