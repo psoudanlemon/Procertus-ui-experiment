@@ -1,10 +1,9 @@
-import { OnboardingStepper } from "@procertus-ui/ui-lib";
-import { useConfirm, useIsMobile } from "@procertus-ui/ui";
-import { useMemo, useState } from "react";
+import { useConfirm } from "@procertus-ui/ui";
+import { useEffect, useMemo } from "react";
 
+import { useCertificationRequest } from "../../certification-request/context";
 import { CERTIFICATION_REQUEST_STEP_IDS } from "../../certification-request/types";
 import { useCertificationRequestWizardModel } from "../../certification-request/model";
-import { CompactWizardTimeline } from "./CompactWizardTimeline";
 import { sortDraftsByIntentAndProduct } from "./draft-selection-presentation";
 import { buildRulesetDocumentsForInquiries } from "./build-ruleset-documents-for-inquiries";
 import type {
@@ -12,14 +11,15 @@ import type {
   UseCertificationRequestWizardViewOptions,
 } from "./certification-request-wizard-types";
 
-const certStepReview = CERTIFICATION_REQUEST_STEP_IDS.indexOf("review");
-
 /**
  * Stable card height for the anonymous wizard / step pages so they don't shrink to
- * content height between steps. Ignored when StepLayout runs in `fill`/`fill-parent`
- * (the authenticated wizard already pins height via the parent region).
+ * content height between steps.
  */
 export const STABLE_STEP_MIN_HEIGHT = "min-h-[calc(100svh-12rem)]";
+
+const DETAILS_IDX = CERTIFICATION_REQUEST_STEP_IDS.indexOf("details");
+const DRAFTS_IDX = CERTIFICATION_REQUEST_STEP_IDS.indexOf("drafts");
+const REVIEW_IDX = CERTIFICATION_REQUEST_STEP_IDS.indexOf("review");
 
 export function useCertificationRequestWizardView(
   options: UseCertificationRequestWizardViewOptions,
@@ -27,110 +27,49 @@ export function useCertificationRequestWizardView(
   const { onCancel, onRequestCreated, onComplete, reviewRequester } = options;
   const model = useCertificationRequestWizardModel({ onCancel, onRequestCreated, onComplete });
   const confirm = useConfirm();
-  const authenticated = model.mode === "authenticated";
-  const isMobile = useIsMobile();
-  const splitProductInquirySteps =
-    authenticated && isMobile && model.detailsStep.detailsUseProductTree;
-  const [mobileDetailsStep, setMobileDetailsStep] = useState<"product" | "inquiries">("product");
-  const effectiveMobileDetailsStep =
-    splitProductInquirySteps && model.activeStep === 1 ? mobileDetailsStep : "product";
+  const { intent, setIntent, setActiveStep, replaceDraftsFromDetails } = useCertificationRequest();
 
-  const mobileStepper = useMemo(() => {
-    if (!splitProductInquirySteps) return model.stepper;
+  // Trim the wizard to Product → Review only: seed the intent so the details
+  // step renders the product picker, and bounce past intent/drafts if the
+  // session lands there (initial mount or persisted state).
+  useEffect(() => {
+    if (!intent) setIntent("product-certification");
+    if (model.activeStep === 0) setActiveStep(DETAILS_IDX);
+    else if (model.activeStep === DRAFTS_IDX) setActiveStep(REVIEW_IDX);
+  }, [intent, model.activeStep, setActiveStep, setIntent]);
 
-    const [intentStep, productStep, draftsStep, reviewStep] = model.stepper.steps;
-    return {
-      activeStep:
-        model.activeStep < 1
-          ? model.activeStep
-          : model.activeStep === 1
-            ? effectiveMobileDetailsStep === "product"
-              ? 1
-              : 2
-            : model.activeStep + 1,
-      steps: [
-        intentStep,
-        productStep,
-        {
-          id: "inquiries",
-          title: "Aanvragen",
-          description: model.detailsStep.selectedProduct
-            ? "Kies certificaten en attesten"
-            : "Selecteer eerst een product",
-          available: Boolean(model.detailsStep.selectedProduct),
-        },
-        draftsStep,
-        reviewStep,
-      ].filter((step): step is NonNullable<typeof step> => step != null),
-      onStepChange: (step: number) => {
-        if (step <= 1) {
-          setMobileDetailsStep("product");
-          model.stepper.onStepChange(Math.min(step, 1));
-          return;
-        }
-        if (step === 2) {
-          if (model.detailsStep.selectedProduct) {
-            model.stepper.onStepChange(1);
-            setMobileDetailsStep("inquiries");
-          }
-          return;
-        }
-        setMobileDetailsStep("product");
-        model.stepper.onStepChange(step - 1);
-      },
-    };
-  }, [
-    effectiveMobileDetailsStep,
-    model.detailsStep.selectedProduct,
-    model.stepper,
-    model.activeStep,
-    splitProductInquirySteps,
-  ]);
-
-  const layout =
-    splitProductInquirySteps && model.activeStep === 1
-      ? {
-          ...model.layout,
-          title:
-            effectiveMobileDetailsStep === "product"
-              ? "Selecteer het producttype"
-              : "Kies de aanvragen",
-          description:
-            effectiveMobileDetailsStep === "product"
-              ? "Kies eerst een product in de beslissingsboom. Daarna selecteer je de beschikbare certificaten en attesten."
-              : "Selecteer welke certificaten en attesten je voor dit product wilt toevoegen.",
-          backAction:
-            effectiveMobileDetailsStep === "inquiries"
-              ? { label: "Terug", onClick: () => setMobileDetailsStep("product") }
-              : model.layout.backAction,
-          primaryAction:
-            effectiveMobileDetailsStep === "product"
-              ? {
-                  label: "Verder",
-                  onClick: () => setMobileDetailsStep("inquiries"),
-                  disabled: !model.detailsStep.selectedProduct,
-                }
-              : model.layout.primaryAction,
-        }
-      : model.layout;
+  const layout = model.layout;
 
   const primaryAction =
-    model.activeStep === certStepReview
+    model.activeStep === DETAILS_IDX
       ? {
           ...layout.primaryAction,
-          onClick: async () => {
-            const confirmed = confirm
-              ? await confirm(
-                  "Aanvraagpakket versturen?",
-                  "Na indiening wordt dit pakket met alle onderliggende certificatie- en attestvragen doorgestuurd naar PROCERTUS voor behandeling.",
-                )
-              : true;
-            if (confirmed) {
-              layout.primaryAction.onClick();
-            }
+          onClick: () => {
+            replaceDraftsFromDetails();
+            setActiveStep(REVIEW_IDX);
           },
         }
-      : layout.primaryAction;
+      : model.activeStep === REVIEW_IDX
+        ? {
+            ...layout.primaryAction,
+            onClick: async () => {
+              const confirmed = confirm
+                ? await confirm(
+                    "Aanvraagpakket versturen?",
+                    "Na indiening wordt dit pakket met alle onderliggende certificatie- en attestvragen doorgestuurd naar PROCERTUS voor behandeling.",
+                  )
+                : true;
+              if (confirmed) {
+                layout.primaryAction.onClick();
+              }
+            },
+          }
+        : layout.primaryAction;
+
+  const backAction =
+    model.activeStep === REVIEW_IDX
+      ? { label: "Terug", onClick: () => setActiveStep(DETAILS_IDX) }
+      : undefined;
 
   const includedReviewInquiries = useMemo(() => {
     const selected = new Set(model.draftsStep.includedDraftIds);
@@ -161,49 +100,31 @@ export function useCertificationRequestWizardView(
       ? `Documenten op basis van je ${includedReviewInquiries.length} geselecteerde ${includedReviewInquiries.length === 1 ? "aanvraag" : "aanvragen"} (prototype — downloadlinks zijn gemockt).`
       : "Selecteer eerst aanvragen in de vorige stap om relevante documenten te zien (prototype).";
 
-  const stepperNode = authenticated ? (
-    <>
-      <div className="pt-region md:hidden">
-        <CompactWizardTimeline model={mobileStepper} />
-      </div>
-      <OnboardingStepper
-        {...model.stepper}
-        className="hidden max-w-none md:block"
-        orientation="vertical"
-        interactive
-      />
-    </>
-  ) : (
-    <OnboardingStepper {...model.stepper} orientation="horizontal" interactive />
-  );
-
   return {
     stepLayout: {
-      className: authenticated ? "max-w-none" : "w-full",
-      layout: authenticated ? "fill-parent" : "default",
-      flush: authenticated,
-      stepperPosition: authenticated ? "start" : "top",
-      variant: "wizard",
-      stepper: stepperNode,
+      className: "w-full",
+      layout: "default",
+      variant: "onboarding",
+      stepLabel: "Productinformatie",
       minHeight: STABLE_STEP_MIN_HEIGHT,
       title: layout.title,
       description: layout.description,
-      backAction: layout.backAction,
+      backAction,
       cancelAction: layout.cancelAction,
-      secondaryAction: layout.secondaryAction,
+      secondaryAction: undefined,
       primaryAction,
     },
-    showIntentStep: model.activeStep === 0,
+    showIntentStep: false,
     intentStep: model.intentStep,
-    showDetailsStep: model.activeStep === 1,
-    splitProductInquirySteps,
-    effectiveMobileDetailsStep,
+    showDetailsStep: model.activeStep === DETAILS_IDX,
+    splitProductInquirySteps: false,
+    effectiveMobileDetailsStep: "product",
     detailsStep: model.detailsStep,
-    showDraftsStep: model.activeStep === 2,
+    showDraftsStep: false,
     draftsStep: model.draftsStep,
     sortedDrafts,
     onDraftIncludedChange,
-    showReviewStep: model.activeStep === certStepReview,
+    showReviewStep: model.activeStep === REVIEW_IDX,
     mode: model.mode,
     reviewRequester,
     reviewStep: model.reviewStep,
