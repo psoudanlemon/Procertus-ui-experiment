@@ -1,4 +1,10 @@
-import { Alert01Icon } from "@hugeicons/core-free-icons";
+import {
+  Alert01Icon,
+  ArrowRight02Icon,
+  CheckmarkCircle02Icon,
+  FilePlusIcon,
+  Mail01Icon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Alert,
@@ -237,23 +243,117 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
             />
           }
           title={
-            step === "customer"
-              ? "Uw gegevens"
-              : step === "company"
-                ? "Bedrijf en adres"
-                : "Samenvatting"
+            step === "intake"
+              ? "Hoe wil je deze aanvraag indienen?"
+              : step === "customer"
+                ? "Uw gegevens"
+                : step === "company"
+                  ? "Bedrijf en adres"
+                  : "Samenvatting"
           }
           description={
-            step === "customer"
-              ? "Wie registreert en het btw- of ondernemingsnummer van uw organisatie."
-              : step === "company"
-                ? "We combineren uw nummer met openbare registers en, waar dat onvoldoende is, met gegevens over de onderneming achter uw e-maildomein (serverside)."
-                : "Controleer uw gegevens en de aanvragen voordat u indient."
+            step === "intake"
+              ? "Kies een vrijblijvende informatieve aanvraag voor advies of prijsopgave, of dien meteen het volledige formele dossier in."
+              : step === "customer"
+                ? "Wie registreert en het btw- of ondernemingsnummer van uw organisatie."
+                : step === "company"
+                  ? "We combineren uw nummer met openbare registers en, waar dat onvoldoende is, met gegevens over de onderneming achter uw e-maildomein (serverside)."
+                  : "Controleer uw gegevens en de aanvragen voordat u indient."
           }
           backAction={backAction}
           primaryAction={primaryAction}
           cancelAction={cancelAction}
         >
+          {step === "intake" ? (
+            <div className="grid gap-section md:grid-cols-2">
+              <Card className="flex h-full flex-col gap-section py-section shadow-proc-xs">
+                <CardHeader className="gap-component px-section">
+                  <div className="flex size-11 items-center justify-center rounded-md bg-secondary text-secondary-foreground">
+                    <HugeiconsIcon icon={Mail01Icon} className="size-6" />
+                  </div>
+                  <div className="flex flex-col gap-micro">
+                    <CardTitle className="text-heading-md">Informatieve aanvraag</CardTitle>
+                    <CardDescription className="text-sm leading-normal">
+                      Voor wie eerst wil afstemmen. Je bezorgt het samengestelde pakket en een korte
+                      vraag, wij komen terug met een prijsopgave en het te volgen traject.
+                    </CardDescription>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex flex-1 flex-col justify-between gap-section px-section">
+                  <ul className="flex flex-col gap-micro">
+                    {[
+                      "Geen verplichting tot opstart",
+                      "Reactie binnen enkele werkdagen",
+                      "Mogelijkheid tot live sessie tijdens het invullen",
+                    ].map((b) => (
+                      <li
+                        key={b}
+                        className="flex items-start gap-micro text-sm leading-normal"
+                      >
+                        <HugeiconsIcon
+                          icon={CheckmarkCircle02Icon}
+                          className="mt-0.5 size-4 shrink-0 text-success"
+                        />
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full justify-between"
+                    onClick={() => goToOnboardingStep("customer")}
+                  >
+                    Start informatieve aanvraag
+                    <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card className="flex h-full flex-col gap-section py-section shadow-proc-md ring-2 ring-primary/30">
+                <CardHeader className="gap-component px-section">
+                  <div className="flex size-11 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                    <HugeiconsIcon icon={FilePlusIcon} className="size-6" />
+                  </div>
+                  <div className="flex flex-col gap-micro">
+                    <CardTitle className="text-heading-md">Formele aanvraag</CardTitle>
+                    <CardDescription className="text-sm leading-normal">
+                      Voor wie klaar is om in te dienen. Het volledige aanvraagpakket wordt
+                      opgebouwd en de ontvankelijkheidsbeoordeling kan starten.
+                    </CardDescription>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex flex-1 flex-col justify-between gap-section px-section">
+                  <ul className="flex flex-col gap-micro">
+                    {[
+                      "Volledige aanvraagwizard",
+                      "Dossier wordt actief opgevolgd",
+                      "Account aanmaken pas bij indiening",
+                    ].map((b) => (
+                      <li
+                        key={b}
+                        className="flex items-start gap-micro text-sm leading-normal"
+                      >
+                        <HugeiconsIcon
+                          icon={CheckmarkCircle02Icon}
+                          className="mt-0.5 size-4 shrink-0 text-success"
+                        />
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button
+                    type="button"
+                    className="w-full justify-between"
+                    onClick={() => goToOnboardingStep("customer")}
+                  >
+                    Start formele aanvraag
+                    <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          ) : null}
+
           {step === "customer" ? (
             <div className="space-y-6">
               <PrototypeCard

@@ -200,6 +200,12 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
         available: true,
       },
       {
+        id: "intake",
+        title: "Aanvraagtype",
+        description: "Informatief of formeel",
+        available: hasDrafts,
+      },
+      {
         id: "customer",
         title: "Registratie",
         description: formatRequesterStepperLabel(context),
@@ -474,7 +480,7 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
           ...prev,
           drafts: nextDrafts,
           wizardInitialStep: "drafts",
-          step: "customer",
+          step: "intake",
           summaryIncludedDraftIds: nextSummaryIncluded,
         };
       });

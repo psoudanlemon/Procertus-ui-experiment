@@ -22,7 +22,7 @@ export type CustomerContext = {
   addressCity: string;
 };
 
-export const ONBOARDING_STEPS = ["request", "customer", "company", "review", "summary"] as const;
+export const ONBOARDING_STEPS = ["request", "intake", "customer", "company", "review", "summary"] as const;
 
 export type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
 
