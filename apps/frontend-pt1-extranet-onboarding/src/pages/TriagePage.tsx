@@ -86,7 +86,6 @@ export function TriagePage() {
         <div className="grid grid-cols-1 gap-component md:grid-cols-2">
           <TriageOptionCard
             tone="muted"
-            badge="Vrijblijvend"
             icon={Mail01Icon}
             title="Informatieve aanvraag"
             description="Voor wie eerst wil afstemmen. U bezorgt enkele basisgegevens en uw vraag, wij komen terug met een prijsopgave en het te volgen traject."
@@ -100,7 +99,6 @@ export function TriagePage() {
           />
           <TriageOptionCard
             tone="primary"
-            badge="Direct van start"
             icon={FilePlusIcon}
             title="Formele aanvraag"
             description="Voor wie klaar is om in te dienen. Het volledige aanvraagpakket wordt opgebouwd en de ontvankelijkheidsbeoordeling kan starten."
@@ -114,24 +112,20 @@ export function TriagePage() {
           />
         </div>
 
-        <Card className="flex flex-col gap-component border border-primary/20 bg-primary/5 py-section sm:flex-row sm:items-center sm:justify-between">
-          <CardHeader className="gap-micro px-section">
-            <CardTitle className="text-heading-sm font-semibold">
-              Liever eerst een expert spreken?
-            </CardTitle>
-            <CardDescription className="text-sm leading-normal">
+        <Card className="flex flex-col gap-component border border-primary/20 bg-primary/5 px-section py-section sm:flex-row sm:items-center sm:justify-between sm:gap-section">
+          <div className="flex min-w-0 flex-1 flex-col gap-micro">
+            <p className="text-heading-sm font-semibold">Liever eerst een expert spreken?</p>
+            <p className="text-sm leading-normal text-muted-foreground">
               Plan een live online sessie van één uur en doorloop de vereisten samen met een PROCERTUS-expert.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="px-section">
-            <Button asChild variant="outline" className="w-full bg-background sm:w-auto">
-              <Link to={EXPERT_CALL_PATH(entry.id)}>
-                <HugeiconsIcon icon={Call02Icon} className="size-4" />
-                Plan een expert call
-                <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
-              </Link>
-            </Button>
-          </CardContent>
+            </p>
+          </div>
+          <Button asChild variant="outline" className="w-full bg-background sm:w-auto sm:shrink-0">
+            <Link to={EXPERT_CALL_PATH(entry.id)}>
+              <HugeiconsIcon icon={Call02Icon} className="size-4" />
+              Plan een expert call
+              <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
+            </Link>
+          </Button>
         </Card>
       </div>
     </PublicRegistryAppShell>
@@ -141,7 +135,6 @@ export function TriagePage() {
 
 type TriageOptionCardProps = {
   tone: "muted" | "primary";
-  badge: string;
   icon: typeof Mail01Icon;
   title: string;
   description: string;
@@ -150,7 +143,7 @@ type TriageOptionCardProps = {
   to: string;
 };
 
-function TriageOptionCard({ tone, badge, icon, title, description, bullets, cta, to }: TriageOptionCardProps) {
+function TriageOptionCard({ tone, icon, title, description, bullets, cta, to }: TriageOptionCardProps) {
   const isPrimary = tone === "primary";
   return (
     <Card
@@ -161,17 +154,14 @@ function TriageOptionCard({ tone, badge, icon, title, description, bullets, cta,
       }
     >
       <CardHeader className="gap-component px-section">
-        <div className="flex items-start justify-between gap-component">
-          <div
-            className={
-              isPrimary
-                ? "flex size-11 items-center justify-center rounded-md bg-primary text-primary-foreground"
-                : "flex size-11 items-center justify-center rounded-md bg-secondary text-secondary-foreground"
-            }
-          >
-            <HugeiconsIcon icon={icon} className="size-6" />
-          </div>
-          <Badge variant={isPrimary ? "default" : "secondary"}>{badge}</Badge>
+        <div
+          className={
+            isPrimary
+              ? "flex size-11 items-center justify-center rounded-md bg-primary text-primary-foreground"
+              : "flex size-11 items-center justify-center rounded-md bg-secondary text-secondary-foreground"
+          }
+        >
+          <HugeiconsIcon icon={icon} className="size-6" />
         </div>
         <div className="flex flex-col gap-micro">
           <CardTitle className="text-heading-md">{title}</CardTitle>
