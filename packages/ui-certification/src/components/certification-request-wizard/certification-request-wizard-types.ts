@@ -28,6 +28,7 @@ export type CertificationRequestWizardViewProps = {
     | "stepperPosition"
     | "variant"
     | "stepper"
+    | "chromeStyle"
     | "stepLabel"
     | "minHeight"
     | "title"

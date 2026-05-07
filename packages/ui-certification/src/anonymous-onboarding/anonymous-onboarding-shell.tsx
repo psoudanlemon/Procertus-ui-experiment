@@ -27,7 +27,7 @@ export function AnonymousOnboardingShell({
       }}
       hideFab
     >
-      <div className="mx-auto flex w-full max-w-[1136px] flex-col gap-region p-boundary">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-region p-boundary">
         <PageHeader title={pageTitle} description={pageDescription} />
         {children}
       </div>

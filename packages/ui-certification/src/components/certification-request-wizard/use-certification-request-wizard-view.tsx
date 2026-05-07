@@ -105,6 +105,7 @@ export function useCertificationRequestWizardView(
       className: "w-full",
       layout: "default",
       variant: "onboarding",
+      chromeStyle: "banded",
       stepLabel: "Productinformatie",
       minHeight: STABLE_STEP_MIN_HEIGHT,
       title: layout.title,

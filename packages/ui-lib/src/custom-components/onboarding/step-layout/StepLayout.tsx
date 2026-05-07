@@ -58,6 +58,13 @@ export type StepLayoutProps = {
    * @default "top"
    */
   stepperPosition?: "top" | "start";
+  /**
+   * `card` — single surface, header flush with the body (default).
+   * `banded` — header and footer sit on a tinted strip (`bg-muted/40`) with
+   * borders separating them from the body, mirroring the CertificationCard
+   * detail layout.
+   */
+  chromeStyle?: "card" | "banded";
   title: ReactNode;
   description?: ReactNode;
   /** e.g. “Step 2 of 6” — not a second heading. */
@@ -153,6 +160,7 @@ export function StepLayout({
   flush = false,
   stepper,
   stepperPosition = "top",
+  chromeStyle = "card",
   title,
   description,
   stepLabel,
@@ -170,6 +178,7 @@ export function StepLayout({
   const hasStepper = stepper != null;
   const rail = hasStepper && stepperPosition === "start";
   const stableHeight = !isFill && !rail && minHeight != null;
+  const banded = chromeStyle === "banded";
 
   const prevStepKeyRef = useRef(stepKey);
   const directionRef = useRef<"forward" | "backward">("forward");
@@ -189,8 +198,8 @@ export function StepLayout({
 
   const cardClass = cn(
     "w-full overflow-hidden shadow-proc-xs",
-    cardGapClass[variant],
-    !rail && cardTopPadClass[variant],
+    banded ? "gap-0 pt-0" : cardGapClass[variant],
+    !rail && !banded && cardTopPadClass[variant],
     isFill ? "flex min-h-0 flex-col" : cn("mx-auto", variantClass[variant]),
     rail && "!py-0",
     isViewportFill && !rail && "!pb-0",
@@ -204,6 +213,7 @@ export function StepLayout({
       className={cn(
         "flex flex-col gap-region",
         rail ? "!px-0" : "sm:px-boundary",
+        banded && "border-b bg-muted/40 !px-region !pt-region !pb-section",
         isFill && "shrink-0",
       )}
     >
@@ -222,7 +232,9 @@ export function StepLayout({
   );
 
   const railContentClass = "space-y-section !px-0";
-  const stackedContentClass = "space-y-section sm:px-boundary sm:pb-section";
+  const stackedContentClass = banded
+    ? "space-y-region p-region"
+    : "space-y-section sm:px-boundary sm:pb-section";
 
   const contentNode = (
     <CardContent
@@ -263,7 +275,7 @@ export function StepLayout({
       className={cn(
         "flex flex-row flex-wrap items-center justify-end gap-component",
         "min-h-11",
-        "p-section",
+        banded ? "border-t bg-muted/40 p-region" : "p-section",
         isFill && "shrink-0",
         isViewportFill && "bg-transparent",
       )}
