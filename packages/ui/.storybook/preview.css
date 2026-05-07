@@ -24,7 +24,7 @@ html {
   --spacing-micro: 0.25rem !important;
   --spacing-component: 0.5rem !important;
   --spacing-section: 1rem !important;
-  --spacing-region: 1.5rem !important;
+  --spacing-region: 2rem !important;
   --spacing-boundary: 2rem !important;
 }
 
@@ -32,7 +32,7 @@ html {
   --spacing-micro: 0.5rem !important;
   --spacing-component: 0.75rem !important;
   --spacing-section: 1.5rem !important;
-  --spacing-region: 2rem !important;
+  --spacing-region: 2.5rem !important;
   --spacing-boundary: 3rem !important;
 }
 

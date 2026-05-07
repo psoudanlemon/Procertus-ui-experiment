@@ -297,7 +297,7 @@
   --spacing-micro: 0.25rem; /* 4px  */
   --spacing-component: 0.75rem; /* 12px — larger for touch */
   --spacing-section: 1rem; /* 16px */
-  --spacing-region: 1.25rem; /* 20px */
+  --spacing-region: 1.5rem; /* 24px */
   --spacing-boundary: 1.5rem; /* 24px */
 }
 
@@ -307,7 +307,7 @@
     --spacing-micro: 0.25rem; /* 4px  */
     --spacing-component: 0.5rem; /* 8px  */
     --spacing-section: 1rem; /* 16px */
-    --spacing-region: 1.5rem; /* 24px */
+    --spacing-region: 2rem; /* 32px */
     --spacing-boundary: 2rem; /* 32px */
   }
 }
@@ -317,7 +317,7 @@
   --spacing-micro: 0.5rem; /* 8px  */
   --spacing-component: 1rem; /* 16px — larger for touch */
   --spacing-section: 1.25rem; /* 20px */
-  --spacing-region: 1.5rem; /* 24px */
+  --spacing-region: 2rem; /* 32px */
   --spacing-boundary: 2rem; /* 32px */
 }
 
@@ -327,7 +327,7 @@
     --spacing-micro: 0.5rem; /* 8px  */
     --spacing-component: 0.75rem; /* 12px */
     --spacing-section: 1.5rem; /* 24px */
-    --spacing-region: 2rem; /* 32px */
+    --spacing-region: 2.5rem; /* 40px */
     --spacing-boundary: 3rem; /* 48px */
   }
 }
@@ -547,7 +547,7 @@
   --spacing-micro: 0.25rem;
   --spacing-component: 0.5rem;
   --spacing-section: 1rem;
-  --spacing-region: 1.5rem;
+  --spacing-region: 2rem;
   --spacing-boundary: 2rem;
 }
 
