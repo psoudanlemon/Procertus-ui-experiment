@@ -21,6 +21,8 @@ export type CatalogueExplorerProps = {
   onActiveIdChange: (id: string) => void;
   /** Accessible name for the underlying radio group. */
   ariaLabel: string;
+  /** Accessible labels for the trailing prev/next nav icon buttons. */
+  navLabels?: { prev: string; next: string };
   /** Body for the active item. Re-keyed on `activeId` so transitions replay. */
   children: ReactNode;
   className?: string;
@@ -31,6 +33,7 @@ export function CatalogueExplorer({
   activeId,
   onActiveIdChange,
   ariaLabel,
+  navLabels,
   children,
   className,
 }: CatalogueExplorerProps) {
@@ -41,6 +44,7 @@ export function CatalogueExplorer({
         value={activeId}
         onValueChange={onActiveIdChange}
         aria-label={ariaLabel}
+        navLabels={navLabels}
       />
       <div
         key={activeId}

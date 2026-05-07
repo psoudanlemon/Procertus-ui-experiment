@@ -46,13 +46,13 @@ const ONBOARDING_STEPPER_PATH = "/welcome/start";
 const EXPERT_CALL_PATH = (serviceId?: string) =>
   serviceId ? `/welcome/expert-call/${serviceId}` : "/welcome/expert-call";
 
+/** Sentinel id for the leading "Alle certificaten" pill — overview state, no single service active. */
+const ALLE_ID = "alle";
 /** Sentinel id for the merged "Overige" pill that bundles all tier-3 external referrals. */
 const ANDERE_ID = "overige";
 
 const PRIMARY_SERVICES = WEGWIJZER_SERVICES.filter((s) => s.tier !== 3);
 const EXTERNAL_SERVICES = WEGWIJZER_SERVICES.filter((s) => s.tier === 3);
-
-const DEFAULT_ACTIVE_SERVICE = PRIMARY_SERVICES.find((s) => s.tier === 1) ?? PRIMARY_SERVICES[0];
 
 // ---------------------------------------------------------------------------
 // Page
@@ -60,7 +60,7 @@ const DEFAULT_ACTIVE_SERVICE = PRIMARY_SERVICES.find((s) => s.tier === 1) ?? PRI
 
 export function WegwijzerPage() {
   const navigate = useNavigate();
-  const [activeId, setActiveId] = useState<string>(DEFAULT_ACTIVE_SERVICE?.entry.id ?? "");
+  const [activeId, setActiveId] = useState<string>(ALLE_ID);
 
   const activeService = WEGWIJZER_SERVICES.find((s) => s.entry.id === activeId);
 
@@ -80,21 +80,24 @@ export function WegwijzerPage() {
         }}
         footer={APP_FOOTER}
       >
-        <Hero />
+        <div className="mx-auto w-full max-w-7xl">
+          <Hero />
 
-        <div className="px-boundary pb-boundary">
-          <CatalogueExplorer
-            items={CHOICE_BAR_ITEMS}
-            activeId={activeId}
-            onActiveIdChange={setActiveId}
-            ariaLabel="Kies een certificaat"
-          >
-            {activeId === ANDERE_ID ? (
-              <ExternalReferralGrid services={EXTERNAL_SERVICES} />
-            ) : activeService ? (
-              <MasterCard service={activeService} />
-            ) : null}
-          </CatalogueExplorer>
+          <div className="px-boundary pb-boundary">
+            <CatalogueExplorer
+              items={CHOICE_BAR_ITEMS}
+              activeId={activeId}
+              onActiveIdChange={setActiveId}
+              ariaLabel="Kies een certificaat"
+              navLabels={{ prev: "Vorige certificaat", next: "Volgende certificaat" }}
+            >
+              {activeId === ALLE_ID ? null : activeId === ANDERE_ID ? (
+                <ExternalReferralGrid services={EXTERNAL_SERVICES} />
+              ) : activeService ? (
+                <MasterCard service={activeService} />
+              ) : null}
+            </CatalogueExplorer>
+          </div>
         </div>
       </PublicRegistryAppShell>
     </DensityProvider>
@@ -131,6 +134,7 @@ function Hero() {
 // ---------------------------------------------------------------------------
 
 const CHOICE_BAR_ITEMS: readonly ChoiceBarItem[] = [
+  { value: ALLE_ID, label: "Alle certificaten", variant: "no-border" as const },
   ...PRIMARY_SERVICES.map((service, index) => ({
     value: service.entry.id,
     label: service.pillLabel ?? service.entry.label,
@@ -239,9 +243,9 @@ function MasterCard({ service }: { service: WegwijzerService }) {
             Documenten op basis van uw selectie voor {entry.shortLabel} (prototype — downloadlinks zijn gemockt).
           </p>
         </div>
-        <ItemGroup className="w-full">
+        <ItemGroup className="grid w-full grid-cols-1 gap-section md:grid-cols-2">
           {documents.map((doc) => (
-            <DownloadableDocumentListItem key={doc.id} {...doc} />
+            <DownloadableDocumentListItem key={doc.id} {...doc} className="bg-card" />
           ))}
         </ItemGroup>
       </section>
@@ -289,7 +293,7 @@ function MasterCardSections({ service }: { service: WegwijzerService }) {
   if (!content) return <MasterCardSkeleton />;
 
   return (
-    <div className="flex flex-col gap-region">
+    <div className="flex max-w-3xl flex-col gap-region">
       <section className="flex flex-col gap-component">
         <H4 className="leading-none">Wat is een {entry.label}?</H4>
         <p className="text-sm leading-normal">{content.what}</p>
@@ -301,7 +305,7 @@ function MasterCardSections({ service }: { service: WegwijzerService }) {
           {content.whenToApply.map((item) => (
             <li key={item} className="flex items-start gap-component text-sm leading-normal">
               <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />
-              <span className="max-w-3xl">{item}</span>
+              <span>{item}</span>
             </li>
           ))}
         </ul>

@@ -52,8 +52,8 @@ const shellVariants = cva(
           "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
         ],
         "no-border": [
-          "has-[>[data-slot=field]]:border-transparent has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:shadow-none has-[>[data-slot=field]]:text-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-accent-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:bg-accent not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
-          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[>[data-slot=field]]:border-transparent has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:shadow-none has-[>[data-slot=field]]:text-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-accent-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:bg-accent not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:has-[>[data-slot=field]]:border-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-accent-foreground has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
         ],
       },
     },

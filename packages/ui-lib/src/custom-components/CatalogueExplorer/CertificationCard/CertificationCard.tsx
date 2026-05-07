@@ -60,7 +60,7 @@ export function CertificationCard({
 
   return (
     <Card className={cn("flex flex-col gap-0 pt-0 shadow-proc-xs md:shadow-proc-sm", className)}>
-      <CardHeader className="gap-0 border-b bg-muted/40 px-region pt-region pb-section">
+      <CardHeader className="gap-1 border-b bg-muted/40 px-region pt-region pb-section">
         <H2>{title}</H2>
         {description ? (
           <CardDescription className="text-base leading-normal">{description}</CardDescription>
@@ -73,7 +73,7 @@ export function CertificationCard({
       </CardContent>
 
       {footer ? (
-        <CardFooter className="flex-wrap-reverse justify-end gap-component p-region sm:flex-nowrap sm:justify-between">
+        <CardFooter className="flex-wrap-reverse justify-end gap-component border-t bg-muted/40 p-region sm:flex-nowrap sm:justify-between">
           {footer}
         </CardFooter>
       ) : null}
