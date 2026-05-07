@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft01Icon,
   ArrowRight02Icon,
@@ -39,6 +39,7 @@ const CATEGORY_LABEL = {
 
 export function TriagePage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { serviceId } = useParams<{ serviceId: string }>();
   const service = findWegwijzerService(serviceId);
 
@@ -47,6 +48,14 @@ export function TriagePage() {
   }
 
   const { entry } = service;
+
+  const handleBack = () => {
+    if (location.key !== "default") {
+      navigate(-1);
+    } else {
+      navigate(`${WEGWIJZER_PATH}?service=${entry.id}`);
+    }
+  };
 
   return (
     <DensityProvider density="spacious">
@@ -65,11 +74,14 @@ export function TriagePage() {
       footer={APP_FOOTER}
     >
       <div className="mx-auto flex w-full max-w-[960px] flex-col gap-region p-boundary">
-        <Button asChild variant="ghost" size="sm" className="-ml-2 self-start text-muted-foreground">
-          <Link to={WEGWIJZER_PATH}>
-            <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
-            Terug naar overzicht
-          </Link>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="-ml-2 self-start text-muted-foreground"
+          onClick={handleBack}
+        >
+          <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
+          Terug
         </Button>
 
         <section className="flex flex-col gap-micro">

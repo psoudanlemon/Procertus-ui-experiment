@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useCallback } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Alert02Icon,
   ArrowRight02Icon,
@@ -31,7 +31,7 @@ import {
   PublicRegistryAppShell,
   Skeleton,
 } from "@procertus-ui/ui";
-import { CertificationCard, type ChoiceBarItem } from "@procertus-ui/ui-lib";
+import { DetailCard, type ChoiceBarItem } from "@procertus-ui/ui-lib";
 import { CatalogueExplorer } from "@procertus-ui/ui-certification";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { APP_FOOTER } from "../layouts/footerConfig";
@@ -52,8 +52,17 @@ const ALLE_ID = "alle";
 /** Sentinel id for the merged "Overige" pill that bundles all tier-3 external referrals. */
 const ANDERE_ID = "overige";
 
+/** Search param that mirrors the active certificate selection so back-nav can restore it. */
+const SERVICE_PARAM = "service";
+
 const PRIMARY_SERVICES = WEGWIJZER_SERVICES.filter((s) => s.tier !== 3);
 const EXTERNAL_SERVICES = WEGWIJZER_SERVICES.filter((s) => s.tier === 3);
+
+const VALID_SERVICE_IDS = new Set<string>([
+  ALLE_ID,
+  ANDERE_ID,
+  ...WEGWIJZER_SERVICES.map((s) => s.entry.id),
+]);
 
 // ---------------------------------------------------------------------------
 // Page
@@ -61,7 +70,28 @@ const EXTERNAL_SERVICES = WEGWIJZER_SERVICES.filter((s) => s.tier === 3);
 
 export function WegwijzerPage() {
   const navigate = useNavigate();
-  const [activeId, setActiveId] = useState<string>(ALLE_ID);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const rawParam = searchParams.get(SERVICE_PARAM);
+  const activeId = rawParam && VALID_SERVICE_IDS.has(rawParam) ? rawParam : ALLE_ID;
+
+  const setActiveId = useCallback(
+    (id: string) => {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          if (id === ALLE_ID) {
+            next.delete(SERVICE_PARAM);
+          } else {
+            next.set(SERVICE_PARAM, id);
+          }
+          return next;
+        },
+        { replace: true },
+      );
+    },
+    [setSearchParams],
+  );
 
   const activeService = WEGWIJZER_SERVICES.find((s) => s.entry.id === activeId);
 
@@ -319,7 +349,7 @@ function MasterCard({ service }: { service: WegwijzerService }) {
   const documents = buildMockDocuments(service);
 
   return (
-    <CertificationCard
+    <DetailCard
       title={entry.label}
       description={entry.description}
       footer={
@@ -380,7 +410,7 @@ function MasterCard({ service }: { service: WegwijzerService }) {
       </section>
 
       <MasterCardTimeline service={service} />
-    </CertificationCard>
+    </DetailCard>
   );
 }
 
