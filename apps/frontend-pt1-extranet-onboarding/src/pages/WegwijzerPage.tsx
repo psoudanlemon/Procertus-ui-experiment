@@ -13,7 +13,6 @@ import {
   AlertDescription,
   AlertTitle,
   Button,
-  cn,
   DensityProvider,
   DownloadableDocumentGrid,
   type DownloadableDocumentListItemData,
@@ -31,7 +30,7 @@ import {
   PublicRegistryAppShell,
   Skeleton,
 } from "@procertus-ui/ui";
-import { DetailCard, type ChoiceBarItem } from "@procertus-ui/ui-lib";
+import { BrowseCard, DetailCard, type ChoiceBarItem } from "@procertus-ui/ui-lib";
 import { CatalogueExplorer } from "@procertus-ui/ui-certification";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { APP_FOOTER } from "../layouts/footerConfig";
@@ -47,8 +46,6 @@ const ONBOARDING_STEPPER_PATH = "/welcome/start";
 const EXPERT_CALL_PATH = (serviceId?: string) =>
   serviceId ? `/welcome/expert-call/${serviceId}` : "/welcome/expert-call";
 
-/** Sentinel id for the leading "Alle certificaten" pill — overview state, no single service active. */
-const ALLE_ID = "alle";
 /** Sentinel id for the merged "Overige" pill that bundles all tier-3 external referrals. */
 const ANDERE_ID = "overige";
 
@@ -59,7 +56,6 @@ const PRIMARY_SERVICES = WEGWIJZER_SERVICES.filter((s) => s.tier !== 3);
 const EXTERNAL_SERVICES = WEGWIJZER_SERVICES.filter((s) => s.tier === 3);
 
 const VALID_SERVICE_IDS = new Set<string>([
-  ALLE_ID,
   ANDERE_ID,
   ...WEGWIJZER_SERVICES.map((s) => s.entry.id),
 ]);
@@ -73,14 +69,14 @@ export function WegwijzerPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const rawParam = searchParams.get(SERVICE_PARAM);
-  const activeId = rawParam && VALID_SERVICE_IDS.has(rawParam) ? rawParam : ALLE_ID;
+  const activeId = rawParam && VALID_SERVICE_IDS.has(rawParam) ? rawParam : "";
 
   const setActiveId = useCallback(
     (id: string) => {
       setSearchParams(
         (prev) => {
           const next = new URLSearchParams(prev);
-          if (id === ALLE_ID) {
+          if (!id) {
             next.delete(SERVICE_PARAM);
           } else {
             next.set(SERVICE_PARAM, id);
@@ -122,7 +118,7 @@ export function WegwijzerPage() {
               ariaLabel="Kies een certificaat"
               navLabels={{ prev: "Vorige certificaat", next: "Volgende certificaat" }}
             >
-              {activeId === ALLE_ID ? (
+              {!activeId ? (
                 <AllCertificatesGrid
                   primary={PRIMARY_SERVICES}
                   external={EXTERNAL_SERVICES}
@@ -170,14 +166,11 @@ function Hero() {
 // external referrals.
 // ---------------------------------------------------------------------------
 
-const CHOICE_BAR_ITEMS: readonly ChoiceBarItem[] = [
-  { value: ALLE_ID, label: "Alle", variant: "no-border" as const },
-  ...PRIMARY_SERVICES.map((service, index) => ({
-    value: service.entry.id,
-    label: service.pillLabel ?? service.entry.label,
-    variant: index < 3 ? ("elevated" as const) : ("faded" as const),
-  })),
-];
+const CHOICE_BAR_ITEMS: readonly ChoiceBarItem[] = PRIMARY_SERVICES.map((service, index) => ({
+  value: service.entry.id,
+  label: service.pillLabel ?? service.entry.label,
+  variant: index < 3 ? ("elevated" as const) : ("faded" as const),
+}));
 
 // ---------------------------------------------------------------------------
 // All Certificates Grid — shown when "Alle certificaten" is active.
@@ -186,8 +179,6 @@ const CHOICE_BAR_ITEMS: readonly ChoiceBarItem[] = [
 //   faded    (50/50 + 50%) → remaining primary services
 //   ghost    (25% each)    → tier-3 external referrals (ATG, EPD)
 // ---------------------------------------------------------------------------
-
-type SummaryTier = "elevated" | "faded" | "ghost";
 
 function AllCertificatesGrid({
   primary,
@@ -203,106 +194,62 @@ function AllCertificatesGrid({
   const fadedRow = faded.slice(0, 2);
   const fadedTrailing = faded[2];
 
+  const summary = (id: string) => WEGWIJZER_SERVICE_CONTENT[id]?.what;
+
   return (
     <div role="list" className="grid w-full grid-cols-4 gap-section">
       {elevated.map((service) => (
-        <CertificateSummaryCard
+        <BrowseCard
           key={service.entry.id}
-          service={service}
-          tier="elevated"
-          onSelect={onSelect}
+          title={service.entry.label}
+          description={summary(service.entry.id)}
+          variant="elevated"
           className="col-span-4"
-        />
+          asChild
+        >
+          <button type="button" onClick={() => onSelect(service.entry.id)} />
+        </BrowseCard>
       ))}
       {fadedRow.map((service) => (
-        <CertificateSummaryCard
+        <BrowseCard
           key={service.entry.id}
-          service={service}
-          tier="faded"
-          onSelect={onSelect}
+          title={service.entry.label}
+          description={summary(service.entry.id)}
+          variant="faded"
           className="col-span-4 md:col-span-2"
-        />
+          asChild
+        >
+          <button type="button" onClick={() => onSelect(service.entry.id)} />
+        </BrowseCard>
       ))}
       {fadedTrailing && (
-        <CertificateSummaryCard
+        <BrowseCard
           key={fadedTrailing.entry.id}
-          service={fadedTrailing}
-          tier="faded"
-          onSelect={onSelect}
+          title={fadedTrailing.entry.label}
+          description={summary(fadedTrailing.entry.id)}
+          variant="faded"
           className="col-span-4 md:col-span-2"
-        />
+          asChild
+        >
+          <button type="button" onClick={() => onSelect(fadedTrailing.entry.id)} />
+        </BrowseCard>
       )}
       {external.map((service) => (
-        <CertificateSummaryCard
+        <BrowseCard
           key={service.entry.id}
-          service={service}
-          tier="ghost"
-          onSelect={onSelect}
+          title={service.entry.label}
+          description={summary(service.entry.id)}
+          variant="ghost"
+          trailing={
+            <HugeiconsIcon icon={LinkSquare02Icon} className="size-5" strokeWidth={1.5} />
+          }
           className="col-span-2 md:col-span-1"
-        />
+          asChild
+        >
+          <button type="button" onClick={() => onSelect(service.entry.id)} />
+        </BrowseCard>
       ))}
     </div>
-  );
-}
-
-function CertificateSummaryCard({
-  service,
-  tier,
-  onSelect,
-  className,
-}: {
-  service: WegwijzerService;
-  tier: SummaryTier;
-  onSelect: (id: string) => void;
-  className?: string;
-}) {
-  const { entry } = service;
-  const what = WEGWIJZER_SERVICE_CONTENT[entry.id]?.what;
-  const isExternal = service.tier === 3;
-
-  return (
-    <button
-      type="button"
-      role="listitem"
-      onClick={() => onSelect(entry.id)}
-      className={cn(
-        "group flex flex-col items-start gap-component rounded-md border bg-card text-left transition-all motion-safe:hover:-translate-y-0.5 hover:border-accent hover:bg-accent/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        tier === "elevated" && "p-region",
-        tier === "faded" && "p-section",
-        tier === "ghost" && "p-section bg-transparent",
-        className,
-      )}
-    >
-      <div className="flex w-full flex-col gap-micro">
-        {isExternal && (
-          <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            Externe verwijzing
-          </span>
-        )}
-        <h3
-          className={cn(
-            "font-semibold leading-tight text-heading-foreground",
-            tier === "elevated" && "text-heading-lg",
-            tier === "faded" && "text-heading-md",
-            tier === "ghost" && "text-base",
-          )}
-        >
-          {entry.label}
-        </h3>
-      </div>
-      {what && (
-        <p
-          className={cn(
-            "leading-normal text-muted-foreground",
-            tier === "elevated" && "text-base line-clamp-3",
-            tier === "faded" && "text-sm line-clamp-3",
-            tier === "ghost" && "text-sm line-clamp-2",
-          )}
-        >
-          {what}
-        </p>
-      )}
-    </button>
   );
 }
 
