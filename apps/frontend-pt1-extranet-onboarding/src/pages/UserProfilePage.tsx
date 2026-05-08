@@ -21,8 +21,11 @@ import {
   iconStroke,
   Input,
   PageHeader,
+  StepLayout,
+  StepLayoutStepper,
+  useStepLayout,
+  type StepLayoutStep,
 } from "@procertus-ui/ui";
-import { OnboardingStepper, StepLayout, useStepLayout, type OnboardingStepperStep } from "@procertus-ui/ui-lib";
 import {
   type MockPrototypeUser,
   type PrototypeUserProfile,
@@ -44,7 +47,7 @@ import { ProfileTableField } from "./profile/ProfileTableField";
 
 const userNav = PROTOTYPE_PRIMARY_NAV.find((item) => item.key === "user-profile")!;
 
-const USER_EDIT_STEPS: OnboardingStepperStep[] = [
+const USER_EDIT_STEPS: StepLayoutStep[] = [
   { id: "identity", title: "Identiteit" },
   { id: "contact", title: "Contact & werk" },
   { id: "orgs", title: "Organisaties" },
@@ -362,7 +365,7 @@ export function UserProfilePage() {
                 flush
                 stepKey={activeStep}
                 stepper={
-                  <OnboardingStepper
+                  <StepLayoutStepper
                     orientation="horizontal"
                     steps={USER_EDIT_STEPS}
                     activeStep={activeStep}

@@ -1,16 +1,18 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
-  Input,
-  Textarea,
-} from "@procertus-ui/ui";
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
-import { StepLayout, useStepLayout } from "../step-layout";
+import { StepLayout } from "../step-layout";
+import { useStepLayout } from "../step-layout/useStepLayout";
 import { StepLayoutStepper, type StepLayoutStep } from "./StepLayoutStepper";
 
 const stepDefs: StepLayoutStep[] = [
@@ -20,7 +22,7 @@ const stepDefs: StepLayoutStep[] = [
 ];
 
 const meta = {
-  title: "Custom Components/Onboarding/StepLayoutStepper",
+  title: "components/StepLayoutStepper",
   component: StepLayoutStepper,
   parameters: {
     layout: "padded",
@@ -106,11 +108,9 @@ function HorizontalWithStepLayout() {
           </Field>
           <Field>
             <label className="flex cursor-pointer items-center gap-component text-sm text-foreground">
-              <input
-                type="checkbox"
-                className="size-4 rounded border"
+              <Checkbox
                 checked={prereq[flow.activeStep]}
-                onChange={() =>
+                onCheckedChange={() =>
                   setPrereq((p) => {
                     const n = [...p];
                     n[flow.activeStep] = !n[flow.activeStep];
@@ -164,11 +164,9 @@ function HorizontalWithStepLayout() {
           </Field>
           <Field>
             <label className="flex cursor-pointer items-center gap-component text-sm text-foreground">
-              <input
-                type="checkbox"
-                className="size-4 rounded border"
+              <Checkbox
                 checked={prereq[flow.activeStep]}
-                onChange={() =>
+                onCheckedChange={() =>
                   setPrereq((p) => {
                     const n = [...p];
                     n[flow.activeStep] = !n[flow.activeStep];
@@ -196,11 +194,9 @@ function HorizontalWithStepLayout() {
           </Field>
           <Field>
             <label className="flex items-center gap-component text-sm text-foreground">
-              <input
-                type="checkbox"
-                className="size-4 rounded border"
+              <Checkbox
                 checked={prereq[flow.activeStep]}
-                onChange={() =>
+                onCheckedChange={() =>
                   setPrereq((p) => {
                     const n = [...p];
                     n[flow.activeStep] = !n[flow.activeStep];

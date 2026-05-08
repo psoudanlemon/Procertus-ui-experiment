@@ -8,7 +8,7 @@ import { OnboardingShell } from "../components/onboarding/shell/OnboardingShell"
 import { OnboardingSummaryStep } from "../components/onboarding/summary-step/OnboardingSummaryStep";
 import { RegistrationProcessingDialog } from "../components/registration-processing-dialog";
 import { STABLE_STEP_MIN_HEIGHT } from "../components/certification-request-wizard/use-certification-request-wizard-view";
-import { OnboardingStepper, StepLayout } from "@procertus-ui/ui-lib";
+import { StepLayout, StepLayoutStepper } from "@procertus-ui/ui";
 
 import { mergeRegistrationChromeCopy } from "./onboarding-registration-chrome-copy";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
@@ -76,7 +76,7 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
           minHeight={STABLE_STEP_MIN_HEIGHT}
           variant="onboarding"
           stepper={
-            <OnboardingStepper
+            <StepLayoutStepper
               steps={stepperSteps}
               activeStep={stepperActiveStep}
               onStepChange={(index) => {

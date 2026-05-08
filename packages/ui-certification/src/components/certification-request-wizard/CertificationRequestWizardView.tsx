@@ -1,4 +1,3 @@
-import { StepLayout } from "@procertus-ui/ui-lib";
 import {
   Badge,
   Button,
@@ -8,6 +7,7 @@ import {
   CardHeader,
   CardList,
   CardTitle,
+  StepLayout,
   DownloadableItemList,
   Empty,
   EmptyDescription,

@@ -1,4 +1,4 @@
-import type { OnboardingStepperStep, StepLayoutAction } from "@procertus-ui/ui-lib";
+import type { StepLayoutAction, StepLayoutStep } from "@procertus-ui/ui";
 import type { Dispatch, SetStateAction } from "react";
 
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
@@ -38,7 +38,7 @@ export type OnboardingFlowViewProps = {
   drafts: CertificationRequestDraft[];
   effectiveSummaryIncludedDraftIds: readonly string[];
   rows: RequestPackageRow[];
-  steps: OnboardingStepperStep[];
+  steps: StepLayoutStep[];
   activeStep: number;
   goToOnboardingStep: (nextStep: OnboardingStep) => void;
   primaryAction: StepLayoutAction;

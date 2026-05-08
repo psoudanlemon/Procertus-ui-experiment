@@ -1,6 +1,8 @@
 import { Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { cn } from "@procertus-ui/ui";
+import { useMemo } from "react";
+
+import { cn } from "@/lib/utils";
 import {
   Stepper,
   StepperIndicator,
@@ -9,8 +11,7 @@ import {
   StepperSeparator,
   StepperTitle,
   StepperTrigger,
-} from "@procertus-ui/ui";
-import { useMemo } from "react";
+} from "@/components/stepper";
 
 export type StepLayoutStep = {
   id: string;

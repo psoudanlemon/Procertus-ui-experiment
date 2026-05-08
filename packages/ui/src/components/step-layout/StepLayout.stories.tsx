@@ -1,22 +1,22 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useCallback, useState } from "react";
 
+import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Checkbox,
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
-  Input,
-  Textarea,
-} from "@procertus-ui/ui";
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 import { StepLayoutStepper, type StepLayoutStep } from "../step-layout-stepper";
 import { StepLayout } from "./StepLayout";
 import { useStepLayout } from "./useStepLayout";
 
 const meta = {
-  title: "Custom Components/Onboarding/StepLayout",
+  title: "components/StepLayout",
   component: StepLayout,
   parameters: {
     layout: "padded",

@@ -1,4 +1,4 @@
-import type { OnboardingStepperStep } from "@procertus-ui/ui-lib";
+import type { StepLayoutStep } from "@procertus-ui/ui";
 import type { SetStateAction } from "react";
 import { useCallback, useRef } from "react";
 
@@ -114,7 +114,7 @@ export function storyOnboardingStepperSteps(input: {
   context: CustomerContext;
   drafts: CertificationRequestDraft[];
   requestOrigin?: OnboardingRequestOrigin | "";
-}): OnboardingStepperStep[] {
+}): StepLayoutStep[] {
   const { step, context, drafts } = input;
   const requestOrigin = input.requestOrigin ?? "";
   const hasDrafts = drafts.length > 0;

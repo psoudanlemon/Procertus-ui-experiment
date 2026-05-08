@@ -33,7 +33,7 @@ import {
 import { buildOnboardingStepperSteps } from "./onboarding-stepper-model";
 import { ONBOARDING_STEPS } from "./onboarding-types";
 import { registrationCountryOptionsForRequestOrigin, vatPrototypePresetIdsForOrigin } from "./onboarding-request-origin";
-import type { OnboardingStepperStep } from "@procertus-ui/ui-lib";
+import type { StepLayoutStep } from "@procertus-ui/ui";
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
 import { useMemo } from "react";
 import type { CertificationRequestWizardProps } from "../components/certification-request-wizard/CertificationRequestWizard";
@@ -147,7 +147,7 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   const registrationStepOk = hasCustomerContext || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const companyStepOk = companyCoreOk;
   const extrasStepOk = optionalContactsOk;
-  const steps: OnboardingStepperStep[] = useMemo(
+  const steps: StepLayoutStep[] = useMemo(
     () =>
       buildOnboardingStepperSteps({
         step,
