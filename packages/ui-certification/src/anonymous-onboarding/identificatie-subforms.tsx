@@ -105,6 +105,7 @@ export function IdentificatiePersonSubform({
   titleDisabled = false,
   startExtra,
   contactRowExtra,
+  disabled = false,
 }: {
   idPrefix: string;
   value: IdentificatiePersonSubformValue;
@@ -119,8 +120,10 @@ export function IdentificatiePersonSubform({
   titleDisabled?: boolean;
   /** Renders before voornaam (e.g. aanhef select) in the same grid row on md+. */
   startExtra?: ReactNode;
-  /** Renders before telefoon on the same row as telefoon and e-mail on md+ (e.g. rol dropdown). */
+  /** Renders before telefoon on the same row as telefoon en e-mail on md+ (e.g. rol dropdown). */
   contactRowExtra?: ReactNode;
+  /** When true, all inputs in this subform are non-interactive. */
+  disabled?: boolean;
 }) {
   const patch = (partial: Partial<IdentificatiePersonSubformValue>) =>
     onChange({ ...value, ...partial });
@@ -173,6 +176,7 @@ export function IdentificatiePersonSubform({
           <Input
             id={`${idPrefix}-firstName`}
             value={value.firstName}
+            disabled={disabled}
             onChange={(e) => patch({ firstName: e.target.value })}
             autoComplete="given-name"
           />
@@ -184,6 +188,7 @@ export function IdentificatiePersonSubform({
           <Input
             id={`${idPrefix}-lastName`}
             value={value.lastName}
+            disabled={disabled}
             onChange={(e) => patch({ lastName: e.target.value })}
             autoComplete="family-name"
           />
@@ -196,6 +201,7 @@ export function IdentificatiePersonSubform({
             <Input
               id={`${idPrefix}-title`}
               value={value.title}
+              disabled={disabled}
               onChange={(e) => patch({ title: e.target.value })}
               placeholder="Bv. zaakvoerder, CEO (optioneel bij aanhef “geen”)"
             />
@@ -210,6 +216,7 @@ export function IdentificatiePersonSubform({
             id={`${idPrefix}-telephone`}
             type="tel"
             value={value.telephone}
+            disabled={disabled}
             onChange={(e) => patch({ telephone: e.target.value })}
             autoComplete="tel"
           />
@@ -224,6 +231,7 @@ export function IdentificatiePersonSubform({
             id={`${idPrefix}-email`}
             type="email"
             value={value.email}
+            disabled={disabled}
             onChange={(e) => patch({ email: e.target.value })}
             autoComplete="email"
             aria-invalid={emailStructuralError != null}

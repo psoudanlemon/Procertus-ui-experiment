@@ -48,7 +48,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Presentational shell for **anonymous onboarding**: wraps `CertificationRequestWizard` on the request step, then `StepLayout` for registratie (origin → customer → company → extras → summary) plus `RegistrationProcessingDialog`. Applications derive props from `useAnonymousOnboardingFlow` (router + localStorage). Stories use static fixtures and `backendKind: "memory"` for the wizard.',
+          'Presentational shell for **anonymous onboarding**: wraps `CertificationRequestWizard` on the request step, then `StepLayout` for registratie (origin → customer → company → invoicing → extras → summary) plus `RegistrationProcessingDialog`. Applications derive props from `useAnonymousOnboardingFlow` (router + localStorage). Stories use static fixtures and `backendKind: "memory"` for the wizard.',
       },
     },
   },
@@ -242,8 +242,41 @@ export const CompanyLookupReady: StoryObj<typeof meta> = {
   },
 };
 
+export const InvoicingStep: StoryObj<typeof meta> = {
+  name: "06 — Facturatie (invoicing)",
+  render: () => {
+    const drafts = storyOnboardingDrafts;
+    const ctx = storyCustomerContext();
+    const activePreset =
+      findVatPrototypePreset(DEFAULT_VAT_PROTOTYPE_PRESET_ID) ?? VAT_PROTOTYPE_PRESETS[0]!;
+    return (
+      <AnonymousOnboardingFlowView
+        {...baseAnonymousOnboardingFlowViewProps({
+          step: "invoicing",
+          context: ctx,
+          drafts,
+          steps: storyOnboardingStepperSteps({
+            step: "invoicing",
+            context: ctx,
+            drafts,
+            requestOrigin: storyRequestOrigin,
+          }),
+          activeStep: stepIndex("invoicing"),
+          companyLookupPhase: "ready",
+          lookupProgress: 100,
+          lookupStepIndex: 4,
+          vatLookupStepLabels: vatLookupSimulationStepsForPreset(activePreset),
+          primaryAction: { label: "Verder", onClick: noop, disabled: false },
+          rows: [],
+          effectiveSummaryIncludedDraftIds: [],
+        })}
+      />
+    );
+  },
+};
+
 export const ExtrasStep: StoryObj<typeof meta> = {
-  name: "06 — Extra contacten",
+  name: "07 — Extra contacten",
   render: () => {
     const drafts = storyOnboardingDrafts;
     const ctx = storyCustomerContext();
@@ -271,12 +304,12 @@ export const ExtrasStep: StoryObj<typeof meta> = {
 };
 
 export const SummaryStep: StoryObj<typeof meta> = {
-  name: "07 — Summary",
+  name: "08 — Summary",
   render: () => <AnonymousOnboardingFlowView {...baseAnonymousOnboardingFlowViewProps()} />,
 };
 
 export const RegistrationProcessingOpen: StoryObj<typeof meta> = {
-  name: "08 — Registration dialog (open)",
+  name: "09 — Registration dialog (open)",
   render: () => (
     <AnonymousOnboardingFlowView
       {...baseAnonymousOnboardingFlowViewProps({

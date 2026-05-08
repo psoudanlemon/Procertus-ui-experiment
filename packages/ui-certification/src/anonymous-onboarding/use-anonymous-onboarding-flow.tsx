@@ -36,6 +36,7 @@ import {
   formatRequesterStepperLabel,
   isLegalRepresentativeCaptureComplete,
   isOnboardingCompanyCoreStepValid,
+  isOnboardingInvoicingStepValid,
   isOnboardingOptionalContactsStepValid,
   isRegistrantCaptureValidForContext,
   mergeCustomerContextDeep,
@@ -247,6 +248,7 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
 
   const activeStep = stepIndex(step);
   const hasDrafts = drafts.length > 0;
+  const certificationInquiryDraftIds = useMemo(() => drafts.map((d) => d.id), [drafts]);
   const hasCustomerContext =
     (context.applicantIsLegalRepresentative === "yes" ||
       context.applicantIsLegalRepresentative === "no") &&
@@ -256,13 +258,16 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
       ? isRegistrationIdentifierValidForOrigin(context.vatNumber ?? "", requestOrigin)
       : isVatIdentifierPlausible(context.vatNumber ?? ""));
   const companyCoreOk =
-    isOnboardingCompanyCoreStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+    isOnboardingCompanyCoreStepValid(context, certificationInquiryDraftIds) ||
+    ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  const invoicingStepOk =
+    isOnboardingInvoicingStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const optionalContactsOk =
     isOnboardingOptionalContactsStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const registrationStepOk = hasCustomerContext || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const companyStepOk = companyCoreOk;
   const extrasStepOk = optionalContactsOk;
-  const summaryStepOk = companyCoreOk && optionalContactsOk;
+  const summaryStepOk = companyCoreOk && invoicingStepOk && optionalContactsOk;
   const steps: OnboardingStepperStep[] = useMemo(
     () => [
       {
@@ -300,14 +305,27 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
       {
         id: "company",
         title: "Bedrijfsgegevens",
-        description: context.organizationName || "Naam en adres",
+        description:
+          context.organizationName.trim() ||
+          (context.headOfficeIsCertificationLegalEntity === "no"
+            ? "Maatschappelijke zetel · vestigingen"
+            : "Maatschappelijke zetel"),
         available: hasDrafts && requestOrigin !== "" && registrationStepOk,
+      },
+      {
+        id: "invoicing",
+        title: "Facturatie",
+        description:
+          context.invoicingEmail.trim() ||
+          (context.invoicingDiffersFromHeadOffice ? "Vestiging voor facturatie" : "Zetel als facturatie"),
+        available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyCoreOk,
       },
       {
         id: "extras",
         title: "Extra contacten",
-        description: "Factuur-, certificatie- en reservecontact (optioneel)",
-        available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyCoreOk,
+        description: "Certificatie- en reservecontact (optioneel)",
+        available:
+          hasDrafts && requestOrigin !== "" && registrationStepOk && companyCoreOk && invoicingStepOk,
       },
       {
         id: "summary",
@@ -316,7 +334,16 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
         available: hasDrafts && requestOrigin !== "" && registrationStepOk && summaryStepOk,
       },
     ],
-    [context, drafts.length, companyCoreOk, registrationStepOk, requestOrigin, step, summaryStepOk],
+    [
+      context,
+      drafts,
+      companyCoreOk,
+      invoicingStepOk,
+      registrationStepOk,
+      requestOrigin,
+      step,
+      summaryStepOk,
+    ],
   );
 
   const updateContext = (id: keyof CustomerContext, value: string) => {
@@ -378,6 +405,7 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
       if ((migratedStep as string) === "profile") migratedStep = "summary";
       if ((migratedStep as string) === "activation") migratedStep = "summary";
       if ((migratedStep as string) === "review") migratedStep = "summary";
+      if ((migratedStep as string) === "intake") migratedStep = "customer";
       if (!ONBOARDING_STEPS.includes(migratedStep)) migratedStep = "request";
       if (migratedStep !== prev.step) {
         fixes.step = migratedStep;
@@ -389,6 +417,7 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
           prev.drafts.length > 0 &&
           (resumeStep === "customer" ||
             resumeStep === "company" ||
+            resumeStep === "invoicing" ||
             resumeStep === "extras" ||
             resumeStep === "summary")
         ) {
@@ -411,6 +440,14 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
           address?: string;
         },
       );
+      const candidateStep = (fixes.step ?? prev.step) as OnboardingStep;
+      if (
+        !ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION &&
+        (candidateStep === "extras" || candidateStep === "summary") &&
+        !isOnboardingInvoicingStepValid(nextContext)
+      ) {
+        fixes.step = "invoicing";
+      }
       if (JSON.stringify(nextContext) !== JSON.stringify(prev.context)) {
         fixes.context = nextContext;
       }
@@ -603,9 +640,15 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
         : step === "company"
           ? {
               label: "Verder",
-              onClick: () => setFlowState((prev) => ({ ...prev, step: "extras" })),
+              onClick: () => goToOnboardingStep("invoicing"),
               disabled: !companyStepOk || companyLookupPhase !== "ready",
             }
+          : step === "invoicing"
+            ? {
+                label: "Verder",
+                onClick: () => goToOnboardingStep("extras"),
+                disabled: !invoicingStepOk,
+              }
           : step === "extras"
             ? {
                 label: "Verder",

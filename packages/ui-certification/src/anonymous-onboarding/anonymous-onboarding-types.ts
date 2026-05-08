@@ -16,6 +16,23 @@ export type OnboardingRegisteredPerson = {
 /** Whether the person completing registration is the legal representative named below; empty until answered. */
 export type ApplicantLegalRepresentativeAnswer = "" | "yes" | "no";
 
+export type CertificationLegalEntityAnswer = "" | "yes" | "no";
+
+/**
+ * Operational site / establishment for certification when it is not the head office (maatschappelijke zetel).
+ * No VAT: one organisation number applies; this is extra legal name and address only.
+ */
+export type OnboardingVestiging = {
+  id: string;
+  legalName: string;
+  addressStreet: string;
+  addressHouseNumber: string;
+  addressPostalCode: string;
+  addressCity: string;
+  country: string;
+  addressCountryCode: string;
+};
+
 export type CustomerContext = {
   representativeFirstName: string;
   representativeLastName: string;
@@ -92,6 +109,13 @@ export type CustomerContext = {
    */
   invoicingContactPersonRegistryId: string;
   invoicingEmail: string;
+  /**
+   * When true, juridisch facturatiedrukker is a {@link onboardingVestigingen} entry, not de
+   * maatschappelijke zetel. Nieuwe vestigingen komen ook op de bedrijfsstap terecht (zelfde lijst).
+   */
+  invoicingDiffersFromHeadOffice: boolean;
+  /** Gekozen vestigings-id uit {@link onboardingVestigingen} wanneer {@link invoicingDiffersFromHeadOffice}. */
+  invoicingVestigingId: string;
   /** Billing address when different from the main organisation address. */
   addInvoicingAddressOverride: boolean;
   invoicingAddressStreet: string;
@@ -107,6 +131,18 @@ export type CustomerContext = {
    */
   onboardingRegisteredPersons: OnboardingRegisteredPerson[];
   /**
+   * Vestigingen registered when certifications do not legally run via the maatschappelijke zetel alone.
+   * No extra VAT/BTW-number; legal name + address only.
+   */
+  onboardingVestigingen: OnboardingVestiging[];
+  /**
+   * Draft id ({@link CertificationRequestDraft}) → vestiging id from {@link onboardingVestigingen}.
+   * Same vestiging may be chosen for multiple certification inquiries (hergebruik).
+   */
+  certificationInquiryVestigingId: Record<string, string>;
+  /** When true, certifications use maatschappelijke zetel as legal contracting entity without extra vestigingen. */
+  headOfficeIsCertificationLegalEntity: CertificationLegalEntityAnswer;
+  /**
    * When {@link addCertificationContactOverride} and linked to registry; otherwise
    * {@link ONBOARDING_PERSON_NEW_ID}.
    */
@@ -118,12 +154,13 @@ export type CustomerContext = {
   certificationSecondaryPersonRegistryId: string;
 };
 
+/** Ordered wizard steps aligned with {@link AnonymousOnboardingFlowView} and the registration stepper. */
 export const ONBOARDING_STEPS = [
   "request",
   "origin",
-  "intake",
   "customer",
   "company",
+  "invoicing",
   "extras",
   "summary",
 ] as const;

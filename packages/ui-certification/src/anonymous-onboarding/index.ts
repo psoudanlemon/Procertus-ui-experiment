@@ -17,6 +17,8 @@ export type {
   AnonymousOnboardingFlowState,
   ApplicantLegalRepresentativeAnswer,
   OnboardingRegisteredPerson,
+  CertificationLegalEntityAnswer,
+  OnboardingVestiging,
 } from "./anonymous-onboarding-types";
 export {
   IdentificatiePersonTitleRoleCapture,
@@ -26,7 +28,14 @@ export {
 export { ONBOARDING_STEPS } from "./anonymous-onboarding-types";
 export {
   ONBOARDING_PERSON_NEW_ID,
+  emptyOnboardingVestiging,
   formatOnboardingPersonRegistryOptionLabel,
+  formatVestigingRegistryOptionLabel,
+  isCertificationVestigingMappingComplete,
+  isOnboardingInvoicingStepValid,
+  isOnboardingVestigingCaptureComplete,
+  newOnboardingVestigingId,
+  vestigingAddressSubformValue,
 } from "./anonymous-onboarding-flow-helpers";
 export type { OnboardingRequestOrigin } from "./onboarding-request-origin";
 export {

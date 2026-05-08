@@ -16,6 +16,7 @@ import {
   isLegalRepresentativeCaptureComplete,
   isOnboardingCompanyCoreStepValid,
   isOnboardingCompanyStepValid,
+  isOnboardingInvoicingStepValid,
   isRegistrantCaptureValidForContext,
   onboardingReviewRequesterFromContext,
   resolveFlowContext,
@@ -57,12 +58,14 @@ export function storyCustomerContext(overrides: Partial<CustomerContext> = {}): 
     representativeRole: "Zaakvoerder",
     representativeRolePreset: "managing_director",
     applicantIsLegalRepresentative: "yes",
+    headOfficeIsCertificationLegalEntity: "yes",
     organizationName: "Voorbeeld BV",
     country: "België",
     addressStreet: "Kerkstraat",
     addressHouseNumber: "12",
     addressPostalCode: "9000",
     addressCity: "Gent",
+    invoicingEmail: "facturatie@voorbeeld.nl",
     ...overrides,
   });
 }
@@ -81,12 +84,19 @@ function hasCustomerContext(
   );
 }
 
-function hasCompanyContext(ctx: CustomerContext): boolean {
-  return isOnboardingCompanyStepValid(ctx);
+function hasInvoicingContext(ctx: CustomerContext): boolean {
+  return isOnboardingInvoicingStepValid(ctx);
 }
 
-function hasCompanyCoreContext(ctx: CustomerContext): boolean {
-  return isOnboardingCompanyCoreStepValid(ctx);
+function hasCompanyContext(ctx: CustomerContext, drafts: CertificationRequestDraft[]): boolean {
+  return isOnboardingCompanyStepValid(
+    ctx,
+    drafts.map((d) => d.id),
+  );
+}
+
+function hasCompanyCoreContext(ctx: CustomerContext, drafts: CertificationRequestDraft[]): boolean {
+  return isOnboardingCompanyCoreStepValid(ctx, drafts.map((d) => d.id));
 }
 
 /** Default origin for Storybook fixtures (Belgium). */
@@ -103,11 +113,13 @@ export function storyOnboardingStepperSteps(input: {
   const requestOrigin = input.requestOrigin ?? "";
   const hasDrafts = drafts.length > 0;
   const hasCust = hasCustomerContext(context, requestOrigin);
-  const hasComp = hasCompanyContext(context);
-  const hasCore = hasCompanyCoreContext(context);
+  const hasInv = hasInvoicingContext(context);
+  const hasComp = hasCompanyContext(context, drafts);
+  const hasCore = hasCompanyCoreContext(context, drafts);
   const registrationStepOk = hasCust || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const companyStepOk = hasComp || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const companyCoreOk = hasCore || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  const invoicingStepOk = hasInv || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   return [
     {
       id: "request",
@@ -144,14 +156,32 @@ export function storyOnboardingStepperSteps(input: {
     {
       id: "company",
       title: "Bedrijfsgegevens",
-      description: context.organizationName || "Naam en adres",
+      description:
+        context.organizationName.trim() ||
+        (context.headOfficeIsCertificationLegalEntity === "no"
+          ? "Maatschappelijke zetel · vestigingen"
+          : "Maatschappelijke zetel"),
       available: hasDrafts && requestOrigin !== "" && registrationStepOk,
+    },
+    {
+      id: "invoicing",
+      title: "Facturatie",
+      description:
+        context.invoicingEmail.trim() ||
+        (context.invoicingDiffersFromHeadOffice ? "Vestiging voor facturatie" : "Zetel als facturatie"),
+      available:
+        hasDrafts && requestOrigin !== "" && registrationStepOk && companyCoreOk,
     },
     {
       id: "extras",
       title: "Extra contacten",
-      description: "Factuur-, certificatie- en reservecontact (optioneel)",
-      available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyCoreOk,
+      description: "Certificatie- en reservecontact (optioneel)",
+      available:
+        hasDrafts &&
+        requestOrigin !== "" &&
+        registrationStepOk &&
+        companyCoreOk &&
+        invoicingStepOk,
     },
     {
       id: "summary",

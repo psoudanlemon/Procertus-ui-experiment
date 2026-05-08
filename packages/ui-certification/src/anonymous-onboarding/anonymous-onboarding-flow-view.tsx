@@ -1,10 +1,4 @@
-import {
-  Alert01Icon,
-  ArrowRight02Icon,
-  CheckmarkCircle02Icon,
-  FilePlusIcon,
-  Mail01Icon,
-} from "@hugeicons/core-free-icons";
+import { Alert01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Alert,
@@ -75,16 +69,23 @@ import {
   certificationSecondaryContactDisabledHint,
   customerContextAfterPrototypePresetChange,
   emptyIdentificatiePersonState,
+  emptyOnboardingVestiging,
   firmaAddressSubformValue,
+  formatVestigingRegistryOptionLabel,
+  formatPostalAddressDisplay,
   invoicingAddressSubformValue,
   isLegalRepresentativeCaptureComplete,
+  isOnboardingVestigingCaptureComplete,
   isRegistrantCaptureValidForContext,
+  legalRepresentativePersonValue,
   onboardingReviewRequesterFromContext,
   buildFullOnboardingPackageEntityRecords,
   resolveFlowContext,
   summaryDisplayNameForRegisteredPerson,
   summaryRolesForRegisteredPerson,
   ONBOARDING_PERSON_NEW_ID,
+  vestigingAddressSubformValue,
+  newOnboardingVestigingId,
 } from "./anonymous-onboarding-flow-helpers";
 import {
   companyRegistrationSourceCountryLabel,
@@ -109,6 +110,13 @@ import { ONBOARDING_STEPS } from "./anonymous-onboarding-types";
 import type { AnonymousOnboardingFlowViewProps } from "./anonymous-onboarding-flow-view-props";
 import { AnonymousOnboardingShell } from "./anonymous-onboarding-shell";
 import { personFormCardClassName } from "./person-form-card-variants";
+
+/** Select sentinel for facturatievestiging picker. */
+const CERT_INVOICE_VEST_UNASSIGNED = "__unset_invoice_vest__";
+const CERT_INVOICE_VEST_NEW = "__new_invoice_vest__";
+
+/** Select sentinel: Radix Select must not use an empty-string item value. */
+const CERT_INQUIRY_VEST_UNASSIGNED = "__unset_inquiry_vest__";
 
 /** Single labeled input used across customer and company steps (Storybook documents this export). */
 export function AnonymousOnboardingContextField({
@@ -252,7 +260,15 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
 
   const originFieldBase = useId();
   const applicantLegalRepFieldBase = useId();
+  /** Personal fields for legal representative (and registrant block) stay locked until Ja/Nee above. */
+  const applicantLegalRepPersonFieldsLocked = context.applicantIsLegalRepresentative === "";
   const invoicingFieldBase = useId();
+  const legalEntityFieldBase = useId();
+
+  const draftsSortedForCertification = useMemo(
+    () => sortDraftsByIntentAndProduct(drafts),
+    [drafts],
+  );
 
   const invoicingCountryOptions = useMemo(() => {
     const c = context.invoicingCountry?.trim();
@@ -266,6 +282,19 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
     const t = context.invoicingCountry?.trim() ?? "";
     return t && invoicingCountryOptions.includes(t) ? t : COUNTRY_SELECT_NONE;
   }, [context.invoicingCountry, invoicingCountryOptions]);
+
+  const invoicingVestigingSelectRadixValue = useMemo(
+    () => (context.invoicingVestigingId ?? "").trim() || CERT_INVOICE_VEST_UNASSIGNED,
+    [context.invoicingVestigingId],
+  );
+
+  const selectedInvoicingVestiging = useMemo(() => {
+    const id = (context.invoicingVestigingId ?? "").trim();
+    if (!id || !context.invoicingDiffersFromHeadOffice) {
+      return undefined;
+    }
+    return context.onboardingVestigingen.find((x) => x.id === id);
+  }, [context.invoicingVestigingId, context.invoicingDiffersFromHeadOffice, context.onboardingVestigingen]);
 
   const registrationIdOrigin = requestOrigin !== "" ? requestOrigin : "other";
 
@@ -373,10 +402,12 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
               : step === "customer"
                 ? "Registratie"
                 : step === "company"
-                  ? "Uw organisatie"
-                  : step === "extras"
-                    ? "Extra contacten"
-                    : "Nazicht"
+                  ? "Maatschappelijke zetel en certificatie"
+                  : step === "invoicing"
+                    ? "Facturatie"
+                    : step === "extras"
+                      ? "Extra contacten"
+                      : "Nazicht"
           }
           description={
             step === "origin"
@@ -384,10 +415,12 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
               : step === "customer"
                 ? "Vul eerst het identificatienummer van uw organisatie in (afhankelijk van het gekozen land). Daarna vult u de wettelijke vertegenwoordiger en een geldig e-mailadres in."
                 : step === "company"
-                  ? "Naam, adres en telefoon van uw bedrijf. Vul een geldig facturatie-e-mailadres in. Optioneel kunt u hier ook een afwijkend facturatieadres toevoegen."
-                  : step === "extras"
-                    ? "Optioneel: een contact voor facturatie, een apart contact voor certificatie en inspectie, en eventueel een tweede (reserve)contact. Elk blok staat los van de andere. U kunt deze stap overslaan."
-                    : "Controleer uw gegevens en aanvragen. Daarna kunt u uw registratie indienen."
+                  ? "Hier registreert u de maatschappelijke zetel zoals gekoppeld aan uw organisatienummer. Daarna geeft u aan of die zetel juridisch optreedt voor de geselecteerde certificaties — zo niet, wijst u per certificatie een vestiging toe (naam en adres, zonder apart btw-nummer)."
+                  : step === "invoicing"
+                    ? "Facturatie-e-mail is verplicht. Standaard gelden de maatschappelijke zetel en de wettelijke vertegenwoordiger als factuurcontact; gebruik de blokken voor een vestiging op de factuur, een afwijkend postadres of een andere contactpersoon waar nodig."
+                    : step === "extras"
+                      ? "Optioneel: een contact voor certificatie en inspectie, en eventueel een tweede (reserve)contact. U kunt deze stap overslaan."
+                      : "Controleer uw gegevens en aanvragen. Daarna kunt u uw registratie indienen."
           }
           backAction={backAction}
           primaryAction={primaryAction}
@@ -704,42 +737,53 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
                 className={personFormCardClassName("chromeless")}
                 aria-labelledby={`${applicantLegalRepFieldBase}-legal-rep-heading`}
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0 space-y-1">
-                    <h3
-                      id={`${applicantLegalRepFieldBase}-legal-rep-heading`}
-                      className="text-sm font-semibold tracking-tight text-foreground"
-                    >
-                      Gegevens wettelijke vertegenwoordiger
-                    </h3>
-                    <p className="text-xs leading-relaxed text-muted-foreground">
-                      {context.applicantIsLegalRepresentative === "no"
-                        ? "Vul hier de persoon in die uw organisatie wettelijk mag vertegenwoordigen en de registratie mag ondertekenen."
-                        : context.applicantIsLegalRepresentative === "yes"
-                          ? "Dit adres gebruiken we voor uw account en berichten over uw aanvraag, tenzij u straks een ander contact opgeeft."
-                          : "Kies hierboven of u de wettelijke vertegenwoordiger bent; vul daarna deze gegevens in."}
-                    </p>
+                <fieldset
+                  disabled={applicantLegalRepPersonFieldsLocked}
+                  className={cn(
+                    "min-w-0 space-y-4 border-0 p-0",
+                    applicantLegalRepPersonFieldsLocked && "opacity-55",
+                  )}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 space-y-1">
+                      <h3
+                        id={`${applicantLegalRepFieldBase}-legal-rep-heading`}
+                        className="text-sm font-semibold tracking-tight text-foreground"
+                      >
+                        Gegevens wettelijke vertegenwoordiger
+                      </h3>
+                      <p className="text-xs leading-relaxed text-muted-foreground">
+                        {context.applicantIsLegalRepresentative === "no"
+                          ? "Vul hier de persoon in die uw organisatie wettelijk mag vertegenwoordigen en de registratie mag ondertekenen."
+                          : context.applicantIsLegalRepresentative === "yes"
+                            ? "Dit adres gebruiken we voor uw account en berichten over uw aanvraag, tenzij u straks een ander contact opgeeft."
+                            : "Kies hierboven of u de wettelijke vertegenwoordiger bent; vul daarna deze gegevens in."}
+                      </p>
+                    </div>
+                    <SubformCompletionBadge
+                      complete={isLegalRepresentativeCaptureComplete(context)}
+                      showIncompletePlaceholder
+                      className="shrink-0"
+                    />
                   </div>
-                  <SubformCompletionBadge
-                    complete={isLegalRepresentativeCaptureComplete(context)}
-                    showIncompletePlaceholder
-                    className="shrink-0"
+                  <IdentificatiePersonTitleRoleCapture
+                    idPrefix="legal-rep"
+                    branch="legalRepresentative"
+                    context={context}
+                    patchContext={patchContext}
+                    disabled={applicantLegalRepPersonFieldsLocked}
+                    copy={{
+                      titleLabel: "Title",
+                      roleLabel: "Role",
+                      emailHint:
+                        context.applicantIsLegalRepresentative === "no"
+                          ? "Het professionele e-mailadres van de wettelijke vertegenwoordiger is verplicht; aanhef en functie zijn optioneel."
+                          : context.applicantIsLegalRepresentative === "yes"
+                            ? "Dit e-mailadres is verplicht voor uw account; aanhef en functie zijn optioneel. Wij gebruiken het voor berichten over uw aanvraag, tenzij u straks een ander contact opgeeft."
+                            : "Maak hierboven eerst een keuze; daarna worden deze velden actief.",
+                    }}
                   />
-                </div>
-                <IdentificatiePersonTitleRoleCapture
-                  idPrefix="legal-rep"
-                  branch="legalRepresentative"
-                  context={context}
-                  patchContext={patchContext}
-                  copy={{
-                    titleLabel: "Title",
-                    roleLabel: "Role",
-                    emailHint:
-                      context.applicantIsLegalRepresentative === "no"
-                        ? "Het professionele e-mailadres van de wettelijke vertegenwoordiger is verplicht; aanhef en functie zijn optioneel."
-                        : "Dit e-mailadres is verplicht voor uw account; aanhef en functie zijn optioneel. Wij gebruiken het voor berichten over uw aanvraag, tenzij u straks een ander contact opgeeft.",
-                  }}
-                />
+                </fieldset>
               </section>
             </div>
           ) : null}
@@ -868,17 +912,18 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
                   ) : null}
                   <div className="space-y-1">
                     <h3 className="text-sm font-semibold tracking-tight text-foreground">
-                      Organisatie
+                      Maatschappelijke zetel
                     </h3>
                     <p className="text-xs leading-relaxed text-muted-foreground">
-                      Gegevens van uw bedrijf zoals we ze nodig hebben voor uw traject. Controleer
-                      ze vooral als er automatisch iets werd ingevuld.
+                      Dit zijn de officiële gegevens van uw hoofdrechtspersoon, zoals die aan uw
+                      identificatienummer gekoppeld zijn. Ze kunnen afwijkend zijn van waar productie
+                      of certificatie fysiek plaatsvindt.
                     </p>
                   </div>
                   <div className="grid gap-4 md:grid-cols-2">
                     <AnonymousOnboardingContextField
                       id="organizationName"
-                      label="Bedrijfsnaam"
+                      label="Juridische naam van de onderneming (zetel)"
                       value={context.organizationName}
                       onChange={updateContext}
                       placeholder="Officiële bedrijfsnaam"
@@ -897,46 +942,6 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
                       </FieldContent>
                     </Field>
                   </div>
-                  <Field data-invalid={invoicingEmailIssue ? true : undefined}>
-                    <FieldLabel htmlFor={`${invoicingFieldBase}-email`}>
-                      E-mail voor facturatie <span className="text-destructive">*</span>
-                    </FieldLabel>
-                    <FieldContent>
-                      <div className="flex min-w-0 items-center gap-1.5">
-                        <Input
-                          id={`${invoicingFieldBase}-email`}
-                          type="email"
-                          className="min-w-0 flex-1 max-w-xl"
-                          value={context.invoicingEmail}
-                          onChange={(e) => updateContext("invoicingEmail", e.target.value)}
-                          autoComplete="email"
-                          aria-required
-                          aria-invalid={invoicingEmailIssue != null}
-                          aria-describedby={
-                            invoicingEmailIssue
-                              ? `${invoicingFieldBase}-email-error ${invoicingFieldBase}-email-hint`
-                              : `${invoicingFieldBase}-email-hint`
-                          }
-                        />
-                        <SubformCompletionBadge
-                          complete={invoicingEmailIssue == null}
-                          title="Facturatie-e-mail ingevuld"
-                        />
-                      </div>
-                      {invoicingEmailIssue ? (
-                        <p
-                          id={`${invoicingFieldBase}-email-error`}
-                          className="text-left text-sm font-medium text-destructive"
-                          role="alert"
-                        >
-                          {invoicingEmailIssue}
-                        </p>
-                      ) : null}
-                      <FieldDescription id={`${invoicingFieldBase}-email-hint`}>
-                        Dit adres ontvangt facturen en herinneringen.
-                      </FieldDescription>
-                    </FieldContent>
-                  </Field>
                   <IdentificatieAddressSubform
                     idPrefix="firma-address"
                     value={firmaAddressSubformValue(context)}
@@ -963,56 +968,619 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
                       country: companyHints.country,
                     }}
                   />
-                  <IdentificatieOptionalBlock
-                    switchId={`${invoicingFieldBase}-inv-alt-address`}
-                    title="Afwijkend facturatieadres"
-                    description="Facturen naar een ander adres dan het bedrijfsadres."
-                    checked={context.addInvoicingAddressOverride}
-                    onCheckedChange={(on) => patchContext({ addInvoicingAddressOverride: on })}
-                  >
-                    <IdentificatieAddressSubform
-                      idPrefix="invoicing-address"
-                      value={invoicingAddressSubformValue(context)}
-                      onChange={(v) => {
-                        const iso =
-                          registrationIsoCodeFromDutchCountryLabel(v.country.trim()) || "";
-                        patchContext({
-                          invoicingAddressStreet: v.street,
-                          invoicingAddressHouseNumber: v.houseNumber,
-                          invoicingAddressPostalCode: v.postalCode,
-                          invoicingAddressCity: v.locality,
-                          invoicingCountry: v.country,
-                          invoicingAddressCountryCode: iso,
-                        });
-                      }}
-                      countryOptions={invoicingCountryOptions}
-                      countrySelectValue={invoicingCountrySelectValue}
-                      onCountryChange={(cv) =>
-                        updateContext("invoicingCountry", cv === COUNTRY_SELECT_NONE ? "" : cv)
-                      }
-                      showCountryCodeField={false}
-                    />
-                  </IdentificatieOptionalBlock>
+                  {draftsSortedForCertification.length > 0 ? (
+                    <div className="space-y-6 border-t border-border pt-6">
+                      <div className="space-y-1">
+                        <h3 className="text-sm font-semibold tracking-tight text-foreground">
+                          Certificatie en juridische entiteit
+                        </h3>
+                        <p className="text-xs leading-relaxed text-muted-foreground">
+                          Zoals eerder uw relatie tot de <span className="font-medium text-foreground">wettelijke vertegenwoordiger</span>{" "}
+                          werd bevestigd, moet hier duidelijk zijn of de hierboven geregistreerde{" "}
+                          <span className="font-medium text-foreground">maatschappelijke zetel</span> juridisch
+                          optreedt voor elke gekozen certificatie. Zo niet: u registreert{" "}
+                          <span className="font-medium text-foreground">vestigingen</span> — extra
+                          rechtseenheden binnen uw organisatie <span className="font-medium text-foreground">zonder een apart btw-nummer</span>.
+                          Daarna koppelt u per certificatie-een zo’n vestiging; u mag dezelfde vestiging
+                          hergebruiken voor verschillende certificatievragen.
+                        </p>
+                      </div>
+                      <Field>
+                        <FieldLabel id={`${legalEntityFieldBase}-legend`}>
+                          Kan de hierboven geregistreerde maatschappelijke zetel optreden als
+                          juridisch aanspreekpunt (rechtspersoon) voor al uw gekozen certificatievragen
+                          uit dit dossier?
+                        </FieldLabel>
+                        <FieldContent>
+                          <RadioGroup
+                            className="gap-3"
+                            aria-labelledby={`${legalEntityFieldBase}-legend`}
+                            value={
+                              context.headOfficeIsCertificationLegalEntity === ""
+                                ? undefined
+                                : context.headOfficeIsCertificationLegalEntity
+                            }
+                            onValueChange={(v) => {
+                              if (v === "yes") {
+                                patchContext({
+                                  headOfficeIsCertificationLegalEntity: "yes",
+                                  onboardingVestigingen: [],
+                                  certificationInquiryVestigingId: {},
+                                });
+                              } else if (v === "no") {
+                                patchContext({ headOfficeIsCertificationLegalEntity: "no" });
+                              }
+                            }}
+                          >
+                            <div className="flex items-center gap-2">
+                              <RadioGroupItem value="yes" id={`${legalEntityFieldBase}-yes`} />
+                              <Label
+                                htmlFor={`${legalEntityFieldBase}-yes`}
+                                className="cursor-pointer font-normal"
+                              >
+                                Ja, voor alle geselecteerde certificaties volstaat deze zetel
+                              </Label>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <RadioGroupItem value="no" id={`${legalEntityFieldBase}-no`} />
+                              <Label
+                                htmlFor={`${legalEntityFieldBase}-no`}
+                                className="cursor-pointer font-normal"
+                              >
+                                Nee, voor minstens één certificaat gaat het juridisch via een andere
+                                vestiging dan de zetel
+                              </Label>
+                            </div>
+                          </RadioGroup>
+                          <FieldDescription>
+                            Kiest u &quot;nee&quot;: voeg zoveel vestigingen toe als nodig zijn (naam +
+                            adres, geen extra btw-nummer) en koppel elk van uw certificatievragen aan
+                            de juiste vestiging — dezelfde vestiging mag u meermaals gebruiken.
+                          </FieldDescription>
+                        </FieldContent>
+                      </Field>
+                      {context.headOfficeIsCertificationLegalEntity === "no" ? (
+                        <div className="space-y-6">
+                          <div className="flex flex-wrap items-center justify-between gap-3">
+                            <p className="text-xs leading-relaxed text-muted-foreground">
+                              Registreer hier uw vestigingen. Per certificatie (zoals gekozen in uw
+                              pakket) wijst u daarna onderaan een vestiging toe.
+                            </p>
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="outline"
+                              className="shrink-0"
+                              onClick={() =>
+                                patchContext({
+                                  onboardingVestigingen: [
+                                    ...context.onboardingVestigingen,
+                                    emptyOnboardingVestiging(),
+                                  ],
+                                })
+                              }
+                            >
+                              Vestiging toevoegen
+                            </Button>
+                          </div>
+                          <div className="space-y-4">
+                            {context.onboardingVestigingen.length === 0 ? (
+                              <p className="text-sm text-muted-foreground">
+                                Nog geen vestiging geregistreerd — gebruik de knop{' '}
+                                <span className="font-medium text-foreground">&quot;Vestiging
+                                toevoegen&quot;</span>.
+                              </p>
+                            ) : null}
+                            {context.onboardingVestigingen.map((ve, veIndex) => {
+                              const usedByDraft = draftsSortedForCertification.some(
+                                (d) =>
+                                  (context.certificationInquiryVestigingId[d.id] ?? "").trim() ===
+                                  ve.id,
+                              );
+                              const usedForInvoicing =
+                                context.invoicingDiffersFromHeadOffice &&
+                                (context.invoicingVestigingId ?? "").trim() === ve.id;
+                              const vestigingInUse = usedByDraft || usedForInvoicing;
+                              return (
+                                <section
+                                  key={ve.id}
+                                  className={personFormCardClassName("emphasized")}
+                                  aria-labelledby={`${legalEntityFieldBase}-ve-${ve.id}-title`}
+                                >
+                                  <div className="flex flex-wrap items-start justify-between gap-3">
+                                    <div className="min-w-0 space-y-1">
+                                      <h4
+                                        id={`${legalEntityFieldBase}-ve-${ve.id}-title`}
+                                        className="text-sm font-semibold tracking-tight text-foreground"
+                                      >
+                                        Vestiging {veIndex + 1}
+                                      </h4>
+                                      <p className="text-xs leading-relaxed text-muted-foreground">
+                                        Juridische naam en adres voor certificatie. Geen afzonderlijk btw-nummer.
+                                      </p>
+                                    </div>
+                                    <div className="flex shrink-0 flex-wrap items-center gap-2">
+                                      <SubformCompletionBadge
+                                        complete={isOnboardingVestigingCaptureComplete(ve)}
+                                        showIncompletePlaceholder
+                                      />
+                                      <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="ghost"
+                                        disabled={vestigingInUse}
+                                        title={
+                                          vestigingInUse
+                                            ? usedForInvoicing
+                                              ? "Kies eerst een andere vestiging voor facturatie (stap Facturatie)."
+                                              : "Ontkoppel eerst deze vestiging van alle certificatievragen."
+                                            : "Vestiging verwijderen"
+                                        }
+                                        className="text-destructive hover:text-destructive"
+                                        onClick={() =>
+                                          patchContext({
+                                            onboardingVestigingen: context.onboardingVestigingen.filter(
+                                              (x) => x.id !== ve.id,
+                                            ),
+                                            certificationInquiryVestigingId: Object.fromEntries(
+                                              Object.entries(
+                                                context.certificationInquiryVestigingId,
+                                              ).filter(([, vid]) => (vid ?? "").trim() !== ve.id),
+                                            ),
+                                            ...((context.invoicingVestigingId ?? "").trim() === ve.id
+                                              ? { invoicingVestigingId: "" }
+                                              : {}),
+                                          })
+                                        }
+                                      >
+                                        Verwijderen
+                                      </Button>
+                                    </div>
+                                  </div>
+                                  <Field>
+                                    <FieldLabel htmlFor={`${legalEntityFieldBase}-ve-name-${ve.id}`}>
+                                      Handels- of juridische naam van de vestiging
+                                    </FieldLabel>
+                                    <FieldContent>
+                                      <Input
+                                        id={`${legalEntityFieldBase}-ve-name-${ve.id}`}
+                                        value={ve.legalName}
+                                        placeholder="Bv. naam van deze vestigingseenheid"
+                                        onChange={(e) =>
+                                          patchContext({
+                                            onboardingVestigingen: context.onboardingVestigingen.map((x) =>
+                                              x.id === ve.id ? { ...x, legalName: e.target.value } : x,
+                                            ),
+                                          })
+                                        }
+                                      />
+                                    </FieldContent>
+                                  </Field>
+                                  <IdentificatieAddressSubform
+                                    idPrefix={`ves-${ve.id}`}
+                                    value={vestigingAddressSubformValue(ve)}
+                                    onChange={(v) => {
+                                      const iso =
+                                        registrationIsoCodeFromDutchCountryLabel(v.country.trim()) ||
+                                        "";
+                                      patchContext({
+                                        onboardingVestigingen: context.onboardingVestigingen.map((x) =>
+                                          x.id === ve.id
+                                            ? {
+                                                ...x,
+                                                addressStreet: v.street,
+                                                addressHouseNumber: v.houseNumber,
+                                                addressPostalCode: v.postalCode,
+                                                addressCity: v.locality,
+                                                country: v.country,
+                                                addressCountryCode: iso,
+                                              }
+                                            : x,
+                                        ),
+                                      });
+                                    }}
+                                    countryOptions={countrySelectOptions}
+                                    countrySelectValue={
+                                      ve.country.trim() &&
+                                      countrySelectOptions.includes(ve.country.trim())
+                                        ? ve.country.trim()
+                                        : COUNTRY_SELECT_NONE
+                                    }
+                                    onCountryChange={(cv) =>
+                                      patchContext({
+                                        onboardingVestigingen: context.onboardingVestigingen.map((x) =>
+                                          x.id === ve.id ? { ...x, country: cv === COUNTRY_SELECT_NONE ? "" : cv } : x,
+                                        ),
+                                      })
+                                    }
+                                    countrySelectMode="editable"
+                                    showCountryCodeField={false}
+                                  />
+                                </section>
+                              );
+                            })}
+                          </div>
+                          <div className="space-y-4">
+                            <div className="space-y-1">
+                              <h4 className="text-sm font-semibold tracking-tight text-foreground">
+                                Koppel vestigingen aan uw certificatievragen
+                              </h4>
+                              <p className="text-xs leading-relaxed text-muted-foreground">
+                                Voor elke gekozen aanvraag geeft u aan welke vestiging daar juridisch
+                                voor staat — u mag bestaande gegevens hergebruiken.
+                              </p>
+                            </div>
+                            <div className="space-y-4">
+                              {draftsSortedForCertification.map((draft) => (
+                                <Field key={draft.id}>
+                                  <FieldLabel htmlFor={`${legalEntityFieldBase}-ves-${draft.id}`}>
+                                    {draft.shortLabel || draft.label}
+                                  </FieldLabel>
+                                  <FieldDescription>
+                                    {draft.productLabel
+                                      ? `${draft.label} · ${draft.productLabel}`
+                                      : draft.label}
+                                  </FieldDescription>
+                                  <FieldContent>
+                                    <Select
+                                      value={(context.certificationInquiryVestigingId[draft.id] ??
+                                        ""
+                                      ).trim() || CERT_INQUIRY_VEST_UNASSIGNED}
+                                      onValueChange={(next) =>
+                                        patchContext({
+                                          certificationInquiryVestigingId: {
+                                            ...context.certificationInquiryVestigingId,
+                                            [draft.id]:
+                                              next === CERT_INQUIRY_VEST_UNASSIGNED ? "" : next,
+                                          },
+                                        })
+                                      }
+                                    >
+                                      <SelectTrigger
+                                        id={`${legalEntityFieldBase}-ves-${draft.id}`}
+                                        className="w-full max-w-xl"
+                                      >
+                                        <SelectValue placeholder="— Kies een vestiging —" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value={CERT_INQUIRY_VEST_UNASSIGNED}>
+                                          — Maak nog een keuze —
+                                        </SelectItem>
+                                        {context.onboardingVestigingen.map((vx) => (
+                                          <SelectItem key={vx.id} value={vx.id}>
+                                            {formatVestigingRegistryOptionLabel(vx)}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </FieldContent>
+                                </Field>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </>
               ) : null}
             </div>
           ) : null}
 
-          {step === "extras" ? (
-            <div className="space-y-4">
+          {step === "invoicing" ? (
+            <div className="space-y-6">
               <div className="space-y-1">
                 <h3 className="text-sm font-semibold tracking-tight text-foreground">
-                  Facturatie en contacten
+                  Factuuradres en rechtspersoon op de factuur
                 </h3>
                 <p className="text-xs leading-relaxed text-muted-foreground">
-                  Optioneel: schakel in wat nodig is. Alle opties gebruiken hetzelfde patroon
-                  (schakelaar rechtsboven). U kunt doorgaan zonder iets in te schakelen.
+                  De maatschappelijke zetel uit de bedrijfsstap is uw standaard voor de gegevens op
+                  de factuur. Gebruik waar nodig de afsluitbare blokken hieronder voor een andere vestiging
+                  als naam/adres op de factuur (zelfde lijst als bij certificatie), een ander
+                  postfactuuradres en/of een andere contactpersoon dan de wettelijke vertegenwoordiger.
                 </p>
               </div>
+
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Maatschappelijke zetel (facturatie)</CardTitle>
+                  <CardDescription>
+                    Standaard verschijnen deze naam en dit adres als ontvanger op de factuur.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2 text-sm">
+                  <p className="font-medium text-foreground">
+                    {context.organizationName.trim() || "—"}
+                  </p>
+                  <p className="text-muted-foreground">{formatPostalAddressDisplay(context)}</p>
+                  {context.country.trim() ? (
+                    <p className="text-muted-foreground">{context.country.trim()}</p>
+                  ) : null}
+                </CardContent>
+              </Card>
+
+              <IdentificatieOptionalBlock
+                switchId={`${invoicingFieldBase}-inv-legal-entity`}
+                title="Andere onderneming op de factuur (vestiging)"
+                description="Schakel dit in wanneer de factuur op naam en adres van een vestiging moet staan in plaats van de maatschappelijke zetel (zonder apart btw-nummer). Nieuw toegevoegde vestigingen vindt u ook op de stap Bedrijfsgegevens."
+                checked={context.invoicingDiffersFromHeadOffice}
+                onCheckedChange={(on) =>
+                  patchContext({
+                    invoicingDiffersFromHeadOffice: on,
+                    ...(!on ? { invoicingVestigingId: "" } : {}),
+                  })
+                }
+              >
+                <div className="space-y-4">
+                  <div className="flex flex-wrap items-end justify-between gap-3">
+                    <Field className="min-w-0 flex-1 basis-72">
+                      <FieldLabel htmlFor={`${invoicingFieldBase}-invoice-vest-select`}>
+                        Vestiging op de factuur
+                      </FieldLabel>
+                      <FieldDescription>
+                        Zelfde registraties als op de bedrijfsstap; toegevoegde vestigingen zijn
+                        daar ook beschikbaar.
+                      </FieldDescription>
+                      <FieldContent>
+                        <Select
+                          value={invoicingVestigingSelectRadixValue}
+                          onValueChange={(next) => {
+                            if (next === CERT_INVOICE_VEST_NEW) {
+                              const nid = newOnboardingVestigingId();
+                              patchContext({
+                                onboardingVestigingen: [
+                                  ...context.onboardingVestigingen,
+                                  emptyOnboardingVestiging(nid),
+                                ],
+                                invoicingVestigingId: nid,
+                              });
+                              return;
+                            }
+                            if (next === CERT_INVOICE_VEST_UNASSIGNED) {
+                              patchContext({ invoicingVestigingId: "" });
+                              return;
+                            }
+                            patchContext({ invoicingVestigingId: next });
+                          }}
+                        >
+                          <SelectTrigger
+                            id={`${invoicingFieldBase}-invoice-vest-select`}
+                            className="w-full"
+                          >
+                            <SelectValue placeholder="— Maak een keuze —" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value={CERT_INVOICE_VEST_UNASSIGNED}>
+                              — Maak een keuze —
+                            </SelectItem>
+                            {context.onboardingVestigingen.map((vx) => (
+                              <SelectItem key={vx.id} value={vx.id}>
+                                {formatVestigingRegistryOptionLabel(vx)}
+                              </SelectItem>
+                            ))}
+                            <SelectItem value={CERT_INVOICE_VEST_NEW}>
+                              Nieuwe vestiging registreren…
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FieldContent>
+                    </Field>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="shrink-0"
+                      onClick={() => {
+                        const nid = newOnboardingVestigingId();
+                        patchContext({
+                          onboardingVestigingen: [
+                            ...context.onboardingVestigingen,
+                            emptyOnboardingVestiging(nid),
+                          ],
+                          invoicingVestigingId: nid,
+                        });
+                      }}
+                    >
+                      Vestiging toevoegen
+                    </Button>
+                  </div>
+
+                  {selectedInvoicingVestiging ? (
+                    <section
+                      className={personFormCardClassName("emphasized")}
+                      aria-labelledby={`${invoicingFieldBase}-inv-ve-editor-title`}
+                    >
+                      <div className="space-y-1 pb-2">
+                        <h4
+                          id={`${invoicingFieldBase}-inv-ve-editor-title`}
+                          className="text-sm font-semibold tracking-tight text-foreground"
+                        >
+                          Gegevens van de gekozen vestiging
+                        </h4>
+                        <p className="text-xs leading-relaxed text-muted-foreground">
+                          Wijzigingen gelden overal waar deze vestiging wordt gebruikt (facturatie
+                          en certificatie).
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap items-center justify-end gap-2 pb-2">
+                        <SubformCompletionBadge
+                          complete={isOnboardingVestigingCaptureComplete(selectedInvoicingVestiging)}
+                          showIncompletePlaceholder
+                        />
+                      </div>
+                      <Field>
+                        <FieldLabel htmlFor={`${invoicingFieldBase}-inv-ve-name`}>
+                          Handels- of juridische naam van de vestiging
+                        </FieldLabel>
+                        <FieldContent>
+                          <Input
+                            id={`${invoicingFieldBase}-inv-ve-name`}
+                            value={selectedInvoicingVestiging.legalName}
+                            placeholder="Bv. naam van deze vestigingseenheid"
+                            onChange={(e) =>
+                              patchContext({
+                                onboardingVestigingen: context.onboardingVestigingen.map((x) =>
+                                  x.id === selectedInvoicingVestiging.id
+                                    ? { ...x, legalName: e.target.value }
+                                    : x,
+                                ),
+                              })
+                            }
+                          />
+                        </FieldContent>
+                      </Field>
+                      <IdentificatieAddressSubform
+                        idPrefix={`inv-ves-${selectedInvoicingVestiging.id}`}
+                        value={vestigingAddressSubformValue(selectedInvoicingVestiging)}
+                        onChange={(v) => {
+                          const iso =
+                            registrationIsoCodeFromDutchCountryLabel(v.country.trim()) || "";
+                          patchContext({
+                            onboardingVestigingen: context.onboardingVestigingen.map((x) =>
+                              x.id === selectedInvoicingVestiging.id
+                                ? {
+                                    ...x,
+                                    addressStreet: v.street,
+                                    addressHouseNumber: v.houseNumber,
+                                    addressPostalCode: v.postalCode,
+                                    addressCity: v.locality,
+                                    country: v.country,
+                                    addressCountryCode: iso,
+                                  }
+                                : x,
+                            ),
+                          });
+                        }}
+                        countryOptions={countrySelectOptions}
+                        countrySelectValue={
+                          selectedInvoicingVestiging.country.trim() &&
+                          countrySelectOptions.includes(selectedInvoicingVestiging.country.trim())
+                            ? selectedInvoicingVestiging.country.trim()
+                            : COUNTRY_SELECT_NONE
+                        }
+                        onCountryChange={(cv) =>
+                          patchContext({
+                            onboardingVestigingen: context.onboardingVestigingen.map((x) =>
+                              x.id === selectedInvoicingVestiging.id
+                                ? { ...x, country: cv === COUNTRY_SELECT_NONE ? "" : cv }
+                                : x,
+                            ),
+                          })
+                        }
+                        countrySelectMode="editable"
+                        showCountryCodeField={false}
+                      />
+                    </section>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Selecteer hierboven een vestiging of voeg een nieuwe toe.
+                    </p>
+                  )}
+                </div>
+              </IdentificatieOptionalBlock>
+
+              <Field data-invalid={invoicingEmailIssue ? true : undefined}>
+                <FieldLabel htmlFor={`${invoicingFieldBase}-email`}>
+                  E-mail voor facturatie <span className="text-destructive">*</span>
+                </FieldLabel>
+                <FieldContent className="w-full min-w-0">
+                  <div className="flex w-full min-w-0 items-center gap-1.5">
+                    <Input
+                      id={`${invoicingFieldBase}-email`}
+                      type="email"
+                      className="min-w-0 w-full flex-1"
+                      value={context.invoicingEmail}
+                      onChange={(e) => updateContext("invoicingEmail", e.target.value)}
+                      autoComplete="email"
+                      aria-required
+                      aria-invalid={invoicingEmailIssue != null}
+                      aria-describedby={
+                        invoicingEmailIssue
+                          ? `${invoicingFieldBase}-email-error ${invoicingFieldBase}-email-hint`
+                          : `${invoicingFieldBase}-email-hint`
+                      }
+                    />
+                    <SubformCompletionBadge
+                      complete={invoicingEmailIssue == null}
+                      title="Facturatie-e-mail ingevuld"
+                    />
+                  </div>
+                  {invoicingEmailIssue ? (
+                    <p
+                      id={`${invoicingFieldBase}-email-error`}
+                      className="text-left text-sm font-medium text-destructive"
+                      role="alert"
+                    >
+                      {invoicingEmailIssue}
+                    </p>
+                  ) : null}
+                  <FieldDescription id={`${invoicingFieldBase}-email-hint`}>
+                    Dit adres ontvangt facturen en herinneringen.
+                  </FieldDescription>
+                </FieldContent>
+              </Field>
+
+              <IdentificatieOptionalBlock
+                switchId={`${invoicingFieldBase}-inv-alt-address`}
+                title="Afwijkend facturatieadres"
+                description="Postadres op de factuur dat afwijkt van het adres van de zetel of gekozen vestiging (bijv. postbus of afdeling)."
+                checked={context.addInvoicingAddressOverride}
+                onCheckedChange={(on) => patchContext({ addInvoicingAddressOverride: on })}
+              >
+                <IdentificatieAddressSubform
+                  idPrefix="invoicing-address"
+                  value={invoicingAddressSubformValue(context)}
+                  onChange={(v) => {
+                    const iso =
+                      registrationIsoCodeFromDutchCountryLabel(v.country.trim()) || "";
+                    patchContext({
+                      invoicingAddressStreet: v.street,
+                      invoicingAddressHouseNumber: v.houseNumber,
+                      invoicingAddressPostalCode: v.postalCode,
+                      invoicingAddressCity: v.locality,
+                      invoicingCountry: v.country,
+                      invoicingAddressCountryCode: iso,
+                    });
+                  }}
+                  countryOptions={invoicingCountryOptions}
+                  countrySelectValue={invoicingCountrySelectValue}
+                  onCountryChange={(cv) =>
+                    updateContext("invoicingCountry", cv === COUNTRY_SELECT_NONE ? "" : cv)
+                  }
+                  showCountryCodeField={false}
+                />
+              </IdentificatieOptionalBlock>
+
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <h4 className="text-sm font-semibold tracking-tight text-foreground">
+                    Contact voor facturatie
+                  </h4>
+                  <p className="text-xs leading-relaxed text-muted-foreground">
+                    Standaard is dat de{" "}
+                    <span className="font-medium text-foreground">
+                      wettelijke vertegenwoordiger
+                    </span>
+                    . Schakel hieronder alleen in wanneer iemand anders uw aanspreekpunt voor
+                    facturatie en financiële opvolging moet zijn.
+                  </p>
+                </div>
+                {!context.invoicingUseContactPerson ? (
+                  <div className="rounded-lg border border-border bg-card px-4 py-3">
+                    <p className="mb-2 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                      Wettelijke vertegenwoordiger — factuurcontact
+                    </p>
+                    <IdentificatiePersonRegistrySummary
+                      person={legalRepresentativePersonValue(context)}
+                    />
+                  </div>
+                ) : null}
+              </div>
+
               <IdentificatieOptionalBlock
                 switchId={`${invoicingFieldBase}-inv-person`}
-                title="Contactpersoon voor facturatie"
-                description="Facturatie en gerelateerde financiële opvolging lopen via deze persoon. Kies iemand uit uw contactenlijst of voer een nieuwe persoon in."
+                title="Andere contactpersoon voor facturatie"
+                description="Vul een andere persoon in of kies iemand die u al in deze flow opgegeven heeft."
                 checked={context.invoicingUseContactPerson}
                 onCheckedChange={(on) =>
                   patchContext({
@@ -1060,6 +1628,20 @@ export function AnonymousOnboardingFlowView(props: AnonymousOnboardingFlowViewPr
                   <IdentificatiePersonRegistrySummary person={context.invoicingContactPerson} />
                 )}
               </IdentificatieOptionalBlock>
+            </div>
+          ) : null}
+
+          {step === "extras" ? (
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <h3 className="text-sm font-semibold tracking-tight text-foreground">
+                  Certificatie en inspectie
+                </h3>
+                <p className="text-xs leading-relaxed text-muted-foreground">
+                  Optioneel: schakel in wat nodig is. Alle blokken gebruiken hetzelfde patroon
+                  (schakelaar rechtsboven). U kunt deze stap overslaan.
+                </p>
+              </div>
               <IdentificatieOptionalBlock
                 switchId="cert-primary"
                 title="Contactpersoon voor certificatie en inspectie"

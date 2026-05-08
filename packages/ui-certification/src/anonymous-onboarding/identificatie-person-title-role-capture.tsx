@@ -53,6 +53,7 @@ export function IdentificatiePersonTitleRoleCapture({
   copy,
   patchContext,
   registryPersonSelected = false,
+  disabled = false,
 }: {
   idPrefix: string;
   branch: IdentificatiePersonTitleRoleBranch;
@@ -64,6 +65,8 @@ export function IdentificatiePersonTitleRoleCapture({
    * context (e.g. certification contact from registry).
    */
   registryPersonSelected?: boolean;
+  /** When true, person grid and preset controls do not accept input (e.g. pending prerequisite answers). */
+  disabled?: boolean;
 }) {
   const personValue: IdentificatiePersonCaptureState = (() => {
     switch (branch) {
@@ -452,8 +455,12 @@ export function IdentificatiePersonTitleRoleCapture({
     <Field className="min-w-0 md:col-span-1">
       <FieldLabel htmlFor={titleTriggerId}>{copy.titleLabel}</FieldLabel>
       <FieldContent className="w-full min-w-0">
-        <Select value={titlePresetValue} onValueChange={onTitlePresetChange}>
-          <SelectTrigger id={titleTriggerId} size="sm" className="h-8 w-full min-w-0">
+        <Select
+          disabled={disabled}
+          value={titlePresetValue}
+          onValueChange={onTitlePresetChange}
+        >
+          <SelectTrigger id={titleTriggerId} size="sm" className="h-8 w-full min-w-0" disabled={disabled}>
             <SelectValue placeholder="Geen selectie" />
           </SelectTrigger>
           <SelectContent>
@@ -470,6 +477,7 @@ export function IdentificatiePersonTitleRoleCapture({
               id={titleOtherInputId}
               className="h-8"
               value={titleOtherValue}
+              disabled={disabled}
               onChange={(event) => patchTitleOther(event.target.value)}
               placeholder="Bv. professor, ingenieur"
               autoComplete="honorific-prefix"
@@ -484,8 +492,12 @@ export function IdentificatiePersonTitleRoleCapture({
     <Field className="min-w-0 md:col-span-1">
       <FieldLabel htmlFor={roleTriggerId}>{copy.roleLabel}</FieldLabel>
       <FieldContent className="w-full min-w-0">
-        <Select value={rolePresetValue} onValueChange={onRolePresetChange}>
-          <SelectTrigger id={roleTriggerId} size="sm" className="h-8 w-full min-w-0">
+        <Select
+          disabled={disabled}
+          value={rolePresetValue}
+          onValueChange={onRolePresetChange}
+        >
+          <SelectTrigger id={roleTriggerId} size="sm" className="h-8 w-full min-w-0" disabled={disabled}>
             <SelectValue placeholder="Geen selectie" />
           </SelectTrigger>
           <SelectContent>
@@ -502,6 +514,7 @@ export function IdentificatiePersonTitleRoleCapture({
               id={roleOtherInputId}
               className="h-8"
               value={roleOtherValue}
+              disabled={disabled}
               onChange={(event) => patchRoleOther(event.target.value)}
               placeholder="Bv. projectleider extern"
               aria-label="Functieomschrijving"
@@ -532,6 +545,7 @@ export function IdentificatiePersonTitleRoleCapture({
           emailHint={copy.emailHint}
           startExtra={titlePresetField}
           contactRowExtra={rolePresetField}
+          disabled={disabled}
         />
       )}
     </div>
