@@ -121,6 +121,7 @@ export type CustomerContext = {
 export const ONBOARDING_STEPS = [
   "request",
   "origin",
+  "intake",
   "customer",
   "company",
   "extras",

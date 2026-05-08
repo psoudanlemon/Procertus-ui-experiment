@@ -1,4 +1,10 @@
-import { Alert01Icon } from "@hugeicons/core-free-icons";
+import {
+  Alert01Icon,
+  ArrowRight02Icon,
+  CheckmarkCircle02Icon,
+  FilePlusIcon,
+  Mail01Icon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Alert,

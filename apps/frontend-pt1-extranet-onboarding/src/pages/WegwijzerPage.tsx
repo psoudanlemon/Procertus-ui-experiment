@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useCallback } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Alert02Icon,
   ArrowRight02Icon,
@@ -14,7 +14,7 @@ import {
   AlertTitle,
   Button,
   DensityProvider,
-  DownloadableDocumentListItem,
+  DownloadableDocumentGrid,
   type DownloadableDocumentListItemData,
   H1,
   H4,
@@ -30,7 +30,7 @@ import {
   PublicRegistryAppShell,
   Skeleton,
 } from "@procertus-ui/ui";
-import { CertificationCard, type ChoiceBarItem } from "@procertus-ui/ui-lib";
+import { BrowseCard, DetailCard, type ChoiceBarItem } from "@procertus-ui/ui-lib";
 import { CatalogueExplorer } from "@procertus-ui/ui-certification";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { APP_FOOTER } from "../layouts/footerConfig";
@@ -46,13 +46,22 @@ const ONBOARDING_STEPPER_PATH = "/welcome/start";
 const EXPERT_CALL_PATH = (serviceId?: string) =>
   serviceId ? `/welcome/expert-call/${serviceId}` : "/welcome/expert-call";
 
+/** Sentinel id for the leading "Alle certificaten" pill that resets the explorer to the overview. */
+const ALL_ID = "all";
 /** Sentinel id for the merged "Overige" pill that bundles all tier-3 external referrals. */
 const ANDERE_ID = "overige";
+
+/** Search param that mirrors the active certificate selection so back-nav can restore it. */
+const SERVICE_PARAM = "service";
 
 const PRIMARY_SERVICES = WEGWIJZER_SERVICES.filter((s) => s.tier !== 3);
 const EXTERNAL_SERVICES = WEGWIJZER_SERVICES.filter((s) => s.tier === 3);
 
-const DEFAULT_ACTIVE_SERVICE = PRIMARY_SERVICES.find((s) => s.tier === 1) ?? PRIMARY_SERVICES[0];
+const VALID_SERVICE_IDS = new Set<string>([
+  ALL_ID,
+  ANDERE_ID,
+  ...WEGWIJZER_SERVICES.map((s) => s.entry.id),
+]);
 
 // ---------------------------------------------------------------------------
 // Page
@@ -60,7 +69,28 @@ const DEFAULT_ACTIVE_SERVICE = PRIMARY_SERVICES.find((s) => s.tier === 1) ?? PRI
 
 export function WegwijzerPage() {
   const navigate = useNavigate();
-  const [activeId, setActiveId] = useState<string>(DEFAULT_ACTIVE_SERVICE?.entry.id ?? "");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const rawParam = searchParams.get(SERVICE_PARAM);
+  const activeId = rawParam && VALID_SERVICE_IDS.has(rawParam) ? rawParam : ALL_ID;
+
+  const setActiveId = useCallback(
+    (id: string) => {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          if (!id || id === ALL_ID) {
+            next.delete(SERVICE_PARAM);
+          } else {
+            next.set(SERVICE_PARAM, id);
+          }
+          return next;
+        },
+        { replace: true },
+      );
+    },
+    [setSearchParams],
+  );
 
   const activeService = WEGWIJZER_SERVICES.find((s) => s.entry.id === activeId);
 
@@ -80,21 +110,30 @@ export function WegwijzerPage() {
         }}
         footer={APP_FOOTER}
       >
-        <Hero />
+        <div className="mx-auto w-full max-w-7xl">
+          <Hero />
 
-        <div className="px-boundary pb-boundary">
-          <CatalogueExplorer
-            items={CHOICE_BAR_ITEMS}
-            activeId={activeId}
-            onActiveIdChange={setActiveId}
-            ariaLabel="Kies een certificaat"
-          >
-            {activeId === ANDERE_ID ? (
-              <ExternalReferralGrid services={EXTERNAL_SERVICES} />
-            ) : activeService ? (
-              <MasterCard service={activeService} />
-            ) : null}
-          </CatalogueExplorer>
+          <div className="px-boundary pb-boundary">
+            <CatalogueExplorer
+              items={CHOICE_BAR_ITEMS}
+              activeId={activeId}
+              onActiveIdChange={setActiveId}
+              ariaLabel="Kies een certificaat"
+              navLabels={{ prev: "Vorige certificaat", next: "Volgende certificaat" }}
+            >
+              {activeId === ALL_ID ? (
+                <AllCertificatesGrid
+                  primary={PRIMARY_SERVICES}
+                  external={EXTERNAL_SERVICES}
+                  onSelect={setActiveId}
+                />
+              ) : activeId === ANDERE_ID ? (
+                <ExternalReferralGrid services={EXTERNAL_SERVICES} />
+              ) : activeService ? (
+                <MasterCard service={activeService} />
+              ) : null}
+            </CatalogueExplorer>
+          </div>
         </div>
       </PublicRegistryAppShell>
     </DensityProvider>
@@ -131,13 +170,97 @@ function Hero() {
 // ---------------------------------------------------------------------------
 
 const CHOICE_BAR_ITEMS: readonly ChoiceBarItem[] = [
+  { value: ALL_ID, label: "Alle certificaten", variant: "elevated" as const },
   ...PRIMARY_SERVICES.map((service, index) => ({
     value: service.entry.id,
     label: service.pillLabel ?? service.entry.label,
-    variant: index < 3 ? ("elevated" as const) : ("faded" as const),
+    variant: index < 3 ? ("elevated" as const) : ("default" as const),
   })),
-  { value: ANDERE_ID, label: "Overige", variant: "ghost" as const },
 ];
+
+// ---------------------------------------------------------------------------
+// All Certificates Grid — shown when "Alle certificaten" is active.
+// Three-tier visual hierarchy mirrors the choice-bar pill variants:
+//   elevated (full width)  → first 3 primary services (BENOR, CE, SSD)
+//   faded    (50/50 + 50%) → remaining primary services
+//   ghost    (25% each)    → tier-3 external referrals (ATG, EPD)
+// ---------------------------------------------------------------------------
+
+function AllCertificatesGrid({
+  primary,
+  external,
+  onSelect,
+}: {
+  primary: readonly WegwijzerService[];
+  external: readonly WegwijzerService[];
+  onSelect: (id: string) => void;
+}) {
+  const elevated = primary.slice(0, 3);
+  const faded = primary.slice(3);
+  const fadedRow = faded.slice(0, 2);
+  const fadedTrailing = faded[2];
+
+  const summary = (id: string) => WEGWIJZER_SERVICE_CONTENT[id]?.what;
+
+  return (
+    <div role="list" className="grid w-full grid-cols-4 gap-section">
+      {elevated.map((service) => (
+        <BrowseCard
+          key={service.entry.id}
+          title={service.entry.label}
+          description={summary(service.entry.id)}
+          variant="elevated"
+          className="col-span-4"
+          asChild
+        >
+          <button type="button" onClick={() => onSelect(service.entry.id)} />
+        </BrowseCard>
+      ))}
+      {fadedRow.map((service) => (
+        <BrowseCard
+          key={service.entry.id}
+          title={service.entry.label}
+          description={summary(service.entry.id)}
+          variant="default"
+          className="col-span-4 md:col-span-2"
+          asChild
+        >
+          <button type="button" onClick={() => onSelect(service.entry.id)} />
+        </BrowseCard>
+      ))}
+      {fadedTrailing && (
+        <BrowseCard
+          key={fadedTrailing.entry.id}
+          title={fadedTrailing.entry.label}
+          description={summary(fadedTrailing.entry.id)}
+          variant="default"
+          className="col-span-4 md:col-span-2"
+          asChild
+        >
+          <button type="button" onClick={() => onSelect(fadedTrailing.entry.id)} />
+        </BrowseCard>
+      )}
+      {external.map((service) => (
+        <BrowseCard
+          key={service.entry.id}
+          title={service.entry.label}
+          description={summary(service.entry.id)}
+          variant="faded"
+          cta={{
+            label: "Bezoek website",
+            icon: (
+              <HugeiconsIcon icon={LinkSquare02Icon} className="size-3.5" strokeWidth={1.5} />
+            ),
+          }}
+          className="col-span-2 md:col-span-1"
+          asChild
+        >
+          <button type="button" onClick={() => onSelect(service.entry.id)} />
+        </BrowseCard>
+      ))}
+    </div>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // External Referral Grid — shown when "Andere" is active
@@ -145,7 +268,7 @@ const CHOICE_BAR_ITEMS: readonly ChoiceBarItem[] = [
 
 function ExternalReferralGrid({ services }: { services: readonly WegwijzerService[] }) {
   return (
-    <ItemGroup className="gap-component">
+    <ItemGroup className="grid w-full grid-cols-1 gap-section md:grid-cols-2">
       {services.map((service) => (
         <ExternalReferralItem key={service.entry.id} service={service} />
       ))}
@@ -182,7 +305,7 @@ function MasterCard({ service }: { service: WegwijzerService }) {
   const documents = buildMockDocuments(service);
 
   return (
-    <CertificationCard
+    <DetailCard
       title={entry.label}
       description={entry.description}
       footer={
@@ -204,7 +327,7 @@ function MasterCard({ service }: { service: WegwijzerService }) {
           </HoverCard>
           <Button asChild size="lg">
             <Link to={ONBOARDING_STEPPER_PATH}>
-              Aanvraag starten
+              Start traject
               <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
             </Link>
           </Button>
@@ -239,15 +362,11 @@ function MasterCard({ service }: { service: WegwijzerService }) {
             Documenten op basis van uw selectie voor {entry.shortLabel} (prototype — downloadlinks zijn gemockt).
           </p>
         </div>
-        <ItemGroup className="w-full">
-          {documents.map((doc) => (
-            <DownloadableDocumentListItem key={doc.id} {...doc} />
-          ))}
-        </ItemGroup>
+        <DownloadableDocumentGrid items={documents} />
       </section>
 
       <MasterCardTimeline service={service} />
-    </CertificationCard>
+    </DetailCard>
   );
 }
 
@@ -289,7 +408,7 @@ function MasterCardSections({ service }: { service: WegwijzerService }) {
   if (!content) return <MasterCardSkeleton />;
 
   return (
-    <div className="flex flex-col gap-region">
+    <div className="flex max-w-3xl flex-col gap-region">
       <section className="flex flex-col gap-component">
         <H4 className="leading-none">Wat is een {entry.label}?</H4>
         <p className="text-sm leading-normal">{content.what}</p>
@@ -301,7 +420,7 @@ function MasterCardSections({ service }: { service: WegwijzerService }) {
           {content.whenToApply.map((item) => (
             <li key={item} className="flex items-start gap-component text-sm leading-normal">
               <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />
-              <span className="max-w-3xl">{item}</span>
+              <span>{item}</span>
             </li>
           ))}
         </ul>

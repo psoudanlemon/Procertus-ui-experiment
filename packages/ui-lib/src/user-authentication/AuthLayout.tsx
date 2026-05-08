@@ -6,7 +6,7 @@ import {
   CardHeader,
   H1,
 } from "@procertus-ui/ui";
-import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
+import procertusLogo from "@procertus-ui/ui/assets/Procertus Logo with tagline.svg";
 
 function ProcertusLogo({ className }: { className?: string }) {
   return (
