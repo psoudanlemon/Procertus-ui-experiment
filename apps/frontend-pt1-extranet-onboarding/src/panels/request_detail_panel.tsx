@@ -1,7 +1,7 @@
 import {
   Button,
   CoverView,
-  DownloadableDocumentListItem,
+  DownloadableItem,
   Item,
   ItemContent,
   ItemDescription,
@@ -214,7 +214,7 @@ export function RequestDetailPanel({ panelType, requestId }: RequestDetailPanelP
           ) : (
             <ItemGroup className="w-full">
               {rulesetDocuments.map((doc) => (
-                <DownloadableDocumentListItem key={doc.id} {...doc} />
+                <DownloadableItem key={doc.id} {...doc} />
               ))}
             </ItemGroup>
           )}

@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { extendTailwindMerge } from "tailwind-merge";
 
-const SEMANTIC_SPACING = ["micro", "element", "component", "section", "region", "page"] as const;
+const SEMANTIC_SPACING = ["micro", "component", "section", "region", "boundary"] as const;
 
 const twMerge = extendTailwindMerge({
   extend: {

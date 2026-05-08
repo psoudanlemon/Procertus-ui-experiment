@@ -1,31 +1,34 @@
 /**
- * Presentational list of downloadable documents (rulesets, guides, PDFs). No fetching —
- * pass `items` from the parent or a hook.
+ * Presentational primitive for a downloadable document (rulesets, guides, PDFs)
+ * with two layout variants and matching layout helpers. No fetching — pass `items`
+ * from the parent or a hook.
+ *
+ * - `DownloadableItem` — the primitive. `variant="row"` (default) renders a
+ *   responsive list row; `variant="card"` renders a stacked tile that pairs with
+ *   `DownloadableItemGrid`.
+ * - `DownloadableItemList` — vertical list of row-variant items inside an
+ *   `ItemGroup`.
+ * - `DownloadableItemGrid` — responsive 1/2/3-column grid of card-variant tiles
+ *   via the `card-grid` utility's container queries.
+ *
+ * No surrounding card chrome / title / description — the consumer owns the
+ * section header (e.g. via `DetailCardSection`).
  */
 import { Delete02Icon, Download01Icon, File01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
-  ItemGroup,
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
 
-export type DownloadableDocumentListItemData = {
+export type DownloadableItemData = {
   id: string;
   title: string;
   description?: string;
@@ -36,7 +39,7 @@ export type DownloadableDocumentListItemData = {
   href: string;
 };
 
-export type DownloadableDocumentListItemProps = DownloadableDocumentListItemData & {
+export type DownloadableItemProps = DownloadableItemData & {
   className?: string;
   /**
    * Layout variant.
@@ -44,7 +47,7 @@ export type DownloadableDocumentListItemProps = DownloadableDocumentListItemData
    *   middle, format-hint and download/delete actions on the right. Reflows to a stacked layout
    *   on small viewports via `Item`'s `responsive` flag.
    * - `"card"`: always-stacked tile — title/description on top, format-hint bottom-left, download
-   *   affordance bottom-right. Pairs with `DownloadableDocumentGrid` to form a responsive 1/2/3-column
+   *   affordance bottom-right. Pairs with `DownloadableItemGrid` to form a responsive 1/2/3-column
    *   grid. When no `onDelete` is provided, the entire card becomes the download anchor.
    */
   variant?: "row" | "card";
@@ -56,7 +59,7 @@ export type DownloadableDocumentListItemProps = DownloadableDocumentListItemData
   deleteAriaLabel?: string;
 };
 
-export function DownloadableDocumentListItem({
+export function DownloadableItem({
   className,
   title,
   description,
@@ -67,32 +70,47 @@ export function DownloadableDocumentListItem({
   onDelete,
   deleteAriaLabel,
   variant = "row",
-}: DownloadableDocumentListItemProps) {
+}: DownloadableItemProps) {
   const linkAriaLabel = downloadAriaLabel ?? `Download ${title}`;
   const deleteLabel = deleteAriaLabel ?? `Delete ${title}`;
   const isCard = variant === "card";
   const isInteractiveCard = isCard && !onDelete;
+  const isCardWithDelete = isCard && Boolean(onDelete);
 
   const itemClassName = cn(
     "min-w-0",
-    isCard ? "bg-card grid grid-cols-[auto_1fr]" : "bg-transparent",
+    isCard
+      ? "grid grid-cols-[auto_1fr] bg-card text-card-foreground"
+      : "bg-transparent",
+    isInteractiveCard && "[&:is(a):hover,&:has(a:hover)]:bg-card",
+    isCardWithDelete &&
+      "[&:is(a):hover,&:has(a:hover)]:bg-card [&:is(a):hover,&:has(a:hover)]:border-border [&:is(a):hover,&:has(a:hover)]:text-card-foreground",
     className,
   );
 
   const formatHintNode = date || formatHint ? (
     <div
       className={cn(
-        "flex flex-col gap-micro text-xs leading-tight text-muted-foreground/90",
-        isCard ? "items-start" : "items-start sm:items-end",
+        "flex items-center gap-micro text-xs leading-tight text-muted-foreground/90",
+        isCard ? "justify-start" : "justify-start sm:justify-end",
       )}
     >
       {formatHint ? <span>{formatHint}</span> : null}
+      {formatHint && date ? (
+        <span aria-hidden className="text-muted-foreground/60">
+          ·
+        </span>
+      ) : null}
       {date ? <span>{date}</span> : null}
     </div>
   ) : null;
 
   const fileIconNode = (
-    <ItemMedia variant="icon" className="text-muted-foreground" aria-hidden>
+    <ItemMedia
+      variant="icon"
+      className="text-muted-foreground transition-colors group-hover/item:text-accent-foreground"
+      aria-hidden
+    >
       <HugeiconsIcon icon={File01Icon} className="size-5" strokeWidth={1.5} />
     </ItemMedia>
   );
@@ -124,7 +142,7 @@ export function DownloadableDocumentListItem({
             {formatHintNode ?? <span aria-hidden />}
             <HugeiconsIcon
               icon={Download01Icon}
-              className="size-5 text-muted-foreground"
+              className="size-5 text-muted-foreground transition-colors group-hover/item:text-accent-foreground"
               strokeWidth={1.5}
               aria-hidden
             />
@@ -175,34 +193,48 @@ export function DownloadableDocumentListItem({
   );
 }
 
-export type DownloadableDocumentGridProps = {
+export type DownloadableItemListProps = {
   className?: string;
-  items: DownloadableDocumentListItemData[];
+  items: DownloadableItemData[];
+  /** When provided, each row renders a delete button calling this with the item id */
+  onDelete?: (id: string) => void;
+};
+
+/** Vertical stack of `card`-variant tiles — the default tile styling, stacked. */
+export function DownloadableItemList({ className, items, onDelete }: DownloadableItemListProps) {
+  return (
+    <div role="list" className={cn("flex w-full flex-col gap-component", className)}>
+      {items.map((item) => (
+        <DownloadableItem
+          key={item.id}
+          variant="card"
+          {...item}
+          onDelete={onDelete ? () => onDelete(item.id) : undefined}
+        />
+      ))}
+    </div>
+  );
+}
+
+export type DownloadableItemGridProps = {
+  className?: string;
+  items: DownloadableItemData[];
   /** When provided, each card renders a delete button calling this with the item id */
   onDelete?: (id: string) => void;
 };
 
 /**
- * Responsive grid of downloadable-document **card** tiles. Steps explicitly
- * between 1 / 2 / 3 columns based on the grid's own inline size (via the
- * `card-grid` utility's container queries): 1 column under 42rem, 2 columns
- * at 42rem+, 3 columns at 64rem+. Predictable column count per breakpoint —
- * no auto-fill "phantom" empty tracks. The outer `@container` wrapper
- * establishes the query container the utility needs.
+ * Responsive grid of `card`-variant tiles. Steps explicitly between 1 / 2 / 3
+ * columns based on the grid's own inline size (via the `card-grid` utility's
+ * container queries): 1 column under 42rem, 2 columns at 42rem+, 3 columns at
+ * 64rem+. The outer `@container` wrapper establishes the query container.
  */
-export function DownloadableDocumentGrid({
-  className,
-  items,
-  onDelete,
-}: DownloadableDocumentGridProps) {
+export function DownloadableItemGrid({ className, items, onDelete }: DownloadableItemGridProps) {
   return (
     <div className="@container w-full">
-      <div
-        role="list"
-        className={cn("card-grid gap-section", className)}
-      >
+      <div role="list" className={cn("card-grid gap-component", className)}>
         {items.map((item) => (
-          <DownloadableDocumentListItem
+          <DownloadableItem
             key={item.id}
             variant="card"
             {...item}
@@ -211,69 +243,5 @@ export function DownloadableDocumentGrid({
         ))}
       </div>
     </div>
-  );
-}
-
-export type DownloadableDocumentsListProps = {
-  className?: string;
-  title: string;
-  description?: ReactNode;
-  items: DownloadableDocumentListItemData[];
-  /** When provided, each row renders a delete button calling this with the item id */
-  onDelete?: (id: string) => void;
-  /** Shown when `items` is empty */
-  emptyContent?: ReactNode;
-  /** Drop the surrounding Card chrome so the list sits flush in its parent. */
-  chromeless?: boolean;
-};
-
-export function DownloadableDocumentsList({
-  className,
-  title,
-  description,
-  items,
-  onDelete,
-  emptyContent,
-  chromeless,
-}: DownloadableDocumentsListProps) {
-  const body =
-    items.length === 0 ? (
-      emptyContent ?? (
-        <p className="text-sm text-muted-foreground">Geen documenten om weer te geven.</p>
-      )
-    ) : (
-      <ItemGroup className="w-full">
-        {items.map((item) => (
-          <DownloadableDocumentListItem
-            key={item.id}
-            {...item}
-            onDelete={onDelete ? () => onDelete(item.id) : undefined}
-          />
-        ))}
-      </ItemGroup>
-    );
-
-  if (chromeless) {
-    return (
-      <div className={cn("flex flex-col gap-section", className)}>
-        <div className="flex flex-col gap-micro">
-          <h3 className="text-heading-sm font-semibold leading-tight tracking-tight">{title}</h3>
-          {description ? (
-            <p className="text-sm text-muted-foreground">{description}</p>
-          ) : null}
-        </div>
-        {body}
-      </div>
-    );
-  }
-
-  return (
-    <Card className={cn("gap-section p-section", className)}>
-      <CardHeader className="gap-micro px-0 pt-0">
-        <CardTitle className="text-heading-sm">{title}</CardTitle>
-        {description ? <CardDescription>{description}</CardDescription> : null}
-      </CardHeader>
-      <CardContent className="px-0 pb-0">{body}</CardContent>
-    </Card>
   );
 }

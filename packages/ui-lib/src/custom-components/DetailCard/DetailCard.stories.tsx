@@ -1,61 +1,37 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import {
-  ArrowRight02Icon,
-  ClockIcon,
-  Download01Icon,
-  File01Icon,
-} from "@hugeicons/core-free-icons";
+import { ArrowRight02Icon, ClockIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Button, H4 } from "@procertus-ui/ui";
+import {
+  Button,
+  DownloadableItemGrid,
+  type DownloadableItemData,
+} from "@procertus-ui/ui";
 
-import { DetailCard } from "./DetailCard";
+import { DetailCard, DetailCardSection } from "./DetailCard";
 
-type DocumentItem = {
-  title: string;
-  description: string;
-  meta: string;
-};
-
-const documents: DocumentItem[] = [
+const documents: DownloadableItemData[] = [
   {
+    id: "benor-ptv",
     title: "Producttechnische fiche (PTV): BENOR",
     description: "Technische specificaties en profieldelen voor BENOR (prototype).",
-    meta: "PDF · mock",
+    formatHint: "PDF · mock",
+    href: "#",
   },
   {
+    id: "benor-ruleset",
     title: "Ruleset matrix: geselecteerde certificeringen en attesten",
     description: "Normenkader en regelpaden voor: BENOR.",
-    meta: "PDF · mock",
+    formatHint: "PDF · mock",
+    href: "#",
   },
   {
+    id: "benor-checklist",
     title: "Indien-checklist aanvraagpakket",
-    description: "Controlelijst afgestemd op de samenstelling van dit pakket vóór indiening…",
-    meta: "PDF · mock",
+    description: "Controlelijst afgestemd op de samenstelling van dit pakket vóór indiening.",
+    formatHint: "PDF · mock",
+    href: "#",
   },
 ];
-
-function DocumentRow({ document }: { document: DocumentItem }) {
-  return (
-    <button
-      type="button"
-      className="group flex items-start gap-component rounded-md border border-border p-component text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-    >
-      <HugeiconsIcon
-        icon={File01Icon}
-        className="mt-0.5 size-5 shrink-0 text-muted-foreground"
-      />
-      <div className="flex min-w-0 flex-1 flex-col gap-micro">
-        <p className="truncate text-sm font-medium leading-snug">{document.title}</p>
-        <p className="text-sm leading-snug text-muted-foreground">{document.description}</p>
-        <p className="text-xs leading-none text-muted-foreground">{document.meta}</p>
-      </div>
-      <HugeiconsIcon
-        icon={Download01Icon}
-        className="mt-0.5 size-5 shrink-0 self-end text-muted-foreground transition-colors group-hover:text-foreground"
-      />
-    </button>
-  );
-}
 
 const meta = {
   title: "custom-components/Catalogue/DetailCard",
@@ -76,7 +52,8 @@ export default meta;
 
 function DefaultStory() {
   return (
-    <DetailCard
+    <div className="mx-auto w-full max-w-7xl">
+      <DetailCard
       title="BENOR-certificatie"
       description="Productgebonden BENOR-certificatie."
       footer={
@@ -89,18 +66,16 @@ function DefaultStory() {
         </>
       }
     >
-      <section className="flex flex-col gap-component">
-        <H4 className="leading-none">Wat is een BENOR-certificatie?</H4>
+      <DetailCardSection title="Wat is een BENOR-certificatie?">
         <p className="max-w-3xl text-sm leading-normal">
           BENOR is een Belgisch productcertificaat dat aantoont dat een bouwproduct voldoet aan de
           geldende normen voor samenstelling, productie en prestatie. PROCERTUS kent het toe na een
           uitgebreide initiële beoordeling en houdt het in stand via continue externe controles op
           de productielocatie en op de markt.
         </p>
-      </section>
+      </DetailCardSection>
 
-      <section className="flex flex-col gap-component">
-        <H4>Wanneer vraag je dit het beste aan?</H4>
+      <DetailCardSection title="Wanneer vraag je dit het beste aan?">
         <ul className="flex flex-col gap-micro">
           {[
             "U wenst een gestandaardiseerd bouwproduct (beton, mortel, granulaten, hydraulische bindmiddelen) op de Belgische markt aan te bieden.",
@@ -113,29 +88,27 @@ function DefaultStory() {
             </li>
           ))}
         </ul>
-      </section>
+      </DetailCardSection>
 
-      <section className="flex flex-col gap-component">
-        <H4>Regels en documentatie</H4>
-        <p className="text-sm leading-normal text-muted-foreground">
-          Documenten op basis van uw selectie voor BENOR (prototype, downloadlinks zijn gemockt).
-        </p>
-        <div className="grid grid-cols-1 gap-component md:grid-cols-2">
-          {documents.map((document) => (
-            <DocumentRow key={document.title} document={document} />
-          ))}
+      <DetailCardSection
+        title="Regels en documentatie"
+        description="Documenten op basis van uw selectie voor BENOR (prototype, downloadlinks zijn gemockt)."
+      >
+        <DownloadableItemGrid items={documents} />
+      </DetailCardSection>
+
+      <DetailCardSection>
+        <div className="flex items-start gap-component self-start rounded-md bg-info/40 p-component text-info-foreground">
+          <HugeiconsIcon icon={ClockIcon} className="mt-0.5 size-5 shrink-0" />
+          <p className="text-sm leading-normal">
+            Vanaf indiening van een volledig dossier verloopt het traject in 8 tot 12 weken:
+            ontvankelijkheidsanalyse, initiële audit, analyse van de proefresultaten en finale
+            beslissing.
+          </p>
         </div>
-      </section>
-
-      <section className="flex items-start gap-component rounded-md bg-info p-component text-info-foreground">
-        <HugeiconsIcon icon={ClockIcon} className="mt-0.5 size-5 shrink-0" />
-        <p className="max-w-3xl text-sm leading-normal">
-          Vanaf indiening van een volledig dossier verloopt het traject in 8 tot 12 weken:
-          ontvankelijkheidsanalyse, initiële audit, analyse van de proefresultaten en finale
-          beslissing.
-        </p>
-      </section>
-    </DetailCard>
+      </DetailCardSection>
+      </DetailCard>
+    </div>
   );
 }
 
@@ -145,17 +118,105 @@ export const Default = {
 
 function NoWatermarkStory() {
   return (
-    <DetailCard
-      title="Detail card without watermark"
-      description="Use `hideWatermark` when the body is busy or includes a custom illustration."
-      hideWatermark
-      footer={<Button>Bevestigen</Button>}
-    >
-      <p className="text-sm leading-normal">Free-form body content.</p>
-    </DetailCard>
+    <div className="mx-auto w-full max-w-7xl">
+      <DetailCard
+        title="Detail card without watermark"
+        description="Use `hideWatermark` when the body is busy or includes a custom illustration."
+        hideWatermark
+        footer={
+          <>
+            <Button variant="link">Hulp nodig?</Button>
+            <Button size="lg">
+              Bevestigen
+              <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
+            </Button>
+          </>
+        }
+      >
+        <DetailCardSection title="Waarom geen watermerk?">
+          <p className="max-w-3xl text-sm leading-normal">
+            Schakel het watermerk uit op surfaces met een drukke body of een eigen illustratie,
+            zodat de inhoud rustig blijft en de typografie centraal staat.
+          </p>
+        </DetailCardSection>
+
+        <DetailCardSection
+          title="Wanneer toepassen?"
+          description="Een paar concrete situaties waarin `hideWatermark` de juiste keuze is."
+        >
+          <ul className="flex flex-col gap-micro">
+            {[
+              "De body bevat een eigen visualisatie, illustratie of kaart.",
+              "De content is data-zwaar (tabellen, formulieren, dashboards).",
+              "De surface staat al naast een ander gebrand element.",
+            ].map((item) => (
+              <li key={item} className="flex items-start gap-component text-sm leading-normal">
+                <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />
+                <span className="max-w-3xl">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </DetailCardSection>
+
+        <DetailCardSection
+          title="Documentatie"
+          description="Optionele referenties die de keuze ondersteunen (mock)."
+        >
+          <DownloadableItemGrid items={documents.slice(0, 2)} />
+        </DetailCardSection>
+      </DetailCard>
+    </div>
   );
 }
 
 export const NoWatermark = {
   render: () => <NoWatermarkStory />,
+} as unknown as StoryObj<typeof meta>;
+
+function LayoutStory() {
+  return (
+    <div className="mx-auto w-full max-w-7xl">
+      <DetailCard
+        title="DetailCard layout"
+        description="CardHeader, CardContent (DetailCardSection × N), CardFooter."
+        footer={
+          <>
+            <Button variant="link">Footer leading slot</Button>
+            <Button size="lg">Footer trailing slot</Button>
+          </>
+        }
+      >
+        <DetailCardSection
+          title="Section A"
+          description="Title + description block, separated by gap-micro."
+        >
+          <LayoutPlaceholder label="Section content" />
+        </DetailCardSection>
+
+        <DetailCardSection title="Section B (title only)">
+          <LayoutPlaceholder label="Section content" />
+        </DetailCardSection>
+
+        <DetailCardSection description="Section C — description only.">
+          <LayoutPlaceholder label="Section content" />
+        </DetailCardSection>
+
+        <DetailCardSection>
+          <LayoutPlaceholder label="Section D — content only, no header" />
+        </DetailCardSection>
+      </DetailCard>
+    </div>
+  );
+}
+
+function LayoutPlaceholder({ label }: { label: string }) {
+  return (
+    <div className="flex min-h-20 items-center justify-center rounded-md border border-dashed border-border bg-muted/30 p-component text-sm text-muted-foreground">
+      {label}
+    </div>
+  );
+}
+
+export const Layout = {
+  render: () => <LayoutStory />,
 } as unknown as StoryObj<typeof meta>;

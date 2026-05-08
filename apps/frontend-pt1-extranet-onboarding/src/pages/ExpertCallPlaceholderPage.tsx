@@ -8,12 +8,11 @@ import {
   DensityProvider,
   Field,
   FieldLabel,
-  H4,
   Input,
   PublicRegistryAppShell,
   Separator,
 } from "@procertus-ui/ui";
-import { DetailCard } from "@procertus-ui/ui-lib";
+import { DetailCard, DetailCardSection } from "@procertus-ui/ui-lib";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { APP_FOOTER } from "../layouts/footerConfig";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
@@ -115,8 +114,7 @@ export function ExpertCallPlaceholderPage() {
               </div>
             }
           >
-            <section className="flex flex-col gap-component">
-              <H4>Wat u kunt verwachten</H4>
+            <DetailCardSection title="Wat u kunt verwachten">
               <ul className="flex flex-col gap-component">
                 {SESSION_HIGHLIGHTS.map((item) => (
                   <li
@@ -131,15 +129,12 @@ export function ExpertCallPlaceholderPage() {
                   </li>
                 ))}
               </ul>
-            </section>
+            </DetailCardSection>
 
-            <section className="flex flex-col gap-component">
-              <div className="flex flex-col">
-                <H4>Kies een moment</H4>
-                <p className="text-sm text-muted-foreground">
-                  Sessies duren één uur en starten op het hele of halve uur.
-                </p>
-              </div>
+            <DetailCardSection
+              title="Kies een moment"
+              description="Sessies duren één uur en starten op het hele of halve uur."
+            >
               <div className="flex flex-col gap-section md:flex-row md:items-stretch md:gap-0">
                 <div className="flex flex-1 justify-center md:justify-start">
                   <Calendar
@@ -174,10 +169,9 @@ export function ExpertCallPlaceholderPage() {
                   <span className="font-medium text-foreground">{formattedSelection}</span>.
                 </p>
               ) : null}
-            </section>
+            </DetailCardSection>
 
-            <section className="flex flex-col gap-component">
-              <H4>Uw gegevens</H4>
+            <DetailCardSection title="Uw gegevens">
               <div className="grid grid-cols-1 gap-section sm:grid-cols-2">
                 <Field>
                   <FieldLabel htmlFor="expert-call-firstname">Voornaam</FieldLabel>
@@ -199,7 +193,7 @@ export function ExpertCallPlaceholderPage() {
               <p className="text-xs text-muted-foreground">
                 U ontvangt een agenda-uitnodiging met videolink zodra het moment is bevestigd.
               </p>
-            </section>
+            </DetailCardSection>
           </DetailCard>
         </div>
       </PublicRegistryAppShell>

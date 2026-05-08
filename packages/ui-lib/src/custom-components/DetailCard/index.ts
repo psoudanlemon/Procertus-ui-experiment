@@ -1,2 +1,2 @@
-export { DetailCard } from "./DetailCard";
-export type { DetailCardProps } from "./DetailCard";
+export { DetailCard, DetailCardSection } from "./DetailCard";
+export type { DetailCardProps, DetailCardSectionProps } from "./DetailCard";

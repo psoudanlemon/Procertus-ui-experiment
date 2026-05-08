@@ -1,4 +1,4 @@
-import type { DownloadableDocumentListItemData } from "@procertus-ui/ui";
+import type { DownloadableItemData } from "@procertus-ui/ui";
 
 import type { CertificationRequestDraft } from "../../certification-request/types";
 
@@ -31,10 +31,10 @@ function productDedupKey(draft: CertificationRequestDraft): string | null {
  */
 export function buildRulesetDocumentsForInquiries(
   inquiries: readonly CertificationRequestDraft[],
-): DownloadableDocumentListItemData[] {
+): DownloadableItemData[] {
   if (inquiries.length === 0) return [];
 
-  const docs: DownloadableDocumentListItemData[] = [];
+  const docs: DownloadableItemData[] = [];
 
   const seenProductKeys = new Set<string>();
   for (const d of inquiries) {

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import type { DownloadableDocumentListItemData } from "@procertus-ui/ui";
+import type { DownloadableItemData } from "@procertus-ui/ui";
 import type { StepLayoutProps } from "@procertus-ui/ui-lib";
 import type { CertificationWizardModel } from "../../certification-request/model";
 import type { CertificationRequestDraft } from "../../certification-request/types";
@@ -53,6 +53,6 @@ export type CertificationRequestWizardViewProps = {
   reviewRequester: RequestPackageReviewRequesterPresentation | undefined;
   reviewStep: CertificationWizardModel["reviewStep"];
   rulesetDocumentsDescription: string;
-  rulesetDocuments: DownloadableDocumentListItemData[];
+  rulesetDocuments: DownloadableItemData[];
   rulesetEmptyContent: ReactNode;
 };

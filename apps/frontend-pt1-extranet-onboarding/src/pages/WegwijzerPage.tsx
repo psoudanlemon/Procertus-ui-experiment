@@ -16,10 +16,9 @@ import {
   Button,
   Card,
   DensityProvider,
-  DownloadableDocumentGrid,
-  type DownloadableDocumentListItemData,
+  DownloadableItemGrid,
+  type DownloadableItemData,
   H1,
-  H4,
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
@@ -32,7 +31,12 @@ import {
   PublicRegistryAppShell,
   Skeleton,
 } from "@procertus-ui/ui";
-import { BrowseCard, DetailCard, type ChoiceBarItem } from "@procertus-ui/ui-lib";
+import {
+  BrowseCard,
+  DetailCard,
+  DetailCardSection,
+  type ChoiceBarItem,
+} from "@procertus-ui/ui-lib";
 import { CatalogueExplorer } from "@procertus-ui/ui-certification";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { APP_FOOTER } from "../layouts/footerConfig";
@@ -363,22 +367,19 @@ function MasterCard({ service }: { service: WegwijzerService }) {
         </Alert>
       )}
 
-      <section className="flex flex-col gap-component">
-        <div className="flex flex-col">
-          <H4>Regels en documentatie</H4>
-          <p className="text-sm text-muted-foreground">
-            Documenten op basis van uw selectie voor {entry.shortLabel} (prototype — downloadlinks zijn gemockt).
-          </p>
-        </div>
-        <DownloadableDocumentGrid items={documents} />
-      </section>
+      <DetailCardSection
+        title="Regels en documentatie"
+        description={`Documenten op basis van uw selectie voor ${entry.shortLabel} (prototype, downloadlinks zijn gemockt).`}
+      >
+        <DownloadableItemGrid items={documents} />
+      </DetailCardSection>
 
       <MasterCardTimeline service={service} />
     </DetailCard>
   );
 }
 
-function buildMockDocuments(service: WegwijzerService): DownloadableDocumentListItemData[] {
+function buildMockDocuments(service: WegwijzerService): DownloadableItemData[] {
   const { entry } = service;
   return [
     {
@@ -416,24 +417,22 @@ function MasterCardSections({ service }: { service: WegwijzerService }) {
   if (!content) return <MasterCardSkeleton />;
 
   return (
-    <div className="flex max-w-3xl flex-col gap-region">
-      <section className="flex flex-col gap-component">
-        <H4 className="leading-none">Wat is een {entry.label}?</H4>
-        <p className="text-sm leading-normal">{content.what}</p>
-      </section>
+    <>
+      <DetailCardSection title={`Wat is een ${entry.label}?`}>
+        <p className="max-w-3xl text-sm leading-normal">{content.what}</p>
+      </DetailCardSection>
 
-      <section className="flex flex-col gap-component">
-        <H4>Wanneer vraag je dit het beste aan?</H4>
+      <DetailCardSection title="Wanneer vraag je dit het beste aan?">
         <ul className="flex flex-col gap-micro">
           {content.whenToApply.map((item) => (
             <li key={item} className="flex items-start gap-component text-sm leading-normal">
               <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />
-              <span>{item}</span>
+              <span className="max-w-3xl">{item}</span>
             </li>
           ))}
         </ul>
-      </section>
-    </div>
+      </DetailCardSection>
+    </>
   );
 }
 
@@ -441,10 +440,12 @@ function MasterCardTimeline({ service }: { service: WegwijzerService }) {
   const content = WEGWIJZER_SERVICE_CONTENT[service.entry.id];
   if (!content) return null;
   return (
-    <section className="flex items-start gap-component self-start rounded-md bg-info p-component text-info-foreground">
-      <HugeiconsIcon icon={ClockIcon} className="mt-0.5 size-5 shrink-0" />
-      <p className="text-sm leading-normal">{content.timeline}</p>
-    </section>
+    <DetailCardSection>
+      <div className="flex items-start gap-component self-start rounded-md bg-info/40 p-component text-info-foreground">
+        <HugeiconsIcon icon={ClockIcon} className="mt-0.5 size-5 shrink-0" />
+        <p className="max-w-3xl text-sm leading-normal">{content.timeline}</p>
+      </div>
+    </DetailCardSection>
   );
 }
 

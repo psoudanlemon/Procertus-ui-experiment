@@ -95,7 +95,7 @@
  *
  * Requires an ancestor with `container-type: inline-size` (Tailwind's
  * `@container` utility) so the @container queries have a target. Used by
- * DownloadableDocumentGrid; reach for it directly whenever you need the
+ * DownloadableItemGrid; reach for it directly whenever you need the
  * same stepped card-grid behavior on another card-style surface.
  * ──────────────────────────────────────────────────────────────────────── */
 

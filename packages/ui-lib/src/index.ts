@@ -20,7 +20,7 @@ export type {
   ChoiceBarItem,
   ChoiceBarProps,
 } from "./custom-components/CatalogueExplorer";
-export { DetailCard } from "./custom-components/DetailCard";
-export type { DetailCardProps } from "./custom-components/DetailCard";
+export { DetailCard, DetailCardSection } from "./custom-components/DetailCard";
+export type { DetailCardProps, DetailCardSectionProps } from "./custom-components/DetailCard";
 export { BrowseCard } from "./custom-components/BrowseCard";
 export type { BrowseCardCta, BrowseCardProps, BrowseCardVariant } from "./custom-components/BrowseCard";

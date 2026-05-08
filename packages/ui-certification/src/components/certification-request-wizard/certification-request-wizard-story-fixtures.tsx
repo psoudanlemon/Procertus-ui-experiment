@@ -1,4 +1,4 @@
-import type { DownloadableDocumentListItemData } from "@procertus-ui/ui";
+import type { DownloadableItemData } from "@procertus-ui/ui";
 
 import type { CertificationWizardModel } from "../../certification-request/model";
 import type { CertificationRequestDraft } from "../../certification-request/types";
@@ -64,7 +64,7 @@ export const storyDrafts: Array<CertificationRequestDraft & { title: string; sub
     },
   ];
 
-export const storyRulesetDocuments: DownloadableDocumentListItemData[] = [
+export const storyRulesetDocuments: DownloadableItemData[] = [
   {
     id: "ptv-fixture",
     title: "PTV — Rainscreen (fixture)",

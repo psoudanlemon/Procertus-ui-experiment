@@ -6,7 +6,12 @@
  * entire surface (catalogue detail, expert-call intake, …). For ordinary
  * cards, keep using the base `Card` primitive from `@procertus-ui/ui`.
  *
- * **Design system:** `Card` family + `H2` + `CardDescription` from
+ * Body content is structured with `DetailCardSection`: each section has an
+ * optional title + description and a free-form content slot. Sections are
+ * separated by `gap-section`; inside a section, the title/description block
+ * sits at `gap-component` from the content.
+ *
+ * **Design system:** `Card` family + `H2` + `H4` + `CardDescription` from
  * `@procertus-ui/ui`.
  */
 import type { ReactNode } from "react";
@@ -19,6 +24,7 @@ import {
   CardFooter,
   CardHeader,
   H2,
+  H4,
 } from "@procertus-ui/ui";
 import procertusLogomark from "@procertus-ui/ui/assets/logomark.svg";
 
@@ -79,5 +85,41 @@ export function DetailCard({
         </CardFooter>
       ) : null}
     </Card>
+  );
+}
+
+export type DetailCardSectionProps = {
+  title?: ReactNode;
+  description?: ReactNode;
+  children: ReactNode;
+  className?: string;
+};
+
+/**
+ * Body unit inside `DetailCard`. Renders an optional title + description
+ * block followed by free-form content. Spacing is fixed by the stramien:
+ * title and description sit flush against each other, the header block
+ * sits at `gap-component` from the content, and sections themselves are
+ * separated by `gap-section` via the parent `DetailCard`.
+ */
+export function DetailCardSection({
+  title,
+  description,
+  children,
+  className,
+}: DetailCardSectionProps) {
+  const hasHeader = Boolean(title || description);
+  return (
+    <section className={cn("flex flex-col gap-component", className)}>
+      {hasHeader ? (
+        <header className="flex flex-col gap-micro">
+          {title ? <H4 className="leading-none">{title}</H4> : null}
+          {description ? (
+            <p className="text-sm leading-normal text-muted-foreground">{description}</p>
+          ) : null}
+        </header>
+      ) : null}
+      {children}
+    </section>
   );
 }
