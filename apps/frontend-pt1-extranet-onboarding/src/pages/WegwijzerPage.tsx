@@ -18,7 +18,6 @@ import {
   DensityProvider,
   DownloadableItemGrid,
   type DownloadableItemData,
-  H1,
   H3,
   HoverCard,
   HoverCardContent,
@@ -29,6 +28,7 @@ import {
   ItemDescription,
   ItemGroup,
   ItemTitle,
+  PageHeader,
   PublicRegistryAppShell,
   Skeleton,
 } from "@procertus-ui/ui";
@@ -160,20 +160,11 @@ export function WegwijzerPage() {
 
 function Hero() {
   return (
-    <section className="relative isolate overflow-hidden">
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-[image:var(--background-image-gradient-procertus-hero)] opacity-60"
-      />
-      <div className="relative flex w-full flex-col items-start gap-component px-boundary pt-boundary pb-region text-left">
-        <H1 className="max-w-3xl text-heading-xl">Start uw certificeringstraject</H1>
-        <p className="max-w-[44rem] text-base leading-normal text-muted-foreground">
-          Bij PROCERTUS bieden we verschillende diensten aan. Hieronder vindt u een overzicht van
-          ons aanbod. Selecteer een certificaat om meer informatie te krijgen of direct uw aanvraag
-          te starten.
-        </p>
-      </div>
-    </section>
+    <PageHeader
+      className="px-boundary pt-boundary pb-region"
+      title="Start uw certificeringstraject"
+      description="Bij PROCERTUS bieden we verschillende diensten aan. Hieronder vindt u een overzicht van ons aanbod. Selecteer een certificaat om meer informatie te krijgen of direct uw aanvraag te starten."
+    />
   );
 }
 
