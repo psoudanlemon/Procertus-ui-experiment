@@ -128,7 +128,7 @@ function AppearanceHeroStory() {
           value="plans"
           controlId="hero-plans"
           title="Elevated"
-          description="Adds a soft drop shadow for the recommended path."
+          description="Static branded glow for the quiet-promotion tier."
         />
         <SelectChoiceCard
           appearance="hero"

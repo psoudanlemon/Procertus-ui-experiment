@@ -329,3 +329,205 @@ function StandoutGradientView() {
 export const BrandedGlow: Story = {
   render: () => <StandoutGradientView />,
 };
+
+// ---------------------------------------------------------------------------
+// Story 03: Static branded glow
+// ---------------------------------------------------------------------------
+
+function StaticGlowView() {
+  return (
+    <div className="mx-auto flex max-w-5xl flex-col gap-16 p-10">
+      <div className="flex flex-col gap-2">
+        <H2>Static branded glow</H2>
+        <Muted className="max-w-prose">
+          A single brand-tinted box-shadow token for &ldquo;quiet promotion&rdquo;.
+          Unlike the animated standout, the static glow is safe to apply to
+          multiple sibling elements: an <code>elevated</code> tier of cards or
+          pills, the primary services in a catalogue, the highlighted row in a
+          list. It says &ldquo;these matter more&rdquo; without demanding
+          undivided attention.
+        </Muted>
+      </div>
+
+      {/* Anatomy */}
+      <div className="flex flex-col gap-6">
+        <H3>Anatomy</H3>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="pb-3 pr-6 text-left text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                  Property
+                </th>
+                <th className="pb-3 text-left text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                  Value
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-border">
+                <td className="py-3 pr-6 font-medium text-foreground">Tokens</td>
+                <td className="py-3">
+                  <code className="text-xs text-muted-foreground">
+                    --shadow-proc-glow-{"{xs|sm|md|lg}"}
+                  </code>
+                </td>
+              </tr>
+              <tr className="border-b border-border">
+                <td className="py-3 pr-6 font-medium text-foreground">
+                  Tailwind classes
+                </td>
+                <td className="py-3">
+                  <code className="text-xs text-muted-foreground">
+                    shadow-proc-glow-{"{xs|sm|md|lg}"}
+                  </code>
+                </td>
+              </tr>
+              <tr className="border-b border-border">
+                <td className="py-3 pr-6 font-medium text-foreground">
+                  Halo colors
+                </td>
+                <td className="py-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="size-4 rounded-full"
+                        style={{ background: "oklch(0.803 0.073 173)" }}
+                      />
+                      <code className="text-xs text-muted-foreground">
+                        accent-300
+                      </code>
+                    </div>
+                    <span className="text-muted-foreground/40">·</span>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="size-4 rounded-full"
+                        style={{ background: "oklch(0.477 0.102 227)" }}
+                      />
+                      <code className="text-xs text-muted-foreground">
+                        primary-700
+                      </code>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr className="border-b border-border">
+                <td className="py-3 pr-6 font-medium text-foreground">
+                  Geometry
+                </td>
+                <td className="py-3 text-muted-foreground">
+                  Three-layer box-shadow per step: a 1px hairline, an accent halo,
+                  and a primary grounding shadow. Omnidirectional. Halo and
+                  grounding blur radii grow across xs → lg, mirroring the
+                  neutral shadow scale.
+                </td>
+              </tr>
+              <tr className="border-b border-border">
+                <td className="py-3 pr-6 font-medium text-foreground">
+                  Motion
+                </td>
+                <td className="py-3 text-muted-foreground">
+                  None. Static across light and dark modes; dark variant uses
+                  brighter alpha to read against deep surfaces.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Scale */}
+      <div className="flex flex-col gap-6">
+        <H3>Scale</H3>
+        <div className="grid grid-cols-2 gap-section py-8 sm:grid-cols-5">
+          {(
+            [
+              { size: "tactile", className: "shadow-proc-glow-tactile" },
+              { size: "xs", className: "shadow-proc-glow-xs" },
+              { size: "sm", className: "shadow-proc-glow-sm" },
+              { size: "md", className: "shadow-proc-glow-md" },
+              { size: "lg", className: "shadow-proc-glow-lg" },
+            ] as const
+          ).map(({ size, className }) => (
+            <div key={size} className="flex flex-col items-center gap-component">
+              <div
+                className={`flex size-32 items-center justify-center rounded-xl border border-border bg-card ${className}`}
+              />
+              <code className="text-xs uppercase tracking-wider text-muted-foreground">
+                shadow-proc-glow-{size}
+              </code>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Live demo */}
+      <div className="flex flex-col gap-6">
+        <H3>Quiet promotion — multiple siblings</H3>
+        <div className="grid grid-cols-1 gap-section py-8 sm:grid-cols-3">
+          {["BENOR", "CE-markering", "SSD"].map((label) => (
+            <div
+              key={label}
+              className="flex h-32 flex-col items-center justify-center gap-1.5 rounded-xl border border-border bg-card shadow-proc-glow-xs"
+            >
+              <span className="text-base font-semibold text-foreground">
+                {label}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                Quiet promotion
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Usage */}
+      <div className="grid gap-6 sm:grid-cols-2">
+        <div className="rounded-lg border border-border bg-muted/30 p-6">
+          <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            When to use
+          </p>
+          <ul className="flex flex-col gap-1.5 text-sm text-muted-foreground">
+            <li>
+              <code className="text-xs">elevated</code> variant of{" "}
+              <code className="text-xs">SelectChoiceCard</code> and{" "}
+              <code className="text-xs">BrowseCard</code>
+            </li>
+            <li>Primary tier in a multi-tier catalogue or filter bar</li>
+            <li>
+              Anywhere the animated standout would be too loud or compete with
+              siblings
+            </li>
+          </ul>
+        </div>
+        <div className="rounded-lg border border-border bg-muted/30 p-6">
+          <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            Constraints
+          </p>
+          <ul className="flex flex-col gap-1.5 text-sm text-muted-foreground">
+            <li>Apply directly to the target — no wrapper element needed</li>
+            <li>
+              Do not combine with{" "}
+              <code className="text-xs">glow-standout</code> on the same surface
+            </li>
+            <li>
+              Reserved for the L1 Standout tier; do not use as decorative
+              chrome
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Static brand-tinted box-shadow for the &ldquo;quiet promotion&rdquo; tier of
+ * the L1 Standout elevation. Applied directly to the element, safe to use on
+ * multiple siblings, and the default treatment for the
+ * <code>elevated</code> variant of <code>SelectChoiceCard</code> and
+ * <code>BrowseCard</code>.
+ */
+export const StaticBrandedGlow: Story = {
+  render: () => <StaticGlowView />,
+};

@@ -1,10 +1,10 @@
 /**
  * Clickable navigation card for catalogue / drill-down surfaces — title,
  * optional eyebrow + description, and a ghost-button affordance below the
- * description (label + trailing icon). Mirrors the five chrome variants of
- * `SelectChoiceCard` (`elevated`, `default`, `faded`, `ghost`, `no-border`)
- * without the form-control machinery, so callers can tier a grid of cards
- * with the same visual vocabulary as a `ChoiceBar`.
+ * description (label + trailing icon). Six chrome variants
+ * (`elevated`, `standout`, `default`, `faded`, `ghost`, `no-border`)
+ * mirror the choice-bar vocabulary so callers can tier a grid of cards
+ * with the same visual hierarchy.
  *
  * Built on top of the `Item` primitive: layout, focus-ring, and slot
  * conventions come from there; chrome is overridden per variant. The cta is
@@ -37,20 +37,22 @@ import {
 } from "@procertus-ui/ui";
 
 const browseCardVariants = cva(
-  "cursor-pointer transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-200 motion-safe:hover:-translate-y-0.5",
+  "cursor-pointer transition-[border-color,color,opacity] duration-200",
   {
     variants: {
       variant: {
         elevated:
-          "border-border bg-card shadow-proc-sm hover:border-accent-foreground hover:bg-accent hover:text-accent-foreground",
+          "border-border bg-card shadow-proc-glow-tactile hover:border-accent-foreground hover:text-accent-foreground",
+        standout:
+          "border-border bg-muted/50 hover:border-accent-foreground hover:text-accent-foreground",
         default:
-          "border-border bg-card hover:border-accent-foreground hover:bg-accent hover:text-accent-foreground",
+          "border-border bg-card hover:border-accent-foreground hover:text-accent-foreground",
         faded:
-          "border-dashed border-muted-foreground/40 bg-card opacity-90 hover:opacity-100 hover:border-accent-foreground hover:bg-accent hover:text-accent-foreground",
+          "border-dashed border-muted-foreground/40 bg-card opacity-90 hover:border-accent-foreground hover:text-accent-foreground hover:opacity-100",
         ghost:
-          "border-transparent bg-card text-muted-foreground shadow-none hover:bg-accent hover:text-accent-foreground",
+          "border-transparent bg-card text-muted-foreground shadow-none hover:text-accent-foreground",
         "no-border":
-          "border-transparent bg-card text-foreground shadow-none hover:border-accent-foreground hover:bg-accent hover:text-accent-foreground",
+          "border-transparent bg-card text-foreground shadow-none hover:border-accent-foreground hover:text-accent-foreground",
       },
     },
     defaultVariants: { variant: "default" },
@@ -72,9 +74,10 @@ export type BrowseCardProps = Omit<ComponentProps<"div">, "title" | "children"> 
   eyebrow?: ReactNode;
   /**
    * @default "default" — same vocabulary as `SelectChoiceCard`. `elevated` adds
-   * a soft shadow, `faded` is dashed and de-emphasized, `ghost` drops surface
-   * and uses muted-foreground text, `no-border` keeps the surface but suppresses
-   * the border.
+   * a static branded glow (quiet-promotion tier), `standout` swaps to a muted
+   * background tint, `faded` is dashed and de-emphasized, `ghost` drops
+   * surface and uses muted-foreground text, `no-border` keeps the surface
+   * but suppresses the border.
    */
   variant?: BrowseCardVariant;
   /**

@@ -135,9 +135,13 @@ animated to attract even more attention.
   <span className="font-semibold text-foreground block" style={{ fontSize: '1.5rem' }}>Static glow</span>
   <span className="uppercase block mb-3" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'var(--muted-foreground)', marginTop: '8px' }}>Quiet promotion</span>
   <p className="text-sm text-muted-foreground m-0" style={{ lineHeight: 1.6 }}>
-    A colored <code className="text-xs bg-muted px-1 py-0.5 rounded">box-shadow</code> applied
-    directly to the element. It highlights without movement, suitable when
-    promotion should be present but not distracting.
+    The <code className="text-xs bg-muted px-1 py-0.5 rounded">shadow-proc-glow-{'{xs|sm|md|lg}'}</code> scale —
+    an omnidirectional, brand-tinted <code className="text-xs bg-muted px-1 py-0.5 rounded">box-shadow</code> applied
+    directly to the element. It highlights without movement, suitable for the <code className="text-xs bg-muted px-1 py-0.5 rounded">elevated</code> variant
+    of cards and pills, or anywhere multiple promoted siblings need to coexist
+    without competing for attention. The four steps mirror the neutral shadow scale,
+    so glow intensity can be tuned to match surrounding depth. Use these tokens
+    instead of constructing custom colored shadows.
   </p>
 </div>
 
@@ -180,7 +184,14 @@ animated to attract even more attention.
     <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">shadow-proc-xs</code>
     through
     <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">shadow-proc-lg</code>
-    map directly to these tokens. The animated glow is a single utility:
+    map directly to these tokens. The static branded glow lives alongside them as a parallel scale,
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">--shadow-proc-glow-{'{xs|sm|md|lg}'}</code> /
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">shadow-proc-glow-{'{xs|sm|md|lg}'}</code> —
+    apply directly to any element that needs quiet promotion (for example, the
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">elevated</code> variant
+    of <code className="text-sm bg-muted px-1.5 py-0.5 rounded">SelectChoiceCard</code> and
+    <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">BrowseCard</code> use <code className="text-sm bg-muted px-1.5 py-0.5 rounded">glow-xs</code>). The
+    animated glow is a single utility:
     <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">glow-standout</code>,
     defined in
     <code className="text-sm bg-muted px-1.5 py-0.5 rounded mx-1">globals.css</code>.
@@ -190,7 +201,9 @@ animated to attract even more attention.
   <div className="flex gap-4 items-center" style={{ marginTop: '16px' }}>
     <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-shadow--neutral-shadows">Token reference</a></Button>
     <span className="text-muted-foreground">|</span>
-    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-shadow--branded-glow">Branded glow</a></Button>
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-shadow--static-branded-glow">Static branded glow</a></Button>
+    <span className="text-muted-foreground">|</span>
+    <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-shadow--branded-glow">Animated branded glow</a></Button>
     <span className="text-muted-foreground">|</span>
     <Button variant="link" className="p-0 h-auto text-base" asChild><a href="?path=/story/design-tokens-elevation-guidelines--docs">Elevation guidelines</a></Button>
   </div>

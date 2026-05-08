@@ -36,7 +36,7 @@ const shellVariants = cva(
       },
       variant: {
         elevated: [
-          "has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:shadow-proc-sm not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-accent-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:bg-accent not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:has-[>[data-slot=field]]:border-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
+          "has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:shadow-proc-glow-tactile not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:border-accent-foreground not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:bg-accent not-has-data-checked:not-has-[[data-state=checked][data-slot=checkbox]]:hover:has-[>[data-slot=field]]:text-accent-foreground has-data-checked:has-[>[data-slot=field]]:border-accent-foreground has-data-checked:has-[>[data-slot=field]]:text-accent-foreground",
           "has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:border-accent-foreground has-[[data-state=checked][data-slot=checkbox]]:has-[>[data-slot=field]]:text-accent-foreground",
         ],
         default: [
@@ -103,11 +103,12 @@ export type SelectChoiceCardProps = {
    */
   leading?: ReactNode;
   /**
-   * @default "default" — `elevated` adds a soft drop shadow, `faded` is dashed and
-   * de-emphasized, `ghost` drops the surface entirely (no background, no border) and
-   * uses muted-foreground text like `faded`, and `no-border` keeps the card surface
-   * but suppresses the border. `ghost` and `no-border` shift the text to
-   * `accent-foreground` on hover and when selected.
+   * @default "default" — `elevated` adds a static branded glow (quiet-promotion
+   * tier), `faded` is dashed and de-emphasized, `ghost` drops the surface
+   * entirely (no background, no border) and uses muted-foreground text like
+   * `faded`, and `no-border` keeps the card surface but suppresses the border.
+   * `ghost` and `no-border` shift the text to `accent-foreground` on hover and
+   * when selected.
    */
   variant?: SelectChoiceVariant;
   /**

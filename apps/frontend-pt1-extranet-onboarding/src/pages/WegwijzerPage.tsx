@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Alert02Icon,
   ArrowRight02Icon,
+  Call02Icon,
   ClockIcon,
   InformationCircleIcon,
   LinkSquare02Icon,
@@ -13,6 +14,7 @@ import {
   AlertDescription,
   AlertTitle,
   Button,
+  Card,
   DensityProvider,
   DownloadableDocumentGrid,
   type DownloadableDocumentListItemData,
@@ -164,26 +166,25 @@ function Hero() {
 }
 
 // ---------------------------------------------------------------------------
-// Choice-bar items — primary services first (BENOR, CE, SSD elevated; the
-// PROCERTUS-side trio faded), trailing "Overige" ghost pill bundles tier-3
-// external referrals.
+// Choice-bar items — primary services first (tier 1 elevated, tier 2 default),
+// trailing "Overige" ghost pill bundles tier-3 external referrals.
 // ---------------------------------------------------------------------------
 
 const CHOICE_BAR_ITEMS: readonly ChoiceBarItem[] = [
   { value: ALL_ID, label: "Alle certificaten", variant: "elevated" as const },
-  ...PRIMARY_SERVICES.map((service, index) => ({
+  ...PRIMARY_SERVICES.map((service) => ({
     value: service.entry.id,
     label: service.pillLabel ?? service.entry.label,
-    variant: index < 3 ? ("elevated" as const) : ("default" as const),
+    variant: service.tier === 1 ? ("elevated" as const) : ("default" as const),
   })),
 ];
 
 // ---------------------------------------------------------------------------
 // All Certificates Grid — shown when "Alle certificaten" is active.
 // Three-tier visual hierarchy mirrors the choice-bar pill variants:
-//   elevated (full width)  → first 3 primary services (BENOR, CE, SSD)
-//   faded    (50/50 + 50%) → remaining primary services
-//   ghost    (25% each)    → tier-3 external referrals (ATG, EPD)
+//   elevated (full width) → tier 1 primary services (BENOR, CE)
+//   default  (50/50)      → tier 2 primary services
+//   faded    (25% each)   → tier 3 external referrals (ATG, EPD)
 // ---------------------------------------------------------------------------
 
 function AllCertificatesGrid({
@@ -195,10 +196,8 @@ function AllCertificatesGrid({
   external: readonly WegwijzerService[];
   onSelect: (id: string) => void;
 }) {
-  const elevated = primary.slice(0, 3);
-  const faded = primary.slice(3);
-  const fadedRow = faded.slice(0, 2);
-  const fadedTrailing = faded[2];
+  const elevated = primary.filter((s) => s.tier === 1);
+  const secondary = primary.filter((s) => s.tier === 2);
 
   const summary = (id: string) => WEGWIJZER_SERVICE_CONTENT[id]?.what;
 
@@ -216,7 +215,7 @@ function AllCertificatesGrid({
           <button type="button" onClick={() => onSelect(service.entry.id)} />
         </BrowseCard>
       ))}
-      {fadedRow.map((service) => (
+      {secondary.map((service) => (
         <BrowseCard
           key={service.entry.id}
           title={service.entry.label}
@@ -228,22 +227,10 @@ function AllCertificatesGrid({
           <button type="button" onClick={() => onSelect(service.entry.id)} />
         </BrowseCard>
       ))}
-      {fadedTrailing && (
-        <BrowseCard
-          key={fadedTrailing.entry.id}
-          title={fadedTrailing.entry.label}
-          description={summary(fadedTrailing.entry.id)}
-          variant="default"
-          className="col-span-4 md:col-span-2"
-          asChild
-        >
-          <button type="button" onClick={() => onSelect(fadedTrailing.entry.id)} />
-        </BrowseCard>
-      )}
       {external.map((service) => (
         <BrowseCard
           key={service.entry.id}
-          title={service.entry.label}
+          title={service.entry.shortLabel}
           description={summary(service.entry.id)}
           variant="faded"
           cta={{
@@ -258,7 +245,28 @@ function AllCertificatesGrid({
           <button type="button" onClick={() => onSelect(service.entry.id)} />
         </BrowseCard>
       ))}
+      <ExpertCallFooterCard />
     </div>
+  );
+}
+
+function ExpertCallFooterCard() {
+  return (
+    <Card className="col-span-4 flex flex-col gap-section bg-muted/50 px-section py-section md:col-span-2">
+      <div className="flex flex-col gap-micro">
+        <p className="text-heading-sm font-semibold">Liever eerst een expert spreken?</p>
+        <p className="text-sm leading-normal text-muted-foreground">
+          Plan een live online sessie van één uur en doorloop de vereisten samen met een PROCERTUS-expert.
+        </p>
+      </div>
+      <Button asChild variant="outline" className="self-start bg-background">
+        <Link to={EXPERT_CALL_PATH()}>
+          <HugeiconsIcon icon={Call02Icon} className="size-4" />
+          Plan een expert call
+          <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
+        </Link>
+      </Button>
+    </Card>
   );
 }
 
