@@ -13,9 +13,10 @@ import type {
 
 /**
  * Stable card height for the anonymous wizard / step pages so they don't shrink to
- * content height between steps.
+ * content height between steps. Resolves to `calc(100svh - 12rem)` via the
+ * `--min-height-stable-step` token (defined alongside `--max-height-sticky-rail`).
  */
-export const STABLE_STEP_MIN_HEIGHT = "min-h-[calc(100svh-12rem)]";
+export const STABLE_STEP_MIN_HEIGHT = "min-h-stable-step";
 
 const DETAILS_IDX = CERTIFICATION_REQUEST_STEP_IDS.indexOf("details");
 const DRAFTS_IDX = CERTIFICATION_REQUEST_STEP_IDS.indexOf("drafts");
