@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useCallback, useState } from "react";
 
 import {
+  Checkbox,
   Field,
   FieldDescription,
   FieldGroup,
@@ -10,7 +11,7 @@ import {
   Textarea,
 } from "@procertus-ui/ui";
 
-import { OnboardingStepper, type OnboardingStepperStep } from "../onboarding-stepper";
+import { StepLayoutStepper, type StepLayoutStep } from "../step-layout-stepper";
 import { StepLayout } from "./StepLayout";
 import { useStepLayout } from "./useStepLayout";
 
@@ -31,7 +32,7 @@ const meta = {
 
 export default meta;
 
-const stepperSteps: OnboardingStepperStep[] = [
+const stepperSteps: StepLayoutStep[] = [
   { id: "a", title: "Account", description: "Create credentials" },
   { id: "b", title: "Profile", description: "Organization details" },
   { id: "c", title: "Review", description: "Confirm and submit" },
@@ -121,11 +122,9 @@ function OnboardingFlowStory() {
           </Field>
           <Field>
             <label className="flex cursor-pointer items-center gap-component text-sm text-foreground">
-              <input
-                type="checkbox"
-                className="size-4 rounded border"
+              <Checkbox
                 checked={perStepOk[step]}
-                onChange={() =>
+                onCheckedChange={() =>
                   setPerStepOk((prev) => {
                     const next = [...prev];
                     next[step] = !next[step];
@@ -179,11 +178,9 @@ function OnboardingFlowStory() {
           </Field>
           <Field>
             <label className="flex cursor-pointer items-center gap-component text-sm text-foreground">
-              <input
-                type="checkbox"
-                className="size-4 rounded border"
+              <Checkbox
                 checked={perStepOk[step]}
-                onChange={() =>
+                onCheckedChange={() =>
                   setPerStepOk((prev) => {
                     const next = [...prev];
                     next[step] = !next[step];
@@ -211,11 +208,9 @@ function OnboardingFlowStory() {
           </Field>
           <Field>
             <label className="flex cursor-pointer items-center gap-component text-sm text-foreground">
-              <input
-                type="checkbox"
-                className="size-4 rounded border"
+              <Checkbox
                 checked={perStepOk[step]}
-                onChange={() =>
+                onCheckedChange={() =>
                   setPerStepOk((prev) => {
                     const next = [...prev];
                     next[step] = !next[step];
@@ -251,7 +246,7 @@ function WithTopStepperStory() {
       stepperPosition="top"
       stepKey={flow.activeStep}
       stepper={
-        <OnboardingStepper
+        <StepLayoutStepper
           steps={stepperSteps}
           activeStep={flow.activeStep}
           onStepChange={flow.goToStep}
@@ -304,11 +299,9 @@ function WithTopStepperStory() {
           </Field>
           <Field>
             <label className="flex cursor-pointer items-center gap-component text-sm text-foreground">
-              <input
-                type="checkbox"
-                className="size-4 rounded border"
+              <Checkbox
                 checked={perStepOk[flow.activeStep]}
-                onChange={() =>
+                onCheckedChange={() =>
                   setPerStepOk((p) => {
                     const n = [...p];
                     n[flow.activeStep] = !n[flow.activeStep];
@@ -362,11 +355,9 @@ function WithTopStepperStory() {
           </Field>
           <Field>
             <label className="flex cursor-pointer items-center gap-component text-sm text-foreground">
-              <input
-                type="checkbox"
-                className="size-4 rounded border"
+              <Checkbox
                 checked={perStepOk[flow.activeStep]}
-                onChange={() =>
+                onCheckedChange={() =>
                   setPerStepOk((p) => {
                     const n = [...p];
                     n[flow.activeStep] = !n[flow.activeStep];
@@ -393,12 +384,10 @@ function WithTopStepperStory() {
             </FieldDescription>
           </Field>
           <Field>
-            <label className="flex items-center gap-component text-sm text-foreground">
-              <input
-                type="checkbox"
-                className="size-4 rounded border"
+            <label className="flex cursor-pointer items-center gap-component text-sm text-foreground">
+              <Checkbox
                 checked={perStepOk[flow.activeStep]}
-                onChange={() =>
+                onCheckedChange={() =>
                   setPerStepOk((p) => {
                     const n = [...p];
                     n[flow.activeStep] = !n[flow.activeStep];
@@ -432,7 +421,7 @@ function WithStartStepperStory() {
       layout="fill"
       stepKey={flow.activeStep}
       stepper={
-        <OnboardingStepper
+        <StepLayoutStepper
           className="max-w-none"
           steps={stepperSteps}
           activeStep={flow.activeStep}
@@ -522,13 +511,8 @@ function WizardStepStory() {
       }}
     >
       {step === 0 ? (
-        <label className="flex items-center gap-component text-sm">
-          <input
-            type="checkbox"
-            className="size-4"
-            checked={ready}
-            onChange={() => setReady((r) => !r)}
-          />
+        <label className="flex cursor-pointer items-center gap-component text-sm">
+          <Checkbox checked={ready} onCheckedChange={() => setReady((r) => !r)} />
           Required for Next
         </label>
       ) : (
@@ -574,13 +558,8 @@ function FillLayoutStory() {
       secondaryAction={{ label: "Save draft", onClick: () => undefined }}
     >
       <div className="space-y-section text-sm text-muted-foreground">
-        <label className="flex items-center gap-component text-foreground">
-          <input
-            type="checkbox"
-            className="size-4 rounded border"
-            checked={ok}
-            onChange={() => setOk((o) => !o)}
-          />
+        <label className="flex cursor-pointer items-center gap-component text-foreground">
+          <Checkbox checked={ok} onCheckedChange={() => setOk((o) => !o)} />
           Allow Continue (prerequisite)
         </label>
         {fillerParagraphs.map((line) => (
@@ -617,7 +596,7 @@ function ParentFillWithRailStory() {
         stepperPosition="start"
         stepKey={flow.activeStep}
         stepper={
-          <OnboardingStepper
+          <StepLayoutStepper
             className="max-w-none"
             steps={stepperSteps}
             activeStep={flow.activeStep}

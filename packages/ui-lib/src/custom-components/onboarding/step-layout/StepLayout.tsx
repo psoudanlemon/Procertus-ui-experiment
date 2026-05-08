@@ -21,6 +21,10 @@ import {
   P,
 } from "@procertus-ui/ui";
 
+import { StepLayoutStepper, type StepLayoutStep } from "../step-layout-stepper";
+
+export type { StepLayoutStep };
+
 export type StepLayoutAction = {
   label: string;
   onClick: () => void;
@@ -48,13 +52,27 @@ export type StepLayoutProps = {
    */
   flush?: boolean;
   /**
-   * Optional process UI (e.g. `OnboardingStepper` or `Stepper` from `@procertus-ui/ui`).
+   * Steps for the built-in stepper. When supplied (and `stepper` slot is omitted) StepLayout
+   * renders its standard `StepLayoutStepper` automatically. Pair with `activeStep` and
+   * `onStepChange` to drive navigation.
+   */
+  steps?: StepLayoutStep[];
+  /** 0-based active step index for the built-in stepper. Required when `steps` is set. */
+  activeStep?: number;
+  /** Called with the new 0-based index when the user activates a step in the built-in stepper. */
+  onStepChange?: (index: number) => void;
+  /** When false, built-in stepper triggers are inert (progress-only display). Default: true. */
+  interactive?: boolean;
+  /**
+   * Slot for a custom progress UI. Wins over `steps` when both are provided. Use this for
+   * non-default shapes like a compact mobile timeline.
    * - `top` — full width above the title block in the header.
    * - `start` — start-aligned rail (e.g. vertical stepper) beside the title + body + footer on `md+`.
    */
   stepper?: ReactNode;
   /**
-   * Where to place `stepper`. Ignored if `stepper` is not set.
+   * Where to place the stepper. Ignored if neither `stepper` slot nor `steps` is set. Also
+   * sets the built-in stepper's orientation: `top` → horizontal, `start` → vertical.
    * @default "top"
    */
   stepperPosition?: "top" | "start";
@@ -159,6 +177,10 @@ export function StepLayout({
   layout = "default",
   flush = false,
   stepper,
+  steps,
+  activeStep,
+  onStepChange,
+  interactive = true,
   stepperPosition = "top",
   chromeStyle = "card",
   title,
@@ -175,7 +197,19 @@ export function StepLayout({
   const isFill = layout === "fill" || layout === "fill-parent";
   const isViewportFill = layout === "fill";
   const isParentFill = layout === "fill-parent";
-  const hasStepper = stepper != null;
+  const resolvedStepper: ReactNode = stepper
+    ?? (steps && steps.length > 0 && activeStep !== undefined
+      ? (
+        <StepLayoutStepper
+          steps={steps}
+          activeStep={activeStep}
+          onStepChange={onStepChange}
+          interactive={interactive}
+          orientation={stepperPosition === "start" ? "vertical" : "horizontal"}
+        />
+      )
+      : null);
+  const hasStepper = resolvedStepper != null;
   const rail = hasStepper && stepperPosition === "start";
   const stableHeight = !isFill && !rail && minHeight != null;
   const banded = chromeStyle === "banded";
@@ -345,7 +379,7 @@ export function StepLayout({
               isParentFill && "min-h-0",
             )}
           >
-            {stepper}
+            {resolvedStepper}
           </div>
           <div
             className={cn(
@@ -372,7 +406,7 @@ export function StepLayout({
         className,
       )}
     >
-      {hasStepper ? <div className="mx-auto w-[90%]">{stepper}</div> : null}
+      {hasStepper ? <div className="mx-auto w-[90%]">{resolvedStepper}</div> : null}
       {headerNode}
       {contentNode}
       {footerNode}

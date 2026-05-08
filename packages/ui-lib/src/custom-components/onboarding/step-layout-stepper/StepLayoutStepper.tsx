@@ -12,7 +12,7 @@ import {
 } from "@procertus-ui/ui";
 import { useMemo } from "react";
 
-export type OnboardingStepperStep = {
+export type StepLayoutStep = {
   id: string;
   title: string;
   description?: string;
@@ -20,7 +20,7 @@ export type OnboardingStepperStep = {
   available?: boolean;
 };
 
-export type OnboardingStepperProps = {
+export type StepLayoutStepperProps = {
   className?: string;
   /**
    * Stepper orientation. Horizontal fits `StepLayout` with `stepperPosition="top"`; vertical
@@ -31,7 +31,7 @@ export type OnboardingStepperProps = {
    * Steps in order. The ReUI / primitive step index is **1-based**; this component maps
    * to and from the **0-based** `activeStep` used by `useStepLayout`.
    */
-  steps: OnboardingStepperStep[];
+  steps: StepLayoutStep[];
   /**
    * Current step index, **0-based** (same as `useStepLayout` → `activeStep`).
    */
@@ -80,14 +80,14 @@ const horizontalLabelClass =
 const verticalSeparatorClass =
   "group-data-[orientation=vertical]/stepper-nav:ml-[calc((2rem+var(--spacing-micro))/2-1px)] group-data-[orientation=vertical]/stepper-nav:my-component";
 
-export function OnboardingStepper({
+export function StepLayoutStepper({
   className,
   steps,
   activeStep,
   onStepChange,
   orientation = "horizontal",
   interactive = true,
-}: OnboardingStepperProps) {
+}: StepLayoutStepperProps) {
   const value1 = useMemo(
     () => Math.min(steps.length, Math.max(1, activeStep + 1)),
     [activeStep, steps.length]
@@ -127,7 +127,7 @@ export function OnboardingStepper({
         {steps.map((s, i) => {
           const n = i + 1;
           return (
-            <OnboardingStepperItem
+            <StepLayoutStepperItem
               key={s.id}
               n={n}
               step={s}
@@ -144,13 +144,13 @@ export function OnboardingStepper({
 
 type ItemProps = {
   n: number;
-  step: OnboardingStepperStep;
+  step: StepLayoutStep;
   interactive: boolean;
   isLast: boolean;
   orientation: "horizontal" | "vertical";
 };
 
-function OnboardingStepperItem({ n, step, interactive, isLast, orientation }: ItemProps) {
+function StepLayoutStepperItem({ n, step, interactive, isLast, orientation }: ItemProps) {
   const available = step.available !== false;
   const inert = !interactive || !available;
 

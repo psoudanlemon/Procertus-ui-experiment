@@ -11,17 +11,17 @@ import {
 } from "@procertus-ui/ui";
 
 import { StepLayout, useStepLayout } from "../step-layout";
-import { OnboardingStepper, type OnboardingStepperStep } from "./OnboardingStepper";
+import { StepLayoutStepper, type StepLayoutStep } from "./StepLayoutStepper";
 
-const stepDefs: OnboardingStepperStep[] = [
+const stepDefs: StepLayoutStep[] = [
   { id: "a", title: "Account", description: "Create credentials" },
   { id: "b", title: "Profile", description: "Organization details" },
   { id: "c", title: "Review", description: "Confirm and submit" },
 ];
 
 const meta = {
-  title: "Custom Components/Onboarding/OnboardingStepper",
-  component: OnboardingStepper,
+  title: "Custom Components/Onboarding/StepLayoutStepper",
+  component: StepLayoutStepper,
   parameters: {
     layout: "padded",
     docs: {
@@ -32,7 +32,7 @@ const meta = {
     },
   },
   tags: ["autodocs"],
-} satisfies Meta<typeof OnboardingStepper>;
+} satisfies Meta<typeof StepLayoutStepper>;
 
 export default meta;
 
@@ -54,7 +54,7 @@ function HorizontalWithStepLayout() {
     <StepLayout
       stepperPosition="top"
       stepper={
-        <OnboardingStepper
+        <StepLayoutStepper
           steps={guardedSteps}
           activeStep={flow.activeStep}
           onStepChange={flow.goToStep}
@@ -224,7 +224,7 @@ export const WithStepLayout = {
 function VerticalReadOnly() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-component md:flex-row">
-      <OnboardingStepper
+      <StepLayoutStepper
         className="!max-w-56 shrink-0"
         steps={stepDefs}
         activeStep={1}
