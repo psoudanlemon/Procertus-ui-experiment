@@ -1,0 +1,296 @@
+When I select "No title" in the Title or Anhef drop-down, an extra form field is added to enter a title. This doesn't make sense since we already allow for an honorific with an extra input field when one is selected.
+
+---
+
+When structurally validating the VAT field, indicate validation by placing a green (or affirmative color) check icon next to the input field.
+
+---
+
+Make this icon more prominent by placing it in a full circle with a shaded background color and a border.
+
+---
+
+Make this icon more prominent by placing it in a full circle with a shaded background color and a border.
+
+---
+
+When the user selects that they are not a legal representative, an extra form needs to be filled in.
+
+For demo purposes, ensure this information is populated with additional mock details about another person completing the registration. Please add mock information for all possible scenarios (countries).
+
+---
+
+place the extra checkmarks for the subforms inside the form card on the same line as the title and subtitle describing the context of the subform.
+
+---
+
+place the extra checkmarks for the subforms inside the form card on the same line as the title and subtitle describing the context of the subform.
+
+---
+
+The person data for the legal representative is currently being designed more prominently by giving the entire card a muted background color and an emphasized border. I want to revert this and ensure we can display the card in variants.
+
+I only want to use the more prominent variant when making the selection that another person is making the request, to distinguish between the two person form cards.
+
+---
+
+You have now added a third variant by making it more permanent and bluish.
+
+I want to make a chromeless variant with no padding, border, or background shades. This is the variant I want to use by default when registering the legal representative.
+
+---
+
+You have now added a third variant by making it more permanent and bluish.
+
+I want to make a chromeless variant with no padding, border, or background shades. This is the variant I want to use by default when registering the legal representative.
+
+---
+
+You have now added a third variant by making it more permanent and bluish.
+
+I want to make a chromeless variant with no padding, border, or background shades. This is the variant I want to use by default when registering the legal representative.
+
+---
+
+You have now added a third variant by making it more permanent and bluish.
+
+I want to make a chromeless variant with no padding, border, or background shades. This is the variant I want to use by default when registering the legal representative.
+
+---
+
+Okay, I moved to the next step of the form. After using the company or VAT number to check for publicly available information, or using fallbacks like email and domain names, we can fill in the form as best as possible.
+
+I can see that the country field is still editable, but we already selected the country in the first step. Please make sure this country field is not editable anymore. Also, don't show any information about the country shortcode; this is derived information and should not be exposed. Show the country just like we're showing email and VAT number as the input source for generating the prefilled data.
+
+Also reuse the country icon (flag) that we used in the first step of selecting the country or region.
+
+Of course, when selecting a broader region like Europe or the US — or other regions — we still need to allow adding country information.
+
+Also, when adding the extra person registration forms here, please use the same person subform we already optimized in the previous step when selecting the optional overrides.
+
+---
+
+Okay, I moved to the next step of the form. After using the company or VAT number to check for publicly available information, or using fallbacks like email and domain names, we can fill in the form as best as possible.
+
+I can see that the country field is still editable, but we already selected the country in the first step. Please make sure this country field is not editable anymore. Also, don't show any information about the country shortcode; this is derived information and should not be exposed. Show the country just like we're showing email and VAT number as the input source for generating the prefilled data.
+
+Also reuse the country icon (flag) that we used in the first step of selecting the country or region.
+
+Of course, when selecting a broader region like Europe or the US — or other regions — we still need to allow adding country information.
+
+Also, when adding the extra person registration forms here, please use the same person subform we already optimized in the previous step when selecting the optional overrides.
+
+---
+
+"Land afgeleid uit uw nummer. U kunt het hier nog aanpassen."
+
+this is not correct when the country was preselected
+ also, don't show the country icon in the country input field. Only show the country icon at the top where we display the pre-selected region or country.
+
+---
+
+The email for invoicing is not an optional field, so in this step please make it a required field for invoicing emails.
+
+Also, allow an optional selection for additional invoicing information.
+
+---
+
+The email for invoicing is not an optional field, so in this step please make it a required field for invoicing emails.
+
+Also, allow an optional selection for additional invoicing information.
+
+---
+
+I still can't see the required field for "invoice email." Please keep this outside of the optional toggle-ball section for changing invoicing company information, but add it to the top form in this section with the other required information.
+
+---
+
+I still can't see the required field for "invoice email." Please keep this outside of the optional toggle-ball section for changing invoicing company information, but add it to the top form in this section with the other required information.
+
+---
+
+There are too many nested, toggleable, or switchable cards for invoicing. Place the lower-level two options as main options next to each other.
+
+Move the alternative company or invoicing information to be the first selectable options below the regular form.
+
+Then show the optional contact person information for invoicing, and then show the optional field for an alternative responsible person for certification inspection—only when this last option is selected.
+
+Also show the extra option for an alternative second contact person for certification inspection.
+
+---
+
+Remove the toggle card with "Aparte facturatie. Actief wanneer facturen naar een apart mailboxadres moeten. Zorg dat het facturatie-e-mailadres hierboven is ingevuld."
+
+since providing an invoicing email address is always required, we don't need this toggle or card.
+
+The only thing we need for invoicing is to allow the user to add additional invoicing information or to add alternative invoicing company information.
+
+---
+
+Remove the toggle card with "Aparte facturatie. Actief wanneer facturen naar een apart mailboxadres moeten. Zorg dat het facturatie-e-mailadres hierboven is ingevuld."
+
+since providing an invoicing email address is always required, we don't need this toggle or card.
+
+The only thing we need for invoicing is to allow the user to add additional invoicing information or to add alternative invoicing company information.
+
+---
+
+When a person is selected to assign a role instead of creating a new one, don't show the form anymore.
+
+Instead, list the person's information more concisely for the person selected for this new role.
+
+---
+
+When a person is selected to assign a role instead of creating a new one, don't show the form anymore.
+
+Instead, list the person's information more concisely for the person selected for this new role.
+
+---
+
+Place a drop-down to select an existing person or choose the option to create a new one, stacked horizontally next to the title of this card.
+
+Align this to the top-right of the card.
+
+---
+
+Don't show the selected person's information inside another extra card. Show it without any chrome in the already available toggleable card.
+
+---
+
+Also, don't display any horizontal rules in this card.
+
+---
+
+Also, don't display any horizontal rules in this card.
+
+---
+
+Also, when a person is selected, I sometimes see additional fields displayed, like title and role. I don't know why they are added. That doesn't make any sense: if I selected a person with optional title and role that were already added before, don't allow changing information for already added persons at this stage.
+
+---
+
+Also, when a person is selected, I sometimes see additional fields displayed, like title and role. I don't know why they are added. That doesn't make any sense: if I selected a person with optional title and role that were already added before, don't allow changing information for already added persons at this stage.
+
+---
+
+Instead of adding all these optional extra contact details on the same step as registering the company information, introduce a new step between the company information registration and the final validation and review.
+
+In that new step, allow adding extra person information for each of the different roles.
+
+This, of course, is an optional step and can be skipped by not enabling any of the optional options.
+
+---
+
+Instead of adding all these optional extra contact details on the same step as registering the company information, introduce a new step between the company information registration and the final validation and review.
+
+In that new step, allow adding extra person information for each of the different roles.
+
+This, of course, is an optional step and can be skipped by not enabling any of the optional options.
+
+---
+
+Please review this new step being added to Additional Contacts. Make sure that we use the toggleable card for all options and don't add any checkbox cards.
+
+Checkboxes suddenly are added for the same intent.
+
+Also make sure all toggleable cards look and feel the same.
+
+Also make sure to add the dependency logic so we can only add a second communication person if a first one has been added.
+
+---
+
+Please review this new step being added to Additional Contacts. Make sure that we use the toggleable card for all options and don't add any checkbox cards.
+
+Checkboxes suddenly are added for the same intent.
+
+Also make sure all toggleable cards look and feel the same.
+
+Also make sure to add the dependency logic so we can only add a second communication person if a first one has been added.
+
+---
+
+You can remove the Extra rule option for invoicing.
+"Extra regel op de factuur
+Afdeling, contactregel of korte referentie op facturen."  We don't need this anymore — not in the previous step, and not in the step about adding roles for the organization.
+
+Then, the alternative invoicing address option needs to be moved to the previous step: the step about registering company information.
+This can remain in the optionally selectable option card, where the user can choose to add alternative company information for invoicing. 
+
+ and then the final option to include a second communication contact for certification inspection. This option should be shown only as an optionally selectable new contact person.
+
+If the user has previously selected to add an alternative contact for certification inspection,
+
+---
+
+You can remove the Extra rule option for invoicing.
+"Extra regel op de factuur
+Afdeling, contactregel of korte referentie op facturen."  We don't need this anymore — not in the previous step, and not in the step about adding roles for the organization.
+
+Then, the alternative invoicing address option needs to be moved to the previous step: the step about registering company information.
+This can remain in the optionally selectable option card, where the user can choose to add alternative company information for invoicing. 
+
+ and then the final option to include a second communication contact for certification inspection. This option should be shown only as an optionally selectable new contact person.
+
+If the user has previously selected to add an alternative contact for certification inspection,
+
+---
+
+You have linked the second contact person for certification and inspection to the alternative contact person for invoicing. These are two separate things.
+
+I need to allow the user to assign all financial information, such as invoicing, to a new or existing person. Additionally, allow the user to select an existing or new person responsible for everything related to certification and inspection.
+
+As a third option, when an extra person for certification and inspection is selected, allow adding a second person as a fallback for certification and inspection.
+
+---
+
+In the final step, please add a table-like overview for all persons who have been registered and the roles assigned to them.
+
+Also add a toggle for onboarding in the Klantenportaal. By default, onboarding should be activated for every person.
+
+---
+
+In the final step, please add a table-like overview for all persons who have been registered and the roles assigned to them.
+
+Also add a toggle for each person for onboarding them in the "Klantenportaal". By default, onboarding should be activated for every person.
+
+The table with the overview of all the information in the requests should be designed with smaller typography and use monospaced characters for the item properties or key values.
+
+Also show this card across the entire available width of the stepper, not only in the first column.
+
+---
+
+In the final step, please add a table-like overview for all persons who have been registered and the roles assigned to them.
+
+Also add a toggle for each person for onboarding them in the "Klantenportaal". By default, onboarding should be activated for every person.
+
+The table with the overview of all the information in the requests should be designed with smaller typography and use monospaced characters for the item properties or key values.
+
+Also show this card across the entire available width of the stepper, not only in the first column.
+
+---
+
+We have a double-nested section: "nazicht" and "nazicht." Please revise the structure of this final-step review and remove the redundant nested cards.
+
+Also, I didn't ask you to complete the two-column layout completely. I only wanted the overview table containing the entire data package eligible to be sent to be moved outside the two-column layout and placed beneath it.
+
+I still want the select box for choosing the actual inquiries to be placed next to the company information and personal information.
+
+Also, the table rendered below should contain all information included in the entire inquiry package that will be sent.
+
+This includes all different roles and the various data fields for each person. Also include information about the person being onboarded. It should be a full representation of all the data we have captured.
+
+---
+
+Don't place the left column in a separate card. Just show the two sections without any surrounding card. The first section is "Aanvrager" and company information. The second section is the overview table of all persons registered, allowing them to be enabled and onboarded on the portal.
+
+Below the two-colums layout, we have the table with the entire dataset of all captured data. We have destructured this information into individual fields per record.
+
+I want a single entity per record, with each value formatted logically and presented as a single string for that entity-record.
+
+---
+
+Don't place the left column in a separate card. Just show the two sections without any surrounding card. The first section is "Aanvrager" and company information. The second section is the overview table of all persons registered, allowing them to be enabled and onboarded on the portal.
+
+Below the two-colums layout, we have the table with the entire dataset of all captured data. We have destructured this information into individual fields per record.
+
+I want a single entity per record, with each value formatted logically and presented as a single string for that entity-record.
