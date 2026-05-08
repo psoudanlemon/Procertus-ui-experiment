@@ -1,5 +1,11 @@
-import { Field, FieldContent, FieldDescription, FieldLabel, Input } from "@procertus-ui/ui";
-import { PrefillFieldSkeleton } from "@procertus-ui/ui";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldLabel,
+  Input,
+  SkeletonPrefillField,
+} from "@procertus-ui/ui";
 
 import type { CustomerContext } from "../../../onboarding/onboarding-types";
 import type { CompanyFormFieldKey } from "../../../onboarding/lib/vatPrototypePresets";
@@ -62,33 +68,33 @@ export function OnboardingCompanyPrefillSkeleton({
       aria-busy="true"
       aria-label="Velden die automatisch worden ingevuld"
     >
-      <PrefillFieldSkeleton
+      <SkeletonPrefillField
         label={COMPANY_FORM_FIELD_LABELS.organizationName}
         prefilled={prefilledKeys.has("organizationName")}
         resolved={resolvedKeys.has("organizationName")}
       />
-      <PrefillFieldSkeleton
+      <SkeletonPrefillField
         label={COMPANY_FORM_FIELD_LABELS.country}
         prefilled={prefilledKeys.has("country")}
         resolved={resolvedKeys.has("country")}
       />
       <div className="grid gap-4 sm:grid-cols-2 md:col-span-2">
-        <PrefillFieldSkeleton
+        <SkeletonPrefillField
           label={COMPANY_FORM_FIELD_LABELS.addressStreet}
           prefilled={prefilledKeys.has("addressStreet")}
           resolved={resolvedKeys.has("addressStreet")}
         />
-        <PrefillFieldSkeleton
+        <SkeletonPrefillField
           label={COMPANY_FORM_FIELD_LABELS.addressHouseNumber}
           prefilled={prefilledKeys.has("addressHouseNumber")}
           resolved={resolvedKeys.has("addressHouseNumber")}
         />
-        <PrefillFieldSkeleton
+        <SkeletonPrefillField
           label={COMPANY_FORM_FIELD_LABELS.addressPostalCode}
           prefilled={prefilledKeys.has("addressPostalCode")}
           resolved={resolvedKeys.has("addressPostalCode")}
         />
-        <PrefillFieldSkeleton
+        <SkeletonPrefillField
           label={COMPANY_FORM_FIELD_LABELS.addressCity}
           prefilled={prefilledKeys.has("addressCity")}
           resolved={resolvedKeys.has("addressCity")}

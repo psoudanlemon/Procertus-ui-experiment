@@ -23,10 +23,10 @@ import {
   FieldLabel,
   H1,
   H4,
-  PrefillFieldSkeleton,
   PublicRegistryAppShell,
   Separator,
   Skeleton,
+  SkeletonPrefillField,
 } from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { APP_FOOTER } from "../layouts/footerConfig";
@@ -91,18 +91,18 @@ export function InfoRequestPlaceholderPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-component px-section">
-            <PrefillFieldSkeleton label="Voornaam" prefilled={false} />
-            <PrefillFieldSkeleton label="Achternaam" prefilled={false} />
-            <PrefillFieldSkeleton label="E-mailadres" prefilled={false} />
-            <PrefillFieldSkeleton label="Telefoonnummer" prefilled={false} />
-            <PrefillFieldSkeleton label="Bedrijfsnaam" prefilled={false} />
+            <SkeletonPrefillField label="Voornaam" prefilled={false} />
+            <SkeletonPrefillField label="Achternaam" prefilled={false} />
+            <SkeletonPrefillField label="E-mailadres" prefilled={false} />
+            <SkeletonPrefillField label="Telefoonnummer" prefilled={false} />
+            <SkeletonPrefillField label="Bedrijfsnaam" prefilled={false} />
           </CardContent>
 
           <Separator />
 
           <CardContent className="flex flex-col gap-component px-section">
             <H4>Uw vraag</H4>
-            <PrefillFieldSkeleton label="Onderwerp" prefilled={false} />
+            <SkeletonPrefillField label="Onderwerp" prefilled={false} />
             <Field>
               <FieldLabel>Toelichting</FieldLabel>
               <Skeleton className="h-28 w-full rounded-md border border-dashed bg-muted/10" />

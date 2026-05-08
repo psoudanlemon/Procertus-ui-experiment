@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton, SkeletonPrefillField } from "@/components/ui/skeleton";
 
 /**
  * Use to show a placeholder while content is loading.
@@ -32,4 +32,78 @@ export const Default: Story = {
       </div>
     </div>
   ),
+};
+
+type PrefillStory = StoryObj<typeof SkeletonPrefillField>;
+
+const prefillMeta = {
+  parameters: {
+    layout: "padded",
+    docs: {
+      description: {
+        story:
+          "Single **form field** row for async prefill: dashed manual placeholder when the field is not being prefilled, or a skeleton bar that distinguishes loading (pulse) from resolved (static).",
+      },
+    },
+  },
+  args: {
+    label: "Bedrijfsnaam",
+    prefilled: true,
+    resolved: false,
+  },
+  render: (args: React.ComponentProps<typeof SkeletonPrefillField>) => (
+    <SkeletonPrefillField {...args} />
+  ),
+};
+
+/**
+ * Field is being prefilled and the lookup is still in flight: the bar pulses.
+ */
+export const PrefillFieldLoading: PrefillStory = {
+  ...prefillMeta,
+  name: "Prefill field, loading",
+  args: {
+    ...prefillMeta.args,
+    prefilled: true,
+    resolved: false,
+  },
+};
+
+/**
+ * Field is being prefilled and the value has resolved: the bar is static.
+ */
+export const PrefillFieldResolved: PrefillStory = {
+  ...prefillMeta,
+  name: "Prefill field, resolved",
+  args: {
+    ...prefillMeta.args,
+    prefilled: true,
+    resolved: true,
+  },
+};
+
+/**
+ * Field is not prefilled: a dashed affordance signals manual entry.
+ */
+export const PrefillFieldManual: PrefillStory = {
+  ...prefillMeta,
+  name: "Prefill field, not prefilled (manual)",
+  args: {
+    ...prefillMeta.args,
+    prefilled: false,
+    resolved: false,
+  },
+};
+
+/**
+ * Manual-entry state with a custom hint copy.
+ */
+export const PrefillFieldCustomManualHint: PrefillStory = {
+  ...prefillMeta,
+  name: "Prefill field, custom manual hint",
+  args: {
+    ...prefillMeta.args,
+    prefilled: false,
+    manualHint: "Enter manually in the next step",
+  },
 };
