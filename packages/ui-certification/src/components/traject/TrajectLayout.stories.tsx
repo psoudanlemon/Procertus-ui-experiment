@@ -65,17 +65,15 @@ export default meta;
 const noop = () => {};
 
 /**
- * Start je certificatieaanvraag: `CertificationRequestWizard` ingebed met bare chrome,
- * zodat de wizard direct onder de PageHeader aansluit zonder eigen card-omhulsel.
+ * Start je certificatieaanvraag: `CertificationRequestWizard` ingebed met bare chrome.
+ * De wizard levert zelf de step-header (kicker + titel + beschrijving), dus de TrajectLayout
+ * laat zijn eigen PageHeader weg om dubbele koppen te vermijden.
  */
 export const ProductSelection: StoryObj<typeof meta> = {
   name: "Product selecteren",
   args: {
     onSignInClick: noop,
-    title: "Start je certificatieaanvraag",
     children: null,
-    description:
-      "Kies eerst wat je wilt aanvragen. We vragen pas organisatie- en accountgegevens wanneer je een conceptaanvraag hebt samengesteld.",
   },
   render: (args) => <ProductSelectionStoryBody args={args} />,
 };

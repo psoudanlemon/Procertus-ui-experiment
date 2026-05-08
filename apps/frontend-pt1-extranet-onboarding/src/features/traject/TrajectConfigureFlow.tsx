@@ -13,10 +13,6 @@ const WEGWIJZER_PATH = "/welcome";
 const SIGNIN_PATH = "/welcome/login";
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
 
-const PAGE_TITLE = "Start je certificatieaanvraag";
-const PAGE_DESCRIPTION =
-  "Kies eerst wat je wilt aanvragen. We vragen pas organisatie- en accountgegevens wanneer je een conceptaanvraag hebt samengesteld.";
-
 export function TrajectConfigureFlow() {
   const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
@@ -45,11 +41,7 @@ export function TrajectConfigureFlow() {
   }
 
   return (
-    <TrajectLayout
-      title={PAGE_TITLE}
-      description={PAGE_DESCRIPTION}
-      onSignInClick={() => navigate(SIGNIN_PATH)}
-    >
+    <TrajectLayout onSignInClick={() => navigate(SIGNIN_PATH)}>
       <CertificationRequestWizard
         mode="onboarding"
         backendKind="localStorage"

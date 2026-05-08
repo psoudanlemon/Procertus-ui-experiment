@@ -23,8 +23,8 @@ export type TrajectLayoutProps = {
   backAction?: TrajectLayoutAction;
   /** Small uppercase eyebrow above the page title (e.g. category label). */
   kicker?: ReactNode;
-  /** Page heading. */
-  title: ReactNode;
+  /** Page heading. Omit when the page body already provides its own primary header (e.g. an embedded wizard). */
+  title?: ReactNode;
   /** Supporting copy below the title. */
   description?: ReactNode;
   /** Page body, rendered below the title block. */
@@ -74,7 +74,9 @@ export function TrajectLayout({
             {backAction.label}
           </Button>
         ) : null}
-        <PageHeader kicker={kicker} title={title} description={description} />
+        {title != null ? (
+          <PageHeader kicker={kicker} title={title} description={description} />
+        ) : null}
         {children}
       </div>
     </PublicRegistryAppShell>
