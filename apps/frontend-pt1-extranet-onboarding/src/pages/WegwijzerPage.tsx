@@ -374,7 +374,7 @@ function MasterCard({ service }: { service: WegwijzerService }) {
       <MasterCardSections service={service} />
 
       {isInnovation && (
-        <Alert>
+        <Alert variant="warning" className="max-w-3xl">
           <HugeiconsIcon icon={Alert02Icon} />
           <AlertTitle>Richtwaarde formele opstart</AlertTitle>
           <AlertDescription>

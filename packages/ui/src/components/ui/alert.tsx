@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const alertVariants = cva(
-  "group/alert relative grid w-full gap-micro rounded-lg border p-section text-left text-sm has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-micro *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-4",
+  "group/alert relative grid w-full gap-micro rounded-lg border p-section text-left text-sm has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-component *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -12,9 +12,11 @@ const alertVariants = cva(
         destructive:
           "border-destructive-foreground/50 bg-card text-destructive-foreground *:data-[slot=alert-description]:text-destructive-foreground/90 *:[svg]:text-current",
         success:
-          "border-sys-success-500/50 bg-card text-sys-success-700 dark:text-sys-success-400 *:data-[slot=alert-description]:text-sys-success-700/90 dark:*:data-[slot=alert-description]:text-sys-success-400/90 *:[svg]:text-current",
+          "border-sys-success-200 bg-sys-success-50 text-sys-success-800 dark:border-sys-success-800 dark:bg-sys-success-950 dark:text-sys-success-200 *:data-[slot=alert-description]:text-sys-success-700 dark:*:data-[slot=alert-description]:text-sys-success-300 *:[svg]:text-current",
         warning:
-          "border-sys-warning-500/50 bg-card text-sys-warning-800 dark:text-sys-warning-200 *:data-[slot=alert-description]:text-sys-warning-700/90 dark:*:data-[slot=alert-description]:text-sys-warning-300/90 *:[svg]:text-current",
+          "border-sys-warning-200 bg-sys-warning-50 text-sys-warning-800 dark:border-sys-warning-800 dark:bg-sys-warning-950 dark:text-sys-warning-200 *:data-[slot=alert-description]:text-sys-warning-700 dark:*:data-[slot=alert-description]:text-sys-warning-300 *:[svg]:text-current",
+        info:
+          "border-sys-info-200 bg-sys-info-50 text-sys-info-800 dark:border-sys-info-800 dark:bg-sys-info-950 dark:text-sys-info-200 *:data-[slot=alert-description]:text-sys-info-700 dark:*:data-[slot=alert-description]:text-sys-info-300 *:[svg]:text-current",
       },
     },
     defaultVariants: {
