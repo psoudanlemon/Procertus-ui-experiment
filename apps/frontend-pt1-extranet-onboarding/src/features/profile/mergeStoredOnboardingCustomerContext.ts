@@ -1,5 +1,5 @@
 import type {
-  AnonymousOnboardingFlowState,
+  OnboardingFlowState,
   CustomerContext,
   IdentificatiePersonCaptureState,
 } from "@procertus-ui/ui-certification";
@@ -41,7 +41,7 @@ export function mergeStoredOnboardingCustomerContext(partial: Partial<CustomerCo
   try {
     const flowRaw = localStorage.getItem(ONBOARDING_FLOW_STORAGE_KEY);
     if (flowRaw) {
-      const parsed = JSON.parse(flowRaw) as AnonymousOnboardingFlowState;
+      const parsed = JSON.parse(flowRaw) as OnboardingFlowState;
       if (parsed?.context && typeof parsed.context === "object") {
         parsed.context = mergeCustomerContext(parsed.context as CustomerContext, partial);
         localStorage.setItem(ONBOARDING_FLOW_STORAGE_KEY, JSON.stringify(parsed));
@@ -53,7 +53,7 @@ export function mergeStoredOnboardingCustomerContext(partial: Partial<CustomerCo
       complete.flowStateSnapshot != null &&
       typeof complete.flowStateSnapshot === "object"
     ) {
-      const snap = complete.flowStateSnapshot as AnonymousOnboardingFlowState;
+      const snap = complete.flowStateSnapshot as OnboardingFlowState;
       if (snap.context && typeof snap.context === "object") {
         snap.context = mergeCustomerContext(snap.context as CustomerContext, partial);
         writeOnboardingRegistrationCompletePayload({

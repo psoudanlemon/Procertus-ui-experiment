@@ -50,7 +50,7 @@ const withDisabledStep: WizardStepperModel = {
 };
 
 const meta = {
-  title: "Certification Request/CompactWizardTimeline",
+  title: "Onboarding/Underlying/CompactWizardTimeline",
   component: CompactWizardTimeline,
   parameters: {
     layout: "padded",

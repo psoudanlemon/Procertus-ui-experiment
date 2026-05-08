@@ -120,6 +120,7 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
+          "Onboarding",
           "Custom components",
           [
             "Application shell",

@@ -1,4 +1,4 @@
-import type { AnonymousOnboardingFlowState, CustomerContext } from "@procertus-ui/ui-certification";
+import type { OnboardingFlowState, CustomerContext } from "@procertus-ui/ui-certification";
 import {
   ONBOARDING_FLOW_STORAGE_KEY,
   readOnboardingRegistrationCompletePayload,
@@ -13,7 +13,7 @@ export type StoredOnboardingContexts = {
 
 function parseFlowStateRaw(raw: string): CustomerContext | null {
   try {
-    const parsed = JSON.parse(raw) as AnonymousOnboardingFlowState;
+    const parsed = JSON.parse(raw) as OnboardingFlowState;
     const ctx = parsed?.context;
     if (ctx && typeof ctx === "object") return ctx as CustomerContext;
   } catch {
@@ -24,7 +24,7 @@ function parseFlowStateRaw(raw: string): CustomerContext | null {
 
 function contextFromRegistrationSnapshot(snapshot: unknown): CustomerContext | null {
   if (!snapshot || typeof snapshot !== "object") return null;
-  const flow = snapshot as Partial<AnonymousOnboardingFlowState>;
+  const flow = snapshot as Partial<OnboardingFlowState>;
   const ctx = flow.context;
   if (ctx && typeof ctx === "object") return ctx as CustomerContext;
   return null;

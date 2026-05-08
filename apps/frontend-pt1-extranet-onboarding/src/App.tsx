@@ -8,7 +8,7 @@ import { RequestDetailPage } from "./pages/RequestDetailPage";
 import { RequestEditPage } from "./pages/RequestEditPage";
 import { CategorizationDemoPage } from "./pages/CategorizationDemoPage";
 import { DesignSystemPage } from "./pages/DesignSystemPage";
-import { AnonymousOnboardingFlow } from "./features/onboarding/AnonymousOnboardingFlow";
+import { OnboardingFlow } from "./features/onboarding/OnboardingFlow";
 import { AppPlaceholderPage } from "./pages/AppPlaceholderPage";
 import { OnboardingRegistrationCompletePage } from "./pages/OnboardingRegistrationCompletePage";
 import { SignupPage } from "./pages/SignupPage";
@@ -47,7 +47,7 @@ export default function App() {
       <Route element={<PublicAppShell />}>
         <Route path="/welcome" element={<WegwijzerPage />} />
         <Route path="/welcome/login" element={<SignupPage />} />
-        <Route path="/welcome/start" element={<AnonymousOnboardingFlow />} />
+        <Route path="/welcome/start" element={<OnboardingFlow />} />
         <Route path="/welcome/aanvraag/:serviceId" element={<TriagePage />} />
         <Route
           path="/welcome/info-request/:serviceId"

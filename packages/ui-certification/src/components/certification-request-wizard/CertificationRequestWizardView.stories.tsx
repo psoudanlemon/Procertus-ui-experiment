@@ -19,7 +19,7 @@ import {
 function noop() {}
 
 const meta = {
-  title: "Certification Request/CertificationRequestWizardView",
+  title: "Onboarding/Underlying/CertificationRequestWizardView",
   component: CertificationRequestWizardView,
   parameters: {
     layout: "fullscreen",

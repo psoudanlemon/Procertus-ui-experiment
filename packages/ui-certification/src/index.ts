@@ -127,12 +127,14 @@ export {
 export * from "./helpers";
 export * from "./hooks";
 export {
-  AnonymousOnboardingCompanyPrefillSkeleton,
-  AnonymousOnboardingContextField,
-  AnonymousOnboardingFlowView,
-  CatalogueExplorer,
-  clearAnonymousOnboardingStorage,
+  OnboardingFlowProvider,
+  OnboardingFlowView,
+  clearOnboardingStorage,
+  createLocalStorageOnboardingFlowPersistence,
+  createMemoryOnboardingFlowPersistence,
+  DEFAULT_ONBOARDING_FLOW_STATE,
   formatOnboardingPersonRegistryOptionLabel,
+  hydrateOnboardingFlowStateFromStored,
   ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY,
   ONBOARDING_FLOW_STORAGE_KEY,
   ONBOARDING_PERSON_NEW_ID,
@@ -141,22 +143,51 @@ export {
   ONBOARDING_REGISTRATION_COMPLETE_STORAGE_KEY,
   ONBOARDING_STEPS,
   readOnboardingRegistrationCompletePayload,
-  useAnonymousOnboardingFlow,
+  useOnboardingFlow,
   writeOnboardingRegistrationCompletePayload,
-} from "./anonymous-onboarding";
+} from "./onboarding";
+export {
+  CatalogueExplorer,
+  OnboardingCompanyPrefillSkeleton,
+  OnboardingCompanyStep,
+  OnboardingContextField,
+  OnboardingCustomerStep,
+  OnboardingExtrasStep,
+  OnboardingInvoicingStep,
+  OnboardingOriginStep,
+  OnboardingRequestStep,
+  OnboardingShell,
+  OnboardingSummaryStep,
+} from "./components/onboarding";
 export type {
-  AnonymousOnboardingFlowState,
-  AnonymousOnboardingFlowViewProps,
-  ApplicantLegalRepresentativeAnswer,
   CatalogueExplorerProps,
+  OnboardingCompanyStepProps,
+  OnboardingCustomerStepProps,
+  OnboardingExtrasStepProps,
+  OnboardingInvoicingStepProps,
+  OnboardingOriginStepProps,
+  OnboardingOriginStepCopy,
+  OnboardingRequestStepProps,
+  OnboardingRequestStepCopy,
+  OnboardingSummaryStepProps,
+  OnboardingShellProps,
+} from "./components/onboarding";
+export type {
+  OnboardingFlowApi,
+  OnboardingFlowProviderProps,
+  OnboardingFlowState,
+  OnboardingFlowViewProps,
+  ApplicantLegalRepresentativeAnswer,
   CustomerContext,
   IdentificatiePersonCaptureState,
+  MemoryOnboardingPersistenceOptions,
+  OnboardingFlowPersistencePort,
   OnboardingRegisteredPerson,
   OnboardingRegistrationCompletePayload,
   OnboardingRequestOrigin,
   OnboardingStep,
-  UseAnonymousOnboardingFlowOptions,
-} from "./anonymous-onboarding";
+  UseOnboardingFlowOptions,
+} from "./onboarding";
 export {
   ProcertusCategorizationProvider,
   type ProcertusCategorizationProviderProps,

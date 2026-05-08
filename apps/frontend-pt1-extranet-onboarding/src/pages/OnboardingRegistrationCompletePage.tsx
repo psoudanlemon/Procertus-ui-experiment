@@ -11,7 +11,7 @@ import { useLayoutEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 
 import {
-  clearAnonymousOnboardingStorage,
+  clearOnboardingStorage,
   readOnboardingRegistrationCompletePayload,
   type OnboardingRegistrationCompletePayload,
 } from "@procertus-ui/ui-certification";
@@ -86,7 +86,7 @@ function OnboardingRegistrationCompleteView({
               variant="link"
               className="text-sm text-muted-foreground"
               onClick={() => {
-                clearAnonymousOnboardingStorage();
+                clearOnboardingStorage();
                 navigate("/", { replace: true });
               }}
             >

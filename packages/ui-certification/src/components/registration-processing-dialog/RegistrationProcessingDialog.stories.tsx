@@ -15,7 +15,7 @@ const sampleSteps: RegistrationProcessingStep[] = [
 ];
 
 const meta = {
-  title: "Certification Request/RegistrationProcessingDialog",
+  title: "Onboarding/Underlying/RegistrationProcessingDialog",
   component: RegistrationProcessingDialog,
   parameters: {
     layout: "centered",
