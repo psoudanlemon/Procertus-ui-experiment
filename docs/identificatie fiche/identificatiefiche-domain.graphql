@@ -1,0 +1,153 @@
+"""
+Domain model for data collected with the PROCERTUS identificatiefiche
+(productie-eenheid / distributiecentrum / verhuurbedrijf).
+
+Maps to: `identificatiefiche-digitized.md` and related screenshots.
+Expose or compose this fragment in your API schema as needed.
+"""
+
+"""Kind of organizational unit (PE / DC / VHB)."""
+enum OrganizationalUnitKind {
+  PRODUCTION_UNIT
+  DISTRIBUTION_CENTER
+  RENTAL_COMPANY
+}
+
+"""
+Postal-style address. Use `lines` for free-text capture; structured
+fields optional when parsed or validated.
+"""
+type Address {
+  """Address lines in order (e.g. street, box, building)."""
+  lines: [String!]!
+  locality: String
+  postalCode: String
+  region: String
+  """ISO 3166-1 alpha-2 country code when known."""
+  countryCode: String
+}
+
+"""
+Natural person used as legal representative, unit responsible contact,
+or certification / invoicing contact.
+"""
+type Person {
+  id: ID!
+  name: String!
+  title: String
+  telephone: String
+  email: String!
+}
+
+"""
+Shared shape for a company (firma) and an operational unit (PE / DC / VHB).
+"""
+interface OrganizationalEntity {
+  id: ID!
+  name: String!
+  address: Address!
+  """Primary telephone for the entity (e.g. firma- or eenheid-level)."""
+  phone: String!
+  """
+  Legal or operational representative: wettelijke vertegenwoordiger (firma)
+  or verantwoordelijke (eenheid), depending on entity type.
+  """
+  representative: Person!
+}
+
+"""
+Registered organization (holding / firma) that may own several units.
+Carries a VAT number; units do not use this type’s VAT field.
+"""
+type Company implements OrganizationalEntity {
+  id: ID!
+  name: String!
+  address: Address!
+  phone: String!
+  representative: Person!
+
+  """BTW-nummer (VAT) — organization level only."""
+  vatNumber: String!
+
+  """Production units, distribution centres, rental companies, etc."""
+  units: [OrganizationalUnit!]!
+
+  """
+  Default primary contact for PROCERTUS communication regarding certification
+  and inspection (e.g. extranet account holder). Applies to every `units`
+  entry unless that `OrganizationalUnit` sets its own primary for this purpose.
+  """
+  certificationAndInspectionContact: Person!
+
+  """
+  Default optional second recipient for PROCERTUS communications on
+  certification and inspection. Applies to each unit unless that unit
+  supplies a secondary override (see `OrganizationalUnit`).
+  """
+  certificationAndInspectionSecondaryContact: Person
+
+  """
+  Billing details for this company. Entire block optional until provided;
+  when present, apply validation (e.g. invoicing email required per form).
+  """
+  invoicing: CompanyInvoicingDetails
+}
+
+"""
+Single operational unit belonging to a `Company`.
+
+Certification and inspection correspondence is scoped to units. Optional
+contact fields below override the defaults on `company`; when omitted (null),
+resolve using `company.certificationAndInspectionContact` and
+`company.certificationAndInspectionSecondaryContact` respectively.
+"""
+type OrganizationalUnit implements OrganizationalEntity {
+  id: ID!
+  name: String!
+  address: Address!
+  phone: String!
+  representative: Person!
+
+  unitKind: OrganizationalUnitKind!
+
+  """Owning company (navigation / integrity)."""
+  company: Company!
+
+  """
+  Primary PROCERTUS contact for certification and inspection for this unit only.
+  When present, takes precedence over `company.certificationAndInspectionContact`;
+  when omitted, use the company default.
+  """
+  certificationAndInspectionContact: Person
+
+  """
+  Second recipient for certification and inspection communications for this unit.
+  When present, takes precedence over `company.certificationAndInspectionSecondaryContact`;
+  when omitted, use the company default (including when the company has no secondary).
+  """
+  certificationAndInspectionSecondaryContact: Person
+}
+
+"""
+Invoicing preferences for a company.
+
+Business rule (paper form): either attribute billing to a dedicated person
+or supply a standalone invoicing email when that mailbox is not tied to a
+`Person` record (or both if your process allows).
+"""
+type CompanyInvoicingDetails {
+  """Optional: person responsible for or named on invoices."""
+  responsiblePerson: Person
+
+  """
+  Email address for invoicing when there is no dedicated `responsiblePerson`
+  or when billing mail must go to a functional mailbox.
+  """
+  invoicingEmail: String
+
+  """
+  Billing address when it differs from the company’s primary `address`
+  on `Company`. Omit when the same as the organization address.
+  """
+  invoicingAddressOverride: Address
+}

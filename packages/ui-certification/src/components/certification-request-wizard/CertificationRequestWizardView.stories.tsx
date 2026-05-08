@@ -398,8 +398,9 @@ export const SubcomponentsShowcase: StoryObj<typeof meta> = {
                   />
                 </div>
                 <div className="min-w-0 flex-1 text-sm text-muted-foreground">
-                  Pair the timeline with <code className="rounded bg-muted px-1">OnboardingStepper</code>{" "}
-                  on desktop in real flows; this story only documents the compact rail.
+                  Pair the timeline with{" "}
+                  <code className="rounded bg-muted px-1">OnboardingStepper</code> on desktop in
+                  real flows; this story only documents the compact rail.
                 </div>
               </div>
             ),

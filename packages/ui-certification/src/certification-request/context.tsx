@@ -22,11 +22,7 @@ import {
   createInMemoryCertificationRequestBackend,
   createLocalStorageCertificationRequestBackend,
 } from "../persistence";
-import {
-  buildProductIndex,
-  entryLabelForIntent,
-  getAvailableProductEntries,
-} from "./product-tree";
+import { buildProductIndex, entryLabelForIntent, getAvailableProductEntries } from "./product-tree";
 import {
   certificationInquiriesNeedDetailsStep,
   createContextDraft,
@@ -74,12 +70,12 @@ function normalizeInitialStep(
   return needsDetails ? detailsIdx : draftsIdx;
 }
 
-const applySetState = <TValue,>(
-  current: TValue,
-  next: SetStateAction<TValue>,
-): TValue => (typeof next === "function" ? (next as (value: TValue) => TValue)(current) : next);
+const applySetState = <TValue,>(current: TValue, next: SetStateAction<TValue>): TValue =>
+  typeof next === "function" ? (next as (value: TValue) => TValue)(current) : next;
 
-const CertificationRequestContext = createContext<CertificationRequestContextValue | undefined>(undefined);
+const CertificationRequestContext = createContext<CertificationRequestContextValue | undefined>(
+  undefined,
+);
 
 export function CertificationRequestProvider({
   children,
@@ -106,19 +102,16 @@ export function CertificationRequestProvider({
     [initialDrafts, initialStep, mode],
   );
 
-  const persistence = useMemo<CertificationRequestBackend>(
-    () => {
-      if (backend) return backend;
-      const options = {
-        sessionId: sessionIdProp ?? `certification-request:${mode}`,
-        initialSession,
-      };
-      return backendKind === "memory"
-        ? createInMemoryCertificationRequestBackend(options)
-        : createLocalStorageCertificationRequestBackend({ ...options, storageKey });
-    },
-    [backend, backendKind, initialSession, mode, sessionIdProp, storageKey],
-  );
+  const persistence = useMemo<CertificationRequestBackend>(() => {
+    if (backend) return backend;
+    const options = {
+      sessionId: sessionIdProp ?? `certification-request:${mode}`,
+      initialSession,
+    };
+    return backendKind === "memory"
+      ? createInMemoryCertificationRequestBackend(options)
+      : createLocalStorageCertificationRequestBackend({ ...options, storageKey });
+  }, [backend, backendKind, initialSession, mode, sessionIdProp, storageKey]);
 
   const session = useSyncExternalStore(
     persistence.subscribe,
@@ -153,8 +146,7 @@ export function CertificationRequestProvider({
     const needsDetails = certificationInquiriesNeedDetailsStep(session.drafts);
     const inferredIntent = session.drafts[0] ? intentForDraft(session.drafts[0]) : undefined;
 
-    const nextStep =
-      needsDetails && activeStep >= draftsStepIdx ? detailsStepIdx : undefined;
+    const nextStep = needsDetails && activeStep >= draftsStepIdx ? detailsStepIdx : undefined;
     const nextIntent = !session.intent && inferredIntent ? inferredIntent : undefined;
 
     if (nextStep == null && nextIntent == null) return;
@@ -182,7 +174,8 @@ export function CertificationRequestProvider({
       expandedIds: applySetState([...current.expandedIds], next),
     }));
   const setSearchValue = (value: string) => updateSession({ searchValue: value });
-  const setHideUnavailableProducts = (value: boolean) => updateSession({ hideUnavailableProducts: value });
+  const setHideUnavailableProducts = (value: boolean) =>
+    updateSession({ hideUnavailableProducts: value });
   const setSelectedProductId = (id: string | undefined) => updateSession({ selectedProductId: id });
   const setSelectedEntryIds = (ids: string[]) => updateSession({ selectedEntryIds: ids });
   const setRequestText = (value: string) => updateSession({ requestText: value });
@@ -201,7 +194,8 @@ export function CertificationRequestProvider({
   const selectedProduct = selectedProductId ? productIndex.get(selectedProductId) : undefined;
   const selectedIntentLabel = entryLabelForIntent(intent, availableEntries);
   const productRequired = intent ? PRODUCT_REQUIRED_INTENTS.has(intent) : false;
-  const detailsUseProductTree = productRequired || (intent ? intent !== "innovation-attest" : false);
+  const detailsUseProductTree =
+    productRequired || (intent ? intent !== "innovation-attest" : false);
   const productEntries = getAvailableProductEntries(selectedProduct?.node, availableEntries);
   const canUseFreeform = intent ? !productRequired : false;
   const canContinueDetails = productRequired
@@ -238,7 +232,8 @@ export function CertificationRequestProvider({
       }
       const next = Array.from(existingById.values());
       const nextIds = new Set(next.map((draft) => draft.id));
-      const currentIncludedIds = current.includedDraftIds ?? current.drafts.map((draft) => draft.id);
+      const currentIncludedIds =
+        current.includedDraftIds ?? current.drafts.map((draft) => draft.id);
       return {
         drafts: next,
         includedDraftIds: Array.from(
@@ -298,7 +293,11 @@ export function CertificationRequestProvider({
               : false;
 
     if (targetStep === activeStep || !stepAvailable) return;
-    if (activeStep === CERTIFICATION_REQUEST_STEP_IDS.indexOf("details") && targetStep > activeStep && canContinueDetails) {
+    if (
+      activeStep === CERTIFICATION_REQUEST_STEP_IDS.indexOf("details") &&
+      targetStep > activeStep &&
+      canContinueDetails
+    ) {
       replaceDraftsFromDetails();
     }
     setActiveStep(targetStep);

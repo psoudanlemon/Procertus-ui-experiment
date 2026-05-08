@@ -225,7 +225,8 @@ function ProcertusTreeNodes({
     <div
       className={cn(
         "flex flex-col gap-micro",
-        depth > 0 && "ml-micro border-l border-border/30 pl-component sm:ml-component sm:pl-component",
+        depth > 0 &&
+          "ml-micro border-l border-border/30 pl-component sm:ml-component sm:pl-component",
       )}
     >
       {nodes.map((node) =>

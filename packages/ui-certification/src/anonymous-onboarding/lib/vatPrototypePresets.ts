@@ -44,6 +44,21 @@ const VAT_PREFIX_TO_COUNTRY_NL: Record<string, string> = {
   XI: "Noord-Ierland",
 };
 
+const DUTCH_COUNTRY_LABEL_TO_ISO: Record<string, string> = (() => {
+  const m: Record<string, string> = {};
+  for (const [iso, label] of Object.entries(VAT_PREFIX_TO_COUNTRY_NL)) {
+    if (m[label] === undefined) m[label] = iso;
+  }
+  return m;
+})();
+
+/** ISO 3166-1 alpha-2 for a Dutch UI country label from {@link REGISTRATION_COUNTRY_OPTIONS}, or `""`. */
+export function registrationIsoCodeFromDutchCountryLabel(countryLabel: string): string {
+  const t = countryLabel.trim();
+  if (!t) return "";
+  return DUTCH_COUNTRY_LABEL_TO_ISO[t] ?? "";
+}
+
 /**
  * Derives the country of origin from a syntactically plausible VAT-style identifier
  * (leading ISO-style alpha-2, e.g. BE, NL, DE, FR, US).
@@ -66,10 +81,10 @@ export const REGISTRATION_COUNTRY_OPTIONS: readonly string[] = Array.from(
 ).sort((a, b) => a.localeCompare(b, "nl"));
 
 const REGISTER_FIELD_HELPER =
-  "Overgenomen uit het openbare register in deze demo. Controleer en pas aan indien nodig.";
+  "Vooraf ingevuld uit openbare gegevens. Controleer en pas aan indien nodig.";
 
-function domainFieldHelper(matchedHost: string): string {
-  return `Aangevuld via uw e-maildomein (${matchedHost}); serverside koppeling (mock). Controleer de gegevens.`;
+function domainFieldHelper(): string {
+  return "Aangevuld aan de hand van uw professionele e-mailadres. Controleer of naam en adres kloppen.";
 }
 
 export type RegistrationEnrichmentHints = Partial<
@@ -88,11 +103,11 @@ export type RegistrationEnrichmentResult = {
 
 /** Stages shown while a lookup runs (mirrors real checks at a high level). */
 export const VAT_LOOKUP_SIMULATION_STEPS: readonly { id: string; label: string }[] = [
-  { id: "prefix", label: "Herkomstland afgeleid uit uw nummer" },
-  { id: "vies", label: "EU-btw-informatie gecontroleerd (VIES)" },
-  { id: "registry", label: "Nationale registers en publicaties doorzocht" },
-  { id: "entity", label: "Bedrijfsnaam en vestigingsadres vastgesteld" },
-  { id: "email", label: "Domein van uw e-mail gekoppeld aan onderneming (serverside)" },
+  { id: "prefix", label: "Land afgeleid uit uw nummer" },
+  { id: "vies", label: "Europese btw-registratie gecontroleerd" },
+  { id: "registry", label: "Openbare registers doorzocht" },
+  { id: "entity", label: "Bedrijfs- en adresgegevens vastgesteld" },
+  { id: "email", label: "Afstemming met uw professioneel e-mailadres" },
 ];
 
 const GENERIC_ORG_EMAIL_DOMAINS = new Set([
@@ -198,7 +213,7 @@ const DEMO_EMAIL_DOMAIN_COMPANY_DEFAULT: DomainCompanyLookupResult = {
 };
 
 const DEMO_DOMAIN_MOCK_FIELD_HELPER =
-  "Demo: vaste voorbeeldgegevens (mock ‘domeinlookup’, geen echte afleiding uit uw e-mail). Controleer en pas aan.";
+  "Voorbeeldgegevens om het formulier te tonen. Vervang ze door uw echte gegevens en controleer alles.";
 
 function hostVariantsForLookup(host: string): string[] {
   const parts = host.split(".").filter(Boolean);
@@ -257,6 +272,20 @@ function resolveMockDomainCompanyForEnrichment(
   return null;
 }
 
+/** Demo-only indiener (persoon die het formulier invult) wanneer ≠ wettelijk vertegenwoordiger. */
+export type VatPrototypeDemoRegistrant = {
+  firstName: string;
+  lastName: string;
+  registrantTitlePreset: string;
+  /** Alleen wanneer `registrantTitlePreset === "other"` */
+  registrantTitle: string;
+  telephone: string;
+  email: string;
+  registrantRolePreset: string;
+  /** Alleen wanneer `registrantRolePreset === "other"` */
+  registrantRoleCustom?: string;
+};
+
 /** Demo-only vertegenwoordiger gekoppeld aan een voorbeeld-btw-scenario en bijhorend mock e-maildomein. */
 export type VatPrototypeDemoPerson = {
   representativeFirstName: string;
@@ -282,8 +311,13 @@ export type VatPrototypePreset = {
    * worden in de flow aangevuld via het registratiedomein van het e-mailadres (mock), indien bekend.
    */
   demoSupplementsOrgAddressFromEmailDomain: boolean;
-  /** Prefilled registrant + e-mail (mock); e-maildomein zit in {@link MOCK_DOMAIN_COMPANY_BY_HOST} waar mogelijk. */
+  /** Prefilled wettelijke vertegenwoordiger + e-mail (mock); e-maildomein zit in {@link MOCK_DOMAIN_COMPANY_BY_HOST} waar mogelijk. */
   demoPerson: VatPrototypeDemoPerson;
+  /**
+   * Demo: tweede persoon (indiener) per scenario — uiteenlopende landen/formaten voor snelle demos
+   * wanneer de gebruiker aangeeft niet de wettelijke vertegenwoordiger te zijn.
+   */
+  demoRegistrant: VatPrototypeDemoRegistrant;
   mock: {
     outcome: VatLookupMockOutcome;
     organizationName: string;
@@ -315,7 +349,11 @@ export function getPersonContextFieldsForPrototypePreset(preset: VatPrototypePre
         ? ""
         : titleLabelForPresetId(titlePreset);
   const representativeRole =
-    rolePreset === "other" ? (p.representativeRoleCustom ?? "") : roleLabelForPresetId(rolePreset);
+    rolePreset === "other"
+      ? (p.representativeRoleCustom ?? "")
+      : rolePreset === "none"
+        ? ""
+        : roleLabelForPresetId(rolePreset);
   return {
     representativeFirstName: p.representativeFirstName,
     representativeLastName: p.representativeLastName,
@@ -324,6 +362,52 @@ export function getPersonContextFieldsForPrototypePreset(preset: VatPrototypePre
     representativeEmail: p.representativeEmail,
     representativeRolePreset: rolePreset,
     representativeRole,
+  };
+}
+
+/**
+ * Zelfde resolutieregels als {@link getPersonContextFieldsForPrototypePreset}, voor het indiener-blok.
+ */
+export function getRegistrantContextFieldsForPrototypePreset(preset: VatPrototypePreset): {
+  registrantPerson: {
+    firstName: string;
+    lastName: string;
+    title: string;
+    telephone: string;
+    email: string;
+  };
+  registrantTitlePreset: string;
+  registrantTitle: string;
+  registrantRolePreset: string;
+  registrantRole: string;
+} {
+  const r = preset.demoRegistrant;
+  const titlePreset = r.registrantTitlePreset;
+  const rolePreset = r.registrantRolePreset;
+  const registrantTitle =
+    titlePreset === "other"
+      ? r.registrantTitle
+      : titlePreset === "none"
+        ? ""
+        : titleLabelForPresetId(titlePreset);
+  const registrantRole =
+    rolePreset === "other"
+      ? (r.registrantRoleCustom ?? "")
+      : rolePreset === "none"
+        ? ""
+        : roleLabelForPresetId(rolePreset);
+  return {
+    registrantPerson: {
+      firstName: r.firstName,
+      lastName: r.lastName,
+      title: registrantTitle,
+      telephone: r.telephone,
+      email: r.email,
+    },
+    registrantTitlePreset: titlePreset,
+    registrantTitle,
+    registrantRolePreset: rolePreset,
+    registrantRole,
   };
 }
 
@@ -341,15 +425,13 @@ export function vatLookupSimulationStepsForPreset(
     if (step.id === "entity") {
       return {
         ...step,
-        label:
-          "Geen bedrijfsnaam of adres uit register voor dit scenario — domeinkoppeling volgt (demo)",
+        label: "Geen volledige gegevens uit het register — we vullen aan waar mogelijk",
       };
     }
     if (step.id === "email") {
       return {
         ...step,
-        label:
-          "Bedrijfsnaam en volledig adres ingevuld via het registratiedomein van uw e-mail (serverside, mock)",
+        label: "Bedrijfsnaam en adres ingevuld aan de hand van uw e-mailadres",
       };
     }
     return step;
@@ -360,6 +442,11 @@ export type RegistrationEnrichmentInput = {
   vatNumber: string;
   representativeEmail: string;
   preset: VatPrototypePreset;
+  /**
+   * When true, firma‑land is fixed by "Land of regio" (BE/NL/US); copy must not imply the user can
+   * change country here or that it comes only from the registration number.
+   */
+  firmaCountryLocked?: boolean;
 };
 
 /**
@@ -369,7 +456,7 @@ export type RegistrationEnrichmentInput = {
 export function enrichRegistrationContext(
   input: RegistrationEnrichmentInput,
 ): RegistrationEnrichmentResult {
-  const { vatNumber, representativeEmail, preset } = input;
+  const { vatNumber, representativeEmail, preset, firmaCountryLocked = false } = input;
   const vatCountry = deriveCountryFromVat(vatNumber);
   const country = vatCountry || preset.mock.countryFallback;
 
@@ -450,16 +537,20 @@ export function enrichRegistrationContext(
   const hints: RegistrationEnrichmentHints = {};
 
   if (country.trim()) {
-    hints.country = vatCountry
-      ? "Afgeleid uit het landprefix van uw btw- of ondernemingsnummer. U kunt het land hier desgewenst aanpassen."
-      : "Ingevuld volgens de scenario‑instelling (geen herkomst uit prefix in deze demo).";
+    if (firmaCountryLocked) {
+      hints.country = "Land zoals gekozen bij ‘Land of regio’. U kunt het hier niet wijzigen.";
+    } else if (vatCountry) {
+      hints.country = "Land afgeleid uit uw nummer. U kunt het hier nog aanpassen.";
+    } else {
+      hints.country = "Land ingesteld voor dit voorbeeld. Pas aan indien nodig.";
+    }
   }
 
   const domainHintForField =
     domainSource === "demo_default_mock"
       ? DEMO_DOMAIN_MOCK_FIELD_HELPER
       : domainHit
-        ? domainFieldHelper(domainHit.matchedHost)
+        ? domainFieldHelper()
         : "";
 
   if (organizationName) {
@@ -561,7 +652,7 @@ export function companyFormFieldsResolvedThroughLookupStep(
 export const VAT_PROTOTYPE_PRESETS: readonly VatPrototypePreset[] = [
   {
     id: "be-kbo",
-    label: "België — volledige registergegevens",
+    label: "België — voorbeeld met volledige gegevens",
     vatNumber: "BE0403.107.223",
     outcomeLabel: "Gegevens gevonden",
     outcomeMessage:
@@ -575,6 +666,15 @@ export const VAT_PROTOTYPE_PRESETS: readonly VatPrototypePreset[] = [
       representativeEmail: "sophie.maes@demofoods.be",
       representativeRolePreset: "managing_director",
     },
+    demoRegistrant: {
+      firstName: "Pieter",
+      lastName: "Janssens",
+      registrantTitlePreset: "mr",
+      registrantTitle: "",
+      telephone: "+32 475 12 34 56",
+      email: "pieter.janssens@indiening-demo.be",
+      registrantRolePreset: "legal_representative",
+    },
     mock: {
       outcome: "registry_auto",
       organizationName: "Demo Foods BV",
@@ -587,7 +687,7 @@ export const VAT_PROTOTYPE_PRESETS: readonly VatPrototypePreset[] = [
   },
   {
     id: "nl-kvk",
-    label: "Nederland — volledige registergegevens",
+    label: "Nederland — voorbeeld met volledige gegevens",
     vatNumber: "NL001234567B01",
     outcomeLabel: "Gegevens gevonden",
     outcomeMessage:
@@ -601,6 +701,15 @@ export const VAT_PROTOTYPE_PRESETS: readonly VatPrototypePreset[] = [
       representativeEmail: "lars.devries@deltapackaging.nl",
       representativeRolePreset: "technical",
     },
+    demoRegistrant: {
+      firstName: "Marie",
+      lastName: "van den Berg",
+      registrantTitlePreset: "mrs",
+      registrantTitle: "",
+      telephone: "+31 6 1234 5678",
+      email: "marie.vandenberg@indiening-demo.nl",
+      registrantRolePreset: "procurement",
+    },
     mock: {
       outcome: "registry_auto",
       organizationName: "Demo Delta Packaging B.V.",
@@ -613,11 +722,11 @@ export const VAT_PROTOTYPE_PRESETS: readonly VatPrototypePreset[] = [
   },
   {
     id: "de-partial",
-    label: "Duitsland — alleen gedeeltelijk uit registers",
+    label: "Duitsland — voorbeeld met gedeeltelijke gegevens",
     vatNumber: "DE123456789",
     outcomeLabel: "Deels automatisch",
     outcomeMessage:
-      "Het land staat vast op basis van uw nummer. Het register leverde in dit scenario geen bedrijfsnaam noch volledig adres. In deze demo vullen we die — straat, huisnummer, postcode en plaats — wanneer het registratiedomein van uw e-mailadres in de mock-database staat, serverside aan (niet afgeleid uit het TLD alleen). Geen koppeling: u vult alles zelf in.",
+      "Het land volgt uit uw nummer. We hebben geen bedrijfsnaam en volledig adres automatisch ontvangen. Waar mogelijk vullen we die voor u aan op basis van uw professionele e-mailadres; anders vult u straat, huisnummer, postcode en plaats hieronder zelf in.",
     demoSupplementsOrgAddressFromEmailDomain: true,
     demoPerson: {
       representativeFirstName: "Anna",
@@ -626,6 +735,16 @@ export const VAT_PROTOTYPE_PRESETS: readonly VatPrototypePreset[] = [
       representativeTitle: "",
       representativeEmail: "anna.mueller@packline-industry.de",
       representativeRolePreset: "legal_representative",
+    },
+    demoRegistrant: {
+      firstName: "Thomas",
+      lastName: "Weber",
+      registrantTitlePreset: "other",
+      registrantTitle: "Dipl.-Ing.",
+      telephone: "+49 30 2211 8899",
+      email: "thomas.weber@indiening-demo.de",
+      registrantRolePreset: "other",
+      registrantRoleCustom: "Zertifizierungsbeauftragter",
     },
     mock: {
       outcome: "prefix_only",
@@ -639,11 +758,11 @@ export const VAT_PROTOTYPE_PRESETS: readonly VatPrototypePreset[] = [
   },
   {
     id: "fr-manual",
-    label: "Frankrijk — bedrijfsgegevens handmatig",
+    label: "Frankrijk — voorbeeld met handmatige aanvulling",
     vatNumber: "FR40303265045",
     outcomeLabel: "Aanvullen vereist",
     outcomeMessage:
-      "Het land staat vast op basis van uw nummer. Voor dit Franse scenario levert het register in de demo geen bedrijfsnaam noch vestigingsadres. Bedrijfsnaam en volledig adres worden hier — indien uw e-maildomein gekoppeld is in de mock — aangevuld via het registratiedomein van uw e-mail (serverside). Anders vult u de velden handmatig in.",
+      "Het land volgt uit uw nummer. We hebben geen bedrijfsnaam en vestigingsadres automatisch ontvangen. Waar mogelijk vullen we die aan op basis van uw e-mailadres; controleer alles en vul ontbrekende velden zelf in.",
     demoSupplementsOrgAddressFromEmailDomain: true,
     demoPerson: {
       representativeFirstName: "Camille",
@@ -652,6 +771,15 @@ export const VAT_PROTOTYPE_PRESETS: readonly VatPrototypePreset[] = [
       representativeTitle: "",
       representativeEmail: "camille.bernard@packline-industry.fr",
       representativeRolePreset: "sales",
+    },
+    demoRegistrant: {
+      firstName: "Élise",
+      lastName: "Dubois",
+      registrantTitlePreset: "ing",
+      registrantTitle: "",
+      telephone: "+33 7 66 55 44 33",
+      email: "elise.dubois@indiening-demo.fr",
+      registrantRolePreset: "quality",
     },
     mock: {
       outcome: "manual",
@@ -665,11 +793,11 @@ export const VAT_PROTOTYPE_PRESETS: readonly VatPrototypePreset[] = [
   },
   {
     id: "us-international",
-    label: "Verenigde Staten — buiten EU-registers",
+    label: "Verenigde Staten — voorbeeld buiten de EU",
     vatNumber: "US-EIN 12-3456789",
     outcomeLabel: "Aanvullen vereist",
     outcomeMessage:
-      "U gaf een niet-Europees identificatienummer op; het land is afgeleid uit het nummer. Registergegevens voor bedrijfsnaam en vestigingsadres hebben we niet automatisch kunnen ophalen. We probeerden informatie te vinden van uw bedrijfsgegevens op basis van uw e-mailadres. Gelieve na te kijken en te corrigeren indien nodig.",
+      "Het land volgt uit uw nummer. Voor bedrijfsnaam en adres hadden we geen automatische gegevens. Waar mogelijk helpen we aan op basis van uw e-mailadres. Controleer en corrigeer alles voordat u verdergaat.",
     demoSupplementsOrgAddressFromEmailDomain: true,
     demoPerson: {
       representativeFirstName: "Jordan",
@@ -678,6 +806,15 @@ export const VAT_PROTOTYPE_PRESETS: readonly VatPrototypePreset[] = [
       representativeTitle: "",
       representativeEmail: "jordan.taylor@packline-industry.com",
       representativeRolePreset: "procurement",
+    },
+    demoRegistrant: {
+      firstName: "Casey",
+      lastName: "Morgan",
+      registrantTitlePreset: "none",
+      registrantTitle: "",
+      telephone: "+1 512 555 0142",
+      email: "casey.morgan@indiening-demo.com",
+      registrantRolePreset: "administration",
     },
     mock: {
       outcome: "manual",

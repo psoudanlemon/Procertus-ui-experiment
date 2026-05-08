@@ -56,12 +56,21 @@ export type RequestPackageReviewProps = {
   description?: string;
   /** Optional intro above the table. */
   notice?: ReactNode;
+  /** Rendered after `notice`, before the key/value rows table (e.g. summary person matrix). */
+  beforeRows?: ReactNode;
   /** Key/value rows. */
   rows: RequestPackageRow[];
   /** Renders when `rows` is empty. */
   emptyState?: ReactNode;
   /** Who is submitting and for which company — shown above `notice` / table when set. */
   requester?: RequestPackageReviewRequesterPresentation;
+  /** Smaller type; monospace for item labels and values in the rows table. */
+  rowsDensity?: "default" | "compactMono";
+  /**
+   * Omit title and description — use when the surrounding step layout already shows the page
+   * heading (avoids duplicate nested headings).
+   */
+  omitHeader?: boolean;
 };
 
 const DEFAULT_SECTION = "Requester & organization";
@@ -74,9 +83,12 @@ export function RequestPackageReview({
   title,
   description,
   notice,
+  beforeRows,
   rows,
   emptyState,
   requester,
+  rowsDensity = "default",
+  omitHeader = false,
 }: RequestPackageReviewProps) {
   const rc = requester?.context;
   const sectionTitle = requester?.sectionTitle ?? DEFAULT_SECTION;
@@ -86,11 +98,13 @@ export function RequestPackageReview({
 
   return (
     <Card className={cn("w-full max-w-2xl overflow-hidden text-base leading-[1.6]", className)}>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        {description ? <CardDescription>{description}</CardDescription> : null}
-      </CardHeader>
-      <CardContent className="flex flex-col gap-section">
+      {!omitHeader ? (
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+          {description ? <CardDescription>{description}</CardDescription> : null}
+        </CardHeader>
+      ) : null}
+      <CardContent className={cn("flex flex-col gap-section", omitHeader && "pt-6")}>
         {rc ? (
           <section
             className="rounded-xl border border-border/60 bg-muted/20 p-section"
@@ -108,7 +122,9 @@ export function RequestPackageReview({
                   <p className="m-0 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
                     {requesterLabel}
                   </p>
-                  <p className="m-0 text-base font-semibold leading-snug text-foreground">{rc.requesterName}</p>
+                  <p className="m-0 text-base font-semibold leading-snug text-foreground">
+                    {rc.requesterName}
+                  </p>
                 </div>
                 {rc.requesterEmail ? (
                   <div className="flex flex-col gap-micro">
@@ -131,7 +147,9 @@ export function RequestPackageReview({
                   <p className="m-0 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
                     {organizationLabel}
                   </p>
-                  <p className="m-0 text-base font-semibold leading-snug text-foreground">{rc.organizationName}</p>
+                  <p className="m-0 text-base font-semibold leading-snug text-foreground">
+                    {rc.organizationName}
+                  </p>
                 </div>
                 {rc.organizationDetails ? (
                   <div className="text-base font-normal leading-[1.6] text-muted-foreground [&_p]:m-0 [&_p+p]:mt-micro">
@@ -143,29 +161,69 @@ export function RequestPackageReview({
           </section>
         ) : null}
 
-        {notice ? <div className="text-base font-normal leading-[1.6] text-muted-foreground">{notice}</div> : null}
+        {notice ? (
+          <div className="text-base font-normal leading-[1.6] text-muted-foreground">{notice}</div>
+        ) : null}
+        {beforeRows ? <div className="min-w-0">{beforeRows}</div> : null}
         {rows.length === 0 ? (
           (emptyState ?? (
-            <p className="m-0 text-base font-normal leading-[1.6] text-muted-foreground" role="status">
+            <p
+              className="m-0 text-base font-normal leading-[1.6] text-muted-foreground"
+              role="status"
+            >
               Nothing to review — add at least one request.
             </p>
           ))
         ) : (
           <div className="overflow-x-auto rounded-xl border border-border/50">
-            <Table className="text-base leading-[1.6]">
+            <Table
+              className={cn(
+                rowsDensity === "compactMono"
+                  ? "text-xs leading-snug tabular-nums"
+                  : "text-base leading-[1.6]",
+              )}
+            >
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-2/5 font-semibold">Item</TableHead>
-                  <TableHead className="font-semibold">Value</TableHead>
+                  <TableHead
+                    className={cn(
+                      "w-2/5 font-semibold",
+                      rowsDensity === "compactMono" &&
+                        "font-mono text-[10px] font-medium uppercase tracking-wider text-muted-foreground",
+                    )}
+                  >
+                    Item
+                  </TableHead>
+                  <TableHead
+                    className={cn(
+                      "font-semibold",
+                      rowsDensity === "compactMono" &&
+                        "font-mono text-[10px] font-medium uppercase tracking-wider text-muted-foreground",
+                    )}
+                  >
+                    Value
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {rows.map((r) => (
                   <TableRow key={r.id}>
-                    <TableCell className="align-top whitespace-nowrap text-base font-normal text-muted-foreground">
+                    <TableCell
+                      className={cn(
+                        "align-top whitespace-nowrap text-base font-normal text-muted-foreground",
+                        rowsDensity === "compactMono" &&
+                          "font-mono text-[11px] leading-relaxed text-muted-foreground",
+                      )}
+                    >
                       {r.label}
                     </TableCell>
-                    <TableCell className="min-w-0 whitespace-normal wrap-break-word align-top text-base font-semibold text-foreground">
+                    <TableCell
+                      className={cn(
+                        "min-w-0 whitespace-normal wrap-break-word align-top text-base font-semibold text-foreground",
+                        rowsDensity === "compactMono" &&
+                          "font-mono text-[11px] font-normal leading-relaxed text-foreground",
+                      )}
+                    >
                       {r.value}
                     </TableCell>
                   </TableRow>

@@ -184,8 +184,8 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
             <CardHeader className="gap-micro px-0">
               <CardTitle>Meerdere certificatie- en attestvragen in één aanvraag</CardTitle>
               <CardDescription>
-                Dit pakket kan meerdere certificatie- en attestvragen bundelen. Voeg extra vragen toe
-                wanneer hetzelfde dossier meerdere producten of aanvraagtypes moet bevatten.
+                Dit pakket kan meerdere certificatie- en attestvragen bundelen. Voeg extra vragen
+                toe wanneer hetzelfde dossier meerdere producten of aanvraagtypes moet bevatten.
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-component px-0 sm:flex-row sm:items-center sm:justify-between">

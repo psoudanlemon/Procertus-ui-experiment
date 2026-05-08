@@ -9,7 +9,11 @@ const meta = {
   component: DraftRequestList,
   parameters: {
     layout: "padded",
-    docs: { description: { component: "Drafts with edit/remove; empty state. Callbacks are props-only (no router)." } },
+    docs: {
+      description: {
+        component: "Drafts with edit/remove; empty state. Callbacks are props-only (no router).",
+      },
+    },
   },
   tags: ["autodocs"],
 } satisfies Meta<typeof DraftRequestList>;

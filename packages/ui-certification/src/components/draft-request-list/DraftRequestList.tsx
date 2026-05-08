@@ -85,7 +85,9 @@ export function DraftRequestList({
                 <div className="flex flex-col gap-component px-section py-section sm:flex-row sm:items-center sm:justify-between sm:gap-section">
                   <div className="min-w-0 flex-1">
                     <p className="font-medium text-foreground">{d.title}</p>
-                    {d.subtitle ? <p className="text-sm text-muted-foreground">{d.subtitle}</p> : null}
+                    {d.subtitle ? (
+                      <p className="text-sm text-muted-foreground">{d.subtitle}</p>
+                    ) : null}
                     {d.details ? <div className="mt-component min-w-0">{d.details}</div> : null}
                   </div>
                   {showEdit || showRemove ? (
@@ -102,7 +104,11 @@ export function DraftRequestList({
                                 className="text-destructive-foreground hover:bg-destructive/20 hover:text-destructive-foreground dark:hover:bg-destructive/30"
                                 aria-label={`${removeLabel}: ${d.title}`}
                               >
-                                <HugeiconsIcon icon={Delete02Icon} className="size-4" strokeWidth={1.5} />
+                                <HugeiconsIcon
+                                  icon={Delete02Icon}
+                                  className="size-4"
+                                  strokeWidth={1.5}
+                                />
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent side="top">{removeLabel}</TooltipContent>
@@ -110,8 +116,18 @@ export function DraftRequestList({
                         </TooltipProvider>
                       ) : null}
                       {showEdit ? (
-                        <Button type="button" size="sm" variant="secondary" onClick={() => onEdit(d.id)} aria-label={`${editLabel}: ${d.title}`}>
-                          <HugeiconsIcon icon={PencilEdit02Icon} className="size-4" strokeWidth={1.5} />
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => onEdit(d.id)}
+                          aria-label={`${editLabel}: ${d.title}`}
+                        >
+                          <HugeiconsIcon
+                            icon={PencilEdit02Icon}
+                            className="size-4"
+                            strokeWidth={1.5}
+                          />
                           {editLabel}
                         </Button>
                       ) : null}

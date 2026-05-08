@@ -34,7 +34,10 @@ export type {
 export { DraftRequestList } from "./components/draft-request-list";
 export type { DraftRequestItem, DraftRequestListProps } from "./components/draft-request-list";
 export { ProductMultiSelect } from "./components/product-multi-select";
-export type { ProductMultiSelectOption, ProductMultiSelectProps } from "./components/product-multi-select";
+export type {
+  ProductMultiSelectOption,
+  ProductMultiSelectProps,
+} from "./components/product-multi-select";
 export { ProductTreePanel } from "./components/product-tree-panel";
 export type {
   ProductTreeGroupNode,
@@ -65,16 +68,12 @@ export type {
   RequestPackageReviewRequesterPresentation,
   RequestPackageRow,
 } from "./components/request-package-review";
-export {
-  RegistrationProcessingDialog,
-} from "./components/registration-processing-dialog";
+export { RegistrationProcessingDialog } from "./components/registration-processing-dialog";
 export type {
   RegistrationProcessingDialogProps,
   RegistrationProcessingStep,
 } from "./components/registration-processing-dialog";
-export {
-  ProcertusCategorizationTreeView,
-} from "./components/procertus-categorization-tree-view";
+export { ProcertusCategorizationTreeView } from "./components/procertus-categorization-tree-view";
 export type {
   CertificationLabelKey,
   ProcertusCategorizationTreeViewProps,
@@ -133,8 +132,10 @@ export {
   AnonymousOnboardingFlowView,
   CatalogueExplorer,
   clearAnonymousOnboardingStorage,
+  formatOnboardingPersonRegistryOptionLabel,
   ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY,
   ONBOARDING_FLOW_STORAGE_KEY,
+  ONBOARDING_PERSON_NEW_ID,
   ONBOARDING_REGISTRATION_COMPLETE_PATH,
   ONBOARDING_REGISTRATION_COMPLETE_SESSION_KEY,
   ONBOARDING_REGISTRATION_COMPLETE_STORAGE_KEY,
@@ -146,9 +147,13 @@ export {
 export type {
   AnonymousOnboardingFlowState,
   AnonymousOnboardingFlowViewProps,
+  ApplicantLegalRepresentativeAnswer,
   CatalogueExplorerProps,
   CustomerContext,
+  IdentificatiePersonCaptureState,
+  OnboardingRegisteredPerson,
   OnboardingRegistrationCompletePayload,
+  OnboardingRequestOrigin,
   OnboardingStep,
   UseAnonymousOnboardingFlowOptions,
 } from "./anonymous-onboarding";

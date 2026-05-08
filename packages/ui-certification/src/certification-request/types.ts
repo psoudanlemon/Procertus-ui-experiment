@@ -28,11 +28,7 @@ export const CERTIFICATION_REQUEST_STEP_IDS = [
 ] as const;
 export type CertificationRequestStepId = (typeof CERTIFICATION_REQUEST_STEP_IDS)[number];
 
-export const PRODUCT_CERTIFICATION_ENTRY_IDS = new Set<AvailableEntryKey>([
-  "ce",
-  "benor",
-  "ssd",
-]);
+export const PRODUCT_CERTIFICATION_ENTRY_IDS = new Set<AvailableEntryKey>(["ce", "benor", "ssd"]);
 
 export const PRODUCT_REQUIRED_INTENTS = new Set<CertificationRequestIntentId>([
   "product-certification",

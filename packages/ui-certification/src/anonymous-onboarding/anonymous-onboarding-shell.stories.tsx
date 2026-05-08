@@ -53,7 +53,7 @@ export const RegistrationPhaseChrome: StoryObj<typeof meta> = {
   render: (args) => (
     <AnonymousOnboardingShell {...args}>
       <div className="rounded-lg border border-dashed border-border/70 bg-muted/20 p-8 text-sm text-muted-foreground">
-        Content slot — hier staat het registratie-StepLayout (customer / company / summary).
+        Content slot — hier staat het registratie-StepLayout (customer → company → extras → summary).
       </div>
     </AnonymousOnboardingShell>
   ),

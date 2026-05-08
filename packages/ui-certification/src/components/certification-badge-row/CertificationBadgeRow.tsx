@@ -67,9 +67,7 @@ export function CertificationBadgeRow({
                 <span
                   className={cn(
                     "ml-micro font-normal",
-                    it.presentation === "not-offered"
-                      ? "text-muted-foreground"
-                      : "opacity-90",
+                    it.presentation === "not-offered" ? "text-muted-foreground" : "opacity-90",
                   )}
                 >
                   : {it.text}

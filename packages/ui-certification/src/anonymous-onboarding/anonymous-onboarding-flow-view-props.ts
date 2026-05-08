@@ -15,6 +15,7 @@ import type {
   RegistrationEnrichmentHints,
   VatPrototypePreset,
 } from "./lib/vatPrototypePresets";
+import type { OnboardingRequestOrigin } from "./onboarding-request-origin";
 
 export type AnonymousOnboardingFlowViewProps = {
   step: OnboardingStep;
@@ -31,6 +32,7 @@ export type AnonymousOnboardingFlowViewProps = {
   registrationSimulationLabels: readonly RegistrationProcessingStep[];
   context: CustomerContext;
   updateContext: (id: keyof CustomerContext, value: string) => void;
+  patchContext: (patch: Partial<CustomerContext>) => void;
   setFlowState: Dispatch<SetStateAction<AnonymousOnboardingFlowState>>;
   drafts: CertificationRequestDraft[];
   effectiveSummaryIncludedDraftIds: readonly string[];
@@ -51,7 +53,12 @@ export type AnonymousOnboardingFlowViewProps = {
   emailForDisplay: string;
   activeVatPreset: VatPrototypePreset | undefined;
   prototypeVatPresetId: string;
+  vatPrototypePresetChoices: readonly VatPrototypePreset[];
+  requestOrigin: OnboardingRequestOrigin | "";
+  setRequestOrigin: (origin: OnboardingRequestOrigin) => void;
   countrySelectOptions: readonly string[];
   countrySelectValue: string;
   companyHints: RegistrationEnrichmentHints;
+  /** Nazicht: Klantenportaal onboarding per registered person id (`false` = opt-out; omitted = on). */
+  summaryKlantenportaalByPersonId: Record<string, boolean>;
 };

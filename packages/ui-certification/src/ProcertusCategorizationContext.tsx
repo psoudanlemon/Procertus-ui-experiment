@@ -1,7 +1,7 @@
-import { createContext, type ReactNode, useContext, useMemo } from 'react';
-import { defaultProcertusCategorizationDoc } from './categorization-data';
-import { buildNodeByIdMap, collectGroupIds, flattenProducts } from './helpers';
-import type { FlatProductEntry, ProcertusCategorizationDoc, TreeNode } from './types';
+import { createContext, type ReactNode, useContext, useMemo } from "react";
+import { defaultProcertusCategorizationDoc } from "./categorization-data";
+import { buildNodeByIdMap, collectGroupIds, flattenProducts } from "./helpers";
+import type { FlatProductEntry, ProcertusCategorizationDoc, TreeNode } from "./types";
 
 export type ProcertusCategorizationValue = {
   /** Full document (meta + clusters). */
@@ -51,7 +51,7 @@ export function useProcertusCategorization(): ProcertusCategorizationValue {
   const ctx = useContext(ProcertusCategorizationContext);
   if (ctx == null) {
     throw new Error(
-      'useProcertusCategorization must be used within ProcertusCategorizationProvider'
+      "useProcertusCategorization must be used within ProcertusCategorizationProvider",
     );
   }
   return ctx;

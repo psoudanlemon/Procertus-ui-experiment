@@ -8,12 +8,13 @@ import {
   enrichRegistrationContext,
   findVatPrototypePreset,
   isVatIdentifierPlausible,
-  REGISTRATION_COUNTRY_OPTIONS,
+  registrationIsoCodeFromDutchCountryLabel,
   vatLookupSimulationStepsForPreset,
   companyFormFieldsPrefilledByMockLookup,
   companyFormFieldsResolvedThroughLookupStep,
   VAT_PROTOTYPE_PRESETS,
 } from "./lib/vatPrototypePresets";
+import { isRegistrationIdentifierValidForOrigin } from "./lib/registration-identifier-for-origin";
 import {
   ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY,
   ONBOARDING_FLOW_STORAGE_KEY,
@@ -24,15 +25,22 @@ import {
   CERTIFICATION_PHASE_DESCRIPTION,
   CERTIFICATION_PHASE_TITLE,
   COUNTRY_SELECT_NONE,
+  ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION,
   ONBOARDING_REGISTRATION_COMPLETE_PATH,
   REGISTRATION_PHASE_DESCRIPTION,
   REGISTRATION_PHASE_TITLE,
 } from "./anonymous-onboarding-constants";
 import {
   buildRows,
+  customerContextAfterPrototypePresetChange,
   formatRequesterStepperLabel,
-  hasStructuredPostalAddress,
+  isLegalRepresentativeCaptureComplete,
+  isOnboardingCompanyCoreStepValid,
+  isOnboardingOptionalContactsStepValid,
+  isRegistrantCaptureValidForContext,
+  mergeCustomerContextDeep,
   onboardingReviewRequesterFromContext,
+  prototypeOptionalDemoContextPatch,
   readInitialCompanyLookupPhase,
   resolveFlowContext,
   stepIndex,
@@ -43,6 +51,13 @@ import type {
   OnboardingStep,
 } from "./anonymous-onboarding-types";
 import { ONBOARDING_STEPS } from "./anonymous-onboarding-types";
+import {
+  defaultPrototypePresetIdForRequestOrigin,
+  firmaCountryLabelLockedForOrigin,
+  registrationCountryOptionsForRequestOrigin,
+  vatPrototypePresetIdsForOrigin,
+  type OnboardingRequestOrigin,
+} from "./onboarding-request-origin";
 import { DEFAULT_CONTEXT } from "./anonymous-onboarding-flow-helpers";
 import type { OnboardingStepperStep } from "@procertus-ui/ui-lib";
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
@@ -59,12 +74,14 @@ const ADDRESS_DETAIL_KEYS: (keyof CustomerContext)[] = [
 
 const DEFAULT_ONBOARDING_FLOW_STATE: AnonymousOnboardingFlowState = {
   step: "request",
+  requestOrigin: "",
   drafts: [],
   summaryIncludedDraftIds: [],
   context: DEFAULT_CONTEXT,
   wizardInitialStep: "intent",
   prototypeVatPresetId: DEFAULT_VAT_PROTOTYPE_PRESET_ID,
   companyFieldHints: {},
+  summaryKlantenportaalByPersonId: {},
 };
 
 export type UseAnonymousOnboardingFlowOptions = {
@@ -100,6 +117,7 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
     drafts,
     step,
     wizardInitialStep,
+    requestOrigin,
     prototypeVatPresetId,
     companyFieldHints,
     summaryIncludedDraftIds,
@@ -162,30 +180,89 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
   }, [registrationSubmitOpen, navigate, registrationCompletePath]);
 
   const countrySelectOptions = useMemo(() => {
-    const c = context.country?.trim();
-    if (c && !REGISTRATION_COUNTRY_OPTIONS.includes(c)) {
-      return [...REGISTRATION_COUNTRY_OPTIONS, c].sort((a, b) => a.localeCompare(b, "nl"));
+    if (!requestOrigin) {
+      return registrationCountryOptionsForRequestOrigin("other", context.country);
     }
-    return REGISTRATION_COUNTRY_OPTIONS;
-  }, [context.country]);
+    return registrationCountryOptionsForRequestOrigin(requestOrigin, context.country);
+  }, [requestOrigin, context.country]);
 
   const countrySelectValue = useMemo(() => {
     const t = context.country?.trim() ?? "";
     return t && countrySelectOptions.includes(t) ? t : COUNTRY_SELECT_NONE;
   }, [context.country, countrySelectOptions]);
 
+  const allowedVatPrototypePresetIds = useMemo(() => {
+    if (!requestOrigin) return VAT_PROTOTYPE_PRESETS.map((p) => p.id);
+    return [...vatPrototypePresetIdsForOrigin(requestOrigin)];
+  }, [requestOrigin]);
+
+  const vatPrototypePresetChoices = useMemo(
+    () => VAT_PROTOTYPE_PRESETS.filter((p) => allowedVatPrototypePresetIds.includes(p.id)),
+    [allowedVatPrototypePresetIds],
+  );
+
+  const setRequestOrigin = (origin: OnboardingRequestOrigin) => {
+    setFlowState((prev) => {
+      const presetId = defaultPrototypePresetIdForRequestOrigin(origin);
+      const preset = findVatPrototypePreset(presetId) ?? VAT_PROTOTYPE_PRESETS[0]!;
+      const baseContext = resolveFlowContext(
+        prev.context as Partial<CustomerContext> & {
+          representativeName?: string;
+          kycNotes?: string;
+          address?: string;
+        },
+      );
+      return {
+        ...prev,
+        requestOrigin: origin,
+        prototypeVatPresetId: preset.id,
+        companyFieldHints: {},
+        context: customerContextAfterPrototypePresetChange(baseContext, preset),
+      };
+    });
+  };
+
+  useEffect(() => {
+    if (!requestOrigin) return;
+    const allowed = vatPrototypePresetIdsForOrigin(requestOrigin);
+    if (allowed.includes(prototypeVatPresetId)) return;
+    const preset = findVatPrototypePreset(allowed[0]!) ?? VAT_PROTOTYPE_PRESETS[0];
+    if (!preset) return;
+    setFlowState((prev) => ({
+      ...prev,
+      prototypeVatPresetId: preset.id,
+      companyFieldHints: {},
+      context: customerContextAfterPrototypePresetChange(
+        resolveFlowContext(
+          prev.context as Partial<CustomerContext> & {
+            representativeName?: string;
+            kycNotes?: string;
+            address?: string;
+          },
+        ),
+        preset,
+      ),
+    }));
+  }, [requestOrigin, prototypeVatPresetId, setFlowState]);
+
   const activeStep = stepIndex(step);
   const hasDrafts = drafts.length > 0;
   const hasCustomerContext =
-    (context.representativeFirstName?.trim() ?? "").length > 0 &&
-    (context.representativeLastName?.trim() ?? "").length > 0 &&
-    (context.representativeEmail?.trim() ?? "").length > 0 &&
-    (context.representativeRole?.trim() ?? "").length > 0 &&
-    isVatIdentifierPlausible(context.vatNumber ?? "");
-  const hasCompanyContext =
-    (context.organizationName?.trim() ?? "").length > 0 &&
-    (context.country?.trim() ?? "").length > 0 &&
-    hasStructuredPostalAddress(context);
+    (context.applicantIsLegalRepresentative === "yes" ||
+      context.applicantIsLegalRepresentative === "no") &&
+    isRegistrantCaptureValidForContext(context) &&
+    isLegalRepresentativeCaptureComplete(context) &&
+    (requestOrigin
+      ? isRegistrationIdentifierValidForOrigin(context.vatNumber ?? "", requestOrigin)
+      : isVatIdentifierPlausible(context.vatNumber ?? ""));
+  const companyCoreOk =
+    isOnboardingCompanyCoreStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  const optionalContactsOk =
+    isOnboardingOptionalContactsStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  const registrationStepOk = hasCustomerContext || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  const companyStepOk = companyCoreOk;
+  const extrasStepOk = optionalContactsOk;
+  const summaryStepOk = companyCoreOk && optionalContactsOk;
   const steps: OnboardingStepperStep[] = useMemo(
     () => [
       {
@@ -200,25 +277,46 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
         available: true,
       },
       {
+        id: "origin",
+        title: "Land of regio",
+        description:
+          requestOrigin === ""
+            ? "Waar is uw bedrijf?"
+            : ({
+                be: "België",
+                nl: "Nederland",
+                eu: "Europa (EU)",
+                us: "Verenigde Staten",
+                other: "Anders",
+              }[requestOrigin] ?? ""),
+        available: hasDrafts,
+      },
+      {
         id: "customer",
         title: "Registratie",
         description: formatRequesterStepperLabel(context),
-        available: hasDrafts,
+        available: hasDrafts && requestOrigin !== "",
       },
       {
         id: "company",
         title: "Bedrijfsgegevens",
-        description: context.organizationName || "Uit BTW-nummer",
-        available: hasDrafts && hasCustomerContext,
+        description: context.organizationName || "Naam en adres",
+        available: hasDrafts && requestOrigin !== "" && registrationStepOk,
+      },
+      {
+        id: "extras",
+        title: "Extra contacten",
+        description: "Factuur-, certificatie- en reservecontact (optioneel)",
+        available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyCoreOk,
       },
       {
         id: "summary",
-        title: "Versturen",
-        description: "Annvraag controleren",
-        available: hasDrafts && hasCustomerContext && hasCompanyContext,
+        title: "Nazicht",
+        description: "Gegevens en aanvragen nakijken",
+        available: hasDrafts && requestOrigin !== "" && registrationStepOk && summaryStepOk,
       },
     ],
-    [context, drafts.length, hasCompanyContext, hasCustomerContext, hasDrafts, step],
+    [context, drafts.length, companyCoreOk, registrationStepOk, requestOrigin, step, summaryStepOk],
   );
 
   const updateContext = (id: keyof CustomerContext, value: string) => {
@@ -238,6 +336,39 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
     });
   };
 
+  const patchContext = (patch: Partial<CustomerContext>) => {
+    setFlowState((prev) => {
+      let nextHints = { ...prev.companyFieldHints };
+      const addrKeys: (keyof CustomerContext)[] = [
+        "addressStreet",
+        "addressHouseNumber",
+        "addressPostalCode",
+        "addressCity",
+        "country",
+        "invoicingAddressStreet",
+        "invoicingAddressHouseNumber",
+        "invoicingAddressPostalCode",
+        "invoicingAddressCity",
+        "invoicingCountry",
+      ];
+      const touchAddr = addrKeys.some((k) => patch[k] !== undefined);
+      if (touchAddr) {
+        delete nextHints.addressStreet;
+      }
+      if (patch.organizationName !== undefined) {
+        delete nextHints.organizationName;
+      }
+      if (patch.country !== undefined) {
+        delete nextHints.country;
+      }
+      return {
+        ...prev,
+        companyFieldHints: nextHints,
+        context: mergeCustomerContextDeep(resolveFlowContext(prev.context), patch),
+      };
+    });
+  };
+
   /** Normalize context from storage (missing keys, legacy `representativeName`, step/preset fixes). */
   useEffect(() => {
     setFlowState((prev) => {
@@ -246,9 +377,23 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
       if ((migratedStep as string) === "kyc") migratedStep = "company";
       if ((migratedStep as string) === "profile") migratedStep = "summary";
       if ((migratedStep as string) === "activation") migratedStep = "summary";
+      if ((migratedStep as string) === "review") migratedStep = "summary";
       if (!ONBOARDING_STEPS.includes(migratedStep)) migratedStep = "request";
       if (migratedStep !== prev.step) {
         fixes.step = migratedStep;
+      }
+      if (prev.requestOrigin === undefined) {
+        fixes.requestOrigin = "";
+        const resumeStep = (fixes.step ?? migratedStep) as OnboardingStep;
+        if (
+          prev.drafts.length > 0 &&
+          (resumeStep === "customer" ||
+            resumeStep === "company" ||
+            resumeStep === "extras" ||
+            resumeStep === "summary")
+        ) {
+          fixes.step = "origin";
+        }
       }
       if (prev.summaryIncludedDraftIds === undefined && prev.drafts.length > 0) {
         fixes.summaryIncludedDraftIds = prev.drafts.map((d) => d.id);
@@ -332,15 +477,23 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
           vatNumber: baseContext.vatNumber,
           representativeEmail: baseContext.representativeEmail,
           preset,
+          firmaCountryLocked: firmaCountryLabelLockedForOrigin(requestOrigin) != null,
         });
         const { hints, ...enrichedFields } = enriched;
+        const mergedCore = resolveFlowContext({
+          ...baseContext,
+          ...enrichedFields,
+        });
+        const withPrototypeOptionals = resolveFlowContext(
+          mergeCustomerContextDeep(
+            mergedCore,
+            prototypeOptionalDemoContextPatch(mergedCore, preset),
+          ),
+        );
         return {
           ...prev,
           companyFieldHints: hints,
-          context: resolveFlowContext({
-            ...baseContext,
-            ...enrichedFields,
-          }),
+          context: withPrototypeOptionals,
         };
       });
       setLookupProgress(100);
@@ -348,7 +501,27 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
     });
 
     return () => timeoutIds.forEach((id) => window.clearTimeout(id));
-  }, [step, prototypeVatPresetId, setFlowState]);
+  }, [step, prototypeVatPresetId, requestOrigin, setFlowState]);
+
+  useEffect(() => {
+    if (step !== "company" || companyLookupPhase !== "ready") return;
+    const locked = firmaCountryLabelLockedForOrigin(requestOrigin);
+    if (!locked) return;
+    const iso = registrationIsoCodeFromDutchCountryLabel(locked);
+    setFlowState((prev) => {
+      if (prev.context.country === locked && prev.context.addressCountryCode === iso) {
+        return prev;
+      }
+      return {
+        ...prev,
+        context: resolveFlowContext({
+          ...prev.context,
+          country: locked,
+          addressCountryCode: iso,
+        }),
+      };
+    });
+  }, [step, companyLookupPhase, requestOrigin, setFlowState]);
 
   const companyPrefillFieldKeys = useMemo(
     () =>
@@ -415,43 +588,55 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
   );
 
   const primaryAction =
-    step === "customer"
+    step === "origin"
       ? {
           label: "Verder",
-          onClick: () => goToOnboardingStep("company"),
-          disabled: !hasCustomerContext,
+          onClick: () => goToOnboardingStep("customer"),
+          disabled: requestOrigin === "",
         }
-      : step === "company"
+      : step === "customer"
         ? {
             label: "Verder",
-            onClick: () => setFlowState((prev) => ({ ...prev, step: "summary" })),
-            disabled: !hasCompanyContext || companyLookupPhase !== "ready",
+            onClick: () => goToOnboardingStep("company"),
+            disabled: !registrationStepOk,
           }
-        : step === "summary"
+        : step === "company"
           ? {
-              label: "Versturen",
-              onClick: () => {
-                const certificationStoreRaw =
-                  typeof localStorage !== "undefined"
-                    ? localStorage.getItem(ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY)
-                    : null;
-                writeOnboardingRegistrationCompletePayload({
-                  representativeEmail: context.representativeEmail.trim(),
-                  organizationName: context.organizationName.trim(),
-                  includedInquiryCount: effectiveSummaryIncludedDraftIds.length,
-                  flowStateSnapshot: flowState,
-                  certificationStoreRaw,
-                });
-                setRegistrationProgress(0);
-                setRegistrationStepIndex(-1);
-                setRegistrationSubmitOpen(true);
-              },
-              disabled:
-                !hasDrafts ||
-                effectiveSummaryIncludedDraftIds.length === 0 ||
-                registrationSubmitOpen,
+              label: "Verder",
+              onClick: () => setFlowState((prev) => ({ ...prev, step: "extras" })),
+              disabled: !companyStepOk || companyLookupPhase !== "ready",
             }
-          : { label: "Doorgaan", onClick: () => {}, disabled: true };
+          : step === "extras"
+            ? {
+                label: "Verder",
+                onClick: () => setFlowState((prev) => ({ ...prev, step: "summary" })),
+                disabled: !extrasStepOk,
+              }
+            : step === "summary"
+              ? {
+                  label: "Indienen",
+                  onClick: () => {
+                    const certificationStoreRaw =
+                      typeof localStorage !== "undefined"
+                        ? localStorage.getItem(ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY)
+                        : null;
+                    writeOnboardingRegistrationCompletePayload({
+                      representativeEmail: context.representativeEmail.trim(),
+                      organizationName: context.organizationName.trim(),
+                      includedInquiryCount: effectiveSummaryIncludedDraftIds.length,
+                      flowStateSnapshot: flowState,
+                      certificationStoreRaw,
+                    });
+                    setRegistrationProgress(0);
+                    setRegistrationStepIndex(-1);
+                    setRegistrationSubmitOpen(true);
+                  },
+                  disabled:
+                    !hasDrafts ||
+                    effectiveSummaryIncludedDraftIds.length === 0 ||
+                    registrationSubmitOpen,
+                }
+              : { label: "Doorgaan", onClick: () => {}, disabled: true };
 
   const certificationWizardProps: CertificationRequestWizardProps = {
     mode: "onboarding",
@@ -474,7 +659,7 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
           ...prev,
           drafts: nextDrafts,
           wizardInitialStep: "drafts",
-          step: "customer",
+          step: "origin",
           summaryIncludedDraftIds: nextSummaryIncluded,
         };
       });
@@ -498,10 +683,13 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
     registrationSimulationLabels,
     context,
     updateContext,
+    patchContext,
     setFlowState,
     drafts,
     effectiveSummaryIncludedDraftIds,
-    rows: buildRows(context, drafts, effectiveSummaryIncludedDraftIds),
+    rows: buildRows(context, drafts, effectiveSummaryIncludedDraftIds, {
+      includeDraftRows: false,
+    }),
     steps,
     activeStep,
     goToOnboardingStep,
@@ -523,9 +711,13 @@ export function useAnonymousOnboardingFlow(options: UseAnonymousOnboardingFlowOp
     emailForDisplay,
     activeVatPreset,
     prototypeVatPresetId,
+    requestOrigin,
+    setRequestOrigin,
+    vatPrototypePresetChoices,
     countrySelectOptions,
     countrySelectValue,
     companyHints,
+    summaryKlantenportaalByPersonId: flowState.summaryKlantenportaalByPersonId ?? {},
   };
 
   return {

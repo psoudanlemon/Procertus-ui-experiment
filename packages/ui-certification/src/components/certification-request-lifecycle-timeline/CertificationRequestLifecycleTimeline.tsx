@@ -118,10 +118,7 @@ export function CertificationRequestLifecycleTimeline({
           <TimelineItem
             key={step}
             step={index + 1}
-            className={cn(
-              "pe-component not-last:pe-section",
-              !completedOrActive && "opacity-45",
-            )}
+            className={cn("pe-component not-last:pe-section", !completedOrActive && "opacity-45")}
           >
             <TimelineIndicator
               className={cn(

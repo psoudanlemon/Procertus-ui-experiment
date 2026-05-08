@@ -86,9 +86,7 @@ export const storyRequester: RequestPackageReviewRequesterPresentation = {
     requesterName: "Alex Example",
     requesterEmail: "alex@example.com",
     organizationName: "Example Construct BV",
-    organizationDetails: (
-      <span className="text-muted-foreground">BE0123456789 · Gent</span>
-    ),
+    organizationDetails: <span className="text-muted-foreground">BE0123456789 · Gent</span>,
   },
 };
 

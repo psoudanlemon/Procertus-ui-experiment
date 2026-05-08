@@ -13,7 +13,7 @@ function slugForDocumentHref(raw: string): string {
 function isProductScopedInquiry(draft: CertificationRequestDraft): boolean {
   return Boolean(
     (draft.productId && draft.productId.trim().length > 0) ||
-      (draft.productLabel && draft.productLabel.trim().length > 0),
+    (draft.productLabel && draft.productLabel.trim().length > 0),
   );
 }
 

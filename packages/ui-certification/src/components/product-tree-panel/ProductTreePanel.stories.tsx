@@ -331,8 +331,7 @@ function WithTree() {
           items.push({ ...node, children: sub.items });
           continue;
         }
-        const matches =
-          filtering && node.label.toLowerCase().includes(lower);
+        const matches = filtering && node.label.toLowerCase().includes(lower);
         if (filtering && !matches) continue;
         items.push({
           ...node,

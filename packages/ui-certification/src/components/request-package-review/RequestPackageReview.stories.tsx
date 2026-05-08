@@ -7,7 +7,12 @@ const meta = {
   component: RequestPackageReview,
   parameters: {
     layout: "padded",
-    docs: { description: { component: "Read-only summary before submit; rows are pre-built by the parent (Task E not included)." } },
+    docs: {
+      description: {
+        component:
+          "Read-only summary before submit; rows are pre-built by the parent (Task E not included).",
+      },
+    },
   },
   tags: ["autodocs"],
 } satisfies Meta<typeof RequestPackageReview>;

@@ -64,11 +64,7 @@ function collectGroupIds(nodes: readonly ProductTreeNode[]): string[] {
   return ids;
 }
 
-function ScrollFades({
-  scrollerRef,
-}: {
-  scrollerRef: React.RefObject<HTMLDivElement | null>;
-}) {
+function ScrollFades({ scrollerRef }: { scrollerRef: React.RefObject<HTMLDivElement | null> }) {
   const [scrolled, setScrolled] = useState(false);
   const [atBottom, setAtBottom] = useState(true);
 
@@ -197,8 +193,7 @@ function makeTreeItemInstance({
     isFolder: () => isGroup,
     isSelected: () => node.kind === "product" && Boolean(node.selected),
     isDragTarget: () => false,
-    isMatchingSearch: () =>
-      node.kind === "product" && Boolean(node.searchMatch),
+    isMatchingSearch: () => node.kind === "product" && Boolean(node.searchMatch),
   };
 }
 
@@ -273,10 +268,7 @@ function HighlightedLabel({ name, query }: { name: string; query?: string }) {
   );
 }
 
-function ProductTreeItemLabel({
-  item,
-  searchQuery,
-}: TreeItemProps & { searchQuery?: string }) {
+function ProductTreeItemLabel({ item, searchQuery }: TreeItemProps & { searchQuery?: string }) {
   const node = item.node;
 
   if (node.kind === "group") {
@@ -396,9 +388,7 @@ export function ProductTreePanel({
   const allExpanded = groupIds.length > 0 && groupIds.every((id) => expandedSet.has(id));
 
   const hasToolbarRow =
-    (showSearch && Boolean(onSearchChange)) ||
-    Boolean(actions) ||
-    Boolean(onToggleExpandAll);
+    (showSearch && Boolean(onSearchChange)) || Boolean(actions) || Boolean(onToggleExpandAll);
 
   return (
     <Card className={cn("mx-auto w-full max-w-5xl overflow-hidden py-section", className)}>

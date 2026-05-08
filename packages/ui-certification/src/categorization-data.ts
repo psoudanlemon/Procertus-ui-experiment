@@ -5,8 +5,8 @@
  * — copy the generated JSON into this package when the decision tree changes.
  */
 
-import procertusCategorizationJson from './data/procertus-categorization.json';
-import type { ProcertusCategorizationDoc } from './types';
+import procertusCategorizationJson from "./data/procertus-categorization.json";
+import type { ProcertusCategorizationDoc } from "./types";
 
 export const defaultProcertusCategorizationDoc: ProcertusCategorizationDoc =
   procertusCategorizationJson as ProcertusCategorizationDoc;

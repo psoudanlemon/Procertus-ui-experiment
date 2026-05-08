@@ -5,12 +5,18 @@ import { storyDrafts } from "../components/certification-request-wizard/certific
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
 import type { CertificationRequestWizardProps } from "../components/certification-request-wizard/CertificationRequestWizard";
 import type { AnonymousOnboardingFlowViewProps } from "./anonymous-onboarding-flow-view-props";
-import { COUNTRY_SELECT_NONE } from "./anonymous-onboarding-constants";
+import {
+  COUNTRY_SELECT_NONE,
+  ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION,
+} from "./anonymous-onboarding-constants";
 import {
   buildRows,
   DEFAULT_CONTEXT,
   formatRequesterStepperLabel,
-  hasStructuredPostalAddress,
+  isLegalRepresentativeCaptureComplete,
+  isOnboardingCompanyCoreStepValid,
+  isOnboardingCompanyStepValid,
+  isRegistrantCaptureValidForContext,
   onboardingReviewRequesterFromContext,
   resolveFlowContext,
   stepIndex,
@@ -29,6 +35,12 @@ import {
   VAT_PROTOTYPE_PRESETS,
   type CompanyFormFieldKey,
 } from "./lib/vatPrototypePresets";
+import { isRegistrationIdentifierValidForOrigin } from "./lib/registration-identifier-for-origin";
+import {
+  registrationCountryOptionsForRequestOrigin,
+  vatPrototypePresetIdsForOrigin,
+  type OnboardingRequestOrigin,
+} from "./onboarding-request-origin";
 
 export function noop(): void {}
 
@@ -44,6 +56,7 @@ export function storyCustomerContext(overrides: Partial<CustomerContext> = {}): 
     representativeEmail: "alex@voorbeeld.nl",
     representativeRole: "Zaakvoerder",
     representativeRolePreset: "managing_director",
+    applicantIsLegalRepresentative: "yes",
     organizationName: "Voorbeeld BV",
     country: "België",
     addressStreet: "Kerkstraat",
@@ -54,34 +67,47 @@ export function storyCustomerContext(overrides: Partial<CustomerContext> = {}): 
   });
 }
 
-function hasCustomerContext(ctx: CustomerContext): boolean {
+function hasCustomerContext(
+  ctx: CustomerContext,
+  requestOrigin: OnboardingRequestOrigin | "",
+): boolean {
   return (
-    (ctx.representativeFirstName?.trim() ?? "").length > 0 &&
-    (ctx.representativeLastName?.trim() ?? "").length > 0 &&
-    (ctx.representativeEmail?.trim() ?? "").length > 0 &&
-    (ctx.representativeRole?.trim() ?? "").length > 0 &&
-    isVatIdentifierPlausible(ctx.vatNumber ?? "")
+    (ctx.applicantIsLegalRepresentative === "yes" || ctx.applicantIsLegalRepresentative === "no") &&
+    isRegistrantCaptureValidForContext(ctx) &&
+    isLegalRepresentativeCaptureComplete(ctx) &&
+    (requestOrigin
+      ? isRegistrationIdentifierValidForOrigin(ctx.vatNumber ?? "", requestOrigin)
+      : isVatIdentifierPlausible(ctx.vatNumber ?? ""))
   );
 }
 
 function hasCompanyContext(ctx: CustomerContext): boolean {
-  return (
-    (ctx.organizationName?.trim() ?? "").length > 0 &&
-    (ctx.country?.trim() ?? "").length > 0 &&
-    hasStructuredPostalAddress(ctx)
-  );
+  return isOnboardingCompanyStepValid(ctx);
 }
+
+function hasCompanyCoreContext(ctx: CustomerContext): boolean {
+  return isOnboardingCompanyCoreStepValid(ctx);
+}
+
+/** Default origin for Storybook fixtures (Belgium). */
+export const storyRequestOrigin: OnboardingRequestOrigin = "be";
 
 /** Mirrors step labels from `useAnonymousOnboardingFlow` for static Storybook fixtures. */
 export function storyOnboardingStepperSteps(input: {
   step: OnboardingStep;
   context: CustomerContext;
   drafts: CertificationRequestDraft[];
+  requestOrigin?: OnboardingRequestOrigin | "";
 }): OnboardingStepperStep[] {
   const { step, context, drafts } = input;
+  const requestOrigin = input.requestOrigin ?? "";
   const hasDrafts = drafts.length > 0;
-  const hasCust = hasCustomerContext(context);
+  const hasCust = hasCustomerContext(context, requestOrigin);
   const hasComp = hasCompanyContext(context);
+  const hasCore = hasCompanyCoreContext(context);
+  const registrationStepOk = hasCust || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  const companyStepOk = hasComp || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  const companyCoreOk = hasCore || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   return [
     {
       id: "request",
@@ -95,22 +121,43 @@ export function storyOnboardingStepperSteps(input: {
       available: true,
     },
     {
+      id: "origin",
+      title: "Land of regio",
+      description:
+        requestOrigin === ""
+          ? "Waar is uw bedrijf?"
+          : ({
+              be: "België",
+              nl: "Nederland",
+              eu: "Europa (EU)",
+              us: "Verenigde Staten",
+              other: "Anders",
+            }[requestOrigin] ?? ""),
+      available: hasDrafts,
+    },
+    {
       id: "customer",
       title: "Registratie",
       description: formatRequesterStepperLabel(context),
-      available: hasDrafts,
+      available: hasDrafts && requestOrigin !== "",
     },
     {
       id: "company",
       title: "Bedrijfsgegevens",
-      description: context.organizationName || "Uit BTW-nummer",
-      available: hasDrafts && hasCust,
+      description: context.organizationName || "Naam en adres",
+      available: hasDrafts && requestOrigin !== "" && registrationStepOk,
+    },
+    {
+      id: "extras",
+      title: "Extra contacten",
+      description: "Factuur-, certificatie- en reservecontact (optioneel)",
+      available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyCoreOk,
     },
     {
       id: "summary",
-      title: "Versturen",
-      description: "Annvraag controleren",
-      available: hasDrafts && hasCust && hasComp,
+      title: "Nazicht",
+      description: "Gegevens en aanvragen nakijken",
+      available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyStepOk,
     },
   ];
 }
@@ -159,11 +206,18 @@ export function baseAnonymousOnboardingFlowViewProps(
   const activePreset =
     findVatPrototypePreset(DEFAULT_VAT_PROTOTYPE_PRESET_ID) ?? VAT_PROTOTYPE_PRESETS[0]!;
   const step: OnboardingStep = "summary";
+  const requestOrigin = storyRequestOrigin;
 
   const countryTrim = context.country?.trim() ?? "";
-  const countryOptions = ["België", "Nederland", "Duitsland"];
+  const countryOptions = [
+    ...registrationCountryOptionsForRequestOrigin(requestOrigin, context.country),
+  ];
   const countrySelectValue =
     countryTrim && countryOptions.includes(countryTrim) ? countryTrim : COUNTRY_SELECT_NONE;
+
+  const vatPrototypePresetChoices = VAT_PROTOTYPE_PRESETS.filter((p) =>
+    vatPrototypePresetIdsForOrigin(requestOrigin).includes(p.id),
+  );
 
   const base: AnonymousOnboardingFlowViewProps = {
     step,
@@ -172,7 +226,7 @@ export function baseAnonymousOnboardingFlowViewProps(
       "Kies eerst wat je wilt aanvragen. We vragen pas organisatie- en accountgegevens wanneer je een conceptaanvraag hebt samengesteld.",
     registrationPhaseTitle: "Registratie",
     registrationPhaseDescription:
-      "Vertegenwoordiger, e-mail en ondernemingsnummer. Land leiden we af uit uw gevalideerde nummer.",
+      "Na een korte keuze voor land of regio vullen we de volgende stappen daarop aan: uw contactpersoon, ondernemingsnummer en bedrijfsadres.",
     onSignInClick: noop,
     certificationWizardProps: storyCertificationWizardProps(context),
     registrationSubmitOpen: false,
@@ -182,14 +236,15 @@ export function baseAnonymousOnboardingFlowViewProps(
     registrationSimulationLabels: defaultRegistrationSimulation,
     context,
     updateContext: noop as AnonymousOnboardingFlowViewProps["updateContext"],
+    patchContext: noop as AnonymousOnboardingFlowViewProps["patchContext"],
     setFlowState: noopSetFlowState,
     drafts,
     effectiveSummaryIncludedDraftIds: includedIds,
-    rows: buildRows(context, drafts, includedIds),
-    steps: storyOnboardingStepperSteps({ step, context, drafts }),
+    rows: buildRows(context, drafts, includedIds, { includeDraftRows: false }),
+    steps: storyOnboardingStepperSteps({ step, context, drafts, requestOrigin }),
     activeStep: stepIndex(step),
     goToOnboardingStep: noop as AnonymousOnboardingFlowViewProps["goToOnboardingStep"],
-    primaryAction: { label: "Versturen", onClick: noop, disabled: false },
+    primaryAction: { label: "Indienen", onClick: noop, disabled: false },
     backAction: {
       label: "Terug",
       onClick: noop,
@@ -208,9 +263,13 @@ export function baseAnonymousOnboardingFlowViewProps(
     emailForDisplay: context.representativeEmail.trim(),
     activeVatPreset: activePreset,
     prototypeVatPresetId: activePreset.id,
+    vatPrototypePresetChoices,
+    requestOrigin,
+    setRequestOrigin: noop as AnonymousOnboardingFlowViewProps["setRequestOrigin"],
     countrySelectOptions: countryOptions,
     countrySelectValue,
     companyHints: {},
+    summaryKlantenportaalByPersonId: {},
   };
 
   return { ...base, ...overrides };

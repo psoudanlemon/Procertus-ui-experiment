@@ -40,7 +40,9 @@ export function certificationInquiriesNeedDetailsStep(
     );
     const hasProduct = draft.productId != null;
     const hasSubstantialContext = (draft.context?.trim().length ?? 0) >= 12;
-    const hasCertificationEntry = PRODUCT_CERTIFICATION_ENTRY_IDS.has(entryId as CertificationEntryId);
+    const hasCertificationEntry = PRODUCT_CERTIFICATION_ENTRY_IDS.has(
+      entryId as CertificationEntryId,
+    );
 
     if (hasCertificationEntry && hasProduct) return false;
     if (looksLikeIntentOnlyRow && hasSubstantialContext) return false;

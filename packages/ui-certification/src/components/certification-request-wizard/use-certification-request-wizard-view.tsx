@@ -150,9 +150,7 @@ export function useCertificationRequestWizardView(
   const onDraftIncludedChange = (draftId: string, checked: boolean) => {
     const current = model.draftsStep.includedDraftIds;
     model.draftsStep.onIncludedDraftIdsChange(
-      checked
-        ? Array.from(new Set([...current, draftId]))
-        : current.filter((id) => id !== draftId),
+      checked ? Array.from(new Set([...current, draftId])) : current.filter((id) => id !== draftId),
     );
   };
 

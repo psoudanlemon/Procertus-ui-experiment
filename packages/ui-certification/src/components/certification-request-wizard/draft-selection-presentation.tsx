@@ -34,7 +34,9 @@ export function DraftCardDescription({ draft }: { draft: CertificationRequestDra
           {draft.productLabel}
         </span>
       ) : null}
-      {draft.productPath ? <span className="text-muted-foreground">{draft.productPath}</span> : null}
+      {draft.productPath ? (
+        <span className="text-muted-foreground">{draft.productPath}</span>
+      ) : null}
       {draft.context ? (
         <span className="mt-micro rounded-md border border-border/60 bg-muted/30 p-component text-foreground">
           <span className="mb-micro block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">

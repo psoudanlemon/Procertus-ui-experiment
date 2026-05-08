@@ -52,8 +52,7 @@ const SERVICE_BY_ID: Record<string, { title: string; content: ServiceContent }> 
         "Aanbestedende overheden leggen BENOR op in hun lastenboeken.",
         "U wilt uw kwaliteitssysteem en productprestaties extern laten valideren.",
       ],
-      timeline:
-        "Vanaf indiening van een volledig dossier verloopt het traject in 8 tot 12 weken.",
+      timeline: "Vanaf indiening van een volledig dossier verloopt het traject in 8 tot 12 weken.",
     },
   },
   ce: {
@@ -65,8 +64,7 @@ const SERVICE_BY_ID: Record<string, { title: string; content: ServiceContent }> 
         "Uw product valt onder een geharmoniseerde Europese norm.",
         "U brengt het product in de handel binnen de Europese Economische Ruimte.",
       ],
-      timeline:
-        "De afhandeling kost doorgaans 6 tot 10 weken na een volledig ingediend dossier.",
+      timeline: "De afhandeling kost doorgaans 6 tot 10 weken na een volledig ingediend dossier.",
     },
   },
 };

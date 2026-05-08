@@ -1,5 +1,5 @@
 export const REPRESENTATIVE_TITLE_PRESETS = [
-  { id: "none", label: "Geen titel" },
+  { id: "none", label: "Geen aanhef of titel" },
   { id: "mr", label: "Dhr." },
   { id: "mrs", label: "Mevr." },
   { id: "mx", label: "Mx" },
@@ -11,6 +11,7 @@ export const REPRESENTATIVE_TITLE_PRESETS = [
 ] as const;
 
 export const REPRESENTATIVE_ROLE_PRESETS = [
+  { id: "none", label: "Geen functie gekozen" },
   { id: "managing_director", label: "Zaakvoerder / bestuurder" },
   { id: "legal_representative", label: "Wettelijk vertegenwoordiger" },
   { id: "quality", label: "Kwaliteit / compliance" },

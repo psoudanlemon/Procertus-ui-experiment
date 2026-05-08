@@ -16,6 +16,7 @@ import {
   storyEmptyCompanyFieldKeySet,
   storyOnboardingDrafts,
   storyOnboardingStepperSteps,
+  storyRequestOrigin,
 } from "./anonymous-onboarding-story-fixtures";
 import {
   DEFAULT_VAT_PROTOTYPE_PRESET_ID,
@@ -47,7 +48,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Presentational shell for **anonymous onboarding**: wraps `CertificationRequestWizard` on the request step, then `StepLayout` for registratie (customer → company → summary) plus `RegistrationProcessingDialog`. Applications derive props from `useAnonymousOnboardingFlow` (router + localStorage). Stories use static fixtures and `backendKind: "memory"` for the wizard.',
+          'Presentational shell for **anonymous onboarding**: wraps `CertificationRequestWizard` on the request step, then `StepLayout` for registratie (origin → customer → company → extras → summary) plus `RegistrationProcessingDialog`. Applications derive props from `useAnonymousOnboardingFlow` (router + localStorage). Stories use static fixtures and `backendKind: "memory"` for the wizard.',
       },
     },
   },
@@ -84,8 +85,43 @@ export const RequestPhase: StoryObj<typeof meta> = {
   },
 };
 
+export const OriginStep: StoryObj<typeof meta> = {
+  name: "02 — Land of regio (origin)",
+  render: () => {
+    const drafts = storyOnboardingDrafts;
+    const ctx = storyCustomerContext({
+      organizationName: "",
+      country: "",
+      addressStreet: "",
+      addressHouseNumber: "",
+      addressPostalCode: "",
+      addressCity: "",
+    });
+    return (
+      <AnonymousOnboardingFlowView
+        {...baseAnonymousOnboardingFlowViewProps({
+          step: "origin",
+          context: ctx,
+          drafts,
+          requestOrigin: "",
+          steps: storyOnboardingStepperSteps({
+            step: "origin",
+            context: ctx,
+            drafts,
+            requestOrigin: "",
+          }),
+          activeStep: stepIndex("origin"),
+          primaryAction: { label: "Verder", onClick: noop, disabled: true },
+          rows: [],
+          effectiveSummaryIncludedDraftIds: [],
+        })}
+      />
+    );
+  },
+};
+
 export const CustomerStep: StoryObj<typeof meta> = {
-  name: "02 — Registratie (customer)",
+  name: "03 — Registratie (customer)",
   render: () => {
     const drafts = storyOnboardingDrafts;
     const ctx = storyCustomerContext({
@@ -102,7 +138,12 @@ export const CustomerStep: StoryObj<typeof meta> = {
           step: "customer",
           context: ctx,
           drafts,
-          steps: storyOnboardingStepperSteps({ step: "customer", context: ctx, drafts }),
+          steps: storyOnboardingStepperSteps({
+            step: "customer",
+            context: ctx,
+            drafts,
+            requestOrigin: storyRequestOrigin,
+          }),
           activeStep: stepIndex("customer"),
           primaryAction: { label: "Verder", onClick: noop, disabled: false },
           rows: [],
@@ -114,7 +155,7 @@ export const CustomerStep: StoryObj<typeof meta> = {
 };
 
 export const CompanyLookupLoading: StoryObj<typeof meta> = {
-  name: "03 — Bedrijf (lookup loading)",
+  name: "04 — Bedrijf (lookup loading)",
   render: () => {
     const drafts = storyOnboardingDrafts;
     const ctx = storyCustomerContext({
@@ -133,7 +174,12 @@ export const CompanyLookupLoading: StoryObj<typeof meta> = {
           step: "company",
           context: ctx,
           drafts,
-          steps: storyOnboardingStepperSteps({ step: "company", context: ctx, drafts }),
+          steps: storyOnboardingStepperSteps({
+            step: "company",
+            context: ctx,
+            drafts,
+            requestOrigin: storyRequestOrigin,
+          }),
           activeStep: stepIndex("company"),
           companyLookupPhase: "loading",
           lookupProgress: 48,
@@ -155,7 +201,7 @@ export const CompanyLookupLoading: StoryObj<typeof meta> = {
 };
 
 export const CompanyLookupReady: StoryObj<typeof meta> = {
-  name: "04 — Bedrijf (lookup ready)",
+  name: "05 — Bedrijf (lookup ready)",
   render: () => {
     const drafts = storyOnboardingDrafts;
     const ctx = storyCustomerContext();
@@ -167,7 +213,12 @@ export const CompanyLookupReady: StoryObj<typeof meta> = {
           step: "company",
           context: ctx,
           drafts,
-          steps: storyOnboardingStepperSteps({ step: "company", context: ctx, drafts }),
+          steps: storyOnboardingStepperSteps({
+            step: "company",
+            context: ctx,
+            drafts,
+            requestOrigin: storyRequestOrigin,
+          }),
           activeStep: stepIndex("company"),
           companyLookupPhase: "ready",
           lookupProgress: 100,
@@ -191,20 +242,48 @@ export const CompanyLookupReady: StoryObj<typeof meta> = {
   },
 };
 
+export const ExtrasStep: StoryObj<typeof meta> = {
+  name: "06 — Extra contacten",
+  render: () => {
+    const drafts = storyOnboardingDrafts;
+    const ctx = storyCustomerContext();
+    return (
+      <AnonymousOnboardingFlowView
+        {...baseAnonymousOnboardingFlowViewProps({
+          step: "extras",
+          context: ctx,
+          drafts,
+          steps: storyOnboardingStepperSteps({
+            step: "extras",
+            context: ctx,
+            drafts,
+            requestOrigin: storyRequestOrigin,
+          }),
+          activeStep: stepIndex("extras"),
+          companyLookupPhase: "ready",
+          primaryAction: { label: "Verder", onClick: noop, disabled: false },
+          rows: [],
+          effectiveSummaryIncludedDraftIds: [],
+        })}
+      />
+    );
+  },
+};
+
 export const SummaryStep: StoryObj<typeof meta> = {
-  name: "05 — Summary",
+  name: "07 — Summary",
   render: () => <AnonymousOnboardingFlowView {...baseAnonymousOnboardingFlowViewProps()} />,
 };
 
 export const RegistrationProcessingOpen: StoryObj<typeof meta> = {
-  name: "06 — Registration dialog (open)",
+  name: "08 — Registration dialog (open)",
   render: () => (
     <AnonymousOnboardingFlowView
       {...baseAnonymousOnboardingFlowViewProps({
         registrationSubmitOpen: true,
         registrationProgress: 78,
         registrationStepIndex: 2,
-        primaryAction: { label: "Versturen", onClick: noop, disabled: true },
+        primaryAction: { label: "Indienen", onClick: noop, disabled: true },
       })}
     />
   ),

@@ -34,7 +34,9 @@ export type CertificationRequestBackend = CertificationRequestPersistencePort & 
       | UpdateCertificationRequestSession
       | ((session: CertificationRequestSession) => UpdateCertificationRequestSession),
   ) => CertificationRequestSession;
-  readonly resetCurrentSession: (input?: CreateCertificationRequestSession) => CertificationRequestSession;
+  readonly resetCurrentSession: (
+    input?: CreateCertificationRequestSession,
+  ) => CertificationRequestSession;
 };
 
 export type CertificationStorageState = {
@@ -90,7 +92,9 @@ function makeSession(input: CreateCertificationRequestSession): CertificationReq
   };
 }
 
-function makeCustomerContext(input: CreateCertificationCustomerContext): CertificationCustomerContext {
+function makeCustomerContext(
+  input: CreateCertificationCustomerContext,
+): CertificationCustomerContext {
   const timestamp = nowIso();
   return {
     id: createId("cert-customer"),
@@ -257,7 +261,8 @@ export function createCertificationBackendFromRef({
     packages,
     createDraftFromIntent: async (input) => {
       const draft = makeDraftFromIntent(input);
-      const current = ref.state.sessions[sessionId] ?? makeSession({ ...initialSession, id: sessionId });
+      const current =
+        ref.state.sessions[sessionId] ?? makeSession({ ...initialSession, id: sessionId });
       const next = {
         ...current,
         drafts: current.drafts.length === 0 ? [draft] : current.drafts,
@@ -268,7 +273,8 @@ export function createCertificationBackendFromRef({
       emit();
       return draft;
     },
-    getCurrentSession: () => ref.state.sessions[sessionId] ?? makeSession({ ...initialSession, id: sessionId }),
+    getCurrentSession: () =>
+      ref.state.sessions[sessionId] ?? makeSession({ ...initialSession, id: sessionId }),
     subscribe: (listener) => {
       listeners.add(listener);
       return () => {
@@ -276,7 +282,8 @@ export function createCertificationBackendFromRef({
       };
     },
     updateCurrentSession: (input) => {
-      const current = ref.state.sessions[sessionId] ?? makeSession({ ...initialSession, id: sessionId });
+      const current =
+        ref.state.sessions[sessionId] ?? makeSession({ ...initialSession, id: sessionId });
       const patch = typeof input === "function" ? input(current) : input;
       const next = { ...current, ...patch, updatedAt: nowIso() };
       ref.state = { ...ref.state, sessions: { ...ref.state.sessions, [sessionId]: next } };

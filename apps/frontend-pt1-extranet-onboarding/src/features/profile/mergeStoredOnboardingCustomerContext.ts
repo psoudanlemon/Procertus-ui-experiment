@@ -1,12 +1,35 @@
-import type { AnonymousOnboardingFlowState, CustomerContext } from "@procertus-ui/ui-certification";
+import type {
+  AnonymousOnboardingFlowState,
+  CustomerContext,
+  IdentificatiePersonCaptureState,
+} from "@procertus-ui/ui-certification";
 import {
   ONBOARDING_FLOW_STORAGE_KEY,
   readOnboardingRegistrationCompletePayload,
   writeOnboardingRegistrationCompletePayload,
 } from "@procertus-ui/ui-certification";
 
-function mergeCustomerContext(base: CustomerContext, partial: Partial<CustomerContext>): CustomerContext {
+function mergePersonSlice(
+  base: IdentificatiePersonCaptureState,
+  partial?: Partial<IdentificatiePersonCaptureState>,
+): IdentificatiePersonCaptureState {
   return { ...base, ...partial };
+}
+
+function mergeCustomerContext(base: CustomerContext, partial: Partial<CustomerContext>): CustomerContext {
+  return {
+    ...base,
+    ...partial,
+    certificationContact: partial.certificationContact
+      ? mergePersonSlice(base.certificationContact, partial.certificationContact)
+      : base.certificationContact,
+    certificationSecondary: partial.certificationSecondary
+      ? mergePersonSlice(base.certificationSecondary, partial.certificationSecondary)
+      : base.certificationSecondary,
+    invoicingContactPerson: partial.invoicingContactPerson
+      ? mergePersonSlice(base.invoicingContactPerson, partial.invoicingContactPerson)
+      : base.invoicingContactPerson,
+  };
 }
 
 /**

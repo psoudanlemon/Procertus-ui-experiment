@@ -354,8 +354,7 @@ export function useCertificationRequestWizardModel({
         nodes: productTreeNodes,
         expandedIds,
         toggleExpandAll: () => {
-          const allExpanded =
-            groupIds.length > 0 && expandedIds.length === groupIds.length;
+          const allExpanded = groupIds.length > 0 && expandedIds.length === groupIds.length;
           setExpandedIds(allExpanded ? [] : [...groupIds]);
         },
         onToggle: (groupId, open) => {
