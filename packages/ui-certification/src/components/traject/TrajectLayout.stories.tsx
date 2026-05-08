@@ -88,12 +88,13 @@ export default meta;
 const noop = () => {};
 
 /**
- * Product selecteren: drilldown door de Procertus-beslissingsboom op volledige breedte
+ * Back-up product selection: drilldown door de Procertus-beslissingsboom op volledige breedte
  * (`ProductTreePanel`) met multi-select, een altijd zichtbare selectie-rij erboven en
- * een sticky actiebalk onderaan de TrajectLayout-kaart.
+ * een sticky actiebalk onderaan de TrajectLayout-kaart. Bewaard als alternatief; de
+ * primaire "Product selecteren" gebruikt de winkelmandje-variant.
  */
-export const ProductSelection: StoryObj<typeof meta> = {
-  name: "Product selecteren",
+export const BackupProductSelection: StoryObj<typeof meta> = {
+  name: "Back-up product selection",
   args: {
     onSignInClick: noop,
     footer: STORY_FOOTER,

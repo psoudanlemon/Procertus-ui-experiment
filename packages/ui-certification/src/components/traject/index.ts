@@ -4,3 +4,9 @@ export { CategoryPicker } from "./CategoryPicker";
 export type { CategoryPickerProps } from "./CategoryPicker";
 export { ProductRow } from "./ProductRow";
 export type { ProductRowProps } from "./ProductRow";
+export {
+  ProductSelectionBasketActionBar,
+  ProductSelectionBasketBody,
+  ProductSelectionBasketProvider,
+} from "./ProductSelectionBasket";
+export type { ProductSelectionBasketProviderProps } from "./ProductSelectionBasket";
