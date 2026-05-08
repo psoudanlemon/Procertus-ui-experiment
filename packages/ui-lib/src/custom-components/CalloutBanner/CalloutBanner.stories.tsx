@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ArrowRight02Icon, Call02Icon } from "@hugeicons/core-free-icons";
+import { Call02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Button, Card } from "@procertus-ui/ui";
+import { Button, Card, H3 } from "@procertus-ui/ui";
 
 /**
  * **Proposal — not yet a primitive.**
@@ -18,25 +18,35 @@ function CalloutBannerPattern({
   title,
   description,
   buttonLabel,
+  onActivate,
 }: {
   title: string;
   description: string;
   buttonLabel: string;
+  onActivate?: () => void;
 }) {
   return (
-    <Card className="flex flex-col gap-component border border-primary/20 bg-primary/5 px-section py-section sm:flex-row sm:items-center sm:justify-between sm:gap-section">
+    <Card
+      className="relative flex cursor-pointer flex-col gap-component px-section py-section sm:flex-row sm:items-center sm:justify-between sm:gap-section"
+      style={{ background: "var(--gradient-neutral)" }}
+    >
       <div className="flex min-w-0 flex-1 flex-col gap-micro">
-        <p className="text-heading-sm font-semibold">{title}</p>
+        <H3>{title}</H3>
         <p className="text-sm leading-normal text-muted-foreground">{description}</p>
       </div>
       <Button
-        type="button"
+        asChild
         variant="outline"
-        className="w-full bg-background sm:w-auto sm:shrink-0"
+        className="w-full bg-background group-hover/card:rounded-tl-[4px] group-hover/card:rounded-tr-[var(--cmd-deep)] group-hover/card:rounded-br-[4px] group-hover/card:rounded-bl-[var(--cmd-deep)] group-hover/card:bg-muted group-hover/card:text-foreground sm:w-auto sm:shrink-0"
       >
-        <HugeiconsIcon icon={Call02Icon} className="size-4" />
-        {buttonLabel}
-        <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
+        <button
+          type="button"
+          onClick={onActivate}
+          className="before:absolute before:inset-0 before:content-['']"
+        >
+          <HugeiconsIcon icon={Call02Icon} className="size-4" />
+          {buttonLabel}
+        </button>
       </Button>
     </Card>
   );
@@ -50,7 +60,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Side-route nudge composed of `Card` + `Button` with brand-tinted chrome (`border-primary/20 bg-primary/5`). Currently inlined in `WegwijzerPage` and `TriagePage` with identical copy. Decide: extract to a `CalloutBanner` primitive, or keep inline.",
+          "Side-route nudge composed of `Card` + `Button` on a `var(--gradient-neutral)` wash. The whole card is the click target via a `before:absolute before:inset-0` stretched link, and the button mirrors its outline-hover state on `group-hover/card:` so the entire surface reacts as one. Currently inlined in `WegwijzerPage` and `TriagePage` with identical copy. Decide: extract to a `CalloutBanner` primitive, or keep inline.",
       },
     },
   },

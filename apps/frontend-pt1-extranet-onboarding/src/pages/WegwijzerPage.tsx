@@ -19,6 +19,7 @@ import {
   DownloadableItemGrid,
   type DownloadableItemData,
   H1,
+  H3,
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
@@ -256,18 +257,27 @@ function AllCertificatesGrid({
 
 function ExpertCallFooterCard() {
   return (
-    <Card className="col-span-4 flex flex-col gap-section bg-muted/50 px-section py-section md:col-span-2">
+    <Card
+      className="relative col-span-4 flex cursor-pointer flex-col gap-section px-section py-section md:col-span-2"
+      style={{ background: "var(--gradient-neutral)" }}
+    >
       <div className="flex flex-col gap-micro">
-        <p className="text-heading-sm font-semibold">Liever eerst een expert spreken?</p>
+        <H3>Liever eerst een expert spreken?</H3>
         <p className="text-sm leading-normal text-muted-foreground">
           Plan een live online sessie van één uur en doorloop de vereisten samen met een PROCERTUS-expert.
         </p>
       </div>
-      <Button asChild variant="outline" className="self-start bg-background">
-        <Link to={EXPERT_CALL_PATH()}>
+      <Button
+        asChild
+        variant="outline"
+        className="self-start bg-background group-hover/card:rounded-tl-[4px] group-hover/card:rounded-tr-[var(--cmd-deep)] group-hover/card:rounded-br-[4px] group-hover/card:rounded-bl-[var(--cmd-deep)] group-hover/card:bg-muted group-hover/card:text-foreground"
+      >
+        <Link
+          to={EXPERT_CALL_PATH()}
+          className="before:absolute before:inset-0 before:content-['']"
+        >
           <HugeiconsIcon icon={Call02Icon} className="size-4" />
           Plan een expert call
-          <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
         </Link>
       </Button>
     </Card>
