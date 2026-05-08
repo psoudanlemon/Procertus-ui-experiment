@@ -8,8 +8,10 @@ import {
   useOnboardingFlowApi,
   useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
+
+import { resetTrajectFlow } from "./traject-submission-context";
 
 const WEGWIJZER_PATH = "/welcome";
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
@@ -59,12 +61,27 @@ function TrajectConfigureFlowBody({ serviceId }: { serviceId: string }) {
     }
   }, [flowState.step, navigate, serviceId]);
 
+  // Annuleren = volledige reset. Gebruiker zegt expliciet "ik weet het niet, ik begin opnieuw",
+  // dus traject + klantgegevens worden gewist en we sturen ze terug naar de Wegwijzer.
+  const handleCancel = useCallback(() => {
+    resetTrajectFlow(api);
+    navigate(WEGWIJZER_PATH);
+  }, [api, navigate]);
+
+  const wizardProps = useMemo(
+    () => ({
+      ...viewProps.certificationWizardProps,
+      onCancel: handleCancel,
+    }),
+    [viewProps.certificationWizardProps, handleCancel],
+  );
+
   return (
     <OnboardingRequestStep
       pageTitle={viewProps.certificationPhaseTitle}
       pageDescription={viewProps.certificationPhaseDescription}
       onSignInClick={viewProps.onSignInClick}
-      certificationWizardProps={viewProps.certificationWizardProps}
+      certificationWizardProps={wizardProps}
     />
   );
 }

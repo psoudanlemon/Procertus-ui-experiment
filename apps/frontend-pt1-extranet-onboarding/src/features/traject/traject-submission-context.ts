@@ -1,9 +1,12 @@
 import {
+  DEFAULT_ONBOARDING_FLOW_STATE,
   ONBOARDING_FLOW_STORAGE_KEY,
+  clearOnboardingStorage,
   createLocalStorageOnboardingFlowPersistence,
   hydrateOnboardingFlowStateFromStored,
   type CertificationRequestDraft,
   type CustomerContext,
+  type OnboardingFlowApi,
   type OnboardingFlowState,
 } from "@procertus-ui/ui-certification";
 
@@ -61,9 +64,9 @@ export function readOnboardingFlowSnapshot(): OnboardingFlowState {
 }
 
 /**
- * Wis de traject-breadcrumbs (serviceId, drafts) uit de gepersisteerde state. Aangeroepen wanneer
- * de gebruiker bewust uit een eerder traject stapt en met een verse intentie opnieuw begint, bv.
- * de hero "Plan een expert call" knop op de Wegwijzer.
+ * Wis de traject-breadcrumbs (serviceId, drafts) uit de gepersisteerde state, maar laat klant- en
+ * registratiegegevens staan. Aangeroepen wanneer de gebruiker bewust uit een eerder traject stapt en
+ * met een verse intentie opnieuw begint, bv. de hero "Plan een expert call" knop op de Wegwijzer.
  */
 export function clearTrajectBreadcrumbs(): void {
   const port = createLocalStorageOnboardingFlowPersistence({
@@ -77,6 +80,17 @@ export function clearTrajectBreadcrumbs(): void {
     drafts: [],
     summaryIncludedDraftIds: [],
   });
+}
+
+/**
+ * Volledige reset van de TrajectFlow + CustomerOnboardingFlow state. Gebruikt door de "Annuleren"
+ * acties: gebruiker geeft expliciet aan dat hij niet verder kan of wil, dus alle gegevens worden
+ * gewist en hij start opnieuw vanaf de Wegwijzer. Reset zowel in-memory state (zodat lopende
+ * providers de oude waarden niet alsnog terugschrijven) als de drie gerelateerde localStorage keys.
+ */
+export function resetTrajectFlow(api: OnboardingFlowApi): void {
+  api.setFlowState(DEFAULT_ONBOARDING_FLOW_STATE);
+  clearOnboardingStorage();
 }
 
 export type BuildTrajectSubmissionContextInput = {

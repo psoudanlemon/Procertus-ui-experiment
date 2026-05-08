@@ -8,13 +8,14 @@ import {
   useOnboardingFlowApi,
   useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+
+import { resetTrajectFlow } from "../traject/traject-submission-context";
 
 export { ONBOARDING_REGISTRATION_COMPLETE_PATH } from "@procertus-ui/ui-certification";
 
 const WEGWIJZER_PATH = "/welcome";
-const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
 
 export function CustomerOnboardingFlow() {
   const navigate = useNavigate();
@@ -51,12 +52,15 @@ function CustomerOnboardingFlowBody() {
     }
   }, [hasDrafts, flowState.step, api]);
 
-  const cancelTarget = flowState.trajectServiceId
-    ? TRIAGE_PATH(flowState.trajectServiceId)
-    : WEGWIJZER_PATH;
+  // Annuleren = volledige reset. Gebruiker zegt expliciet "ik weet het niet, ik begin opnieuw",
+  // dus traject + klantgegevens worden gewist en we sturen ze terug naar de Wegwijzer.
+  const handleCancel = useCallback(() => {
+    resetTrajectFlow(api);
+    navigate(WEGWIJZER_PATH);
+  }, [api, navigate]);
   const cancelAction = useMemo(
-    () => ({ label: "Annuleren", onClick: () => navigate(cancelTarget) }),
-    [navigate, cancelTarget],
+    () => ({ label: "Annuleren", onClick: handleCancel }),
+    [handleCancel],
   );
   const isFirstStep = flowState.step === "origin";
 
