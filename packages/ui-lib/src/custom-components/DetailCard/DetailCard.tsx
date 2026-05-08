@@ -61,7 +61,7 @@ export function DetailCard({
 
   return (
     <Card className={cn("flex flex-col gap-0 pt-0 shadow-proc-xs md:shadow-proc-sm", className)}>
-      <CardHeader className="gap-1 border-b bg-muted/40 px-region pt-region pb-section">
+      <CardHeader className="gap-1 border-b bg-muted/40 p-region [.border-b]:pb-region">
         <H2>{title}</H2>
         {description ? (
           <CardDescription className="text-base leading-normal">{description}</CardDescription>
