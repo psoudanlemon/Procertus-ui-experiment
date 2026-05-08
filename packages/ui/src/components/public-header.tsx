@@ -6,6 +6,7 @@ import {
   Tick02Icon,
   ArrowDown01Icon,
   GlobeIcon,
+  Login01Icon,
   Logout01Icon,
   Menu01Icon,
   Search01Icon,
@@ -169,6 +170,7 @@ function PublicRegistryHeader({
 
   const activeLanguageObj = languages.find((l) => l.code === activeLanguage);
   const initials = user ? getInitials(user) : "";
+  const hasMobileMenuContent = navLinks.length > 0 || languages.length > 1;
 
   return (
     <header
@@ -181,15 +183,17 @@ function PublicRegistryHeader({
       )}
     >
       <div className="flex h-16 items-center gap-component px-section">
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          className="sm:hidden min-h-11 min-w-11 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-          onClick={() => setMobileMenuOpen(true)}
-        >
-          <HugeiconsIcon icon={Menu01Icon} />
-          <span className="sr-only">Menu</span>
-        </Button>
+        {hasMobileMenuContent && (
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="sm:hidden min-h-11 min-w-11 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            onClick={() => setMobileMenuOpen(true)}
+          >
+            <HugeiconsIcon icon={Menu01Icon} />
+            <span className="sr-only">Menu</span>
+          </Button>
+        )}
 
         {logo && (
           <a href="/" className="flex shrink-0 items-center gap-component">
@@ -334,7 +338,9 @@ function PublicRegistryHeader({
               </span>
               <Button variant="secondary" size="sm" className="min-h-11 lg:min-h-0" asChild>
                 <a href={loginUrl} onClick={onLogin}>
-                  Log in
+                  <HugeiconsIcon icon={Login01Icon} className="size-4 sm:hidden" />
+                  <span className="hidden sm:inline">Log in</span>
+                  <span className="sr-only sm:hidden">Log in</span>
                 </a>
               </Button>
             </div>
@@ -388,6 +394,7 @@ function PublicRegistryHeader({
           -webkit-backdrop-filter: blur(1px) !important;
         }
       `}</style>
+      {hasMobileMenuContent && (
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
         <SheetContent
           side="left"
@@ -467,6 +474,7 @@ function PublicRegistryHeader({
           </div>
         </SheetContent>
       </Sheet>
+      )}
     </header>
   );
 }
