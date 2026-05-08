@@ -23,8 +23,8 @@ import {
   RadioGroup,
   RadioGroupItem,
   Select,
-  SelectChoiceCard,
-  SelectChoiceCardGroup,
+  ChoiceCard,
+  ChoiceCardGroup,
   SelectContent,
   SelectItem,
   SelectTrigger,
@@ -389,13 +389,13 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
                 </>
               ) : (
                 <>
-                  <SelectChoiceCardGroup selectionMode="multiple">
+                  <ChoiceCardGroup selectionMode="multiple">
                     <CardList
                       items={sortDraftsByIntentAndProduct(drafts)}
                       widthClass="@min-[40rem]:grid-cols-1"
                     >
                       {(draft) => (
-                        <SelectChoiceCard
+                        <ChoiceCard
                           key={draft.id}
                           selectionMode="multiple"
                           value={draft.id}
@@ -417,7 +417,7 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
                         />
                       )}
                     </CardList>
-                  </SelectChoiceCardGroup>
+                  </ChoiceCardGroup>
                   <div>
                     <Button
                       type="button"

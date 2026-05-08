@@ -11,7 +11,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Horizontal single-select pill bar of `SelectChoiceCard`s (minimal appearance, fully rounded) inside a `FadingScrollList`, with prev/next icon buttons that step linearly through enabled items. Per-item `variant` is supported for tiering, but the bar reads cleanest when all chips share one variant.",
+          "Horizontal single-select pill bar of `ChoiceCard`s (minimal appearance, fully rounded) inside a `FadingScrollList`, with prev/next icon buttons that step linearly through enabled items. Per-item `variant` is supported for tiering, but the bar reads cleanest when all chips share one variant.",
       },
     },
   },

@@ -90,7 +90,7 @@ function EuFlag({ className }: { className?: string }) {
 export function RequestOriginFlag({
   origin,
   className,
-  /** Fits {@link SelectChoiceCard} `leading`: overrides parent `[&_svg]:size-5`. */
+  /** Fits {@link ChoiceCard} `leading`: overrides parent `[&_svg]:size-5`. */
   compact = false,
 }: {
   origin: OnboardingRequestOrigin;

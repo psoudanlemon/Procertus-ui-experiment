@@ -9,7 +9,7 @@ const meta = {
     layout: "padded",
     docs: {
       description: {
-        component: "Land of regio chooser (`SelectChoiceCardGroup`) — first registration body step.",
+        component: "Land of regio chooser (`ChoiceCardGroup`) — first registration body step.",
       },
     },
   },

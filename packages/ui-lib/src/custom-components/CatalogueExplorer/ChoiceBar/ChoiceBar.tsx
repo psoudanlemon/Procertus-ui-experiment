@@ -1,5 +1,5 @@
 /**
- * Horizontal pill-bar of single-select choices, built from `SelectChoiceCard`
+ * Horizontal pill-bar of single-select choices, built from `ChoiceCard`
  * (minimal appearance) inside a `FadingScrollList`. Per-item `variant`
  * (`elevated` / `default` / `faded` / `ghost` / `no-border`) lets callers tier
  * the options — selection state is rendered uniformly by the choice-card
@@ -10,7 +10,7 @@
  * view inside the fading scroll container.
  *
  * **Design system:** primitives sourced from `@procertus-ui/ui`
- * (`SelectChoiceCardGroup` for radio semantics, `FadingScrollList` for
+ * (`ChoiceCardGroup` for radio semantics, `FadingScrollList` for
  * overflow affordance, `Button` for the icon nav).
  */
 import { useId, useRef, type ReactNode } from "react";
@@ -21,9 +21,9 @@ import { cn } from "@/lib/utils";
 import {
   Button,
   FadingScrollList,
-  SelectChoiceCard,
-  SelectChoiceCardGroup,
-  type SelectChoiceVariant,
+  ChoiceCard,
+  ChoiceCardGroup,
+  type ChoiceVariant,
 } from "@procertus-ui/ui";
 
 export type ChoiceBarItem = {
@@ -32,11 +32,11 @@ export type ChoiceBarItem = {
   /** Pill label. */
   label: ReactNode;
   /**
-   * @default "default" — same vocabulary as `SelectChoiceCard`. Use `elevated`
+   * @default "default" — same vocabulary as `ChoiceCard`. Use `elevated`
    * for primary tier, `faded` for de-emphasized siblings, and `ghost` for an
    * overflow / "other" option at the end of the bar.
    */
-  variant?: SelectChoiceVariant;
+  variant?: ChoiceVariant;
   disabled?: boolean;
 };
 
@@ -104,7 +104,7 @@ export function ChoiceBar({
         className="-my-2 py-2"
       >
         <div ref={groupRef}>
-          <SelectChoiceCardGroup
+          <ChoiceCardGroup
             layout="stack"
             value={value}
             onValueChange={onValueChange}
@@ -112,7 +112,7 @@ export function ChoiceBar({
             className="flex-row flex-nowrap gap-component"
           >
             {items.map((item) => (
-              <SelectChoiceCard
+              <ChoiceCard
                 key={item.value}
                 value={item.value}
                 controlId={`${idPrefix}-${item.value}`}
@@ -127,7 +127,7 @@ export function ChoiceBar({
                 )}
               />
             ))}
-          </SelectChoiceCardGroup>
+          </ChoiceCardGroup>
         </div>
       </FadingScrollList>
       <div className="hidden shrink-0 items-center gap-component sm:flex">

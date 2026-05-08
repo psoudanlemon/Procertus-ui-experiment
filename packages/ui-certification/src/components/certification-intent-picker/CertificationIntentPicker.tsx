@@ -7,8 +7,8 @@ import { useId } from "react";
 import type { ReactNode } from "react";
 
 import { cn } from "@procertus-ui/ui";
-import { SelectChoiceCard, SelectChoiceCardGroup } from "@procertus-ui/ui";
-import type { SelectChoiceVariant } from "@procertus-ui/ui";
+import { ChoiceCard, ChoiceCardGroup } from "@procertus-ui/ui";
+import type { ChoiceVariant } from "@procertus-ui/ui";
 
 /** Aligned with `meta.wizard.entryPoints` in the decision-tree JSON. */
 export const CERTIFICATION_INTENT_IDS = [
@@ -27,8 +27,8 @@ export type CertificationIntentOption = {
   title: ReactNode;
   description?: ReactNode;
   leading?: ReactNode;
-  /** Match {@link SelectChoiceVariant} — use **elevated** for the main product path. */
-  variant: SelectChoiceVariant;
+  /** Match {@link ChoiceVariant} — use **elevated** for the main product path. */
+  variant: ChoiceVariant;
   prominence?: "main" | "additional";
   disabled?: boolean;
 };
@@ -127,7 +127,7 @@ export function CertificationIntentPicker({
 
   return (
     <div className={cn("w-full min-w-0", className)}>
-      <SelectChoiceCardGroup
+      <ChoiceCardGroup
         className="p-0"
         legend={legend}
         hint={hint}
@@ -147,7 +147,7 @@ export function CertificationIntentPicker({
           )}
         >
           {mainOptions.map((opt) => (
-            <SelectChoiceCard
+            <ChoiceCard
               key={opt.id}
               value={opt.id}
               controlId={`${base}-${opt.id}`}
@@ -160,7 +160,7 @@ export function CertificationIntentPicker({
             />
           ))}
           {additionalOptions.map((opt) => (
-            <SelectChoiceCard
+            <ChoiceCard
               key={opt.id}
               value={opt.id}
               controlId={`${base}-${opt.id}`}
@@ -173,7 +173,7 @@ export function CertificationIntentPicker({
             />
           ))}
         </div>
-      </SelectChoiceCardGroup>
+      </ChoiceCardGroup>
     </div>
   );
 }

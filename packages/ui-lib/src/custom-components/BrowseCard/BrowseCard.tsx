@@ -13,7 +13,7 @@
  * `<button>`, `<Link>`, …).
  *
  * **Design system:** `Item` family from `@procertus-ui/ui`, variant vocabulary
- * shared with `SelectChoiceCard` / `ChoiceBar`.
+ * shared with `ChoiceCard` / `ChoiceBar`.
  */
 import { cva, type VariantProps } from "class-variance-authority";
 import {
@@ -73,7 +73,7 @@ export type BrowseCardProps = Omit<ComponentProps<"div">, "title" | "children"> 
   /** Small uppercase label above the title (e.g. "Externe verwijzing"). */
   eyebrow?: ReactNode;
   /**
-   * @default "default" — same vocabulary as `SelectChoiceCard`. `elevated` adds
+   * @default "default" — same vocabulary as `ChoiceCard`. `elevated` adds
    * a static branded glow (quiet-promotion tier), `standout` swaps to a muted
    * background tint, `faded` is dashed and de-emphasized, `ghost` drops
    * surface and uses muted-foreground text, `no-border` keeps the surface

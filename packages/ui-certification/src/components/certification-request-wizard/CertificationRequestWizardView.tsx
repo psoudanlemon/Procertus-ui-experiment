@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardList,
   CardTitle,
-  DownloadableDocumentsList,
+  DownloadableItemList,
   Empty,
   EmptyDescription,
   EmptyIcon,
@@ -16,8 +16,8 @@ import {
   Field,
   FieldContent,
   FieldGroup,
-  SelectChoiceCard,
-  SelectChoiceCardGroup,
+  ChoiceCard,
+  ChoiceCardGroup,
   Switch,
   Textarea,
 } from "@procertus-ui/ui";
@@ -198,7 +198,7 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
               </Button>
             </CardContent>
           </Card>
-          <SelectChoiceCardGroup
+          <ChoiceCardGroup
             selectionMode="multiple"
             hint="Vink kaarten uit om ze niet mee te nemen in het aanvraagpakket."
           >
@@ -207,7 +207,7 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
               widthClass="@min-[40rem]:grid-cols-1 @min-[60rem]:grid-cols-2 @min-[100rem]:grid-cols-3 @min-[150rem]:grid-cols-3"
             >
               {(draft: CertificationRequestDraft) => (
-                <SelectChoiceCard
+                <ChoiceCard
                   key={draft.id}
                   selectionMode="multiple"
                   value={draft.id}
@@ -220,7 +220,7 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
                 />
               )}
             </CardList>
-          </SelectChoiceCardGroup>
+          </ChoiceCardGroup>
         </div>
       ) : null}
 
@@ -247,13 +247,23 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
               ) : undefined
             }
           />
-          <DownloadableDocumentsList
-            className="max-w-5xl"
-            title="Regels en documentatie"
-            description={rulesetDocumentsDescription}
-            items={rulesetDocuments}
-            emptyContent={rulesetEmptyContent}
-          />
+          <section className="flex max-w-5xl flex-col gap-component">
+            <div className="flex flex-col gap-micro">
+              <h3 className="text-heading-sm font-semibold leading-tight tracking-tight">
+                Regels en documentatie
+              </h3>
+              {rulesetDocumentsDescription ? (
+                <p className="text-sm text-muted-foreground">{rulesetDocumentsDescription}</p>
+              ) : null}
+            </div>
+            {rulesetDocuments.length === 0 ? (
+              rulesetEmptyContent ?? (
+                <p className="text-sm text-muted-foreground">Geen documenten om weer te geven.</p>
+              )
+            ) : (
+              <DownloadableItemList items={rulesetDocuments} />
+            )}
+          </section>
         </div>
       ) : null}
     </StepLayout>

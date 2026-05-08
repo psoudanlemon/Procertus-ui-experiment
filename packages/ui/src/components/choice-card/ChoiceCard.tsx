@@ -23,7 +23,7 @@ import { RadioGroupItem } from "@/components/ui/radio-group";
 
 import type { ChoiceSelectionMode } from "./useChoiceSelection";
 
-export type SelectChoiceAppearance = "default" | "hero" | "minimal";
+export type ChoiceAppearance = "default" | "hero" | "minimal";
 
 const shellVariants = cva(
   "group/choice w-full select-none has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border has-[>[data-slot=field]]:bg-card has-[>[data-slot=field]]:transition-[box-shadow,background-color,border-color,opacity]",
@@ -88,9 +88,9 @@ const descVariants = cva("text-sm", {
   defaultVariants: { variant: "default" },
 });
 
-export type SelectChoiceVariant = NonNullable<VariantProps<typeof shellVariants>["variant"]>;
+export type ChoiceVariant = NonNullable<VariantProps<typeof shellVariants>["variant"]>;
 
-export type SelectChoiceCardProps = {
+export type ChoiceCardProps = {
   className?: string;
   /** Option id — `RadioGroupItem` value (single) or stable key for toggling (multiple). */
   value: string;
@@ -110,13 +110,13 @@ export type SelectChoiceCardProps = {
    * `ghost` and `no-border` shift the text to `accent-foreground` on hover and
    * when selected.
    */
-  variant?: SelectChoiceVariant;
+  variant?: ChoiceVariant;
   /**
    * @default "default" — `hero` uses a two-zone (header + body) tier-card layout;
    * `minimal` shows only the title and keeps the native control accessible but
    * visually hidden (`description` and `leading` are ignored).
    */
-  appearance?: SelectChoiceAppearance;
+  appearance?: ChoiceAppearance;
   /** @default "leading" — only applies when `appearance="default"`; ignored for hero. */
   controlPosition?: "leading" | "trailing";
   /** @default "single" — use with `RadioGroup`; `multiple` uses `Checkbox` + `checked` props. */
@@ -130,7 +130,7 @@ export type SelectChoiceCardProps = {
   name?: string;
 };
 
-export function SelectChoiceCard({
+export function ChoiceCard({
   className,
   value,
   controlId,
@@ -145,7 +145,7 @@ export function SelectChoiceCard({
   checked,
   onCheckedChange,
   name,
-}: SelectChoiceCardProps) {
+}: ChoiceCardProps) {
   const isHero = appearance === "hero";
   const isMinimal = appearance === "minimal";
   const isMultiple = selectionMode === "multiple";

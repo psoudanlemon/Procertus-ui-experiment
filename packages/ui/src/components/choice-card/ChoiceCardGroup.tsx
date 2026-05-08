@@ -6,7 +6,7 @@ import { RadioGroup } from "@/components/ui/radio-group";
 
 import type { ChoiceSelectionMode } from "./useChoiceSelection";
 
-export type SelectChoiceCardGroupProps = Omit<ComponentProps<typeof RadioGroup>, "children"> & {
+export type ChoiceCardGroupProps = Omit<ComponentProps<typeof RadioGroup>, "children"> & {
   className?: string;
   children: ReactNode;
   /**
@@ -22,7 +22,7 @@ export type SelectChoiceCardGroupProps = Omit<ComponentProps<typeof RadioGroup>,
   layout?: "stack" | "grid";
   /**
    * **single** — inner `RadioGroup` (one value). **multiple** — `role="group"` div; pair each
-   * {@link SelectChoiceCard} with `selectionMode="multiple"` and `checked` / `onCheckedChange`.
+   * {@link ChoiceCard} with `selectionMode="multiple"` and `checked` / `onCheckedChange`.
    * When `multiple`, `value` / `onValueChange` / `defaultValue` on this component are ignored.
    * @default "single"
    */
@@ -39,7 +39,7 @@ const layoutClass = (layout: "stack" | "grid") =>
 /**
  * `fieldset` + either a `RadioGroup` (single) or a grouping `div` (multiple).
  */
-export function SelectChoiceCardGroup({
+export function ChoiceCardGroup({
   className,
   legend,
   hint,
@@ -47,7 +47,7 @@ export function SelectChoiceCardGroup({
   selectionMode = "single",
   children,
   ...radioRest
-}: SelectChoiceCardGroupProps) {
+}: ChoiceCardGroupProps) {
   return (
     <FieldSet className="w-full min-w-0">
       {legend ? <FieldLegend className="text-base font-semibold">{legend}</FieldLegend> : null}

@@ -490,7 +490,7 @@ function StaticGlowView() {
           <ul className="flex flex-col gap-1.5 text-sm text-muted-foreground">
             <li>
               <code className="text-xs">elevated</code> variant of{" "}
-              <code className="text-xs">SelectChoiceCard</code> and{" "}
+              <code className="text-xs">ChoiceCard</code> and{" "}
               <code className="text-xs">BrowseCard</code>
             </li>
             <li>Primary tier in a multi-tier catalogue or filter bar</li>
@@ -525,7 +525,7 @@ function StaticGlowView() {
  * Static brand-tinted box-shadow for the &ldquo;quiet promotion&rdquo; tier of
  * the L1 Standout elevation. Applied directly to the element, safe to use on
  * multiple siblings, and the default treatment for the
- * <code>elevated</code> variant of <code>SelectChoiceCard</code> and
+ * <code>elevated</code> variant of <code>ChoiceCard</code> and
  * <code>BrowseCard</code>.
  */
 export const StaticBrandedGlow: Story = {

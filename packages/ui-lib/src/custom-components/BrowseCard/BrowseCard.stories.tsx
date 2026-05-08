@@ -17,7 +17,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Clickable navigation card. Same chrome vocabulary as `SelectChoiceCard` / `ChoiceBar` (elevated, default, faded, ghost, no-border) but without form-control machinery — drop-in for catalogue grids, drill-down lists, and external referrals.",
+          "Clickable navigation card. Same chrome vocabulary as `ChoiceCard` / `ChoiceBar` (elevated, default, faded, ghost, no-border) but without form-control machinery — drop-in for catalogue grids, drill-down lists, and external referrals.",
       },
     },
   },

@@ -1,4 +1,4 @@
-import { SelectChoiceCard, SelectChoiceCardGroup } from "@procertus-ui/ui";
+import { ChoiceCard, ChoiceCardGroup } from "@procertus-ui/ui";
 
 import {
   ONBOARDING_REQUEST_ORIGIN_HERO_OPTIONS,
@@ -32,7 +32,7 @@ export function OnboardingOriginStep({
 
   return (
     <div className="space-y-4">
-      <SelectChoiceCardGroup
+      <ChoiceCardGroup
         className="p-0"
         legend={copy.choiceGroupLegend}
         hint={copy.choiceGroupHint}
@@ -49,7 +49,7 @@ export function OnboardingOriginStep({
           <div className="flex w-full min-w-0 flex-row flex-nowrap items-stretch gap-3 md:gap-4">
             {ONBOARDING_REQUEST_ORIGIN_HERO_OPTIONS.map((opt) => (
               <div key={opt.id} className="flex min-h-0 min-w-0 flex-1 basis-0 flex-col">
-                <SelectChoiceCard
+                <ChoiceCard
                   value={opt.id}
                   controlId={`${originFieldBase}-${opt.id}`}
                   title={
@@ -72,7 +72,7 @@ export function OnboardingOriginStep({
                 <div className="pointer-events-none absolute top-3 right-3 z-10" aria-hidden>
                   <RequestOriginFlag origin={opt.id} compact />
                 </div>
-                <SelectChoiceCard
+                <ChoiceCard
                   value={opt.id}
                   controlId={`${originFieldBase}-${opt.id}`}
                   title={opt.title}
@@ -85,7 +85,7 @@ export function OnboardingOriginStep({
             ))}
           </div>
         </div>
-      </SelectChoiceCardGroup>
+      </ChoiceCardGroup>
     </div>
   );
 }

@@ -6,7 +6,7 @@
 import { useId } from "react";
 
 import { FadingScrollList, FieldSet, cn } from "@procertus-ui/ui";
-import { SelectChoiceCard, SelectChoiceCardGroup } from "@procertus-ui/ui";
+import { ChoiceCard, ChoiceCardGroup } from "@procertus-ui/ui";
 
 export type ProductMultiSelectOption = {
   id: string;
@@ -77,12 +77,12 @@ export function ProductMultiSelect({
       wrapperClassName={cn(className)}
       className="p-micro"
     >
-      <SelectChoiceCardGroup selectionMode="multiple" legend={legend} hint={description}>
+      <ChoiceCardGroup selectionMode="multiple" legend={legend} hint={description}>
         {options.map((opt) => {
           const cbId = `${name}-${opt.id}`;
           const checked = set.has(opt.id);
           return (
-            <SelectChoiceCard
+            <ChoiceCard
               key={opt.id}
               selectionMode="multiple"
               value={opt.id}
@@ -100,7 +100,7 @@ export function ProductMultiSelect({
             />
           );
         })}
-      </SelectChoiceCardGroup>
+      </ChoiceCardGroup>
     </FadingScrollList>
   );
 }
