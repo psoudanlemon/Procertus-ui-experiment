@@ -24,7 +24,8 @@ const REVIEW_IDX = CERTIFICATION_REQUEST_STEP_IDS.indexOf("review");
 export function useCertificationRequestWizardView(
   options: UseCertificationRequestWizardViewOptions,
 ): CertificationRequestWizardViewProps {
-  const { onCancel, onRequestCreated, onComplete, reviewRequester } = options;
+  const { onCancel, onRequestCreated, onComplete, reviewRequester, stepLayoutChromeStyle } =
+    options;
   const model = useCertificationRequestWizardModel({ onCancel, onRequestCreated, onComplete });
   const confirm = useConfirm();
   const { intent, setIntent, setActiveStep, replaceDraftsFromDetails } = useCertificationRequest();
@@ -103,9 +104,9 @@ export function useCertificationRequestWizardView(
       className: "w-full",
       layout: "default",
       variant: "onboarding",
-      chromeStyle: "banded",
+      chromeStyle: stepLayoutChromeStyle ?? "banded",
       stepLabel: "Productinformatie",
-      minHeight: STABLE_STEP_MIN_HEIGHT,
+      minHeight: stepLayoutChromeStyle === "bare" ? undefined : STABLE_STEP_MIN_HEIGHT,
       title: layout.title,
       description: layout.description,
       backAction,

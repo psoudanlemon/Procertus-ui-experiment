@@ -1,3 +1,5 @@
+import type { StepLayoutProps } from "@procertus-ui/ui";
+
 import {
   CertificationRequestProvider,
   type CertificationRequestDraft,
@@ -24,12 +26,18 @@ export type CertificationRequestWizardProps = {
   onComplete: (drafts: CertificationWizardDraft[]) => void;
   /** Shown on the final review step when `mode` is `authenticated`: current user + company. Omit on anonymous onboarding — registration follows in the next wizard step. */
   reviewRequester?: RequestPackageReviewRequesterPresentation;
+  /** Override the StepLayout chrome (default: `"banded"`). Pass `"bare"` when the page already supplies its own chrome. */
+  stepLayoutChromeStyle?: StepLayoutProps["chromeStyle"];
 };
 
 function CertificationRequestWizardSession(
   props: Pick<
     CertificationRequestWizardProps,
-    "onCancel" | "onRequestCreated" | "onComplete" | "reviewRequester"
+    | "onCancel"
+    | "onRequestCreated"
+    | "onComplete"
+    | "reviewRequester"
+    | "stepLayoutChromeStyle"
   >,
 ) {
   const viewProps = useCertificationRequestWizardView(props);
@@ -48,6 +56,7 @@ export function CertificationRequestWizard({
   onRequestCreated,
   onComplete,
   reviewRequester,
+  stepLayoutChromeStyle,
 }: CertificationRequestWizardProps) {
   return (
     <CertificationRequestProvider
@@ -64,6 +73,7 @@ export function CertificationRequestWizard({
         onRequestCreated={onRequestCreated}
         onComplete={onComplete}
         reviewRequester={reviewRequester}
+        stepLayoutChromeStyle={stepLayoutChromeStyle}
       />
     </CertificationRequestProvider>
   );

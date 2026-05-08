@@ -1,6 +1,5 @@
 import { Link, Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
-  ArrowLeft01Icon,
   ArrowRight02Icon,
   Call02Icon,
   CheckmarkCircle02Icon,
@@ -9,7 +8,6 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Badge,
   Button,
   Card,
   CardContent,
@@ -17,11 +15,9 @@ import {
   CardHeader,
   CardTitle,
   DensityProvider,
-  H1,
   H3,
-  PublicRegistryAppShell,
 } from "@procertus-ui/ui";
-import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
+import { TrajectLayout } from "@procertus-ui/ui-certification";
 import { APP_FOOTER } from "../layouts/footerConfig";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
 import { TRAJECT_ENTRY_POINT_QUERY_PARAM } from "../features/traject/traject-submission-context";
@@ -67,42 +63,14 @@ export function TriagePage() {
 
   return (
     <DensityProvider density="spacious">
-    <PublicRegistryAppShell
-      hideFab
-      header={{
-        logo: (
-          <img
-            src={procertusLogo}
-            alt="PROCERTUS, certification that builds trust"
-            className="h-8 w-auto dark:brightness-0 dark:invert"
-          />
-        ),
-        onLogin: () => navigate(LOGIN_PATH),
-      }}
-      footer={APP_FOOTER}
-    >
-      <div className="mx-auto flex w-full max-w-[960px] flex-col gap-region p-boundary">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="-ml-2 self-start text-muted-foreground"
-          onClick={handleBack}
-        >
-          <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
-          Terug
-        </Button>
-
-        <section className="flex flex-col gap-micro">
-          <Badge variant="outline" className="self-start">
-            {CATEGORY_LABEL[entry.category]}
-          </Badge>
-          <H1>Hoe wilt u {entry.label} aanvragen?</H1>
-          <p className="max-w-[44rem] text-base leading-normal text-muted-foreground">
-            Kies een vrijblijvende informatieaanvraag voor een prijsopgave en advies, of start
-            meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen.
-          </p>
-        </section>
-
+      <TrajectLayout
+        onSignInClick={() => navigate(LOGIN_PATH)}
+        footer={APP_FOOTER}
+        backAction={{ label: "Terug", onClick: handleBack }}
+        kicker={CATEGORY_LABEL[entry.category]}
+        title={`Hoe wilt u ${entry.label} aanvragen?`}
+        description="Kies een vrijblijvende informatieaanvraag voor een prijsopgave en advies, of start meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen."
+      >
         <div className="flex flex-col gap-section">
           <div className="grid grid-cols-1 gap-section md:grid-cols-2">
             <TriageOptionCard
@@ -158,8 +126,7 @@ export function TriagePage() {
             </Button>
           </Card>
         </div>
-      </div>
-    </PublicRegistryAppShell>
+      </TrajectLayout>
     </DensityProvider>
   );
 }

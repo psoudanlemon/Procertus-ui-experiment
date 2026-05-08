@@ -85,12 +85,53 @@ export function clearTrajectBreadcrumbs(): void {
 /**
  * Volledige reset van de TrajectFlow + CustomerOnboardingFlow state. Gebruikt door de "Annuleren"
  * acties: gebruiker geeft expliciet aan dat hij niet verder kan of wil, dus alle gegevens worden
- * gewist en hij start opnieuw vanaf de Wegwijzer. Reset zowel in-memory state (zodat lopende
- * providers de oude waarden niet alsnog terugschrijven) als de drie gerelateerde localStorage keys.
+ * gewist en hij start opnieuw vanaf de Wegwijzer.
+ *
+ * Wist alle drie de gerelateerde localStorage keys. Geef optioneel een `OnboardingFlowApi` mee
+ * (alleen relevant wanneer een provider gemount is, zoals in `CustomerOnboardingFlow`) zodat de
+ * in-memory state ook resetten en de provider niets terugschrijft naar localStorage.
  */
-export function resetTrajectFlow(api: OnboardingFlowApi): void {
-  api.setFlowState(DEFAULT_ONBOARDING_FLOW_STATE);
+export function resetTrajectFlow(api?: OnboardingFlowApi): void {
+  if (api) api.setFlowState(DEFAULT_ONBOARDING_FLOW_STATE);
   clearOnboardingStorage();
+}
+
+/**
+ * Schrijft de wizard-output (drafts + service id) door naar de OnboardingFlow-state in
+ * localStorage. CustomerOnboardingFlow leest deze state bij het mounten en kan zo doorgaan
+ * vanaf de "origin"-stap met de samengestelde aanvraagpakketten.
+ *
+ * Bedoeld als hand-off vanuit `TrajectConfigureFlow` zodat die feature geen
+ * `OnboardingFlowProvider` hoeft te mounten — de write replicaat de logica van
+ * `applyWizardDraftCompletion` rechtstreeks op de gepersisteerde state.
+ */
+export function persistTrajectHandoff(input: {
+  drafts: CertificationRequestDraft[];
+  serviceId: string;
+}): void {
+  const port = createLocalStorageOnboardingFlowPersistence({
+    storageKey: ONBOARDING_FLOW_STORAGE_KEY,
+  });
+  const stored = hydrateOnboardingFlowStateFromStored(port.load());
+
+  const prevDraftIds = new Set(stored.drafts.map((d) => d.id));
+  const nextIds = input.drafts.map((d) => d.id);
+  const baseSel = stored.summaryIncludedDraftIds ?? Array.from(prevDraftIds);
+  const keptSelection = baseSel.filter(
+    (id) => nextIds.includes(id) && prevDraftIds.has(id),
+  );
+  const newDraftIds = nextIds.filter((id) => !prevDraftIds.has(id));
+  const nextSummaryIncluded = Array.from(new Set([...keptSelection, ...newDraftIds]));
+
+  const next: OnboardingFlowState = {
+    ...stored,
+    drafts: input.drafts,
+    wizardInitialStep: "drafts",
+    step: "origin",
+    trajectServiceId: input.serviceId,
+    summaryIncludedDraftIds: nextSummaryIncluded,
+  };
+  port.save(next);
 }
 
 export type BuildTrajectSubmissionContextInput = {

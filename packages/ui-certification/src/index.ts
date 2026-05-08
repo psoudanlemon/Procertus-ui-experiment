@@ -73,6 +73,8 @@ export type {
   RegistrationProcessingDialogProps,
   RegistrationProcessingStep,
 } from "./components/registration-processing-dialog";
+export { TrajectLayout } from "./components/traject";
+export type { TrajectLayoutAction, TrajectLayoutProps } from "./components/traject";
 export { ProcertusCategorizationTreeView } from "./components/procertus-categorization-tree-view";
 export type {
   CertificationLabelKey,

@@ -1,27 +1,43 @@
 import {
-  OnboardingFlowProvider,
-  OnboardingRequestStep,
-  createLocalStorageOnboardingFlowPersistence,
-  ONBOARDING_FLOW_STORAGE_KEY,
-  ONBOARDING_REGISTRATION_COMPLETE_PATH,
-  useOnboardingFlow,
-  useOnboardingFlowApi,
-  useOnboardingFlowState,
+  CertificationRequestWizard,
+  ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY,
+  TrajectLayout,
+  type CertificationRequestDraft,
 } from "@procertus-ui/ui-certification";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
-import { resetTrajectFlow } from "./traject-submission-context";
+import { persistTrajectHandoff, resetTrajectFlow } from "./traject-submission-context";
 
 const WEGWIJZER_PATH = "/welcome";
+const SIGNIN_PATH = "/welcome/login";
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
+
+const PAGE_TITLE = "Start je certificatieaanvraag";
+const PAGE_DESCRIPTION =
+  "Kies eerst wat je wilt aanvragen. We vragen pas organisatie- en accountgegevens wanneer je een conceptaanvraag hebt samengesteld.";
 
 export function TrajectConfigureFlow() {
   const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
-  const persistence = useMemo(
-    () => createLocalStorageOnboardingFlowPersistence({ storageKey: ONBOARDING_FLOW_STORAGE_KEY }),
-    [],
+
+  // Annuleren = volledige reset. Gebruiker zegt expliciet "ik weet het niet, ik begin opnieuw",
+  // dus traject + klantgegevens worden gewist en we sturen ze terug naar de Wegwijzer. Geen
+  // OnboardingFlowProvider gemount, dus we wissen alleen localStorage.
+  const handleCancel = useCallback(() => {
+    resetTrajectFlow();
+    navigate(WEGWIJZER_PATH);
+  }, [navigate]);
+
+  // Wizard-output rechtstreeks doorschrijven naar de OnboardingFlow-state in localStorage.
+  // CustomerOnboardingFlow leest deze state bij mount en pakt het traject op vanaf "origin".
+  const handleComplete = useCallback(
+    (drafts: CertificationRequestDraft[]) => {
+      if (!serviceId) return;
+      persistTrajectHandoff({ drafts, serviceId });
+      navigate(TRIAGE_PATH(serviceId), { replace: true });
+    },
+    [navigate, serviceId],
   );
 
   if (!serviceId) {
@@ -29,59 +45,20 @@ export function TrajectConfigureFlow() {
   }
 
   return (
-    <OnboardingFlowProvider
-      persistence={persistence}
-      navigate={navigate}
-      registrationCompletePath={ONBOARDING_REGISTRATION_COMPLETE_PATH}
+    <TrajectLayout
+      title={PAGE_TITLE}
+      description={PAGE_DESCRIPTION}
+      onSignInClick={() => navigate(SIGNIN_PATH)}
     >
-      <TrajectConfigureFlowBody serviceId={serviceId} />
-    </OnboardingFlowProvider>
-  );
-}
-
-function TrajectConfigureFlowBody({ serviceId }: { serviceId: string }) {
-  const navigate = useNavigate();
-  const api = useOnboardingFlowApi();
-  const { flowState } = useOnboardingFlowState();
-  const { viewProps } = useOnboardingFlow({ navigate });
-  const seenRequestStep = useRef(false);
-
-  useEffect(() => {
-    api.setTrajectServiceId(serviceId);
-    api.goToOnboardingStep("request");
-  }, [api, serviceId]);
-
-  useEffect(() => {
-    if (flowState.step === "request") {
-      seenRequestStep.current = true;
-      return;
-    }
-    if (seenRequestStep.current) {
-      navigate(TRIAGE_PATH(serviceId), { replace: true });
-    }
-  }, [flowState.step, navigate, serviceId]);
-
-  // Annuleren = volledige reset. Gebruiker zegt expliciet "ik weet het niet, ik begin opnieuw",
-  // dus traject + klantgegevens worden gewist en we sturen ze terug naar de Wegwijzer.
-  const handleCancel = useCallback(() => {
-    resetTrajectFlow(api);
-    navigate(WEGWIJZER_PATH);
-  }, [api, navigate]);
-
-  const wizardProps = useMemo(
-    () => ({
-      ...viewProps.certificationWizardProps,
-      onCancel: handleCancel,
-    }),
-    [viewProps.certificationWizardProps, handleCancel],
-  );
-
-  return (
-    <OnboardingRequestStep
-      pageTitle={viewProps.certificationPhaseTitle}
-      pageDescription={viewProps.certificationPhaseDescription}
-      onSignInClick={viewProps.onSignInClick}
-      certificationWizardProps={wizardProps}
-    />
+      <CertificationRequestWizard
+        mode="onboarding"
+        backendKind="localStorage"
+        storageKey={ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY}
+        sessionId="pt1:onboarding:certification-request"
+        onCancel={handleCancel}
+        onComplete={handleComplete}
+        stepLayoutChromeStyle="bare"
+      />
+    </TrajectLayout>
   );
 }

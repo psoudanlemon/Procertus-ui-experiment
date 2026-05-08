@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
 import {
   Navigate,
@@ -15,12 +16,11 @@ import {
   DensityProvider,
   Field,
   FieldLabel,
+  H4,
   Input,
-  PublicRegistryAppShell,
   Separator,
 } from "@procertus-ui/ui";
-import { DetailCard, DetailCardSection } from "@procertus-ui/ui-lib";
-import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
+import { TrajectLayout } from "@procertus-ui/ui-certification";
 import { APP_FOOTER } from "../layouts/footerConfig";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
 import {
@@ -120,142 +120,124 @@ export function ExpertCallPlaceholderPage() {
 
   return (
     <DensityProvider density="operational">
-      <PublicRegistryAppShell
-        hideFab
-        header={{
-          logo: (
-            <img
-              src={procertusLogo}
-              alt="PROCERTUS, certification that builds trust"
-              className="h-8 w-auto dark:brightness-0 dark:invert"
-            />
-          ),
-          onLogin: () => navigate(LOGIN_PATH),
-        }}
+      <TrajectLayout
+        onSignInClick={() => navigate(LOGIN_PATH)}
         footer={APP_FOOTER}
+        backAction={{ label: "Terug", onClick: handleBack }}
+        title="Plan een expert call"
+        description={intro}
       >
-        <div className="mx-auto w-full max-w-7xl p-boundary">
-          <DetailCard
-            title="Plan een expert call"
-            description={intro}
-            footer={
-              <div className="ml-auto flex flex-wrap items-center justify-end gap-component">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="lg"
-                  onClick={handleBack}
+        <div className="flex flex-col gap-region">
+          <PageSection title="Wat u kunt verwachten">
+            <ul className="flex flex-col gap-component">
+              {SESSION_HIGHLIGHTS.map((item) => (
+                <li
+                  key={item}
+                  className="flex items-start gap-component text-sm leading-normal"
                 >
-                  Terug
-                </Button>
-                <Button size="lg" disabled>
-                  Verzenden
-                </Button>
-              </div>
-            }
+                  <HugeiconsIcon
+                    icon={CheckmarkCircle02Icon}
+                    className="mt-0.5 size-5 shrink-0 text-accent-foreground"
+                  />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </PageSection>
+
+          <PageSection
+            title="Kies een moment"
+            description="Sessies duren één uur en starten op het hele of halve uur."
           >
-            <DetailCardSection title="Wat u kunt verwachten">
-              <ul className="flex flex-col gap-component">
-                {SESSION_HIGHLIGHTS.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-start gap-component text-sm leading-normal"
-                  >
-                    <HugeiconsIcon
-                      icon={CheckmarkCircle02Icon}
-                      className="mt-0.5 size-5 shrink-0 text-accent-foreground"
-                    />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </DetailCardSection>
-
-            <DetailCardSection
-              title="Kies een moment"
-              description="Sessies duren één uur en starten op het hele of halve uur."
-            >
-              <div className="flex flex-col gap-section md:flex-row md:items-stretch md:gap-0">
-                <div className="flex flex-1 justify-center md:justify-start">
-                  <Calendar
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={setSelectedDate}
-                    className="w-fit"
-                  />
-                </div>
-                <Separator orientation="vertical" className="hidden md:block" />
-                <div className="flex max-h-80 flex-col gap-micro overflow-y-auto md:w-44 md:pl-section">
-                  {TIME_SLOTS.map((slot) => {
-                    const isSelected = selectedSlot === slot;
-                    return (
-                      <Button
-                        key={slot}
-                        type="button"
-                        variant={isSelected ? "default" : "outline"}
-                        onClick={() => setSelectedSlot(slot)}
-                        className="w-full justify-center"
-                        disabled={!selectedDate}
-                      >
-                        {slot}
-                      </Button>
-                    );
-                  })}
-                </div>
+            <div className="flex flex-col gap-section md:flex-row md:items-stretch md:gap-0">
+              <div className="flex flex-1 justify-center md:justify-start">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={setSelectedDate}
+                  className="w-fit"
+                />
               </div>
-              {formattedSelection ? (
-                <p className="text-sm text-muted-foreground">
-                  Uw expert call is gepland voor{" "}
-                  <span className="font-medium text-foreground">{formattedSelection}</span>.
-                </p>
-              ) : null}
-            </DetailCardSection>
-
-            <DetailCardSection title="Uw gegevens">
-              <div className="grid grid-cols-1 gap-section sm:grid-cols-2">
-                <Field>
-                  <FieldLabel htmlFor="expert-call-firstname">Voornaam</FieldLabel>
-                  <Input
-                    id="expert-call-firstname"
-                    autoComplete="given-name"
-                    defaultValue={prefill.representativeFirstName || undefined}
-                  />
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="expert-call-lastname">Achternaam</FieldLabel>
-                  <Input
-                    id="expert-call-lastname"
-                    autoComplete="family-name"
-                    defaultValue={prefill.representativeLastName || undefined}
-                  />
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="expert-call-email">E-mailadres</FieldLabel>
-                  <Input
-                    id="expert-call-email"
-                    type="email"
-                    autoComplete="email"
-                    defaultValue={prefill.representativeEmail || undefined}
-                  />
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="expert-call-company">Bedrijfsnaam</FieldLabel>
-                  <Input
-                    id="expert-call-company"
-                    autoComplete="organization"
-                    defaultValue={prefill.organizationName || undefined}
-                  />
-                </Field>
+              <Separator orientation="vertical" className="hidden md:block" />
+              <div className="flex max-h-80 flex-col gap-micro overflow-y-auto md:w-44 md:pl-section">
+                {TIME_SLOTS.map((slot) => {
+                  const isSelected = selectedSlot === slot;
+                  return (
+                    <Button
+                      key={slot}
+                      type="button"
+                      variant={isSelected ? "default" : "outline"}
+                      onClick={() => setSelectedSlot(slot)}
+                      className="w-full justify-center"
+                      disabled={!selectedDate}
+                    >
+                      {slot}
+                    </Button>
+                  );
+                })}
               </div>
-              <p className="text-xs text-muted-foreground">
-                U ontvangt een agenda-uitnodiging met videolink zodra het moment is bevestigd.
+            </div>
+            {formattedSelection ? (
+              <p className="text-sm text-muted-foreground">
+                Uw expert call is gepland voor{" "}
+                <span className="font-medium text-foreground">{formattedSelection}</span>.
               </p>
-            </DetailCardSection>
+            ) : null}
+          </PageSection>
 
-            <SubmissionContextSection context={submissionContext} />
-          </DetailCard>
+          <PageSection title="Uw gegevens">
+            <div className="grid grid-cols-1 gap-section sm:grid-cols-2">
+              <Field>
+                <FieldLabel htmlFor="expert-call-firstname">Voornaam</FieldLabel>
+                <Input
+                  id="expert-call-firstname"
+                  autoComplete="given-name"
+                  defaultValue={prefill.representativeFirstName || undefined}
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="expert-call-lastname">Achternaam</FieldLabel>
+                <Input
+                  id="expert-call-lastname"
+                  autoComplete="family-name"
+                  defaultValue={prefill.representativeLastName || undefined}
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="expert-call-email">E-mailadres</FieldLabel>
+                <Input
+                  id="expert-call-email"
+                  type="email"
+                  autoComplete="email"
+                  defaultValue={prefill.representativeEmail || undefined}
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="expert-call-company">Bedrijfsnaam</FieldLabel>
+                <Input
+                  id="expert-call-company"
+                  autoComplete="organization"
+                  defaultValue={prefill.organizationName || undefined}
+                />
+              </Field>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              U ontvangt een agenda-uitnodiging met videolink zodra het moment is bevestigd.
+            </p>
+          </PageSection>
+
+          <SubmissionContextSection context={submissionContext} />
+
+          <div className="flex flex-wrap items-center justify-end gap-component">
+            <Button type="button" variant="outline" size="lg" onClick={handleBack}>
+              Terug
+            </Button>
+            <Button size="lg" disabled>
+              Verzenden
+            </Button>
+          </div>
         </div>
-      </PublicRegistryAppShell>
+      </TrajectLayout>
     </DensityProvider>
   );
 }
@@ -278,7 +260,7 @@ function SubmissionContextSection({ context }: { context: TrajectSubmissionConte
         : null;
 
   return (
-    <DetailCardSection
+    <PageSection
       title="Bijgevoegde context"
       description="Breadcrumbs uit de TrajectFlow die met deze aanvraag worden meegestuurd."
     >
@@ -300,6 +282,29 @@ function SubmissionContextSection({ context }: { context: TrajectSubmissionConte
           Geen voorafgaande context, deze aanvraag start vanaf de Wegwijzer-startpagina.
         </p>
       )}
-    </DetailCardSection>
+    </PageSection>
+  );
+}
+
+type PageSectionProps = {
+  title?: ReactNode;
+  description?: ReactNode;
+  children: ReactNode;
+};
+
+function PageSection({ title, description, children }: PageSectionProps) {
+  const hasHeader = Boolean(title || description);
+  return (
+    <section className="flex flex-col gap-component">
+      {hasHeader ? (
+        <header className="flex flex-col gap-micro">
+          {title ? <H4 className="leading-none">{title}</H4> : null}
+          {description ? (
+            <p className="text-sm leading-normal text-muted-foreground">{description}</p>
+          ) : null}
+        </header>
+      ) : null}
+      {children}
+    </section>
   );
 }
