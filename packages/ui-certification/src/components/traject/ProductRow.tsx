@@ -40,7 +40,7 @@ export function ProductRow({ id, label, onAdd, className }: ProductRowProps) {
       <Item
         asChild
         className={cn(
-          "cursor-pointer rounded-none border-transparent text-left transition-colors",
+          "cursor-pointer rounded-none border-transparent p-component text-left transition-colors",
           "hover:bg-accent hover:text-accent-foreground",
           "focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none",
           className,
@@ -53,7 +53,7 @@ export function ProductRow({ id, label, onAdd, className }: ProductRowProps) {
             typeof label === "string" ? `Voeg ${label} toe aan selectie` : undefined
           }
         >
-          <ItemMedia variant="icon">
+          <ItemMedia variant="icon" className="translate-y-0.5 self-start">
             <HugeiconsIcon
               icon={Tag01Icon}
               className="size-4 text-muted-foreground transition-colors group-hover/item:text-accent-foreground"

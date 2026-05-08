@@ -40,8 +40,8 @@ export function CategoryPicker({
       asChild
       variant="outline"
       className={cn(
-        "cursor-pointer bg-card p-section text-left transition-colors",
-        "hover:border-accent-foreground hover:bg-accent hover:text-accent-foreground",
+        "cursor-pointer gap-section bg-card p-section text-left transition-colors",
+        "hover:bg-accent hover:text-accent-foreground",
         className,
       )}
     >
