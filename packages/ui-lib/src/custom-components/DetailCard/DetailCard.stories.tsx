@@ -6,7 +6,7 @@ import { Button, H4 } from "@procertus-ui/ui";
 import { DetailCard } from "./DetailCard";
 
 const meta = {
-  title: "custom-components/DetailCard",
+  title: "custom-components/Catalogue/DetailCard",
   component: DetailCard,
   parameters: {
     layout: "padded",
@@ -73,21 +73,6 @@ function DefaultStory() {
 
 export const Default = {
   render: () => <DefaultStory />,
-} as unknown as StoryObj<typeof meta>;
-
-function NoFooterStory() {
-  return (
-    <DetailCard
-      title="Detail card without footer"
-      description="A footer is optional. Useful for surfaces where the action lives elsewhere on the page."
-    >
-      <p className="text-sm leading-normal">Free-form body content.</p>
-    </DetailCard>
-  );
-}
-
-export const NoFooter = {
-  render: () => <NoFooterStory />,
 } as unknown as StoryObj<typeof meta>;
 
 function NoWatermarkStory() {

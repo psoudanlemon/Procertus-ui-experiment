@@ -4,14 +4,14 @@ import { useState } from "react";
 import { ChoiceBar, type ChoiceBarItem } from "./ChoiceBar";
 
 const meta = {
-  title: "custom-components/CatalogueExplorer/ChoiceBar",
+  title: "custom-components/Catalogue/ChoiceBar",
   component: ChoiceBar,
   parameters: {
     layout: "padded",
     docs: {
       description: {
         component:
-          "Horizontal single-select pill bar of `SelectChoiceCard`s (minimal appearance) inside a `FadingScrollList`. Per-item `variant` lets callers tier the options — `elevated` for primary, `faded` for siblings, `ghost` for a trailing overflow option.",
+          "Horizontal single-select pill bar of `SelectChoiceCard`s (minimal appearance, fully rounded) inside a `FadingScrollList`, with prev/next icon buttons that step linearly through enabled items. Per-item `variant` is supported for tiering, but the bar reads cleanest when all chips share one variant.",
       },
     },
   },
@@ -21,13 +21,13 @@ const meta = {
 export default meta;
 
 const ITEMS: readonly ChoiceBarItem[] = [
-  { value: "benor", label: "BENOR-certificatie", variant: "elevated" },
-  { value: "ce", label: "CE-markering", variant: "elevated" },
-  { value: "ssd", label: "SSD", variant: "elevated" },
-  { value: "innovatie-attest", label: "Innovatie-attest", variant: "faded" },
-  { value: "procertus-attest", label: "PROCERTUS-attest", variant: "faded" },
-  { value: "partijkeuring", label: "Partijkeuring", variant: "faded" },
-  { value: "overige", label: "Overige", variant: "ghost" },
+  { value: "all", label: "Alle certificaten" },
+  { value: "benor", label: "BENOR-certificatie" },
+  { value: "ce", label: "CE-markering" },
+  { value: "ssd", label: "SSD" },
+  { value: "innovatie-attest", label: "Innovatie-attest" },
+  { value: "procertus-attest", label: "PROCERTUS-attest" },
+  { value: "partijkeuring", label: "Partijkeuring" },
 ];
 
 function DefaultStory() {
