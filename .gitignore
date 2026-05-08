@@ -38,3 +38,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # dora code context index
 .dora/
+
+# Claude Code runtime artifacts
+.claude/scheduled_tasks.lock
