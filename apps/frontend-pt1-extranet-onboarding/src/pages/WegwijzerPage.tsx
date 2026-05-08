@@ -234,7 +234,7 @@ function AllCertificatesGrid({
         <BrowseCard
           key={service.entry.id}
           title={service.entry.shortLabel}
-          description={summary(service.entry.id)}
+          description="Dit attest wordt beoordeeld door een andere instantie."
           variant="faded"
           cta={{
             label: "Bezoek website",
@@ -245,7 +245,13 @@ function AllCertificatesGrid({
           className="col-span-2 md:col-span-1"
           asChild
         >
-          <button type="button" onClick={() => onSelect(service.entry.id)} />
+          <button
+            type="button"
+            onClick={() => {
+              const url = service.externalReferral?.url;
+              if (url) window.open(url, "_blank", "noopener,noreferrer");
+            }}
+          />
         </BrowseCard>
       ))}
       <ExpertCallFooterCard />
