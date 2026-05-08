@@ -161,7 +161,7 @@ export function WegwijzerPage() {
 function Hero() {
   return (
     <PageHeader
-      className="px-boundary pt-boundary pb-region"
+      className="px-boundary pt-boundary pb-section"
       title="Start uw certificeringstraject"
       description="Bij PROCERTUS bieden we verschillende diensten aan. Hieronder vindt u een overzicht van ons aanbod. Selecteer een certificaat om meer informatie te krijgen of direct uw aanvraag te starten."
     />
