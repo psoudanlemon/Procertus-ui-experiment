@@ -65,3 +65,7 @@ To-do's from the plan have already been created. Do not create them again. Mark 
 Please rename all files related to "anonymous-onboarding" to "onboarding." Remove the "anonymous-" prefix from all files.
 
 Also rename component names and cells from "AnonymousOonboarding" to "Onboarding." Remove the "Anonymous" prefix from all components. Do this with a script or use terminal operations to do it efficiently.
+
+---
+
+Commit all changes in this session using the Git commit skill.
