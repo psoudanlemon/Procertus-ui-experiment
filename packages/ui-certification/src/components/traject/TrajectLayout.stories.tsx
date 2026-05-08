@@ -22,10 +22,14 @@ import {
   Separator,
 } from "@procertus-ui/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { CertificationRequestWizard } from "../certification-request-wizard";
-import { storyCertificationWizardProps, storyCustomerContext } from "../../onboarding/onboarding-story-fixtures";
+import {
+  storyCertificationWizardProps,
+  storyCustomerContext,
+  storyOnboardingDrafts,
+} from "../../onboarding/onboarding-story-fixtures";
 import { ProcertusCategorizationProvider } from "../../ProcertusCategorizationContext";
 import { TrajectLayout } from "./TrajectLayout";
 
@@ -49,7 +53,7 @@ const meta = {
       children: null,
     description: {
         component:
-          "Shared chrome for the public traject pages (triage ➜ certificatieaanvraag ➜ expert call). Provides registry header, optional footer, capped content column, optional back link and a `PageHeader` for the title block. Page-specific bodies live in `children`.",
+          "Shared chrome for the public traject pages (product selecteren, aanvraag controleren, keuze aanvraag type, expert call boeken). Provides registry header, optional footer, capped content column, optional back link and a `PageHeader` for the title block. Page-specific bodies live in `children`.",
       },
     },
   },
@@ -61,11 +65,83 @@ export default meta;
 const noop = () => {};
 
 /**
- * Hoe wilt u {service} aanvragen? — keuze tussen informatieve en formele aanvraag,
+ * Start je certificatieaanvraag: `CertificationRequestWizard` ingebed met bare chrome,
+ * zodat de wizard direct onder de PageHeader aansluit zonder eigen card-omhulsel.
+ */
+export const ProductSelection: StoryObj<typeof meta> = {
+  name: "Product selecteren",
+  args: {
+    onSignInClick: noop,
+    title: "Start je certificatieaanvraag",
+    children: null,
+    description:
+      "Kies eerst wat je wilt aanvragen. We vragen pas organisatie- en accountgegevens wanneer je een conceptaanvraag hebt samengesteld.",
+  },
+  render: (args) => <ProductSelectionStoryBody args={args} />,
+};
+
+function ProductSelectionStoryBody({ args }: { args: React.ComponentProps<typeof TrajectLayout> }) {
+  // Stabilise wizard props: the wizard provider re-keys its in-memory backend on
+  // initialSession identity, so a fresh `storyCertificationWizardProps()` each
+  // render would rebuild the backend, re-fire the seeding effect, and loop.
+  const wizardProps = useMemo(() => storyCertificationWizardProps(storyCustomerContext()), []);
+  return (
+    <ProcertusCategorizationProvider>
+      <TrajectLayout {...args}>
+        <CertificationRequestWizard
+          {...wizardProps}
+          sessionId="storybook-traject-layout-product-selection"
+          stepLayoutChromeStyle="bare"
+        />
+      </TrajectLayout>
+    </ProcertusCategorizationProvider>
+  );
+}
+
+/**
+ * Aanvraag controleren: wizard geseed met conceptaanvragen, geopend op de review-stap
+ * zodat de samenvatting met regelset-documenten meteen zichtbaar is.
+ */
+export const RequestReview: StoryObj<typeof meta> = {
+  name: "Aanvraag controleren",
+  args: {
+    onSignInClick: noop,
+    title: "Controleer je aanvraagpakket",
+    children: null,
+    description:
+      "Bekijk de samengestelde conceptaanvragen en de bijhorende regelset-documenten voordat je doorgaat met registratie.",
+  },
+  render: (args) => <RequestReviewStoryBody args={args} />,
+};
+
+function RequestReviewStoryBody({ args }: { args: React.ComponentProps<typeof TrajectLayout> }) {
+  const wizardProps = useMemo(
+    () => ({
+      ...storyCertificationWizardProps(storyCustomerContext()),
+      initialDrafts: storyOnboardingDrafts,
+      initialStep: "review" as const,
+    }),
+    [],
+  );
+  return (
+    <ProcertusCategorizationProvider>
+      <TrajectLayout {...args}>
+        <CertificationRequestWizard
+          {...wizardProps}
+          sessionId="storybook-traject-layout-request-review"
+          stepLayoutChromeStyle="bare"
+        />
+      </TrajectLayout>
+    </ProcertusCategorizationProvider>
+  );
+}
+
+/**
+ * Hoe wilt u {service} aanvragen? Keuze tussen informatieve en formele aanvraag,
  * met "expert call"-uitnodiging onderaan.
  */
-export const Triage: StoryObj<typeof meta> = {
-  name: "Triage — keuze aanvraagtype",
+export const RequestTypeChoice: StoryObj<typeof meta> = {
+  name: "Keuze aanvraag type",
   args: {
     onSignInClick: noop,
     footer: STORY_FOOTER,
@@ -127,40 +203,11 @@ export const Triage: StoryObj<typeof meta> = {
 };
 
 /**
- * Start je certificatieaanvraag — `CertificationRequestWizard` ingebed met bare chrome,
- * zodat de wizard direct onder de PageHeader aanmeldt zonder eigen card-omhulsel.
- */
-export const ConfigureFlow: StoryObj<typeof meta> = {
-  name: "Configure flow — certificatie wizard",
-  args: {
-    onSignInClick: noop,
-    title: "Start je certificatieaanvraag",
-    children: null,
-    description:
-      "Kies eerst wat je wilt aanvragen. We vragen pas organisatie- en accountgegevens wanneer je een conceptaanvraag hebt samengesteld.",
-  },
-  render: (args) => {
-    const wizardProps = storyCertificationWizardProps(storyCustomerContext());
-    return (
-      <ProcertusCategorizationProvider>
-        <TrajectLayout {...args}>
-          <CertificationRequestWizard
-            {...wizardProps}
-            sessionId="storybook-traject-layout-configure"
-            stepLayoutChromeStyle="bare"
-          />
-        </TrajectLayout>
-      </ProcertusCategorizationProvider>
-    );
-  },
-};
-
-/**
- * Plan een expert call — kalender + tijdslots + contactgegevens, met footer en
+ * Plan een expert call: kalender, tijdslots en contactgegevens, met footer en
  * "Terug"-actie zoals in de live ExpertCallPlaceholderPage.
  */
-export const ExpertCall: StoryObj<typeof meta> = {
-  name: "Expert call — plan een sessie",
+export const ExpertCallBooking: StoryObj<typeof meta> = {
+  name: "Expert call boeken",
   args: {
     onSignInClick: noop,
     footer: STORY_FOOTER,
