@@ -290,25 +290,20 @@ export function ProductSelectionExperimentBody() {
 }
 
 export function ProductSelectionExperimentActionBar() {
-  const { selectedIds, onCancel, onBack, onContinue } = useExperiment();
+  const { selectedIds, onCancel, onContinue } = useExperiment();
   const selectedCount = selectedIds.length;
   return (
     <>
       <Button type="button" variant="ghost" onClick={onCancel}>
         Annuleren
       </Button>
-      <div className="flex items-center gap-component">
-        <Button type="button" variant="outline" onClick={onBack}>
-          Terug
-        </Button>
-        <Button
-          type="button"
-          disabled={selectedCount === 0}
-          onClick={() => onContinue(selectedIds)}
-        >
-          Verder
-        </Button>
-      </div>
+      <Button
+        type="button"
+        disabled={selectedCount === 0}
+        onClick={() => onContinue(selectedIds)}
+      >
+        Verder
+      </Button>
     </>
   );
 }

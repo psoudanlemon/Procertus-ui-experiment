@@ -95,8 +95,8 @@ export function TrajectLayout({
         {children}
       </div>
       {actionBar ? (
-        <div className="sticky bottom-0 z-10 mt-auto rounded-b-xl border-t border-border bg-muted/40">
-          <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-component px-boundary py-component">
+        <div className="sticky bottom-0 z-10 mt-auto rounded-b-xl border-t border-border bg-muted">
+          <div className="flex w-full items-center justify-between gap-component px-boundary py-section">
             {actionBar}
           </div>
         </div>

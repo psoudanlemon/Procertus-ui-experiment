@@ -22,7 +22,7 @@ import {
   Separator,
 } from "@procertus-ui/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useMemo, useState } from "react";
+import { type ComponentType, useLayoutEffect, useMemo, useState } from "react";
 
 import { CertificationRequestWizard } from "../certification-request-wizard";
 import {
@@ -50,6 +50,22 @@ const STORY_FOOTER = {
   ],
 };
 
+/**
+ * Mirrors `PublicAppShell` in the production app: sets `data-public-layout` on `<html>` so the
+ * shared `globals.css` unlocks document scrolling (it keeps html/body locked for the
+ * authenticated shell). Without this, tall traject pages get clipped at viewport.
+ */
+const PublicLayoutDecorator = (Story: ComponentType) => {
+  useLayoutEffect(() => {
+    const el = document.documentElement;
+    el.dataset.publicLayout = "";
+    return () => {
+      delete el.dataset.publicLayout;
+    };
+  }, []);
+  return <Story />;
+};
+
 const meta = {
   title: "Traject/Layout",
   component: TrajectLayout,
@@ -63,6 +79,7 @@ const meta = {
       },
     },
   },
+  decorators: [PublicLayoutDecorator],
   tags: ["autodocs"],
 } satisfies Meta<typeof TrajectLayout>;
 
