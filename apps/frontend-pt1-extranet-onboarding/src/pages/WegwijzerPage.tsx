@@ -46,12 +46,19 @@ import {
   type WegwijzerService,
 } from "../features/wegwijzer/wegwijzer-services";
 import { WEGWIJZER_SERVICE_CONTENT } from "../features/wegwijzer/wegwijzer-service-content";
+import {
+  TRAJECT_ENTRY_POINT_QUERY_PARAM,
+  clearTrajectBreadcrumbs,
+} from "../features/traject/traject-submission-context";
 
 const LOGIN_PATH = "/welcome/login";
 /** Eerste stap van de TrajectFlow: producttype kiezen en aanvraag controleren in de wizard, voor de triage-keuze. */
 const TRAJECT_CONFIGURE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}/start`;
 const EXPERT_CALL_PATH = (serviceId?: string) =>
   serviceId ? `/welcome/expert-call/${serviceId}` : "/welcome/expert-call";
+/** Detail-card "Hulp nodig?" stuurt mee dat het certificaat al in beeld is, zonder verdere wizard-context. */
+const EXPERT_CALL_FROM_DETAIL_PATH = (serviceId: string) =>
+  `${EXPERT_CALL_PATH(serviceId)}?${TRAJECT_ENTRY_POINT_QUERY_PARAM}=wegwijzer-detail`;
 
 /** Sentinel id for the leading "Alle certificaten" pill that resets the explorer to the overview. */
 const ALL_ID = "all";
@@ -256,6 +263,13 @@ function AllCertificatesGrid({
 }
 
 function ExpertCallFooterCard() {
+  const navigate = useNavigate();
+  // Hero-CTA: gebruiker drukt expliciet de reset, eerdere traject-breadcrumbs worden gewist zodat
+  // het expert-call formulier echt context-loos verzonden wordt.
+  const handleHeroExpertCall = () => {
+    clearTrajectBreadcrumbs();
+    navigate(EXPERT_CALL_PATH());
+  };
   return (
     <Card
       className="relative col-span-4 flex cursor-pointer flex-col gap-section px-section py-section md:col-span-2"
@@ -268,17 +282,13 @@ function ExpertCallFooterCard() {
         </p>
       </div>
       <Button
-        asChild
+        type="button"
         variant="outline"
-        className="self-start bg-background group-hover/card:rounded-tl-[4px] group-hover/card:rounded-tr-[var(--cmd-deep)] group-hover/card:rounded-br-[4px] group-hover/card:rounded-bl-[var(--cmd-deep)] group-hover/card:bg-muted group-hover/card:text-foreground"
+        onClick={handleHeroExpertCall}
+        className="self-start bg-background before:absolute before:inset-0 before:content-[''] group-hover/card:rounded-tl-[4px] group-hover/card:rounded-tr-[var(--cmd-deep)] group-hover/card:rounded-br-[4px] group-hover/card:rounded-bl-[var(--cmd-deep)] group-hover/card:bg-muted group-hover/card:text-foreground"
       >
-        <Link
-          to={EXPERT_CALL_PATH()}
-          className="before:absolute before:inset-0 before:content-['']"
-        >
-          <HugeiconsIcon icon={Call02Icon} className="size-4" />
-          Plan een expert call
-        </Link>
+        <HugeiconsIcon icon={Call02Icon} className="size-4" />
+        Plan een expert call
       </Button>
     </Card>
   );
@@ -335,7 +345,7 @@ function MasterCard({ service }: { service: WegwijzerService }) {
           <HoverCard>
             <HoverCardTrigger asChild>
               <Button asChild variant="link">
-                <Link to={EXPERT_CALL_PATH(entry.id)}>Hulp nodig?</Link>
+                <Link to={EXPERT_CALL_FROM_DETAIL_PATH(entry.id)}>Hulp nodig?</Link>
               </Button>
             </HoverCardTrigger>
             <HoverCardContent side="top" sideOffset={12} align="start" className="w-80">

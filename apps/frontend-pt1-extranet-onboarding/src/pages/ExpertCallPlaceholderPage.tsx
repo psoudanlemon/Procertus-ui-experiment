@@ -1,8 +1,15 @@
-import { useState } from "react";
-import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useMemo, useState } from "react";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
+  Badge,
   Button,
   Calendar,
   DensityProvider,
@@ -16,10 +23,23 @@ import { DetailCard, DetailCardSection } from "@procertus-ui/ui-lib";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { APP_FOOTER } from "../layouts/footerConfig";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
+import {
+  TRAJECT_ENTRY_POINT_QUERY_PARAM,
+  buildTrajectSubmissionContext,
+  isTrajectEntryPoint,
+  readOnboardingFlowSnapshot,
+  type TrajectEntryPoint,
+  type TrajectSubmissionContext,
+} from "../features/traject/traject-submission-context";
 
 const LOGIN_PATH = "/welcome/login";
 const WEGWIJZER_PATH = "/welcome";
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
+
+const ENTRY_POINT_LABEL: Record<TrajectEntryPoint, string> = {
+  "wegwijzer-detail": "Vanuit certificaat-detail",
+  triage: "Vanuit triage (informatieve aanvraag)",
+};
 
 const SESSION_HIGHLIGHTS = [
   "Eén uur live online, videogesprek met scherm delen",
@@ -49,6 +69,7 @@ export function ExpertCallPlaceholderPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { serviceId } = useParams<{ serviceId: string }>();
+  const [searchParams] = useSearchParams();
   const service = findWegwijzerService(serviceId);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedSlot, setSelectedSlot] = useState<string | undefined>(undefined);
@@ -56,6 +77,25 @@ export function ExpertCallPlaceholderPage() {
     selectedDate && selectedSlot
       ? `${SELECTION_FORMATTER.format(selectedDate)} om ${selectedSlot}`
       : null;
+
+  const fromParam = searchParams.get(TRAJECT_ENTRY_POINT_QUERY_PARAM);
+  const entryPoint = isTrajectEntryPoint(fromParam) ? fromParam : undefined;
+
+  /**
+   * Snapshot van OnboardingFlowProvider state ten tijde van het renderen. We mounten geen provider:
+   * deze pagina hoeft alleen te lezen.
+   */
+  const flowSnapshot = useMemo(() => readOnboardingFlowSnapshot(), []);
+  const submissionContext = useMemo<TrajectSubmissionContext>(
+    () =>
+      buildTrajectSubmissionContext({
+        entryPoint,
+        urlServiceId: serviceId,
+        flowState: flowSnapshot,
+      }),
+    [entryPoint, serviceId, flowSnapshot],
+  );
+  const prefill = flowSnapshot.context;
 
   // /welcome/expert-call/:serviceId with an unknown id → fall back to overview.
   // /welcome/expert-call (no param) is the generic intake from the Hero banner.
@@ -175,28 +215,91 @@ export function ExpertCallPlaceholderPage() {
               <div className="grid grid-cols-1 gap-section sm:grid-cols-2">
                 <Field>
                   <FieldLabel htmlFor="expert-call-firstname">Voornaam</FieldLabel>
-                  <Input id="expert-call-firstname" autoComplete="given-name" />
+                  <Input
+                    id="expert-call-firstname"
+                    autoComplete="given-name"
+                    defaultValue={prefill.representativeFirstName || undefined}
+                  />
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="expert-call-lastname">Achternaam</FieldLabel>
-                  <Input id="expert-call-lastname" autoComplete="family-name" />
+                  <Input
+                    id="expert-call-lastname"
+                    autoComplete="family-name"
+                    defaultValue={prefill.representativeLastName || undefined}
+                  />
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="expert-call-email">E-mailadres</FieldLabel>
-                  <Input id="expert-call-email" type="email" autoComplete="email" />
+                  <Input
+                    id="expert-call-email"
+                    type="email"
+                    autoComplete="email"
+                    defaultValue={prefill.representativeEmail || undefined}
+                  />
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="expert-call-company">Bedrijfsnaam</FieldLabel>
-                  <Input id="expert-call-company" autoComplete="organization" />
+                  <Input
+                    id="expert-call-company"
+                    autoComplete="organization"
+                    defaultValue={prefill.organizationName || undefined}
+                  />
                 </Field>
               </div>
               <p className="text-xs text-muted-foreground">
                 U ontvangt een agenda-uitnodiging met videolink zodra het moment is bevestigd.
               </p>
             </DetailCardSection>
+
+            <SubmissionContextSection context={submissionContext} />
           </DetailCard>
         </div>
       </PublicRegistryAppShell>
     </DensityProvider>
+  );
+}
+
+/**
+ * Toont welke breadcrumbs uit de TrajectFlow met deze submissie meegestuurd worden. Read-only,
+ * bedoeld voor zichtbaarheid in de prototype zodat reviewers kunnen valideren dat hero / detail /
+ * triage entry-points elk de juiste hoeveelheid context dragen.
+ */
+function SubmissionContextSection({ context }: { context: TrajectSubmissionContext }) {
+  const hasAny = Object.keys(context).length > 0;
+  const serviceLabel = context.serviceId
+    ? (findWegwijzerService(context.serviceId)?.entry.label ?? context.serviceId)
+    : null;
+  const intentLabel =
+    context.intent === "informational"
+      ? "Informatieve aanvraag"
+      : context.intent === "formal"
+        ? "Formele aanvraag"
+        : null;
+
+  return (
+    <DetailCardSection
+      title="Bijgevoegde context"
+      description="Breadcrumbs uit de TrajectFlow die met deze aanvraag worden meegestuurd."
+    >
+      {hasAny ? (
+        <div className="flex flex-wrap items-center gap-micro">
+          {context.entryPoint ? (
+            <Badge variant="secondary">{ENTRY_POINT_LABEL[context.entryPoint]}</Badge>
+          ) : null}
+          {serviceLabel ? <Badge variant="outline">{serviceLabel}</Badge> : null}
+          {context.drafts && context.drafts.length > 0 ? (
+            <Badge variant="outline">
+              {context.drafts.length} concept{context.drafts.length === 1 ? "" : "en"}
+            </Badge>
+          ) : null}
+          {intentLabel ? <Badge variant="outline">{intentLabel}</Badge> : null}
+        </div>
+      ) : (
+        <p className="text-sm text-muted-foreground">
+          Geen voorafgaande context, deze aanvraag start vanaf de Wegwijzer-startpagina.
+        </p>
+      )}
+    </DetailCardSection>
   );
 }

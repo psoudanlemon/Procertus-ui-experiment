@@ -24,13 +24,19 @@ import {
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { APP_FOOTER } from "../layouts/footerConfig";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
+import { TRAJECT_ENTRY_POINT_QUERY_PARAM } from "../features/traject/traject-submission-context";
 
 const LOGIN_PATH = "/welcome/login";
 const WEGWIJZER_PATH = "/welcome";
-/** Informatieve aanvraag is afgehandeld via een live expert-call, niet via een placeholder formulier. */
-const INFORMATIONAL_REQUEST_PATH = (serviceId: string) => `/welcome/expert-call/${serviceId}`;
+/**
+ * Informatieve aanvraag wordt afgehandeld via een live expert-call. Het `from=triage` signaal stempelt
+ * de submissie zodat PROCERTUS weet dat de aanvrager al de wizard en de keuze gepasseerd heeft.
+ */
+const INFORMATIONAL_REQUEST_PATH = (serviceId: string) =>
+  `/welcome/expert-call/${serviceId}?${TRAJECT_ENTRY_POINT_QUERY_PARAM}=triage`;
 const FORMAL_REQUEST_PATH = "/welcome/start";
-const EXPERT_CALL_PATH = (serviceId: string) => `/welcome/expert-call/${serviceId}`;
+const EXPERT_CALL_PATH = (serviceId: string) =>
+  `/welcome/expert-call/${serviceId}?${TRAJECT_ENTRY_POINT_QUERY_PARAM}=triage`;
 
 const CATEGORY_LABEL = {
   certification: "Productcertificatie",
