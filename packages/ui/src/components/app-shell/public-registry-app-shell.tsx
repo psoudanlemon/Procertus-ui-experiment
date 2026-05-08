@@ -2,6 +2,7 @@ import * as React from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { FilePlusIcon } from "@hugeicons/core-free-icons";
 
+import { cn } from "@/lib/utils";
 import { Footer, type FooterProps } from "@/components/footer";
 import { PublicRegistryHeader, type PublicRegistryHeaderProps } from "@/components/public-header";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,12 @@ export type PublicRegistryAppShellProps = {
   onRequestCertificate?: () => void;
   /** Hide the FAB — useful for pages that have their own CTA. */
   hideFab?: boolean;
+  /**
+   * Lock the shell to the viewport so children manage their own internal scroll.
+   * Outer becomes `h-svh` instead of `min-h-svh`, main becomes a flex column with
+   * `min-h-0 overflow-hidden` so the content area can use `flex-1 + overflow-y-auto`.
+   */
+  fillViewport?: boolean;
   children: React.ReactNode;
 };
 
@@ -27,21 +34,30 @@ function PublicRegistryAppShell({
   requestUrl = "#",
   onRequestCertificate,
   hideFab = false,
+  fillViewport = false,
   children,
 }: PublicRegistryAppShellProps) {
   return (
     <div
       data-slot="public-registry-app-shell"
-      className="flex min-h-svh flex-col bg-sidebar [&>header]:border-b-0"
+      className={cn(
+        "flex flex-col bg-sidebar [&>header]:border-b-0",
+        fillViewport ? "h-svh overflow-hidden" : "min-h-svh",
+      )}
     >
       <PublicRegistryHeader {...header} variant={variant} />
-      <main className="relative mt-micro mx-section flex-1 rounded-xl bg-background">
+      <main
+        className={cn(
+          "relative mt-micro mx-section flex flex-1 flex-col rounded-xl bg-background",
+          fillViewport && "min-h-0 overflow-hidden",
+        )}
+      >
         {children}
 
         {!hideFab && (
           <Button
             size="lg"
-            className="absolute right-boundary bottom-boundary z-40 h-12 gap-component rounded-full px-component shadow-[var(--shadow-proc-lg)]"
+            className="absolute right-boundary bottom-boundary z-40 h-12 gap-component rounded-full px-component shadow-proc-lg"
             asChild
           >
             <a href={requestUrl} onClick={onRequestCertificate}>

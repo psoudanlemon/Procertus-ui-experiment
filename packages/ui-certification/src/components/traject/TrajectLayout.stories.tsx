@@ -31,6 +31,12 @@ import {
   storyOnboardingDrafts,
 } from "../../onboarding/onboarding-story-fixtures";
 import { ProcertusCategorizationProvider } from "../../ProcertusCategorizationContext";
+import { defaultProcertusCategorizationDoc } from "../../categorization-data";
+import {
+  ProductSelectionExperimentActionBar,
+  ProductSelectionExperimentBody,
+  ProductSelectionExperimentProvider,
+} from "./ProductSelectionExperiment";
 import { TrajectLayout } from "./TrajectLayout";
 
 const STORY_FOOTER = {
@@ -65,36 +71,36 @@ export default meta;
 const noop = () => {};
 
 /**
- * Start je certificatieaanvraag: `CertificationRequestWizard` ingebed met bare chrome.
- * De wizard levert zelf de step-header (kicker + titel + beschrijving), dus de TrajectLayout
- * laat zijn eigen PageHeader weg om dubbele koppen te vermijden.
+ * Product selecteren: drilldown door de Procertus-beslissingsboom op volledige breedte
+ * (`ProductTreePanel`) met multi-select, een altijd zichtbare selectie-rij erboven en
+ * een sticky actiebalk onderaan de TrajectLayout-kaart.
  */
 export const ProductSelection: StoryObj<typeof meta> = {
   name: "Product selecteren",
   args: {
     onSignInClick: noop,
+    footer: STORY_FOOTER,
+    bodyGap: "section",
+    kicker: "BENOR-certificatie",
+    title: "Selecteer de producten die je wil certificeren",
+    description:
+      "Drill down in de Procertus-beslissingsboom of zoek op productnaam, en duid alle producten aan die je in dit traject wilt opnemen.",
     children: null,
   },
-  render: (args) => <ProductSelectionStoryBody args={args} />,
-};
-
-function ProductSelectionStoryBody({ args }: { args: React.ComponentProps<typeof TrajectLayout> }) {
-  // Stabilise wizard props: the wizard provider re-keys its in-memory backend on
-  // initialSession identity, so a fresh `storyCertificationWizardProps()` each
-  // render would rebuild the backend, re-fire the seeding effect, and loop.
-  const wizardProps = useMemo(() => storyCertificationWizardProps(storyCustomerContext()), []);
-  return (
-    <ProcertusCategorizationProvider>
-      <TrajectLayout {...args}>
-        <CertificationRequestWizard
-          {...wizardProps}
-          sessionId="storybook-traject-layout-product-selection"
-          stepLayoutChromeStyle="bare"
-        />
+  render: (args) => (
+    <ProductSelectionExperimentProvider
+      doc={defaultProcertusCategorizationDoc}
+      traject="benor"
+      onCancel={noop}
+      onBack={noop}
+      onContinue={noop}
+    >
+      <TrajectLayout {...args} actionBar={<ProductSelectionExperimentActionBar />}>
+        <ProductSelectionExperimentBody />
       </TrajectLayout>
-    </ProcertusCategorizationProvider>
-  );
-}
+    </ProductSelectionExperimentProvider>
+  ),
+};
 
 /**
  * Aanvraag controleren: wizard geseed met conceptaanvragen, geopend op de review-stap

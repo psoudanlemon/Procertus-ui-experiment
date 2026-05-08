@@ -29,6 +29,18 @@ export type TrajectLayoutProps = {
   description?: ReactNode;
   /** Page body, rendered below the title block. */
   children: ReactNode;
+  /**
+   * Optional sticky action bar pinned to the bottom of the AppShell card. Surface stretches
+   * full-width inside the registry card; the inner content stays capped at the same `max-w-7xl`
+   * column as `children` so buttons align with the page content above.
+   */
+  actionBar?: ReactNode;
+  /**
+   * Vertical gap between back-link / `PageHeader` / `children`. Defaults to `"region"` per the
+   * top-level rhythm guideline; pages whose body owns its own internal spacing (e.g. tightly
+   * coupled overview + sticky toolbar) can drop to `"section"` for a tighter join.
+   */
+  bodyGap?: "region" | "section";
 };
 
 /**
@@ -45,7 +57,10 @@ export function TrajectLayout({
   title,
   description,
   children,
+  actionBar,
+  bodyGap = "region",
 }: TrajectLayoutProps) {
+  const gapClass = bodyGap === "section" ? "gap-section" : "gap-region";
   return (
     <PublicRegistryAppShell
       hideFab
@@ -61,7 +76,7 @@ export function TrajectLayout({
       }}
       footer={footer}
     >
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-region p-boundary">
+      <div className={`mx-auto flex w-full max-w-7xl flex-col p-boundary ${gapClass}`}>
         {backAction ? (
           <Button
             type="button"
@@ -79,6 +94,13 @@ export function TrajectLayout({
         ) : null}
         {children}
       </div>
+      {actionBar ? (
+        <div className="sticky bottom-0 z-10 mt-auto rounded-b-xl border-t border-border bg-muted/40">
+          <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-component px-boundary py-component">
+            {actionBar}
+          </div>
+        </div>
+      ) : null}
     </PublicRegistryAppShell>
   );
 }
