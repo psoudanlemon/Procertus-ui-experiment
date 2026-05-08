@@ -42,7 +42,7 @@ export type OnboardingFlowViewProps = {
   activeStep: number;
   goToOnboardingStep: (nextStep: OnboardingStep) => void;
   primaryAction: StepLayoutAction;
-  backAction: StepLayoutAction;
+  backAction?: StepLayoutAction;
   cancelAction?: StepLayoutAction;
   companyLookupPhase: "idle" | "loading" | "ready";
   lookupProgress: number;
@@ -66,4 +66,10 @@ export type OnboardingFlowViewProps = {
   registrationChromeOverrides?: Partial<
     Record<Exclude<OnboardingStep, "request">, Partial<RegistrationStepChromeCopy>>
   >;
+  /**
+   * Hide the leading "request" step from the stepper UI. Use this when the certification
+   * request was configured upstream (e.g. in a separate TrajectConfigureFlow) and the view
+   * only needs to expose the registration phase. Underlying step state stays intact.
+   */
+  hideRequestStep?: boolean;
 };

@@ -39,6 +39,8 @@ export type OnboardingFlowApi = {
   readonly goToOnboardingStep: (nextStep: OnboardingStep) => void;
   /** After certification wizard completes: drafts + jump to origin. */
   readonly applyWizardDraftCompletion: (nextDrafts: CertificationRequestDraft[]) => void;
+  /** Pin het Wegwijzer-service id van het lopende traject (zodat de back-link naar Triage refresh-bestendig blijft). */
+  readonly setTrajectServiceId: (serviceId: string) => void;
 };
 
 type LegacyContext = Partial<CustomerContext> & {
@@ -147,6 +149,10 @@ export function createOnboardingFlowApi(
           summaryIncludedDraftIds: nextSummaryIncluded,
         };
       });
+    },
+
+    setTrajectServiceId(serviceId) {
+      setFlowState((prev) => (prev.trajectServiceId === serviceId ? prev : { ...prev, trajectServiceId: serviceId }));
     },
 
     goToOnboardingStep(nextStep) {

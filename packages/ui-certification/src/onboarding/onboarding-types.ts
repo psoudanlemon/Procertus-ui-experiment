@@ -169,6 +169,12 @@ export type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
 
 export type OnboardingFlowState = {
   step: OnboardingStep;
+  /**
+   * Wegwijzer-service id van het lopende traject. Gezet wanneer de aanvraag via TrajectConfigureFlow
+   * start, leeg bij een schone state. Wordt gebruikt om de "Annuleren / Terug" knop in de customer
+   * onboarding terug te koppelen aan de juiste TriagePage, ook na een refresh.
+   */
+  trajectServiceId: string;
   /** Where the requesting company is based; drives preset and country options for later steps. */
   requestOrigin: OnboardingRequestOrigin | "";
   drafts: CertificationRequestDraft[];

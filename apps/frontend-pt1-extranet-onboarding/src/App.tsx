@@ -8,7 +8,8 @@ import { RequestDetailPage } from "./pages/RequestDetailPage";
 import { RequestEditPage } from "./pages/RequestEditPage";
 import { CategorizationDemoPage } from "./pages/CategorizationDemoPage";
 import { DesignSystemPage } from "./pages/DesignSystemPage";
-import { OnboardingFlow } from "./features/onboarding/OnboardingFlow";
+import { CustomerOnboardingFlow } from "./features/customer-onboarding/CustomerOnboardingFlow";
+import { TrajectConfigureFlow } from "./features/traject/TrajectConfigureFlow";
 import { AppPlaceholderPage } from "./pages/AppPlaceholderPage";
 import { OnboardingRegistrationCompletePage } from "./pages/OnboardingRegistrationCompletePage";
 import { SignupPage } from "./pages/SignupPage";
@@ -47,7 +48,8 @@ export default function App() {
       <Route element={<PublicAppShell />}>
         <Route path="/welcome" element={<WegwijzerPage />} />
         <Route path="/welcome/login" element={<SignupPage />} />
-        <Route path="/welcome/start" element={<OnboardingFlow />} />
+        <Route path="/welcome/start" element={<CustomerOnboardingFlow />} />
+        <Route path="/welcome/aanvraag/:serviceId/start" element={<TrajectConfigureFlow />} />
         <Route path="/welcome/aanvraag/:serviceId" element={<TriagePage />} />
         <Route
           path="/welcome/info-request/:serviceId"

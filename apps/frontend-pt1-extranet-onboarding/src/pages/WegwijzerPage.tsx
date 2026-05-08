@@ -48,8 +48,8 @@ import {
 import { WEGWIJZER_SERVICE_CONTENT } from "../features/wegwijzer/wegwijzer-service-content";
 
 const LOGIN_PATH = "/welcome/login";
-/** Onboarding-stepper — primary CTA target for "Start aanvraag voor [Naam]". */
-const ONBOARDING_STEPPER_PATH = "/welcome/start";
+/** Eerste stap van de TrajectFlow: producttype kiezen en aanvraag controleren in de wizard, voor de triage-keuze. */
+const TRAJECT_CONFIGURE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}/start`;
 const EXPERT_CALL_PATH = (serviceId?: string) =>
   serviceId ? `/welcome/expert-call/${serviceId}` : "/welcome/expert-call";
 
@@ -348,7 +348,7 @@ function MasterCard({ service }: { service: WegwijzerService }) {
             </HoverCardContent>
           </HoverCard>
           <Button asChild size="lg">
-            <Link to={ONBOARDING_STEPPER_PATH}>
+            <Link to={TRAJECT_CONFIGURE_PATH(entry.id)}>
               Start traject
               <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
             </Link>

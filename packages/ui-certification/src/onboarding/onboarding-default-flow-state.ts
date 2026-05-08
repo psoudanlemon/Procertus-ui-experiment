@@ -4,6 +4,7 @@ import { DEFAULT_CONTEXT } from "./onboarding-flow-helpers";
 
 export const DEFAULT_ONBOARDING_FLOW_STATE: OnboardingFlowState = {
   step: "request",
+  trajectServiceId: "",
   requestOrigin: "",
   drafts: [],
   summaryIncludedDraftIds: [],

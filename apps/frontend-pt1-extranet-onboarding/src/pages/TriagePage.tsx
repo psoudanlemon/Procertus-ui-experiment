@@ -27,7 +27,8 @@ import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
 
 const LOGIN_PATH = "/welcome/login";
 const WEGWIJZER_PATH = "/welcome";
-const INFO_REQUEST_PATH = (serviceId: string) => `/welcome/info-request/${serviceId}`;
+/** Informatieve aanvraag is afgehandeld via een live expert-call, niet via een placeholder formulier. */
+const INFORMATIONAL_REQUEST_PATH = (serviceId: string) => `/welcome/expert-call/${serviceId}`;
 const FORMAL_REQUEST_PATH = "/welcome/start";
 const EXPERT_CALL_PATH = (serviceId: string) => `/welcome/expert-call/${serviceId}`;
 
@@ -109,7 +110,7 @@ export function TriagePage() {
                 "Mogelijkheid tot live sessie tijdens het invullen",
               ]}
               cta="Start informatieve aanvraag"
-              to={INFO_REQUEST_PATH(entry.id)}
+              to={INFORMATIONAL_REQUEST_PATH(entry.id)}
             />
             <TriageOptionCard
               tone="primary"

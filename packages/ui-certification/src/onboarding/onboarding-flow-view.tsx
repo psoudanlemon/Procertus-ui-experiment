@@ -40,7 +40,12 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
     cancelAction,
     requestOrigin,
     setRequestOrigin,
+    hideRequestStep,
   } = props;
+
+  const stepperOffset = hideRequestStep ? 1 : 0;
+  const stepperSteps = hideRequestStep ? steps.slice(stepperOffset) : steps;
+  const stepperActiveStep = Math.max(0, activeStep - stepperOffset);
 
   if (step === "request") {
     return (
@@ -72,10 +77,10 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
           variant="onboarding"
           stepper={
             <OnboardingStepper
-              steps={steps}
-              activeStep={activeStep}
+              steps={stepperSteps}
+              activeStep={stepperActiveStep}
               onStepChange={(index) => {
-                const nextStep = ONBOARDING_STEPS[index];
+                const nextStep = ONBOARDING_STEPS[index + stepperOffset];
                 if (nextStep) {
                   goToOnboardingStep(nextStep);
                 }

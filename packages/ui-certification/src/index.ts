@@ -144,6 +144,8 @@ export {
   ONBOARDING_STEPS,
   readOnboardingRegistrationCompletePayload,
   useOnboardingFlow,
+  useOnboardingFlowApi,
+  useOnboardingFlowState,
   writeOnboardingRegistrationCompletePayload,
 } from "./onboarding";
 export {
