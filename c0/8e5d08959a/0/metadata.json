@@ -1,0 +1,44 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "c08e5d08959a",
+  "session_id": "1f2cc224-f91d-483c-9d88-91f494d107ab",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-08T06:13:17.003346Z",
+  "branch": "main",
+  "checkpoints_count": 8,
+  "files_touched": [
+    "packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-flow-helpers.tsx",
+    "packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-flow-view.stories.tsx",
+    "packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-flow-view.tsx",
+    "packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-story-fixtures.tsx",
+    "packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-types.ts",
+    "packages/ui-certification/src/anonymous-onboarding/identificatie-person-title-role-capture.tsx",
+    "packages/ui-certification/src/anonymous-onboarding/identificatie-subforms.tsx",
+    "packages/ui-certification/src/anonymous-onboarding/index.ts",
+    "packages/ui-certification/src/anonymous-onboarding/use-anonymous-onboarding-flow.tsx"
+  ],
+  "agent": "Claude Code",
+  "model": "composer-2",
+  "turn_id": "3c9396b42e5e",
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "session_metrics": {
+    "turn_count": 18,
+    "context_tokens": 183276,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-08T06:13:16.929723Z",
+    "agent_lines": 1241,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 1241,
+    "agent_percentage": 100
+  }
+}

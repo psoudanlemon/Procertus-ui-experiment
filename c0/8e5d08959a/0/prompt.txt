@@ -1,0 +1,106 @@
+@Procertus-ui-experiment/packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-flow-view.tsx 
+when entering company information in Step 4, if the user has not yet selected the radio button to indicate whether they are the legal representative, the entire phone field for entering personal information about the legal representative or the person filling in the form should be inaccessible and dimmed (disabled).
+
+The person must first make a selection indicating whether they are the legal representative. The user cannot proceed to the next step until this choice has been made.
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-flow-view.tsx 
+when entering company information in Step 4, if the user has not yet selected the radio button to indicate whether they are the legal representative, the entire phone field for entering personal information about the legal representative or the person filling in the form should be inaccessible and dimmed (disabled).
+
+The person must first make a selection indicating whether they are the legal representative. The user cannot proceed to the next step until this choice has been made.
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-flow-view.tsx 
+when entering company information in Step 4, if the user has not yet selected the radiobutton to indicate whether they are the legal representative, the entire form field for entering personal information about the legal representative or the person filling in the form should be inaccessible and dimmed (disabled).
+
+The person must first make a selection indicating whether they are the legal representative. The user cannot proceed to the next step until this choice has been made.
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-flow-view.tsx 
+when entering company information in Step 4, if the user has not yet selected the radiobutton to indicate whether they are the legal representative, the entire form field for entering personal information about the legal representative or the person filling in the form should be inaccessible and dimmed (disabled).
+
+The person must first make a selection indicating whether they are the legal representative. The user cannot proceed to the next step until this choice has been made.
+
+---
+
+There is currently a mismatch between the stepper's progress and the actual content of the stepper. Please review.
+
+---
+
+On the step for registering organization information, please move the invoicing email field to the bottom of the form.  
+Also, do not enable the option to select an alternative invoicing address by default.
+
+---
+
+I meant to move the invoicing email address to the bottom of the form, but above the optional selectable card for the alternative invoicing address.
+
+---
+
+I meant to move the invoicing email address to the bottom of the form, but above the optional selectable card for the alternative invoicing address.
+
+---
+
+Make the invoicing email form field stretch to the entire available width.
+
+---
+
+Make the invoicing email form field stretch to the entire available width.
+
+---
+
+Please indicate in the copy of this stepper section that we are registering the head company, or in Dutch, "maatschappelijke zetel".
+
+Just like in the previous stepper, the user had to confirm whether they were the legal representative themselves or were representing someone else as legal representative.
+
+We now want to introduce the same flow, but the user must indicate whether the registered company can serve as the legal entity for the selected certification. If the registered company ("maatschappelijke zetel") cannot, the user needs to enter possible extra company information for an extra legal entity within the company.
+
+This registration for the extra legal entity cannot contain an extra VAT number but may include an extra legal name and extra address information.
+
+Please name this extra legal entity in Dutch "Vestiging".
+ The user needs to be able to register as many "Vestigingen" as there are currently selected certifications in their inquiry.  As multiple certifications have already been selected, you can select or create a new vestiging for each one, or reuse existing information from already registered vestigings to map to the legal certification inquiries.
+
+---
+
+Please indicate in the copy of this stepper section that we are registering the head company, or in Dutch, "maatschappelijke zetel".
+
+Just like in the previous stepper, the user had to confirm whether they were the legal representative themselves or were representing someone else as legal representative.
+
+We now want to introduce the same flow, but the user must indicate whether the registered company can serve as the legal entity for the selected certification. If the registered company ("maatschappelijke zetel") cannot, the user needs to enter possible extra company information for an extra legal entity within the company.
+
+This registration for the extra legal entity cannot contain an extra VAT number but may include an extra legal name and extra address information.
+
+Please name this extra legal entity in Dutch "Vestiging".
+ The user needs to be able to register as many "Vestigingen" as there are currently selected certifications in their inquiry.  As multiple certifications have already been selected, you can select or create a new vestiging for each one, or reuse existing information from already registered vestigings to map to the legal certification inquiries.
+
+---
+
+Please introduce a new step in the stepper that is all about invoicing.
+
+Move the required field for registering the invoicing email address to this new step as the only required field. Also move the optional field to select an alternative address for invoicing to this step.
+
+Show the currently registered address information and company name of the maatschappelkazetel (or company information) previously recorded from the previous step as the invoicing address. When showing this information, include a toggle: "No, I want to use different information for invoicing."
+
+If the user toggles to use different information, they should be able to select one of the previously registered company informations or create a new one. When this new information is added, it should also be available in the previous step.
+
+Also move the personal registration from the next step to this step so it can be used as contact information for everything related to invoicing.
+
+---
+
+Please introduce a new step in the stepper that is all about invoicing.
+
+Move the required field for registering the invoicing email address to this new step as the only required field. Also move the optional field to select an alternative address for invoicing to this step.
+
+Show the currently registered address information and company name of the maatschappelkazetel (or company information) previously recorded from the previous step as the invoicing address. When showing this information, include a toggle: "No, I want to use different information for invoicing."
+
+If the user toggles to use different information, they should be able to select one of the previously registered company informations or create a new one. When this new information is added, it should also be available in the previous step.
+
+Also move the personal registration from the next step to this step so it can be used as contact information for everything related to invoicing.
+
+---
+
+We already have this toggleable card to select an alternative address. Don't duplicate this logic with an extra toggle field.
+
+Also show the currently selected person responsible for, or to be contacted about, invoicing. By default, select the legal representative. Allow changing this by toggling to provide an alternative person.
