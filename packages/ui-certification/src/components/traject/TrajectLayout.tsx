@@ -62,6 +62,8 @@ export function TrajectLayout({
   bodyGap = "region",
 }: TrajectLayoutProps) {
   const gapClass = bodyGap === "section" ? "gap-section" : "gap-region";
+  const bodyTopSpacingClass = bodyGap === "section" ? "pt-section" : "pt-region";
+  const hasHeader = backAction != null || title != null;
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [topFaded, setTopFaded] = useState(false);
@@ -100,12 +102,15 @@ export function TrajectLayout({
       }}
       footer={footer}
     >
-      <div className="relative flex min-h-0 flex-1 flex-col">
-        <div
-          ref={scrollRef}
-          className="flex min-h-0 flex-1 flex-col overflow-y-auto"
-        >
-          <div className={`mx-auto flex w-full max-w-7xl flex-col p-boundary ${gapClass}`}>
+      <div className="flex min-h-0 flex-1 flex-col">
+        {hasHeader ? (
+          <div
+            data-slot="traject-layout-header"
+            className={cn(
+              "mx-auto flex w-full max-w-7xl flex-col px-boundary pt-boundary",
+              gapClass,
+            )}
+          >
             {backAction ? (
               <Button
                 type="button"
@@ -121,25 +126,39 @@ export function TrajectLayout({
             {title != null ? (
               <PageHeader kicker={kicker} title={title} description={description} />
             ) : null}
-            {children}
           </div>
+        ) : null}
+        <div className="relative flex min-h-0 flex-1 flex-col">
+          <div
+            ref={scrollRef}
+            className="flex min-h-0 flex-1 flex-col overflow-y-auto"
+          >
+            <div
+              className={cn(
+                "mx-auto flex w-full max-w-7xl flex-col px-boundary pb-boundary",
+                hasHeader ? bodyTopSpacingClass : "pt-boundary",
+              )}
+            >
+              {children}
+            </div>
+          </div>
+          <div
+            aria-hidden
+            data-slot="traject-layout-scroll-fade-top"
+            className={cn(
+              "pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-background to-transparent transition-opacity duration-200",
+              topFaded ? "opacity-100" : "opacity-0",
+            )}
+          />
+          <div
+            aria-hidden
+            data-slot="traject-layout-scroll-fade-bottom"
+            className={cn(
+              "pointer-events-none absolute inset-x-0 bottom-0 z-10 h-8 bg-gradient-to-t from-background to-transparent transition-opacity duration-200",
+              bottomFaded ? "opacity-100" : "opacity-0",
+            )}
+          />
         </div>
-        <div
-          aria-hidden
-          data-slot="traject-layout-scroll-fade-top"
-          className={cn(
-            "pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-background to-transparent transition-opacity duration-200",
-            topFaded ? "opacity-100" : "opacity-0",
-          )}
-        />
-        <div
-          aria-hidden
-          data-slot="traject-layout-scroll-fade-bottom"
-          className={cn(
-            "pointer-events-none absolute inset-x-0 bottom-0 z-10 h-8 bg-gradient-to-t from-background to-transparent transition-opacity duration-200",
-            bottomFaded ? "opacity-100" : "opacity-0",
-          )}
-        />
       </div>
       {actionBar ? (
         <div className="z-10 rounded-b-xl border-t border-border bg-muted">
