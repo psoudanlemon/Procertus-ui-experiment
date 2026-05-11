@@ -31,6 +31,12 @@ export type PublicRegistryAppShellProps = {
    * outer container — see commentary on the root `<div>` below.
    */
   fillViewport?: boolean;
+  /**
+   * Pin the bottom chrome (action bar + footer) to the viewport bottom while the page
+   * scrolls. Defaults to `true`. Set to `false` on pages where the footer should scroll
+   * along with the content instead of staying glued to the viewport.
+   */
+  stickyBottomChrome?: boolean;
   children: React.ReactNode;
 };
 
@@ -43,14 +49,16 @@ function PublicRegistryAppShell({
   onRequestCertificate,
   hideFab = false,
   fillViewport = false,
+  stickyBottomChrome = true,
   children,
 }: PublicRegistryAppShellProps) {
   const hasBottomChrome = actionBar != null || footer != null;
+  const isSticky = stickyBottomChrome && !fillViewport;
   const outerRef = React.useRef<HTMLDivElement>(null);
   const [scrolledAboveBottom, setScrolledAboveBottom] = React.useState(false);
 
   React.useEffect(() => {
-    if (fillViewport || !hasBottomChrome) return;
+    if (!isSticky || !hasBottomChrome) return;
     const el = outerRef.current;
     if (!el) return;
 
@@ -67,7 +75,7 @@ function PublicRegistryAppShell({
       el.removeEventListener("scroll", update);
       ro.disconnect();
     };
-  }, [fillViewport, hasBottomChrome]);
+  }, [isSticky, hasBottomChrome]);
 
   return (
     /*
@@ -117,17 +125,19 @@ function PublicRegistryAppShell({
           data-slot="public-registry-bottom-chrome"
           className={cn(
             "z-20 mx-section flex flex-col",
-            fillViewport ? "static" : "sticky bottom-0",
+            isSticky ? "sticky bottom-0" : "static",
           )}
         >
-          <div
-            aria-hidden
-            data-slot="public-registry-bottom-chrome-scroll-fade"
-            className={cn(
-              "pointer-events-none absolute inset-x-0 -top-8 h-8 bg-linear-to-t from-background to-transparent transition-opacity duration-200",
-              scrolledAboveBottom ? "opacity-100" : "opacity-0",
-            )}
-          />
+          {isSticky && (
+            <div
+              aria-hidden
+              data-slot="public-registry-bottom-chrome-scroll-fade"
+              className={cn(
+                "pointer-events-none absolute inset-x-0 -top-8 h-8 bg-linear-to-t from-background to-transparent transition-opacity duration-200",
+                scrolledAboveBottom ? "opacity-100" : "opacity-0",
+              )}
+            />
+          )}
           {actionBar}
           {footer && <Footer {...footer} variant={variant} />}
         </div>

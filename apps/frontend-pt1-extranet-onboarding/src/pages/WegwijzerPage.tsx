@@ -112,6 +112,7 @@ export function WegwijzerPage() {
     <DensityProvider density="operational">
       <PublicRegistryAppShell
         hideFab
+        stickyBottomChrome={false}
         header={{
           logo: (
             <img
@@ -356,7 +357,7 @@ function MasterCard({ service }: { service: WegwijzerService }) {
           </HoverCard>
           <Button asChild size="lg">
             <Link to={TRAJECT_CONFIGURE_PATH(entry.id)}>
-              Start traject
+              Bekijk mogelijkheden
               <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
             </Link>
           </Button>

@@ -80,7 +80,7 @@ export function DetailCard({
       </CardContent>
 
       {footer ? (
-        <CardFooter className="flex-wrap-reverse justify-end gap-component border-t bg-muted/40 p-region sm:flex-nowrap sm:justify-between">
+        <CardFooter className="flex-wrap-reverse justify-between gap-component border-t bg-muted/40 p-region sm:flex-nowrap">
           {footer}
         </CardFooter>
       ) : null}

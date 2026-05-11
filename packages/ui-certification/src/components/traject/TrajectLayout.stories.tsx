@@ -52,6 +52,10 @@ const STORY_FOOTER = {
  * Mirrors `PublicAppShell` in the production app: sets `data-public-layout` on `<html>` so the
  * shared `globals.css` unlocks document scrolling (it keeps html/body locked for the
  * authenticated shell). Without this, tall traject pages get clipped at viewport.
+ *
+ * Also pins the footer to a white surface in every story by remapping the sidebar/card tokens
+ * scoped to `[data-slot="footer"]`, so the chrome reads clean against the page regardless of
+ * the active theme.
  */
 const PublicLayoutDecorator = (Story: ComponentType) => {
   useLayoutEffect(() => {
@@ -61,7 +65,20 @@ const PublicLayoutDecorator = (Story: ComponentType) => {
       delete el.dataset.publicLayout;
     };
   }, []);
-  return <Story />;
+  return (
+    <>
+      <style>{`
+        [data-slot="footer"] {
+          --sidebar: var(--neutral-white);
+          --sidebar-foreground: var(--neutral-950);
+          --sidebar-accent-foreground: var(--brand-primary-700);
+          --card: var(--neutral-white);
+          --card-foreground: var(--neutral-950);
+        }
+      `}</style>
+      <Story />
+    </>
+  );
 };
 
 const meta = {
