@@ -13,7 +13,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
+  H2,
   H3,
 } from "@procertus-ui/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -76,41 +76,44 @@ export const Default: StoryObj<typeof meta> = {
     onSignInClick: noop,
     footer: STORY_FOOTER,
     kicker: "Keuring",
-    title: "Hoe wilt u Partijkeuring aanvragen?",
+    title: "Wat voor aanvraag wilt u graag indienen?",
     children: null,
     description:
       "Kies een vrijblijvende informatieaanvraag voor een prijsopgave en advies, of start meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen.",
+    bodyGap: "section",
   },
   render: (args) => (
     <TrajectLayout
       {...args}
-      actionBar={<TrajectStoryFooter onBack={noop} backLabel="Terug naar wegwijzer" />}
+      actionBar={<TrajectStoryFooter onCancel={noop} onBack={noop} />}
     >
-      <div className="flex flex-col gap-section">
-        <div className="grid grid-cols-1 gap-section md:grid-cols-2">
+      <div className="flex flex-col gap-region">
+        <div className="grid grid-cols-1 gap-region md:grid-cols-2">
           <TriageOptionCard
             tone="muted"
             icon={Mail01Icon}
             title="Informatieve aanvraag"
-            description="Voor wie eerst wil afstemmen. U bezorgt enkele basisgegevens en uw vraag, wij komen terug met een prijsopgave en het te volgen traject."
+            description="Voor wie eerst wil afstemmen."
             bullets={[
+              "Prijsopgave en advies op maat",
               "Geen verplichting tot opstart",
               "Reactie binnen enkele werkdagen",
-              "Mogelijkheid tot live sessie tijdens het invullen",
+              "Live sessie mogelijk tijdens het invullen",
             ]}
-            cta="Start informatieve aanvraag"
+            cta="Start aanvraag"
           />
           <TriageOptionCard
             tone="primary"
             icon={FilePlusIcon}
             title="Formele aanvraag"
-            description="Voor wie klaar is om in te dienen. Het volledige aanvraagpakket wordt opgebouwd en de ontvankelijkheidsbeoordeling kan starten."
+            description="Voor wie klaar is om in te dienen."
             bullets={[
               "Volledige aanvraagwizard",
+              "Ontvankelijkheidsbeoordeling start meteen",
               "Dossier wordt actief opgevolgd",
-              "Account aanmaken pas bij indiening",
+              "Account pas nodig bij indiening",
             ]}
-            cta="Start formele aanvraag"
+            cta="Start aanvraag"
           />
         </div>
         <Card
@@ -126,7 +129,7 @@ export const Default: StoryObj<typeof meta> = {
           </div>
           <Button variant="outline" className="w-full bg-background sm:w-auto sm:shrink-0">
             <HugeiconsIcon icon={Call02Icon} className="size-4" />
-            Plan een expert call
+            Plan een gesprek
           </Button>
         </Card>
       </div>
@@ -153,18 +156,18 @@ function TriageOptionCard({ tone, icon, title, description, bullets, cta }: Tria
           : "flex h-full flex-col gap-section py-section shadow-proc-xs"
       }
     >
-      <CardHeader className="gap-component px-section">
+      <CardHeader className="!flex flex-row items-start gap-section px-section">
         <div
           className={
             isPrimary
-              ? "flex size-11 items-center justify-center rounded-md bg-primary text-primary-foreground"
-              : "flex size-11 items-center justify-center rounded-md bg-secondary text-secondary-foreground"
+              ? "flex size-11 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground"
+              : "flex size-11 shrink-0 items-center justify-center rounded-md bg-secondary text-secondary-foreground"
           }
         >
           <HugeiconsIcon icon={icon} className="size-6" />
         </div>
-        <div className="flex flex-col gap-micro">
-          <CardTitle className="text-heading-md">{title}</CardTitle>
+        <div className="flex min-w-0 flex-1 flex-col">
+          <H2>{title}</H2>
           <CardDescription className="text-sm leading-normal">{description}</CardDescription>
         </div>
       </CardHeader>
@@ -174,7 +177,7 @@ function TriageOptionCard({ tone, icon, title, description, bullets, cta }: Tria
             <li key={b} className="flex items-start gap-micro text-sm leading-normal">
               <HugeiconsIcon
                 icon={CheckmarkCircle02Icon}
-                className="mt-0.5 size-4 shrink-0 text-success"
+                className="mt-0.5 size-4 shrink-0 text-primary"
               />
               <span>{b}</span>
             </li>

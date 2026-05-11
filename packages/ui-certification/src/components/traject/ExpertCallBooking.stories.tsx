@@ -44,7 +44,7 @@ const PublicLayoutDecorator = (Story: ComponentType) => {
 };
 
 const meta = {
-  title: "Traject configuration/Layout/Expert call boeken",
+  title: "Traject configuration/Layout/Informatieve aanvraag",
   component: TrajectLayout,
   parameters: {
     layout: "fullscreen",
