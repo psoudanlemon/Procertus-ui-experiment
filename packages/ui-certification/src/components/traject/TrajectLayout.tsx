@@ -64,6 +64,7 @@ export function TrajectLayout({
   return (
     <PublicRegistryAppShell
       hideFab
+      fillViewport
       header={{
         logo: (
           <img
@@ -76,26 +77,28 @@ export function TrajectLayout({
       }}
       footer={footer}
     >
-      <div className={`mx-auto flex w-full max-w-7xl flex-col p-boundary ${gapClass}`}>
-        {backAction ? (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="-ml-2 self-start text-muted-foreground"
-            onClick={backAction.onClick}
-          >
-            <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
-            {backAction.label}
-          </Button>
-        ) : null}
-        {title != null ? (
-          <PageHeader kicker={kicker} title={title} description={description} />
-        ) : null}
-        {children}
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+        <div className={`mx-auto flex w-full max-w-7xl flex-col p-boundary ${gapClass}`}>
+          {backAction ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="-ml-2 self-start text-muted-foreground"
+              onClick={backAction.onClick}
+            >
+              <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
+              {backAction.label}
+            </Button>
+          ) : null}
+          {title != null ? (
+            <PageHeader kicker={kicker} title={title} description={description} />
+          ) : null}
+          {children}
+        </div>
       </div>
       {actionBar ? (
-        <div className="sticky bottom-0 z-10 mt-auto rounded-b-xl border-t border-border bg-muted">
+        <div className="z-10 rounded-b-xl border-t border-border bg-muted">
           <div className="flex w-full items-center justify-between gap-component px-boundary py-section">
             {actionBar}
           </div>
