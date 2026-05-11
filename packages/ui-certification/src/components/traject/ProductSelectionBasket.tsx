@@ -31,6 +31,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -214,6 +215,15 @@ type ContextValue = {
   clearSelection: () => void;
   onBack?: () => void;
   onContinue: (ids: readonly string[]) => void;
+  /**
+   * Escape route wanneer een gebruiker zijn product niet in de catalogus vindt.
+   * Wanneer beschikbaar verschijnt er in elke productlijst een "Mijn product
+   * staat niet in de lijst"-rij bovenaan, plus dezelfde call-to-action in de
+   * empty state van een zoekopdracht. De callback springt in de productie-flow
+   * direct naar "Aanvraag controleren" en slaat de bundle-stap over; in stories
+   * staat hij doorgaans op `noop` om de affordance zichtbaar te maken.
+   */
+  onProductNotFound?: () => void;
 };
 
 const ProductSelectionBasketContext = createContext<ContextValue | null>(null);
@@ -248,6 +258,15 @@ export type ProductSelectionBasketProviderProps = {
   onSelectionChange?: (ids: string[]) => void;
   onBack?: () => void;
   onContinue: (ids: readonly string[]) => void;
+  /**
+   * Wanneer aanwezig verschijnt de "Mijn product staat niet in de lijst"-
+   * affordance op twee plekken in de discovery-area: als vaste rij bovenaan
+   * elke productlijst (browse + zoekresultaten) en als primary call-to-action
+   * in de zoek empty state. De host wireert hier doorgaans de sprong naar
+   * "Aanvraag controleren" — zo slaat de gebruiker de bundle-stap over en
+   * landt direct in review.
+   */
+  onProductNotFound?: () => void;
   children: ReactNode;
 };
 
@@ -263,6 +282,7 @@ export function ProductSelectionBasketProvider({
   onSelectionChange,
   onBack,
   onContinue,
+  onProductNotFound,
   children,
 }: ProductSelectionBasketProviderProps) {
   const [path, setPath] = useState<readonly string[]>([]);
@@ -344,6 +364,7 @@ export function ProductSelectionBasketProvider({
       clearSelection,
       onBack,
       onContinue,
+      onProductNotFound,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -585,7 +606,19 @@ function DiscoveryArea({
   goTo,
   goUpTo,
   addProduct,
+  onProductNotFound,
 }: ContextValue) {
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  // Zet bij eerste render direct focus op het zoekveld: de search is de
+  // dominante affordance op deze pagina en gebruikers landen hier meestal
+  // met een product in gedachten — meteen kunnen typen scheelt een klik.
+  useEffect(() => {
+    searchInputRef.current?.focus();
+  }, []);
+  const resetSearch = () => {
+    setSearchValue("");
+    searchInputRef.current?.focus();
+  };
   return (
     <div className="flex min-w-0 flex-col gap-section">
       <div className="relative w-full">
@@ -594,6 +627,7 @@ function DiscoveryArea({
           className="pointer-events-none absolute left-component top-1/2 size-5 -translate-y-1/2 text-muted-foreground"
         />
         <Input
+          ref={searchInputRef}
           type="text"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
@@ -629,11 +663,13 @@ function DiscoveryArea({
                   query={searchQuery}
                   totalResults={searchResultsTotal}
                   visibleResults={searchHits.length}
+                  onProductNotFound={onProductNotFound}
                 />
                 {searchHits.length === 0 ? (
                   <SearchEmptyState
                     query={searchQuery}
                     totalResults={searchResultsTotal}
+                    onResetSearch={resetSearch}
                   />
                 ) : (
                   <ProductsList>
@@ -659,44 +695,49 @@ function DiscoveryArea({
                 transition={{ duration: 0.2, ease: "easeOut" }}
                 className="flex flex-col gap-section"
               >
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    <BreadcrumbItem>
-                      {isRoot ? (
-                        <BreadcrumbPage>Alle producten</BreadcrumbPage>
-                      ) : (
-                        <BreadcrumbLink asChild>
-                          <button type="button" onClick={goRoot} className="cursor-pointer">
-                            Alle producten
-                          </button>
-                        </BreadcrumbLink>
-                      )}
-                    </BreadcrumbItem>
-                    {trail.map((seg, idx) => {
-                      const isLast = idx === trail.length - 1;
-                      return (
-                        <Fragment key={seg.id}>
-                          <BreadcrumbSeparator />
-                          <BreadcrumbItem>
-                            {isLast ? (
-                              <BreadcrumbPage>{seg.label}</BreadcrumbPage>
-                            ) : (
-                              <BreadcrumbLink asChild>
-                                <button
-                                  type="button"
-                                  onClick={() => goUpTo(idx + 1)}
-                                  className="cursor-pointer"
-                                >
-                                  {seg.label}
-                                </button>
-                              </BreadcrumbLink>
-                            )}
-                          </BreadcrumbItem>
-                        </Fragment>
-                      );
-                    })}
-                  </BreadcrumbList>
-                </Breadcrumb>
+                <div className="flex flex-wrap items-center justify-between gap-component">
+                  <Breadcrumb>
+                    <BreadcrumbList>
+                      <BreadcrumbItem>
+                        {isRoot ? (
+                          <BreadcrumbPage>Alle producten</BreadcrumbPage>
+                        ) : (
+                          <BreadcrumbLink asChild>
+                            <button type="button" onClick={goRoot} className="cursor-pointer">
+                              Alle producten
+                            </button>
+                          </BreadcrumbLink>
+                        )}
+                      </BreadcrumbItem>
+                      {trail.map((seg, idx) => {
+                        const isLast = idx === trail.length - 1;
+                        return (
+                          <Fragment key={seg.id}>
+                            <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                              {isLast ? (
+                                <BreadcrumbPage>{seg.label}</BreadcrumbPage>
+                              ) : (
+                                <BreadcrumbLink asChild>
+                                  <button
+                                    type="button"
+                                    onClick={() => goUpTo(idx + 1)}
+                                    className="cursor-pointer"
+                                  >
+                                    {seg.label}
+                                  </button>
+                                </BreadcrumbLink>
+                              )}
+                            </BreadcrumbItem>
+                          </Fragment>
+                        );
+                      })}
+                    </BreadcrumbList>
+                  </Breadcrumb>
+                  {onProductNotFound ? (
+                    <ProductNotFoundLink onClick={onProductNotFound} />
+                  ) : null}
+                </div>
 
                 <div className="flex flex-col gap-section">
                   {categories.length > 0 ? (
@@ -749,35 +790,78 @@ function SearchHeader({
   query,
   totalResults,
   visibleResults,
+  onProductNotFound,
 }: {
   query: string;
   totalResults: number;
   visibleResults: number;
+  onProductNotFound?: () => void;
 }) {
   return (
-    <header className="flex flex-wrap items-baseline gap-component">
-      <h2 className="text-xl font-semibold tracking-tight">
-        Zoekresultaten voor &ldquo;{query}&rdquo;
-      </h2>
-      <span className="text-sm text-muted-foreground">
-        {visibleResults} van {totalResults}
-      </span>
+    <header className="flex flex-wrap items-baseline justify-between gap-component">
+      <div className="flex flex-wrap items-baseline gap-component">
+        <h2 className="text-xl font-semibold tracking-tight">
+          Zoekresultaten voor &ldquo;{query}&rdquo;
+        </h2>
+        <span className="text-sm text-muted-foreground">
+          {visibleResults} van {totalResults}
+        </span>
+      </div>
+      {onProductNotFound ? (
+        <ProductNotFoundLink onClick={onProductNotFound} />
+      ) : null}
     </header>
+  );
+}
+
+/**
+ * "Mijn product staat niet in de lijst"-affordance als sm link-button.
+ * Verschijnt rechts naast de breadcrumb (browse) en rechts in de search-header
+ * (zodra er resultaten zijn). Functioneel identiek aan de primary button in de
+ * search empty state: triggert de `onProductNotFound`-callback die in productie
+ * de gebruiker direct naar "Aanvraag controleren" stuurt en de bundle-stap dus
+ * overslaat.
+ */
+function ProductNotFoundLink({ onClick }: { onClick: () => void }) {
+  return (
+    <Button
+      type="button"
+      variant="link"
+      size="xs"
+      onClick={onClick}
+    >
+      Mijn product staat niet in de lijst?
+    </Button>
   );
 }
 
 function SearchEmptyState({
   query,
   totalResults,
+  onResetSearch,
 }: {
   query: string;
   totalResults: number;
+  onResetSearch: () => void;
 }) {
+  const noResults = totalResults === 0;
   return (
-    <div className="rounded-lg border border-dashed border-border/70 bg-muted/20 px-section py-region text-center text-sm text-muted-foreground">
-      {totalResults === 0
-        ? `Geen producten gevonden voor "${query}". Probeer een andere zoekterm.`
-        : `Alle resultaten voor "${query}" staan al in je selectie.`}
+    <div className="flex flex-col items-center gap-section rounded-lg border border-dashed border-border/70 bg-muted/20 px-section py-region text-center">
+      <p className="text-sm text-muted-foreground">
+        {noResults
+          ? `Geen producten gevonden voor "${query}".`
+          : `Alle resultaten voor "${query}" staan al in je selectie.`}
+      </p>
+      {noResults ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={onResetSearch}
+        >
+          Probeer opnieuw
+        </Button>
+      ) : null}
     </div>
   );
 }

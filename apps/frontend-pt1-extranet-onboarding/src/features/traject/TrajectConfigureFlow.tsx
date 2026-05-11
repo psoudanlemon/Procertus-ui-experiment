@@ -26,6 +26,8 @@ const SIGNIN_PATH = "/welcome/login";
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
 const BUNDLE_ASSEMBLE_PATH = (serviceId: string) =>
   `/welcome/aanvraag/${serviceId}/pakket`;
+const REQUEST_REVIEW_PATH = (serviceId: string) =>
+  `/welcome/aanvraag/${serviceId}/controleren`;
 
 // Alleen wegwijzer-services die als hoofdcertificatie binnen het bundle-pakket vallen
 // (BENOR/CE/SSD/PROCERTUS) krijgen de extra "Voeg trajecten toe"-stap. Andere services
@@ -93,6 +95,25 @@ export function TrajectConfigureFlow() {
     [navigate, productIndex, service, serviceId],
   );
 
+  // Escape route wanneer de gebruiker zijn product niet terugvindt in de catalogus.
+  // We slaan de bundle-stap over en sturen rechtstreeks naar "Aanvraag controleren";
+  // een placeholder-draft zonder productId geeft de review-pagina iets om te tonen
+  // (en omzeilt haar redirect-naar-bundle bij een lege drafts-lijst), terwijl het
+  // marker-label aangeeft dat een expert nog moet helpen identificeren welk product
+  // bedoeld wordt.
+  const handleProductNotFound = useCallback(() => {
+    if (!serviceId || !service) return;
+    const placeholder: CertificationRequestDraft = {
+      id: `${serviceId}-product-not-found`,
+      entryId: serviceId as CertificationEntryId,
+      label: service.entry.label,
+      shortLabel: service.entry.shortLabel,
+      productLabel: "Product nog te bespreken met expert",
+    };
+    persistTrajectHandoff({ drafts: [placeholder], serviceId });
+    navigate(REQUEST_REVIEW_PATH(serviceId), { replace: true });
+  }, [navigate, service, serviceId]);
+
   if (!serviceId || !service) {
     return <Navigate to={WEGWIJZER_PATH} replace />;
   }
@@ -103,6 +124,7 @@ export function TrajectConfigureFlow() {
       initialSelectedIds={initialSelectedIds}
       onBack={handleBack}
       onContinue={handleContinue}
+      onProductNotFound={handleProductNotFound}
     >
       <TrajectLayout
         onSignInClick={() => navigate(SIGNIN_PATH)}

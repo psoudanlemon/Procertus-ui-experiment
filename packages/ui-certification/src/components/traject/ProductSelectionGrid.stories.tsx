@@ -84,6 +84,7 @@ export const ProductSelection: StoryObj<typeof meta> = {
       doc={defaultProcertusCategorizationDoc}
       onBack={noop}
       onContinue={noop}
+      onProductNotFound={noop}
     >
       <TrajectLayout
         {...args}
