@@ -79,7 +79,7 @@ export function TrajectLayout({
   // vallen op mobiel zodat de visuele tussenruimte exact 12px is, en herstelt `pt-region`
   // vanaf `md:` waar de bovenste balk is uitgeschakeld.
   const actionRowSpacing =
-    aboveActionBar != null ? "pt-0 pb-region md:pt-region" : "py-region";
+    aboveActionBar != null ? "pt-0 pb-section md:pt-section" : "py-section";
 
   const actionBarRef = useRef<HTMLDivElement>(null);
   const [hasContentBelow, setHasContentBelow] = useState(false);
