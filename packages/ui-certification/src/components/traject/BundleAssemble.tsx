@@ -1,6 +1,4 @@
-import { ArrowLeft01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Badge, Button } from "@procertus-ui/ui";
+import { Button } from "@procertus-ui/ui";
 import {
   type ReactNode,
   createContext,
@@ -11,7 +9,11 @@ import {
 
 import {
   BUNDLE_CERT_ORDER,
+  BundleMatrixHeader,
+  BundleMatrixProvider,
   BundleProductCard,
+  BundleProductMobileCard,
+  bundleMatrixGridCols,
   type BundleCertKey,
   type BundleProduct,
 } from "./BundleProductCard";
@@ -19,7 +21,11 @@ import {
 export {
   BUNDLE_CERT_META,
   BUNDLE_CERT_ORDER,
+  BundleMatrixHeader,
+  BundleMatrixProvider,
   BundleProductCard,
+  BundleProductMobileCard,
+  bundleMatrixGridCols,
 } from "./BundleProductCard";
 export type {
   BundleCertKey,
@@ -132,60 +138,109 @@ export function BundleAssembleProvider({
   );
 }
 
+export type BundleAssembleBodyProps = {
+  /**
+   * Toon één kolom-headerrij boven de eerste productkaart met korte cert-labels,
+   * zodat de cards zelf compact kunnen blijven (alleen md+; mobiel toont de
+   * cert-naam in elke ChoiceCard). Default `true`.
+   */
+  withColumnHeader?: boolean;
+};
+
 /**
- * Verticaal gestapelde productkaarten. Elke kaart toont z'n categoriepad, productlabel
- * en een grid van {@link ChoiceCard} multi-toggles voor de aanvullende certificaties.
+ * Geselecteerde producten met responsive layout:
+ *
+ * - **md+:** matrix-view met vaste cert-kolommen, CSS-subgrid voor uitlijning over
+ *   rijen heen, en {@link BundleMatrixProvider} voor gesynchroniseerde kolom-hover.
+ * - **<md:** verticaal gestapelde {@link BundleProductMobileCard}s met een sticky
+ *   product-header per kaart, full-width ChoiceCards, en bovenaan de
+ *   hoofdcertificatie als read-only basis-marker.
  */
-export function BundleAssembleBody() {
-  const { products, selections, toggleCert } = useBundleAssemble();
+export function BundleAssembleBody({ withColumnHeader = true }: BundleAssembleBodyProps = {}) {
+  const { products, primaryCert, selections, toggleCert } = useBundleAssemble();
+
   return (
-    <section
-      aria-label="Geselecteerde producten"
-      className="flex flex-col gap-component"
-    >
-      {products.map((product) => (
-        <BundleProductCard
-          key={product.id}
-          product={product}
-          selected={selections.get(product.id) ?? new Set<BundleCertKey>()}
-          onToggle={(cert, checked) => toggleCert(product.id, cert, checked)}
-        />
-      ))}
-    </section>
+    <>
+      <ul
+        aria-label="Geselecteerde producten"
+        className="flex flex-col gap-section md:hidden"
+      >
+        {products.map((product) => (
+          <li key={product.id}>
+            <BundleProductMobileCard
+              product={product}
+              primaryCert={primaryCert}
+              selected={selections.get(product.id) ?? new Set<BundleCertKey>()}
+              onToggle={(cert, checked) => toggleCert(product.id, cert, checked)}
+            />
+          </li>
+        ))}
+      </ul>
+      <BundleMatrixProvider primaryCert={primaryCert}>
+        <section
+          role="table"
+          aria-label="Geselecteerde producten"
+          className={`hidden gap-component md:grid ${bundleMatrixGridCols.excludingPrimary}`}
+        >
+          {withColumnHeader ? <BundleMatrixHeader /> : null}
+          {products.map((product) => (
+            <BundleProductCard
+              key={product.id}
+              product={product}
+              selected={selections.get(product.id) ?? new Set<BundleCertKey>()}
+              onToggle={(cert, checked) => toggleCert(product.id, cert, checked)}
+            />
+          ))}
+        </section>
+      </BundleMatrixProvider>
+    </>
   );
 }
 
 /**
  * Sticky action bar voor de bundle-assemble stap. Render binnen
- * {@link TrajectLayout}'s `actionBar` slot. Toont "Terug" links en
- * "Annuleren / Verder" rechts, met daartussen de pakket-status badge die
- * benadrukt dat alles samen één pakket vormt.
+ * {@link TrajectLayout}'s `actionBar` slot. Latere-stap variant: "Annuleren"
+ * (ghost, links) springt naar de wegwijzer, "Terug" (outline, rechts) gaat
+ * een stap terug binnen de flow, en "Bevestig selectie" (primary, rechts)
+ * sluit de pakket-samenstelling af. Op mobile stapelen de knoppen verticaal;
+ * vanaf `md` zitten Terug + Bevestig selectie als groep rechts en Annuleren
+ * links.
  */
 export function BundleAssembleActionBar() {
-  const { productCount, onBack, onCancel, emitContinue } = useBundleAssemble();
-  const productWordCap = productCount === 1 ? "Product" : "Producten";
+  const { onBack, onCancel, emitContinue } = useBundleAssemble();
   return (
-    <>
-      <Button type="button" variant="ghost" onClick={onBack} disabled={onBack == null}>
-        <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
-        Terug
+    <div className="grid w-full grid-cols-2 items-center gap-component md:flex">
+      <Button
+        type="button"
+        size="lg"
+        className="col-span-2 h-12 w-full px-6 md:order-3 md:col-auto md:h-9 md:w-auto md:px-4"
+        onClick={emitContinue}
+      >
+        Bevestig selectie
       </Button>
-      <div className="flex flex-wrap items-center justify-end gap-component">
-        <Badge
-          variant="outline"
-          aria-label={`Pakket-status: ${productCount} ${productWordCap.toLowerCase()}, samengesteld pakket`}
-          className="hidden whitespace-nowrap sm:inline-flex"
+      {onCancel ? (
+        <Button
+          type="button"
+          variant="ghost"
+          size="lg"
+          className="h-12 w-full px-6 md:order-1 md:h-9 md:w-auto md:px-4"
+          onClick={onCancel}
         >
-          {productCount} {productWordCap} · Samengesteld Pakket
-        </Badge>
-        <Button type="button" variant="ghost" onClick={onCancel} disabled={onCancel == null}>
           Annuleren
         </Button>
-        <Button type="button" onClick={emitContinue}>
-          Verder
+      ) : null}
+      {onBack ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="lg"
+          className={`h-12 w-full px-6 md:order-2 md:ml-auto md:h-9 md:w-auto md:px-4 ${onCancel == null ? "col-span-2 md:col-auto" : ""}`}
+          onClick={onBack}
+        >
+          Terug
         </Button>
-      </div>
-    </>
+      ) : null}
+    </div>
   );
 }
 

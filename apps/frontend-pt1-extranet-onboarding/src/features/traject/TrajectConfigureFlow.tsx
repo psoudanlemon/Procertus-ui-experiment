@@ -28,8 +28,8 @@ const BUNDLE_ASSEMBLE_PATH = (serviceId: string) =>
   `/welcome/aanvraag/${serviceId}/pakket`;
 
 // Alleen wegwijzer-services die als hoofdcertificatie binnen het bundle-pakket vallen
-// (BENOR/CE/ATG) krijgen de extra "Voeg trajecten toe"-stap. Andere services (SSD,
-// Partijkeuring, …) hebben geen bundle-extras en gaan rechtstreeks naar Triage.
+// (BENOR/CE/SSD/PROCERTUS) krijgen de extra "Voeg trajecten toe"-stap. Andere services
+// (ATG, Partijkeuring, …) hebben geen bundle-extras en gaan rechtstreeks naar Triage.
 function isBundleCertService(value: string): value is BundleCertKey {
   return (BUNDLE_CERT_ORDER as readonly string[]).includes(value);
 }

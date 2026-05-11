@@ -3,12 +3,12 @@ import { type ComponentType, useLayoutEffect } from "react";
 
 import {
   BUNDLE_CERT_META,
+  BundleAssembleActionBar,
   BundleAssembleBody,
   BundleAssembleProvider,
 } from "./BundleAssemble";
 import type { BundleCertKey, BundleProduct } from "./BundleAssemble";
 import { TrajectLayout } from "./TrajectLayout";
-import { TrajectStoryFooter } from "./TrajectStoryFooter";
 
 const STORY_FOOTER = {
   companyDetails: [
@@ -66,7 +66,7 @@ const STORY_BUNDLE_PRODUCTS: readonly BundleProduct[] = [
     id: "stortklaar-beton",
     label: "Stortklaar beton",
     categoryTrail: "Beton en mortel",
-    extraCerts: ["ce", "atg"],
+    extraCerts: ["ce", "ssd", "procertus"],
   },
   {
     id: "granulaten-voor-beton",
@@ -78,7 +78,7 @@ const STORY_BUNDLE_PRODUCTS: readonly BundleProduct[] = [
     id: "betonstaal",
     label: "Betonstaal",
     categoryTrail: "Staal > Wapeningsstaal",
-    extraCerts: ["ce", "atg"],
+    extraCerts: ["ce", "procertus"],
   },
 ];
 
@@ -104,14 +104,7 @@ export const Default: StoryObj<typeof meta> = {
         {...args}
         kicker={STORY_BUNDLE_PRIMARY_LABEL}
         description="Bekijk elk van uw geselecteerde producten en voeg waar nodig nog extra certificaten toe, zodat je meteen alle benodigdheden voor elk product kan indienen"
-        actionBar={
-          <TrajectStoryFooter
-            onCancel={noop}
-            onBack={noop}
-            onContinue={noop}
-            continueLabel="Verder"
-          />
-        }
+        actionBar={<BundleAssembleActionBar />}
       >
         <BundleAssembleBody />
       </TrajectLayout>

@@ -18,7 +18,8 @@ const WEGWIJZER_PATH = "/welcome";
 const SIGNIN_PATH = "/welcome/login";
 const PRODUCT_SELECTION_PATH = (serviceId: string) =>
   `/welcome/aanvraag/${serviceId}/start`;
-const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
+const REQUEST_REVIEW_PATH = (serviceId: string) =>
+  `/welcome/aanvraag/${serviceId}/controleren`;
 
 function isBundleCert(value: string): value is BundleCertKey {
   return (BUNDLE_CERT_ORDER as readonly string[]).includes(value);
@@ -33,7 +34,7 @@ export function TrajectBundleAssembleFlow() {
 
   // Producten worden afgeleid uit de drafts die TrajectConfigureFlow heeft gepersisteerd.
   // Eén kaart per uniek product, met `productPath` als categoriepad-prefix. Extra
-  // certificaties zijn de andere bundle-certs (BENOR/CE/ATG) minus de hoofdcertificatie.
+  // certificaties zijn de andere bundle-certs (BENOR/CE/SSD/PROCERTUS) minus de hoofdcertificatie.
   const products: readonly BundleProduct[] = useMemo(() => {
     if (!serviceId || !isBundleCert(serviceId)) return [];
     const extras = BUNDLE_CERT_ORDER.filter((c) => c !== serviceId);
@@ -65,9 +66,10 @@ export function TrajectBundleAssembleFlow() {
   const handleContinue = useCallback(() => {
     if (!serviceId) return;
     // De selectie van extra certificaties wordt voorlopig nog niet teruggeschreven naar de
-    // OnboardingFlow-drafts; dat hoort bij een latere data-laag iteratie. De UI-handoff
-    // naar Triage blijft consistent met TrajectConfigureFlow.
-    navigate(TRIAGE_PATH(serviceId), { replace: true });
+    // OnboardingFlow-drafts; dat hoort bij een latere data-laag iteratie. Stuur door naar de
+    // "Aanvraag controleren"-stap waar de gebruiker het samengestelde pakket nog ziet voor
+    // hij bevestigt.
+    navigate(REQUEST_REVIEW_PATH(serviceId));
   }, [navigate, serviceId]);
 
   if (!serviceId || !service || !isBundleCert(serviceId)) {

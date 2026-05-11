@@ -23,13 +23,19 @@ export type { BundleAssembleProviderProps } from "./BundleAssemble";
 export {
   BUNDLE_CERT_META,
   BUNDLE_CERT_ORDER,
+  BundleMatrixHeader,
+  BundleMatrixProvider,
   BundleProductCard,
+  BundleProductMobileCard,
+  bundleMatrixGridCols,
 } from "./BundleProductCard";
 export type {
   BundleCertKey,
   BundleCertMeta,
+  BundleMatrixProviderProps,
   BundleProduct,
   BundleProductCardProps,
+  BundleProductMobileCardProps,
 } from "./BundleProductCard";
 export { TrajectStoryFooter } from "./TrajectStoryFooter";
 export type { TrajectStoryFooterProps } from "./TrajectStoryFooter";

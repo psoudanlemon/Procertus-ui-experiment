@@ -11,6 +11,7 @@ import { DesignSystemPage } from "./pages/DesignSystemPage";
 import { CustomerOnboardingFlow } from "./features/customer-onboarding/CustomerOnboardingFlow";
 import { TrajectConfigureFlow } from "./features/traject/TrajectConfigureFlow";
 import { TrajectBundleAssembleFlow } from "./features/traject/TrajectBundleAssembleFlow";
+import { TrajectRequestReviewFlow } from "./features/traject/TrajectRequestReviewFlow";
 import { AppPlaceholderPage } from "./pages/AppPlaceholderPage";
 import { OnboardingRegistrationCompletePage } from "./pages/OnboardingRegistrationCompletePage";
 import { SignupPage } from "./pages/SignupPage";
@@ -54,6 +55,10 @@ export default function App() {
         <Route
           path="/welcome/aanvraag/:serviceId/pakket"
           element={<TrajectBundleAssembleFlow />}
+        />
+        <Route
+          path="/welcome/aanvraag/:serviceId/controleren"
+          element={<TrajectRequestReviewFlow />}
         />
         <Route path="/welcome/aanvraag/:serviceId" element={<TriagePage />} />
         <Route
