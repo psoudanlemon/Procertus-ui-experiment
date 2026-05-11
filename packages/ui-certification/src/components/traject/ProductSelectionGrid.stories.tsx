@@ -5,6 +5,7 @@ import { defaultProcertusCategorizationDoc } from "../../categorization-data";
 import {
   ProductSelectionBasketActionBar,
   ProductSelectionBasketBody,
+  ProductSelectionBasketMobileSummaryBar,
   ProductSelectionBasketProvider,
 } from "./ProductSelectionBasket";
 import { TrajectLayout } from "./TrajectLayout";
@@ -82,7 +83,11 @@ export const ProductSelection: StoryObj<typeof meta> = {
       onCancel={noop}
       onContinue={noop}
     >
-      <TrajectLayout {...args} actionBar={<ProductSelectionBasketActionBar />}>
+      <TrajectLayout
+        {...args}
+        aboveActionBar={<ProductSelectionBasketMobileSummaryBar />}
+        actionBar={<ProductSelectionBasketActionBar />}
+      >
         <ProductSelectionBasketBody />
       </TrajectLayout>
     </ProductSelectionBasketProvider>

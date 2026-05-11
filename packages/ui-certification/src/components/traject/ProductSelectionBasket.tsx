@@ -1,4 +1,5 @@
 import {
+  ArrowUp01Icon,
   BrickWallIcon,
   Cancel01Icon,
   FactoryIcon,
@@ -10,6 +11,7 @@ import {
 import type { IconSvgElement } from "@hugeicons/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
+  Badge,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -19,7 +21,15 @@ import {
   Button,
   Card,
   CardContent,
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
   Input,
+  cn,
 } from "@procertus-ui/ui";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -27,13 +37,14 @@ import {
   type ReactNode,
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
 
 import type { ProcertusCategorizationDoc, TreeNode } from "../../types";
 import { CategoryPicker } from "./CategoryPicker";
-import { ProductBasket } from "./ProductBasket";
+import { ProductBasket, SelectedRow } from "./ProductBasket";
 import { ProductRow } from "./ProductRow";
 
 const CLUSTER_ICONS: Record<string, IconSvgElement> = {
@@ -176,6 +187,12 @@ type ContextValue = {
   searchHits: readonly SearchHit[];
   selectedProducts: readonly SelectedProduct[];
   selectedIds: readonly string[];
+  /**
+   * Monotone teller die enkel wordt verhoogd wanneer er daadwerkelijk een
+   * nieuw product wordt toegevoegd (geen no-op). Wordt gebruikt als `key`
+   * voor de pulse-animatie op de mobiele samenvattings-bar.
+   */
+  addPulseKey: number;
   goRoot: () => void;
   goTo: (id: string) => void;
   goUpTo: (depth: number) => void;
@@ -211,8 +228,7 @@ export type ProductSelectionBasketProviderProps = {
  * Multi-product picker with global search, hierarchical drilldown and a
  * sticky basket sidebar. Provider holds state so {@link TrajectLayout}'s
  * `actionBar` slot and the body can both read selection without prop
- * drilling. Mirrors the {@link ProductSelectionExperimentProvider} contract
- * so consumers can pick whichever picker suits their flow.
+ * drilling.
  */
 export function ProductSelectionBasketProvider({
   doc,
@@ -227,6 +243,7 @@ export function ProductSelectionBasketProvider({
     ...(initialSelectedIds ?? []),
   ]);
   const [searchValue, setSearchValue] = useState("");
+  const [addPulseKey, setAddPulseKey] = useState(0);
   const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
 
   const { trail, nodes } = useMemo(
@@ -268,8 +285,11 @@ export function ProductSelectionBasketProvider({
   const goTo = (id: string) => setPath((prev) => [...prev, id]);
   const goUpTo = (depth: number) => setPath((prev) => prev.slice(0, depth));
 
-  const addProduct = (id: string) =>
-    updateSelection(selectedIds.includes(id) ? selectedIds : [...selectedIds, id]);
+  const addProduct = (id: string) => {
+    if (selectedIds.includes(id)) return;
+    setAddPulseKey((k) => k + 1);
+    updateSelection([...selectedIds, id]);
+  };
   const removeProduct = (id: string) =>
     updateSelection(selectedIds.filter((x) => x !== id));
   const clearSelection = () => updateSelection([]);
@@ -289,6 +309,7 @@ export function ProductSelectionBasketProvider({
       searchHits: visibleSearchResults,
       selectedProducts,
       selectedIds,
+      addPulseKey,
       goRoot,
       goTo,
       goUpTo,
@@ -311,6 +332,7 @@ export function ProductSelectionBasketProvider({
       visibleSearchResults,
       selectedProducts,
       selectedIds,
+      addPulseKey,
     ],
   );
 
@@ -321,17 +343,138 @@ export function ProductSelectionBasketProvider({
   );
 }
 
-/** Body grid: discovery area on the left, basket sidebar on the right. */
+/**
+ * Body grid: discovery area on the left, basket sidebar on the right. Op mobile
+ * (`<md`) verdwijnt de zijdelingse winkelmand uit de standaard flow; daar wordt
+ * de selectie samengevat in een fixed bar boven de actie-footer (zie
+ * {@link ProductSelectionBasketMobileSummaryBar}) en opent een bottom sheet voor
+ * details. De extra `pb-region` op mobile reserveert scroll-ruimte zodat het
+ * laatste product niet onder de zwevende bar verdwijnt; alleen actief zodra
+ * de selectie 1+ items bevat.
+ */
 export function ProductSelectionBasketBody() {
   const basket = useBasket();
+  const hasSelection = basket.selectedProducts.length > 0;
   return (
-    <div className="grid grid-cols-1 gap-region lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)]">
+    <div
+      className={cn(
+        "grid grid-cols-1 gap-region lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)]",
+        hasSelection && "pb-region md:pb-0",
+      )}
+    >
       <DiscoveryArea {...basket} />
       <ProductBasket
         items={basket.selectedProducts}
         onRemove={basket.removeProduct}
         onClear={basket.clearSelection}
+        className="hidden md:flex"
       />
+    </div>
+  );
+}
+
+/**
+ * Mobiele samenvattings-bar. Gerendeerd in `TrajectLayout.aboveActionBar`, dus
+ * direct boven de Annuleren/Verder-knoppen, en gegate met `md:hidden` zodat de
+ * desktop-weergave ongewijzigd blijft. Toont enkel content zodra er minimaal
+ * één product geselecteerd is; daarvoor blijft het slot leeg om verticale
+ * ruimte te besparen. De teller krijgt een spring-pop wanneer er een product
+ * wordt toegevoegd ({@link ContextValue.addPulseKey}); de hele rij is een
+ * tap-target dat de bottom sheet opent.
+ */
+export function ProductSelectionBasketMobileSummaryBar() {
+  const {
+    selectedProducts,
+    addPulseKey,
+    removeProduct,
+    clearSelection,
+  } = useBasket();
+  const [open, setOpen] = useState(false);
+  const count = selectedProducts.length;
+
+  useEffect(() => {
+    if (count === 0 && open) setOpen(false);
+  }, [count, open]);
+
+  if (count === 0) return null;
+
+  const countLabel = `${count} ${count === 1 ? "product" : "producten"} geselecteerd`;
+
+  return (
+    <div className="border-b border-border/60 px-boundary py-component md:hidden">
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        aria-label={`${countLabel}. Bekijk lijst.`}
+        className={cn(
+          "flex w-full items-center justify-between gap-component rounded-md bg-card px-component py-micro text-left",
+          "transition-colors hover:bg-accent hover:text-accent-foreground",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        )}
+      >
+        <span className="flex items-center gap-component text-sm font-medium">
+          <motion.span
+            key={addPulseKey}
+            initial={{ scale: 1.35 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 420, damping: 14 }}
+            className="inline-block"
+          >
+            <Badge variant="secondary" className="border-border">
+              {count}
+            </Badge>
+          </motion.span>
+          <span>{count === 1 ? "product geselecteerd" : "producten geselecteerd"}</span>
+        </span>
+        <span className="flex items-center gap-micro text-xs font-medium text-muted-foreground">
+          Bekijk lijst
+          <HugeiconsIcon icon={ArrowUp01Icon} className="size-4" aria-hidden />
+        </span>
+      </button>
+
+      <Drawer open={open} onOpenChange={setOpen}>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Gekozen producten ({count})</DrawerTitle>
+            <DrawerDescription>
+              Verwijder een product met de ✕-knop of wis je volledige selectie.
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="flex min-h-0 flex-1 flex-col gap-component overflow-y-auto px-section">
+            <ul className="flex flex-col divide-y divide-border rounded-lg border border-border bg-card">
+              <AnimatePresence initial={false} mode="popLayout">
+                {selectedProducts.map((p) => (
+                  <SelectedRow
+                    key={p.id}
+                    id={p.id}
+                    label={p.label}
+                    categoryTrail={p.categoryTrail}
+                    onRemove={() => removeProduct(p.id)}
+                  />
+                ))}
+              </AnimatePresence>
+            </ul>
+          </div>
+          <DrawerFooter>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={clearSelection}
+              className="text-muted-foreground"
+            >
+              Wis selectie
+            </Button>
+            <DrawerClose asChild>
+              <Button type="button" variant="ghost" size="sm">
+                Sluiten
+              </Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }

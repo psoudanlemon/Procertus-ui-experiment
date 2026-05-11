@@ -176,7 +176,7 @@ function PublicRegistryHeader({
     <header
       data-slot="public-registry-header"
       className={cn(
-        "sticky top-0 z-20 w-full border-b",
+        "w-full border-b",
         variant === "transparent"
           ? "border-border bg-background text-foreground"
           : "border-sidebar-border bg-sidebar text-sidebar-foreground",

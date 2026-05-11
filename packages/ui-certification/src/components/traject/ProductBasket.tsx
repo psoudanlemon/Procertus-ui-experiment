@@ -126,8 +126,11 @@ function EmptyBasket() {
  * categoriepad als prefix omdat de browse-context in de winkelmand verloren
  * is. Hele rij is klikbaar om te verwijderen, cancel-icoon staat op de plek
  * waar de catalogusrij een plus-icoon had.
+ *
+ * Geëxporteerd zodat de mobiele bottom-sheet in `ProductSelectionBasket`
+ * dezelfde rij-presentatie kan hergebruiken.
  */
-function SelectedRow({
+export function SelectedRow({
   id,
   label,
   categoryTrail,

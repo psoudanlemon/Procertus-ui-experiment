@@ -31,12 +31,6 @@ import {
   storyOnboardingDrafts,
 } from "../../onboarding/onboarding-story-fixtures";
 import { ProcertusCategorizationProvider } from "../../ProcertusCategorizationContext";
-import { defaultProcertusCategorizationDoc } from "../../categorization-data";
-import {
-  ProductSelectionExperimentActionBar,
-  ProductSelectionExperimentBody,
-  ProductSelectionExperimentProvider,
-} from "./ProductSelectionExperiment";
 import { TrajectLayout } from "./TrajectLayout";
 
 const STORY_FOOTER = {
@@ -86,39 +80,6 @@ const meta = {
 export default meta;
 
 const noop = () => {};
-
-/**
- * Back-up product selection: drilldown door de Procertus-beslissingsboom op volledige breedte
- * (`ProductTreePanel`) met multi-select, een altijd zichtbare selectie-rij erboven en
- * een sticky actiebalk onderaan de TrajectLayout-kaart. Bewaard als alternatief; de
- * primaire "Product selecteren" gebruikt de winkelmandje-variant.
- */
-export const BackupProductSelection: StoryObj<typeof meta> = {
-  name: "Back-up product selection",
-  args: {
-    onSignInClick: noop,
-    footer: STORY_FOOTER,
-    bodyGap: "section",
-    kicker: "BENOR-certificatie",
-    title: "Selecteer de producten die je wil certificeren",
-    description:
-      "Drill down in de Procertus-beslissingsboom of zoek op productnaam, en duid alle producten aan die je in dit traject wilt opnemen.",
-    children: null,
-  },
-  render: (args) => (
-    <ProductSelectionExperimentProvider
-      doc={defaultProcertusCategorizationDoc}
-      traject="benor"
-      onCancel={noop}
-      onBack={noop}
-      onContinue={noop}
-    >
-      <TrajectLayout {...args} actionBar={<ProductSelectionExperimentActionBar />}>
-        <ProductSelectionExperimentBody />
-      </TrajectLayout>
-    </ProductSelectionExperimentProvider>
-  ),
-};
 
 /**
  * Aanvraag controleren: wizard geseed met conceptaanvragen, geopend op de review-stap
