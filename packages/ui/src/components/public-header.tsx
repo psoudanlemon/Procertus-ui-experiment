@@ -228,7 +228,6 @@ export function PublicRegistryHeader({
 }: PublicRegistryHeaderProps) {
   const searchRef = React.useRef<HTMLInputElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-  const [scrolled, setScrolled] = React.useState(false);
 
   React.useEffect(() => {
     if (!showSearch) return;
@@ -242,13 +241,6 @@ export function PublicRegistryHeader({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [showSearch]);
 
-  React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 0);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   const activeLanguageObj = languages.find((l) => l.code === activeLanguage);
   const initials = user ? getInitials(user) : "";
   const hasMobileMenuContent = navLinks.length > 0 || languages.length > 1;
@@ -257,7 +249,7 @@ export function PublicRegistryHeader({
     <header
       data-slot="public-registry-header"
       className={cn(
-        "sticky top-0 z-20 w-full border-b",
+        "w-full border-b",
         variant === "transparent"
           ? "border-border bg-background text-foreground"
           : "border-sidebar-border bg-sidebar text-sidebar-foreground",
@@ -448,16 +440,6 @@ export function PublicRegistryHeader({
           )}
         </div>
       </div>
-
-      <div
-        aria-hidden="true"
-        data-slot="public-registry-header-scroll-fade"
-        className={cn(
-          "pointer-events-none mx-section -mb-8 h-8 bg-linear-to-b to-transparent transition-opacity duration-200",
-          variant === "transparent" ? "from-background" : "from-sidebar",
-        )}
-        style={{ opacity: scrolled ? 1 : 0 }}
-      />
 
       <style>{`
         [data-slot="public-registry-header"] [data-slot="sheet-overlay"] {

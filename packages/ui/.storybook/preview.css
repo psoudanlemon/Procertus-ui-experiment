@@ -57,6 +57,31 @@ body:has(#storybook-docs:not(:empty)) {
 }
 
 /**
+ * Mirrors `PublicAppShell` in the production app: full-page guest stories that
+ * rely on document scrolling (e.g. `PublicRegistryAppShell` with tall content
+ * and a sticky footer) set `data-public-layout` on `<html>` via a story
+ * decorator to release the `globals.css` height/overflow lock.
+ */
+@layer base {
+  html[data-public-layout],
+  html[data-public-layout] body,
+  html[data-public-layout] #storybook-root {
+    height: auto;
+    min-height: 100%;
+  }
+
+  html[data-public-layout] {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  html[data-public-layout] body,
+  html[data-public-layout] #storybook-root {
+    overflow: visible;
+  }
+}
+
+/**
  * ─── Docs page theming ──────────────────────────────────────────────────────
  *
  * Storybook's addon-docs injects hardcoded white backgrounds and dark text

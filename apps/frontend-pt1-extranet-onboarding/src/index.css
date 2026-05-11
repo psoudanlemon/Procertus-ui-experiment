@@ -5,9 +5,12 @@
 
 /**
  * Guest routes (`PublicAppShell`): restore viewport scrolling.
- * Shared `@procertus-ui/ui/globals.css` uses height:100% + overflow:hidden on html/body/#root so the
- * management shell owns scroll internally — full-page guest flows (welcome, anonymous onboarding)
- * need the document to scroll instead.
+ *
+ * Shared `@procertus-ui/ui/globals.css` locks html/body/#root and the `.app-wrapper` /
+ * `.app-height-chain` utilities to `height:100%; overflow:hidden` so the signed-in management
+ * shell owns scroll internally. Full-page guest flows (welcome, anonymous onboarding) need the
+ * document to scroll instead so the sticky chrome inside `PublicRegistryAppShell` (header that
+ * scrolls away, pinned footer + action bar) actually works.
  */
 @layer base {
   html[data-public-layout],
@@ -26,13 +29,17 @@
   html[data-public-layout] #root {
     overflow: visible;
   }
+}
 
-  /* Guest routes: don’t clip tall pages — signed-in shell uses overflow:hidden on `app-wrapper`. */
-  html[data-public-layout] .app-wrapper,
-  html[data-public-layout] .app-height-chain {
-    height: auto;
-    min-height: 100%;
-    flex: none;
-    overflow: visible;
-  }
+/*
+ * Unlayered so it wins over the `@utility app-wrapper` declaration in `globals.css`. Tailwind v4
+ * emits `@utility` rules into the `utilities` cascade layer; per CSS-layer precedence, an unlayered
+ * rule beats any layered rule regardless of specificity, which gives us a reliable override here.
+ */
+html[data-public-layout] .app-wrapper,
+html[data-public-layout] .app-height-chain {
+  height: auto;
+  min-height: 100%;
+  flex: none;
+  overflow: visible;
 }

@@ -1,4 +1,5 @@
 import {
+  ArrowLeft01Icon,
   ArrowRight02Icon,
   Call02Icon,
   CheckmarkCircle02Icon,
@@ -8,6 +9,7 @@ import {
 import type { IconSvgElement } from "@hugeicons/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
+  Badge,
   Button,
   Calendar,
   Card,
@@ -20,7 +22,9 @@ import {
   H3,
   Input,
   Separator,
+  cn,
 } from "@procertus-ui/ui";
+import { Check, Plus } from "lucide-react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { type ComponentType, useLayoutEffect, useMemo, useState } from "react";
 
@@ -31,12 +35,6 @@ import {
   storyOnboardingDrafts,
 } from "../../onboarding/onboarding-story-fixtures";
 import { ProcertusCategorizationProvider } from "../../ProcertusCategorizationContext";
-import { defaultProcertusCategorizationDoc } from "../../categorization-data";
-import {
-  ProductSelectionExperimentActionBar,
-  ProductSelectionExperimentBody,
-  ProductSelectionExperimentProvider,
-} from "./ProductSelectionExperiment";
 import { TrajectLayout } from "./TrajectLayout";
 
 const STORY_FOOTER = {
@@ -88,37 +86,237 @@ export default meta;
 const noop = () => {};
 
 /**
- * Back-up product selection: drilldown door de Procertus-beslissingsboom op volledige breedte
- * (`ProductTreePanel`) met multi-select, een altijd zichtbare selectie-rij erboven en
- * een sticky actiebalk onderaan de TrajectLayout-kaart. Bewaard als alternatief; de
- * primaire "Product selecteren" gebruikt de winkelmandje-variant.
+ * Voeg trajecten toe: na productselectie kan de gebruiker per geselecteerd product extra
+ * certificaties (CE, ATG) bovenop de primaire certificatie (gekozen in de wegwijzer)
+ * aanvinken om alles in één gebundelde aanvraag in te dienen. De regelset onderaan
+ * reageert direct op de toegevoegde labels en groepeert algemene reglementen vs.
+ * productspecifieke PTV's. De pakket-status in de actiebalk telt actuele producten en
+ * certificaties.
  */
-export const BackupProductSelection: StoryObj<typeof meta> = {
-  name: "Back-up product selection",
+export const RequestBundleAssemble: StoryObj<typeof meta> = {
+  name: "Voeg trajecten toe",
   args: {
     onSignInClick: noop,
     footer: STORY_FOOTER,
     bodyGap: "section",
-    kicker: "BENOR-certificatie",
-    title: "Selecteer de producten die je wil certificeren",
+    title: "Stel je aanvraagpakket samen",
     description:
-      "Drill down in de Procertus-beslissingsboom of zoek op productnaam, en duid alle producten aan die je in dit traject wilt opnemen.",
+      "Controleer je geselecteerde producten. Hieronder kun je per product extra certificaties (zoals CE of ATG) toevoegen om deze in één gebundelde aanvraag in te dienen.",
     children: null,
   },
-  render: (args) => (
-    <ProductSelectionExperimentProvider
-      doc={defaultProcertusCategorizationDoc}
-      traject="benor"
-      onCancel={noop}
-      onBack={noop}
-      onContinue={noop}
-    >
-      <TrajectLayout {...args} actionBar={<ProductSelectionExperimentActionBar />}>
-        <ProductSelectionExperimentBody />
-      </TrajectLayout>
-    </ProductSelectionExperimentProvider>
-  ),
+  render: (args) => <RequestBundleAssembleStoryBody args={args} />,
 };
+
+const BUNDLE_CERT_ORDER = ["benor", "ce", "atg"] as const;
+type BundleCertKey = (typeof BUNDLE_CERT_ORDER)[number];
+
+const BUNDLE_CERT_LABEL: Record<BundleCertKey, string> = {
+  benor: "BENOR",
+  ce: "CE",
+  atg: "ATG",
+};
+
+type BundleProduct = {
+  id: string;
+  label: string;
+  categoryTrail: string;
+  primaryCert: BundleCertKey;
+  availableCerts: readonly BundleCertKey[];
+};
+
+const BUNDLE_PRODUCTS: readonly BundleProduct[] = [
+  {
+    id: "stortklaar-beton",
+    label: "Stortklaar beton",
+    categoryTrail: "Beton en mortel",
+    primaryCert: "benor",
+    availableCerts: ["benor", "ce", "atg"],
+  },
+  {
+    id: "granulaten-voor-beton",
+    label: "Granulaten voor beton",
+    categoryTrail: "Bestanddelen voor beton > Granulaten",
+    primaryCert: "ce",
+    availableCerts: ["benor", "ce"],
+  },
+  {
+    id: "betonstaal",
+    label: "Betonstaal",
+    categoryTrail: "Staal > Wapeningsstaal",
+    primaryCert: "benor",
+    availableCerts: ["benor", "ce", "atg"],
+  },
+];
+
+function RequestBundleAssembleStoryBody({
+  args,
+}: {
+  args: React.ComponentProps<typeof TrajectLayout>;
+}) {
+  const [selections, setSelections] = useState<Record<string, ReadonlySet<BundleCertKey>>>(
+    () =>
+      Object.fromEntries(
+        BUNDLE_PRODUCTS.map((p) => [p.id, new Set<BundleCertKey>([p.primaryCert])] as const),
+      ),
+  );
+
+  const toggleCert = (productId: string, cert: BundleCertKey) => {
+    setSelections((prev) => {
+      const product = BUNDLE_PRODUCTS.find((p) => p.id === productId);
+      if (!product || cert === product.primaryCert) return prev;
+      const current = new Set(prev[productId] ?? []);
+      if (current.has(cert)) current.delete(cert);
+      else current.add(cert);
+      return { ...prev, [productId]: current };
+    });
+  };
+
+  const totalCertCount = useMemo(
+    () => Object.values(selections).reduce((sum, set) => sum + set.size, 0),
+    [selections],
+  );
+
+  const productCount = BUNDLE_PRODUCTS.length;
+  const certWord = totalCertCount === 1 ? "certificatie" : "certificaties";
+  const productWord = productCount === 1 ? "product" : "producten";
+
+  return (
+    <TrajectLayout
+      {...args}
+      actionBar={
+        <>
+          <Button type="button" variant="ghost" onClick={noop}>
+            <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
+            Terug
+          </Button>
+          <div className="flex flex-wrap items-center justify-end gap-component">
+            <Badge
+              variant="outline"
+              aria-label={`Pakket-status: ${productCount} ${productWord}, ${totalCertCount} ${certWord}`}
+              className="hidden whitespace-nowrap sm:inline-flex"
+            >
+              {productCount} {productWord} · {totalCertCount} {certWord}
+            </Badge>
+            <Button type="button" variant="ghost" onClick={noop}>
+              Annuleren
+            </Button>
+            <Button type="button" onClick={noop}>
+              Verder
+            </Button>
+          </div>
+        </>
+      }
+    >
+      <section
+        aria-label="Geselecteerde producten"
+        className="flex flex-col gap-component"
+      >
+        {BUNDLE_PRODUCTS.map((product) => {
+          const selected = selections[product.id] ?? new Set<BundleCertKey>();
+          return (
+            <BundleProductCard
+              key={product.id}
+              product={product}
+              selected={selected}
+              onToggle={(cert) => toggleCert(product.id, cert)}
+            />
+          );
+        })}
+      </section>
+    </TrajectLayout>
+  );
+}
+
+function BundleProductCard({
+  product,
+  selected,
+  onToggle,
+}: {
+  product: BundleProduct;
+  selected: ReadonlySet<BundleCertKey>;
+  onToggle: (cert: BundleCertKey) => void;
+}) {
+  return (
+    <Card className="gap-region py-region">
+      <CardHeader className="gap-micro px-region">
+        <span className="text-xs leading-tight text-muted-foreground">
+          {product.categoryTrail}
+        </span>
+        <CardTitle className="text-base font-semibold">{product.label}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-component px-region">
+        <span className="text-sm text-muted-foreground">Extra certificaties toevoegen</span>
+        <div
+          role="group"
+          aria-label={`Certificaties voor ${product.label}`}
+          className="flex flex-wrap gap-component"
+        >
+          {product.availableCerts.map((cert) => {
+            const isPrimary = cert === product.primaryCert;
+            const isChecked = selected.has(cert);
+            return (
+              <BundleCertToggle
+                key={cert}
+                cert={cert}
+                isPrimary={isPrimary}
+                isChecked={isChecked}
+                onToggle={() => onToggle(cert)}
+              />
+            );
+          })}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function BundleCertToggle({
+  cert,
+  isPrimary,
+  isChecked,
+  onToggle,
+}: {
+  cert: BundleCertKey;
+  isPrimary: boolean;
+  isChecked: boolean;
+  onToggle: () => void;
+}) {
+  const label = BUNDLE_CERT_LABEL[cert];
+  const filled = isPrimary || isChecked;
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={isChecked}
+      aria-disabled={isPrimary || undefined}
+      onClick={isPrimary ? undefined : onToggle}
+      className={cn(
+        "group/cert inline-flex items-center gap-micro rounded-full border text-sm font-medium leading-none transition-all duration-150",
+        "px-component py-component",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card",
+        isPrimary && "cursor-default border-primary bg-primary text-primary-foreground shadow-proc-xs",
+        !isPrimary &&
+          isChecked &&
+          "border-primary bg-primary text-primary-foreground shadow-proc-xs hover:brightness-110 hover:shadow-proc-md active:brightness-95 active:shadow-proc-xs",
+        !isPrimary &&
+          !isChecked &&
+          "border-primary/40 bg-card text-primary hover:border-primary hover:bg-primary/5 hover:shadow-proc-md active:bg-primary/10 active:shadow-proc-xs",
+      )}
+    >
+      {filled ? (
+        <Check aria-hidden className="size-3.5 shrink-0" strokeWidth={2.5} />
+      ) : (
+        <Plus aria-hidden className="size-3.5 shrink-0" strokeWidth={2.5} />
+      )}
+      <span className="inline-flex items-baseline gap-1 whitespace-nowrap">
+        {isChecked ? label : `Voeg ${label} toe`}
+        {isPrimary ? (
+          <span className="text-[0.7rem] font-normal opacity-80">(Primair)</span>
+        ) : null}
+      </span>
+    </button>
+  );
+}
 
 /**
  * Aanvraag controleren: wizard geseed met conceptaanvragen, geopend op de review-stap

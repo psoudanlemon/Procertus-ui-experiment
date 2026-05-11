@@ -126,8 +126,11 @@ function EmptyBasket() {
  * categoriepad als prefix omdat de browse-context in de winkelmand verloren
  * is. Hele rij is klikbaar om te verwijderen, cancel-icoon staat op de plek
  * waar de catalogusrij een plus-icoon had.
+ *
+ * Geëxporteerd zodat de mobiele bottom-sheet in `ProductSelectionBasket`
+ * dezelfde rij-presentatie kan hergebruiken.
  */
-function SelectedRow({
+export function SelectedRow({
   id,
   label,
   categoryTrail,
@@ -163,20 +166,12 @@ function SelectedRow({
         >
           <ItemContent className="min-w-0">
             <ItemTitle className="line-clamp-none w-full whitespace-normal break-words text-sm font-medium leading-snug">
-              {categoryTrail ? (
-                <>
-                  <span className="font-normal text-muted-foreground">
-                    {categoryTrail}
-                  </span>
-                  <span
-                    aria-hidden
-                    className="mx-1 font-normal text-muted-foreground"
-                  >
-                    &gt;
-                  </span>
-                </>
-              ) : null}
               {label}
+              {categoryTrail ? (
+                <span className="ms-2 text-xs font-normal text-muted-foreground">
+                  {`> ${categoryTrail.split(" > ").reverse().join(" > ")}`}
+                </span>
+              ) : null}
             </ItemTitle>
           </ItemContent>
           <ItemActions>

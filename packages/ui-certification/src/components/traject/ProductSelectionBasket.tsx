@@ -1,4 +1,5 @@
 import {
+  ArrowUp01Icon,
   BrickWallIcon,
   Cancel01Icon,
   FactoryIcon,
@@ -10,6 +11,7 @@ import {
 import type { IconSvgElement } from "@hugeicons/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
+  Badge,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -20,6 +22,7 @@ import {
   Card,
   CardContent,
   Input,
+  cn,
 } from "@procertus-ui/ui";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -27,13 +30,14 @@ import {
   type ReactNode,
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
 
 import type { ProcertusCategorizationDoc, TreeNode } from "../../types";
 import { CategoryPicker } from "./CategoryPicker";
-import { ProductBasket } from "./ProductBasket";
+import { ProductBasket, SelectedRow } from "./ProductBasket";
 import { ProductRow } from "./ProductRow";
 
 const CLUSTER_ICONS: Record<string, IconSvgElement> = {
@@ -114,17 +118,38 @@ function collectSelectedProducts(
 const byLabel = (a: { label: string }, b: { label: string }) =>
   a.label.localeCompare(b.label, "nl", { sensitivity: "base" });
 
-function collectAllProducts(roots: readonly TreeNode[]): TreeNode[] {
-  const out: TreeNode[] = [];
-  const walk = (input: readonly TreeNode[]) => {
+type VisibleProduct = {
+  id: string;
+  label: string;
+  /**
+   * Categoriepad relatief aan het huidige browse-niveau. Leeg voor producten
+   * die directe kinderen van de actieve categorie zijn; gevuld voor producten
+   * die in subcategorieën leven ("Granulaten" of "Granulaten > Zand"). Wordt
+   * als prefix boven de productnaam getoond zodat de browse-context behouden
+   * blijft, identiek aan de stijl van `SearchHit`.
+   */
+  categoryTrail: string;
+};
+
+function collectDescendantProducts(
+  nodes: readonly TreeNode[],
+): VisibleProduct[] {
+  const out: VisibleProduct[] = [];
+  const walk = (input: readonly TreeNode[], trail: readonly string[]) => {
     for (const n of input) {
       if (n.kind === "product") {
-        out.push(n);
+        out.push({
+          id: n.id,
+          label: n.label,
+          categoryTrail: trail.join(" > "),
+        });
       }
-      if (n.children?.length) walk(n.children);
+      if (n.children?.length) {
+        walk(n.children, [...trail, n.label]);
+      }
     }
   };
-  walk(roots);
+  walk(nodes, []);
   return out.sort(byLabel);
 }
 
@@ -170,12 +195,18 @@ type ContextValue = {
   searchValue: string;
   setSearchValue: (next: string) => void;
   categories: readonly TreeNode[];
-  visibleProducts: readonly TreeNode[];
+  visibleProducts: readonly VisibleProduct[];
   searchQuery: string;
   searchResultsTotal: number;
   searchHits: readonly SearchHit[];
   selectedProducts: readonly SelectedProduct[];
   selectedIds: readonly string[];
+  /**
+   * Monotone teller die enkel wordt verhoogd wanneer er daadwerkelijk een
+   * nieuw product wordt toegevoegd (geen no-op). Wordt gebruikt als `key`
+   * voor de pulse-animatie op de mobiele samenvattings-bar.
+   */
+  addPulseKey: number;
   goRoot: () => void;
   goTo: (id: string) => void;
   goUpTo: (depth: number) => void;
@@ -211,8 +242,7 @@ export type ProductSelectionBasketProviderProps = {
  * Multi-product picker with global search, hierarchical drilldown and a
  * sticky basket sidebar. Provider holds state so {@link TrajectLayout}'s
  * `actionBar` slot and the body can both read selection without prop
- * drilling. Mirrors the {@link ProductSelectionExperimentProvider} contract
- * so consumers can pick whichever picker suits their flow.
+ * drilling.
  */
 export function ProductSelectionBasketProvider({
   doc,
@@ -227,6 +257,7 @@ export function ProductSelectionBasketProvider({
     ...(initialSelectedIds ?? []),
   ]);
   const [searchValue, setSearchValue] = useState("");
+  const [addPulseKey, setAddPulseKey] = useState(0);
   const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
 
   const { trail, nodes } = useMemo(
@@ -238,12 +269,11 @@ export function ProductSelectionBasketProvider({
   const isSearching = searchValue.trim().length > 0;
 
   const categories = useMemo(() => nodes.filter((n) => n.kind === "group"), [nodes]);
-  const visibleProducts = useMemo(() => {
-    const pool = isRoot
-      ? collectAllProducts(doc.clusters)
-      : [...nodes.filter((n) => n.kind === "product")].sort(byLabel);
-    return pool.filter((n) => !selectedSet.has(n.id));
-  }, [isRoot, doc, nodes, selectedSet]);
+  const visibleProducts = useMemo<readonly VisibleProduct[]>(
+    () =>
+      collectDescendantProducts(nodes).filter((p) => !selectedSet.has(p.id)),
+    [nodes, selectedSet],
+  );
 
   const searchResults = useMemo(
     () => searchProducts(searchValue, doc.clusters),
@@ -268,8 +298,11 @@ export function ProductSelectionBasketProvider({
   const goTo = (id: string) => setPath((prev) => [...prev, id]);
   const goUpTo = (depth: number) => setPath((prev) => prev.slice(0, depth));
 
-  const addProduct = (id: string) =>
-    updateSelection(selectedIds.includes(id) ? selectedIds : [...selectedIds, id]);
+  const addProduct = (id: string) => {
+    if (selectedIds.includes(id)) return;
+    setAddPulseKey((k) => k + 1);
+    updateSelection([...selectedIds, id]);
+  };
   const removeProduct = (id: string) =>
     updateSelection(selectedIds.filter((x) => x !== id));
   const clearSelection = () => updateSelection([]);
@@ -289,6 +322,7 @@ export function ProductSelectionBasketProvider({
       searchHits: visibleSearchResults,
       selectedProducts,
       selectedIds,
+      addPulseKey,
       goRoot,
       goTo,
       goUpTo,
@@ -311,6 +345,7 @@ export function ProductSelectionBasketProvider({
       visibleSearchResults,
       selectedProducts,
       selectedIds,
+      addPulseKey,
     ],
   );
 
@@ -321,7 +356,15 @@ export function ProductSelectionBasketProvider({
   );
 }
 
-/** Body grid: discovery area on the left, basket sidebar on the right. */
+/**
+ * Body grid: discovery area on the left, basket sidebar on the right. Op mobile
+ * (`<md`) verdwijnt de zijdelingse winkelmand uit de standaard flow; daar wordt
+ * de selectie samengevat in een bar boven de actie-footer (zie
+ * {@link ProductSelectionBasketMobileSummaryBar}) en opent een bottom sheet
+ * voor details. `TrajectLayout` host de catalogus in een eigen scroll-container,
+ * dus extra padding-bottom voor scroll-ruimte is hier niet nodig: de actiebalk
+ * ligt naast de scrollende lijst, niet erbovenop.
+ */
 export function ProductSelectionBasketBody() {
   const basket = useBasket();
   return (
@@ -331,12 +374,162 @@ export function ProductSelectionBasketBody() {
         items={basket.selectedProducts}
         onRemove={basket.removeProduct}
         onClear={basket.clearSelection}
+        className="hidden md:flex"
       />
     </div>
   );
 }
 
-/** Sticky action bar buttons; render inside `TrajectLayout.actionBar`. */
+/**
+ * Mobiele samenvattings-bar. Bedoeld voor `TrajectLayout.aboveActionBar` of
+ * losse stories. Zonder selectie blijft de bar zichtbaar als rustige empty
+ * state; met selectie wordt de rij een tap-target die een in-place tray
+ * omhoog uitschuift boven de bar (geen overlay): de lijst leeft in dezelfde
+ * chrome, dus de buttons-rij en het zwevende karakter blijven behouden. Een
+ * grip-handle bovenaan de tray markeert de uitschuif-affordance; de chevron
+ * op de bar roteert van omhoog (gesloten) naar omlaag (open) om de volgende
+ * actie te communiceren. De teller krijgt een spring-pop wanneer er een
+ * product wordt toegevoegd ({@link ContextValue.addPulseKey}).
+ *
+ * Het component is zelf niet viewport-gegate; productie-consumers passen
+ * `className="md:hidden"` toe zodat de desktop-weergave ongewijzigd blijft,
+ * terwijl stories de bar ongegate kunnen renderen om de mobiele flow te
+ * reviewen.
+ */
+export function ProductSelectionBasketMobileSummaryBar({
+  className,
+}: { className?: string } = {}) {
+  const {
+    selectedProducts,
+    addPulseKey,
+    removeProduct,
+    clearSelection,
+  } = useBasket();
+  const [open, setOpen] = useState(false);
+  const count = selectedProducts.length;
+
+  useEffect(() => {
+    if (count === 0 && open) setOpen(false);
+  }, [count, open]);
+
+  if (count === 0) {
+    return (
+      <div className={cn("px-boundary py-component", className)}>
+        <div
+          aria-live="polite"
+          className="flex min-h-11 items-center gap-component rounded-md border border-dashed border-border/60 bg-card/50 px-component py-micro text-sm text-muted-foreground"
+        >
+          <HugeiconsIcon icon={PackageIcon} className="size-4" aria-hidden />
+          <span>Nog geen producten geselecteerd</span>
+        </div>
+      </div>
+    );
+  }
+
+  const countLabel = `${count} ${count === 1 ? "product" : "producten"} geselecteerd`;
+  const trayId = "basket-tray";
+
+  return (
+    <div className={className}>
+      <AnimatePresence initial={false}>
+        {open ? (
+          <motion.div
+            key="tray"
+            id={trayId}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="flex flex-col gap-component px-boundary pt-component">
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                aria-label="Verberg lijst"
+                className="-my-micro mx-auto flex h-6 items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <span aria-hidden className="h-1 w-10 rounded-full bg-border" />
+              </button>
+              <ul className="flex max-h-sticky-rail flex-col divide-y divide-border overflow-y-auto rounded-lg border border-border bg-card">
+                <AnimatePresence initial={false} mode="popLayout">
+                  {selectedProducts.map((p) => (
+                    <SelectedRow
+                      key={p.id}
+                      id={p.id}
+                      label={p.label}
+                      categoryTrail={p.categoryTrail}
+                      onRemove={() => removeProduct(p.id)}
+                    />
+                  ))}
+                </AnimatePresence>
+              </ul>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={clearSelection}
+                className="self-start text-muted-foreground"
+              >
+                Wis selectie
+              </Button>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+        aria-controls={trayId}
+        aria-label={`${countLabel}. ${open ? "Verberg" : "Bekijk"} lijst.`}
+        className="group/basket-bar block w-full cursor-pointer px-boundary py-component text-left focus-visible:outline-none"
+      >
+        <span
+          className={cn(
+            "flex min-h-11 w-full items-center justify-between gap-component rounded-md bg-card px-component py-micro",
+            "transition-colors group-hover/basket-bar:bg-accent group-hover/basket-bar:text-accent-foreground",
+            "group-focus-visible/basket-bar:ring-2 group-focus-visible/basket-bar:ring-ring",
+          )}
+        >
+          <span className="flex items-center gap-component text-sm font-medium">
+            <motion.span
+              key={addPulseKey}
+              initial={{ scale: 1.35 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 420, damping: 14 }}
+              className="inline-block"
+            >
+              <Badge variant="secondary" className="border-border">
+                {count}
+              </Badge>
+            </motion.span>
+            <span>{count === 1 ? "product geselecteerd" : "producten geselecteerd"}</span>
+          </span>
+          <span className="flex items-center gap-micro text-xs font-medium text-muted-foreground">
+            {open ? "Verberg lijst" : "Bekijk lijst"}
+            <motion.span
+              animate={{ rotate: open ? 180 : 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="inline-flex"
+            >
+              <HugeiconsIcon icon={ArrowUp01Icon} className="size-4" aria-hidden />
+            </motion.span>
+          </span>
+        </span>
+      </button>
+    </div>
+  );
+}
+
+/**
+ * Sticky action bar buttons; render inside `TrajectLayout.actionBar`. Op mobile
+ * draaien beide knoppen naar `size="lg"` (40px hoog) zodat ze comfortabele
+ * tap-targets vormen; vanaf `md` wordt dit teruggebracht naar de standaard
+ * 36px-hoogte via `md:h-9 md:px-4` zodat de desktop-weergave ongewijzigd
+ * blijft.
+ */
 export function ProductSelectionBasketActionBar() {
   const { selectedIds, onCancel, onContinue } = useBasket();
   return (
@@ -344,6 +537,8 @@ export function ProductSelectionBasketActionBar() {
       <Button
         type="button"
         variant="ghost"
+        size="lg"
+        className="md:h-9 md:px-4"
         onClick={onCancel}
         disabled={onCancel == null}
       >
@@ -351,6 +546,8 @@ export function ProductSelectionBasketActionBar() {
       </Button>
       <Button
         type="button"
+        size="lg"
+        className="md:h-9 md:px-4"
         disabled={selectedIds.length === 0}
         onClick={() => onContinue(selectedIds)}
       >
@@ -450,14 +647,6 @@ function DiscoveryArea({
                 transition={{ duration: 0.2, ease: "easeOut" }}
                 className="flex flex-col gap-section"
               >
-                {categories.length > 0 ? (
-                  <CategoriesGrid
-                    items={categories}
-                    isAtClusterLevel={isRoot}
-                    onSelect={goTo}
-                  />
-                ) : null}
-
                 <Breadcrumb>
                   <BreadcrumbList>
                     <BreadcrumbItem>
@@ -497,33 +686,44 @@ function DiscoveryArea({
                   </BreadcrumbList>
                 </Breadcrumb>
 
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={path.join("/") || "root-products"}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                  >
-                    {visibleProducts.length > 0 ? (
-                      <ProductsList>
-                        {visibleProducts.map((p) => (
-                          <ProductRow
-                            key={p.id}
-                            id={p.id}
-                            label={p.label}
-                            onAdd={() => addProduct(p.id)}
-                          />
-                        ))}
-                      </ProductsList>
-                    ) : null}
-                    {categories.length === 0 && visibleProducts.length === 0 ? (
-                      <p className="text-sm text-muted-foreground">
-                        Alle producten op dit niveau staan al in je selectie.
-                      </p>
-                    ) : null}
-                  </motion.div>
-                </AnimatePresence>
+                <div className="flex flex-col gap-component">
+                  {categories.length > 0 ? (
+                    <CategoriesGrid
+                      items={categories}
+                      isAtClusterLevel={isRoot}
+                      onSelect={goTo}
+                    />
+                  ) : null}
+
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.div
+                      key={path.join("/") || "root-products"}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                    >
+                      {visibleProducts.length > 0 ? (
+                        <ProductsList>
+                          {visibleProducts.map((p) => (
+                            <ProductRow
+                              key={p.id}
+                              id={p.id}
+                              label={p.label}
+                              categoryTrail={p.categoryTrail}
+                              onAdd={() => addProduct(p.id)}
+                            />
+                          ))}
+                        </ProductsList>
+                      ) : null}
+                      {categories.length === 0 && visibleProducts.length === 0 ? (
+                        <p className="text-sm text-muted-foreground">
+                          Alle producten op dit niveau staan al in je selectie.
+                        </p>
+                      ) : null}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

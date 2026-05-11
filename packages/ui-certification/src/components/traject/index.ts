@@ -9,6 +9,7 @@ export type { ProductBasketItem, ProductBasketProps } from "./ProductBasket";
 export {
   ProductSelectionBasketActionBar,
   ProductSelectionBasketBody,
+  ProductSelectionBasketMobileSummaryBar,
   ProductSelectionBasketProvider,
 } from "./ProductSelectionBasket";
 export type { ProductSelectionBasketProviderProps } from "./ProductSelectionBasket";

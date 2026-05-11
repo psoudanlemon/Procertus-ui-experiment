@@ -48,10 +48,14 @@ export type ProductRowProps = {
   id: string;
   label: ReactNode;
   /**
-   * Optionele volledige categoriepad-prefix ("Beton en mortel > Stortklaar
-   * beton"). Wordt boven het product getoond in zoekmodus zodat de
-   * browse-context behouden blijft, identiek aan de stijl van `SelectedRow`
-   * in `ProductBasket`.
+   * Optionele volledige categoriepad ("Beton en mortel > Stortklaar beton"),
+   * cluster eerst, deepest-last, " > "-joined. Wordt ná de productnaam
+   * getoond in omgekeerde volgorde (deepest-first met `>` als separator,
+   * "Stortklaar beton > Beton en mortel"), zodat de productnaam visueel
+   * leidt en het pad als context teruggeeft naar de bredere categorie. Trail-
+   * tekst zit 1 typografische stap onder de productnaam (`text-xs` t.o.v.
+   * `text-sm`) en lijnt op de baseline doordat beide spans `inline` zijn
+   * binnen één regel.
    */
   categoryTrail?: string;
   /**
@@ -108,20 +112,12 @@ export function ProductRow({
         >
           <ItemContent className="min-w-0">
             <ItemTitle className="line-clamp-2 w-full text-sm font-medium leading-snug">
-              {categoryTrail ? (
-                <>
-                  <span className="font-normal text-muted-foreground">
-                    {categoryTrail}
-                  </span>
-                  <span
-                    aria-hidden
-                    className="mx-1 font-normal text-muted-foreground"
-                  >
-                    &gt;
-                  </span>
-                </>
-              ) : null}
               {renderHighlightedLabel(label, highlight)}
+              {categoryTrail ? (
+                <span className="ms-2 text-xs font-normal text-muted-foreground">
+                  {`> ${categoryTrail.split(" > ").reverse().join(" > ")}`}
+                </span>
+              ) : null}
             </ItemTitle>
           </ItemContent>
           <ItemActions>
