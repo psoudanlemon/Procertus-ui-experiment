@@ -106,6 +106,7 @@ export const Default: StoryObj<typeof meta> = {
         description="Bekijk elk van uw geselecteerde producten en voeg waar nodig nog extra certificaten toe, zodat je meteen alle benodigdheden voor elk product kan indienen"
         actionBar={
           <TrajectStoryFooter
+            onCancel={noop}
             onBack={noop}
             onContinue={noop}
             continueLabel="Verder"

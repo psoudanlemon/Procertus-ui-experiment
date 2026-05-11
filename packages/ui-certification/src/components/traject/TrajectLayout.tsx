@@ -76,10 +76,10 @@ export function TrajectLayout({
   const gapClass = bodyGap === "section" ? "gap-section" : "gap-region";
   // Wanneer `aboveActionBar` aanwezig is (mobile-only samenvattingsbalk via `md:hidden`),
   // levert die zelf zijn `pb-component` (12px). De action-rij laat dan haar eigen top-padding
-  // vallen op mobiel zodat de visuele tussenruimte exact 12px is, en herstelt `pt-section`
+  // vallen op mobiel zodat de visuele tussenruimte exact 12px is, en herstelt `pt-region`
   // vanaf `md:` waar de bovenste balk is uitgeschakeld.
   const actionRowSpacing =
-    aboveActionBar != null ? "pt-0 pb-section md:pt-section" : "py-section";
+    aboveActionBar != null ? "pt-0 pb-region md:pt-region" : "py-region";
 
   const actionBarRef = useRef<HTMLDivElement>(null);
   const [hasContentBelow, setHasContentBelow] = useState(false);

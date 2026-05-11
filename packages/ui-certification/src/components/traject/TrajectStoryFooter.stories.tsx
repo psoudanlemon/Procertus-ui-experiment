@@ -36,7 +36,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Gedeeld footer-template voor traject-stories. Houdt de visuele baseline (twee Buttons, ghost links + primary rechts, matching responsive sizing) consistent zodat elk traject-scherm vanuit dezelfde shape vertrekt en daarna alleen labels/extra slots hoeft aan te passen.",
+          "Gedeeld footer-template voor traject-stories. Vaste vorm: ghost 'Annuleren' helemaal links (consumenten bedraden dit op de wegwijzer-route), en rechts de outline 'Terug' + primary 'Verder' als stap-navigatie. Op de eerste stap van een flow laat de consument `onCancel` weg: de ghost-knop verdwijnt en `onBack` neemt de rol 'terug naar het vorige scherm' over.",
       },
     },
   },
@@ -48,8 +48,10 @@ export default meta;
 
 export const Default: StoryObj<typeof meta> = {
   args: {
+    onCancel: noop,
     onBack: noop,
     onContinue: noop,
+    cancelLabel: "Annuleren",
     backLabel: "Terug",
     continueLabel: "Bevestig selectie",
   },
@@ -59,6 +61,34 @@ export const Default: StoryObj<typeof meta> = {
       footer={STORY_FOOTER}
       title="Voorbeeldscherm met gedeelde footer"
       description="Deze pagina toont enkel de baseline footer. De inhoud erboven is leeg zodat de visuele standaard duidelijk is."
+      actionBar={<TrajectStoryFooter {...args} />}
+    >
+      <div />
+    </TrajectLayout>
+  ),
+};
+
+export const FirstStep: StoryObj<typeof meta> = {
+  args: {
+    onBack: noop,
+    onContinue: noop,
+    backLabel: "Terug",
+    continueLabel: "Verder",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Eerste stap van een flow: `onCancel` wordt bewust weggelaten waardoor de ghost-knop verdwijnt. 'Terug' brengt de gebruiker dan naar het scherm dat aan de flow voorafging (typisch de wegwijzer).",
+      },
+    },
+  },
+  render: (args) => (
+    <TrajectLayout
+      onSignInClick={noop}
+      footer={STORY_FOOTER}
+      title="Voorbeeldscherm: eerste stap"
+      description="Op de eerste stap is er nog niets om te annuleren. De ghost-knop is afwezig en 'Terug' brengt de gebruiker terug naar het voorgaande scherm."
       actionBar={<TrajectStoryFooter {...args} />}
     >
       <div />
