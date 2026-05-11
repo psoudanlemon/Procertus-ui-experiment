@@ -43,8 +43,50 @@ export const Default: StoryObj<typeof meta> = {
   ),
 };
 
+/**
+ * Lange titels worden afgekapt op één regel. Hover over de kaart en blijf
+ * even hangen: na een korte vertraging verschijnt een tooltip met de
+ * volledige naam. Wanneer de titel volledig past, verschijnt er geen tooltip.
+ */
+export const TruncatedTitle: StoryObj<typeof meta> = {
+  args: {
+    label: "Voorgespannen prefab beton voor industriële vloersystemen en draagstructuren",
+    description: "14 producten",
+    icon: BrickWallIcon,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Demonstreert het truncatie-gedrag van `CategoryPicker`: de eerste kaart heeft een extreem lange titel die wordt afgekapt en een hover-tooltip krijgt, de tweede past op één regel en toont geen tooltip.",
+      },
+    },
+  },
+  render: () => (
+    <div className="grid max-w-md grid-cols-1 gap-component">
+      <CategoryPicker
+        label="Voorgespannen prefab beton voor industriële vloersystemen en draagstructuren"
+        description="14 producten"
+        icon={BrickWallIcon}
+        onSelect={noop}
+      />
+      <CategoryPicker
+        label="Staal"
+        description="11 producten"
+        icon={FactoryIcon}
+        onSelect={noop}
+      />
+    </div>
+  ),
+};
+
 /** Twee-kolomsraster zoals in de productie-drilldown van `ProductSelectionGrid`. */
 export const Grid: StoryObj<typeof meta> = {
+  args: {
+    label: "Beton en mortel",
+    description: "6 categorieën",
+    icon: BrickWallIcon,
+  },
   parameters: {
     docs: {
       description: {

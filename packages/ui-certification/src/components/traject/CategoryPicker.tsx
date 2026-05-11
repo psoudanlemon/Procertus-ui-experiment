@@ -8,9 +8,13 @@ import {
   ItemDescription,
   ItemMedia,
   ItemTitle,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
   cn,
 } from "@procertus-ui/ui";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 export type CategoryPickerProps = {
   label: ReactNode;
@@ -26,7 +30,9 @@ export type CategoryPickerProps = {
  * the {@link Item} primitive: icon tile in `ItemMedia`, title + description in
  * `ItemContent`, trailing chevron in `ItemActions`. The hover lift, accent
  * recolor and tile color shift are layered on top via `className` because
- * `Item`'s built-in hover styles are scoped to anchor children.
+ * `Item`'s built-in hover styles are scoped to anchor children. Long titles
+ * are clipped to a single line; a Radix tooltip reveals the full label after a
+ * short hover delay, but only when the visible text is actually truncated.
  */
 export function CategoryPicker({
   label,
@@ -35,6 +41,21 @@ export function CategoryPicker({
   onSelect,
   className,
 }: CategoryPickerProps) {
+  const titleRef = useRef<HTMLSpanElement>(null);
+  const [isTitleTruncated, setIsTitleTruncated] = useState(false);
+
+  useEffect(() => {
+    const el = titleRef.current;
+    if (!el) return;
+    const check = () => {
+      setIsTitleTruncated(el.scrollWidth - el.clientWidth > 1);
+    };
+    check();
+    const observer = new ResizeObserver(check);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [label]);
+
   return (
     <Item
       asChild
@@ -56,8 +77,26 @@ export function CategoryPicker({
             <HugeiconsIcon icon={icon} />
           </div>
         </ItemMedia>
-        <ItemContent className="gap-0">
-          <ItemTitle className="text-base font-semibold">{label}</ItemTitle>
+        <ItemContent className="min-w-0 gap-0">
+          <ItemTitle className="w-full text-base font-semibold">
+            <TooltipProvider>
+              <Tooltip delayDuration={600}>
+                <TooltipTrigger asChild>
+                  <span
+                    ref={titleRef}
+                    className="block w-full min-w-0 truncate"
+                  >
+                    {label}
+                  </span>
+                </TooltipTrigger>
+                {isTitleTruncated ? (
+                  <TooltipContent side="top" align="start">
+                    {label}
+                  </TooltipContent>
+                ) : null}
+              </Tooltip>
+            </TooltipProvider>
+          </ItemTitle>
           {description ? (
             <ItemDescription className="line-clamp-1 text-xs">
               {description}
