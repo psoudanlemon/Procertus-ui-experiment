@@ -30,9 +30,8 @@ export type TrajectLayoutProps = {
   /** Page body, rendered below the title block. */
   children: ReactNode;
   /**
-   * Optional sticky action bar pinned to the bottom of the viewport, offset above the sticky
-   * registry footer via the `--registry-bottom-chrome-height` CSS variable that
-   * {@link PublicRegistryAppShell} maintains.
+   * Optional action bar rendered inside `PublicRegistryAppShell`'s sticky bottom chrome,
+   * directly above the footer. Stays pinned to the viewport bottom while the page scrolls.
    */
   actionBar?: ReactNode;
   /**
@@ -54,8 +53,8 @@ export type TrajectLayoutProps = {
  * registry header, optional footer, capped 7xl content column with consistent boundary
  * padding, optional back link, and a `PageHeader` for the title block. Page-specific
  * content lives in `children`. Uses document scroll so the registry header scrolls
- * away naturally; the action bar (if any) sticks just above the sticky footer via
- * the `--registry-bottom-chrome-height` CSS variable set by {@link PublicRegistryAppShell}.
+ * away naturally; the action bar + footer share `PublicRegistryAppShell`'s sticky
+ * bottom chrome so both stay pinned to the viewport bottom without overlapping.
  */
 export function TrajectLayout({
   onSignInClick,
@@ -71,6 +70,15 @@ export function TrajectLayout({
 }: TrajectLayoutProps) {
   const gapClass = bodyGap === "section" ? "gap-section" : "gap-region";
 
+  const actionBarNode = actionBar ? (
+    <div className="rounded-b-xl border-t border-border bg-muted">
+      {aboveActionBar}
+      <div className="flex w-full items-center justify-between gap-component px-boundary py-section">
+        {actionBar}
+      </div>
+    </div>
+  ) : null;
+
   return (
     <PublicRegistryAppShell
       hideFab
@@ -85,6 +93,7 @@ export function TrajectLayout({
         onLogin: onSignInClick,
       }}
       footer={footer}
+      actionBar={actionBarNode}
     >
       <div className={`mx-auto flex w-full max-w-7xl flex-col p-boundary ${gapClass}`}>
         {backAction ? (
@@ -104,17 +113,6 @@ export function TrajectLayout({
         ) : null}
         {children}
       </div>
-      {actionBar ? (
-        <div
-          className="sticky z-10 mt-auto rounded-b-xl border-t border-border bg-muted"
-          style={{ bottom: "var(--registry-bottom-chrome-height, 0px)" }}
-        >
-          {aboveActionBar}
-          <div className="flex w-full items-center justify-between gap-component px-boundary py-section">
-            {actionBar}
-          </div>
-        </div>
-      ) : null}
     </PublicRegistryAppShell>
   );
 }
