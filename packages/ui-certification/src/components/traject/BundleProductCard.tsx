@@ -77,8 +77,8 @@ export type BundleProductCardProps = {
  */
 export function BundleProductCard({ product, selected, onToggle }: BundleProductCardProps) {
   return (
-    <Card className="gap-component py-region">
-      <CardHeader className="px-region">
+    <Card className="gap-component py-section">
+      <CardHeader className="px-section">
         <CardTitle className="text-sm leading-snug font-medium">
           {product.label}
           <span className="ms-2 text-xs font-normal text-muted-foreground">
@@ -86,7 +86,7 @@ export function BundleProductCard({ product, selected, onToggle }: BundleProduct
           </span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="px-region">
+      <CardContent className="px-section">
         <ChoiceCardGroup
           aria-label={`Extra certificaties voor ${product.label}`}
           selectionMode="multiple"
