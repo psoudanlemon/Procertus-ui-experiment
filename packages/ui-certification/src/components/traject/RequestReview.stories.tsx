@@ -152,7 +152,7 @@ function RequestReviewStory() {
           onContinue={noop}
           cancelLabel="Annuleren"
           backLabel="Terug"
-          continueLabel="Akkoord"
+          continueLabel="Bevestig"
           continueDisabled={!isProductRequestNoteComplete(note, STORY_NOTE_REQUIRED)}
         />
       }
@@ -245,7 +245,7 @@ function RequestReviewNonProductBoundStory() {
           onContinue={noop}
           cancelLabel="Annuleren"
           backLabel="Terug"
-          continueLabel="Bevestig en verzend"
+          continueLabel="Bevestig"
           continueDisabled={!isProductRequestNoteComplete(note, noteRequired)}
         />
       }

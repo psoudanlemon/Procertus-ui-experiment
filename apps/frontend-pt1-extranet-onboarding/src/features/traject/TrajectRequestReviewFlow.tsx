@@ -23,7 +23,7 @@ const WEGWIJZER_PATH = "/welcome";
 const SIGNIN_PATH = "/welcome/login";
 const BUNDLE_ASSEMBLE_PATH = (serviceId: string) =>
   `/welcome/aanvraag/${serviceId}/pakket`;
-const REGISTRATION_COMPLETE_PATH = "/registratie-voltooid";
+const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
 
 /** Een draft telt als "echt productgebonden" als er een productId óf productLabel op staat. */
 function isProductBoundDraft(draft: CertificationRequestDraft): boolean {
@@ -60,8 +60,9 @@ export function TrajectRequestReviewFlow() {
     navigate(BUNDLE_ASSEMBLE_PATH(serviceId));
   }, [isNonProductBound, navigate, serviceId]);
   const handleContinue = useCallback(() => {
-    navigate(REGISTRATION_COMPLETE_PATH, { replace: true });
-  }, [navigate]);
+    if (!serviceId) return;
+    navigate(TRIAGE_PATH(serviceId));
+  }, [navigate, serviceId]);
 
   if (!serviceId || !service) {
     return <Navigate to={WEGWIJZER_PATH} replace />;
@@ -91,7 +92,7 @@ export function TrajectRequestReviewFlow() {
           onContinue={handleContinue}
           cancelLabel="Annuleren"
           backLabel="Terug"
-          continueLabel="Bevestig en verzend"
+          continueLabel="Bevestig"
           continueDisabled={!isProductRequestNoteComplete(note, noteRequired)}
         />
       }
