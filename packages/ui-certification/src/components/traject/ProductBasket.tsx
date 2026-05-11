@@ -50,8 +50,7 @@ export function ProductBasket({
     <aside
       aria-label="Gekozen producten"
       className={cn(
-        "flex flex-col gap-section rounded-lg border border-border p-section lg:sticky lg:top-component lg:h-fit lg:max-h-sticky-rail",
-        isEmpty ? "bg-muted/30" : "bg-card",
+        "flex flex-col gap-section rounded-lg border border-border bg-muted/30 p-section lg:sticky lg:top-component lg:h-fit lg:max-h-sticky-rail",
         className,
       )}
     >
@@ -59,7 +58,7 @@ export function ProductBasket({
         <H3>Gekozen producten</H3>
         <Badge
           variant={isEmpty ? "outline" : "secondary"}
-          className={cn(isEmpty && "bg-card")}
+          className={cn("bg-card", !isEmpty && "border-border")}
         >
           {items.length}
         </Badge>
