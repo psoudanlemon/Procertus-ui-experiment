@@ -3,12 +3,12 @@ import { type ComponentType, useLayoutEffect } from "react";
 
 import {
   BUNDLE_CERT_META,
-  BundleAssembleActionBar,
   BundleAssembleBody,
   BundleAssembleProvider,
 } from "./BundleAssemble";
 import type { BundleCertKey, BundleProduct } from "./BundleAssemble";
 import { TrajectLayout } from "./TrajectLayout";
+import { TrajectStoryFooter } from "./TrajectStoryFooter";
 
 const STORY_FOOTER = {
   companyDetails: [
@@ -83,15 +83,13 @@ const STORY_BUNDLE_PRODUCTS: readonly BundleProduct[] = [
 ];
 
 const STORY_BUNDLE_PRIMARY_LABEL = BUNDLE_CERT_META[STORY_BUNDLE_PRIMARY_CERT].title;
-const STORY_BUNDLE_PRODUCT_COUNT = STORY_BUNDLE_PRODUCTS.length;
-const STORY_BUNDLE_PRODUCT_WORD = STORY_BUNDLE_PRODUCT_COUNT === 1 ? "product" : "producten";
 
 export const Default: StoryObj<typeof meta> = {
   args: {
     onSignInClick: noop,
     footer: STORY_FOOTER,
     bodyGap: "section",
-    title: "Stel je aanvraagpakket samen",
+    title: "Voeg per product certificaten toe",
     children: null,
   },
   render: (args) => (
@@ -104,14 +102,15 @@ export const Default: StoryObj<typeof meta> = {
     >
       <TrajectLayout
         {...args}
-        kicker={
-          <span className="inline-flex max-w-full items-center gap-micro self-start rounded-full border border-primary/30 bg-primary/10 px-component py-micro text-xs font-medium text-primary">
-            Hoofdcertificatie voor dit pakket:
-            <strong className="font-semibold">{STORY_BUNDLE_PRIMARY_LABEL}</strong>
-          </span>
+        kicker={STORY_BUNDLE_PRIMARY_LABEL}
+        description="Bekijk elk van uw geselecteerde producten en voeg waar nodig nog extra certificaten toe, zodat je meteen alle benodigdheden voor elk product kan indienen"
+        actionBar={
+          <TrajectStoryFooter
+            onBack={noop}
+            onContinue={noop}
+            continueLabel="Verder"
+          />
         }
-        description={`U heeft ${STORY_BUNDLE_PRODUCT_COUNT} ${STORY_BUNDLE_PRODUCT_WORD} geselecteerd. Breid uw aanvraag hieronder uit per product om uw dossier in één keer volledig te maken.`}
-        actionBar={<BundleAssembleActionBar />}
       >
         <BundleAssembleBody />
       </TrajectLayout>

@@ -30,3 +30,5 @@ export type {
   BundleProduct,
   BundleProductCardProps,
 } from "./BundleProductCard";
+export { TrajectStoryFooter } from "./TrajectStoryFooter";
+export type { TrajectStoryFooterProps } from "./TrajectStoryFooter";
