@@ -48,7 +48,7 @@ const meta = {
       children: null,
       description: {
         component:
-          "Definitief validatiescherm voor het aanvraagpakket. Eén kaart per uniek product (drie in deze story: 2, 2 en 1 certificatietrajecten) met de productkop bovenaan, daaronder de gezamenlijke documenten en per traject de bijbehorende badge en cert-specifieke documenten. De knop 'Bevestig en verzend' is geforceerd disabled tot de gebruiker tot onderaan heeft gescrold.",
+          "Definitief validatiescherm voor het aanvraagpakket. Eén kaart per uniek product (drie in deze story: 2, 2 en 1 certificatietrajecten) met de productkop bovenaan, daaronder de gezamenlijke documenten en per traject de bijbehorende badge en cert-specifieke documenten. De knop 'Akkoord' is geforceerd disabled tot de gebruiker tot onderaan heeft gescrold.",
       },
     },
   },
@@ -61,8 +61,10 @@ export default meta;
 const noop = () => {};
 
 /**
- * Drie producten met respectievelijk twee, twee en één certificaten — geeft vijf
- * aanvraagkaartjes (één per product/certificaat-combinatie) zoals voorzien in de spec.
+ * Drie producten met respectievelijk twee, twee en één certificaten. De story
+ * groepeert deze drafts per product en rendert drie kaarten in plaats van
+ * vijf — de twee multi-cert producten tonen de "Gezamenlijke documenten"-
+ * dedup en de subtiele scheidingslijnen tussen trajecten.
  */
 const STORY_REVIEW_INQUIRIES: CertificationRequestDraft[] = [
   {
@@ -119,6 +121,10 @@ const STORY_REVIEW_INQUIRIES: CertificationRequestDraft[] = [
 
 function RequestReviewStory() {
   const { sentinelRef, hasReachedBottom } = useForceScrollConfirmation();
+  const productGroups = useMemo(
+    () => groupDraftsByProduct(STORY_REVIEW_INQUIRIES),
+    [],
+  );
 
   return (
     <TrajectLayout
@@ -144,7 +150,7 @@ function RequestReviewStory() {
             onContinue={noop}
             cancelLabel="Annuleren"
             backLabel="Terug"
-            continueLabel="Bevestig en verzend"
+            continueLabel="Akkoord"
             continueDisabled={!hasReachedBottom}
           />
         </div>
@@ -155,7 +161,7 @@ function RequestReviewStory() {
           className="flex flex-col gap-component"
           aria-labelledby="aanvraag-pakket-heading"
         >
-          <div className="flex flex-col gap-micro">
+          <div className="flex flex-wrap items-baseline gap-x-component gap-y-micro">
             <h2
               id="aanvraag-pakket-heading"
               className="m-0 text-heading-md font-semibold leading-tight tracking-tight"
@@ -166,16 +172,25 @@ function RequestReviewStory() {
               {STORY_REVIEW_INQUIRIES.length}{" "}
               {STORY_REVIEW_INQUIRIES.length === 1 ? "certificaat" : "certificaten"} aangevraagd
               over{" "}
-              {new Set(STORY_REVIEW_INQUIRIES.map((d) => d.productId ?? d.productLabel)).size}{" "}
-              producten.
+              {productGroups.length} {productGroups.length === 1 ? "product" : "producten"}.
             </p>
           </div>
           <div className="flex flex-col gap-component">
-            {STORY_REVIEW_INQUIRIES.map((draft) => (
-              <RequestValidationCard
-                key={draft.id}
-                draft={draft}
-                documents={buildProductDocumentsForDraft(draft)}
+            {productGroups.map((group) => (
+              <ProductSummaryCard
+                key={group.productId}
+                product={{
+                  id: group.productId,
+                  label: group.productLabel,
+                  path: group.productPath,
+                  code: group.productTypeStreamLabel,
+                }}
+                certifications={group.drafts.map((draft) => ({
+                  id: draft.id,
+                  entryId: draft.entryId,
+                  value: draft.entryId === "ce" ? draft.value : undefined,
+                  documents: buildProductDocumentsForDraft(draft),
+                }))}
               />
             ))}
           </div>

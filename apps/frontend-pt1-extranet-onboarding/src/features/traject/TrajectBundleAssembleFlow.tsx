@@ -41,23 +41,46 @@ export function TrajectBundleAssembleFlow() {
   // Producten worden afgeleid uit de drafts die TrajectConfigureFlow heeft gepersisteerd.
   // Eén kaart per uniek product, met `productPath` als categoriepad-prefix. Extra
   // certificaties zijn de andere bundle-certs (BENOR/CE/SSD/PROCERTUS) minus de hoofdcertificatie.
+  // De eerste draft per product (de primaire-cert draft uit de configure-stap) is gezaghebbend
+  // voor de cosmetische product-metadata; volgende extras-drafts dragen dezelfde metadata.
+  const baseDraftByProduct = useMemo(() => {
+    const map = new Map<string, CertificationRequestDraft>();
+    for (const draft of snapshot.drafts) {
+      const productId = draft.productId;
+      if (!productId || map.has(productId)) continue;
+      map.set(productId, draft);
+    }
+    return map;
+  }, [snapshot.drafts]);
+
   const products: readonly BundleProduct[] = useMemo(() => {
     if (!serviceId || !isBundleCert(serviceId)) return [];
     const extras = BUNDLE_CERT_ORDER.filter((c) => c !== serviceId);
-    const seen = new Set<string>();
-    return snapshot.drafts.flatMap((draft) => {
+    return Array.from(baseDraftByProduct, ([productId, draft]) => ({
+      id: productId,
+      label: draft.productLabel ?? productId,
+      categoryTrail: draft.productPath ?? draft.productTypeStreamLabel ?? "",
+      extraCerts: extras,
+    } satisfies BundleProduct));
+  }, [serviceId, baseDraftByProduct]);
+
+  // Bij terugkomst vanuit "Aanvraag controleren" lezen we de eerder gekozen extra
+  // certificaties terug uit de gepersisteerde drafts, zodat de checkboxen per product
+  // ge-prevuld zijn en de gebruiker zijn werk niet opnieuw moet doen.
+  const initialSelections = useMemo<Record<string, readonly BundleCertKey[]>>(() => {
+    if (!serviceId || !isBundleCert(serviceId)) return {};
+    const primary: BundleCertKey = serviceId;
+    const result: Record<string, BundleCertKey[]> = {};
+    for (const draft of snapshot.drafts) {
       const productId = draft.productId;
-      if (!productId || seen.has(productId)) return [];
-      seen.add(productId);
-      return [
-        {
-          id: productId,
-          label: draft.productLabel ?? productId,
-          categoryTrail: draft.productPath ?? draft.productTypeStreamLabel ?? "",
-          extraCerts: extras,
-        } satisfies BundleProduct,
-      ];
-    });
+      if (!productId) continue;
+      const entryId = draft.entryId as string;
+      if (entryId === primary) continue;
+      if (!isBundleCert(entryId)) continue;
+      const list = result[productId] ?? (result[productId] = []);
+      if (!list.includes(entryId)) list.push(entryId);
+    }
+    return result;
   }, [serviceId, snapshot.drafts]);
 
   const handleBack = useCallback(() => {
@@ -69,31 +92,47 @@ export function TrajectBundleAssembleFlow() {
     navigate(WEGWIJZER_PATH);
   }, [navigate]);
 
-  // Expandeer per product de hoofd-cert draft + één extra draft per aangevinkt extra certificaat,
-  // zodat het validatiescherm één kaart per (product, certificaat)-combinatie kan tonen.
+  // Regenereer de draftlijst idempotent vanuit (product × huidige selectie): per product
+  // exact één primaire-cert draft + één draft per aangevinkte extra cert. Niet flatMappen
+  // over `snapshot.drafts`, anders zouden eerder toegevoegde extras blijven plakken bij
+  // een terug-trip vanuit "Aanvraag controleren".
   const handleContinue = useCallback(
     (selections: Record<string, readonly BundleCertKey[]>) => {
       if (!serviceId || !isBundleCert(serviceId)) return;
       const primaryCert: BundleCertKey = serviceId;
-      const expanded: CertificationRequestDraft[] = snapshot.drafts.flatMap((draft) => {
-        const productId = draft.productId;
-        if (!productId) return [draft];
-        const extras = selections[productId] ?? [];
-        const extraDrafts = extras
-          .filter((cert) => cert !== primaryCert)
-          .map<CertificationRequestDraft>((cert) => ({
-            ...draft,
+
+      const expanded: CertificationRequestDraft[] = [];
+      for (const draft of snapshot.drafts) {
+        if (!draft.productId) expanded.push(draft);
+      }
+      for (const [productId, base] of baseDraftByProduct) {
+        const primaryDraft: CertificationRequestDraft =
+          base.entryId === primaryCert
+            ? base
+            : {
+                ...base,
+                id: `${productId}-${primaryCert}`,
+                entryId: primaryCert as CertificationEntryId,
+                label: BUNDLE_CERT_META[primaryCert].title,
+                shortLabel: BUNDLE_CERT_META[primaryCert].shortTitle,
+              };
+        expanded.push(primaryDraft);
+        for (const cert of selections[productId] ?? []) {
+          if (cert === primaryCert) continue;
+          expanded.push({
+            ...base,
             id: `${productId}-${cert}`,
             entryId: cert as CertificationEntryId,
             label: BUNDLE_CERT_META[cert].title,
             shortLabel: BUNDLE_CERT_META[cert].shortTitle,
-          }));
-        return [draft, ...extraDrafts];
-      });
+          });
+        }
+      }
+
       persistTrajectHandoff({ drafts: expanded, serviceId });
       navigate(REQUEST_REVIEW_PATH(serviceId));
     },
-    [navigate, serviceId, snapshot.drafts],
+    [navigate, serviceId, snapshot.drafts, baseDraftByProduct],
   );
 
   if (!serviceId || !service || !isBundleCert(serviceId)) {
@@ -109,6 +148,7 @@ export function TrajectBundleAssembleFlow() {
     <BundleAssembleProvider
       products={products}
       primaryCert={primaryCert}
+      initialSelections={initialSelections}
       onBack={handleBack}
       onCancel={handleCancel}
       onContinue={handleContinue}

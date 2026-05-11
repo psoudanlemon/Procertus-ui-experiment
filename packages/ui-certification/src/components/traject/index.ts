@@ -39,6 +39,10 @@ export type {
   ProductSummaryCertification,
   ProductSummaryDocument,
 } from "./ProductSummaryCard";
+export { ProductInquiryMatrix } from "./ProductInquiryMatrix";
+export type { ProductInquiryMatrixProps } from "./ProductInquiryMatrix";
+export { ProductDocumentationLibrary } from "./ProductDocumentationLibrary";
+export type { ProductDocumentationLibraryProps } from "./ProductDocumentationLibrary";
 export {
   buildGeneralProcessDocuments,
   buildProductDocumentsForDraft,

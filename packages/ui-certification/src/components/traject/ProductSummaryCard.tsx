@@ -1,6 +1,6 @@
 import {
   Badge,
-  DownloadableItemGrid,
+  DownloadableItem,
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
@@ -120,6 +120,39 @@ function partitionDocuments(certifications: ProductSummaryCertification[]): {
 }
 
 /**
+ * Compacte, dichte documentenlijst: per item één `[icoon] [titel + subtekst]
+ * [download]`-rij. Tot en met twee items stapelen we verticaal; vanaf drie
+ * items schakelen we op md+ over naar een twee-kolommen grid om de
+ * kaartbreedte te benutten zonder dat de rijen onnodig lang worden.
+ */
+function CompactDocumentList({
+  items,
+  ariaLabel,
+}: {
+  items: DownloadableItemData[];
+  ariaLabel: string;
+}) {
+  const useGrid = items.length > 2;
+  return (
+    <div
+      role="list"
+      aria-label={ariaLabel}
+      className={cn(
+        "grid gap-micro",
+        useGrid ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1",
+      )}
+    >
+      {items.map((doc) => (
+        <DownloadableItem key={doc.id} variant="row" {...doc} />
+      ))}
+    </div>
+  );
+}
+
+const SUBSECTION_HEADING_CLASS =
+  "m-0 text-xs font-bold uppercase tracking-wider text-muted-foreground";
+
+/**
  * Product-level overzichtskaart voor het validatiescherm. Toont één productkop
  * (naam, categoriepad, producttype-code) en eronder elke aangevraagde
  * certificatie als eigen traject-rij met badge en eigen documenten. Documenten
@@ -139,7 +172,7 @@ export function ProductSummaryCard({
   return (
     <article
       className={cn(
-        "flex flex-col gap-section rounded-xl border border-border bg-card p-section text-base text-card-foreground",
+        "flex flex-col gap-component rounded-xl border border-border bg-card p-section text-card-foreground",
         className,
       )}
       aria-label={`Productaanvraag — ${leaf}`}
@@ -171,13 +204,11 @@ export function ProductSummaryCard({
 
       {shared.length > 0 ? (
         <section
-          className="flex flex-col gap-component"
+          className="flex flex-col gap-micro rounded-md border border-border/40 bg-muted/30 p-component"
           aria-label="Gezamenlijke documenten"
         >
-          <p className="m-0 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-            Gezamenlijke documenten
-          </p>
-          <DownloadableItemGrid items={shared} />
+          <p className={SUBSECTION_HEADING_CLASS}>Gezamenlijke documenten</p>
+          <CompactDocumentList items={shared} ariaLabel="Gezamenlijke documenten" />
         </section>
       ) : null}
 
@@ -187,13 +218,13 @@ export function ProductSummaryCard({
       >
         {certifications.map((cert, index) => {
           const docs = perCert.get(cert.id) ?? [];
+          const trajectLabel = `Aanvraag voor ${ENTRY_LABELS[cert.entryId] ?? cert.entryId}`;
           return (
             <div
               key={cert.id}
               className={cn(
-                "flex flex-col gap-component",
-                multipleTrajects && index > 0 && "border-t border-border/60 pt-section",
-                multipleTrajects && index < trajectCount - 1 && "pb-section",
+                "flex flex-col gap-micro",
+                multipleTrajects && index > 0 && "mt-component border-t border-border/60 pt-component",
               )}
             >
               <div className="flex flex-wrap items-center gap-micro">
@@ -218,7 +249,9 @@ export function ProductSummaryCard({
                   </HoverCard>
                 ) : null}
               </div>
-              {docs.length > 0 ? <DownloadableItemGrid items={docs} /> : null}
+              {docs.length > 0 ? (
+                <CompactDocumentList items={docs} ariaLabel={trajectLabel} />
+              ) : null}
             </div>
           );
         })}

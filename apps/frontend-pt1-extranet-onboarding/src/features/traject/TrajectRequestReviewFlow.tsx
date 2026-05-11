@@ -1,5 +1,6 @@
 import {
-  ProductSummaryCard,
+  ProductDocumentationLibrary,
+  ProductInquiryMatrix,
   TrajectLayout,
   TrajectStoryFooter,
   buildProductDocumentsForDraft,
@@ -81,14 +82,14 @@ export function TrajectRequestReviewFlow() {
       <div className="flex flex-col gap-region">
         <section
           className="flex flex-col gap-component"
-          aria-labelledby="aanvraag-pakket-heading"
+          aria-labelledby="aanvraag-matrix-heading"
         >
-          <div className="flex flex-col gap-micro">
+          <div className="flex flex-wrap items-baseline gap-x-component gap-y-micro">
             <h2
-              id="aanvraag-pakket-heading"
-              className="m-0 text-heading-md font-semibold leading-tight tracking-tight"
+              id="aanvraag-matrix-heading"
+              className="m-0 text-lg font-semibold leading-tight tracking-tight text-foreground"
             >
-              Aanvragen in dit pakket
+              Overzicht aanvragen
             </h2>
             <p className="m-0 text-sm text-muted-foreground">
               {inquiries.length}{" "}
@@ -97,27 +98,26 @@ export function TrajectRequestReviewFlow() {
               {productGroups.length === 1 ? "product" : "producten"}.
             </p>
           </div>
-          <div className="flex flex-col gap-component">
-            {productGroups.map((group) => (
-              <ProductSummaryCard
-                key={group.productId}
-                product={{
-                  id: group.productId,
-                  label: group.productLabel,
-                  path: group.productPath,
-                  code: group.productTypeStreamLabel,
-                }}
-                certifications={group.drafts.map((draft) => ({
-                  id: draft.id,
-                  entryId: draft.entryId,
-                  value: draft.entryId === "ce" ? draft.value : undefined,
-                  documents: buildProductDocumentsForDraft(draft),
-                }))}
-              />
-            ))}
-          </div>
-          <div ref={sentinelRef} aria-hidden className="h-px w-full" />
+          <ProductInquiryMatrix groups={productGroups} />
         </section>
+
+        <section
+          className="flex flex-col gap-section"
+          aria-labelledby="documentatie-heading"
+        >
+          <h2
+            id="documentatie-heading"
+            className="m-0 text-lg font-semibold leading-tight tracking-tight text-foreground"
+          >
+            Uw documentatie-pakket
+          </h2>
+          <ProductDocumentationLibrary
+            groups={productGroups}
+            documentsForDraft={buildProductDocumentsForDraft}
+          />
+        </section>
+
+        <div ref={sentinelRef} aria-hidden className="h-px w-full" />
       </div>
     </TrajectLayout>
   );
