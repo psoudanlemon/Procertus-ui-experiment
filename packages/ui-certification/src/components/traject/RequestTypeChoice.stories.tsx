@@ -20,6 +20,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { type ComponentType, useLayoutEffect } from "react";
 
 import { TrajectLayout } from "./TrajectLayout";
+import { TrajectStoryFooter } from "./TrajectStoryFooter";
 
 const STORY_FOOTER = {
   companyDetails: [
@@ -74,7 +75,6 @@ export const Default: StoryObj<typeof meta> = {
   args: {
     onSignInClick: noop,
     footer: STORY_FOOTER,
-    backAction: { label: "Terug", onClick: noop },
     kicker: "Keuring",
     title: "Hoe wilt u Partijkeuring aanvragen?",
     children: null,
@@ -82,7 +82,10 @@ export const Default: StoryObj<typeof meta> = {
       "Kies een vrijblijvende informatieaanvraag voor een prijsopgave en advies, of start meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen.",
   },
   render: (args) => (
-    <TrajectLayout {...args}>
+    <TrajectLayout
+      {...args}
+      actionBar={<TrajectStoryFooter onBack={noop} backLabel="Terug naar wegwijzer" />}
+    >
       <div className="flex flex-col gap-section">
         <div className="grid grid-cols-1 gap-section md:grid-cols-2">
           <TriageOptionCard

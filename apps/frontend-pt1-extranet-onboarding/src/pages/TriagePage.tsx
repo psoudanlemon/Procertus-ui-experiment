@@ -17,7 +17,7 @@ import {
   DensityProvider,
   H3,
 } from "@procertus-ui/ui";
-import { TrajectLayout } from "@procertus-ui/ui-certification";
+import { TrajectLayout, TrajectStoryFooter } from "@procertus-ui/ui-certification";
 import { APP_FOOTER } from "../layouts/footerConfig";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
 import { TRAJECT_ENTRY_POINT_QUERY_PARAM } from "../features/traject/traject-submission-context";
@@ -66,10 +66,10 @@ export function TriagePage() {
       <TrajectLayout
         onSignInClick={() => navigate(LOGIN_PATH)}
         footer={APP_FOOTER}
-        backAction={{ label: "Terug", onClick: handleBack }}
         kicker={CATEGORY_LABEL[entry.category]}
         title={`Hoe wilt u ${entry.label} aanvragen?`}
         description="Kies een vrijblijvende informatieaanvraag voor een prijsopgave en advies, of start meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen."
+        actionBar={<TrajectStoryFooter onBack={handleBack} backLabel="Terug naar wegwijzer" />}
       >
         <div className="flex flex-col gap-section">
           <div className="grid grid-cols-1 gap-section md:grid-cols-2">

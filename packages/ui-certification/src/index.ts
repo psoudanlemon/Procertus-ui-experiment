@@ -85,6 +85,8 @@ export {
   ProductSelectionBasketMobileSummaryBar,
   ProductSelectionBasketProvider,
   TrajectLayout,
+  TrajectStoryFooter,
+  useProductSelectionBasket,
 } from "./components/traject";
 export type {
   BundleAssembleProviderProps,
@@ -96,6 +98,7 @@ export type {
   ProductSelectionBasketProviderProps,
   TrajectLayoutAction,
   TrajectLayoutProps,
+  TrajectStoryFooterProps,
 } from "./components/traject";
 export { ProcertusCategorizationTreeView } from "./components/procertus-categorization-tree-view";
 export type {

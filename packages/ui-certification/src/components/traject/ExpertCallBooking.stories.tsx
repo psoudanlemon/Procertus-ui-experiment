@@ -13,6 +13,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { type ComponentType, useLayoutEffect, useState } from "react";
 
 import { TrajectLayout } from "./TrajectLayout";
+import { TrajectStoryFooter } from "./TrajectStoryFooter";
 
 const STORY_FOOTER = {
   companyDetails: [
@@ -51,7 +52,7 @@ const meta = {
       children: null,
       description: {
         component:
-          "Plan een expert call: kalender, tijdslots en contactgegevens, met footer en 'Terug'-actie zoals in de live ExpertCallPlaceholderPage.",
+          "Plan een expert call: kalender, tijdslots en contactgegevens. Navigatie via de gedeelde `TrajectStoryFooter` (Terug + Verzenden) in de `actionBar`-slot van `TrajectLayout`; 'Verzenden' blijft uitgeschakeld tot datum en tijdslot gekozen zijn.",
       },
     },
   },
@@ -75,7 +76,6 @@ export const Default: StoryObj<typeof meta> = {
   args: {
     onSignInClick: noop,
     footer: STORY_FOOTER,
-    backAction: { label: "Terug", onClick: noop },
     title: "Plan een expert call",
     children: null,
     description:
@@ -87,8 +87,19 @@ export const Default: StoryObj<typeof meta> = {
 function ExpertCallStoryBody({ args }: { args: React.ComponentProps<typeof TrajectLayout> }) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedSlot, setSelectedSlot] = useState<string | undefined>(undefined);
+  const canSubmit = selectedDate != null && selectedSlot != null;
   return (
-    <TrajectLayout {...args}>
+    <TrajectLayout
+      {...args}
+      actionBar={
+        <TrajectStoryFooter
+          onBack={noop}
+          onContinue={noop}
+          continueLabel="Verzenden"
+          continueDisabled={!canSubmit}
+        />
+      }
+    >
       <div className="flex flex-col gap-section">
         <section className="flex flex-col gap-component">
           <H3>Wat u kunt verwachten</H3>
@@ -166,15 +177,6 @@ function ExpertCallStoryBody({ args }: { args: React.ComponentProps<typeof Traje
             </Field>
           </div>
         </section>
-
-        <div className="flex flex-wrap items-center justify-end gap-component">
-          <Button variant="outline" size="lg" onClick={noop}>
-            Terug
-          </Button>
-          <Button size="lg" disabled>
-            Verzenden
-          </Button>
-        </div>
       </div>
     </TrajectLayout>
   );
