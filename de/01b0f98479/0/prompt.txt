@@ -1,0 +1,115 @@
+For the anonymous onboarding flow, I want the active step to be derived from the key in the URL route. 
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:55  I have therefore changed the route to formal requests, with an optional step ID to control the current step within this formal request flow.
+
+ this way, the actual active step can be removed from the context.  the data context doesn't change when going back to the previous step or when proceeding to the next step when it's possible.
+
+When the step ID is missing, we should implement logic to derive the correct step to redirect to from the current data context. @Procertus-ui-experiment/packages/ui-certification/src/onboarding/onboarding-flow-provider.tsx
+
+---
+
+For the anonymous onboarding flow, I want the active step to be derived from the key in the URL route. 
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:55  I have therefore changed the route to formal requests, with an optional step ID to control the current step within this formal request flow.
+
+ this way, the actual active step can be removed from the context.  the data context doesn't change when going back to the previous step or when proceeding to the next step when it's possible.
+
+When the step ID is missing, we should implement logic to derive the correct step to redirect to from the current data context. @Procertus-ui-experiment/packages/ui-certification/src/onboarding/onboarding-flow-provider.tsx
+
+---
+
+Set up a redirect component that handles redirects for a missing step ID.
+
+Make sure the onboarding flow has a required step ID. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/customer-onboarding/CustomerOnboardingFlow.tsx:30
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx:119-131 when starting the formal request, please go to the formal onboarding path that we just set up. Go to the base route or the root route for this formal onboarding; it will be redirected to the first step if no context has yet been provided.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx:119-131 when starting the formal request, please go to the formal onboarding path that we just set up. Go to the base route or the root route for this formal onboarding; it will be redirected to the first step if no context has yet been provided.
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/onboarding/onboarding-formal-route.ts:18 don't make route mapping part of the UI package. This is part of the application scope.
+
+Everything related to routing should not be placed in the UI package.
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/onboarding/onboarding-formal-route.ts:18 don't make route mapping part of the UI package. This is part of the application scope.
+
+Everything related to routing should not be placed in the UI package.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:53 I want to move the context provider up in the tree because I also want to add an element to the public app shell app bar to indicate we have selected one or multiple certification products.
+
+Add this to the request context. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:50 @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx:30-32 
+
+ much like how users expect to see a shopping cart with the number of items in it, clicking this icon will show a panel with an overview of all certification requests or inquiries in the current requests. 
+
+ please reuse the overview of certification inquiries from the final summary step of the onboarding flow. @Procertus-ui-experiment/packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx @Procertus-ui-experiment/packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx:363-433  make this a reusable component as a separate presentational component in the UI certification package.
+
+---
+
+Add call-to-action buttons in the shopping cart panel that shows the overview of inquiries to: reset all, erase all, or remove one from the basket.
+
+---
+
+Add call-to-action buttons in the shopping cart panel that shows the overview of inquiries to: reset all, erase all, or remove one from the basket.
+
+---
+
+If there are no inquiries, we shouldn't display the request card. When we remove all inquiries from the request card, the panel can be closed and we should be redirected to the welcome page.
+
+Also add a confirmation dialog first.
+
+use the useconfirm hook
+
+---
+
+If there are no inquiries, we shouldn't display the request card. When we remove all inquiries from the request card, the panel can be closed and we should be redirected to the welcome page.
+
+Also add a confirmation dialog first.
+
+use the useconfirm hook
+
+---
+
+@Procertus-ui-experiment/packages/ui/src/components/public-header.tsx:331-340 this is the header I'm referring to. Move the mode toggle and the guard button to this header instead.
+
+---
+
+@Procertus-ui-experiment/packages/ui/src/components/public-header.tsx:331-340 this is the header I'm referring to. Move the mode toggle and the guard button to this header instead.
+
+---
+
+Move the mode toggle and the language selector to the leading/trailing side of the header or appbar.
+
+---
+
+Move the mode toggle and the language selector to the leading/trailing side of the header or appbar.
+
+---
+
+Please set up the language selector in the leading trail slide of the A-bar to mimic changing language. Support only English, French, and Dutch.
+
+This is just a mock-up. I will not implement functionality, but we need to add this to the prototype to make it clear we can switch between the three languages.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:51 I have changed the login route to /login. Please always use this correct route.
+
+When the login button in the app bar is clicked, always navigate to the /login route.  even if we have an active request with enquiries. 
+
+ on all other pages where we are still selecting possible context for the inquiry, while we already have an active inquiry with selected items, please add an alert on the page to show that we have an active request with inquiries and we can just continue this request.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:51 I have changed the login route to /login. Please always use this correct route.
+
+When the login button in the app bar is clicked, always navigate to the /login route.  even if we have an active request with enquiries. 
+
+ on all other pages where we are still selecting possible context for the inquiry, while we already have an active inquiry with selected items, please add an alert on the page to show that we have an active request with inquiries and we can just continue this request.
