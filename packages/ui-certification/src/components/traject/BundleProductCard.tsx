@@ -53,21 +53,19 @@ export type BundleProductCardProps = {
  */
 export function BundleProductCard({ product, selected, onToggle }: BundleProductCardProps) {
   return (
-    <Card className="gap-region py-region">
-      <CardHeader className="gap-micro px-region">
+    <Card className="flex-row items-center gap-component py-region">
+      <CardHeader className="gap-micro px-region shrink-0">
         <span className="text-xs leading-tight text-muted-foreground">
           {product.categoryTrail}
         </span>
         <CardTitle className="text-base font-semibold">{product.label}</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-component px-region">
-        <span className="text-sm text-muted-foreground">
-          Extra certificaties toevoegen voor dit product:
-        </span>
+      <CardContent className="ml-auto px-region">
         <ChoiceCardGroup
           aria-label={`Extra certificaties voor ${product.label}`}
           selectionMode="multiple"
-          layout="grid"
+          layout="stack"
+          className="flex-row flex-wrap gap-component"
         >
           {product.extraCerts.map((cert) => {
             const meta = BUNDLE_CERT_META[cert];
@@ -78,10 +76,11 @@ export function BundleProductCard({ product, selected, onToggle }: BundleProduct
                 value={cert}
                 controlId={`${product.id}-${cert}`}
                 title={meta.title}
-                description={meta.description}
+                controlPosition="trailing"
                 selectionMode="multiple"
                 checked={isChecked}
                 onCheckedChange={(next) => onToggle(cert, next)}
+                className="w-auto"
               />
             );
           })}

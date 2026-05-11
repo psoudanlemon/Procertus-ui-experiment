@@ -59,42 +59,6 @@ export const WithSelection: StoryObj<typeof meta> = {
   render: (args) => <InteractiveCard {...args} />,
 };
 
-/**
- * Eén beschikbare extra certificatie. Bevestigt dat het grid ook met een enkele kolom
- * inhoud blijft kloppen wanneer een product geen ATG-traject heeft.
- */
-export const SingleExtraCert: StoryObj<typeof meta> = {
-  args: {
-    product: {
-      id: "granulaten-voor-beton",
-      label: "Granulaten voor beton",
-      categoryTrail: "Bestanddelen voor beton > Granulaten",
-      extraCerts: ["ce"],
-    },
-    selected: new Set<BundleCertKey>(),
-    onToggle: noop,
-  },
-  render: (args) => <InteractiveCard {...args} />,
-};
-
-/**
- * Diep categoriepad: laat zien hoe de header zich gedraagt met een langere
- * `categoryTrail` boven het productlabel.
- */
-export const DeepCategoryTrail: StoryObj<typeof meta> = {
-  args: {
-    product: {
-      id: "betonstaal",
-      label: "Betonstaal",
-      categoryTrail: "Staal > Wapeningsstaal > Betonstaal en wapeningsnetten",
-      extraCerts: ["ce", "atg"],
-    },
-    selected: new Set<BundleCertKey>(),
-    onToggle: noop,
-  },
-  render: (args) => <InteractiveCard {...args} />,
-};
-
 function InteractiveCard({
   product,
   selected: initial,
