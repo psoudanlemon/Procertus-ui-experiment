@@ -1,0 +1,189 @@
+@Procertus-ui-experiment/packages/ui-lib/src/custom-components/onboarding/step-layout/StepLayout.tsx @Procertus-ui-experiment/packages/ui-lib/src/custom-components/onboarding/step-layout/StepLayout.stories.tsx  we have a Step Layout component that has a lot in common with the Detailed Card component. When using the non-fullscreen mode in the Step Layout, I want to internally use the Detailed Card component and thus remove all duplicated code between those two components. @Procertus-ui-experiment/packages/ui-lib/src/custom-components/DetailCard/DetailCard.tsx
+
+---
+
+@Procertus-ui-experiment/packages/ui-lib/src/custom-components/onboarding/step-layout/StepLayout.tsx @Procertus-ui-experiment/packages/ui-lib/src/custom-components/onboarding/step-layout/StepLayout.stories.tsx  we have a Step Layout component that has a lot in common with the Detailed Card component. When using the non-fullscreen mode in the Step Layout, I want to internally use the Detailed Card component and thus remove all duplicated code between those two components. @Procertus-ui-experiment/packages/ui-lib/src/custom-components/DetailCard/DetailCard.tsx
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/onboarding/onboarding-flow-view.tsx when using this step layout inside the onboarding flow view, I expected the header to have a more prominent background. This header contains the stepper, but it currently has the same background color as the card content.
+
+I assumed that switching to the detail-geared component internally would produce the expected header styling, but it seems we now have a different variant. Please change the settings of the step layout or the underlying detail card to use the same header styling.
+
+---
+
+No — please remove your changes from the detail card component. The detail card already had support for this styling. I don't know what was added now. Please revert.
+
+---
+
+No — please remove your changes from the detail card component. The detail card already had support for this styling. I don't know what was added now. Please revert.
+
+---
+
+Only place the stepper of the step layout inside this chrome-style band header slot.
+
+---
+
+Yes, but now make sure the title description as header uses proper padding or margin.
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/onboarding/use-onboarding-flow.tsx:298-299 when we are in the registration phase, I want the title and description that will always be included.
+
+On top of the page, I want it to clearly indicate that we are currently in the formal registration phase, after the user has already selected the intent for registration. 
+
+ this intent needs to be filled in from a previous selection. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx
+
+---
+
+It is our goal to capture all the needed context inside the onboarding provider. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:51-62 it is best that all pages in the onboarding flow share the same provider and contribute to the data context being built across the different steps. 
+
+
+That way, when the user is later on a different route and is doing a formal request, the system will already have the correct context.
+
+---
+
+It is our goal to capture all the needed context inside the onboarding provider. @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx:51-62 it is best that all pages in the onboarding flow share the same provider and contribute to the data context being built across the different steps. 
+
+ when the user requests or selects a certain service ID and then selects multiple products and certifications, we need to store this information for later formal or informal requests. 
+
+That way, when the user is later on a different route and is doing a formal request, the system will already have the correct context.  it's this context that we also want to display in the title.
+
+---
+
+Commit all changes. Use the "Commit" skill.
+
+---
+
+Commit all changes. Use the "Commit" skill.
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyStep.tsx:363-655 our goal is to allow users to create or register new entities for each certification currently in scope for registration. If only one certification for one product is in scope, the user can select only one entity.
+
+If there is no separate entity from the company, the user must provide the same information as the maatschappelijke zetel. This information should be used for the legal entity. 
+
+ if multiple certification products or multiple products for certification have been selected, the user can select different legal entities for each of them.
+
+In any case, we should always select or show all of the currently selected certification products in context.
+
+---
+
+Even when the user has selected to use the same legal entity for all the certificates, I still want to show all of the certification products currently in scope or in context and display the name of the legal entity that will be used for each certification.
+
+As soon as he selects that different legal entities can be registered, the option will be enabled to select a different legal entity for each of the already selected or shown certification options.
+
+---
+
+Even when the user has selected to use the same legal entity for all the certificates, I still want to show all of the certification products currently in scope or in context and display the name of the legal entity that will be used for each certification.
+
+As soon as he selects that different legal entities can be registered, the option will be enabled to select a different legal entity for each of the already selected or shown certification options.
+
+---
+
+When listing all of the certification inquiries in this request, also list the assigned company information for each certification.
+
+"Certificatie en juridische entiteit"
+
+when the user has selected "Yes" to use the same legal entity, namely the maatschappelijke zetel, mention this maatschappelijke zetel information only once in the table.
+
+As soon as he selects "No," I want to allow adding different information.
+
+We want to show different company information for each certification inquiry within the request.
+
+In this case, the user does not need to click the "Add Vestiging" button.  
+The form for registering a first vestiging should already be presented.
+
+---
+
+I want to split this form, or this step, into two steps.
+
+The first step should complete all information for the Maatschappelijke Zetel. The second step should add all of the legal entities, vestigingen, units, or whatever they call them, possibly for each inquiry within the request.
+
+---
+
+I want to split this form, or this step, into two steps.
+
+The first step should complete all information for the Maatschappelijke Zetel. The second step should add all of the legal entities, vestigingen, units, or whatever they call them, possibly for each inquiry within the request.
+
+---
+
+Now, in the extra added step to link all certification inquiries to possibly different legal entities, please show first an overview of all certification inquiries and then choice cards to select between two options. By default, neither option is selected.
+
+First option: Yes, I want to use my Maatschappelijk Gazetel.
+Second option: No, I want to register different legal entities.
+
+When the second option is selected, please show an extra form to create one or more legal entities. As soon as one or more legal entities are created, allow selecting those legal entities in the overview at the top. Then allow selecting the Maatschappelijke Gazetel for every certification inquiry.
+
+---
+
+Now, in the extra added step to link all certification inquiries to possibly different legal entities, please show first an overview of all certification inquiries and then choice cards to select between two options. By default, neither option is selected.
+
+First option: Yes, I want to use my Maatschappelijk Gazetel.
+Second option: No, I want to register different legal entities.
+
+When the second option is selected, please show an extra form to create one or more legal entities. As soon as one or more legal entities are created, allow selecting those legal entities in the overview at the top. Then allow selecting the Maatschappelijke Gazetel for every certification inquiry.
+
+---
+
+As long as not all certification inquiries within the request are mapped to at least one legal entity, the user cannot continue to the next step.
+
+Also, when selecting Option 2, it does not make sense: the user first has to click "Add Entity" before they can create a new entity. Please enable this form by default.
+
+---
+
+As long as not all certification inquiries within the request are mapped to at least one legal entity, the user cannot continue to the next step.
+
+Also, when selecting Option 2, it does not make sense: the user first has to click "Add Entity" before they can create a new entity. Please enable this form by default.
+
+---
+
+Please add a call-to-action button within the subform to create a new legal entity. Call this call-to-action button "Add."
+
+As soon as a new legal entity is added, show a list of legal entities and allow editing. When editing, change the call-to-action button to "Save."
+
+---
+
+Please add a call-to-action button within the subform to create a new legal entity. Call this call-to-action button "Add."
+
+As soon as a new legal entity is added, show a list of legal entities and allow editing. When editing, change the call-to-action button to "Save."
+
+---
+
+Don't allow selecting the country for one of the created vestigingen. It must always be the same country as the maatschappelijke zetel.
+
+---
+
+Reuse the same legal-entity management on the next page to select the legal entity for invoicing. In the same way as in this step, the user can create a new legal entity, manage the list of legal entities, and select the correct legal entity for invoicing.
+
+When, in a previous step, the user selected multiple legal entities for certification, the user now has the option to use the same legal entities for invoicing for that specific request, or to use the Maatschappel Kassetel or any other legal entities.
+
+The user can select another legal entity for all invoicing, and can also select different legal entities for invoicing per certification inquiry. Please, just as in the step to select a legal entity per certification, also allow selecting a legal entity for invoicing for that certification.
+
+---
+
+Reuse the same legal-entity management on the next page to select the legal entity for invoicing. In the same way as in this step, the user can create a new legal entity, manage the list of legal entities, and select the correct legal entity for invoicing.
+
+When, in a previous step, the user selected multiple legal entities for certification, the user now has the option to use the same legal entities for invoicing for that specific request, or to use the Maatschappel Kassetel or any other legal entities.
+
+The user can select another legal entity for all invoicing, and can also select different legal entities for invoicing per certification inquiry. Please, just as in the step to select a legal entity per certification, also allow selecting a legal entity for invoicing for that certification.
+
+---
+
+In this step about invoicing, I want to move the required email field to the top of this stepper, just beneath the title and description. This email is required and must be entered first.
+
+After the email, I want to show an overview of all certification inquiries within this request and the legal entity selected in the previous step that owns each certification. Just beneath this overview, the user can toggle the option to provide alternative invoicing data per certification inquiry.
+
+When this option is enabled, we render the legal entity manager. The legal entity manager should allow adding new legal entities and selecting them for invoicing possibly for each inquiry.
+
+---
+
+In this step about invoicing, I want to move the required email field to the top of this stepper, just beneath the title and description. This email is required and must be entered first.
+
+After the email, I want to show an overview of all certification inquiries within this request and the legal entity selected in the previous step that owns each certification. Just beneath this overview, the user can toggle the option to provide alternative invoicing data per certification inquiry.
+
+When this option is enabled, we render the legal entity manager. The legal entity manager should allow adding new legal entities and selecting them for invoicing possibly for each inquiry.
+
+---
+
+Use the same select card on the registration step for the required selection if the current user is also the legal representative.
