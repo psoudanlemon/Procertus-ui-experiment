@@ -84,8 +84,12 @@ export {
   ProductSelectionBasketBody,
   ProductSelectionBasketMobileSummaryBar,
   ProductSelectionBasketProvider,
+  RequestValidationCard,
   TrajectLayout,
   TrajectStoryFooter,
+  buildGeneralProcessDocuments,
+  buildProductDocumentsForDraft,
+  useForceScrollConfirmation,
   useProductSelectionBasket,
 } from "./components/traject";
 export type {
@@ -96,9 +100,12 @@ export type {
   ProductBasketItem,
   ProductBasketProps,
   ProductSelectionBasketProviderProps,
+  RequestValidationCardProps,
+  RequestValidationDocument,
   TrajectLayoutAction,
   TrajectLayoutProps,
   TrajectStoryFooterProps,
+  UseForceScrollConfirmationResult,
 } from "./components/traject";
 export { ProcertusCategorizationTreeView } from "./components/procertus-categorization-tree-view";
 export type {

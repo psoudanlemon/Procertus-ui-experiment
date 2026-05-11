@@ -39,3 +39,14 @@ export type {
 } from "./BundleProductCard";
 export { TrajectStoryFooter } from "./TrajectStoryFooter";
 export type { TrajectStoryFooterProps } from "./TrajectStoryFooter";
+export { RequestValidationCard } from "./RequestValidationCard";
+export type {
+  RequestValidationCardProps,
+  RequestValidationDocument,
+} from "./RequestValidationCard";
+export {
+  buildGeneralProcessDocuments,
+  buildProductDocumentsForDraft,
+} from "./build-validation-documents";
+export { useForceScrollConfirmation } from "./use-force-scroll-confirmation";
+export type { UseForceScrollConfirmationResult } from "./use-force-scroll-confirmation";
