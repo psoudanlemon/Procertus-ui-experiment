@@ -106,8 +106,9 @@ export function ProductRequestNoteField({
   }, [autoFocus]);
   const remaining = maxLength - value.length;
   const isNearLimit = remaining <= Math.max(50, Math.round(maxLength * 0.05));
-  const tooShort =
-    required && value.trim().length > 0 && value.trim().length < PRODUCT_REQUEST_NOTE_MIN_LENGTH;
+  const trimmedLength = value.trim().length;
+  const belowMinimum = required && trimmedLength < PRODUCT_REQUEST_NOTE_MIN_LENGTH;
+  const tooShort = belowMinimum && trimmedLength > 0;
   const statusText = required
     ? tooShort
       ? `Minstens ${PRODUCT_REQUEST_NOTE_MIN_LENGTH} tekens vereist.`
@@ -153,7 +154,10 @@ export function ProductRequestNoteField({
         <span className={cn(tooShort && "text-destructive-foreground")}>{statusText}</span>
         <span
           aria-live="polite"
-          className={cn("tabular-nums", isNearLimit && "text-destructive-foreground")}
+          className={cn(
+            "tabular-nums",
+            (isNearLimit || belowMinimum) && "text-destructive-foreground",
+          )}
         >
           {value.length.toLocaleString("nl-BE")} /{" "}
           {maxLength.toLocaleString("nl-BE")}

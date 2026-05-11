@@ -1,3 +1,4 @@
+import { cn } from "@procertus-ui/ui";
 import {
   PRODUCT_REQUEST_NOTE_MAX_LENGTH,
   PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG,
@@ -97,7 +98,11 @@ export function TrajectRequestReviewFlow() {
     >
       <div className="flex flex-col gap-component">
         <section
-          className="flex flex-col gap-component rounded-xl border border-border bg-card p-section text-card-foreground"
+          className={cn(
+            "flex flex-col gap-component rounded-xl border bg-card p-section text-card-foreground transition-colors",
+            "focus-within:ring-3 focus-within:ring-ring/50",
+            note.trim().length > 0 ? "border-primary/50" : "border-border",
+          )}
           aria-labelledby="begeleidende-brief-heading"
         >
           <h2

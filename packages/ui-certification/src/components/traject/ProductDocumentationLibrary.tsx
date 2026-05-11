@@ -62,7 +62,7 @@ export function ProductDocumentationLibrary({
   documentsForDraft,
 }: ProductDocumentationLibraryProps) {
   return (
-    <div className={cn("flex flex-col gap-component", className)}>
+    <div className={cn("flex flex-col gap-section", className)}>
       {groups.map((group) => {
         const totalTrajects = group.drafts.length;
         const docMap = new Map<

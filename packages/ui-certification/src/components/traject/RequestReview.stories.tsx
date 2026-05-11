@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { cn } from "@procertus-ui/ui";
 import { type ComponentType, useLayoutEffect, useMemo, useState } from "react";
 
 import type { CertificationRequestDraft } from "../../certification-request/types";
@@ -156,7 +157,7 @@ function RequestReviewStory() {
         />
       }
     >
-      <div className="flex flex-col gap-component">
+      <div className="flex flex-col gap-section">
         <section
           className="flex flex-col gap-component rounded-xl border border-border bg-card p-section text-card-foreground"
           aria-labelledby="aanvraag-matrix-heading"
@@ -179,14 +180,18 @@ function RequestReviewStory() {
         </section>
 
         <section
-          className="flex flex-col gap-component rounded-xl border border-border bg-card p-section text-card-foreground"
+          className={cn(
+            "flex flex-col gap-component rounded-xl border bg-card p-section text-card-foreground transition-colors",
+            "focus-within:ring-3 focus-within:ring-ring/50",
+            note.trim().length > 0 ? "border-primary/50" : "border-border",
+          )}
           aria-labelledby="begeleidende-brief-heading"
         >
           <h2
             id="begeleidende-brief-heading"
             className="m-0 text-heading-lg font-semibold text-heading-foreground"
           >
-            Begeleidende brief
+            Voeg extra informatie toe
           </h2>
           <ProductRequestNoteField
             value={note}
@@ -245,9 +250,13 @@ function RequestReviewNonProductBoundStory() {
         />
       }
     >
-      <div className="flex flex-col gap-component">
+      <div className="flex flex-col gap-section">
         <section
-          className="flex flex-col gap-component rounded-xl border border-border bg-card p-section text-card-foreground"
+          className={cn(
+            "flex flex-col gap-component rounded-xl border bg-card p-section text-card-foreground transition-colors",
+            "focus-within:ring-3 focus-within:ring-ring/50",
+            note.trim().length > 0 ? "border-primary/50" : "border-border",
+          )}
           aria-labelledby="begeleidende-brief-heading-non-product"
         >
           <h2
