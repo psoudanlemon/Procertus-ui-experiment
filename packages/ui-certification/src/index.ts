@@ -77,6 +77,7 @@ export {
   ProductBasket,
   ProductSelectionBasketActionBar,
   ProductSelectionBasketBody,
+  ProductSelectionBasketMobileSummaryBar,
   ProductSelectionBasketProvider,
   TrajectLayout,
 } from "./components/traject";

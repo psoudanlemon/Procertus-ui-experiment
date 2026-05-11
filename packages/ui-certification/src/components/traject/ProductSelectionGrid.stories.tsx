@@ -85,7 +85,9 @@ export const ProductSelection: StoryObj<typeof meta> = {
     >
       <TrajectLayout
         {...args}
-        aboveActionBar={<ProductSelectionBasketMobileSummaryBar />}
+        aboveActionBar={
+          <ProductSelectionBasketMobileSummaryBar className="md:hidden" />
+        }
         actionBar={<ProductSelectionBasketActionBar />}
       >
         <ProductSelectionBasketBody />

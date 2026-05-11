@@ -166,20 +166,12 @@ export function SelectedRow({
         >
           <ItemContent className="min-w-0">
             <ItemTitle className="line-clamp-none w-full whitespace-normal break-words text-sm font-medium leading-snug">
-              {categoryTrail ? (
-                <>
-                  <span className="font-normal text-muted-foreground">
-                    {categoryTrail}
-                  </span>
-                  <span
-                    aria-hidden
-                    className="mx-1 font-normal text-muted-foreground"
-                  >
-                    &gt;
-                  </span>
-                </>
-              ) : null}
               {label}
+              {categoryTrail ? (
+                <span className="ms-2 text-xs font-normal text-muted-foreground">
+                  {categoryTrail.split(" > ").reverse().join(" < ")}
+                </span>
+              ) : null}
             </ItemTitle>
           </ItemContent>
           <ItemActions>

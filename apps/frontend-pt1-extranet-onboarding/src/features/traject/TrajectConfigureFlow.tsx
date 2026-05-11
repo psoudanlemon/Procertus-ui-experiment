@@ -1,6 +1,7 @@
 import {
   ProductSelectionBasketActionBar,
   ProductSelectionBasketBody,
+  ProductSelectionBasketMobileSummaryBar,
   ProductSelectionBasketProvider,
   TrajectLayout,
   buildProductIndex,
@@ -80,6 +81,9 @@ export function TrajectConfigureFlow() {
         kicker={service.entry.label}
         title="Selecteer de producten die je wil certificeren"
         description="Doorzoek de hele catalogus of blader stapsgewijs door categorieën."
+        aboveActionBar={
+          <ProductSelectionBasketMobileSummaryBar className="md:hidden" />
+        }
         actionBar={<ProductSelectionBasketActionBar />}
       >
         <ProductSelectionBasketBody />

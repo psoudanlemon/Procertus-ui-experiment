@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { IconSvgElement } from "@hugeicons/react";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { type ComponentType, useLayoutEffect } from "react";
 import {
   AnalyticsUpIcon,
   BookOpen01Icon,
@@ -53,6 +54,22 @@ type Story = StoryObj;
 // Public registry — Default
 // ---------------------------------------------------------------------------
 
+/**
+ * Mirrors `PublicAppShell` in the production app: sets `data-public-layout` on
+ * `<html>` so the shared `globals.css` height/overflow lock is released and the
+ * iframe scrolls at the document level, matching how guest pages behave in app.
+ */
+const PublicLayoutDecorator = (Story: ComponentType) => {
+  useLayoutEffect(() => {
+    const el = document.documentElement;
+    el.dataset.publicLayout = "";
+    return () => {
+      delete el.dataset.publicLayout;
+    };
+  }, []);
+  return <Story />;
+};
+
 const publicRegistryHeader = {
   logo: <img src="/Procertus logo.svg" alt="Procertus" className="h-8 w-auto" />,
   languages: [
@@ -93,6 +110,7 @@ const procertusLogoLarge = (
  * Public registry homepage: search-first portal with marketing chrome.
  */
 export const Default: Story = {
+  decorators: [PublicLayoutDecorator],
   render: () => (
     <PublicRegistryAppShell header={publicRegistryHeader} footer={publicRegistryFooter} hideFab>
       <div className="flex min-h-[calc(100svh-theme(spacing.16)-53px)] flex-col items-center justify-center px-4">
@@ -125,6 +143,32 @@ export const Default: Story = {
             </Tooltip>
           </div>
         </div>
+      </div>
+    </PublicRegistryAppShell>
+  ),
+};
+
+/**
+ * Tall content scrolls under the chrome: the public header scrolls away naturally
+ * with the document, while the footer pins to the viewport bottom. A scroll-to-fade
+ * overlay above the footer fades in while there is more content below.
+ */
+export const ScrollableContent: Story = {
+  name: "Scrollable content",
+  decorators: [PublicLayoutDecorator],
+  render: () => (
+    <PublicRegistryAppShell header={publicRegistryHeader} footer={publicRegistryFooter} hideFab>
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-8">
+        {Array.from({ length: 30 }).map((_, i) => (
+          <div
+            key={i}
+            className="rounded-lg border border-dashed border-border p-6 text-sm text-muted-foreground"
+          >
+            Sectie {i + 1} — voorbeeldcontent zodat de pagina langer is dan de viewport en
+            je het scrollgedrag kunt waarnemen. De header verdwijnt naar boven, de footer
+            blijft plakken en de fade verschijnt zolang er nog inhoud onder de footer staat.
+          </div>
+        ))}
       </div>
     </PublicRegistryAppShell>
   ),

@@ -37,6 +37,42 @@ function PublicRegistryAppShell({
   fillViewport = false,
   children,
 }: PublicRegistryAppShellProps) {
+  const footerRef = React.useRef<HTMLDivElement>(null);
+  const [scrolledAboveBottom, setScrolledAboveBottom] = React.useState(false);
+
+  React.useLayoutEffect(() => {
+    if (fillViewport || !footer) return;
+
+    const updateFade = () => {
+      const docH = document.documentElement.scrollHeight;
+      const winH = window.innerHeight;
+      const scrollY = window.scrollY;
+      setScrolledAboveBottom(scrollY + winH < docH - 1);
+    };
+
+    const updateFooterHeight = () => {
+      const h = footerRef.current?.offsetHeight ?? 0;
+      document.documentElement.style.setProperty("--registry-bottom-chrome-height", `${h}px`);
+    };
+
+    updateFade();
+    updateFooterHeight();
+
+    window.addEventListener("scroll", updateFade, { passive: true });
+    const ro = new ResizeObserver(() => {
+      updateFade();
+      updateFooterHeight();
+    });
+    ro.observe(document.documentElement);
+    if (footerRef.current) ro.observe(footerRef.current);
+
+    return () => {
+      window.removeEventListener("scroll", updateFade);
+      ro.disconnect();
+      document.documentElement.style.removeProperty("--registry-bottom-chrome-height");
+    };
+  }, [fillViewport, footer]);
+
   return (
     <div
       data-slot="public-registry-app-shell"
@@ -69,7 +105,20 @@ function PublicRegistryAppShell({
         )}
       </main>
       {footer && (
-        <div className="mx-section">
+        <div
+          ref={footerRef}
+          data-slot="public-registry-footer"
+          className={cn("sticky bottom-0 z-20 mx-section", fillViewport && "static")}
+        >
+          <div
+            aria-hidden
+            data-slot="public-registry-footer-scroll-fade"
+            className={cn(
+              "pointer-events-none absolute inset-x-0 -top-8 h-8 bg-linear-to-t to-transparent transition-opacity duration-200",
+              variant === "transparent" ? "from-background" : "from-sidebar",
+              scrolledAboveBottom ? "opacity-100" : "opacity-0",
+            )}
+          />
           <Footer {...footer} variant={variant} />
         </div>
       )}
