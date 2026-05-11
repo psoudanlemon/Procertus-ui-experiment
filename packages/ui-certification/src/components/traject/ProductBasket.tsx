@@ -50,40 +50,56 @@ export function ProductBasket({
     <aside
       aria-label="Gekozen producten"
       className={cn(
-        "flex flex-col gap-section rounded-lg border border-border bg-muted/30 p-section lg:sticky lg:top-component lg:h-fit lg:max-h-sticky-rail",
+        "flex flex-col gap-section rounded-lg border border-border p-section lg:sticky lg:top-component lg:h-fit lg:max-h-sticky-rail",
+        isEmpty ? "bg-muted/30" : "bg-card",
         className,
       )}
     >
       <header className="flex items-center justify-between gap-component">
         <H3>Gekozen producten</H3>
-        <Badge variant={isEmpty ? "outline" : "secondary"}>{items.length}</Badge>
+        <Badge
+          variant={isEmpty ? "outline" : "secondary"}
+          className={cn(isEmpty && "bg-card")}
+        >
+          {items.length}
+        </Badge>
       </header>
 
       {isEmpty ? (
         <EmptyBasket />
       ) : (
         <>
-          <ul className="flex min-h-0 flex-1 flex-col divide-y divide-border overflow-y-auto rounded-lg border border-border bg-card">
-            <AnimatePresence initial={false} mode="popLayout">
-              {items.map((p) => (
-                <SelectedRow
-                  key={p.id}
-                  id={p.id}
-                  label={p.label}
-                  categoryTrail={p.categoryTrail}
-                  onRemove={() => onRemove(p.id)}
-                />
-              ))}
-            </AnimatePresence>
-          </ul>
+          <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-1">
+            {/*
+             * Onzichtbare empty-state als hoogtereferentie: de grid-cel
+             * sized op de grootste child, dus de gevulde lijst zit nooit
+             * korter dan wat we in de empty state zouden tonen.
+             */}
+            <div aria-hidden className="invisible col-start-1 row-start-1">
+              <EmptyBasket />
+            </div>
+            <ul className="col-start-1 row-start-1 flex flex-col self-start divide-y divide-border overflow-y-auto rounded-lg border border-border bg-card">
+              <AnimatePresence initial={false} mode="popLayout">
+                {items.map((p) => (
+                  <SelectedRow
+                    key={p.id}
+                    id={p.id}
+                    label={p.label}
+                    categoryTrail={p.categoryTrail}
+                    onRemove={() => onRemove(p.id)}
+                  />
+                ))}
+              </AnimatePresence>
+            </ul>
+          </div>
           <Button
             type="button"
             variant="ghost"
             size="sm"
             onClick={onClear}
-            className="self-start text-muted-foreground"
+            className="w-full text-muted-foreground"
           >
-            Wis selectie
+            Wis alle producten
           </Button>
         </>
       )}
@@ -93,7 +109,7 @@ export function ProductBasket({
 
 function EmptyBasket() {
   return (
-    <div className="flex flex-col items-center gap-micro rounded-md border border-dashed border-border/60 bg-card/50 px-component py-section text-center">
+    <div className="flex flex-col items-center gap-micro rounded-md border border-dashed border-border/60 bg-card p-region text-center">
       <HugeiconsIcon icon={PackageIcon} className="size-6 text-muted-foreground/60" />
       <span className="text-sm font-medium">Nog geen producten geselecteerd</span>
       <span className="text-xs text-muted-foreground">

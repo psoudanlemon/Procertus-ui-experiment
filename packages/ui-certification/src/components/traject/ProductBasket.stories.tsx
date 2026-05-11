@@ -1,6 +1,4 @@
-import { Button } from "@procertus-ui/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
 
 import { ProductBasket, type ProductBasketItem } from "./ProductBasket";
 
@@ -83,49 +81,3 @@ export const Filled: StoryObj<typeof meta> = {
     className: STORY_WRAPPER_CLASS,
   },
 };
-
-/**
- * Interactieve variant: klik een rij om hem uit de winkelmand te
- * verwijderen, klik "Wis selectie" om alles weg te halen. Toont de
- * exit-animatie (links naar buiten, hoogte collapseert) waar de andere
- * rijen vloeiend op opschuiven via `popLayout`.
- */
-export const Interactive: StoryObj<typeof meta> = {
-  name: "Interactief",
-  args: {
-    items: SAMPLE_ITEMS,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Probeer een rij te verwijderen of de hele selectie te wissen. Gebruik 'Reset' om de stories opnieuw te vullen.",
-      },
-    },
-  },
-  render: () => <InteractiveBody />,
-};
-
-function InteractiveBody() {
-  const [items, setItems] = useState<readonly ProductBasketItem[]>(SAMPLE_ITEMS);
-  return (
-    <div className="flex max-w-sm flex-col gap-component">
-      <ProductBasket
-        items={items}
-        onRemove={(id) => setItems((prev) => prev.filter((p) => p.id !== id))}
-        onClear={() => setItems([])}
-      />
-      {items.length === 0 ? (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="self-start"
-          onClick={() => setItems(SAMPLE_ITEMS)}
-        >
-          Reset
-        </Button>
-      ) : null}
-    </div>
-  );
-}
