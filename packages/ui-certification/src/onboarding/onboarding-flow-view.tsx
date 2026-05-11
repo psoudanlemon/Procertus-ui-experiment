@@ -72,6 +72,7 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
         onSignInClick={onSignInClick}
       >
         <StepLayout
+          chromeStyle="banded"
           className="w-full"
           minHeight={STABLE_STEP_MIN_HEIGHT}
           variant="onboarding"

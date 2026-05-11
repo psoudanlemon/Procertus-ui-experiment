@@ -60,9 +60,8 @@ export type StepLayoutProps = {
   stepperPosition?: "top" | "start";
   /**
    * `card` — single surface, header flush with the body (default).
-   * `banded` — header and footer sit on a tinted strip (`bg-muted/40`) with
-   * borders separating them from the body, mirroring the DetailCard
-   * layout.
+   * `banded` — a muted strip carries only an optional **horizontal** stepper (`stepperPosition="top"`),
+   * and the footer mirrors that strip; step title/description use the ordinary card surface.
    */
   chromeStyle?: "card" | "banded";
   title: ReactNode;
@@ -153,11 +152,64 @@ function StepLayoutHeaderBlock({
   );
 }
 
+function StepLayoutFooterActions({
+  cancelAction,
+  backAction,
+  primaryAction,
+  secondaryAction,
+}: Pick<StepLayoutProps, "cancelAction" | "backAction" | "primaryAction" | "secondaryAction">) {
+  return (
+    <>
+      {cancelAction ? (
+        <Button
+          type="button"
+          variant="ghost"
+          className="mr-auto"
+          disabled={cancelAction.disabled}
+          onClick={cancelAction.onClick}
+        >
+          {cancelAction.label}
+        </Button>
+      ) : null}
+      {backAction ? (
+        <Button
+          type="button"
+          variant="outline"
+          disabled={backAction.disabled}
+          onClick={backAction.onClick}
+        >
+          {backAction.label}
+        </Button>
+      ) : null}
+      {secondaryAction ? (
+        <Button
+          type="button"
+          variant="outline"
+          disabled={secondaryAction.disabled}
+          onClick={secondaryAction.onClick}
+        >
+          {secondaryAction.label}
+        </Button>
+      ) : null}
+      {primaryAction ? (
+        <Button
+          type="button"
+          disabled={primaryAction.disabled || primaryAction.loading}
+          onClick={primaryAction.onClick}
+          aria-busy={primaryAction.loading === true}
+        >
+          {primaryAction.label}
+        </Button>
+      ) : null}
+    </>
+  );
+}
+
 export function StepLayout({
   className,
   variant = "onboarding",
   layout = "default",
-  flush = false,
+  flush: _flush = false,
   stepper,
   stepperPosition = "top",
   chromeStyle = "card",
@@ -179,6 +231,18 @@ export function StepLayout({
   const rail = hasStepper && stepperPosition === "start";
   const stableHeight = !isFill && !rail && minHeight != null;
   const banded = chromeStyle === "banded";
+  /** Horizontal stepper only: muted chrome strip separates from body; title sits below without the band. */
+  const bandedTopStepStrip =
+    banded && !rail && hasStepper && stepperPosition === "top";
+
+  const footerActions = (
+    <StepLayoutFooterActions
+      cancelAction={cancelAction}
+      backAction={backAction}
+      primaryAction={primaryAction}
+      secondaryAction={secondaryAction}
+    />
+  );
 
   const prevStepKeyRef = useRef(stepKey);
   const directionRef = useRef<"forward" | "backward">("forward");
@@ -208,12 +272,31 @@ export function StepLayout({
     stableHeight && cn("flex flex-col", minHeight),
   );
 
-  const headerNode = (
+  const bandedStepStripNode =
+    bandedTopStepStrip ? (
+      <CardHeader
+        className={cn(
+          "flex flex-col border-b bg-muted/40 !gap-0 !px-region !pt-region !pb-section",
+          isFill && "shrink-0",
+        )}
+      >
+        <div className="mx-auto w-[90%]">{stepper}</div>
+      </CardHeader>
+    ) : null;
+
+  const titleHeaderNode = (
     <CardHeader
       className={cn(
         "flex flex-col gap-region",
-        rail ? "!px-0" : "sm:px-boundary",
-        banded && "border-b bg-muted/40 !px-region !pt-region !pb-section",
+        rail
+          ? "!px-0"
+          : banded && !rail
+            ? cn(
+                "!px-region",
+                "!pb-section",
+                bandedTopStepStrip ? "!pt-region" : cn(cardTopPadClass[variant], "pt-region"),
+              )
+            : "sm:px-boundary",
         isFill && "shrink-0",
       )}
     >
@@ -261,7 +344,7 @@ export function StepLayout({
           )}
         </FadingScrollList>
       ) : animateStep ? (
-        <div key={`body-${stepKey}`} className={cn("space-y-section", stepAnimClass)}>
+        <div key={`body-${stepKey}`} className={cn(banded ? "space-y-region" : "space-y-section", stepAnimClass)}>
           {children}
         </div>
       ) : (
@@ -280,47 +363,7 @@ export function StepLayout({
         isViewportFill && "bg-transparent",
       )}
     >
-      {cancelAction ? (
-        <Button
-          type="button"
-          variant="ghost"
-          className="mr-auto"
-          disabled={cancelAction.disabled}
-          onClick={cancelAction.onClick}
-        >
-          {cancelAction.label}
-        </Button>
-      ) : null}
-      {backAction ? (
-        <Button
-          type="button"
-          variant="outline"
-          disabled={backAction.disabled}
-          onClick={backAction.onClick}
-        >
-          {backAction.label}
-        </Button>
-      ) : null}
-      {secondaryAction ? (
-        <Button
-          type="button"
-          variant="outline"
-          disabled={secondaryAction.disabled}
-          onClick={secondaryAction.onClick}
-        >
-          {secondaryAction.label}
-        </Button>
-      ) : null}
-      {primaryAction ? (
-        <Button
-          type="button"
-          disabled={primaryAction.disabled || primaryAction.loading}
-          onClick={primaryAction.onClick}
-          aria-busy={primaryAction.loading === true}
-        >
-          {primaryAction.label}
-        </Button>
-      ) : null}
+      {footerActions}
     </CardFooter>
   );
 
@@ -354,7 +397,7 @@ export function StepLayout({
               isFill && "min-h-0 flex-1",
             )}
           >
-            {headerNode}
+            {titleHeaderNode}
             {contentNode}
           </div>
         </div>
@@ -372,8 +415,11 @@ export function StepLayout({
         className,
       )}
     >
-      {hasStepper ? <div className="mx-auto w-[90%]">{stepper}</div> : null}
-      {headerNode}
+      {bandedStepStripNode}
+      {hasStepper && stepperPosition === "top" && !banded ? (
+        <div className="mx-auto w-[90%]">{stepper}</div>
+      ) : null}
+      {titleHeaderNode}
       {contentNode}
       {footerNode}
     </Card>

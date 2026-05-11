@@ -22,7 +22,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Reusable **step page** layout for multi-step flows in the main content area. Pass a **stepper** via `stepper` and `stepperPosition` (or omit for title-only chrome). Pair with `useStepLayout` for back/next and per-step prerequisites. Align spacing and hierarchy with the Documentation Portal design guidelines.",
+          "Reusable **step page** layout for multi-step flows in the main content area. Pass a **stepper** via `stepper` and `stepperPosition` (or omit for title-only chrome). Pair with `useStepLayout` for back/next and per-step prerequisites. **`chromeStyle=\"banded\"`** adds muted strips for an optional **horizontal** stepper-only row and for the footer; title and description stay on the main card surface. Align spacing and hierarchy with the Documentation Portal design guidelines.",
       },
     },
   },
