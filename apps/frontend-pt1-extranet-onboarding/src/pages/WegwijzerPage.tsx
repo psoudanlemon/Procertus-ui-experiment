@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Alert02Icon,
@@ -84,6 +84,7 @@ const VALID_SERVICE_IDS = new Set<string>([
 export function WegwijzerPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const explorerRef = useRef<HTMLDivElement>(null);
 
   const rawParam = searchParams.get(SERVICE_PARAM);
   const activeId = rawParam && VALID_SERVICE_IDS.has(rawParam) ? rawParam : ALL_ID;
@@ -106,6 +107,20 @@ export function WegwijzerPage() {
     [setSearchParams],
   );
 
+  /**
+   * Sluit een detail-card en stuur de gebruiker terug naar het overzicht.
+   * Scrollt naar de choice-bar zodat de gebruiker leert dat de selectie ook
+   * vanuit die bar te bedienen is. requestAnimationFrame wacht tot de nieuwe
+   * grid is uitgemonteerd zodat de scroll niet over een collapsing layout heen
+   * springt.
+   */
+  const handleResetToOverview = useCallback(() => {
+    setActiveId(ALL_ID);
+    requestAnimationFrame(() => {
+      explorerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [setActiveId]);
+
   const activeService = WEGWIJZER_SERVICES.find((s) => s.entry.id === activeId);
 
   return (
@@ -127,7 +142,7 @@ export function WegwijzerPage() {
         <div className="mx-auto w-full max-w-7xl">
           <Hero />
 
-          <div className="px-boundary pb-boundary">
+          <div ref={explorerRef} className="px-boundary pb-boundary scroll-mt-section">
             <CatalogueExplorer
               items={CHOICE_BAR_ITEMS}
               activeId={activeId}
@@ -144,7 +159,7 @@ export function WegwijzerPage() {
               ) : activeId === ANDERE_ID ? (
                 <ExternalReferralGrid services={EXTERNAL_SERVICES} />
               ) : activeService ? (
-                <MasterCard service={activeService} />
+                <MasterCard service={activeService} onClose={handleResetToOverview} />
               ) : null}
             </CatalogueExplorer>
           </div>
@@ -327,7 +342,13 @@ function ExternalReferralItem({ service }: { service: WegwijzerService }) {
 // Master Card — selected service detail
 // ---------------------------------------------------------------------------
 
-function MasterCard({ service }: { service: WegwijzerService }) {
+function MasterCard({
+  service,
+  onClose,
+}: {
+  service: WegwijzerService;
+  onClose: () => void;
+}) {
   const { entry, externalReferral } = service;
   const isInnovation = entry.id === "innovation-attest";
   const isExternal = service.tier === 3;
@@ -337,6 +358,8 @@ function MasterCard({ service }: { service: WegwijzerService }) {
     <DetailCard
       title={entry.label}
       description={entry.description}
+      onClose={onClose}
+      closeLabel={`Sluit ${entry.shortLabel} en keer terug naar alle certificaten`}
       footer={
         <>
           <HoverCard>

@@ -173,6 +173,43 @@ export const NoWatermark = {
   render: () => <NoWatermarkStory />,
 } as unknown as StoryObj<typeof meta>;
 
+function WithCloseStory() {
+  return (
+    <div className="mx-auto w-full max-w-7xl">
+      <DetailCard
+        title="BENOR-certificatie"
+        description="Pass `onClose` to render a ghost close button in the header. Use to return from a detail view to its overview."
+        onClose={() => {
+          // eslint-disable-next-line no-alert
+          alert("DetailCard close clicked");
+        }}
+        closeLabel="Sluit BENOR-certificatie en keer terug naar het overzicht"
+        footer={
+          <>
+            <Button variant="link">Hulp nodig?</Button>
+            <Button size="lg">
+              Start traject
+              <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
+            </Button>
+          </>
+        }
+      >
+        <DetailCardSection title="Wat is een BENOR-certificatie?">
+          <p className="max-w-3xl text-sm leading-normal">
+            De close-knop links bovenaan de header laat de gebruiker zonder browser-back terug naar
+            het overzicht. Houd de titel kort genoeg zodat hij niet over de knop heen loopt — bij
+            lange titels zorgt de flex-layout dat de knop netjes naast de tekst blijft staan.
+          </p>
+        </DetailCardSection>
+      </DetailCard>
+    </div>
+  );
+}
+
+export const WithClose = {
+  render: () => <WithCloseStory />,
+} as unknown as StoryObj<typeof meta>;
+
 function LayoutStory() {
   return (
     <div className="mx-auto w-full max-w-7xl">

@@ -80,28 +80,27 @@ export function DetailCard({
 
   return (
     <Card className={cn("flex flex-col gap-0 pt-0 shadow-proc-xs md:shadow-proc-sm", className)}>
-      <CardHeader
-        className={cn(
-          "relative gap-1 border-b bg-muted/40 p-region [.border-b]:pb-region",
-          onClose && "pr-[calc(var(--region)+2.5rem)]",
-        )}
-      >
-        <H2>{title}</H2>
-        {description ? (
-          <CardDescription className="text-base leading-normal">{description}</CardDescription>
-        ) : null}
-        {onClose ? (
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            onClick={onClose}
-            className="absolute top-component right-component text-muted-foreground hover:text-foreground"
-          >
-            <HugeiconsIcon icon={Cancel01Icon} />
-            <span className="sr-only">{closeLabel}</span>
-          </Button>
-        ) : null}
+      <CardHeader className="gap-1 border-b bg-muted/40 p-region [.border-b]:pb-region">
+        <div className="flex items-start justify-between gap-component">
+          <div className="flex min-w-0 flex-col gap-1">
+            <H2>{title}</H2>
+            {description ? (
+              <CardDescription className="text-base leading-normal">{description}</CardDescription>
+            ) : null}
+          </div>
+          {onClose ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              onClick={onClose}
+              className="-mt-1 -mr-1 shrink-0 text-muted-foreground hover:text-foreground"
+            >
+              <HugeiconsIcon icon={Cancel01Icon} />
+              <span className="sr-only">{closeLabel}</span>
+            </Button>
+          ) : null}
+        </div>
       </CardHeader>
 
       <CardContent className="relative isolate flex flex-col gap-region overflow-hidden p-region">
