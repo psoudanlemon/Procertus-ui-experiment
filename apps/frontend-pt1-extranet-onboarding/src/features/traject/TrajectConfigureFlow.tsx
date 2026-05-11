@@ -1,4 +1,5 @@
 import {
+  BUNDLE_CERT_ORDER,
   ProductSelectionBasketActionBar,
   ProductSelectionBasketBody,
   ProductSelectionBasketMobileSummaryBar,
@@ -6,6 +7,7 @@ import {
   TrajectLayout,
   buildProductIndex,
   defaultProcertusCategorizationDoc,
+  type BundleCertKey,
   type CertificationEntryId,
   type CertificationRequestDraft,
 } from "@procertus-ui/ui-certification";
@@ -19,6 +21,15 @@ import { persistTrajectHandoff } from "./traject-submission-context";
 const WEGWIJZER_PATH = "/welcome";
 const SIGNIN_PATH = "/welcome/login";
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
+const BUNDLE_ASSEMBLE_PATH = (serviceId: string) =>
+  `/welcome/aanvraag/${serviceId}/pakket`;
+
+// Alleen wegwijzer-services die als hoofdcertificatie binnen het bundle-pakket vallen
+// (BENOR/CE/ATG) krijgen de extra "Voeg trajecten toe"-stap. Andere services (SSD,
+// Partijkeuring, …) hebben geen bundle-extras en gaan rechtstreeks naar Triage.
+function isBundleCertService(value: string): value is BundleCertKey {
+  return (BUNDLE_CERT_ORDER as readonly string[]).includes(value);
+}
 
 export function TrajectConfigureFlow() {
   const navigate = useNavigate();
@@ -60,7 +71,10 @@ export function TrajectConfigureFlow() {
       });
       if (drafts.length === 0) return;
       persistTrajectHandoff({ drafts, serviceId });
-      navigate(TRIAGE_PATH(serviceId), { replace: true });
+      const nextPath = isBundleCertService(serviceId)
+        ? BUNDLE_ASSEMBLE_PATH(serviceId)
+        : TRIAGE_PATH(serviceId);
+      navigate(nextPath, { replace: true });
     },
     [navigate, productIndex, service, serviceId],
   );

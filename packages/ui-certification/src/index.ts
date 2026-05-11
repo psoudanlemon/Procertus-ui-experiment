@@ -74,6 +74,11 @@ export type {
   RegistrationProcessingStep,
 } from "./components/registration-processing-dialog";
 export {
+  BUNDLE_CERT_META,
+  BUNDLE_CERT_ORDER,
+  BundleAssembleActionBar,
+  BundleAssembleBody,
+  BundleAssembleProvider,
   ProductBasket,
   ProductSelectionBasketActionBar,
   ProductSelectionBasketBody,
@@ -82,6 +87,10 @@ export {
   TrajectLayout,
 } from "./components/traject";
 export type {
+  BundleAssembleProviderProps,
+  BundleCertKey,
+  BundleCertMeta,
+  BundleProduct,
   ProductBasketItem,
   ProductBasketProps,
   ProductSelectionBasketProviderProps,
