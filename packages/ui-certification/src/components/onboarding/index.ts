@@ -12,7 +12,8 @@ export { OnboardingRequestStep, type OnboardingRequestStepProps } from "./reques
 export type { OnboardingRequestStepCopy } from "./request-step/onboarding-request-step-copy";
 export { DEFAULT_ONBOARDING_REQUEST_STEP_COPY } from "./request-step/onboarding-request-step-copy";
 export { OnboardingCustomerStep, type OnboardingCustomerStepProps } from "./customer-step/OnboardingCustomerStep";
-export { OnboardingCompanyStep, type OnboardingCompanyStepProps } from "./company-step/OnboardingCompanyStep";
+export { OnboardingCompanyLegalEntitiesStep, type OnboardingCompanyLegalEntitiesStepProps } from "./company-step/OnboardingCompanyLegalEntitiesStep";
+export { OnboardingCompanyZetelStep, type OnboardingCompanyZetelStepProps } from "./company-step/OnboardingCompanyZetelStep";
 export { OnboardingInvoicingStep, type OnboardingInvoicingStepProps } from "./invoicing-step/OnboardingInvoicingStep";
 export { OnboardingExtrasStep, type OnboardingExtrasStepProps } from "./extras-step/OnboardingExtrasStep";
 export { OnboardingSummaryStep, type OnboardingSummaryStepProps } from "./summary-step/OnboardingSummaryStep";

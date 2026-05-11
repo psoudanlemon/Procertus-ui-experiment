@@ -8,6 +8,7 @@ import type {
 } from "./onboarding-types";
 import {
   customerContextAfterPrototypePresetChange,
+  effectiveIncludedCertificationDraftIds,
   mergeCustomerContextDeep,
   resolveFlowContext,
   stepIndex,
@@ -178,7 +179,10 @@ export function createOnboardingFlowApi(
     goToOnboardingStep(nextStep) {
       setFlowState((prev) => {
         const context = resolvePrevContext(prev);
-        const certificationInquiryDraftIds = prev.drafts.map((d) => d.id);
+        const certificationInquiryDraftIds = effectiveIncludedCertificationDraftIds(
+          prev.drafts,
+          prev.summaryIncludedDraftIds,
+        );
         const steps = buildOnboardingStepperSteps({
           step: prev.step,
           drafts: prev.drafts,

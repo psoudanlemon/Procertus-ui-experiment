@@ -21,6 +21,7 @@ import {
 } from "./lib/vatPrototypePresets";
 import {
   customerContextAfterPrototypePresetChange,
+  effectiveIncludedCertificationDraftIds,
   isOnboardingInvoicingStepValid,
   mergeCustomerContextDeep,
   prototypeOptionalDemoContextPatch,
@@ -148,6 +149,7 @@ export function OnboardingFlowProvider({
           prev.drafts.length > 0 &&
           (resumeStep === "customer" ||
             resumeStep === "company" ||
+            resumeStep === "companyLegalEntities" ||
             resumeStep === "invoicing" ||
             resumeStep === "extras" ||
             resumeStep === "summary")
@@ -172,10 +174,14 @@ export function OnboardingFlowProvider({
         },
       );
       const candidateStep = (fixes.step ?? prev.step) as OnboardingStep;
+      const invoicingIncludedDraftIds = effectiveIncludedCertificationDraftIds(
+        prev.drafts,
+        prev.summaryIncludedDraftIds,
+      );
       if (
         !ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION &&
         (candidateStep === "extras" || candidateStep === "summary") &&
-        !isOnboardingInvoicingStepValid(nextContext)
+        !isOnboardingInvoicingStepValid(nextContext, invoicingIncludedDraftIds)
       ) {
         fixes.step = "invoicing";
       }

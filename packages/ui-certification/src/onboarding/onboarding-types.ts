@@ -110,12 +110,23 @@ export type CustomerContext = {
   invoicingContactPersonRegistryId: string;
   invoicingEmail: string;
   /**
-   * When true, juridisch facturatiedrukker is a {@link onboardingVestigingen} entry, not de
-   * maatschappelijke zetel. Nieuwe vestigingen komen ook op de bedrijfsstap terecht (zelfde lijst).
+   * Legacy: enkelvoudige factuur‑rechtspersoon; wordt niet meer in de hoofd‑UI gebruikt maar blijft
+   * gedecodeerd bij persistentie. Per aanvraag zie {@link invoicingMirrorCertificationLegalEntities}
+   * en {@link invoicingInquiryVestigingId}.
    */
   invoicingDiffersFromHeadOffice: boolean;
-  /** Gekozen vestigings-id uit {@link onboardingVestigingen} wanneer {@link invoicingDiffersFromHeadOffice}. */
+  /** Legacy enkel veld bij {@link invoicingDiffersFromHeadOffice}. */
   invoicingVestigingId: string;
+  /**
+   * Wanneer true: facturatiedrukker per aanvraag volgt {@link certificationInquiryVestigingId}
+   * (respectievelijk impliciet zetel wanneer {@link headOfficeIsCertificationLegalEntity} `"yes"`).
+   */
+  invoicingMirrorCertificationLegalEntities: boolean;
+  /**
+   * Bij {@link invoicingMirrorCertificationLegalEntities} false: aanvraag‑id → zetel‑sentinel of
+   * vestigings‑id uit {@link onboardingVestigingen} (zelde semantics als certificatietabel).
+   */
+  invoicingInquiryVestigingId: Record<string, string>;
   /** Billing address when different from the main organisation address. */
   addInvoicingAddressOverride: boolean;
   invoicingAddressStreet: string;
@@ -160,6 +171,7 @@ export const ONBOARDING_STEPS = [
   "origin",
   "customer",
   "company",
+  "companyLegalEntities",
   "invoicing",
   "extras",
   "summary",

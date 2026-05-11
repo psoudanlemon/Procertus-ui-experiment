@@ -2,6 +2,7 @@ import { personSubformEmailStructuralIssue } from "@procertus-ui/domain-certific
 import { useId, useMemo } from "react";
 
 import { sortDraftsByIntentAndProduct } from "../components/certification-request-wizard/draft-selection-presentation";
+import type { CertificationRequestDraft } from "../CertificationRequestContext";
 import { COUNTRY_SELECT_NONE } from "./onboarding-constants";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
 import {
@@ -14,8 +15,7 @@ import {
   isFirmaCountryLockedToRequestOrigin,
 } from "./onboarding-request-origin";
 import {
-  CERT_INVOICE_VEST_NEW,
-  CERT_INVOICE_VEST_UNASSIGNED,
+  CERT_INQUIRY_LEGAL_ENTITY_ZETEL,
   CERT_INQUIRY_VEST_UNASSIGNED,
 } from "./onboarding-flow-select-sentinels";
 import {
@@ -30,13 +30,12 @@ export type OnboardingRegistrationLayoutModel = OnboardingFlowViewProps & {
   applicantLegalRepPersonFieldsLocked: boolean;
   invoicingFieldBase: string;
   legalEntityFieldBase: string;
+  /** Sorted wizard drafts shown where the broad package matters. */
   draftsSortedForCertification: ReturnType<typeof sortDraftsByIntentAndProduct>;
+  /** Drafts in this dossier registration scope (included in nazicht/submit); drives legal entity UI. */
+  draftsInRegistrationScope: CertificationRequestDraft[];
   invoicingCountryOptions: readonly string[];
   invoicingCountrySelectValue: string;
-  invoicingVestigingSelectRadixValue: string;
-  selectedInvoicingVestiging:
-    | OnboardingFlowViewProps["context"]["onboardingVestigingen"][number]
-    | undefined;
   registrationIdOrigin: string;
   registrationIdFieldMeta: ReturnType<typeof registrationIdentifierFieldMeta>;
   registrationIdentifierIssue: string | null;
@@ -51,8 +50,7 @@ export type OnboardingRegistrationLayoutModel = OnboardingFlowViewProps & {
   summaryRc: ReturnType<typeof onboardingReviewRequesterFromContext>["context"];
   firmaCountryLocked: boolean;
   companySourceCountryLabel: string;
-  CERT_INVOICE_VEST_UNASSIGNED: string;
-  CERT_INVOICE_VEST_NEW: string;
+  CERT_INQUIRY_LEGAL_ENTITY_ZETEL: string;
   CERT_INQUIRY_VEST_UNASSIGNED: string;
 };
 
@@ -79,6 +77,11 @@ export function useOnboardingRegistrationLayoutModel(
     [drafts],
   );
 
+  const draftsInRegistrationScope = useMemo(() => {
+    const allow = new Set(effectiveSummaryIncludedDraftIds);
+    return draftsSortedForCertification.filter((d) => allow.has(d.id));
+  }, [draftsSortedForCertification, effectiveSummaryIncludedDraftIds]);
+
   const invoicingCountryOptions = useMemo(() => {
     const c = context.invoicingCountry?.trim();
     if (c && !countrySelectOptions.includes(c)) {
@@ -91,19 +94,6 @@ export function useOnboardingRegistrationLayoutModel(
     const t = context.invoicingCountry?.trim() ?? "";
     return t && invoicingCountryOptions.includes(t) ? t : COUNTRY_SELECT_NONE;
   }, [context.invoicingCountry, invoicingCountryOptions]);
-
-  const invoicingVestigingSelectRadixValue = useMemo(
-    () => (context.invoicingVestigingId ?? "").trim() || CERT_INVOICE_VEST_UNASSIGNED,
-    [context.invoicingVestigingId],
-  );
-
-  const selectedInvoicingVestiging = useMemo(() => {
-    const id = (context.invoicingVestigingId ?? "").trim();
-    if (!id || !context.invoicingDiffersFromHeadOffice) {
-      return undefined;
-    }
-    return context.onboardingVestigingen.find((x) => x.id === id);
-  }, [context.invoicingVestigingId, context.invoicingDiffersFromHeadOffice, context.onboardingVestigingen]);
 
   const registrationIdOrigin = requestOrigin !== "" ? requestOrigin : "other";
 
@@ -174,10 +164,9 @@ export function useOnboardingRegistrationLayoutModel(
     invoicingFieldBase,
     legalEntityFieldBase,
     draftsSortedForCertification,
+    draftsInRegistrationScope,
     invoicingCountryOptions,
     invoicingCountrySelectValue,
-    invoicingVestigingSelectRadixValue,
-    selectedInvoicingVestiging,
     registrationIdOrigin,
     registrationIdFieldMeta,
     registrationIdentifierIssue,
@@ -192,8 +181,7 @@ export function useOnboardingRegistrationLayoutModel(
     summaryRc,
     firmaCountryLocked,
     companySourceCountryLabel,
-    CERT_INVOICE_VEST_UNASSIGNED,
-    CERT_INVOICE_VEST_NEW,
+    CERT_INQUIRY_LEGAL_ENTITY_ZETEL,
     CERT_INQUIRY_VEST_UNASSIGNED,
   };
 }

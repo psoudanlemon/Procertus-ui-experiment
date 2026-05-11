@@ -13,18 +13,14 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  ChoiceCard,
+  ChoiceCardGroup,
   Field,
   FieldContent,
   FieldDescription,
   FieldLabel,
   Input,
-  Label,
-  Progress,
-  RadioGroup,
-  RadioGroupItem,
   Select,
-  ChoiceCard,
-  ChoiceCardGroup,
   SelectContent,
   SelectItem,
   SelectTrigger,
@@ -104,377 +100,361 @@ import {
 import type { OnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
 import { personFormCardClassName } from "../../../onboarding/person-form-card-variants";
 
-
 export type OnboardingCustomerStepProps = { model: OnboardingRegistrationLayoutModel };
 
 export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
   const {
     step,
-        certificationPhaseTitle,
-        certificationPhaseDescription,
-        registrationPhaseTitle,
-        registrationPhaseDescription,
-        onSignInClick,
-        certificationWizardProps,
-        registrationSubmitOpen,
-        onRegistrationSubmitOpenChange,
-        registrationProgress,
-        registrationStepIndex,
-        registrationSimulationLabels,
-        context,
-        updateContext,
-        patchContext,
-        setFlowState,
-        drafts,
-        effectiveSummaryIncludedDraftIds,
-        rows,
-        steps,
-        activeStep,
-        goToOnboardingStep,
-        primaryAction,
-        backAction,
-        cancelAction,
-        companyLookupPhase,
-        lookupProgress,
-        lookupStepIndex,
-        vatLookupStepLabels,
-        companyPrefillFieldKeys,
-        companyFieldsResolvedInSimulation,
-        vatNumberForDisplay,
-        emailForDisplay,
-        activeVatPreset,
-        prototypeVatPresetId,
-        vatPrototypePresetChoices,
-        requestOrigin,
-        setRequestOrigin,
-        countrySelectOptions,
-        countrySelectValue,
-        companyHints,
-        summaryKlantenportaalByPersonId,
-        originFieldBase,
-        applicantLegalRepFieldBase,
-        applicantLegalRepPersonFieldsLocked,
-        invoicingFieldBase,
-        legalEntityFieldBase,
-        draftsSortedForCertification,
-        invoicingCountryOptions,
-        invoicingCountrySelectValue,
-        invoicingVestigingSelectRadixValue,
-        selectedInvoicingVestiging,
-        registrationIdOrigin,
-        registrationIdFieldMeta,
-        registrationIdentifierIssue,
-        registrationIdentifierStructurallyValid,
-        invoicingEmailIssue,
-        canAddCertificationSecondary,
-        fullPackageEntityRecords,
-        summaryRequesterLabel,
-        summaryRequesterEmailLabel,
-        summaryOrganizationLabel,
-        summarySectionTitle,
-        summaryRc,
-        firmaCountryLocked,
-        companySourceCountryLabel,
-        CERT_INVOICE_VEST_UNASSIGNED,
-        CERT_INVOICE_VEST_NEW,
-        CERT_INQUIRY_VEST_UNASSIGNED,
+    certificationPhaseTitle,
+    certificationPhaseDescription,
+    registrationPhaseTitle,
+    registrationPhaseDescription,
+    onSignInClick,
+    certificationWizardProps,
+    registrationSubmitOpen,
+    onRegistrationSubmitOpenChange,
+    registrationProgress,
+    registrationStepIndex,
+    registrationSimulationLabels,
+    context,
+    updateContext,
+    patchContext,
+    setFlowState,
+    drafts,
+    effectiveSummaryIncludedDraftIds,
+    rows,
+    steps,
+    activeStep,
+    goToOnboardingStep,
+    primaryAction,
+    backAction,
+    cancelAction,
+    companyLookupPhase,
+    lookupProgress,
+    lookupStepIndex,
+    vatLookupStepLabels,
+    companyPrefillFieldKeys,
+    companyFieldsResolvedInSimulation,
+    vatNumberForDisplay,
+    emailForDisplay,
+    activeVatPreset,
+    prototypeVatPresetId,
+    vatPrototypePresetChoices,
+    requestOrigin,
+    setRequestOrigin,
+    countrySelectOptions,
+    countrySelectValue,
+    companyHints,
+    summaryKlantenportaalByPersonId,
+    originFieldBase,
+    applicantLegalRepFieldBase,
+    applicantLegalRepPersonFieldsLocked,
+    invoicingFieldBase,
+    legalEntityFieldBase,
+    draftsSortedForCertification,
+    invoicingCountryOptions,
+    invoicingCountrySelectValue,
+    registrationIdOrigin,
+    registrationIdFieldMeta,
+    registrationIdentifierIssue,
+    registrationIdentifierStructurallyValid,
+    invoicingEmailIssue,
+    canAddCertificationSecondary,
+    fullPackageEntityRecords,
+    summaryRequesterLabel,
+    summaryRequesterEmailLabel,
+    summaryOrganizationLabel,
+    summarySectionTitle,
+    summaryRc,
+    firmaCountryLocked,
+    companySourceCountryLabel,
   } = model;
 
   return (
-      <div className="space-y-6">
-        <PrototypeCard
-          title="Voorbeeldmodus"
-          description={
+    <div className="space-y-6">
+      <PrototypeCard
+        title="Voorbeeldmodus"
+        description={
+          <>
+            Kies een voorbeeld om het identificatieveld hieronder automatisch in te vullen en de
+            flow te doorlopen. U kunt het nummer altijd zelf aanpassen. Bij een andere keuze worden
+            naam, aanhef, functie en e-mail bijgewerkt en worden bedrijfsgegevens leeggemaakt tot de
+            opzoeking klaar is.
+          </>
+        }
+        notice={
+          activeVatPreset?.demoSupplementsOrgAddressFromEmailDomain ? (
             <>
-              Kies een voorbeeld om het identificatieveld hieronder automatisch in te vullen
-              en de flow te doorlopen. U kunt het nummer altijd zelf aanpassen. Bij een andere
-              keuze worden naam, aanhef, functie en e-mail bijgewerkt en worden
-              bedrijfsgegevens leeggemaakt tot de opzoeking klaar is.
+              <span className="font-medium text-foreground">Let op bij dit voorbeeld:</span> uw
+              nummer levert hier geen bedrijfsnaam en volledig adres op. Waar mogelijk vullen we die
+              aan op basis van uw professionele e-mailadres. Controleer de velden. Gebruikt u een
+              gratis of algemeen e-mailadres, vult u naam en adres zelf in.
             </>
-          }
-          notice={
-            activeVatPreset?.demoSupplementsOrgAddressFromEmailDomain ? (
-              <>
-                <span className="font-medium text-foreground">Let op bij dit voorbeeld:</span>{" "}
-                uw nummer levert hier geen bedrijfsnaam en volledig adres op. Waar mogelijk
-                vullen we die aan op basis van uw professionele e-mailadres. Controleer de
-                velden. Gebruikt u een gratis of algemeen e-mailadres, vult u naam en adres
-                zelf in.
-              </>
-            ) : undefined
-          }
-        >
-          <Field>
-            <FieldLabel htmlFor="prototype-vat-preset">
-              Voorbeeld btw- / ondernemingsnummer
-            </FieldLabel>
-            <FieldContent>
-              <Select
-                value={prototypeVatPresetId}
-                onValueChange={(id) => {
-                  const preset =
-                    findVatPrototypePreset(id) ??
-                    vatPrototypePresetChoices[0] ??
-                    VAT_PROTOTYPE_PRESETS[0];
-                  if (!preset) return;
-                  setFlowState((prev) => ({
-                    ...prev,
-                    prototypeVatPresetId: id,
-                    companyFieldHints: {},
-                    context: customerContextAfterPrototypePresetChange(
-                      resolveFlowContext(prev.context),
-                      preset,
-                    ),
-                  }));
-                }}
-              >
-                <SelectTrigger
-                  id="prototype-vat-preset"
-                  className="h-auto min-h-9 w-full py-2 whitespace-normal"
-                >
-                  <SelectValue placeholder="Kies" />
-                </SelectTrigger>
-                <SelectContent>
-                  {vatPrototypePresetChoices.map((p) => (
-                    <SelectItem key={p.id} value={p.id}>
-                      {p.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FieldContent>
-          </Field>
-        </PrototypeCard>
-        <div className="space-y-4">
-          <div className="space-y-1">
-            <h3 className="text-sm font-semibold tracking-tight text-foreground">
-              Organisatie-identificatie
-            </h3>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Het formaat hangt af van uw eerder gekozen land of regio. Zodra het nummer
-              klopt, kunt u verder naar bedrijfsgegevens.
-            </p>
-          </div>
-          <Field data-invalid={registrationIdentifierIssue ? true : undefined}>
-            <FieldLabel htmlFor="customer-registration-identifier">
-              {registrationIdFieldMeta.label}
-            </FieldLabel>
-            <FieldContent>
-              <div className="flex min-w-0 items-center gap-1.5">
-                <Input
-                  id="customer-registration-identifier"
-                  className="min-w-0 flex-1"
-                  value={context.vatNumber}
-                  placeholder={registrationIdFieldMeta.placeholder}
-                  onChange={(event) => updateContext("vatNumber", event.target.value)}
-                  autoComplete="off"
-                  spellCheck={false}
-                  aria-invalid={registrationIdentifierIssue != null}
-                  aria-describedby={
-                    registrationIdentifierIssue
-                      ? "customer-registration-identifier-error customer-registration-identifier-hint"
-                      : "customer-registration-identifier-hint"
-                  }
-                />
-                <SubformCompletionBadge
-                  complete={registrationIdentifierStructurallyValid}
-                  title="Geldig formaat"
-                />
-              </div>
-              {registrationIdentifierIssue ? (
-                <p
-                  id="customer-registration-identifier-error"
-                  className="text-left text-sm font-medium text-destructive"
-                  role="alert"
-                >
-                  {registrationIdentifierIssue}
-                </p>
-              ) : null}
-              <FieldDescription id="customer-registration-identifier-hint">
-                {registrationIdFieldMeta.description}
-              </FieldDescription>
-            </FieldContent>
-          </Field>
-        </div>
-        <div className="space-y-1">
-          <h3 className="text-sm font-semibold tracking-tight text-foreground">
-            Wettelijke vertegenwoordiger
-          </h3>
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            We registreren de persoon die uw organisatie wettelijk mag vertegenwoordigen. Geef
-            eerst aan of u die persoon zelf bent; zo niet, vullen we eerst uw eigen gegevens
-            in.
-          </p>
-        </div>
+          ) : undefined
+        }
+      >
         <Field>
-          <FieldLabel id={`${applicantLegalRepFieldBase}-legend`}>
-            Bent u zelf degene die u hieronder als wettelijke vertegenwoordiger invult?
+          <FieldLabel htmlFor="prototype-vat-preset">
+            Voorbeeld btw- / ondernemingsnummer
           </FieldLabel>
           <FieldContent>
-            <RadioGroup
-              className="gap-3"
-              aria-labelledby={`${applicantLegalRepFieldBase}-legend`}
-              value={
-                context.applicantIsLegalRepresentative === ""
-                  ? undefined
-                  : context.applicantIsLegalRepresentative
-              }
-              onValueChange={(v) => {
-                if (v === "yes") {
-                  setFlowState((prev) => ({
-                    ...prev,
-                    context: resolveFlowContext({
-                      ...prev.context,
-                      applicantIsLegalRepresentative: "yes",
-                      registrantPerson: emptyIdentificatiePersonState(),
-                      registrantTitlePreset: "none",
-                      registrantTitle: "",
-                      registrantRolePreset: "none",
-                      registrantRole: "",
-                    }),
-                  }));
-                } else if (v === "no") {
-                  setFlowState((prev) => {
-                    const preset =
-                      activeVatPreset ??
-                      findVatPrototypePreset(prototypeVatPresetId) ??
-                      VAT_PROTOTYPE_PRESETS[0];
-                    const registrantMock = preset
-                      ? getRegistrantContextFieldsForPrototypePreset(preset)
-                      : undefined;
-                    return {
-                      ...prev,
-                      context: resolveFlowContext({
-                        ...prev.context,
-                        applicantIsLegalRepresentative: "no",
-                        ...(registrantMock ?? {
-                          registrantPerson: emptyIdentificatiePersonState(),
-                          registrantTitlePreset: "none",
-                          registrantTitle: "",
-                          registrantRolePreset: "none",
-                          registrantRole: "",
-                        }),
-                      }),
-                    };
-                  });
-                }
+            <Select
+              value={prototypeVatPresetId}
+              onValueChange={(id) => {
+                const preset =
+                  findVatPrototypePreset(id) ??
+                  vatPrototypePresetChoices[0] ??
+                  VAT_PROTOTYPE_PRESETS[0];
+                if (!preset) return;
+                setFlowState((prev) => ({
+                  ...prev,
+                  prototypeVatPresetId: id,
+                  companyFieldHints: {},
+                  context: customerContextAfterPrototypePresetChange(
+                    resolveFlowContext(prev.context),
+                    preset,
+                  ),
+                }));
               }}
             >
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="yes" id={`${applicantLegalRepFieldBase}-yes`} />
-                <Label
-                  htmlFor={`${applicantLegalRepFieldBase}-yes`}
-                  className="cursor-pointer font-normal"
-                >
-                  Ja, ik ben de wettelijke vertegenwoordiger
-                </Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="no" id={`${applicantLegalRepFieldBase}-no`} />
-                <Label
-                  htmlFor={`${applicantLegalRepFieldBase}-no`}
-                  className="cursor-pointer font-normal"
-                >
-                  Nee, ik vul namens de wettelijke vertegenwoordiger in
-                </Label>
-              </div>
-            </RadioGroup>
-            <FieldDescription>
-              Kies eerst wat voor u klopt. Zo nodig vullen we daarna uw eigen gegevens én de
-              gegevens van de wettelijke vertegenwoordiger in.
+              <SelectTrigger
+                id="prototype-vat-preset"
+                className="h-auto min-h-9 w-full py-2 whitespace-normal"
+              >
+                <SelectValue placeholder="Kies" />
+              </SelectTrigger>
+              <SelectContent>
+                {vatPrototypePresetChoices.map((p) => (
+                  <SelectItem key={p.id} value={p.id}>
+                    {p.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FieldContent>
+        </Field>
+      </PrototypeCard>
+      <div className="space-y-4">
+        <div className="space-y-1">
+          <h3 className="text-sm font-semibold tracking-tight text-foreground">
+            Organisatie-identificatie
+          </h3>
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            Het formaat hangt af van uw eerder gekozen land of regio. Zodra het nummer klopt, kunt u
+            verder naar bedrijfsgegevens.
+          </p>
+        </div>
+        <Field data-invalid={registrationIdentifierIssue ? true : undefined}>
+          <FieldLabel htmlFor="customer-registration-identifier">
+            {registrationIdFieldMeta.label}
+          </FieldLabel>
+          <FieldContent>
+            <div className="flex min-w-0 items-center gap-1.5">
+              <Input
+                id="customer-registration-identifier"
+                className="min-w-0 flex-1"
+                value={context.vatNumber}
+                placeholder={registrationIdFieldMeta.placeholder}
+                onChange={(event) => updateContext("vatNumber", event.target.value)}
+                autoComplete="off"
+                spellCheck={false}
+                aria-invalid={registrationIdentifierIssue != null}
+                aria-describedby={
+                  registrationIdentifierIssue
+                    ? "customer-registration-identifier-error customer-registration-identifier-hint"
+                    : "customer-registration-identifier-hint"
+                }
+              />
+              <SubformCompletionBadge
+                complete={registrationIdentifierStructurallyValid}
+                title="Geldig formaat"
+              />
+            </div>
+            {registrationIdentifierIssue ? (
+              <p
+                id="customer-registration-identifier-error"
+                className="text-left text-sm font-medium text-destructive"
+                role="alert"
+              >
+                {registrationIdentifierIssue}
+              </p>
+            ) : null}
+            <FieldDescription id="customer-registration-identifier-hint">
+              {registrationIdFieldMeta.description}
             </FieldDescription>
           </FieldContent>
         </Field>
-        {context.applicantIsLegalRepresentative === "no" ? (
-          <section
-            className={personFormCardClassName("emphasized")}
-            aria-labelledby={`${applicantLegalRepFieldBase}-registrant-heading`}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0 space-y-1">
-                <h3
-                  id={`${applicantLegalRepFieldBase}-registrant-heading`}
-                  className="text-sm font-semibold tracking-tight text-foreground"
-                >
-                  Uw gegevens als indiener
-                </h3>
-                <p className="text-xs leading-relaxed text-muted-foreground">
-                  Deze velden gaan over uzelf — degene die het formulier nu invult. Daarna
-                  vult u de wettelijke vertegenwoordiger in.
-                </p>
-              </div>
-              <SubformCompletionBadge
-                complete={isRegistrantCaptureValidForContext(context)}
-                showIncompletePlaceholder
-                className="shrink-0"
-              />
-            </div>
-            <IdentificatiePersonTitleRoleCapture
-              idPrefix="registrant-applicant"
-              branch="registrant"
-              context={context}
-              patchContext={patchContext}
-              copy={{
-                titleLabel: "Title",
-                roleLabel: "Role",
-                emailHint:
-                  "Uw werk-e-mail is verplicht. Aanhef en functie zijn optioneel. Wij gebruiken uw e-mail om u te bereiken over deze registratie en uw account.",
-              }}
-            />
-          </section>
-        ) : null}
-        <section
-          className={personFormCardClassName("chromeless")}
-          aria-labelledby={`${applicantLegalRepFieldBase}-legal-rep-heading`}
-        >
-          <fieldset
-            disabled={applicantLegalRepPersonFieldsLocked}
-            className={cn(
-              "min-w-0 space-y-4 border-0 p-0",
-              applicantLegalRepPersonFieldsLocked && "opacity-55",
-            )}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0 space-y-1">
-                <h3
-                  id={`${applicantLegalRepFieldBase}-legal-rep-heading`}
-                  className="text-sm font-semibold tracking-tight text-foreground"
-                >
-                  Gegevens wettelijke vertegenwoordiger
-                </h3>
-                <p className="text-xs leading-relaxed text-muted-foreground">
-                  {context.applicantIsLegalRepresentative === "no"
-                    ? "Vul hier de persoon in die uw organisatie wettelijk mag vertegenwoordigen en de registratie mag ondertekenen."
-                    : context.applicantIsLegalRepresentative === "yes"
-                      ? "Dit adres gebruiken we voor uw account en berichten over uw aanvraag, tenzij u straks een ander contact opgeeft."
-                      : "Kies hierboven of u de wettelijke vertegenwoordiger bent; vul daarna deze gegevens in."}
-                </p>
-              </div>
-              <SubformCompletionBadge
-                complete={isLegalRepresentativeCaptureComplete(context)}
-                showIncompletePlaceholder
-                className="shrink-0"
-              />
-            </div>
-            <IdentificatiePersonTitleRoleCapture
-              idPrefix="legal-rep"
-              branch="legalRepresentative"
-              context={context}
-              patchContext={patchContext}
-              disabled={applicantLegalRepPersonFieldsLocked}
-              copy={{
-                titleLabel: "Title",
-                roleLabel: "Role",
-                emailHint:
-                  context.applicantIsLegalRepresentative === "no"
-                    ? "Het professionele e-mailadres van de wettelijke vertegenwoordiger is verplicht; aanhef en functie zijn optioneel."
-                    : context.applicantIsLegalRepresentative === "yes"
-                      ? "Dit e-mailadres is verplicht voor uw account; aanhef en functie zijn optioneel. Wij gebruiken het voor berichten over uw aanvraag, tenzij u straks een ander contact opgeeft."
-                      : "Maak hierboven eerst een keuze; daarna worden deze velden actief.",
-              }}
-            />
-          </fieldset>
-        </section>
       </div>
+      <div className="space-y-1">
+        <h3 className="text-sm font-semibold tracking-tight text-foreground">
+          Wettelijke vertegenwoordiger
+        </h3>
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          We registreren de persoon die uw organisatie wettelijk mag vertegenwoordigen. Het is deze
+          persoon die handtekenbevoegdheid heeft.
+        </p>
+      </div>
+      <ChoiceCardGroup
+        className="p-0"
+        layout="grid"
+        legend="Bent u de wettelijke vertegenwoordiger?"
+        hint="Maak eerst deze keuze; daarna verschijnen de juiste invoervelden voor uzelf en/of de vertegenwoordiger."
+        name={`${applicantLegalRepFieldBase}-legal-rep`}
+        value={
+          context.applicantIsLegalRepresentative === ""
+            ? undefined
+            : context.applicantIsLegalRepresentative
+        }
+        onValueChange={(v: string) => {
+          if (v === "yes") {
+            setFlowState((prev) => ({
+              ...prev,
+              context: resolveFlowContext({
+                ...prev.context,
+                applicantIsLegalRepresentative: "yes",
+                registrantPerson: emptyIdentificatiePersonState(),
+                registrantTitlePreset: "none",
+                registrantTitle: "",
+                registrantRolePreset: "none",
+                registrantRole: "",
+              }),
+            }));
+          } else if (v === "no") {
+            setFlowState((prev) => {
+              const preset =
+                activeVatPreset ??
+                findVatPrototypePreset(prototypeVatPresetId) ??
+                VAT_PROTOTYPE_PRESETS[0];
+              const registrantMock = preset
+                ? getRegistrantContextFieldsForPrototypePreset(preset)
+                : undefined;
+              return {
+                ...prev,
+                context: resolveFlowContext({
+                  ...prev.context,
+                  applicantIsLegalRepresentative: "no",
+                  ...(registrantMock ?? {
+                    registrantPerson: emptyIdentificatiePersonState(),
+                    registrantTitlePreset: "none",
+                    registrantTitle: "",
+                    registrantRolePreset: "none",
+                    registrantRole: "",
+                  }),
+                }),
+              };
+            });
+          }
+        }}
+      >
+        <ChoiceCard
+          value="yes"
+          controlId={`${applicantLegalRepFieldBase}-yes`}
+          title="Ja, ik ben de wettelijke vertegenwoordiger"
+          description="U vult hierna uw eigen bereikbaarheid in als vertegenwoordiger; die gegevens gebruiken we ook voor uw account."
+          variant="elevated"
+          appearance="hero"
+          className="h-full min-h-[8rem]"
+        />
+        <ChoiceCard
+          value="no"
+          controlId={`${applicantLegalRepFieldBase}-no`}
+          title="Nee, ik vul namens de wettelijke vertegenwoordiger in"
+          description="U geeft eerst uzelf door als indiener, daarna de persoon met wettelijke vertegenwoordigingsbevoegdheid."
+          variant="default"
+          appearance="hero"
+          className="h-full min-h-[8rem]"
+        />
+      </ChoiceCardGroup>
+      {context.applicantIsLegalRepresentative === "no" ? (
+        <section
+          className={personFormCardClassName("emphasized")}
+          aria-labelledby={`${applicantLegalRepFieldBase}-registrant-heading`}
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0 space-y-1">
+              <h3
+                id={`${applicantLegalRepFieldBase}-registrant-heading`}
+                className="text-sm font-semibold tracking-tight text-foreground"
+              >
+                Uw gegevens als indiener
+              </h3>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Deze velden gaan over uzelf — degene die het formulier nu invult. Daarna vult u de
+                wettelijke vertegenwoordiger in.
+              </p>
+            </div>
+            <SubformCompletionBadge
+              complete={isRegistrantCaptureValidForContext(context)}
+              showIncompletePlaceholder
+              className="shrink-0"
+            />
+          </div>
+          <IdentificatiePersonTitleRoleCapture
+            idPrefix="registrant-applicant"
+            branch="registrant"
+            context={context}
+            patchContext={patchContext}
+            copy={{
+              titleLabel: "Title",
+              roleLabel: "Role",
+              emailHint:
+                "Uw werk-e-mail is verplicht. Aanhef en functie zijn optioneel. Wij gebruiken uw e-mail om u te bereiken over deze registratie en uw account.",
+            }}
+          />
+        </section>
+      ) : null}
+      <section
+        className={personFormCardClassName("chromeless")}
+        aria-labelledby={`${applicantLegalRepFieldBase}-legal-rep-heading`}
+      >
+        <fieldset
+          disabled={applicantLegalRepPersonFieldsLocked}
+          className={cn(
+            "min-w-0 space-y-4 border-0 p-0",
+            applicantLegalRepPersonFieldsLocked && "opacity-55",
+          )}
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0 space-y-1">
+              <h3
+                id={`${applicantLegalRepFieldBase}-legal-rep-heading`}
+                className="text-sm font-semibold tracking-tight text-foreground"
+              >
+                Gegevens wettelijke vertegenwoordiger
+              </h3>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                {context.applicantIsLegalRepresentative === "no"
+                  ? "Vul hier de persoon in die uw organisatie wettelijk mag vertegenwoordigen en de registratie mag ondertekenen."
+                  : context.applicantIsLegalRepresentative === "yes"
+                    ? "Dit adres gebruiken we voor uw account en berichten over uw aanvraag, tenzij u straks een ander contact opgeeft."
+                    : "Kies hierboven of u de wettelijke vertegenwoordiger bent; vul daarna deze gegevens in."}
+              </p>
+            </div>
+            <SubformCompletionBadge
+              complete={isLegalRepresentativeCaptureComplete(context)}
+              showIncompletePlaceholder
+              className="shrink-0"
+            />
+          </div>
+          <IdentificatiePersonTitleRoleCapture
+            idPrefix="legal-rep"
+            branch="legalRepresentative"
+            context={context}
+            patchContext={patchContext}
+            disabled={applicantLegalRepPersonFieldsLocked}
+            copy={{
+              titleLabel: "Title",
+              roleLabel: "Role",
+              emailHint:
+                context.applicantIsLegalRepresentative === "no"
+                  ? "Het professionele e-mailadres van de wettelijke vertegenwoordiger is verplicht; aanhef en functie zijn optioneel."
+                  : context.applicantIsLegalRepresentative === "yes"
+                    ? "Dit e-mailadres is verplicht voor uw account; aanhef en functie zijn optioneel. Wij gebruiken het voor berichten over uw aanvraag, tenzij u straks een ander contact opgeeft."
+                    : "Maak hierboven eerst een keuze; daarna worden deze velden actief.",
+            }}
+          />
+        </fieldset>
+      </section>
+    </div>
   );
 }

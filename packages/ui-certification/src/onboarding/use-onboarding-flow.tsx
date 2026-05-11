@@ -26,8 +26,10 @@ import {
 } from "./lib/registration-phase-shell-copy";
 import {
   buildRows,
+  effectiveIncludedCertificationDraftIds,
   isLegalRepresentativeCaptureComplete,
-  isOnboardingCompanyCoreStepValid,
+  isOnboardingCompanyLegalEntitiesStepValid,
+  isOnboardingCompanyZetelStepValid,
   isOnboardingInvoicingStepValid,
   isOnboardingOptionalContactsStepValid,
   isRegistrantCaptureValidForContext,
@@ -98,11 +100,10 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   } = flowState;
   const companyHints = companyFieldHints ?? {};
 
-  const effectiveSummaryIncludedDraftIds = useMemo(() => {
-    const ids = drafts.map((d) => d.id);
-    if (summaryIncludedDraftIds === undefined) return ids;
-    return summaryIncludedDraftIds.filter((id) => ids.includes(id));
-  }, [drafts, summaryIncludedDraftIds]);
+  const effectiveSummaryIncludedDraftIds = useMemo(
+    () => effectiveIncludedCertificationDraftIds(drafts, summaryIncludedDraftIds),
+    [drafts, summaryIncludedDraftIds],
+  );
 
   const registrationSimulationLabels = useMemo(
     () => registrationSimulationStepLabels(effectiveSummaryIncludedDraftIds.length),
@@ -133,7 +134,8 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
 
   const activeStep = stepIndex(step);
   const hasDrafts = drafts.length > 0;
-  const certificationInquiryDraftIds = useMemo(() => drafts.map((d) => d.id), [drafts]);
+  /** Inquiry drafts that must have a mapped legal entity (zetel or vestiging). */
+  const certificationInquiryDraftIds = effectiveSummaryIncludedDraftIds;
   const hasCustomerContext =
     (context.applicantIsLegalRepresentative === "yes" ||
       context.applicantIsLegalRepresentative === "no") &&
@@ -142,15 +144,19 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     (requestOrigin
       ? isRegistrationIdentifierValidForOrigin(context.vatNumber ?? "", requestOrigin)
       : isVatIdentifierPlausible(context.vatNumber ?? ""));
-  const companyCoreOk =
-    isOnboardingCompanyCoreStepValid(context, certificationInquiryDraftIds) ||
-    ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  const companyZetelOk =
+    isOnboardingCompanyZetelStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  /** Strikt — los van {@link ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION}: elke aanvraag gekoppeld. */
+  const companyLegalEntitiesOk = isOnboardingCompanyLegalEntitiesStepValid(
+    context,
+    certificationInquiryDraftIds,
+  );
   const invoicingStepOk =
-    isOnboardingInvoicingStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+    isOnboardingInvoicingStepValid(context, certificationInquiryDraftIds) ||
+    ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const optionalContactsOk =
     isOnboardingOptionalContactsStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const registrationStepOk = hasCustomerContext || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
-  const companyStepOk = companyCoreOk;
   const extrasStepOk = optionalContactsOk;
   const steps: OnboardingStepperStep[] = useMemo(
     () =>
@@ -240,46 +246,52 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
         : step === "company"
           ? {
               label: "Verder",
-              onClick: () => goToOnboardingStep("invoicing"),
-              disabled: !companyStepOk || companyLookupPhase !== "ready",
+              onClick: () => goToOnboardingStep("companyLegalEntities"),
+              disabled: !companyZetelOk || companyLookupPhase !== "ready",
             }
-          : step === "invoicing"
+          : step === "companyLegalEntities"
             ? {
                 label: "Verder",
-                onClick: () => goToOnboardingStep("extras"),
-                disabled: !invoicingStepOk,
+                onClick: () => goToOnboardingStep("invoicing"),
+                disabled: !companyLegalEntitiesOk,
               }
-            : step === "extras"
+            : step === "invoicing"
               ? {
                   label: "Verder",
-                  onClick: () => setFlowState((prev) => ({ ...prev, step: "summary" })),
-                  disabled: !extrasStepOk,
+                  onClick: () => goToOnboardingStep("extras"),
+                  disabled: !invoicingStepOk,
                 }
-              : step === "summary"
+              : step === "extras"
                 ? {
-                    label: "Indienen",
-                    onClick: () => {
-                      const certificationStoreRaw =
-                        typeof localStorage !== "undefined"
-                          ? localStorage.getItem(ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY)
-                          : null;
-                      writeOnboardingRegistrationCompletePayload({
-                        representativeEmail: context.representativeEmail.trim(),
-                        organizationName: context.organizationName.trim(),
-                        includedInquiryCount: effectiveSummaryIncludedDraftIds.length,
-                        flowStateSnapshot: flowState,
-                        certificationStoreRaw,
-                      });
-                      setRegistrationProgress(0);
-                      setRegistrationStepIndex(-1);
-                      setRegistrationSubmitOpen(true);
-                    },
-                    disabled:
-                      !hasDrafts ||
-                      effectiveSummaryIncludedDraftIds.length === 0 ||
-                      registrationSubmitOpen,
+                    label: "Verder",
+                    onClick: () => setFlowState((prev) => ({ ...prev, step: "summary" })),
+                    disabled: !extrasStepOk,
                   }
-                : { label: "Doorgaan", onClick: () => {}, disabled: true };
+                : step === "summary"
+                  ? {
+                      label: "Indienen",
+                      onClick: () => {
+                        const certificationStoreRaw =
+                          typeof localStorage !== "undefined"
+                            ? localStorage.getItem(ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY)
+                            : null;
+                        writeOnboardingRegistrationCompletePayload({
+                          representativeEmail: context.representativeEmail.trim(),
+                          organizationName: context.organizationName.trim(),
+                          includedInquiryCount: effectiveSummaryIncludedDraftIds.length,
+                          flowStateSnapshot: flowState,
+                          certificationStoreRaw,
+                        });
+                        setRegistrationProgress(0);
+                        setRegistrationStepIndex(-1);
+                        setRegistrationSubmitOpen(true);
+                      },
+                      disabled:
+                        !hasDrafts ||
+                        effectiveSummaryIncludedDraftIds.length === 0 ||
+                        registrationSubmitOpen,
+                    }
+                  : { label: "Doorgaan", onClick: () => {}, disabled: true };
 
   const registrationPhaseDescriptionDerived = useMemo(
     () =>

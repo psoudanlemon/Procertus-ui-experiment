@@ -151,7 +151,8 @@ export {
 export {
   CatalogueExplorer,
   OnboardingCompanyPrefillSkeleton,
-  OnboardingCompanyStep,
+  OnboardingCompanyLegalEntitiesStep,
+  OnboardingCompanyZetelStep,
   OnboardingContextField,
   OnboardingCustomerStep,
   OnboardingExtrasStep,
@@ -163,7 +164,8 @@ export {
 } from "./components/onboarding";
 export type {
   CatalogueExplorerProps,
-  OnboardingCompanyStepProps,
+  OnboardingCompanyLegalEntitiesStepProps,
+  OnboardingCompanyZetelStepProps,
   OnboardingCustomerStepProps,
   OnboardingExtrasStepProps,
   OnboardingInvoicingStepProps,

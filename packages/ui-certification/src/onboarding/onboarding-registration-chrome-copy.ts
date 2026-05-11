@@ -17,9 +17,14 @@ const DEFAULTS: Record<Exclude<OnboardingStep, "request">, RegistrationStepChrom
       "Vul eerst het identificatienummer van uw organisatie in (afhankelijk van het gekozen land). Daarna vult u de wettelijke vertegenwoordiger en een geldig e-mailadres in.",
   },
   company: {
-    title: "Maatschappelijke zetel en certificatie",
+    title: "Maatschappelijke zetel",
     description:
-      "Hier registreert u de maatschappelijke zetel zoals gekoppeld aan uw organisatienummer. Daarna geeft u aan of die zetel juridisch optreedt voor de geselecteerde certificaties — zo niet, wijst u per certificatie een vestiging toe (naam en adres, zonder apart btw-nummer).",
+      "Na het opzoeken vult u de officiële gegevens van uw hoofdrechtspersoon in zoals gekoppeld aan uw organisatienummer: juridische naam, telefoon en adres.",
+  },
+  companyLegalEntities: {
+    title: "Certificatie en juridische entiteit",
+    description:
+      "Geeft aan of uw maatschappelijke zetel juridisch optreedt voor de geselecteerde certificaties in dit dossier — zo niet, vult u per aanvraag een vestiging in (naam en adres, zonder apart btw-nummer).",
   },
   invoicing: {
     title: "Facturatie",
@@ -42,6 +47,7 @@ export function mergeRegistrationChromeCopy(
     | "origin"
     | "customer"
     | "company"
+    | "companyLegalEntities"
     | "invoicing"
     | "extras"
     | "summary",

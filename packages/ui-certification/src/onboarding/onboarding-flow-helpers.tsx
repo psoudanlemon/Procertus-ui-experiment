@@ -12,6 +12,7 @@ import {
   personSubformValueToCapture,
 } from "@procertus-ui/domain-certification";
 import { ONBOARDING_FLOW_STORAGE_KEY } from "./lib/onboardingRegistrationCompleteSession";
+import { CERT_INQUIRY_LEGAL_ENTITY_ZETEL } from "./onboarding-flow-select-sentinels";
 import type { IdentificatieAddressSubformValue } from "./identificatie-subforms";
 import {
   ONBOARDING_STEPS,
@@ -64,6 +65,30 @@ export function emptyOnboardingVestiging(id?: string): OnboardingVestiging {
   };
 }
 
+/**
+ * Maintains exactly one vestigING per certification draft in registration scope (order matches
+ * {@code scopeDrafts}). Keeps captured fields when draft→vestiging mapping is still valid.
+ */
+export function syncOnboardingVestigingenOnePerRegistrationDraft(
+  scopeDrafts: readonly { id: string }[],
+  prevVestigingen: readonly OnboardingVestiging[],
+  prevMap: Readonly<Record<string, string>>,
+): { onboardingVestigingen: OnboardingVestiging[]; certificationInquiryVestigingId: Record<string, string> } {
+  const prevById = new Map(prevVestigingen.map((v) => [v.id, v]));
+  const onboardingVestigingen: OnboardingVestiging[] = [];
+  const certificationInquiryVestigingId: Record<string, string> = {};
+
+  for (const d of scopeDrafts) {
+    const prevVid = (prevMap[d.id] ?? "").trim();
+    const preserved = prevVid ? prevById.get(prevVid) : undefined;
+    const ve = preserved !== undefined ? { ...preserved } : emptyOnboardingVestiging();
+    onboardingVestigingen.push(ve);
+    certificationInquiryVestigingId[d.id] = ve.id;
+  }
+
+  return { onboardingVestigingen, certificationInquiryVestigingId };
+}
+
 export function onboardingVestigingAddressCapture(v: OnboardingVestiging) {
   return {
     addressStreet: v.addressStreet,
@@ -91,6 +116,19 @@ export function vestigingAddressSubformValue(v: OnboardingVestiging): Identifica
   };
 }
 
+/**
+ * Draft IDs that count toward the dossier (“in scope”) for registration: either every wizard draft or
+ * the subset the user opted into via {@link OnboardingFlowState.summaryIncludedDraftIds}.
+ */
+export function effectiveIncludedCertificationDraftIds(
+  drafts: readonly { id: string }[],
+  summaryIncludedDraftIds: readonly string[] | undefined,
+): string[] {
+  const ids = drafts.map((d) => d.id);
+  if (summaryIncludedDraftIds === undefined) return [...ids];
+  return summaryIncludedDraftIds.filter((id) => ids.includes(id));
+}
+
 export function formatVestigingRegistryOptionLabel(v: OnboardingVestiging): string {
   const addr = onboardingVestigingAddressCapture(v);
   const n = v.legalName.trim() || "Naam nog niet ingevuld";
@@ -99,26 +137,121 @@ export function formatVestigingRegistryOptionLabel(v: OnboardingVestiging): stri
   return tail ? `${n} · ${tail}` : n;
 }
 
-/** When head office cannot cover certifications, each inquiry draft must reference a completed vestiging (reuse allowed). */
+/** When head office does not universally cover certs, each inquiry maps to zetel or a completed vestiging (reuse allowed). */
 export function isCertificationVestigingMappingComplete(
   context: CustomerContext,
   inquiryDraftIds: readonly string[],
 ): boolean {
   if (context.headOfficeIsCertificationLegalEntity !== "no") return true;
   if (inquiryDraftIds.length === 0) return true;
-  if (context.onboardingVestigingen.length === 0) return false;
 
   const byId = new Map(context.onboardingVestigingen.map((ve) => [ve.id, ve]));
-  const validSet = new Set(
+  const validVestIds = new Set(
     context.onboardingVestigingen.filter(isOnboardingVestigingCaptureComplete).map((ve) => ve.id),
   );
 
   return inquiryDraftIds.every((did) => {
-    const vid = (context.certificationInquiryVestigingId[did] ?? "").trim();
-    if (!vid || !validSet.has(vid)) return false;
-    const v = byId.get(vid);
+    const raw = (context.certificationInquiryVestigingId[did] ?? "").trim();
+    if (!raw) return false;
+    if (raw === CERT_INQUIRY_LEGAL_ENTITY_ZETEL) return true;
+    if (!validVestIds.has(raw)) return false;
+    const v = byId.get(raw);
     return v !== undefined && isOnboardingVestigingCaptureComplete(v);
   });
+}
+
+/** Rechts‑persoon gekozen bij certificatie (zetel-sentinel of vestigings‑id); los van factuurspiegeling. */
+export function certificationLegalEntityAssignmentRaw(
+  context: CustomerContext,
+  draftId: string,
+): string {
+  if (context.headOfficeIsCertificationLegalEntity === "yes") {
+    return CERT_INQUIRY_LEGAL_ENTITY_ZETEL;
+  }
+  return (context.certificationInquiryVestigingId[draftId] ?? "").trim();
+}
+
+/** Normalized pick (zetel sentinel of een voltooide vestiging) gebruikt ook voor facturatietabel. */
+export function invoicingLegalEntityAssignmentRaw(
+  context: CustomerContext,
+  draftId: string,
+): string {
+  if (context.invoicingMirrorCertificationLegalEntities) {
+    if (context.headOfficeIsCertificationLegalEntity === "yes") {
+      return CERT_INQUIRY_LEGAL_ENTITY_ZETEL;
+    }
+    return (context.certificationInquiryVestigingId[draftId] ?? "").trim();
+  }
+  return (context.invoicingInquiryVestigingId[draftId] ?? "").trim();
+}
+
+export function seedInvoicingInquiryMapFromCertification(
+  context: CustomerContext,
+  draftIds: readonly string[],
+): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const did of draftIds) {
+    if (context.headOfficeIsCertificationLegalEntity === "yes") {
+      out[did] = CERT_INQUIRY_LEGAL_ENTITY_ZETEL;
+    } else {
+      const v = (context.certificationInquiryVestigingId[did] ?? "").trim();
+      if (v) {
+        out[did] = v;
+      }
+    }
+  }
+  return out;
+}
+
+export function summaryLegalEntityFromAssignmentRaw(
+  context: CustomerContext,
+  rawUntrimmed: string,
+): string {
+  const raw = rawUntrimmed.trim();
+  if (!raw) {
+    return "—";
+  }
+  if (raw === CERT_INQUIRY_LEGAL_ENTITY_ZETEL) {
+    return `Maatschappelijke zetel · ${context.organizationName.trim() || "—"} · ${formatPostalAddressDisplay(context)}`;
+  }
+  const ve = context.onboardingVestigingen.find((x) => x.id === raw);
+  return ve !== undefined && isOnboardingVestigingCaptureComplete(ve)
+    ? `${ve.legalName.trim()} · ${formatOnboardingVestigingPostalLine(ve)}`
+    : ve !== undefined
+      ? "— (vestiging onvolledig)"
+      : "—";
+}
+
+export function isInvoicingLegalEntitySelectionsComplete(
+  context: CustomerContext,
+  inquiryDraftIds: readonly string[],
+): boolean {
+  if (inquiryDraftIds.length === 0) return true;
+  return inquiryDraftIds.every((did) => {
+    const raw = invoicingLegalEntityAssignmentRaw(context, did).trim();
+    if (!raw) return false;
+    if (raw === CERT_INQUIRY_LEGAL_ENTITY_ZETEL) return true;
+    const ve = context.onboardingVestigingen.find((x) => x.id === raw);
+    return ve !== undefined && isOnboardingVestigingCaptureComplete(ve);
+  });
+}
+
+/** Korte kopregel onder “Factuur (rechtspersoon)” voor het overzicht. */
+export function summaryInvoicingLegalEntityOverviewLine(
+  context: CustomerContext,
+  inquiryDraftIds: readonly string[],
+): string {
+  if (inquiryDraftIds.length === 0) return "—";
+  if (context.invoicingMirrorCertificationLegalEntities) {
+    return "Zelfde rechts‑persoon per aanvraag als bij certificatie";
+  }
+  const keys = inquiryDraftIds.map((id) => invoicingLegalEntityAssignmentRaw(context, id).trim());
+  const uniq = new Set(keys.filter(Boolean));
+  if (uniq.size === 0) return "—";
+  if (uniq.size === 1) {
+    return summaryLegalEntityFromAssignmentRaw(context, [...uniq][0]!);
+  }
+  return "Verschilt per aanvraag — zie toewijzingstabel op de facturatietap";
 }
 
 /** Clears organisation capture and reapplies demo vertegenwoordiger fields for a new VAT prototype preset. */
@@ -158,6 +291,8 @@ export function customerContextAfterPrototypePresetChange(
     onboardingVestigingen: [],
     certificationInquiryVestigingId: {},
     headOfficeIsCertificationLegalEntity: "",
+    invoicingMirrorCertificationLegalEntities: true,
+    invoicingInquiryVestigingId: {},
     invoicingDiffersFromHeadOffice: false,
     invoicingVestigingId: "",
     invoicingEmail: "",
@@ -574,9 +709,9 @@ export function buildFullOnboardingPackageEntityRecords(
 
   const certEntityYes =
     context.headOfficeIsCertificationLegalEntity === "yes"
-      ? "Ja — de maatschappelijke zetel kan optreden als rechts-persoon voor alle geselecteerde certificaties."
+      ? "Ja — de maatschappelijke zetel voor alle geselecteerde certificatie-aanvragen in dit dossier."
       : context.headOfficeIsCertificationLegalEntity === "no"
-        ? "Nee — per certificatievraag wijzen we een vestiging toe (naam en adres zonder apart btw-nummer)."
+        ? "Nee — aparte juridische entiteiten (vestigingen): u wijst in het dossier per aanvraag toe aan de zetel of een vestiging."
         : null;
 
   records.push({
@@ -640,18 +775,8 @@ export function buildFullOnboardingPackageEntityRecords(
 
   const factuurLines: Array<string | null> = [
     summaryLine(
-      "Facturatie op naam van",
-      context.invoicingDiffersFromHeadOffice
-        ? (() => {
-            const id = (context.invoicingVestigingId ?? "").trim();
-            const ve = context.onboardingVestigingen.find((x) => x.id === id);
-            return ve && isOnboardingVestigingCaptureComplete(ve)
-              ? `${ve.legalName.trim()} · ${formatOnboardingVestigingPostalLine(ve)}`
-              : ve
-                ? `${ve.legalName.trim() || "—"} · adres nog aan te vullen`
-                : "—";
-          })()
-        : `${context.organizationName.trim() || "—"} · ${formatPostalAddressDisplay(context)}`,
+      "Facturatiedrukker (per gekozen aanvraag)",
+      summaryInvoicingLegalEntityOverviewLine(context, included.map((d) => d.id)),
     ),
     summaryLine("E-mail facturatie", context.invoicingEmail),
   ];
@@ -789,19 +914,21 @@ export function buildFullOnboardingPackageEntityRecords(
         context.headOfficeIsCertificationLegalEntity === "no"
           ? summaryLine(
               "Vestiging (rechtspersoon certificatie)",
-              (() => {
-                const vid = (context.certificationInquiryVestigingId[draft.id] ?? "").trim();
-                const ve = vid ? context.onboardingVestigingen.find((x) => x.id === vid) : undefined;
-                return ve !== undefined && isOnboardingVestigingCaptureComplete(ve)
-                  ? `${ve.legalName.trim()} · ${formatOnboardingVestigingPostalLine(ve)}`
-                  : ve !== undefined
-                    ? "— (vestiging onvolledig)"
-                    : "—";
-              })(),
+              summaryLegalEntityFromAssignmentRaw(
+                context,
+                (context.certificationInquiryVestigingId[draft.id] ?? "").trim(),
+              ),
             )
           : context.headOfficeIsCertificationLegalEntity === "yes"
             ? summaryLine("Vestiging", "Rechts-persoon: maatschappelijke zetel (zie organisatie)")
             : null,
+        summaryLine(
+          "Facturatie (rechtspersoon op factuur)",
+          summaryLegalEntityFromAssignmentRaw(
+            context,
+            invoicingLegalEntityAssignmentRaw(context, draft.id),
+          ),
+        ),
       ]),
     });
   });
@@ -980,38 +1107,53 @@ function invoicingAddressCapture(context: CustomerContext) {
   });
 }
 
-/** Organisation name, firma address, certification legal entity / vestigingen (company step only). */
-export function isOnboardingCompanyCoreStepValid(
-  context: CustomerContext,
-  certificationInquiryDraftIds: readonly string[],
-): boolean {
+/** Maatschappelijke zetel: organisatienaam + gestructureerd adres ( eerste bedrijfsstap ). */
+export function isOnboardingCompanyZetelStepValid(context: CustomerContext): boolean {
   if (!(context.organizationName?.trim() ?? "").length || !hasStructuredPostalAddress(context)) {
-    return false;
-  }
-  const rel = context.headOfficeIsCertificationLegalEntity;
-  if (rel !== "yes" && rel !== "no") {
-    return false;
-  }
-  if (!isCertificationVestigingMappingComplete(context, certificationInquiryDraftIds)) {
     return false;
   }
   return true;
 }
 
-/** Facturatie-e-mail, juridisch facturatiedrukker (zetel of vestiging), optioneel factuuradres, factuurcontact. */
-export function isOnboardingInvoicingStepValid(context: CustomerContext): boolean {
+/**
+ * Juridisch aanspreekpunt per certificatie-aanvraag; leeg dossier-scope = geen keuze nodig.
+ * @see certificationInquiryDraftIds — meestal effectief gekozen aanvragen in het dossier.
+ */
+export function isOnboardingCompanyLegalEntitiesStepValid(
+  context: CustomerContext,
+  certificationInquiryDraftIds: readonly string[],
+): boolean {
+  const rel = context.headOfficeIsCertificationLegalEntity;
+  if (rel !== "yes" && rel !== "no") {
+    return false;
+  }
+  if (certificationInquiryDraftIds.length === 0) {
+    return true;
+  }
+  return isCertificationVestigingMappingComplete(context, certificationInquiryDraftIds);
+}
+
+/** Organisation name, firma address, certification legal entity / vestigingen (beide bedrijfs-substappen samen). */
+export function isOnboardingCompanyCoreStepValid(
+  context: CustomerContext,
+  certificationInquiryDraftIds: readonly string[],
+): boolean {
+  return (
+    isOnboardingCompanyZetelStepValid(context) &&
+    isOnboardingCompanyLegalEntitiesStepValid(context, certificationInquiryDraftIds)
+  );
+}
+
+/** Facturatie-e-mail, rechts‑persoon op factuur per aanvraag, optioneel factuuradres, factuurcontact. */
+export function isOnboardingInvoicingStepValid(
+  context: CustomerContext,
+  certificationInquiryDraftIds: readonly string[],
+): boolean {
   if (!isOnboardingInvoicingCaptureValid({ invoicingEmail: context.invoicingEmail })) {
     return false;
   }
-  if (context.invoicingDiffersFromHeadOffice) {
-    const id = (context.invoicingVestigingId ?? "").trim();
-    if (!id) {
-      return false;
-    }
-    const ve = context.onboardingVestigingen.find((x) => x.id === id);
-    if (!ve || !isOnboardingVestigingCaptureComplete(ve)) {
-      return false;
-    }
+  if (!isInvoicingLegalEntitySelectionsComplete(context, certificationInquiryDraftIds)) {
+    return false;
   }
   if (
     context.addInvoicingAddressOverride &&
@@ -1085,7 +1227,7 @@ export function isOnboardingCompanyStepValid(
 ): boolean {
   return (
     isOnboardingCompanyCoreStepValid(context, certificationInquiryDraftIds) &&
-    isOnboardingInvoicingStepValid(context) &&
+    isOnboardingInvoicingStepValid(context, certificationInquiryDraftIds) &&
     isOnboardingOptionalContactsStepValid(context)
   );
 }
@@ -1143,6 +1285,8 @@ export const DEFAULT_CONTEXT: CustomerContext = {
   certificationSecondaryPersonRegistryId: ONBOARDING_PERSON_NEW_ID,
   onboardingVestigingen: [],
   certificationInquiryVestigingId: {},
+  invoicingMirrorCertificationLegalEntities: true,
+  invoicingInquiryVestigingId: {},
   headOfficeIsCertificationLegalEntity: "",
 };
 
@@ -1378,9 +1522,32 @@ export function normalizeCustomerContext(
   const prunedMap: Record<string, string> = {};
   for (const [did, vid] of Object.entries(out.certificationInquiryVestigingId)) {
     const v = typeof vid === "string" ? vid.trim() : "";
-    if (v && vestIds.has(v)) prunedMap[did] = v;
+    if (!v) continue;
+    if (v === CERT_INQUIRY_LEGAL_ENTITY_ZETEL) prunedMap[did] = v;
+    else if (vestIds.has(v)) prunedMap[did] = v;
   }
   out.certificationInquiryVestigingId = prunedMap;
+
+  out.invoicingInquiryVestigingId =
+    out.invoicingInquiryVestigingId != null &&
+    typeof out.invoicingInquiryVestigingId === "object" &&
+    !Array.isArray(out.invoicingInquiryVestigingId)
+      ? { ...(out.invoicingInquiryVestigingId as Record<string, string>) }
+      : DEFAULT_CONTEXT.invoicingInquiryVestigingId;
+
+  const invoicingPrunedMap: Record<string, string> = {};
+  for (const [did, vid] of Object.entries(out.invoicingInquiryVestigingId)) {
+    const v = typeof vid === "string" ? vid.trim() : "";
+    if (!v) continue;
+    if (v === CERT_INQUIRY_LEGAL_ENTITY_ZETEL) invoicingPrunedMap[did] = v;
+    else if (vestIds.has(v)) invoicingPrunedMap[did] = v;
+  }
+  out.invoicingInquiryVestigingId = invoicingPrunedMap;
+
+  if (typeof out.invoicingMirrorCertificationLegalEntities !== "boolean") {
+    out.invoicingMirrorCertificationLegalEntities =
+      DEFAULT_CONTEXT.invoicingMirrorCertificationLegalEntities;
+  }
 
   if (typeof out.invoicingDiffersFromHeadOffice !== "boolean") {
     out.invoicingDiffersFromHeadOffice = DEFAULT_CONTEXT.invoicingDiffersFromHeadOffice;
@@ -1542,19 +1709,7 @@ export function buildRows(
     });
   }
 
-  const invoicingLegalEntityValue = (() => {
-    if (context.invoicingDiffersFromHeadOffice) {
-      const id = (context.invoicingVestigingId ?? "").trim();
-      const ve = id ? context.onboardingVestigingen.find((x) => x.id === id) : undefined;
-      if (ve && isOnboardingVestigingCaptureComplete(ve)) {
-        return `${ve.legalName.trim()} · ${formatOnboardingVestigingPostalLine(ve)}`;
-      }
-      return ve
-        ? `${ve.legalName.trim() || "Onvolledig"} · adres nog aan te vullen`
-        : "—";
-    }
-    return `${context.organizationName.trim() || "—"} · ${formatPostalAddressDisplay(context)}`;
-  })();
+  const invoicingLegalEntityValue = summaryInvoicingLegalEntityOverviewLine(context, includedDraftIds);
   rows.push({
     id: "invoicing-legal-entity",
     label: "Facturatie (rechtspersoon)",
@@ -1619,19 +1774,21 @@ export function buildRows(
         value: draft.productLabel ? `${draft.label} · ${draft.productLabel}` : draft.label,
       });
       if (context.headOfficeIsCertificationLegalEntity === "no") {
-        const vid = (context.certificationInquiryVestigingId[draft.id] ?? "").trim();
-        const ve = vid ? context.onboardingVestigingen.find((x) => x.id === vid) : undefined;
+        const rawCert = (context.certificationInquiryVestigingId[draft.id] ?? "").trim();
         rows.push({
           id: `${draft.id}-vestiging`,
           label: `Vestiging (aanvraag ${index + 1})`,
-          value:
-            ve !== undefined && isOnboardingVestigingCaptureComplete(ve)
-              ? `${ve.legalName.trim()} · ${formatOnboardingVestigingPostalLine(ve)}`
-              : ve !== undefined
-                ? `${ve.legalName.trim() || "Onvolledig"} · adres nog aan te vullen`
-                : "—",
+          value: summaryLegalEntityFromAssignmentRaw(context, rawCert),
         });
       }
+      rows.push({
+        id: `${draft.id}-factuurrechts`,
+        label: `Factuur rechtspersoon (aanvraag ${index + 1})`,
+        value: summaryLegalEntityFromAssignmentRaw(
+          context,
+          invoicingLegalEntityAssignmentRaw(context, draft.id),
+        ),
+      });
     });
   }
 
@@ -1675,7 +1832,11 @@ export function readInitialCompanyLookupPhase(): "idle" | "loading" | "ready" {
     if (!raw) return "idle";
     const parsed = JSON.parse(raw) as { step?: string };
     const s = parsed.step;
-    return s === "company" || s === "kyc" ? "loading" : "idle";
+    return s === "company" || s === "kyc"
+      ? "loading"
+      : s === "companyLegalEntities"
+        ? "ready"
+        : "idle";
   } catch {
     return "idle";
   }

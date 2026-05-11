@@ -13,10 +13,12 @@ import {
 import {
   buildRows,
   DEFAULT_CONTEXT,
+  effectiveIncludedCertificationDraftIds,
   formatRequesterStepperLabel,
   isLegalRepresentativeCaptureComplete,
   isOnboardingCompanyCoreStepValid,
   isOnboardingCompanyStepValid,
+  isOnboardingCompanyZetelStepValid,
   isOnboardingInvoicingStepValid,
   isRegistrantCaptureValidForContext,
   onboardingReviewRequesterFromContext,
@@ -90,19 +92,30 @@ function hasCustomerContext(
   );
 }
 
-function hasInvoicingContext(ctx: CustomerContext): boolean {
-  return isOnboardingInvoicingStepValid(ctx);
-}
-
-function hasCompanyContext(ctx: CustomerContext, drafts: CertificationRequestDraft[]): boolean {
-  return isOnboardingCompanyStepValid(
+function hasInvoicingContext(
+  ctx: CustomerContext,
+  drafts: CertificationRequestDraft[],
+): boolean {
+  return isOnboardingInvoicingStepValid(
     ctx,
-    drafts.map((d) => d.id),
+    effectiveIncludedCertificationDraftIds(drafts, undefined),
   );
 }
 
+function includedDraftIdsForStoryFixtures(drafts: CertificationRequestDraft[]): string[] {
+  return effectiveIncludedCertificationDraftIds(drafts, undefined);
+}
+
+function hasCompanyContext(ctx: CustomerContext, drafts: CertificationRequestDraft[]): boolean {
+  return isOnboardingCompanyStepValid(ctx, includedDraftIdsForStoryFixtures(drafts));
+}
+
 function hasCompanyCoreContext(ctx: CustomerContext, drafts: CertificationRequestDraft[]): boolean {
-  return isOnboardingCompanyCoreStepValid(ctx, drafts.map((d) => d.id));
+  return isOnboardingCompanyCoreStepValid(ctx, includedDraftIdsForStoryFixtures(drafts));
+}
+
+function hasCompanyZetelContext(ctx: CustomerContext): boolean {
+  return isOnboardingCompanyZetelStepValid(ctx);
 }
 
 /** Default origin for Storybook fixtures (Belgium). */
@@ -119,9 +132,11 @@ export function storyOnboardingStepperSteps(input: {
   const requestOrigin = input.requestOrigin ?? "";
   const hasDrafts = drafts.length > 0;
   const hasCust = hasCustomerContext(context, requestOrigin);
-  const hasInv = hasInvoicingContext(context);
+  const hasInv = hasInvoicingContext(context, drafts);
   const hasComp = hasCompanyContext(context, drafts);
   const hasCore = hasCompanyCoreContext(context, drafts);
+  const companyZetelOk =
+    hasCompanyZetelContext(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const registrationStepOk = hasCust || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const companyStepOk = hasComp || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const companyCoreOk = hasCore || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
@@ -161,22 +176,31 @@ export function storyOnboardingStepperSteps(input: {
     },
     {
       id: "company",
-      title: "Bedrijfsgegevens",
+      title: "Maatschappelijke zetel",
       description:
-        context.organizationName.trim() ||
-        (context.headOfficeIsCertificationLegalEntity === "no"
-          ? "Maatschappelijke zetel · vestigingen"
-          : "Maatschappelijke zetel"),
+        context.organizationName.trim() || "Officiële gegevens van de hoofdrechtspersoon",
       available: hasDrafts && requestOrigin !== "" && registrationStepOk,
+    },
+    {
+      id: "companyLegalEntities",
+      title: "Certificatie (entiteit)",
+      description:
+        context.headOfficeIsCertificationLegalEntity === ""
+          ? "Zetel of vestigingen per aanvraag"
+          : context.headOfficeIsCertificationLegalEntity === "yes"
+            ? "Zetel voor alle aanvragen in dit dossier"
+            : "Vestiging per aanvraag",
+      available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyZetelOk,
     },
     {
       id: "invoicing",
       title: "Facturatie",
       description:
         context.invoicingEmail.trim() ||
-        (context.invoicingDiffersFromHeadOffice ? "Vestiging voor facturatie" : "Zetel als facturatie"),
-      available:
-        hasDrafts && requestOrigin !== "" && registrationStepOk && companyCoreOk,
+        (context.invoicingMirrorCertificationLegalEntities
+          ? "Zelfde rechts‑persoon als bij certificatie"
+          : "Factuur‑rechtspersoon per aanvraag"),
+      available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyStepOk,
     },
     {
       id: "extras",

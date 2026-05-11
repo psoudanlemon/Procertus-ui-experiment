@@ -49,7 +49,7 @@ function Layout({
       vatLookupStepLabels: vatLookupSimulationStepsForPreset(activePreset),
       primaryAction: { label: "Verder", onClick: () => {}, disabled: false },
       rows: [],
-      effectiveSummaryIncludedDraftIds: [],
+      effectiveSummaryIncludedDraftIds: drafts.map((d) => d.id),
     });
   }, []);
   const model = useOnboardingRegistrationLayoutModel(props);
@@ -68,6 +68,6 @@ const meta = {
 
 export default meta;
 
-export const Default: StoryObj<typeof meta> = {
+export const Default = {
   render: () => <Layout>{(m) => <OnboardingInvoicingStep model={m} />}</Layout>,
-};
+} satisfies StoryObj<typeof OnboardingInvoicingStep>;

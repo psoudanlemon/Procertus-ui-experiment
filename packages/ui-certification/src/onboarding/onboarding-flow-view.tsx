@@ -1,4 +1,5 @@
-import { OnboardingCompanyStep } from "../components/onboarding/company-step/OnboardingCompanyStep";
+import { OnboardingCompanyLegalEntitiesStep } from "../components/onboarding/company-step/OnboardingCompanyLegalEntitiesStep";
+import { OnboardingCompanyZetelStep } from "../components/onboarding/company-step/OnboardingCompanyZetelStep";
 import { OnboardingCustomerStep } from "../components/onboarding/customer-step/OnboardingCustomerStep";
 import { OnboardingExtrasStep } from "../components/onboarding/extras-step/OnboardingExtrasStep";
 import { OnboardingInvoicingStep } from "../components/onboarding/invoicing-step/OnboardingInvoicingStep";
@@ -103,7 +104,10 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
             />
           ) : null}
           {step === "customer" ? <OnboardingCustomerStep model={rb} /> : null}
-          {step === "company" ? <OnboardingCompanyStep model={rb} /> : null}
+          {step === "company" ? <OnboardingCompanyZetelStep model={rb} /> : null}
+          {step === "companyLegalEntities" ? (
+            <OnboardingCompanyLegalEntitiesStep model={rb} />
+          ) : null}
           {step === "invoicing" ? <OnboardingInvoicingStep model={rb} /> : null}
           {step === "extras" ? <OnboardingExtrasStep model={rb} /> : null}
           {step === "summary" ? <OnboardingSummaryStep model={rb} /> : null}

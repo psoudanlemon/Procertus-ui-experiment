@@ -19,7 +19,7 @@ import {
 } from "../../../onboarding/lib/vatPrototypePresets";
 import { useOnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
 
-import { OnboardingCompanyStep } from "./OnboardingCompanyStep";
+import { OnboardingCompanyZetelStep } from "./OnboardingCompanyZetelStep";
 
 type Model = ReturnType<typeof useOnboardingRegistrationLayoutModel>;
 
@@ -36,18 +36,19 @@ function Layout({
 }
 
 const meta = {
-  title: "Onboarding/Presentational/Steps/Company",
-  component: OnboardingCompanyStep,
+  title: "Onboarding/Presentational/Steps/Company · maatschappelijke zetel",
+  component: OnboardingCompanyZetelStep,
   parameters: {
     layout: "padded",
-    docs: { description: { component: "Bedrijfsgegevens + mock VAT lookup UI." } },
+    docs: { description: { component: "Maatschappelijke zetel + mock VAT lookup UI." } },
   },
   tags: ["autodocs"],
-} satisfies Meta<typeof OnboardingCompanyStep>;
+} satisfies Meta<typeof OnboardingCompanyZetelStep>;
 
 export default meta;
 
 export const LookupReady: StoryObj<typeof meta> = {
+  args: {},
   render: () => (
     <Layout
       build={() => {
@@ -66,16 +67,16 @@ export const LookupReady: StoryObj<typeof meta> = {
           activeStep: stepIndex("company"),
           primaryAction: { label: "Verder", onClick: () => {}, disabled: false },
           rows: [],
-          effectiveSummaryIncludedDraftIds: [],
         };
       }}
     >
-      {(model) => <OnboardingCompanyStep model={model} />}
+      {(model) => <OnboardingCompanyZetelStep model={model} />}
     </Layout>
   ),
 };
 
 export const LookupLoading: StoryObj<typeof meta> = {
+  args: {},
   render: () => (
     <Layout
       build={() => {
@@ -113,11 +114,10 @@ export const LookupLoading: StoryObj<typeof meta> = {
           prototypeVatPresetId: activePreset.id,
           primaryAction: { label: "Verder", onClick: () => {}, disabled: true },
           rows: [],
-          effectiveSummaryIncludedDraftIds: [],
         };
       }}
     >
-      {(model) => <OnboardingCompanyStep model={model} />}
+      {(model) => <OnboardingCompanyZetelStep model={model} />}
     </Layout>
   ),
 };

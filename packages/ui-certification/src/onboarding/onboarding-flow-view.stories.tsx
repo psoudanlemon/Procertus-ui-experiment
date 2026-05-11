@@ -6,7 +6,7 @@ import {
   CERTIFICATION_PHASE_DESCRIPTION,
   CERTIFICATION_PHASE_TITLE,
 } from "./onboarding-constants";
-import { stepIndex } from "./onboarding-flow-helpers";
+import { stepIndex, buildRows } from "./onboarding-flow-helpers";
 import { OnboardingFlowView } from "./onboarding-flow-view";
 import {
   OnboardingFlowViewWithMemoryProvider,
@@ -156,7 +156,7 @@ export const CustomerStep: StoryObj<typeof meta> = {
 };
 
 export const CompanyLookupLoading: StoryObj<typeof meta> = {
-  name: "04 — Bedrijf (lookup loading)",
+  name: "04 — Maatschappelijke zetel (lookup bezig)",
   render: () => {
     const drafts = storyOnboardingDrafts;
     const ctx = storyCustomerContext({
@@ -202,7 +202,7 @@ export const CompanyLookupLoading: StoryObj<typeof meta> = {
 };
 
 export const CompanyLookupReady: StoryObj<typeof meta> = {
-  name: "05 — Bedrijf (lookup ready)",
+  name: "05 — Maatschappelijke zetel (lookup klaar)",
   render: () => {
     const drafts = storyOnboardingDrafts;
     const ctx = storyCustomerContext();
@@ -243,8 +243,42 @@ export const CompanyLookupReady: StoryObj<typeof meta> = {
   },
 };
 
+export const CompanyLegalEntitiesStep: StoryObj<typeof meta> = {
+  name: "06 — Certificatie (juridische entiteit)",
+  render: () => {
+    const drafts = storyOnboardingDrafts;
+    const included = drafts.map((d) => d.id);
+    const ctx = storyCustomerContext({ headOfficeIsCertificationLegalEntity: "yes" });
+    const activePreset =
+      findVatPrototypePreset(DEFAULT_VAT_PROTOTYPE_PRESET_ID) ?? VAT_PROTOTYPE_PRESETS[0]!;
+    return (
+      <OnboardingFlowView
+        {...baseOnboardingFlowViewProps({
+          step: "companyLegalEntities",
+          context: ctx,
+          drafts,
+          effectiveSummaryIncludedDraftIds: included,
+          rows: buildRows(ctx, drafts, included, { includeDraftRows: false }),
+          steps: storyOnboardingStepperSteps({
+            step: "companyLegalEntities",
+            context: ctx,
+            drafts,
+            requestOrigin: storyRequestOrigin,
+          }),
+          activeStep: stepIndex("companyLegalEntities"),
+          companyLookupPhase: "ready",
+          lookupProgress: 100,
+          lookupStepIndex: 4,
+          vatLookupStepLabels: vatLookupSimulationStepsForPreset(activePreset),
+          primaryAction: { label: "Verder", onClick: noop, disabled: false },
+        })}
+      />
+    );
+  },
+};
+
 export const InvoicingStep: StoryObj<typeof meta> = {
-  name: "06 — Facturatie (invoicing)",
+  name: "07 — Facturatie (invoicing)",
   render: () => {
     const drafts = storyOnboardingDrafts;
     const ctx = storyCustomerContext();
@@ -277,7 +311,7 @@ export const InvoicingStep: StoryObj<typeof meta> = {
 };
 
 export const ExtrasStep: StoryObj<typeof meta> = {
-  name: "07 — Extra contacten",
+  name: "08 — Extra contacten",
   render: () => {
     const drafts = storyOnboardingDrafts;
     const ctx = storyCustomerContext();
@@ -305,12 +339,12 @@ export const ExtrasStep: StoryObj<typeof meta> = {
 };
 
 export const SummaryStep: StoryObj<typeof meta> = {
-  name: "08 — Summary",
+  name: "09 — Nazicht",
   render: () => <OnboardingFlowView {...baseOnboardingFlowViewProps()} />,
 };
 
 export const RegistrationProcessingOpen: StoryObj<typeof meta> = {
-  name: "09 — Registration dialog (open)",
+  name: "10 — Registration dialog (open)",
   render: () => (
     <OnboardingFlowView
       {...baseOnboardingFlowViewProps({
@@ -324,7 +358,7 @@ export const RegistrationProcessingOpen: StoryObj<typeof meta> = {
 };
 
 export const ProviderMemorySummaryBaseline: StoryObj<typeof meta> = {
-  name: "10 — Provider + memory (summary baseline)",
+  name: "11 — Provider + memory (summary baseline)",
   decorators: [categorizationDecorator],
   render: () => (
     <OnboardingFlowViewWithMemoryProvider fixtureProps={baseOnboardingFlowViewProps()} />

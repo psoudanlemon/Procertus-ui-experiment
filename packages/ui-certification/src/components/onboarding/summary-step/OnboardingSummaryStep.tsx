@@ -159,8 +159,6 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
         draftsSortedForCertification,
         invoicingCountryOptions,
         invoicingCountrySelectValue,
-        invoicingVestigingSelectRadixValue,
-        selectedInvoicingVestiging,
         registrationIdOrigin,
         registrationIdFieldMeta,
         registrationIdentifierIssue,
@@ -175,9 +173,6 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
         summaryRc,
         firmaCountryLocked,
         companySourceCountryLabel,
-        CERT_INVOICE_VEST_UNASSIGNED,
-        CERT_INVOICE_VEST_NEW,
-        CERT_INQUIRY_VEST_UNASSIGNED,
   } = model;
 
   return (

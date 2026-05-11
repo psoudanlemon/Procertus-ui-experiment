@@ -22,7 +22,8 @@ import type { OnboardingStep } from "../../../onboarding/onboarding-types";
 import { useOnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
 import { STABLE_STEP_MIN_HEIGHT } from "../../certification-request-wizard/use-certification-request-wizard-view";
 
-import { OnboardingCompanyStep } from "../company-step/OnboardingCompanyStep";
+import { OnboardingCompanyLegalEntitiesStep } from "../company-step/OnboardingCompanyLegalEntitiesStep";
+import { OnboardingCompanyZetelStep } from "../company-step/OnboardingCompanyZetelStep";
 import { OnboardingCustomerStep } from "../customer-step/OnboardingCustomerStep";
 import { OnboardingExtrasStep } from "../extras-step/OnboardingExtrasStep";
 import { OnboardingInvoicingStep } from "../invoicing-step/OnboardingInvoicingStep";
@@ -141,7 +142,9 @@ function StepBodies({
     case "customer":
       return <OnboardingCustomerStep model={model} />;
     case "company":
-      return <OnboardingCompanyStep model={model} />;
+      return <OnboardingCompanyZetelStep model={model} />;
+    case "companyLegalEntities":
+      return <OnboardingCompanyLegalEntitiesStep model={model} />;
     case "invoicing":
       return <OnboardingInvoicingStep model={model} />;
     case "extras":

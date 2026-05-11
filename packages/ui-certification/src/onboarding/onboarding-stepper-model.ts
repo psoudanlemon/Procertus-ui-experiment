@@ -9,6 +9,8 @@ import {
   formatRequesterStepperLabel,
   isLegalRepresentativeCaptureComplete,
   isOnboardingCompanyCoreStepValid,
+  isOnboardingCompanyLegalEntitiesStepValid,
+  isOnboardingCompanyZetelStepValid,
   isOnboardingInvoicingStepValid,
   isOnboardingOptionalContactsStepValid,
   isRegistrantCaptureValidForContext,
@@ -19,6 +21,10 @@ import { ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION } from "./onboarding-constan
 
 export type OnboardingPhaseValidity = {
   registrationStepOk: boolean;
+  /** Maatschappelijke zetel (naam + adres). */
+  companyZetelOk: boolean;
+  /** Juridisch aanspreekpunt / vestigingen per aanvraag. */
+  companyLegalEntitiesOk: boolean;
   companyCoreOk: boolean;
   invoicingStepOk: boolean;
   optionalContactsOk: boolean;
@@ -40,17 +46,25 @@ export function deriveOnboardingPhaseValidityForFlow(
       ? isRegistrationIdentifierValidForOrigin(context.vatNumber ?? "", requestOrigin)
       : isVatIdentifierPlausible(context.vatNumber ?? ""));
   const registrationStepOk = hasCustomerContext || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
-  const companyCoreOk =
-    isOnboardingCompanyCoreStepValid(context, certificationInquiryDraftIds) ||
-    ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  const companyZetelOk =
+    isOnboardingCompanyZetelStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  /** Strict: alle aanvragen moeten gekoppeld zijn voor verder naar facturatie. */
+  const companyLegalEntitiesOk = isOnboardingCompanyLegalEntitiesStepValid(
+    context,
+    certificationInquiryDraftIds,
+  );
+  const companyCoreOk = isOnboardingCompanyCoreStepValid(context, certificationInquiryDraftIds);
   const invoicingStepOk =
-    isOnboardingInvoicingStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+    isOnboardingInvoicingStepValid(context, certificationInquiryDraftIds) ||
+    ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const optionalContactsOk =
     isOnboardingOptionalContactsStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const summaryStepOk = companyCoreOk && invoicingStepOk && optionalContactsOk;
   return {
     hasCustomerContext,
     registrationStepOk,
+    companyZetelOk,
+    companyLegalEntitiesOk,
     companyCoreOk,
     invoicingStepOk,
     optionalContactsOk,
@@ -73,6 +87,7 @@ export function buildOnboardingStepperSteps(
   const hasDrafts = drafts.length > 0;
   const {
     registrationStepOk,
+    companyZetelOk,
     companyCoreOk,
     invoicingStepOk,
     summaryStepOk,
@@ -115,20 +130,31 @@ export function buildOnboardingStepperSteps(
     },
     {
       id: "company",
-      title: "Bedrijfsgegevens",
+      title: "Maatschappelijke zetel",
       description:
         context.organizationName.trim() ||
-        (context.headOfficeIsCertificationLegalEntity === "no"
-          ? "Maatschappelijke zetel · vestigingen"
-          : "Maatschappelijke zetel"),
+        "Officiële gegevens van de hoofdrechtspersoon",
       available: hasDrafts && requestOrigin !== "" && registrationStepOk,
+    },
+    {
+      id: "companyLegalEntities",
+      title: "Certificatie (entiteit)",
+      description:
+        context.headOfficeIsCertificationLegalEntity === ""
+          ? "Zetel of vestigingen per aanvraag"
+          : context.headOfficeIsCertificationLegalEntity === "yes"
+            ? "Zetel voor alle aanvragen in dit dossier"
+            : "Vestiging per aanvraag",
+      available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyZetelOk,
     },
     {
       id: "invoicing",
       title: "Facturatie",
       description:
         context.invoicingEmail.trim() ||
-        (context.invoicingDiffersFromHeadOffice ? "Vestiging voor facturatie" : "Zetel als facturatie"),
+        (context.invoicingMirrorCertificationLegalEntities
+          ? "Zelfde rechts‑persoon als bij certificatie"
+          : "Factuur‑rechtspersoon per aanvraag"),
       available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyStepOk,
     },
     {
