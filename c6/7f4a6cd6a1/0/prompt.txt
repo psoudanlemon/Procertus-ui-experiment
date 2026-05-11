@@ -1,0 +1,13 @@
+Resolve this merge conflict @Branch
+
+---
+
+Resolve this merge conflict @Branch
+
+---
+
+ReferenceError: Can't find variable: PUBLIC_GUEST_LOGIN_PATH
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx ReferenceError: Can't find variable: navigate
