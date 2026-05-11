@@ -551,7 +551,7 @@ export function ProductSelectionBasketActionBar() {
         disabled={selectedIds.length === 0}
         onClick={() => onContinue(selectedIds)}
       >
-        Verder ({selectedIds.length})
+        Pakket samenstellen
       </Button>
     </>
   );
@@ -686,7 +686,7 @@ function DiscoveryArea({
                   </BreadcrumbList>
                 </Breadcrumb>
 
-                <div className="flex flex-col gap-component">
+                <div className="flex flex-col gap-section">
                   {categories.length > 0 ? (
                     <CategoriesGrid
                       items={categories}
