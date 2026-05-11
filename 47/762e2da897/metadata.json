@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.5.1",
+  "checkpoint_id": "47762e2da897",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 9,
+  "files_touched": [
+    "packages/ui-certification/src/onboarding/onboarding-flow-view.tsx",
+    "packages/ui-lib/src/custom-components/onboarding/step-layout/StepLayout.stories.tsx",
+    "packages/ui-lib/src/custom-components/onboarding/step-layout/StepLayout.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/47/762e2da897/0/metadata.json",
+      "transcript": "/47/762e2da897/0/full.jsonl",
+      "content_hash": "/47/762e2da897/0/content_hash.txt",
+      "prompt": "/47/762e2da897/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}
