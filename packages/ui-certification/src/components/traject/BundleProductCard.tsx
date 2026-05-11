@@ -17,6 +17,8 @@ import {
   type ReactNode,
 } from "react";
 
+import { ProductCategoryTrail } from "./ProductCategoryTrail";
+
 export const BUNDLE_CERT_ORDER = ["benor", "ce", "ssd", "procertus"] as const;
 export type BundleCertKey = (typeof BUNDLE_CERT_ORDER)[number];
 
@@ -126,20 +128,12 @@ function visibleCerts(primaryCert: BundleCertKey | null): readonly BundleCertKey
 }
 
 /**
- * Toont een categoriepad in root-to-leaf volgorde met `›` (U+203A) als leidende
- * marker én als separator tussen de segmenten, zodat alle chevrons visueel
- * even zwaar wegen.
- */
-function formatCategoryTrail(trail: string): string {
-  const segments = trail.split(" > ").filter(Boolean);
-  return segments.length === 0 ? "" : `› ${segments.join(" › ")}`;
-}
-
-/**
  * Productlabel + breadcrumb op één regel, met truncate-detectie. Wanneer de
  * regel visueel afgekapt wordt, verschijnt na ~1.5s hover een tooltip met de
  * volledige productnaam. ResizeObserver houdt het truncate-flag bij wanneer
- * de kolombreedte of viewport verandert.
+ * de kolombreedte of viewport verandert. Het categoriepad wordt via de
+ * gedeelde {@link ProductCategoryTrail} gerenderd zodat de visuele
+ * behandeling 1-op-1 gelijk loopt met de catalogus- en basket-rijen.
  */
 function ProductLabelLine({
   label,
@@ -168,11 +162,7 @@ function ProductLabelLine({
   const line = (
     <p ref={ref} className={cn("truncate text-sm leading-snug", className)}>
       <span className="font-medium">{label}</span>
-      {trail ? (
-        <span className="ms-component text-xs font-normal text-muted-foreground">
-          {trail}
-        </span>
-      ) : null}
+      <ProductCategoryTrail trail={trail} />
     </p>
   );
 
@@ -250,7 +240,6 @@ export function BundleProductMobileCard({
   onToggle,
   primaryCert,
 }: BundleProductMobileCardProps) {
-  const trail = formatCategoryTrail(product.categoryTrail);
   const extras = BUNDLE_CERT_ORDER.filter(
     (cert) => cert !== primaryCert && product.extraCerts.includes(cert),
   );
@@ -261,7 +250,7 @@ export function BundleProductMobileCard({
       className="overflow-hidden rounded-lg border bg-card"
     >
       <header className="sticky top-0 z-10 bg-card/95 px-section py-component backdrop-blur-sm">
-        <ProductLabelLine label={product.label} trail={trail} />
+        <ProductLabelLine label={product.label} trail={product.categoryTrail} />
       </header>
       <div className="flex flex-col gap-component p-section pt-0">
         {extras.length === 0 ? (
@@ -295,7 +284,6 @@ export function BundleProductMobileCard({
 export function BundleProductCard({ product, selected, onToggle }: BundleProductCardProps) {
   const matrix = useContext(BundleMatrixContext);
   const inMatrix = matrix != null;
-  const trail = formatCategoryTrail(product.categoryTrail);
   const certs = visibleCerts(matrix?.primaryCert ?? null);
   const standaloneGridCols =
     matrix?.primaryCert != null
@@ -312,7 +300,7 @@ export function BundleProductCard({ product, selected, onToggle }: BundleProduct
       )}
     >
       <div className="flex min-w-0 items-center">
-        <ProductLabelLine label={product.label} trail={trail} />
+        <ProductLabelLine label={product.label} trail={product.categoryTrail} />
       </div>
       {certs.map((cert) => {
         const available = product.extraCerts.includes(cert);
