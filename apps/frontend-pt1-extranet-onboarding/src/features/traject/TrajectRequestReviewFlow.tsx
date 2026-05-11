@@ -1,11 +1,15 @@
-import { Badge, DownloadableItemList } from "@procertus-ui/ui";
+import { Alert, AlertDescription, AlertTitle, DownloadableItemList } from "@procertus-ui/ui";
 import {
-  RequestPackageReview,
+  RequestValidationCard,
   TrajectLayout,
   TrajectStoryFooter,
-  buildRulesetDocumentsForInquiries,
+  buildGeneralProcessDocuments,
+  buildProductDocumentsForDraft,
+  useForceScrollConfirmation,
   type CertificationRequestDraft,
 } from "@procertus-ui/ui-certification";
+import { Clock01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
@@ -19,11 +23,6 @@ const BUNDLE_ASSEMBLE_PATH = (serviceId: string) =>
   `/welcome/aanvraag/${serviceId}/pakket`;
 const REGISTRATION_COMPLETE_PATH = "/registratie-voltooid";
 
-function joinName(first: string, last: string): string {
-  const value = `${first} ${last}`.trim();
-  return value.length > 0 ? value : "Aanvrager";
-}
-
 export function TrajectRequestReviewFlow() {
   const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
@@ -32,32 +31,9 @@ export function TrajectRequestReviewFlow() {
   const snapshot = useMemo(() => readOnboardingFlowSnapshot(), []);
   const inquiries: CertificationRequestDraft[] = snapshot.drafts;
 
-  const rows = useMemo(
-    () =>
-      inquiries.map((draft) => ({
-        id: draft.id,
-        label: draft.productLabel ?? "Aanvraag",
-        value: draft.label,
-      })),
-    [inquiries],
-  );
+  const generalDocuments = useMemo(() => buildGeneralProcessDocuments(inquiries), [inquiries]);
 
-  const documents = useMemo(
-    () => buildRulesetDocumentsForInquiries(inquiries),
-    [inquiries],
-  );
-
-  const requester = useMemo(() => {
-    const { representativeFirstName, representativeLastName, representativeEmail, organizationName } =
-      snapshot.context;
-    return {
-      context: {
-        requesterName: joinName(representativeFirstName, representativeLastName),
-        requesterEmail: representativeEmail || "geen e-mail bekend",
-        organizationName: organizationName || "Organisatie nog niet ingevuld",
-      },
-    };
-  }, [snapshot.context]);
+  const { sentinelRef, hasReachedBottom } = useForceScrollConfirmation();
 
   const handleCancel = useCallback(() => navigate(WEGWIJZER_PATH), [navigate]);
   const handleBack = useCallback(() => {
@@ -82,44 +58,84 @@ export function TrajectRequestReviewFlow() {
       bodyGap="section"
       kicker={service.entry.label}
       title="Controleer je aanvraagpakket"
-      description="Bekijk de samengestelde conceptaanvragen en de bijhorende regelset-documenten voordat je doorgaat met registratie."
+      description="Lees de onderstaande samenvatting van je geselecteerde producten en de bijbehorende documentatie aandachtig na ter validatie voordat je de aanvraag indient."
       actionBar={
-        <TrajectStoryFooter
-          onCancel={handleCancel}
-          onBack={handleBack}
-          onContinue={handleContinue}
-          continueLabel="Bevestig en verzend"
-        />
+        <div className="flex w-full flex-col gap-micro">
+          {!hasReachedBottom ? (
+            <p
+              className="m-0 text-xs font-medium text-muted-foreground"
+              role="status"
+              aria-live="polite"
+            >
+              Scroll naar beneden om te kunnen bevestigen.
+            </p>
+          ) : null}
+          <TrajectStoryFooter
+            onCancel={handleCancel}
+            onBack={handleBack}
+            onContinue={handleContinue}
+            cancelLabel="Annuleren"
+            backLabel="Terug"
+            continueLabel="Bevestig en verzend"
+            continueDisabled={!hasReachedBottom}
+          />
+        </div>
       }
     >
-      <div className="flex flex-col gap-section">
-        <RequestPackageReview
-          className="max-w-5xl"
-          title="Samenvatting van het aanvraagpakket"
-          description="Controleer de inhoudelijke aanvragen en de organisatiecontext voordat je het pakket indient."
-          requester={requester}
-          rows={rows}
-          notice={
-            inquiries.length > 1 ? (
-              <span>
-                <Badge variant="secondary">{inquiries.length} vragen</Badge> worden samen
-                gebundeld in deze aanvraag.
-              </span>
-            ) : undefined
-          }
-        />
-        <section className="flex max-w-5xl flex-col gap-component">
+      <div className="flex flex-col gap-region">
+        <section
+          className="flex max-w-5xl flex-col gap-component"
+          aria-labelledby="aanvraag-pakket-heading"
+        >
           <div className="flex flex-col gap-micro">
-            <h3 className="text-heading-sm font-semibold leading-tight tracking-tight">
-              Regels en documentatie
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Documenten op basis van je {inquiries.length} geselecteerde{" "}
-              {inquiries.length === 1 ? "aanvraag" : "aanvragen"} (prototype, downloadlinks
-              zijn gemockt).
+            <h2
+              id="aanvraag-pakket-heading"
+              className="m-0 text-heading-md font-semibold leading-tight tracking-tight"
+            >
+              Aanvragen in dit pakket
+            </h2>
+            <p className="m-0 text-sm text-muted-foreground">
+              {inquiries.length} {inquiries.length === 1 ? "aanvraag" : "aanvragen"} worden samen
+              gebundeld.
             </p>
           </div>
-          <DownloadableItemList items={documents} />
+          <div className="flex flex-col gap-component">
+            {inquiries.map((draft) => (
+              <RequestValidationCard
+                key={draft.id}
+                draft={draft}
+                documents={buildProductDocumentsForDraft(draft)}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section
+          className="flex max-w-5xl flex-col gap-component"
+          aria-labelledby="aanvraag-algemeen-heading"
+        >
+          <div className="flex flex-col gap-micro">
+            <h2
+              id="aanvraag-algemeen-heading"
+              className="m-0 text-heading-md font-semibold leading-tight tracking-tight"
+            >
+              Algemene procesinformatie
+            </h2>
+            <p className="m-0 text-sm text-muted-foreground">
+              Documenten die gelden voor het volledige aanvraagpakket.
+            </p>
+          </div>
+          <DownloadableItemList items={generalDocuments} />
+          <Alert variant="info" className="max-w-5xl">
+            <HugeiconsIcon icon={Clock01Icon} />
+            <AlertTitle>Doorlooptijd: 8 tot 12 weken</AlertTitle>
+            <AlertDescription>
+              Vanaf indiening van een volledig dossier verloopt het traject in 8 tot 12 weken:
+              ontvankelijkheidsanalyse, initiële audit, analyse van de proefresultaten en finale
+              beslissing.
+            </AlertDescription>
+          </Alert>
+          <div ref={sentinelRef} aria-hidden className="h-px w-full" />
         </section>
       </div>
     </TrajectLayout>
