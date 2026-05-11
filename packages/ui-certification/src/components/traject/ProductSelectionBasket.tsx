@@ -52,6 +52,8 @@ type SearchHit = {
   id: string;
   label: string;
   clusterLabel: string;
+  /** Labels van alle tussenliggende groepen tussen cluster en product (exclusief beide). */
+  categoryTrail: readonly string[];
 };
 
 function resolveLevel(
@@ -92,16 +94,23 @@ function searchProducts(query: string, roots: readonly TreeNode[]): SearchHit[] 
   const q = query.trim().toLowerCase();
   if (!q) return [];
   const out: SearchHit[] = [];
-  const walk = (input: readonly TreeNode[], clusterLabel: string) => {
+  const walk = (
+    input: readonly TreeNode[],
+    clusterLabel: string,
+    trail: readonly string[],
+  ) => {
     for (const n of input) {
       if (n.kind === "product" && n.label.toLowerCase().includes(q)) {
-        out.push({ id: n.id, label: n.label, clusterLabel });
+        out.push({ id: n.id, label: n.label, clusterLabel, categoryTrail: trail });
       }
-      if (n.children?.length) walk(n.children, clusterLabel);
+      if (n.children?.length) {
+        const nextTrail = n.kind === "group" ? [...trail, n.label] : trail;
+        walk(n.children, clusterLabel, nextTrail);
+      }
     }
   };
   for (const cluster of roots) {
-    walk(cluster.children ?? [], cluster.label);
+    walk(cluster.children ?? [], cluster.label, []);
   }
   return out;
 }
@@ -351,7 +360,7 @@ function DiscoveryArea({
           type="search"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-          placeholder="Zoek op productnaam of code..."
+          placeholder="Zoek op category of productnaam"
           className="h-12 bg-card pl-10 text-base"
           aria-label="Zoek in de gehele catalogus"
         />
@@ -393,6 +402,11 @@ function DiscoveryArea({
                               key={hit.id}
                               id={hit.id}
                               label={hit.label}
+                              description={
+                                hit.categoryTrail.length > 0
+                                  ? hit.categoryTrail.join(" > ")
+                                  : undefined
+                              }
                               onAdd={() => addProduct(hit.id)}
                             />
                           ))}
@@ -415,11 +429,11 @@ function DiscoveryArea({
                   <BreadcrumbList>
                     <BreadcrumbItem>
                       {isRoot ? (
-                        <BreadcrumbPage>Catalogus</BreadcrumbPage>
+                        <BreadcrumbPage>Alle producten</BreadcrumbPage>
                       ) : (
                         <BreadcrumbLink asChild>
                           <button type="button" onClick={goRoot} className="cursor-pointer">
-                            Catalogus
+                            Alle producten
                           </button>
                         </BreadcrumbLink>
                       )}
@@ -467,6 +481,11 @@ function DiscoveryArea({
                             key={p.id}
                             id={p.id}
                             label={p.label}
+                            description={
+                              trail.length > 0
+                                ? trail.map((seg) => seg.label).join(" > ")
+                                : undefined
+                            }
                             onAdd={() => addProduct(p.id)}
                           />
                         ))}

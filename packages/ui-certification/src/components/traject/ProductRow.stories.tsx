@@ -31,15 +31,55 @@ const meta = {
 export default meta;
 
 const SAMPLE_PRODUCTS = [
-  { id: "stortklaar-beton", label: "Stortklaar beton" },
-  { id: "verhuurbedrijven", label: "Verhuurbedrijven" },
-  { id: "wegenbeton", label: "Wegenbeton" },
-  { id: "metselmortel", label: "Metselmortel" },
-  { id: "hydraulisch-gebonden-mengsels", label: "Hydraulisch gebonden mengsels" },
+  {
+    id: "stortklaar-beton",
+    label: "Stortklaar beton",
+    description: "Beton en mortel > Stortklaar beton",
+  },
+  {
+    id: "verhuurbedrijven",
+    label: "Verhuurbedrijven",
+    description: "Beton en mortel > Stortklaar beton",
+  },
+  {
+    id: "wegenbeton",
+    label: "Wegenbeton",
+    description: "Beton en mortel > Stortklaar beton",
+  },
+  {
+    id: "metselmortel",
+    label: "Metselmortel",
+    description: "Beton en mortel > Mortels",
+  },
+  {
+    id: "hydraulisch-gebonden-mengsels",
+    label: "Hydraulisch gebonden mengsels",
+    description: "Beton en mortel > Mengsels",
+  },
 ] as const;
 
-/** Eén rij in een minimale lijst-wrapper, zodat de divide-y en padding kloppen. */
+/**
+ * Eén rij in een minimale lijst-wrapper, zodat de divide-y en padding kloppen.
+ * `description` toont het categoriepad waar het product onder valt: één regel,
+ * `text-xs`, muted, net als `ItemDescription` in `CategoryPicker`.
+ */
 export const Default: StoryObj<typeof meta> = {
+  args: {
+    id: "stortklaar-beton",
+    label: "Stortklaar beton",
+    description: "Beton en mortel > Stortklaar beton",
+  },
+  render: (args) => (
+    <ul className="max-w-2xl divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
+      <AnimatePresence>
+        <ProductRow {...args} />
+      </AnimatePresence>
+    </ul>
+  ),
+};
+
+/** Zonder ondertitel: bv. wanneer de context al uit een breadcrumb blijkt. */
+export const WithoutDescription: StoryObj<typeof meta> = {
   args: {
     id: "stortklaar-beton",
     label: "Stortklaar beton",
@@ -70,9 +110,10 @@ export const InteractiveList: StoryObj<typeof meta> = {
 };
 
 function InteractiveListBody() {
-  const [items, setItems] = useState<ReadonlyArray<{ id: string; label: string }>>(
-    SAMPLE_PRODUCTS,
-  );
+  const [items, setItems] =
+    useState<ReadonlyArray<{ id: string; label: string; description: string }>>(
+      SAMPLE_PRODUCTS,
+    );
   return (
     <div className="flex max-w-2xl flex-col gap-component">
       <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
@@ -82,6 +123,7 @@ function InteractiveListBody() {
               key={p.id}
               id={p.id}
               label={p.label}
+              description={p.description}
               onAdd={() => setItems((prev) => prev.filter((x) => x.id !== p.id))}
             />
           ))}
@@ -108,6 +150,7 @@ export const LongLabel: StoryObj<typeof meta> = {
     id: "long",
     label:
       "Cirkelvormige geperforeerde buizen, cirkelvormige poreuze buizen en hulpstukken van ongewapend beton voor draineer- en infiltratieleidingen",
+    description: "Beton en mortel > Geprefabriceerde betonproducten > Buizen",
   },
   render: (args) => (
     <ul className="max-w-2xl divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
