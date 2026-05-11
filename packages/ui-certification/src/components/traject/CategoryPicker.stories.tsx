@@ -6,7 +6,7 @@ import { CategoryPicker } from "./CategoryPicker";
 const noop = () => {};
 
 const meta = {
-  title: "Traject configuration/CategoryPicker",
+  title: "Traject configuration/Layout/Product selecteren/CategoryPicker",
   component: CategoryPicker,
   parameters: {
     layout: "padded",

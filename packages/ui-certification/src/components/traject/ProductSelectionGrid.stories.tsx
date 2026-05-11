@@ -41,7 +41,7 @@ const PublicLayoutDecorator = (Story: ComponentType) => {
 };
 
 const meta = {
-  title: "Traject configuration/Layout",
+  title: "Traject configuration/Layout/Product selecteren",
   component: TrajectLayout,
   parameters: {
     layout: "fullscreen",
@@ -67,7 +67,7 @@ export default meta;
  * nog zichtbaar in het winkelmandje rechts.
  */
 export const ProductSelection: StoryObj<typeof meta> = {
-  name: "Product selecteren",
+  name: "Default",
   args: {
     onSignInClick: noop,
     footer: STORY_FOOTER,

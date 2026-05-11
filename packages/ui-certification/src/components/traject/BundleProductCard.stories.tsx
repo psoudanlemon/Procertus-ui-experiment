@@ -10,7 +10,7 @@ import {
 const noop = () => {};
 
 const meta = {
-  title: "Traject configuration/BundleProductCard",
+  title: "Traject configuration/Layout/Voeg trajecten toe/BundleProductCard",
   component: BundleProductCard,
   parameters: {
     layout: "padded",
