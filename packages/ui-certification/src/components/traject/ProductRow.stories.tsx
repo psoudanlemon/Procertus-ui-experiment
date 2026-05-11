@@ -8,7 +8,7 @@ import { ProductRow } from "./ProductRow";
 const noop = () => {};
 
 const meta = {
-  title: "Traject/ProductRow",
+  title: "Traject configuration/ProductRow",
   component: ProductRow,
   parameters: {
     layout: "padded",

@@ -80,7 +80,7 @@ const SAMPLE_ITEMS: readonly ProductBasketItem[] = [
 ] as const;
 
 const meta = {
-  title: "Traject/ProductBasket",
+  title: "Traject configuration/ProductBasket",
   component: ProductBasket,
   parameters: {
     layout: "padded",
