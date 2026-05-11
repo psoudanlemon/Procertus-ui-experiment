@@ -3,7 +3,7 @@
   "checkpoint_id": "76a7e9afa415",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 2,
+  "checkpoints_count": 3,
   "files_touched": [
     ".scaffold/metrics/scaffold-commands.jsonl",
     ".scaffold/metrics/snapshots.jsonl"
@@ -14,6 +14,19 @@
       "transcript": "/76/a7e9afa415/0/full.jsonl",
       "content_hash": "/76/a7e9afa415/0/content_hash.txt",
       "prompt": "/76/a7e9afa415/0/prompt.txt"
+    },
+    {
+      "metadata": "/76/a7e9afa415/1/metadata.json",
+      "transcript": "/76/a7e9afa415/1/full.jsonl",
+      "content_hash": "/76/a7e9afa415/1/content_hash.txt",
+      "prompt": "/76/a7e9afa415/1/prompt.txt"
     }
-  ]
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
 }
