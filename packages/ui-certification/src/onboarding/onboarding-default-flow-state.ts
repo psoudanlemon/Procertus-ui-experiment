@@ -19,9 +19,12 @@ export function hydrateOnboardingFlowStateFromStored(
   stored: OnboardingFlowState | null | undefined,
 ): OnboardingFlowState {
   if (!stored) return DEFAULT_ONBOARDING_FLOW_STATE;
+  const { registrationEntryLabel: rawEntryLabel, ...restStored } = stored;
+  const trimmedLabel = rawEntryLabel?.trim();
   return {
     ...DEFAULT_ONBOARDING_FLOW_STATE,
-    ...stored,
+    ...restStored,
+    ...(trimmedLabel ? { registrationEntryLabel: trimmedLabel } : {}),
     context: { ...DEFAULT_CONTEXT, ...stored.context },
     companyFieldHints: stored.companyFieldHints ?? {},
     summaryKlantenportaalByPersonId: stored.summaryKlantenportaalByPersonId ?? {},

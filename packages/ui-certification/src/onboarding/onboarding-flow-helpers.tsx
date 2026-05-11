@@ -856,7 +856,7 @@ export function syncOnboardingRegisteredPersons(ctx: CustomerContext): CustomerC
     ctx.onboardingRegisteredPersons.map((p) => [p.id, { ...p, person: { ...p.person } }]),
   );
   const emailToId = new Map<string, string>();
-  for (const row of byId.values()) {
+  for (const row of Array.from(byId.values())) {
     const ek = normalizedPersonEmailKey(row.person.email);
     if (ek) {
       emailToId.set(ek, row.id);
@@ -940,7 +940,7 @@ export function syncOnboardingRegisteredPersons(ctx: CustomerContext): CustomerC
 
   return {
     ...ctx,
-    onboardingRegisteredPersons: [...byId.values()],
+    onboardingRegisteredPersons: Array.from(byId.values()),
   };
 }
 

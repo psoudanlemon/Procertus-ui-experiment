@@ -1,44 +1,38 @@
 import {
-  OnboardingFlowProvider,
   OnboardingFlowView,
-  createLocalStorageOnboardingFlowPersistence,
-  ONBOARDING_FLOW_STORAGE_KEY,
   ONBOARDING_REGISTRATION_COMPLETE_PATH,
   useOnboardingFlow,
   useOnboardingFlowApi,
   useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
 import { useEffect, useMemo } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
+
+import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
 
 export { ONBOARDING_REGISTRATION_COMPLETE_PATH } from "@procertus-ui/ui-certification";
 
 const WEGWIJZER_PATH = "/welcome";
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
 
+/**
+ * Formal onboarding after drafts exist. Expects ancestor {@link OnboardingFlowProvider}
+ * ({@link PublicWelcomeOnboardingSessionLayout}).
+ */
 export function CustomerOnboardingFlow() {
   const navigate = useNavigate();
-  const persistence = useMemo(
-    () => createLocalStorageOnboardingFlowPersistence({ storageKey: ONBOARDING_FLOW_STORAGE_KEY }),
-    [],
-  );
-
-  return (
-    <OnboardingFlowProvider
-      persistence={persistence}
-      navigate={navigate}
-      registrationCompletePath={ONBOARDING_REGISTRATION_COMPLETE_PATH}
-    >
-      <CustomerOnboardingFlowBody />
-    </OnboardingFlowProvider>
-  );
-}
-
-function CustomerOnboardingFlowBody() {
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { redirectToRegistrationComplete, viewProps } = useOnboardingFlow({ navigate });
   const { flowState } = useOnboardingFlowState();
   const api = useOnboardingFlowApi();
+
+  const svcParam = searchParams.get("service")?.trim() ?? "";
+  useEffect(() => {
+    if (!svcParam) return;
+    const svc = findWegwijzerService(svcParam);
+    if (!svc) return;
+    api.setTrajectServiceId(svcParam, svc.entry.label);
+  }, [api, svcParam]);
 
   // Customer onboarding only runs once a certification request has been configured upstream
   // in the TrajectConfigureFlow. Without drafts there is nothing to onboard against.

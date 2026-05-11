@@ -21,6 +21,10 @@ import {
   REGISTRATION_PHASE_TITLE,
 } from "./onboarding-constants";
 import {
+  buildRegistrationPhaseDescription,
+  buildRegistrationPhaseTitle,
+} from "./lib/registration-phase-shell-copy";
+import {
   buildRows,
   isLegalRepresentativeCaptureComplete,
   isOnboardingCompanyCoreStepValid,
@@ -90,6 +94,7 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     prototypeVatPresetId,
     companyFieldHints,
     summaryIncludedDraftIds,
+    registrationEntryLabel,
   } = flowState;
   const companyHints = companyFieldHints ?? {};
 
@@ -276,6 +281,26 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
                   }
                 : { label: "Doorgaan", onClick: () => {}, disabled: true };
 
+  const registrationPhaseDescriptionDerived = useMemo(
+    () =>
+      buildRegistrationPhaseDescription({
+        registrationEntryLabel,
+        drafts,
+        fallbackDescription: REGISTRATION_PHASE_DESCRIPTION,
+      }),
+    [drafts, registrationEntryLabel],
+  );
+
+  const registrationPhaseTitleDerived = useMemo(
+    () =>
+      buildRegistrationPhaseTitle({
+        registrationEntryLabel,
+        drafts,
+        fallbackTitle: REGISTRATION_PHASE_TITLE,
+      }),
+    [drafts, registrationEntryLabel],
+  );
+
   const certificationWizardProps: CertificationRequestWizardProps = {
     mode: "onboarding",
     initialDrafts: drafts,
@@ -295,8 +320,8 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     step,
     certificationPhaseTitle: CERTIFICATION_PHASE_TITLE,
     certificationPhaseDescription: CERTIFICATION_PHASE_DESCRIPTION,
-    registrationPhaseTitle: REGISTRATION_PHASE_TITLE,
-    registrationPhaseDescription: REGISTRATION_PHASE_DESCRIPTION,
+    registrationPhaseTitle: registrationPhaseTitleDerived,
+    registrationPhaseDescription: registrationPhaseDescriptionDerived,
     onSignInClick: () => navigate(welcomePath),
     certificationWizardProps,
     registrationSubmitOpen,

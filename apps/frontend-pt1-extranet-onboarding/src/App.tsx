@@ -2,6 +2,7 @@ import { useMockPrototypeIsAuthenticated } from "@procertus-ui/ui-pt1-prototype"
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthenticatedAppShell } from "./layouts/AuthenticatedAppShell";
 import { PublicAppShell } from "./layouts/PublicAppShell";
+import { PublicWelcomeOnboardingSessionLayout } from "./layouts/PublicWelcomeOnboardingSessionLayout";
 import { RequestsOverviewPage } from "./pages/RequestsOverviewPage";
 import { RequestCreationPage } from "./pages/RequestCreationPage";
 import { RequestDetailPage } from "./pages/RequestDetailPage";
@@ -48,18 +49,20 @@ export default function App() {
       <Route element={<PublicAppShell />}>
         <Route path="/welcome" element={<WegwijzerPage />} />
         <Route path="/welcome/login" element={<SignupPage />} />
-        <Route path="/welcome/start" element={<CustomerOnboardingFlow />} />
-        <Route path="/welcome/aanvraag/:serviceId/start" element={<TrajectConfigureFlow />} />
-        <Route path="/welcome/aanvraag/:serviceId" element={<TriagePage />} />
-        <Route
-          path="/welcome/info-request/:serviceId"
-          element={<InfoRequestPlaceholderPage />}
-        />
-        <Route path="/welcome/expert-call" element={<ExpertCallPlaceholderPage />} />
-        <Route
-          path="/welcome/expert-call/:serviceId"
-          element={<ExpertCallPlaceholderPage />}
-        />
+        <Route element={<PublicWelcomeOnboardingSessionLayout />}>
+          <Route path="/welcome/start" element={<CustomerOnboardingFlow />} />
+          <Route path="/welcome/aanvraag/:serviceId/start" element={<TrajectConfigureFlow />} />
+          <Route path="/welcome/aanvraag/:serviceId" element={<TriagePage />} />
+          <Route
+            path="/welcome/info-request/:serviceId"
+            element={<InfoRequestPlaceholderPage />}
+          />
+          <Route path="/welcome/expert-call" element={<ExpertCallPlaceholderPage />} />
+          <Route
+            path="/welcome/expert-call/:serviceId"
+            element={<ExpertCallPlaceholderPage />}
+          />
+        </Route>
       </Route>
 
       <Route element={<RequireAuth />}>

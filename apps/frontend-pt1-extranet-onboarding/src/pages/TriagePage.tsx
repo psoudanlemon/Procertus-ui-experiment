@@ -23,13 +23,15 @@ import {
 } from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { APP_FOOTER } from "../layouts/footerConfig";
+import { useSyncOnboardingTrajectFromServiceId } from "../features/onboarding/use-sync-onboarding-traject-from-service-id";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
 
 const LOGIN_PATH = "/welcome/login";
 const WEGWIJZER_PATH = "/welcome";
 /** Informatieve aanvraag is afgehandeld via een live expert-call, niet via een placeholder formulier. */
 const INFORMATIONAL_REQUEST_PATH = (serviceId: string) => `/welcome/expert-call/${serviceId}`;
-const FORMAL_REQUEST_PATH = "/welcome/start";
+const formalOnboardingPath = (serviceId: string) =>
+  `/welcome/start?service=${encodeURIComponent(serviceId)}`;
 const EXPERT_CALL_PATH = (serviceId: string) => `/welcome/expert-call/${serviceId}`;
 
 const CATEGORY_LABEL = {
@@ -43,6 +45,7 @@ export function TriagePage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { serviceId } = useParams<{ serviceId: string }>();
+  useSyncOnboardingTrajectFromServiceId(serviceId);
   const service = findWegwijzerService(serviceId);
 
   if (!service) {
@@ -123,7 +126,7 @@ export function TriagePage() {
                 "Account aanmaken pas bij indiening",
               ]}
               cta="Start formele aanvraag"
-              to={FORMAL_REQUEST_PATH}
+              to={formalOnboardingPath(entry.id)}
             />
           </div>
 

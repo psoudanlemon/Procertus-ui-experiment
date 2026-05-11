@@ -321,6 +321,7 @@ export function flowStateSeedFromOnboardingFlowViewProps(
   const summaryIds = props.effectiveSummaryIncludedDraftIds;
   return hydrateOnboardingFlowStateFromStored({
     step: props.step,
+    trajectServiceId: "",
     requestOrigin: props.requestOrigin,
     drafts: [...props.drafts],
     summaryIncludedDraftIds: summaryIds !== undefined ? [...summaryIds] : undefined,

@@ -40,7 +40,11 @@ export type OnboardingFlowApi = {
   /** After certification wizard completes: drafts + jump to origin. */
   readonly applyWizardDraftCompletion: (nextDrafts: CertificationRequestDraft[]) => void;
   /** Pin het Wegwijzer-service id van het lopende traject (zodat de back-link naar Triage refresh-bestendig blijft). */
-  readonly setTrajectServiceId: (serviceId: string) => void;
+  readonly setTrajectServiceId: (
+    serviceId: string,
+    /** Toon voor shell‑kopie in de registratiefase (Wegwijzer / triage). */
+    registrationEntryLabel?: string,
+  ) => void;
 };
 
 type LegacyContext = Partial<CustomerContext> & {
@@ -151,8 +155,24 @@ export function createOnboardingFlowApi(
       });
     },
 
-    setTrajectServiceId(serviceId) {
-      setFlowState((prev) => (prev.trajectServiceId === serviceId ? prev : { ...prev, trajectServiceId: serviceId }));
+    setTrajectServiceId(serviceId, registrationEntryLabel) {
+      setFlowState((prev) => {
+        let nextRegistrationLabel = prev.registrationEntryLabel;
+        if (registrationEntryLabel !== undefined) {
+          const t = registrationEntryLabel.trim();
+          nextRegistrationLabel = t.length > 0 ? t : undefined;
+        }
+        if (prev.trajectServiceId === serviceId && prev.registrationEntryLabel === nextRegistrationLabel) {
+          return prev;
+        }
+        const nextState: OnboardingFlowState = { ...prev, trajectServiceId: serviceId };
+        if (nextRegistrationLabel) {
+          nextState.registrationEntryLabel = nextRegistrationLabel;
+        } else {
+          delete nextState.registrationEntryLabel;
+        }
+        return nextState;
+      });
     },
 
     goToOnboardingStep(nextStep) {

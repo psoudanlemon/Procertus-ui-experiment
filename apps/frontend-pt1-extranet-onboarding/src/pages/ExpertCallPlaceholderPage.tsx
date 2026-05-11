@@ -15,6 +15,7 @@ import {
 import { DetailCard, DetailCardSection } from "@procertus-ui/ui-lib";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { APP_FOOTER } from "../layouts/footerConfig";
+import { useSyncOnboardingTrajectFromServiceId } from "../features/onboarding/use-sync-onboarding-traject-from-service-id";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
 
 const LOGIN_PATH = "/welcome/login";
@@ -49,6 +50,7 @@ export function ExpertCallPlaceholderPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { serviceId } = useParams<{ serviceId: string }>();
+  useSyncOnboardingTrajectFromServiceId(serviceId);
   const service = findWegwijzerService(serviceId);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedSlot, setSelectedSlot] = useState<string | undefined>(undefined);

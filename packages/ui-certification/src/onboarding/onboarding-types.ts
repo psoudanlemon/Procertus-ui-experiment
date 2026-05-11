@@ -175,6 +175,10 @@ export type OnboardingFlowState = {
    * onboarding terug te koppelen aan de juiste TriagePage, ook na een refresh.
    */
   trajectServiceId: string;
+  /**
+   * Wegwijzer toonlabel (bv. naam van het dienstkanaal uit de triage) voor kopie in de registratiefase.
+   */
+  registrationEntryLabel?: string;
   /** Where the requesting company is based; drives preset and country options for later steps. */
   requestOrigin: OnboardingRequestOrigin | "";
   drafts: CertificationRequestDraft[];

@@ -30,6 +30,7 @@ import {
 } from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { APP_FOOTER } from "../layouts/footerConfig";
+import { useSyncOnboardingTrajectFromServiceId } from "../features/onboarding/use-sync-onboarding-traject-from-service-id";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
 
 const LOGIN_PATH = "/welcome/login";
@@ -40,6 +41,7 @@ const EXPERT_CALL_PATH = (serviceId: string) => `/welcome/expert-call/${serviceI
 export function InfoRequestPlaceholderPage() {
   const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
+  useSyncOnboardingTrajectFromServiceId(serviceId);
   const service = findWegwijzerService(serviceId);
 
   if (!service) {

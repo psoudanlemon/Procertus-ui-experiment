@@ -1,51 +1,39 @@
 import {
-  OnboardingFlowProvider,
   OnboardingRequestStep,
-  createLocalStorageOnboardingFlowPersistence,
-  ONBOARDING_FLOW_STORAGE_KEY,
-  ONBOARDING_REGISTRATION_COMPLETE_PATH,
   useOnboardingFlow,
   useOnboardingFlowApi,
   useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
+
+import { useSyncOnboardingTrajectFromServiceId } from "../onboarding/use-sync-onboarding-traject-from-service-id";
 
 const WEGWIJZER_PATH = "/welcome";
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
 
+/**
+ * Wizard-only step bundled with triage/start under {@link PublicWelcomeOnboardingSessionLayout}.
+ */
 export function TrajectConfigureFlow() {
-  const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
-  const persistence = useMemo(
-    () => createLocalStorageOnboardingFlowPersistence({ storageKey: ONBOARDING_FLOW_STORAGE_KEY }),
-    [],
-  );
 
   if (!serviceId) {
     return <Navigate to={WEGWIJZER_PATH} replace />;
   }
 
-  return (
-    <OnboardingFlowProvider
-      persistence={persistence}
-      navigate={navigate}
-      registrationCompletePath={ONBOARDING_REGISTRATION_COMPLETE_PATH}
-    >
-      <TrajectConfigureFlowBody serviceId={serviceId} />
-    </OnboardingFlowProvider>
-  );
+  return <TrajectConfigureFlowBody serviceId={serviceId} />;
 }
 
 function TrajectConfigureFlowBody({ serviceId }: { serviceId: string }) {
   const navigate = useNavigate();
+  useSyncOnboardingTrajectFromServiceId(serviceId);
   const api = useOnboardingFlowApi();
   const { flowState } = useOnboardingFlowState();
   const { viewProps } = useOnboardingFlow({ navigate });
   const seenRequestStep = useRef(false);
 
   useEffect(() => {
-    api.setTrajectServiceId(serviceId);
     api.goToOnboardingStep("request");
   }, [api, serviceId]);
 
