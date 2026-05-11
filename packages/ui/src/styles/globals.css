@@ -212,7 +212,7 @@
     --card-foreground: var(--neutral-950);
   }
   html[data-public-layout] [data-slot="traject-action-bar"] {
-    --card: var(--background);
+    --card: var(--neutral-100);
     --card-foreground: var(--foreground);
   }
   @media (prefers-reduced-motion: reduce) {

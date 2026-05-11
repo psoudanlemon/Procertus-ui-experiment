@@ -212,7 +212,7 @@ type ContextValue = {
   addProduct: (id: string) => void;
   removeProduct: (id: string) => void;
   clearSelection: () => void;
-  onCancel?: () => void;
+  onBack?: () => void;
   onContinue: (ids: readonly string[]) => void;
 };
 
@@ -228,11 +228,25 @@ function useBasket(): ContextValue {
   return ctx;
 }
 
+/**
+ * Public read of the basket: exposes the selection state and the
+ * `onBack` / `onContinue` callbacks wired into {@link ProductSelectionBasketProvider}.
+ * Use this when you want to render a custom action bar (e.g. a Storybook footer
+ * template) outside the shipped {@link ProductSelectionBasketActionBar}.
+ */
+export function useProductSelectionBasket(): Pick<
+  ContextValue,
+  "selectedIds" | "onBack" | "onContinue"
+> {
+  const { selectedIds, onBack, onContinue } = useBasket();
+  return { selectedIds, onBack, onContinue };
+}
+
 export type ProductSelectionBasketProviderProps = {
   doc: ProcertusCategorizationDoc;
   initialSelectedIds?: readonly string[];
   onSelectionChange?: (ids: string[]) => void;
-  onCancel?: () => void;
+  onBack?: () => void;
   onContinue: (ids: readonly string[]) => void;
   children: ReactNode;
 };
@@ -247,7 +261,7 @@ export function ProductSelectionBasketProvider({
   doc,
   initialSelectedIds,
   onSelectionChange,
-  onCancel,
+  onBack,
   onContinue,
   children,
 }: ProductSelectionBasketProviderProps) {
@@ -328,7 +342,7 @@ export function ProductSelectionBasketProvider({
       addProduct,
       removeProduct,
       clearSelection,
-      onCancel,
+      onBack,
       onContinue,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -520,36 +534,38 @@ export function ProductSelectionBasketMobileSummaryBar({
 }
 
 /**
- * Sticky action bar buttons; render inside `TrajectLayout.actionBar`. Op mobile
- * draaien beide knoppen naar `size="lg"` (40px hoog) zodat ze comfortabele
- * tap-targets vormen; vanaf `md` wordt dit teruggebracht naar de standaard
- * 36px-hoogte via `md:h-9 md:px-4` zodat de desktop-weergave ongewijzigd
- * blijft.
+ * Sticky action bar buttons; render inside `TrajectLayout.actionBar`. Eerste
+ * stap van de flow, dus volgt de first-step variant: enkel "Terug" (outline)
+ * naar het voorgaande scherm en "Bevestig selectie" (primary) naar de
+ * volgende stap. Op mobile stapelen beide knoppen verticaal op volledige
+ * breedte; vanaf `md` zitten ze als groep rechts.
  */
 export function ProductSelectionBasketActionBar() {
-  const { selectedIds, onCancel, onContinue } = useBasket();
+  const { selectedIds, onBack, onContinue } = useBasket();
+  const continueDisabled = selectedIds.length === 0;
   return (
-    <>
-      <Button
-        type="button"
-        variant="ghost"
-        size="lg"
-        className="h-12 px-6 md:h-9 md:px-4"
-        onClick={onCancel}
-        disabled={onCancel == null}
-      >
-        Terug
-      </Button>
+    <div className="grid w-full grid-cols-2 items-center gap-component md:flex">
       <Button
         type="button"
         size="lg"
-        className="h-12 px-6 md:h-9 md:px-4"
-        disabled={selectedIds.length === 0}
+        className="col-span-2 h-12 w-full px-6 md:order-3 md:col-auto md:h-9 md:w-auto md:px-4"
+        disabled={continueDisabled}
         onClick={() => onContinue(selectedIds)}
       >
         Bevestig selectie
       </Button>
-    </>
+      {onBack ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="lg"
+          className="col-span-2 h-12 w-full px-6 md:order-2 md:col-auto md:ml-auto md:h-9 md:w-auto md:px-4"
+          onClick={onBack}
+        >
+          Terug
+        </Button>
+      ) : null}
+    </div>
   );
 }
 

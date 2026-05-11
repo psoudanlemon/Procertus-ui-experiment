@@ -31,7 +31,7 @@ function MobileBasketHarness({
     <ProductSelectionBasketProvider
       doc={defaultProcertusCategorizationDoc}
       initialSelectedIds={initialSelectedIds}
-      onCancel={noop}
+      onBack={noop}
       onContinue={noop}
     >
       <div

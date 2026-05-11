@@ -11,6 +11,7 @@ export {
   ProductSelectionBasketBody,
   ProductSelectionBasketMobileSummaryBar,
   ProductSelectionBasketProvider,
+  useProductSelectionBasket,
 } from "./ProductSelectionBasket";
 export type { ProductSelectionBasketProviderProps } from "./ProductSelectionBasket";
 export {

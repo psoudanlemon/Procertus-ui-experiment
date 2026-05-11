@@ -50,8 +50,10 @@ export function TrajectConfigureFlow() {
 
   // "Terug" houdt de reeds gemaakte productselectie en eventuele klantgegevens vast: we
   // navigeren enkel terug naar de wegwijzer zodat de gebruiker zonder informatieverlies
-  // van service kan wisselen of zijn keuze kan heroverwegen.
-  const handleCancel = useCallback(() => {
+  // van service kan wisselen of zijn keuze kan heroverwegen. Dit is de eerste stap in
+  // de flow, dus "Terug" neemt de rol "naar het voorgaande scherm" over (geen aparte
+  // annuleer-actie nodig).
+  const handleBack = useCallback(() => {
     navigate(WEGWIJZER_PATH);
   }, [navigate]);
 
@@ -99,7 +101,7 @@ export function TrajectConfigureFlow() {
     <ProductSelectionBasketProvider
       doc={defaultProcertusCategorizationDoc}
       initialSelectedIds={initialSelectedIds}
-      onCancel={handleCancel}
+      onBack={handleBack}
       onContinue={handleContinue}
     >
       <TrajectLayout

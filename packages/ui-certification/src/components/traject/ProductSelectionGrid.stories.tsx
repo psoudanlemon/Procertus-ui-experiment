@@ -3,12 +3,13 @@ import { type ComponentType, useLayoutEffect } from "react";
 
 import { defaultProcertusCategorizationDoc } from "../../categorization-data";
 import {
-  ProductSelectionBasketActionBar,
   ProductSelectionBasketBody,
   ProductSelectionBasketMobileSummaryBar,
   ProductSelectionBasketProvider,
+  useProductSelectionBasket,
 } from "./ProductSelectionBasket";
 import { TrajectLayout } from "./TrajectLayout";
+import { TrajectStoryFooter } from "./TrajectStoryFooter";
 
 const STORY_FOOTER = {
   companyDetails: [
@@ -81,7 +82,7 @@ export const ProductSelection: StoryObj<typeof meta> = {
   render: (args) => (
     <ProductSelectionBasketProvider
       doc={defaultProcertusCategorizationDoc}
-      onCancel={noop}
+      onBack={noop}
       onContinue={noop}
     >
       <TrajectLayout
@@ -89,10 +90,28 @@ export const ProductSelection: StoryObj<typeof meta> = {
         aboveActionBar={
           <ProductSelectionBasketMobileSummaryBar className="md:hidden" />
         }
-        actionBar={<ProductSelectionBasketActionBar />}
+        actionBar={<ProductSelectionStoryFooter />}
       >
         <ProductSelectionBasketBody />
       </TrajectLayout>
     </ProductSelectionBasketProvider>
   ),
 };
+
+/**
+ * Verbindt {@link TrajectStoryFooter} met de basket-context: leest `selectedIds` voor de
+ * disabled-staat van "Bevestig selectie" en bedraadt `onBack`/`onContinue` op de provider.
+ * Eerste stap van de flow, dus `onCancel` wordt bewust weggelaten — `onBack` brengt de
+ * gebruiker terug naar de wegwijzer.
+ */
+function ProductSelectionStoryFooter() {
+  const { selectedIds, onBack, onContinue } = useProductSelectionBasket();
+  return (
+    <TrajectStoryFooter
+      onBack={onBack}
+      onContinue={() => onContinue(selectedIds)}
+      continueLabel="Bevestig selectie"
+      continueDisabled={selectedIds.length === 0}
+    />
+  );
+}
