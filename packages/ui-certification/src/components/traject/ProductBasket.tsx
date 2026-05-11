@@ -78,7 +78,7 @@ export function ProductBasket({
             <EmptyBasket />
           </div>
           <div className="col-start-1 row-start-1 flex flex-col gap-section">
-            <ul className="flex flex-col divide-y divide-border overflow-y-auto rounded-lg border border-border bg-card">
+            <ul className="flex flex-col gap-component overflow-y-auto">
               <AnimatePresence initial={false} mode="popLayout">
                 {items.map((p) => (
                   <SelectedRow
@@ -153,8 +153,9 @@ export function SelectedRow({
     >
       <Item
         asChild
+        variant="outline"
         className={cn(
-          "cursor-pointer rounded-none border-transparent p-component text-left transition-colors",
+          "cursor-pointer p-component text-left transition-colors",
           "hover:bg-accent hover:text-accent-foreground",
           "focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none",
         )}
