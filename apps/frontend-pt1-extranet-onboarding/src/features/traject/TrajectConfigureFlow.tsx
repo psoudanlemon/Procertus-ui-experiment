@@ -1,13 +1,17 @@
 import {
   OnboardingRequestStep,
   useOnboardingFlow,
-  useOnboardingFlowApi,
-  useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
-import { useEffect, useRef } from "react";
+import type { CertificationRequestDraft } from "@procertus-ui/ui-certification";
+import { useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { useSyncOnboardingTrajectFromServiceId } from "../onboarding/use-sync-onboarding-traject-from-service-id";
+import { ActiveInquiryContinueAlert } from "../../layouts/ActiveInquiryContinueAlert";
+import { usePublicPrototypeRegistryLanguageHeaderProps } from "../../layouts/PublicPrototypeLanguageContext";
+import { WelcomePublicHeaderLeading } from "../../layouts/WelcomePublicHeaderLeading";
+import { WelcomePublicHeaderTrailing } from "../../layouts/WelcomePublicHeaderTrailing";
+import { PUBLIC_GUEST_LOGIN_PATH } from "../../routes/guestPaths";
 
 const WEGWIJZER_PATH = "/welcome";
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
@@ -27,32 +31,40 @@ export function TrajectConfigureFlow() {
 
 function TrajectConfigureFlowBody({ serviceId }: { serviceId: string }) {
   const navigate = useNavigate();
+  const registryLang = usePublicPrototypeRegistryLanguageHeaderProps();
   useSyncOnboardingTrajectFromServiceId(serviceId);
-  const api = useOnboardingFlowApi();
-  const { flowState } = useOnboardingFlowState();
-  const { viewProps } = useOnboardingFlow({ navigate });
-  const seenRequestStep = useRef(false);
+  const { viewProps } = useOnboardingFlow({
+    navigate,
+    activeStep: "request",
+    onRegistrationStepChange: () => {},
+    signInUrl: PUBLIC_GUEST_LOGIN_PATH,
+    registryHeaderLeadingActions: <WelcomePublicHeaderLeading />,
+    registryHeaderTrailingActions: <WelcomePublicHeaderTrailing />,
+  });
 
-  useEffect(() => {
-    api.goToOnboardingStep("request");
-  }, [api, serviceId]);
-
-  useEffect(() => {
-    if (flowState.step === "request") {
-      seenRequestStep.current = true;
-      return;
-    }
-    if (seenRequestStep.current) {
-      navigate(TRIAGE_PATH(serviceId), { replace: true });
-    }
-  }, [flowState.step, navigate, serviceId]);
+  const certificationWizardProps = useMemo(
+    () => ({
+      ...viewProps.certificationWizardProps,
+      onComplete: (nextDrafts: CertificationRequestDraft[]) => {
+        viewProps.certificationWizardProps.onComplete(nextDrafts);
+        navigate(TRIAGE_PATH(serviceId), { replace: true });
+      },
+    }),
+    [navigate, serviceId, viewProps.certificationWizardProps],
+  );
 
   return (
     <OnboardingRequestStep
       pageTitle={viewProps.certificationPhaseTitle}
       pageDescription={viewProps.certificationPhaseDescription}
       onSignInClick={viewProps.onSignInClick}
-      certificationWizardProps={viewProps.certificationWizardProps}
+      certificationWizardProps={certificationWizardProps}
+      headerLeadingActions={viewProps.registryHeaderLeadingActions}
+      headerTrailingActions={viewProps.registryHeaderTrailingActions}
+      loginUrl={viewProps.signInUrl}
+      guestLanguagePlacement={viewProps.guestLanguagePlacement}
+      sessionBanner={<ActiveInquiryContinueAlert />}
+      {...registryLang}
     />
   );
 }

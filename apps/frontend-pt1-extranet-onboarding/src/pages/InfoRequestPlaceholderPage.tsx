@@ -29,17 +29,22 @@ import {
   SkeletonPrefillField,
 } from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
+import { ActiveInquiryContinueAlert } from "../layouts/ActiveInquiryContinueAlert";
 import { APP_FOOTER } from "../layouts/footerConfig";
+import { usePublicPrototypeRegistryLanguageHeaderProps } from "../layouts/PublicPrototypeLanguageContext";
+import { WelcomePublicHeaderLeading } from "../layouts/WelcomePublicHeaderLeading";
+import { WelcomePublicHeaderTrailing } from "../layouts/WelcomePublicHeaderTrailing";
 import { useSyncOnboardingTrajectFromServiceId } from "../features/onboarding/use-sync-onboarding-traject-from-service-id";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
+import { PUBLIC_GUEST_LOGIN_PATH } from "../routes/guestPaths";
 
-const LOGIN_PATH = "/welcome/login";
 const WEGWIJZER_PATH = "/welcome";
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
 const EXPERT_CALL_PATH = (serviceId: string) => `/welcome/expert-call/${serviceId}`;
 
 export function InfoRequestPlaceholderPage() {
   const navigate = useNavigate();
+  const registryLang = usePublicPrototypeRegistryLanguageHeaderProps();
   const { serviceId } = useParams<{ serviceId: string }>();
   useSyncOnboardingTrajectFromServiceId(serviceId);
   const service = findWegwijzerService(serviceId);
@@ -62,11 +67,17 @@ export function InfoRequestPlaceholderPage() {
             className="h-8 w-auto dark:brightness-0 dark:invert"
           />
         ),
-        onLogin: () => navigate(LOGIN_PATH),
+        onLogin: () => navigate(PUBLIC_GUEST_LOGIN_PATH),
+        loginUrl: PUBLIC_GUEST_LOGIN_PATH,
+        leadingActions: <WelcomePublicHeaderLeading />,
+        trailingActions: <WelcomePublicHeaderTrailing />,
+        guestLanguagePlacement: "leading",
+        ...registryLang,
       }}
       footer={APP_FOOTER}
     >
       <div className="mx-auto flex w-full max-w-[760px] flex-col gap-region p-boundary">
+        <ActiveInquiryContinueAlert />
         <Button asChild variant="ghost" size="sm" className="-ml-2 self-start text-muted-foreground">
           <Link to={TRIAGE_PATH(entry.id)}>
             <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />

@@ -94,9 +94,12 @@ export type PublicRegistryHeaderProps = {
   onLanguageChange?: (code: string) => void;
   /** Logged-in user — when absent the header shows login + CTA buttons. */
   user?: PublicHeaderUser;
-  /** URL for the login page. */
+  /** URL for the login page (`<a href>`). */
   loginUrl?: string;
-  /** Callback when login button is clicked (overrides loginUrl). */
+  /**
+   * When set, login uses client-side handling: `preventDefault` on the anchor and this callback.
+   * Use with `loginUrl` for correct href (new tab, copy link) while routing in-app on click.
+   */
   onLogin?: () => void;
   /** Callback when logout is clicked. */
   onLogout?: () => void;
@@ -104,6 +107,22 @@ export type PublicRegistryHeaderProps = {
   version?: string;
   /** Visual variant — "default" uses sidebar tokens, "transparent" uses background. */
   variant?: "default" | "transparent";
+  /**
+   * Leading app bar controls (e.g. color mode). Rendered after the logo, before nav or breadcrumbs.
+   */
+  leadingActions?: React.ReactNode;
+  /**
+   * Trailing cluster (e.g. inquiry cart). Guest language sits here only when
+   * {@link guestLanguagePlacement} is `"trailing"` and multiple languages are set.
+   */
+  trailingActions?: React.ReactNode;
+  /**
+   * Where to render the guest language control when `!user` and `languages.length > 1`.
+   * Use `"leading"` when the host places {@link PublicRegistryGuestLanguageDropdown} inside
+   * {@link leadingActions} (e.g. next to the theme toggle). The mobile sheet still lists languages.
+   * @default "trailing"
+   */
+  guestLanguagePlacement?: "trailing" | "leading";
 };
 
 // ---------------------------------------------------------------------------
@@ -124,10 +143,69 @@ function getInitials(user: PublicHeaderUser): string {
 }
 
 // ---------------------------------------------------------------------------
+// Guest language (desktop) — reusable in leading or trailing clusters
+// ---------------------------------------------------------------------------
+
+export type PublicRegistryGuestLanguageDropdownProps = {
+  languages: PublicHeaderLanguage[];
+  activeLanguage?: string;
+  onLanguageChange?: (code: string) => void;
+  /** Dropdown content alignment relative to the trigger. */
+  align?: "start" | "end";
+  className?: string;
+};
+
+export function PublicRegistryGuestLanguageDropdown({
+  languages,
+  activeLanguage,
+  onLanguageChange,
+  align = "end",
+  className,
+}: PublicRegistryGuestLanguageDropdownProps) {
+  if (languages.length <= 1) {
+    return null;
+  }
+
+  const activeLanguageObj = languages.find((l) => l.code === activeLanguage);
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "inline-flex gap-1 text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+            className,
+          )}
+        >
+          <span className="text-xs font-medium uppercase">
+            {activeLanguageObj?.code ?? languages[0]?.code}
+          </span>
+          <HugeiconsIcon icon={ArrowDown01Icon} className="size-3" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align={align} className="w-auto">
+        {languages.map((lang) => (
+          <DropdownMenuCheckboxItem
+            key={lang.code}
+            checked={lang.code === (activeLanguage ?? languages[0]?.code)}
+            onClick={() => onLanguageChange?.(lang.code)}
+          >
+            <span className="mr-1.5">{lang.flag}</span>
+            {lang.label}
+          </DropdownMenuCheckboxItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
-function PublicRegistryHeader({
+export function PublicRegistryHeader({
   logo,
   navLinks = [],
   breadcrumbs,
@@ -143,6 +221,9 @@ function PublicRegistryHeader({
   onLogout,
   version,
   variant = "default",
+  leadingActions,
+  trailingActions,
+  guestLanguagePlacement = "trailing",
 }: PublicRegistryHeaderProps) {
   const searchRef = React.useRef<HTMLInputElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -196,6 +277,17 @@ function PublicRegistryHeader({
             {logo}
           </a>
         )}
+
+        {leadingActions ? (
+          <div
+            className={cn(
+              "flex shrink-0 items-center gap-2 border-l pl-component sm:pl-section",
+              variant === "transparent" ? "border-border" : "border-sidebar-border",
+            )}
+          >
+            {leadingActions}
+          </div>
+        ) : null}
 
         {breadcrumbs && breadcrumbs.length > 0 ? (
           <Breadcrumb className="hidden sm:flex">
@@ -256,7 +348,7 @@ function PublicRegistryHeader({
           </div>
         )}
 
-        <div className="ml-auto flex items-center gap-section">
+        <div className="ml-auto flex shrink-0 items-center gap-section">
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -333,40 +425,32 @@ function PublicRegistryHeader({
                 Reeds een account?
               </span>
               <Button variant="secondary" size="sm" className="min-h-11 lg:min-h-0" asChild>
-                <a href={loginUrl} onClick={onLogin}>
+                <a
+                  href={loginUrl}
+                  onClick={(e) => {
+                    if (onLogin) {
+                      e.preventDefault();
+                      onLogin();
+                    }
+                  }}
+                >
                   Log in
                 </a>
               </Button>
             </div>
           )}
 
-          {!user && languages.length > 1 && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="hidden gap-1 text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground sm:inline-flex"
-                >
-                  <span className="text-xs font-medium uppercase">
-                    {activeLanguageObj?.code ?? languages[0]?.code}
-                  </span>
-                  <HugeiconsIcon icon={ArrowDown01Icon} className="size-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-auto">
-                {languages.map((lang) => (
-                  <DropdownMenuCheckboxItem
-                    key={lang.code}
-                    checked={lang.code === (activeLanguage ?? languages[0]?.code)}
-                    onClick={() => onLanguageChange?.(lang.code)}
-                  >
-                    <span className="mr-1.5">{lang.flag}</span>
-                    {lang.label}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+          {trailingActions ? (
+            <div className="flex shrink-0 items-center gap-2">{trailingActions}</div>
+          ) : null}
+
+          {!user && guestLanguagePlacement === "trailing" && languages.length > 1 && (
+            <PublicRegistryGuestLanguageDropdown
+              languages={languages}
+              activeLanguage={activeLanguage}
+              onLanguageChange={onLanguageChange}
+              align="end"
+            />
           )}
         </div>
       </div>
@@ -448,7 +532,10 @@ function PublicRegistryHeader({
                         "flex min-h-11 items-center justify-between rounded-md px-component text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                         lang.code === (activeLanguage ?? languages[0]?.code) && "font-medium",
                       )}
-                      onClick={() => onLanguageChange?.(lang.code)}
+                      onClick={() => {
+                        onLanguageChange?.(lang.code);
+                        setMobileMenuOpen(false);
+                      }}
                     >
                       <span className="flex items-center gap-micro">
                         <span>{lang.flag}</span> {lang.label}
@@ -470,5 +557,3 @@ function PublicRegistryHeader({
     </header>
   );
 }
-
-export { PublicRegistryHeader };

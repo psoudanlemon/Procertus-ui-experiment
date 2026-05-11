@@ -15,6 +15,7 @@ import {
   readOnboardingRegistrationCompletePayload,
   type OnboardingRegistrationCompletePayload,
 } from "@procertus-ui/ui-certification";
+import { FORMAL_ONBOARDING_PATH } from "../routes/formal-request-routing";
 
 const registrationCompleteOverlay = (): PrototypeOverlayOptions => ({
   placement: "top-right",
@@ -123,7 +124,7 @@ export function OnboardingRegistrationCompletePage() {
   }
 
   if (!payload) {
-    return <Navigate to="/welcome/start" replace />;
+    return <Navigate to={FORMAL_ONBOARDING_PATH} replace />;
   }
 
   return <OnboardingRegistrationCompleteView payload={payload} />;

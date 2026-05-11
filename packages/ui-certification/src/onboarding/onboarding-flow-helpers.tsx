@@ -249,7 +249,7 @@ export function summaryInvoicingLegalEntityOverviewLine(
   const uniq = new Set(keys.filter(Boolean));
   if (uniq.size === 0) return "—";
   if (uniq.size === 1) {
-    return summaryLegalEntityFromAssignmentRaw(context, [...uniq][0]!);
+    return summaryLegalEntityFromAssignmentRaw(context, Array.from(uniq)[0]!);
   }
   return "Verschilt per aanvraag — zie toewijzingstabel op de facturatietap";
 }

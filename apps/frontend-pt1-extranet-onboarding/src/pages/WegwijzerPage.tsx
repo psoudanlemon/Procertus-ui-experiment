@@ -40,14 +40,18 @@ import {
 } from "@procertus-ui/ui-lib";
 import { CatalogueExplorer } from "@procertus-ui/ui-certification";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
+import { ActiveInquiryContinueAlert } from "../layouts/ActiveInquiryContinueAlert";
 import { APP_FOOTER } from "../layouts/footerConfig";
+import { usePublicPrototypeRegistryLanguageHeaderProps } from "../layouts/PublicPrototypeLanguageContext";
+import { WelcomePublicHeaderLeading } from "../layouts/WelcomePublicHeaderLeading";
+import { WelcomePublicHeaderTrailing } from "../layouts/WelcomePublicHeaderTrailing";
 import {
   WEGWIJZER_SERVICES,
   type WegwijzerService,
 } from "../features/wegwijzer/wegwijzer-services";
 import { WEGWIJZER_SERVICE_CONTENT } from "../features/wegwijzer/wegwijzer-service-content";
+import { PUBLIC_GUEST_LOGIN_PATH } from "../routes/guestPaths";
 
-const LOGIN_PATH = "/welcome/login";
 /** Eerste stap van de TrajectFlow: producttype kiezen en aanvraag controleren in de wizard, voor de triage-keuze. */
 const TRAJECT_CONFIGURE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}/start`;
 const EXPERT_CALL_PATH = (serviceId?: string) =>
@@ -76,6 +80,7 @@ const VALID_SERVICE_IDS = new Set<string>([
 
 export function WegwijzerPage() {
   const navigate = useNavigate();
+  const registryLang = usePublicPrototypeRegistryLanguageHeaderProps();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const rawParam = searchParams.get(SERVICE_PARAM);
@@ -113,11 +118,19 @@ export function WegwijzerPage() {
               className="h-8 w-auto dark:brightness-0 dark:invert"
             />
           ),
-          onLogin: () => navigate(LOGIN_PATH),
+          onLogin: () => navigate(PUBLIC_GUEST_LOGIN_PATH),
+          loginUrl: PUBLIC_GUEST_LOGIN_PATH,
+          leadingActions: <WelcomePublicHeaderLeading />,
+          trailingActions: <WelcomePublicHeaderTrailing />,
+          guestLanguagePlacement: "leading",
+          ...registryLang,
         }}
         footer={APP_FOOTER}
       >
         <div className="mx-auto w-full max-w-7xl">
+          <div className="px-boundary pt-boundary">
+            <ActiveInquiryContinueAlert />
+          </div>
           <Hero />
 
           <div className="px-boundary pb-boundary">

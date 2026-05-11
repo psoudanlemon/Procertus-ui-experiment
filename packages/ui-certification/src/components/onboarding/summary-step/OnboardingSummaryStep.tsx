@@ -23,13 +23,10 @@ import {
   RadioGroup,
   RadioGroupItem,
   Select,
-  ChoiceCard,
-  ChoiceCardGroup,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  CardList,
   cn,
   Switch,
   Table,
@@ -39,10 +36,7 @@ import {
   TableHeader,
   TableRow,
 } from "@procertus-ui/ui";
-import {
-  DraftCardDescription,
-  sortDraftsByIntentAndProduct,
-} from "../../certification-request-wizard/draft-selection-presentation";
+import { CertificationInquiriesOverviewCard } from "../certification-inquiries-overview/CertificationInquiriesOverviewCard";
 import { PrototypeCard } from "@procertus-ui/ui-pt1-prototype";
 import {
   findVatPrototypePreset,
@@ -360,77 +354,22 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
               )}
             </section>
           </div>
-          <Card className="w-full min-w-0 overflow-hidden lg:max-w-none">
-            <CardHeader>
-              <CardTitle>Aanvragen</CardTitle>
-              <CardDescription>
-                Pas uw selectie van certificatieaanvragen nog aan.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {drafts.length === 0 ? (
-                <>
-                  <p className="m-0 text-sm text-muted-foreground" role="status">
-                    Geen conceptaanvragen.
-                  </p>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full sm:w-auto"
-                    onClick={() => goToOnboardingStep("request")}
-                  >
-                    Aanvraag wijzigen
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <ChoiceCardGroup selectionMode="multiple">
-                    <CardList
-                      items={sortDraftsByIntentAndProduct(drafts)}
-                      widthClass="@min-[40rem]:grid-cols-1"
-                    >
-                      {(draft) => (
-                        <ChoiceCard
-                          key={draft.id}
-                          selectionMode="multiple"
-                          value={draft.id}
-                          controlId={`onboarding-summary-draft-${draft.id}`}
-                          title={draft.label}
-                          description={<DraftCardDescription draft={draft} />}
-                          checked={effectiveSummaryIncludedDraftIds.includes(draft.id)}
-                          onCheckedChange={(checked) => {
-                            setFlowState((prev) => {
-                              const ids = prev.drafts.map((d) => d.id);
-                              const base = prev.summaryIncludedDraftIds ?? [...ids];
-                              const next = checked
-                                ? Array.from(new Set([...base, draft.id]))
-                                : base.filter((id) => id !== draft.id);
-                              return { ...prev, summaryIncludedDraftIds: next };
-                            });
-                          }}
-                          variant="elevated"
-                        />
-                      )}
-                    </CardList>
-                  </ChoiceCardGroup>
-                  <div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full sm:w-auto"
-                      onClick={() => goToOnboardingStep("request")}
-                    >
-                      Aanvraag wijzigen
-                    </Button>
-                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                      Ga terug naar de wizard om aanvragen toe te voegen, te verwijderen of
-                      opnieuw samen te stellen.
-                    </p>
-                  </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
+          <CertificationInquiriesOverviewCard
+            drafts={drafts}
+            effectiveIncludedDraftIds={effectiveSummaryIncludedDraftIds}
+            controlIdPrefix="onboarding-summary-draft"
+            onDraftIncludedChange={(draftId, included) => {
+              setFlowState((prev) => {
+                const ids = prev.drafts.map((d) => d.id);
+                const base = prev.summaryIncludedDraftIds ?? [...ids];
+                const next = included
+                  ? Array.from(new Set([...base, draftId]))
+                  : base.filter((id) => id !== draftId);
+                return { ...prev, summaryIncludedDraftIds: next };
+              });
+            }}
+            onEditRequestsClick={() => goToOnboardingStep("request")}
+          />
         </div>
 
         <Card className="w-full max-w-none overflow-hidden">

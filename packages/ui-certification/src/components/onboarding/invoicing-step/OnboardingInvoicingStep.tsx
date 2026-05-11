@@ -66,13 +66,13 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
     CERT_INQUIRY_VEST_UNASSIGNED,
   } = model;
 
-  const invoicingMap = context.invoicingInquiryVestigungId;
+  const invoicingMap = context.invoicingInquiryVestigingId;
   const mirror = context.invoicingMirrorCertificationLegalEntities;
   const overviewRows = draftsInRegistrationScope;
 
   const assignmentMapsBlockingDelete = mirror
     ? [context.certificationInquiryVestigingId]
-    : [context.certificationInquiryVestigingId, context.invoicingInquiryVestigungId];
+    : [context.certificationInquiryVestigingId, context.invoicingInquiryVestigingId];
 
   function invoicingDraftSelectRadix(draftId: string): string {
     const raw = (invoicingMap[draftId] ?? "").trim();
@@ -105,7 +105,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
     if (!enabled) {
       patchContext({
         invoicingMirrorCertificationLegalEntities: true,
-        invoicingInquiryVestigungId: {},
+        invoicingInquiryVestigingId: {},
       });
       return;
     }

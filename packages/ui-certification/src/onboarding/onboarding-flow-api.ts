@@ -1,17 +1,12 @@
 import type { Dispatch, SetStateAction } from "react";
 
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
-import type {
-  OnboardingFlowState,
-  CustomerContext,
-  OnboardingStep,
-} from "./onboarding-types";
+import type { OnboardingFlowState, CustomerContext } from "./onboarding-types";
 import {
   customerContextAfterPrototypePresetChange,
-  effectiveIncludedCertificationDraftIds,
   mergeCustomerContextDeep,
   resolveFlowContext,
-  stepIndex,
+  syncOnboardingVestigingenOnePerRegistrationDraft,
 } from "./onboarding-flow-helpers";
 import {
   findVatPrototypePreset,
@@ -21,7 +16,6 @@ import {
   defaultPrototypePresetIdForRequestOrigin,
   type OnboardingRequestOrigin,
 } from "./onboarding-request-origin";
-import { buildOnboardingStepperSteps } from "./onboarding-stepper-model";
 
 const ADDRESS_DETAIL_KEYS: (keyof CustomerContext)[] = [
   "addressStreet",
@@ -37,8 +31,7 @@ export type OnboardingFlowApi = {
   readonly setFlowState: Dispatch<SetStateAction<OnboardingFlowState>>;
   readonly setPrototypeVatPresetFromWizardChoice: (presetId: string) => void;
   readonly setRequestOrigin: (origin: OnboardingRequestOrigin) => void;
-  readonly goToOnboardingStep: (nextStep: OnboardingStep) => void;
-  /** After certification wizard completes: drafts + jump to origin. */
+  /** After certification wizard completes: drafts + navigation is handled by the host route. */
   readonly applyWizardDraftCompletion: (nextDrafts: CertificationRequestDraft[]) => void;
   /** Pin het Wegwijzer-service id van het lopende traject (zodat de back-link naar Triage refresh-bestendig blijft). */
   readonly setTrajectServiceId: (
@@ -146,12 +139,29 @@ export function createOnboardingFlowApi(
         const keptSelection = baseSel.filter((id) => nextIds.includes(id) && prevDraftIds.has(id));
         const newDraftIds = nextIds.filter((id) => !prevDraftIds.has(id));
         const nextSummaryIncluded = Array.from(new Set([...keptSelection, ...newDraftIds]));
+
+        const sync = syncOnboardingVestigingenOnePerRegistrationDraft(
+          nextDrafts,
+          prev.context.onboardingVestigingen,
+          prev.context.certificationInquiryVestigingId,
+        );
+        const nextIdSet = new Set(nextIds);
+        const invoicingPruned: Record<string, string> = {};
+        for (const [did, vid] of Object.entries(prev.context.invoicingInquiryVestigingId)) {
+          if (nextIdSet.has(did)) invoicingPruned[did] = vid;
+        }
+
         return {
           ...prev,
           drafts: nextDrafts,
-          wizardInitialStep: "drafts",
-          step: "origin",
+          wizardInitialStep: nextDrafts.length === 0 ? "intent" : "drafts",
           summaryIncludedDraftIds: nextSummaryIncluded,
+          context: {
+            ...prev.context,
+            onboardingVestigingen: sync.onboardingVestigingen,
+            certificationInquiryVestigingId: sync.certificationInquiryVestigingId,
+            invoicingInquiryVestigingId: invoicingPruned,
+          },
         };
       });
     },
@@ -173,39 +183,6 @@ export function createOnboardingFlowApi(
           delete nextState.registrationEntryLabel;
         }
         return nextState;
-      });
-    },
-
-    goToOnboardingStep(nextStep) {
-      setFlowState((prev) => {
-        const context = resolvePrevContext(prev);
-        const certificationInquiryDraftIds = effectiveIncludedCertificationDraftIds(
-          prev.drafts,
-          prev.summaryIncludedDraftIds,
-        );
-        const steps = buildOnboardingStepperSteps({
-          step: prev.step,
-          drafts: prev.drafts,
-          requestOrigin: prev.requestOrigin,
-          context,
-          certificationInquiryDraftIds,
-        });
-        const targetIndex = stepIndex(nextStep);
-        if (steps[targetIndex]?.available === false) {
-          return prev;
-        }
-        if (nextStep === "request") {
-          return {
-            ...prev,
-            step: nextStep,
-            wizardInitialStep: prev.drafts.length > 0 ? "drafts" : "intent",
-          };
-        }
-        return {
-          ...prev,
-          step: nextStep,
-          ...(nextStep === "company" ? { companyFieldHints: {} } : {}),
-        };
       });
     },
   };

@@ -14,27 +14,17 @@ import {
 import { REGISTRATION_SUBMIT_REDIRECT_DELAY_MS } from "./lib/registrationSubmitSimulation";
 import {
   DEFAULT_VAT_PROTOTYPE_PRESET_ID,
-  enrichRegistrationContext,
   findVatPrototypePreset,
-  registrationIsoCodeFromDutchCountryLabel,
   VAT_PROTOTYPE_PRESETS,
 } from "./lib/vatPrototypePresets";
 import {
   customerContextAfterPrototypePresetChange,
-  effectiveIncludedCertificationDraftIds,
-  isOnboardingInvoicingStepValid,
-  mergeCustomerContextDeep,
-  prototypeOptionalDemoContextPatch,
   readInitialCompanyLookupPhase,
   resolveFlowContext,
 } from "./onboarding-flow-helpers";
-import type { OnboardingFlowState, CustomerContext, OnboardingStep } from "./onboarding-types";
-import { ONBOARDING_STEPS } from "./onboarding-types";
-import { firmaCountryLabelLockedForOrigin, vatPrototypePresetIdsForOrigin } from "./onboarding-request-origin";
-import {
-  ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION,
-  ONBOARDING_REGISTRATION_COMPLETE_PATH,
-} from "./onboarding-constants";
+import type { OnboardingFlowState, CustomerContext } from "./onboarding-types";
+import { vatPrototypePresetIdsForOrigin } from "./onboarding-request-origin";
+import { ONBOARDING_REGISTRATION_COMPLETE_PATH } from "./onboarding-constants";
 import { hydrateOnboardingFlowStateFromStored } from "./onboarding-default-flow-state";
 import type { OnboardingFlowPersistencePort } from "./persistence/onboarding-flow-persistence-port";
 import {
@@ -118,44 +108,14 @@ export function OnboardingFlowProvider({
     [flowState.context],
   );
 
-  const { step, requestOrigin, prototypeVatPresetId } = flowState;
+  const { requestOrigin, prototypeVatPresetId } = flowState;
 
-  /** Entering company step always restarts mock lookup UI. */
-  useEffect(() => {
-    if (step !== "company") return;
-    setCompanyLookupPhase("loading");
-    setLookupProgress(0);
-    setLookupStepIndex(-1);
-  }, [step]);
-
-  /** Normalize context from storage (legacy steps, missing keys, …). */
+  /** Normalize context from storage (legacy keys, missing fields). */
   useEffect(() => {
     setFlowState((prev) => {
       const fixes: Partial<OnboardingFlowState> = {};
-      let migratedStep = prev.step;
-      if ((migratedStep as string) === "kyc") migratedStep = "company";
-      if ((migratedStep as string) === "profile") migratedStep = "summary";
-      if ((migratedStep as string) === "activation") migratedStep = "summary";
-      if ((migratedStep as string) === "review") migratedStep = "summary";
-      if ((migratedStep as string) === "intake") migratedStep = "customer";
-      if (!ONBOARDING_STEPS.includes(migratedStep)) migratedStep = "request";
-      if (migratedStep !== prev.step) {
-        fixes.step = migratedStep;
-      }
       if (prev.requestOrigin === undefined) {
         fixes.requestOrigin = "";
-        const resumeStep = (fixes.step ?? migratedStep) as OnboardingStep;
-        if (
-          prev.drafts.length > 0 &&
-          (resumeStep === "customer" ||
-            resumeStep === "company" ||
-            resumeStep === "companyLegalEntities" ||
-            resumeStep === "invoicing" ||
-            resumeStep === "extras" ||
-            resumeStep === "summary")
-        ) {
-          fixes.step = "origin";
-        }
       }
       if (prev.summaryIncludedDraftIds === undefined && prev.drafts.length > 0) {
         fixes.summaryIncludedDraftIds = prev.drafts.map((d) => d.id);
@@ -173,18 +133,6 @@ export function OnboardingFlowProvider({
           address?: string;
         },
       );
-      const candidateStep = (fixes.step ?? prev.step) as OnboardingStep;
-      const invoicingIncludedDraftIds = effectiveIncludedCertificationDraftIds(
-        prev.drafts,
-        prev.summaryIncludedDraftIds,
-      );
-      if (
-        !ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION &&
-        (candidateStep === "extras" || candidateStep === "summary") &&
-        !isOnboardingInvoicingStepValid(nextContext, invoicingIncludedDraftIds)
-      ) {
-        fixes.step = "invoicing";
-      }
       if (JSON.stringify(nextContext) !== JSON.stringify(prev.context)) {
         fixes.context = nextContext;
       }
@@ -215,96 +163,6 @@ export function OnboardingFlowProvider({
       ),
     }));
   }, [requestOrigin, prototypeVatPresetId]);
-
-  /** Mock company enrichment while on company step. */
-  useEffect(() => {
-    if (step !== "company") return;
-    const preset = findVatPrototypePreset(prototypeVatPresetId) ?? VAT_PROTOTYPE_PRESETS[0];
-    if (!preset) return;
-
-    const timeoutIds: number[] = [];
-    const scheduleLookup = (delayMs: number, fn: () => void) => {
-      timeoutIds.push(window.setTimeout(fn, delayMs));
-    };
-
-    scheduleLookup(150, () => {
-      setLookupProgress(12);
-      setLookupStepIndex(0);
-    });
-    scheduleLookup(700, () => {
-      setLookupProgress(30);
-      setLookupStepIndex(1);
-    });
-    scheduleLookup(1300, () => {
-      setLookupProgress(48);
-      setLookupStepIndex(2);
-    });
-    scheduleLookup(1900, () => {
-      setLookupProgress(64);
-      setLookupStepIndex(3);
-    });
-    scheduleLookup(2500, () => {
-      setLookupProgress(80);
-      setLookupStepIndex(4);
-    });
-    scheduleLookup(3300, () => {
-      setFlowState((prev) => {
-        const baseContext = resolveFlowContext(
-          prev.context as Partial<CustomerContext> & {
-            representativeName?: string;
-            kycNotes?: string;
-            address?: string;
-          },
-        );
-        const enriched = enrichRegistrationContext({
-          vatNumber: baseContext.vatNumber,
-          representativeEmail: baseContext.representativeEmail,
-          preset,
-          firmaCountryLocked: firmaCountryLabelLockedForOrigin(requestOrigin) != null,
-        });
-        const { hints, ...enrichedFields } = enriched;
-        const mergedCore = resolveFlowContext({
-          ...baseContext,
-          ...enrichedFields,
-        });
-        const withPrototypeOptionals = resolveFlowContext(
-          mergeCustomerContextDeep(
-            mergedCore,
-            prototypeOptionalDemoContextPatch(mergedCore, preset),
-          ),
-        );
-        return {
-          ...prev,
-          companyFieldHints: hints,
-          context: withPrototypeOptionals,
-        };
-      });
-      setLookupProgress(100);
-      setCompanyLookupPhase("ready");
-    });
-
-    return () => timeoutIds.forEach((id) => window.clearTimeout(id));
-  }, [step, prototypeVatPresetId, requestOrigin]);
-
-  useEffect(() => {
-    if (step !== "company" || companyLookupPhase !== "ready") return;
-    const locked = firmaCountryLabelLockedForOrigin(requestOrigin);
-    if (!locked) return;
-    const iso = registrationIsoCodeFromDutchCountryLabel(locked);
-    setFlowState((prev) => {
-      if (prev.context.country === locked && prev.context.addressCountryCode === iso) {
-        return prev;
-      }
-      return {
-        ...prev,
-        context: resolveFlowContext({
-          ...prev.context,
-          country: locked,
-          addressCountryCode: iso,
-        }),
-      };
-    });
-  }, [step, companyLookupPhase, requestOrigin]);
 
   const registrationDestination = registrationCompletePath ?? ONBOARDING_REGISTRATION_COMPLETE_PATH;
 

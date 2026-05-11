@@ -1,14 +1,26 @@
 import {
-  OnboardingFlowView,
   ONBOARDING_REGISTRATION_COMPLETE_PATH,
+  OnboardingFlowView,
+  deriveFormalOnboardingResumeStep,
+  useOnboardingCompanyLookupPrototypeEffects,
   useOnboardingFlow,
   useOnboardingFlowApi,
   useOnboardingFlowState,
+  type OnboardingStep,
 } from "@procertus-ui/ui-certification";
-import { useEffect, useMemo } from "react";
-import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useMemo } from "react";
+import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
+import {
+  formalOnboardingStepPath,
+  parseFormalOnboardingStepParam,
+  shouldClampFormalStepToResume,
+} from "../../routes/formal-request-routing";
+import { PUBLIC_GUEST_LOGIN_PATH } from "../../routes/guestPaths";
+import { usePublicPrototypeRegistryLanguageHeaderProps } from "../../layouts/PublicPrototypeLanguageContext";
+import { WelcomePublicHeaderLeading } from "../../layouts/WelcomePublicHeaderLeading";
+import { WelcomePublicHeaderTrailing } from "../../layouts/WelcomePublicHeaderTrailing";
 
 export { ONBOARDING_REGISTRATION_COMPLETE_PATH } from "@procertus-ui/ui-certification";
 
@@ -21,10 +33,38 @@ const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
  */
 export function CustomerOnboardingFlow() {
   const navigate = useNavigate();
+  const registryLang = usePublicPrototypeRegistryLanguageHeaderProps();
+  const { stepId } = useParams<{ stepId: string }>();
   const [searchParams] = useSearchParams();
-  const { redirectToRegistrationComplete, viewProps } = useOnboardingFlow({ navigate });
-  const { flowState } = useOnboardingFlowState();
+  const { flowState, resolvedContext } = useOnboardingFlowState();
   const api = useOnboardingFlowApi();
+
+  const resumeStep = useMemo(
+    () => deriveFormalOnboardingResumeStep(flowState, resolvedContext),
+    [flowState, resolvedContext],
+  );
+
+  const parsedStep = parseFormalOnboardingStepParam(stepId);
+  const urlResumeRedirect =
+    parsedStep == null || shouldClampFormalStepToResume(parsedStep, resumeStep)
+      ? formalOnboardingStepPath(resumeStep)
+      : null;
+
+  const flowSurfaceStep = parsedStep ?? resumeStep;
+  useOnboardingCompanyLookupPrototypeEffects(urlResumeRedirect ? null : flowSurfaceStep);
+
+  const onRegistrationStepChange = useCallback((next: OnboardingStep) => {
+    navigate(formalOnboardingStepPath(next));
+  }, [navigate]);
+
+  const { redirectToRegistrationComplete, viewProps } = useOnboardingFlow({
+    navigate,
+    activeStep: flowSurfaceStep,
+    onRegistrationStepChange,
+    signInUrl: PUBLIC_GUEST_LOGIN_PATH,
+    registryHeaderLeadingActions: <WelcomePublicHeaderLeading />,
+    registryHeaderTrailingActions: <WelcomePublicHeaderTrailing />,
+  });
 
   const svcParam = searchParams.get("service")?.trim() ?? "";
   useEffect(() => {
@@ -34,16 +74,7 @@ export function CustomerOnboardingFlow() {
     api.setTrajectServiceId(svcParam, svc.entry.label);
   }, [api, svcParam]);
 
-  // Customer onboarding only runs once a certification request has been configured upstream
-  // in the TrajectConfigureFlow. Without drafts there is nothing to onboard against.
   const hasDrafts = flowState.drafts.length > 0;
-
-  useEffect(() => {
-    if (!hasDrafts) return;
-    if (flowState.step === "request") {
-      api.goToOnboardingStep("origin");
-    }
-  }, [hasDrafts, flowState.step, api]);
 
   const cancelTarget = flowState.trajectServiceId
     ? TRIAGE_PATH(flowState.trajectServiceId)
@@ -52,7 +83,7 @@ export function CustomerOnboardingFlow() {
     () => ({ label: "Annuleren", onClick: () => navigate(cancelTarget) }),
     [navigate, cancelTarget],
   );
-  const isFirstStep = flowState.step === "origin";
+  const isFirstRegistrationStep = viewProps.step === "origin";
 
   if (redirectToRegistrationComplete) {
     return <Navigate to={ONBOARDING_REGISTRATION_COMPLETE_PATH} replace />;
@@ -62,15 +93,16 @@ export function CustomerOnboardingFlow() {
     return <Navigate to={WEGWIJZER_PATH} replace />;
   }
 
-  if (flowState.step === "request") {
-    return null;
+  if (urlResumeRedirect) {
+    return <Navigate to={urlResumeRedirect} replace />;
   }
 
   return (
     <OnboardingFlowView
       {...viewProps}
+      {...registryLang}
       hideRequestStep
-      backAction={isFirstStep ? undefined : viewProps.backAction}
+      backAction={isFirstRegistrationStep ? undefined : viewProps.backAction}
       cancelAction={cancelAction}
     />
   );

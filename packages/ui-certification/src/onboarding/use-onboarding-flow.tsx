@@ -36,25 +36,41 @@ import {
   onboardingReviewRequesterFromContext,
   stepIndex,
 } from "./onboarding-flow-helpers";
-import { buildOnboardingStepperSteps } from "./onboarding-stepper-model";
+import type { OnboardingStep } from "./onboarding-types";
 import { ONBOARDING_STEPS } from "./onboarding-types";
 import { registrationCountryOptionsForRequestOrigin, vatPrototypePresetIdsForOrigin } from "./onboarding-request-origin";
 import type { OnboardingStepperStep } from "@procertus-ui/ui-lib";
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
-import { useMemo } from "react";
+import { useCallback, useMemo, type ReactNode } from "react";
 import type { CertificationRequestWizardProps } from "../components/certification-request-wizard/CertificationRequestWizard";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
+import { buildOnboardingStepperSteps } from "./onboarding-stepper-model";
 import { useOnboardingFlowContext } from "./onboarding-flow-provider";
 import { isRegistrationIdentifierValidForOrigin } from "./lib/registration-identifier-for-origin";
 
 export type UseOnboardingFlowOptions = {
   navigate: (to: string, options?: { replace?: boolean }) => void;
+  /** Current registration / wizard step (URL or host-controlled). */
+  activeStep: OnboardingStep;
+  /** Called after optional flow-state side effects when {@link activeStep} should change. */
+  onRegistrationStepChange: (next: OnboardingStep) => void;
   welcomePath?: string;
   flowStorageKey?: string;
   certificationRequestStorageKey?: string;
   certificationSessionId?: string;
   /** Merged after flow-derived wizard props (e.g. Storybook may set `backendKind: "memory"`). */
   certificationWizardPropsOverrides?: Partial<CertificationRequestWizardProps>;
+  /** Leading registry header slot (e.g. color mode). */
+  registryHeaderLeadingActions?: ReactNode;
+  /** Trailing registry header slot (e.g. inquiry cart). */
+  registryHeaderTrailingActions?: ReactNode;
+  /** Guest login route (header `loginUrl` + `onSignInClick` target). Default `/login`. */
+  signInUrl?: string;
+  /**
+   * Guest language chip placement. Default `"leading"` for extranet onboarding (language in
+   * {@link registryHeaderLeadingActions}). Use `"trailing"` for Storybook / legacy layouts.
+   */
+  guestLanguagePlacement?: OnboardingFlowViewProps["guestLanguagePlacement"];
 };
 
 export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
@@ -63,10 +79,16 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
 } {
   const {
     navigate,
+    activeStep,
+    onRegistrationStepChange,
     welcomePath = "/welcome",
     certificationRequestStorageKey = ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY,
     certificationSessionId = "pt1:onboarding:certification-request",
     certificationWizardPropsOverrides,
+    registryHeaderLeadingActions,
+    registryHeaderTrailingActions,
+    signInUrl = "/login",
+    guestLanguagePlacement = "leading",
     flowStorageKey: _flowStorageKey,
   } = options;
 
@@ -90,7 +112,6 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
 
   const {
     drafts,
-    step,
     wizardInitialStep,
     requestOrigin,
     prototypeVatPresetId,
@@ -132,7 +153,7 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     [allowedVatPrototypePresetIds],
   );
 
-  const activeStep = stepIndex(step);
+  const stepperActiveIndex = stepIndex(activeStep);
   const hasDrafts = drafts.length > 0;
   /** Inquiry drafts that must have a mapped legal entity (zetel or vestiging). */
   const certificationInquiryDraftIds = effectiveSummaryIncludedDraftIds;
@@ -161,25 +182,61 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   const steps: OnboardingStepperStep[] = useMemo(
     () =>
       buildOnboardingStepperSteps({
-        step,
+        step: activeStep,
         drafts,
         requestOrigin,
         context,
         certificationInquiryDraftIds,
       }),
-    [
-      context,
-      drafts,
-      certificationInquiryDraftIds,
-      requestOrigin,
-      step,
+    [activeStep, context, drafts, certificationInquiryDraftIds, requestOrigin,
     ],
   );
 
   const updateContext = api.updateContext;
   const patchContext = api.patchContext;
   const setRequestOrigin = api.setRequestOrigin;
-  const goToOnboardingStep = api.goToOnboardingStep;
+
+  const goToOnboardingStep = useCallback(
+    (nextStep: OnboardingStep) => {
+      const certificationInquiryDraftIdsInner = effectiveIncludedCertificationDraftIds(
+        flowState.drafts,
+        flowState.summaryIncludedDraftIds,
+      );
+      const stepperModel = buildOnboardingStepperSteps({
+        step: activeStep,
+        drafts: flowState.drafts,
+        requestOrigin: flowState.requestOrigin,
+        context,
+        certificationInquiryDraftIds: certificationInquiryDraftIdsInner,
+      });
+      const targetIndex = stepIndex(nextStep);
+      if (stepperModel[targetIndex]?.available === false) {
+        return;
+      }
+      setFlowState((prev) => {
+        if (nextStep === "company") {
+          return { ...prev, companyFieldHints: {} };
+        }
+        if (nextStep === "request") {
+          return {
+            ...prev,
+            wizardInitialStep: prev.drafts.length > 0 ? "drafts" : "intent",
+          };
+        }
+        return prev;
+      });
+      onRegistrationStepChange(nextStep);
+    },
+    [
+      activeStep,
+      context,
+      flowState.drafts,
+      flowState.requestOrigin,
+      flowState.summaryIncludedDraftIds,
+      onRegistrationStepChange,
+      setFlowState,
+    ],
+  );
 
   const activeVatPreset = useMemo(
     () => findVatPrototypePreset(prototypeVatPresetId) ?? VAT_PROTOTYPE_PRESETS[0]!,
@@ -231,43 +288,43 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   );
 
   const primaryAction =
-    step === "origin"
+    activeStep === "origin"
       ? {
           label: "Verder",
           onClick: () => goToOnboardingStep("customer"),
           disabled: requestOrigin === "",
         }
-      : step === "customer"
+      : activeStep === "customer"
         ? {
             label: "Verder",
             onClick: () => goToOnboardingStep("company"),
             disabled: !registrationStepOk,
           }
-        : step === "company"
+        : activeStep === "company"
           ? {
               label: "Verder",
               onClick: () => goToOnboardingStep("companyLegalEntities"),
               disabled: !companyZetelOk || companyLookupPhase !== "ready",
             }
-          : step === "companyLegalEntities"
+          : activeStep === "companyLegalEntities"
             ? {
                 label: "Verder",
                 onClick: () => goToOnboardingStep("invoicing"),
                 disabled: !companyLegalEntitiesOk,
               }
-            : step === "invoicing"
+            : activeStep === "invoicing"
               ? {
                   label: "Verder",
                   onClick: () => goToOnboardingStep("extras"),
                   disabled: !invoicingStepOk,
                 }
-              : step === "extras"
+              : activeStep === "extras"
                 ? {
                     label: "Verder",
-                    onClick: () => setFlowState((prev) => ({ ...prev, step: "summary" })),
+                    onClick: () => goToOnboardingStep("summary"),
                     disabled: !extrasStepOk,
                   }
-                : step === "summary"
+                : activeStep === "summary"
                   ? {
                       label: "Indienen",
                       onClick: () => {
@@ -329,12 +386,13 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   };
 
   const viewProps: OnboardingFlowViewProps = {
-    step,
+    step: activeStep,
     certificationPhaseTitle: CERTIFICATION_PHASE_TITLE,
     certificationPhaseDescription: CERTIFICATION_PHASE_DESCRIPTION,
     registrationPhaseTitle: registrationPhaseTitleDerived,
     registrationPhaseDescription: registrationPhaseDescriptionDerived,
-    onSignInClick: () => navigate(welcomePath),
+    onSignInClick: () => navigate(signInUrl),
+    signInUrl,
     certificationWizardProps,
     registrationSubmitOpen,
     onRegistrationSubmitOpenChange: (next) => {
@@ -353,14 +411,14 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
       includeDraftRows: false,
     }),
     steps,
-    activeStep,
+    activeStep: stepperActiveIndex,
     goToOnboardingStep,
     primaryAction,
     backAction: {
       label: "Terug",
       onClick: () => {
-        const previous = ONBOARDING_STEPS[Math.max(0, activeStep - 1)];
-        if (previous) setFlowState((prev) => ({ ...prev, step: previous }));
+        const previous = ONBOARDING_STEPS[Math.max(0, stepperActiveIndex - 1)];
+        if (previous) onRegistrationStepChange(previous);
       },
     },
     companyLookupPhase,
@@ -380,6 +438,9 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     countrySelectValue,
     companyHints,
     summaryKlantenportaalByPersonId: flowState.summaryKlantenportaalByPersonId ?? {},
+    registryHeaderLeadingActions,
+    registryHeaderTrailingActions,
+    guestLanguagePlacement,
   };
 
   return {

@@ -14,11 +14,15 @@ import {
 } from "@procertus-ui/ui";
 import { DetailCard, DetailCardSection } from "@procertus-ui/ui-lib";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
+import { ActiveInquiryContinueAlert } from "../layouts/ActiveInquiryContinueAlert";
 import { APP_FOOTER } from "../layouts/footerConfig";
+import { usePublicPrototypeRegistryLanguageHeaderProps } from "../layouts/PublicPrototypeLanguageContext";
+import { WelcomePublicHeaderLeading } from "../layouts/WelcomePublicHeaderLeading";
+import { WelcomePublicHeaderTrailing } from "../layouts/WelcomePublicHeaderTrailing";
 import { useSyncOnboardingTrajectFromServiceId } from "../features/onboarding/use-sync-onboarding-traject-from-service-id";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
+import { PUBLIC_GUEST_LOGIN_PATH } from "../routes/guestPaths";
 
-const LOGIN_PATH = "/welcome/login";
 const WEGWIJZER_PATH = "/welcome";
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
 
@@ -48,6 +52,7 @@ const SELECTION_FORMATTER = new Intl.DateTimeFormat("nl-BE", {
 
 export function ExpertCallPlaceholderPage() {
   const navigate = useNavigate();
+  const registryLang = usePublicPrototypeRegistryLanguageHeaderProps();
   const location = useLocation();
   const { serviceId } = useParams<{ serviceId: string }>();
   useSyncOnboardingTrajectFromServiceId(serviceId);
@@ -92,11 +97,17 @@ export function ExpertCallPlaceholderPage() {
               className="h-8 w-auto dark:brightness-0 dark:invert"
             />
           ),
-          onLogin: () => navigate(LOGIN_PATH),
+          onLogin: () => navigate(PUBLIC_GUEST_LOGIN_PATH),
+          loginUrl: PUBLIC_GUEST_LOGIN_PATH,
+          leadingActions: <WelcomePublicHeaderLeading />,
+          trailingActions: <WelcomePublicHeaderTrailing />,
+          guestLanguagePlacement: "leading",
+          ...registryLang,
         }}
         footer={APP_FOOTER}
       >
         <div className="mx-auto w-full max-w-7xl p-boundary">
+          <ActiveInquiryContinueAlert />
           <DetailCard
             title="Plan een expert call"
             description={intro}

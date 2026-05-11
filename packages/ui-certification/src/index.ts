@@ -133,6 +133,8 @@ export {
   createLocalStorageOnboardingFlowPersistence,
   createMemoryOnboardingFlowPersistence,
   DEFAULT_ONBOARDING_FLOW_STATE,
+  deriveFormalOnboardingResumeStep,
+  effectiveIncludedCertificationDraftIds,
   formatOnboardingPersonRegistryOptionLabel,
   hydrateOnboardingFlowStateFromStored,
   ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY,
@@ -143,6 +145,7 @@ export {
   ONBOARDING_REGISTRATION_COMPLETE_STORAGE_KEY,
   ONBOARDING_STEPS,
   readOnboardingRegistrationCompletePayload,
+  useOnboardingCompanyLookupPrototypeEffects,
   useOnboardingFlow,
   useOnboardingFlowApi,
   useOnboardingFlowState,
@@ -161,6 +164,7 @@ export {
   OnboardingRequestStep,
   OnboardingShell,
   OnboardingSummaryStep,
+  CertificationInquiriesOverviewCard,
 } from "./components/onboarding";
 export type {
   CatalogueExplorerProps,
@@ -175,6 +179,7 @@ export type {
   OnboardingRequestStepCopy,
   OnboardingSummaryStepProps,
   OnboardingShellProps,
+  CertificationInquiriesOverviewCardProps,
 } from "./components/onboarding";
 export type {
   OnboardingFlowApi,

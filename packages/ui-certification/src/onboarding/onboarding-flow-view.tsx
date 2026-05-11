@@ -27,6 +27,7 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
     registrationPhaseTitle,
     registrationPhaseDescription,
     onSignInClick,
+    signInUrl,
     certificationWizardProps,
     registrationSubmitOpen,
     onRegistrationSubmitOpenChange,
@@ -42,6 +43,12 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
     requestOrigin,
     setRequestOrigin,
     hideRequestStep,
+    registryHeaderLeadingActions,
+    registryHeaderTrailingActions,
+    languages,
+    activeLanguage,
+    onLanguageChange,
+    guestLanguagePlacement,
   } = props;
 
   const stepperOffset = hideRequestStep ? 1 : 0;
@@ -55,6 +62,13 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
         pageDescription={certificationPhaseDescription}
         onSignInClick={onSignInClick}
         certificationWizardProps={certificationWizardProps}
+        headerLeadingActions={registryHeaderLeadingActions}
+        headerTrailingActions={registryHeaderTrailingActions}
+        languages={languages}
+        activeLanguage={activeLanguage}
+        onLanguageChange={onLanguageChange}
+        loginUrl={signInUrl}
+        guestLanguagePlacement={guestLanguagePlacement}
       />
     );
   }
@@ -71,6 +85,13 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
         pageTitle={registrationPhaseTitle}
         pageDescription={registrationPhaseDescription}
         onSignInClick={onSignInClick}
+        headerLeadingActions={registryHeaderLeadingActions}
+        headerTrailingActions={registryHeaderTrailingActions}
+        languages={languages}
+        activeLanguage={activeLanguage}
+        onLanguageChange={onLanguageChange}
+        loginUrl={signInUrl}
+        guestLanguagePlacement={guestLanguagePlacement}
       >
         <StepLayout
           chromeStyle="banded"

@@ -1,7 +1,15 @@
-import { ModeToggle } from "@procertus-ui/ui";
+import {
+  ONBOARDING_FLOW_STORAGE_KEY,
+  ONBOARDING_REGISTRATION_COMPLETE_PATH,
+  OnboardingFlowProvider,
+  createLocalStorageOnboardingFlowPersistence,
+} from "@procertus-ui/ui-certification";
+import { AlertDialogProvider } from "@procertus-ui/ui";
 import { useMockPrototypeIsAuthenticated } from "@procertus-ui/ui-pt1-prototype";
-import { useLayoutEffect } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { useLayoutEffect, useMemo } from "react";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
+
+import { PublicPrototypeLanguageProvider } from "./PublicPrototypeLanguageContext";
 
 /**
  * Guest routes: no management sidebar — pages use **`AuthLayout`** from ui-lib (same pattern as authentication stories).
@@ -9,9 +17,17 @@ import { Navigate, Outlet } from "react-router-dom";
  *
  * Sets **`data-public-layout`** on `<html>` so app CSS can restore normal document scrolling (shared
  * **`globals.css`** locks **`overflow`** on html/body/#root for the signed-in shell).
+ *
+ * Wraps public guest flows in {@link OnboardingFlowProvider} so triage, wizard, and formal registration
+ * share persisted onboarding state; see {@link PublicCertificationRequestsCart}.
  */
 export function PublicAppShell() {
   const isAuthenticated = useMockPrototypeIsAuthenticated();
+  const navigate = useNavigate();
+  const persistence = useMemo(
+    () => createLocalStorageOnboardingFlowPersistence({ storageKey: ONBOARDING_FLOW_STORAGE_KEY }),
+    [],
+  );
 
   useLayoutEffect(() => {
     const el = document.documentElement;
@@ -26,11 +42,18 @@ export function PublicAppShell() {
   }
 
   return (
-    <div data-density="operational" className="relative min-h-svh">
-      <div className="fixed bottom-4 right-4 z-50">
-        <ModeToggle />
-      </div>
-      <Outlet />
-    </div>
+    <OnboardingFlowProvider
+      persistence={persistence}
+      navigate={navigate}
+      registrationCompletePath={ONBOARDING_REGISTRATION_COMPLETE_PATH}
+    >
+      <PublicPrototypeLanguageProvider>
+        <AlertDialogProvider>
+          <div data-density="operational" className="relative min-h-svh">
+            <Outlet />
+          </div>
+        </AlertDialogProvider>
+      </PublicPrototypeLanguageProvider>
+    </OnboardingFlowProvider>
   );
 }

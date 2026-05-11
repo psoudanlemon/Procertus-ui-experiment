@@ -27,7 +27,11 @@ export {
   type MemoryOnboardingPersistenceOptions,
 } from "./persistence";
 export { useOnboardingFlow } from "./use-onboarding-flow";
+export { useOnboardingCompanyLookupPrototypeEffects } from "./use-onboarding-company-lookup-prototype-effects";
 export type { UseOnboardingFlowOptions } from "./use-onboarding-flow";
+export {
+  deriveFormalOnboardingResumeStep,
+} from "./derive-formal-onboarding-resume-step";
 export * from "./onboarding-constants";
 export type {
   CustomerContext,
@@ -48,6 +52,7 @@ export { ONBOARDING_STEPS } from "./onboarding-types";
 export {
   ONBOARDING_PERSON_NEW_ID,
   emptyOnboardingVestiging,
+  effectiveIncludedCertificationDraftIds,
   formatOnboardingPersonRegistryOptionLabel,
   formatVestigingRegistryOptionLabel,
   isCertificationVestigingMappingComplete,

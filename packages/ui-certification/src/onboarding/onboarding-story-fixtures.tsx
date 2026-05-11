@@ -1,6 +1,6 @@
 import type { OnboardingStepperStep } from "@procertus-ui/ui-lib";
 import type { SetStateAction } from "react";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { storyDrafts } from "../components/certification-request-wizard/certification-request-wizard-story-fixtures";
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
@@ -50,6 +50,7 @@ import { OnboardingFlowProvider } from "./onboarding-flow-provider";
 import { OnboardingFlowView } from "./onboarding-flow-view";
 import { createMemoryOnboardingFlowPersistence } from "./persistence";
 import { useOnboardingFlow } from "./use-onboarding-flow";
+import { useOnboardingCompanyLookupPrototypeEffects } from "./use-onboarding-company-lookup-prototype-effects";
 
 export function noop(): void {}
 
@@ -344,7 +345,6 @@ export function flowStateSeedFromOnboardingFlowViewProps(
     w.initialStep === "drafts" ? "drafts" : "intent";
   const summaryIds = props.effectiveSummaryIncludedDraftIds;
   return hydrateOnboardingFlowStateFromStored({
-    step: props.step,
     trajectServiceId: "",
     requestOrigin: props.requestOrigin,
     drafts: [...props.drafts],
@@ -368,13 +368,20 @@ function certificationWizardStoryOverrides(
 }
 
 function OnboardingFlowStoryHookBody({
+  activeStep,
+  onRegistrationStepChange,
   certificationWizardPropsOverrides,
 }: {
+  activeStep: OnboardingStep;
+  onRegistrationStepChange: (next: OnboardingStep) => void;
   certificationWizardPropsOverrides?: Partial<CertificationRequestWizardProps>;
 }) {
   const navigate = useCallback(() => {}, []);
+  useOnboardingCompanyLookupPrototypeEffects(activeStep);
   const { viewProps } = useOnboardingFlow({
     navigate,
+    activeStep,
+    onRegistrationStepChange,
     certificationWizardPropsOverrides,
   });
   return <OnboardingFlowView {...viewProps} />;
@@ -396,9 +403,13 @@ export function OnboardingFlowViewWithMemoryProvider({
     }),
   ).current;
 
+  const [routedStep, setRoutedStep] = useState<OnboardingStep>(fixtureProps.step);
+
   return (
     <OnboardingFlowProvider persistence={persistence} navigate={noopNavigate}>
       <OnboardingFlowStoryHookBody
+        activeStep={routedStep}
+        onRegistrationStepChange={setRoutedStep}
         certificationWizardPropsOverrides={certificationWizardStoryOverrides(
           fixtureProps.certificationWizardProps,
         )}

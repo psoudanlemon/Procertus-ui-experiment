@@ -1,5 +1,6 @@
+import type { PublicRegistryHeaderProps } from "@procertus-ui/ui";
 import type { OnboardingStepperStep, StepLayoutAction } from "@procertus-ui/ui-lib";
-import type { Dispatch, SetStateAction } from "react";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
 
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
 import type { CertificationRequestWizardProps } from "../components/certification-request-wizard/CertificationRequestWizard";
@@ -18,6 +19,11 @@ import type {
 } from "./lib/vatPrototypePresets";
 import type { OnboardingRequestOrigin } from "./onboarding-request-origin";
 
+type RegistryHeaderLanguageProps = Pick<
+  PublicRegistryHeaderProps,
+  "languages" | "activeLanguage" | "onLanguageChange"
+>;
+
 export type OnboardingFlowViewProps = {
   step: OnboardingStep;
   certificationPhaseTitle: string;
@@ -25,6 +31,8 @@ export type OnboardingFlowViewProps = {
   registrationPhaseTitle: string;
   registrationPhaseDescription: string;
   onSignInClick: () => void;
+  /** Guest login `<a href>` — pair with {@link onSignInClick} for in-app routing. */
+  signInUrl?: string;
   certificationWizardProps: CertificationRequestWizardProps;
   registrationSubmitOpen: boolean;
   onRegistrationSubmitOpenChange: (open: boolean) => void;
@@ -62,6 +70,16 @@ export type OnboardingFlowViewProps = {
   companyHints: RegistrationEnrichmentHints;
   /** Nazicht: Klantenportaal onboarding per registered person id (`false` = opt-out; omitted = on). */
   summaryKlantenportaalByPersonId: Record<string, boolean>;
+  /** Leading public registry header slot (e.g. color mode). */
+  registryHeaderLeadingActions?: ReactNode;
+  /** Trailing header slot (e.g. inquiry cart). */
+  registryHeaderTrailingActions?: ReactNode;
+  /** Guest registry header language switcher (prototype). */
+  languages?: RegistryHeaderLanguageProps["languages"];
+  activeLanguage?: RegistryHeaderLanguageProps["activeLanguage"];
+  onLanguageChange?: RegistryHeaderLanguageProps["onLanguageChange"];
+  /** Guest language control placement for {@link PublicRegistryHeaderProps}. */
+  guestLanguagePlacement?: PublicRegistryHeaderProps["guestLanguagePlacement"];
   /** Optional StepLayout title/description overrides per registration step (i18n). */
   registrationChromeOverrides?: Partial<
     Record<Exclude<OnboardingStep, "request">, Partial<RegistrationStepChromeCopy>>

@@ -180,7 +180,6 @@ export const ONBOARDING_STEPS = [
 export type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
 
 export type OnboardingFlowState = {
-  step: OnboardingStep;
   /**
    * Wegwijzer-service id van het lopende traject. Gezet wanneer de aanvraag via TrajectConfigureFlow
    * start, leeg bij een schone state. Wordt gebruikt om de "Annuleren / Terug" knop in de customer

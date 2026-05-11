@@ -1,11 +1,36 @@
-import { PageHeader, PublicRegistryAppShell } from "@procertus-ui/ui";
+import {
+  PageHeader,
+  PublicRegistryAppShell,
+  type PublicRegistryHeaderProps,
+} from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import type { ReactNode } from "react";
+
+type RegistryHeaderLanguageProps = Pick<
+  PublicRegistryHeaderProps,
+  "languages" | "activeLanguage" | "onLanguageChange"
+>;
+
+type RegistryGuestLanguagePlacement = PublicRegistryHeaderProps["guestLanguagePlacement"];
 
 export type OnboardingShellProps = {
   pageTitle: string;
   pageDescription: string;
   onSignInClick: () => void;
+  /** Leading registry header slot (e.g. color mode). */
+  headerLeadingActions?: React.ReactNode;
+  /** Trailing registry header slot before language (e.g. inquiry cart). */
+  headerTrailingActions?: React.ReactNode;
+  /** Guest language switcher (prototype / i18n hook-up). */
+  languages?: RegistryHeaderLanguageProps["languages"];
+  activeLanguage?: RegistryHeaderLanguageProps["activeLanguage"];
+  onLanguageChange?: RegistryHeaderLanguageProps["onLanguageChange"];
+  /** `<a href>` for the guest login control (used with SPA `onSignInClick`). */
+  loginUrl?: string;
+  /** When host renders language in {@link headerLeadingActions}, set `"leading"`. */
+  guestLanguagePlacement?: RegistryGuestLanguagePlacement;
+  /** Rendered after {@link PageHeader}, before main content (e.g. session notices). */
+  sessionBanner?: ReactNode;
   children: ReactNode;
 };
 
@@ -14,6 +39,14 @@ export function OnboardingShell({
   pageTitle,
   pageDescription,
   onSignInClick,
+  headerLeadingActions,
+  headerTrailingActions,
+  languages,
+  activeLanguage,
+  onLanguageChange,
+  loginUrl,
+  guestLanguagePlacement,
+  sessionBanner,
   children,
 }: OnboardingShellProps) {
   return (
@@ -27,11 +60,19 @@ export function OnboardingShell({
           />
         ),
         onLogin: onSignInClick,
+        loginUrl,
+        leadingActions: headerLeadingActions,
+        trailingActions: headerTrailingActions,
+        languages,
+        activeLanguage,
+        onLanguageChange,
+        guestLanguagePlacement,
       }}
       hideFab
     >
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-region p-boundary">
         <PageHeader title={pageTitle} description={pageDescription} />
+        {sessionBanner}
         {children}
       </div>
     </PublicRegistryAppShell>
