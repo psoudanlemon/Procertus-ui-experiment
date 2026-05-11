@@ -84,6 +84,18 @@ export const Default: StoryObj<typeof meta> = {
   render: (args) => <ExpertCallStoryBody args={args} />,
 };
 
+export const ExpertCall: StoryObj<typeof meta> = {
+  args: {
+    onSignInClick: noop,
+    footer: STORY_FOOTER,
+    title: "Plan een expert call",
+    children: null,
+    description:
+      "Eén uur live met een PROCERTUS-expert om uw vraag, uw dossier en de juiste route samen door te nemen.",
+  },
+  render: (args) => <ExpertCallStoryBody args={args} />,
+};
+
 function ExpertCallStoryBody({ args }: { args: React.ComponentProps<typeof TrajectLayout> }) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedSlot, setSelectedSlot] = useState<string | undefined>(undefined);
