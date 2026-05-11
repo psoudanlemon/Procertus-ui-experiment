@@ -45,7 +45,7 @@ export const Default: StoryObj<typeof meta> = {
     label: "Stortklaar beton",
   },
   render: (args) => (
-    <ul className="max-w-2xl divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
+    <ul className="max-w-2xl flex flex-col">
       <AnimatePresence>
         <ProductRow {...args} />
       </AnimatePresence>
@@ -74,7 +74,7 @@ function InteractiveListBody() {
     useState<ReadonlyArray<{ id: string; label: string }>>(SAMPLE_PRODUCTS);
   return (
     <div className="flex max-w-2xl flex-col gap-component">
-      <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
+      <ul className="flex flex-col">
         <AnimatePresence initial={false} mode="popLayout">
           {items.map((p) => (
             <ProductRow
@@ -109,7 +109,29 @@ export const LongLabel: StoryObj<typeof meta> = {
       "Cirkelvormige geperforeerde buizen, cirkelvormige poreuze buizen en hulpstukken van ongewapend beton voor draineer- en infiltratieleidingen",
   },
   render: (args) => (
-    <ul className="max-w-2xl divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
+    <ul className="max-w-2xl flex flex-col">
+      <AnimatePresence>
+        <ProductRow {...args} />
+      </AnimatePresence>
+    </ul>
+  ),
+};
+
+/**
+ * Zoekresultaat-variant. Toont het volledige categoriepad als prefix boven de
+ * productnaam en markeert het matchende substring met accent-gekleurde
+ * `<mark>`-spans. Gebruikt door de zoekmodus in `ProductSelectionBasket`,
+ * zodat de browse-context bewaard blijft en de match visueel scant.
+ */
+export const SearchResult: StoryObj<typeof meta> = {
+  args: {
+    id: "geprefabriceerde-betonproducten-met-infiltratiekenmerken",
+    label: "Geprefabriceerde betonproducten met infiltratiekenmerken",
+    categoryTrail: "Beton en mortel > Geprefabriceerde betonproducten",
+    highlight: "infiltra",
+  },
+  render: (args) => (
+    <ul className="max-w-2xl flex flex-col">
       <AnimatePresence>
         <ProductRow {...args} />
       </AnimatePresence>

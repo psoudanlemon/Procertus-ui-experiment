@@ -1,5 +1,6 @@
 import {
   BrickWallIcon,
+  Cancel01Icon,
   FactoryIcon,
   Layers01Icon,
   MoleculesIcon,
@@ -9,7 +10,6 @@ import {
 import type { IconSvgElement } from "@hugeicons/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Badge,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -19,7 +19,6 @@ import {
   Button,
   Card,
   CardContent,
-  H4,
   Input,
 } from "@procertus-ui/ui";
 import { AnimatePresence, motion } from "framer-motion";
@@ -60,7 +59,13 @@ type SelectedProduct = {
 type SearchHit = {
   id: string;
   label: string;
-  clusterLabel: string;
+  /**
+   * Volledig categoriepad als platte string ("Beton en mortel > Stortklaar
+   * beton"). Wordt in de zoekresultaten als prefix boven de productnaam
+   * getoond zodat de browse-context behouden blijft, identiek aan de stijl
+   * van het basketrij-pad in `ProductBasket`.
+   */
+  categoryTrail: string;
 };
 
 function resolveLevel(
@@ -106,6 +111,9 @@ function collectSelectedProducts(
     .filter((p): p is SelectedProduct => p != null);
 }
 
+const byLabel = (a: { label: string }, b: { label: string }) =>
+  a.label.localeCompare(b.label, "nl", { sensitivity: "base" });
+
 function collectAllProducts(roots: readonly TreeNode[]): TreeNode[] {
   const out: TreeNode[] = [];
   const walk = (input: readonly TreeNode[]) => {
@@ -117,27 +125,30 @@ function collectAllProducts(roots: readonly TreeNode[]): TreeNode[] {
     }
   };
   walk(roots);
-  return out;
+  return out.sort(byLabel);
 }
 
 function searchProducts(query: string, roots: readonly TreeNode[]): SearchHit[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
   const out: SearchHit[] = [];
-  const walk = (input: readonly TreeNode[], clusterLabel: string) => {
+  const walk = (input: readonly TreeNode[], trail: readonly string[]) => {
     for (const n of input) {
       if (n.kind === "product" && n.label.toLowerCase().includes(q)) {
-        out.push({ id: n.id, label: n.label, clusterLabel });
+        out.push({ id: n.id, label: n.label, categoryTrail: trail.join(" > ") });
       }
       if (n.children?.length) {
-        walk(n.children, clusterLabel);
+        walk(n.children, [...trail, n.label]);
       }
     }
   };
-  for (const cluster of roots) {
-    walk(cluster.children ?? [], cluster.label);
-  }
-  return out;
+  walk(roots, []);
+  return out.sort((a, b) => {
+    const byTrail = a.categoryTrail.localeCompare(b.categoryTrail, "nl", {
+      sensitivity: "base",
+    });
+    return byTrail !== 0 ? byTrail : byLabel(a, b);
+  });
 }
 
 function firstChildIsProduct(node: TreeNode): boolean {
@@ -162,7 +173,7 @@ type ContextValue = {
   visibleProducts: readonly TreeNode[];
   searchQuery: string;
   searchResultsTotal: number;
-  groupedSearchResults: ReadonlyArray<{ cluster: string; hits: readonly SearchHit[] }>;
+  searchHits: readonly SearchHit[];
   selectedProducts: readonly SelectedProduct[];
   selectedIds: readonly string[];
   goRoot: () => void;
@@ -230,7 +241,7 @@ export function ProductSelectionBasketProvider({
   const visibleProducts = useMemo(() => {
     const pool = isRoot
       ? collectAllProducts(doc.clusters)
-      : nodes.filter((n) => n.kind === "product");
+      : [...nodes.filter((n) => n.kind === "product")].sort(byLabel);
     return pool.filter((n) => !selectedSet.has(n.id));
   }, [isRoot, doc, nodes, selectedSet]);
 
@@ -242,16 +253,6 @@ export function ProductSelectionBasketProvider({
     () => searchResults.filter((r) => !selectedSet.has(r.id)),
     [searchResults, selectedSet],
   );
-
-  const groupedSearchResults = useMemo(() => {
-    const map = new Map<string, SearchHit[]>();
-    for (const hit of visibleSearchResults) {
-      const arr = map.get(hit.clusterLabel) ?? [];
-      arr.push(hit);
-      map.set(hit.clusterLabel, arr);
-    }
-    return Array.from(map.entries()).map(([cluster, hits]) => ({ cluster, hits }));
-  }, [visibleSearchResults]);
 
   const selectedProducts = useMemo(
     () => collectSelectedProducts(selectedIds, doc.clusters),
@@ -285,7 +286,7 @@ export function ProductSelectionBasketProvider({
       visibleProducts,
       searchQuery: searchValue.trim(),
       searchResultsTotal: searchResults.length,
-      groupedSearchResults,
+      searchHits: visibleSearchResults,
       selectedProducts,
       selectedIds,
       goRoot,
@@ -307,7 +308,7 @@ export function ProductSelectionBasketProvider({
       categories,
       visibleProducts,
       searchResults,
-      groupedSearchResults,
+      visibleSearchResults,
       selectedProducts,
       selectedIds,
     ],
@@ -370,7 +371,7 @@ function DiscoveryArea({
   visibleProducts,
   searchQuery,
   searchResultsTotal,
-  groupedSearchResults,
+  searchHits,
   goRoot,
   goTo,
   goUpTo,
@@ -384,18 +385,27 @@ function DiscoveryArea({
           className="pointer-events-none absolute left-component top-1/2 size-5 -translate-y-1/2 text-muted-foreground"
         />
         <Input
-          type="search"
+          type="text"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           placeholder="Zoek op category of productnaam"
-          className="h-12 bg-card pl-10 text-base"
+          className="h-12 bg-card pl-10 pr-10 text-base"
           aria-label="Zoek in de gehele catalogus"
         />
+        {searchValue.length > 0 ? (
+          <button
+            type="button"
+            onClick={() => setSearchValue("")}
+            aria-label="Wis zoekopdracht"
+            className="absolute right-component top-1/2 flex size-7 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <HugeiconsIcon icon={Cancel01Icon} className="size-4" />
+          </button>
+        ) : null}
       </div>
 
-      <Card>
-        <CardContent>
-          <AnimatePresence mode="wait">
+      <div>
+        <AnimatePresence mode="wait">
             {isSearching ? (
               <motion.div
                 key="search-mode"
@@ -408,34 +418,26 @@ function DiscoveryArea({
                 <SearchHeader
                   query={searchQuery}
                   totalResults={searchResultsTotal}
-                  visibleResults={groupedSearchResults.reduce(
-                    (sum, g) => sum + g.hits.length,
-                    0,
-                  )}
+                  visibleResults={searchHits.length}
                 />
-                {groupedSearchResults.length === 0 ? (
+                {searchHits.length === 0 ? (
                   <SearchEmptyState
                     query={searchQuery}
                     totalResults={searchResultsTotal}
                   />
                 ) : (
-                  <div className="flex flex-col gap-region">
-                    {groupedSearchResults.map((group) => (
-                      <section key={group.cluster} className="flex flex-col gap-component">
-                        <SubHeader>Gevonden in {group.cluster}</SubHeader>
-                        <ProductsList>
-                          {group.hits.map((hit) => (
-                            <ProductRow
-                              key={hit.id}
-                              id={hit.id}
-                              label={hit.label}
-                              onAdd={() => addProduct(hit.id)}
-                            />
-                          ))}
-                        </ProductsList>
-                      </section>
+                  <ProductsList>
+                    {searchHits.map((hit) => (
+                      <ProductRow
+                        key={hit.id}
+                        id={hit.id}
+                        label={hit.label}
+                        categoryTrail={hit.categoryTrail}
+                        highlight={searchQuery}
+                        onAdd={() => addProduct(hit.id)}
+                      />
                     ))}
-                  </div>
+                  </ProductsList>
                 )}
               </motion.div>
             ) : (
@@ -524,10 +526,9 @@ function DiscoveryArea({
               </motion.div>
             )}
           </AnimatePresence>
-        </CardContent>
-      </Card>
-    </div>
-  );
+        </div>
+      </div>
+    );
 }
 
 function SearchHeader({
@@ -540,19 +541,13 @@ function SearchHeader({
   visibleResults: number;
 }) {
   return (
-    <header className="flex flex-col gap-component">
-      <div className="flex flex-wrap items-baseline gap-component">
-        <h2 className="text-xl font-semibold tracking-tight">
-          Zoekresultaten voor &ldquo;{query}&rdquo;
-        </h2>
-        <span className="text-sm text-muted-foreground">
-          {visibleResults} van {totalResults}
-        </span>
-      </div>
-      <Badge variant="outline" className="self-start gap-micro">
-        <HugeiconsIcon icon={Search01Icon} className="size-3" />
-        Zoeken in de gehele catalogus
-      </Badge>
+    <header className="flex flex-wrap items-baseline gap-component">
+      <h2 className="text-xl font-semibold tracking-tight">
+        Zoekresultaten voor &ldquo;{query}&rdquo;
+      </h2>
+      <span className="text-sm text-muted-foreground">
+        {visibleResults} van {totalResults}
+      </span>
     </header>
   );
 }
@@ -571,10 +566,6 @@ function SearchEmptyState({
         : `Alle resultaten voor "${query}" staan al in je selectie.`}
     </div>
   );
-}
-
-function SubHeader({ children }: { children: React.ReactNode }) {
-  return <H4>{children}</H4>;
 }
 
 function CategoriesGrid({
@@ -611,7 +602,7 @@ function CategoriesGrid({
 
 function ProductsList({ children }: { children: React.ReactNode }) {
   return (
-    <ul className="flex flex-col divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
+    <ul className="flex flex-col">
       <AnimatePresence initial={false} mode="popLayout">
         {children}
       </AnimatePresence>
