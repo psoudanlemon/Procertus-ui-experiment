@@ -12,16 +12,17 @@ import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
+import { PUBLIC_GUEST_LOGIN_PATH } from "../../routes/guestPaths";
 import { persistTrajectHandoff, resetTrajectFlow } from "./traject-submission-context";
 
 const WEGWIJZER_PATH = "/welcome";
-const SIGNIN_PATH = "/welcome/login";
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
 
 /**
  * Wizard-only step bundled with triage/start under {@link PublicWelcomeOnboardingSessionLayout}.
  */
 export function TrajectConfigureFlow() {
+  const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
   const service = findWegwijzerService(serviceId);
 
@@ -77,7 +78,7 @@ export function TrajectConfigureFlow() {
       onContinue={handleContinue}
     >
       <TrajectLayout
-        onSignInClick={() => navigate(SIGNIN_PATH)}
+        onSignInClick={() => navigate(PUBLIC_GUEST_LOGIN_PATH)}
         bodyGap="section"
         kicker={service.entry.label}
         title="Selecteer de producten die je wil certificeren"

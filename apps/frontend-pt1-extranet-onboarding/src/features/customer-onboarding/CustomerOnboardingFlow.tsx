@@ -9,8 +9,18 @@ import {
   type OnboardingStep,
 } from "@procertus-ui/ui-certification";
 import { useCallback, useEffect, useMemo } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
+import { usePublicPrototypeRegistryLanguageHeaderProps } from "../../layouts/PublicPrototypeLanguageContext";
+import { WelcomePublicHeaderLeading } from "../../layouts/WelcomePublicHeaderLeading";
+import { WelcomePublicHeaderTrailing } from "../../layouts/WelcomePublicHeaderTrailing";
+import {
+  formalOnboardingStepPath,
+  parseFormalOnboardingStepParam,
+  shouldClampFormalStepToResume,
+} from "../../routes/formal-request-routing";
+import { PUBLIC_GUEST_LOGIN_PATH } from "../../routes/guestPaths";
+import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
 import { resetTrajectFlow } from "../traject/traject-submission-context";
 
 export { ONBOARDING_REGISTRATION_COMPLETE_PATH } from "@procertus-ui/ui-certification";
@@ -68,13 +78,6 @@ export function CustomerOnboardingFlow() {
   }, [api, svcParam]);
 
   const hasDrafts = flowState.drafts.length > 0;
-
-  useEffect(() => {
-    if (!hasDrafts) return;
-    if (flowState.step === "request") {
-      api.goToOnboardingStep("origin");
-    }
-  }, [hasDrafts, flowState.step, api]);
 
   // Annuleren = volledige reset. Gebruiker zegt expliciet "ik weet het niet, ik begin opnieuw",
   // dus traject + klantgegevens worden gewist en we sturen ze terug naar de Wegwijzer.

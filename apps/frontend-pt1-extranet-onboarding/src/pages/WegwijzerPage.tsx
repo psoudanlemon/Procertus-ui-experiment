@@ -54,6 +54,7 @@ import {
   TRAJECT_ENTRY_POINT_QUERY_PARAM,
   clearTrajectBreadcrumbs,
 } from "../features/traject/traject-submission-context";
+import { PUBLIC_GUEST_LOGIN_PATH } from "../routes/guestPaths";
 
 /** Eerste stap van de TrajectFlow: producttype kiezen en aanvraag controleren in de wizard, voor de triage-keuze. */
 const TRAJECT_CONFIGURE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}/start`;
