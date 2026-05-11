@@ -25,8 +25,9 @@ const noop = () => {};
 
 /**
  * Mirrors `PublicAppShell` in the production app: sets `data-public-layout` on `<html>` so the
- * shared `globals.css` unlocks document scrolling. Without this, the page can't scroll and the
- * sticky basket sidebar + action bar have no scroll context to anchor against.
+ * shared `globals.css` unlocks document scrolling and paints the public bottom chrome (footer
+ * + action bar) on a white surface. Without this, the page can't scroll and the sticky basket
+ * sidebar + action bar have no scroll context to anchor against.
  */
 const PublicLayoutDecorator = (Story: ComponentType) => {
   useLayoutEffect(() => {

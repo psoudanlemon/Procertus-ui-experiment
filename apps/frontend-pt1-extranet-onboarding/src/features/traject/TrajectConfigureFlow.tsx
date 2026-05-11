@@ -12,6 +12,7 @@ import {
 import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
+import { APP_FOOTER } from "../../layouts/footerConfig";
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
 import { persistTrajectHandoff, resetTrajectFlow } from "./traject-submission-context";
 
@@ -77,6 +78,7 @@ export function TrajectConfigureFlow() {
     >
       <TrajectLayout
         onSignInClick={() => navigate(SIGNIN_PATH)}
+        footer={APP_FOOTER}
         bodyGap="section"
         kicker={service.entry.label}
         title="Selecteer de producten die je wil certificeren"
