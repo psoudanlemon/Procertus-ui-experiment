@@ -212,8 +212,8 @@
     --card-foreground: var(--neutral-950);
   }
   html[data-public-layout] [data-slot="traject-action-bar"] {
-    --card: var(--neutral-white);
-    --card-foreground: var(--neutral-950);
+    --card: var(--background);
+    --card-foreground: var(--foreground);
   }
   @media (prefers-reduced-motion: reduce) {
     *,
