@@ -74,12 +74,15 @@ export type {
   RegistrationProcessingStep,
 } from "./components/registration-processing-dialog";
 export {
+  ProductBasket,
   ProductSelectionBasketActionBar,
   ProductSelectionBasketBody,
   ProductSelectionBasketProvider,
   TrajectLayout,
 } from "./components/traject";
 export type {
+  ProductBasketItem,
+  ProductBasketProps,
   ProductSelectionBasketProviderProps,
   TrajectLayoutAction,
   TrajectLayoutProps,

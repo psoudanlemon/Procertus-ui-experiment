@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { type ComponentType, useLayoutEffect } from "react";
 
 import { defaultProcertusCategorizationDoc } from "../../categorization-data";
 import {
@@ -21,6 +22,22 @@ const STORY_FOOTER = {
 
 const noop = () => {};
 
+/**
+ * Mirrors `PublicAppShell` in the production app: sets `data-public-layout` on `<html>` so the
+ * shared `globals.css` unlocks document scrolling. Without this, the page can't scroll and the
+ * sticky basket sidebar + action bar have no scroll context to anchor against.
+ */
+const PublicLayoutDecorator = (Story: ComponentType) => {
+  useLayoutEffect(() => {
+    const el = document.documentElement;
+    el.dataset.publicLayout = "";
+    return () => {
+      delete el.dataset.publicLayout;
+    };
+  }, []);
+  return <Story />;
+};
+
 const meta = {
   title: "Traject/Layout",
   component: TrajectLayout,
@@ -34,6 +51,7 @@ const meta = {
       },
     },
   },
+  decorators: [PublicLayoutDecorator],
   tags: ["autodocs"],
 } satisfies Meta<typeof TrajectLayout>;
 

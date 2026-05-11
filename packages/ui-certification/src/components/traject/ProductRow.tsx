@@ -14,8 +14,6 @@ export type ProductRowProps = {
   /** Stable id for AnimatePresence keying — required so the exit animation can play. */
   id: string;
   label: ReactNode;
-  /** Optionele ondertitel, bv. het categoriepad waar dit product onder valt. Wordt zoals in `CategoryPicker` afgekapt op één regel. */
-  description?: ReactNode;
   onAdd: () => void;
   className?: string;
 };
@@ -30,7 +28,6 @@ export type ProductRowProps = {
 export function ProductRow({
   id,
   label,
-  description,
   onAdd,
   className,
 }: ProductRowProps) {
@@ -62,19 +59,6 @@ export function ProductRow({
         >
           <ItemContent className="min-w-0">
             <ItemTitle className="line-clamp-2 w-full text-sm font-medium leading-snug">
-              {description ? (
-                <>
-                  <span className="font-normal text-muted-foreground">
-                    {description}
-                  </span>
-                  <span
-                    aria-hidden
-                    className="mx-1 font-normal text-muted-foreground"
-                  >
-                    &gt;
-                  </span>
-                </>
-              ) : null}
               {label}
             </ItemTitle>
           </ItemContent>

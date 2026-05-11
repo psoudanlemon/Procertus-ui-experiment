@@ -1,6 +1,5 @@
 import {
   BrickWallIcon,
-  Cancel01Icon,
   FactoryIcon,
   Layers01Icon,
   MoleculesIcon,
@@ -20,7 +19,6 @@ import {
   Button,
   Card,
   CardContent,
-  H3,
   H4,
   Input,
 } from "@procertus-ui/ui";
@@ -36,6 +34,7 @@ import {
 
 import type { ProcertusCategorizationDoc, TreeNode } from "../../types";
 import { CategoryPicker } from "./CategoryPicker";
+import { ProductBasket } from "./ProductBasket";
 import { ProductRow } from "./ProductRow";
 
 const CLUSTER_ICONS: Record<string, IconSvgElement> = {
@@ -46,14 +45,22 @@ const CLUSTER_ICONS: Record<string, IconSvgElement> = {
 
 type Trail = ReadonlyArray<{ id: string; label: string }>;
 
-type SelectedProduct = { id: string; label: string };
+type SelectedProduct = {
+  id: string;
+  label: string;
+  /**
+   * Volledig categoriepad als platte string ("Beton en mortel > Stortklaar beton"),
+   * cluster en alle tussenliggende groepen, zonder het product zelf. In de
+   * winkelmand verloren we de browse-context, dus tonen we het pad als prefix
+   * boven het product, identiek aan de breadcrumb-stijl van `CategoryPicker`.
+   */
+  categoryTrail: string;
+};
 
 type SearchHit = {
   id: string;
   label: string;
   clusterLabel: string;
-  /** Labels van alle tussenliggende groepen tussen cluster en product (exclusief beide). */
-  categoryTrail: readonly string[];
 };
 
 function resolveLevel(
@@ -78,10 +85,30 @@ function collectSelectedProducts(
   roots: readonly TreeNode[],
 ): SelectedProduct[] {
   const out: SelectedProduct[] = [];
-  const walk = (input: readonly TreeNode[]) => {
+  const walk = (input: readonly TreeNode[], trail: readonly string[]) => {
     for (const n of input) {
       if (n.kind === "product" && ids.has(n.id)) {
-        out.push({ id: n.id, label: n.label });
+        out.push({
+          id: n.id,
+          label: n.label,
+          categoryTrail: trail.join(" > "),
+        });
+      }
+      if (n.children?.length) {
+        walk(n.children, [...trail, n.label]);
+      }
+    }
+  };
+  walk(roots, []);
+  return out;
+}
+
+function collectAllProducts(roots: readonly TreeNode[]): TreeNode[] {
+  const out: TreeNode[] = [];
+  const walk = (input: readonly TreeNode[]) => {
+    for (const n of input) {
+      if (n.kind === "product") {
+        out.push(n);
       }
       if (n.children?.length) walk(n.children);
     }
@@ -94,23 +121,18 @@ function searchProducts(query: string, roots: readonly TreeNode[]): SearchHit[] 
   const q = query.trim().toLowerCase();
   if (!q) return [];
   const out: SearchHit[] = [];
-  const walk = (
-    input: readonly TreeNode[],
-    clusterLabel: string,
-    trail: readonly string[],
-  ) => {
+  const walk = (input: readonly TreeNode[], clusterLabel: string) => {
     for (const n of input) {
       if (n.kind === "product" && n.label.toLowerCase().includes(q)) {
-        out.push({ id: n.id, label: n.label, clusterLabel, categoryTrail: trail });
+        out.push({ id: n.id, label: n.label, clusterLabel });
       }
       if (n.children?.length) {
-        const nextTrail = n.kind === "group" ? [...trail, n.label] : trail;
-        walk(n.children, clusterLabel, nextTrail);
+        walk(n.children, clusterLabel);
       }
     }
   };
   for (const cluster of roots) {
-    walk(cluster.children ?? [], cluster.label, []);
+    walk(cluster.children ?? [], cluster.label);
   }
   return out;
 }
@@ -202,10 +224,12 @@ export function ProductSelectionBasketProvider({
   const isSearching = searchValue.trim().length > 0;
 
   const categories = useMemo(() => nodes.filter((n) => n.kind === "group"), [nodes]);
-  const visibleProducts = useMemo(
-    () => nodes.filter((n) => n.kind === "product" && !selectedSet.has(n.id)),
-    [nodes, selectedSet],
-  );
+  const visibleProducts = useMemo(() => {
+    const pool = isRoot
+      ? collectAllProducts(doc.clusters)
+      : nodes.filter((n) => n.kind === "product");
+    return pool.filter((n) => !selectedSet.has(n.id));
+  }, [isRoot, doc, nodes, selectedSet]);
 
   const searchResults = useMemo(
     () => searchProducts(searchValue, doc.clusters),
@@ -297,10 +321,10 @@ export function ProductSelectionBasketProvider({
 export function ProductSelectionBasketBody() {
   const basket = useBasket();
   return (
-    <div className="grid grid-cols-1 gap-region lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)] lg:items-start">
+    <div className="grid grid-cols-1 gap-region lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)]">
       <DiscoveryArea {...basket} />
-      <SelectionSidebar
-        selected={basket.selectedProducts}
+      <ProductBasket
+        items={basket.selectedProducts}
         onRemove={basket.removeProduct}
         onClear={basket.clearSelection}
       />
@@ -402,11 +426,6 @@ function DiscoveryArea({
                               key={hit.id}
                               id={hit.id}
                               label={hit.label}
-                              description={
-                                hit.categoryTrail.length > 0
-                                  ? hit.categoryTrail.join(" > ")
-                                  : undefined
-                              }
                               onAdd={() => addProduct(hit.id)}
                             />
                           ))}
@@ -418,13 +437,21 @@ function DiscoveryArea({
               </motion.div>
             ) : (
               <motion.div
-                key={path.join("/") || "root"}
+                key="browse-mode"
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
-                className="flex flex-col gap-component"
+                className="flex flex-col gap-section"
               >
+                {categories.length > 0 ? (
+                  <CategoriesGrid
+                    items={categories}
+                    isAtClusterLevel={isRoot}
+                    onSelect={goTo}
+                  />
+                ) : null}
+
                 <Breadcrumb>
                   <BreadcrumbList>
                     <BreadcrumbItem>
@@ -464,40 +491,33 @@ function DiscoveryArea({
                   </BreadcrumbList>
                 </Breadcrumb>
 
-                <div className="flex flex-col gap-section">
-                  {categories.length > 0 ? (
-                    <CategoriesGrid
-                      items={categories}
-                      isAtClusterLevel={isRoot}
-                      onSelect={goTo}
-                    />
-                  ) : null}
-                  {visibleProducts.length > 0 ? (
-                    <section className="flex flex-col gap-component">
-                      <SubHeader>Producten</SubHeader>
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={path.join("/") || "root-products"}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                  >
+                    {visibleProducts.length > 0 ? (
                       <ProductsList>
                         {visibleProducts.map((p) => (
                           <ProductRow
                             key={p.id}
                             id={p.id}
                             label={p.label}
-                            description={
-                              trail.length > 0
-                                ? trail.map((seg) => seg.label).join(" > ")
-                                : undefined
-                            }
                             onAdd={() => addProduct(p.id)}
                           />
                         ))}
                       </ProductsList>
-                    </section>
-                  ) : null}
-                  {categories.length === 0 && visibleProducts.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">
-                      Alle producten op dit niveau staan al in je selectie.
-                    </p>
-                  ) : null}
-                </div>
+                    ) : null}
+                    {categories.length === 0 && visibleProducts.length === 0 ? (
+                      <p className="text-sm text-muted-foreground">
+                        Alle producten op dit niveau staan al in je selectie.
+                      </p>
+                    ) : null}
+                  </motion.div>
+                </AnimatePresence>
               </motion.div>
             )}
           </AnimatePresence>
@@ -596,87 +616,3 @@ function ProductsList({ children }: { children: React.ReactNode }) {
   );
 }
 
-function SelectionSidebar({
-  selected,
-  onRemove,
-  onClear,
-}: {
-  selected: readonly SelectedProduct[];
-  onRemove: (id: string) => void;
-  onClear: () => void;
-}) {
-  const isEmpty = selected.length === 0;
-  return (
-    <aside
-      aria-label="Gekozen producten"
-      className="flex flex-col gap-section rounded-lg border border-border bg-muted/30 p-section lg:sticky lg:top-component lg:max-h-sticky-rail"
-    >
-      <header className="flex items-center justify-between gap-component">
-        <H3>Gekozen producten</H3>
-        <Badge variant={isEmpty ? "outline" : "secondary"}>{selected.length}</Badge>
-      </header>
-
-      {isEmpty ? (
-        <EmptyBasket />
-      ) : (
-        <>
-          <ul className="flex min-h-0 flex-1 flex-col divide-y divide-border/60 overflow-y-auto rounded-md border border-border bg-card">
-            <AnimatePresence initial={false}>
-              {selected.map((p) => (
-                <motion.li
-                  key={p.id}
-                  layout
-                  initial={{ opacity: 0, x: 12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 12 }}
-                  transition={{ duration: 0.16, ease: "easeOut" }}
-                >
-                  <SelectedRow label={p.label} onRemove={() => onRemove(p.id)} />
-                </motion.li>
-              ))}
-            </AnimatePresence>
-          </ul>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={onClear}
-            className="self-start text-muted-foreground"
-          >
-            Wis selectie
-          </Button>
-        </>
-      )}
-    </aside>
-  );
-}
-
-function EmptyBasket() {
-  return (
-    <div className="flex flex-col items-center gap-micro rounded-md border border-dashed border-border/60 bg-card/50 px-component py-section text-center">
-      <HugeiconsIcon icon={PackageIcon} className="size-6 text-muted-foreground/60" />
-      <span className="text-sm font-medium">Nog geen producten geselecteerd</span>
-      <span className="text-xs text-muted-foreground">
-        Voeg producten toe vanuit de catalogus links.
-      </span>
-    </div>
-  );
-}
-
-function SelectedRow({ label, onRemove }: { label: string; onRemove: () => void }) {
-  return (
-    <div className="flex items-center gap-component px-component py-component">
-      <span className="min-w-0 flex-1 truncate text-sm leading-snug">{label}</span>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        onClick={onRemove}
-        aria-label={`Verwijder ${label}`}
-        className="-mr-1 size-7 shrink-0 text-muted-foreground hover:text-destructive"
-      >
-        <HugeiconsIcon icon={Cancel01Icon} className="size-4" />
-      </Button>
-    </div>
-  );
-}
