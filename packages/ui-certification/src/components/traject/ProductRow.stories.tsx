@@ -45,7 +45,7 @@ export const Default: StoryObj<typeof meta> = {
     label: "Stortklaar beton",
   },
   render: (args) => (
-    <ul className="max-w-2xl flex flex-col">
+    <ul className="flex max-w-2xl flex-col gap-component">
       <AnimatePresence>
         <ProductRow {...args} />
       </AnimatePresence>
@@ -74,7 +74,7 @@ function InteractiveListBody() {
     useState<ReadonlyArray<{ id: string; label: string }>>(SAMPLE_PRODUCTS);
   return (
     <div className="flex max-w-2xl flex-col gap-component">
-      <ul className="flex flex-col">
+      <ul className="flex flex-col gap-component">
         <AnimatePresence initial={false} mode="popLayout">
           {items.map((p) => (
             <ProductRow
@@ -109,7 +109,7 @@ export const LongLabel: StoryObj<typeof meta> = {
       "Cirkelvormige geperforeerde buizen, cirkelvormige poreuze buizen en hulpstukken van ongewapend beton voor draineer- en infiltratieleidingen",
   },
   render: (args) => (
-    <ul className="max-w-2xl flex flex-col">
+    <ul className="flex max-w-2xl flex-col gap-component">
       <AnimatePresence>
         <ProductRow {...args} />
       </AnimatePresence>
@@ -131,7 +131,7 @@ export const SearchResult: StoryObj<typeof meta> = {
     highlight: "infiltra",
   },
   render: (args) => (
-    <ul className="max-w-2xl flex flex-col">
+    <ul className="flex max-w-2xl flex-col gap-component">
       <AnimatePresence>
         <ProductRow {...args} />
       </AnimatePresence>

@@ -87,12 +87,13 @@ export function ProductRow({
       animate={{ opacity: 1, height: "auto" }}
       exit={{ opacity: 0, x: 80, scale: 0.96, height: 0 }}
       transition={{ duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
-      className="overflow-hidden border-t border-border"
+      className="overflow-hidden"
     >
       <Item
         asChild
+        variant="outline"
         className={cn(
-          "cursor-pointer rounded-none border-transparent p-component text-left transition-colors",
+          "cursor-pointer p-component text-left transition-colors",
           "hover:bg-accent hover:text-accent-foreground",
           "focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none",
           className,

@@ -404,8 +404,9 @@ function DiscoveryArea({
         ) : null}
       </div>
 
-      <div>
-        <AnimatePresence mode="wait">
+      <Card>
+        <CardContent>
+          <AnimatePresence mode="wait">
             {isSearching ? (
               <motion.div
                 key="search-mode"
@@ -526,9 +527,10 @@ function DiscoveryArea({
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
-      </div>
-    );
+        </CardContent>
+      </Card>
+    </div>
+  );
 }
 
 function SearchHeader({
@@ -602,7 +604,7 @@ function CategoriesGrid({
 
 function ProductsList({ children }: { children: React.ReactNode }) {
   return (
-    <ul className="flex flex-col">
+    <ul className="flex flex-col gap-component">
       <AnimatePresence initial={false} mode="popLayout">
         {children}
       </AnimatePresence>

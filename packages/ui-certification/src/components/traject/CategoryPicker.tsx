@@ -31,8 +31,8 @@ export type CategoryPickerProps = {
  * `ItemContent`, trailing chevron in `ItemActions`. The hover lift, accent
  * recolor and tile color shift are layered on top via `className` because
  * `Item`'s built-in hover styles are scoped to anchor children. Long titles
- * are clipped to a single line; a Radix tooltip reveals the full label after a
- * short hover delay, but only when the visible text is actually truncated.
+ * are clipped to a single line; a Radix tooltip on the whole card reveals the
+ * full label after a short hover delay, but only when the title is truncated.
  */
 export function CategoryPicker({
   label,
@@ -57,59 +57,59 @@ export function CategoryPicker({
   }, [label]);
 
   return (
-    <Item
-      asChild
-      variant="outline"
-      className={cn(
-        "cursor-pointer gap-section bg-card p-section text-left transition-colors",
-        "hover:bg-accent hover:text-accent-foreground",
-        className,
-      )}
-    >
-      <button type="button" onClick={onSelect}>
-        <ItemMedia>
-          <div
+    <TooltipProvider>
+      <Tooltip delayDuration={600}>
+        <TooltipTrigger asChild>
+          <Item
+            asChild
+            variant="outline"
             className={cn(
-              "flex size-11 items-center justify-center rounded-lg bg-secondary text-secondary-foreground transition-colors",
-              "group-hover/item:bg-primary/10 group-hover/item:text-primary [&_svg]:size-5",
+              "cursor-pointer gap-section bg-card p-section text-left transition-colors",
+              "hover:bg-accent hover:text-accent-foreground",
+              className,
             )}
           >
-            <HugeiconsIcon icon={icon} />
-          </div>
-        </ItemMedia>
-        <ItemContent className="min-w-0 gap-0">
-          <ItemTitle className="w-full text-base font-semibold">
-            <TooltipProvider>
-              <Tooltip delayDuration={600}>
-                <TooltipTrigger asChild>
+            <button type="button" onClick={onSelect}>
+              <ItemMedia>
+                <div
+                  className={cn(
+                    "flex size-11 items-center justify-center rounded-lg bg-secondary text-secondary-foreground transition-colors",
+                    "group-hover/item:bg-primary/10 group-hover/item:text-primary [&_svg]:size-5",
+                  )}
+                >
+                  <HugeiconsIcon icon={icon} />
+                </div>
+              </ItemMedia>
+              <ItemContent className="min-w-0 gap-0">
+                <ItemTitle className="w-full text-base font-semibold">
                   <span
                     ref={titleRef}
                     className="block w-full min-w-0 truncate"
                   >
                     {label}
                   </span>
-                </TooltipTrigger>
-                {isTitleTruncated ? (
-                  <TooltipContent side="top" align="start">
-                    {label}
-                  </TooltipContent>
+                </ItemTitle>
+                {description ? (
+                  <ItemDescription className="line-clamp-1 text-xs">
+                    {description}
+                  </ItemDescription>
                 ) : null}
-              </Tooltip>
-            </TooltipProvider>
-          </ItemTitle>
-          {description ? (
-            <ItemDescription className="line-clamp-1 text-xs">
-              {description}
-            </ItemDescription>
-          ) : null}
-        </ItemContent>
-        <ItemActions>
-          <HugeiconsIcon
-            icon={ArrowRight01Icon}
-            className="size-4 text-muted-foreground transition-colors group-hover/item:text-accent-foreground"
-          />
-        </ItemActions>
-      </button>
-    </Item>
+              </ItemContent>
+              <ItemActions>
+                <HugeiconsIcon
+                  icon={ArrowRight01Icon}
+                  className="size-4 text-muted-foreground transition-colors group-hover/item:text-accent-foreground"
+                />
+              </ItemActions>
+            </button>
+          </Item>
+        </TooltipTrigger>
+        {isTitleTruncated ? (
+          <TooltipContent side="top" align="start">
+            {label}
+          </TooltipContent>
+        ) : null}
+      </Tooltip>
+    </TooltipProvider>
   );
 }
