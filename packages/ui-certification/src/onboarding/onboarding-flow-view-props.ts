@@ -1,16 +1,11 @@
-import type { PublicRegistryHeaderProps } from "@procertus-ui/ui";
-import type { OnboardingStepperStep, StepLayoutAction } from "@procertus-ui/ui-lib";
-import type { Dispatch, ReactNode, SetStateAction } from "react";
+import type { StepLayoutAction, StepLayoutStep } from "@procertus-ui/ui";
+import type { Dispatch, SetStateAction } from "react";
 
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
 import type { CertificationRequestWizardProps } from "../components/certification-request-wizard/CertificationRequestWizard";
 import type { RegistrationProcessingStep } from "../components/registration-processing-dialog";
 import type { RequestPackageRow } from "../components/request-package-review";
-import type {
-  OnboardingFlowState,
-  CustomerContext,
-  OnboardingStep,
-} from "./onboarding-types";
+import type { OnboardingFlowState, CustomerContext, OnboardingStep } from "./onboarding-types";
 import type { RegistrationStepChromeCopy } from "./onboarding-registration-chrome-copy";
 import type {
   CompanyFormFieldKey,
@@ -46,7 +41,7 @@ export type OnboardingFlowViewProps = {
   drafts: CertificationRequestDraft[];
   effectiveSummaryIncludedDraftIds: readonly string[];
   rows: RequestPackageRow[];
-  steps: OnboardingStepperStep[];
+  steps: StepLayoutStep[];
   activeStep: number;
   goToOnboardingStep: (nextStep: OnboardingStep) => void;
   primaryAction: StepLayoutAction;

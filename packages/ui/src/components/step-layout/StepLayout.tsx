@@ -10,16 +10,15 @@
 import { useRef, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
-import {
-  Button,
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  FadingScrollList,
-  H1,
-  P,
-} from "@procertus-ui/ui";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { FadingScrollList } from "@/components/ui/fading-scroll-list";
+import { H1 } from "@/components/ui/heading";
+import { P } from "@/components/ui/typography";
+
+import { StepLayoutStepper, type StepLayoutStep } from "../step-layout-stepper";
+
+export type { StepLayoutStep };
 
 export type StepLayoutAction = {
   label: string;
@@ -48,22 +47,39 @@ export type StepLayoutProps = {
    */
   flush?: boolean;
   /**
-   * Optional process UI (e.g. `OnboardingStepper` or `Stepper` from `@procertus-ui/ui`).
+   * Steps for the built-in stepper. When supplied (and `stepper` slot is omitted) StepLayout
+   * renders its standard `StepLayoutStepper` automatically. Pair with `activeStep` and
+   * `onStepChange` to drive navigation.
+   */
+  steps?: StepLayoutStep[];
+  /** 0-based active step index for the built-in stepper. Required when `steps` is set. */
+  activeStep?: number;
+  /** Called with the new 0-based index when the user activates a step in the built-in stepper. */
+  onStepChange?: (index: number) => void;
+  /** When false, built-in stepper triggers are inert (progress-only display). Default: true. */
+  interactive?: boolean;
+  /**
+   * Slot for a custom progress UI. Wins over `steps` when both are provided. Use this for
+   * non-default shapes like a compact mobile timeline.
    * - `top` — full width above the title block in the header.
    * - `start` — start-aligned rail (e.g. vertical stepper) beside the title + body + footer on `md+`.
    */
   stepper?: ReactNode;
   /**
-   * Where to place `stepper`. Ignored if `stepper` is not set.
+   * Where to place the stepper. Ignored if neither `stepper` slot nor `steps` is set. Also
+   * sets the built-in stepper's orientation: `top` → horizontal, `start` → vertical.
    * @default "top"
    */
   stepperPosition?: "top" | "start";
   /**
    * `card` — single surface, header flush with the body (default).
-   * `banded` — a muted strip carries only an optional **horizontal** stepper (`stepperPosition="top"`),
-   * and the footer mirrors that strip; step title/description use the ordinary card surface.
+   * `banded` — with a horizontal top stepper, the stepper sits on a muted strip; title/description
+   * stay on the main surface; the footer mirrors the strip. Without that strip, padding follows the
+   * banded content rhythm while the footer keeps the tinted strip.
+   * `bare` — no surface chrome: header, body and footer flow flush with the parent (no border,
+   * background, shadow, or rail padding). Use when the page already supplies its own chrome.
    */
-  chromeStyle?: "card" | "banded";
+  chromeStyle?: "card" | "banded" | "bare";
   title: ReactNode;
   description?: ReactNode;
   /** e.g. “Step 2 of 6” — not a second heading. */
@@ -211,6 +227,10 @@ export function StepLayout({
   layout = "default",
   flush: _flush = false,
   stepper,
+  steps,
+  activeStep,
+  onStepChange,
+  interactive = true,
   stepperPosition = "top",
   chromeStyle = "card",
   title,
@@ -227,10 +247,22 @@ export function StepLayout({
   const isFill = layout === "fill" || layout === "fill-parent";
   const isViewportFill = layout === "fill";
   const isParentFill = layout === "fill-parent";
-  const hasStepper = stepper != null;
+  const resolvedStepper: ReactNode =
+    stepper ??
+    (steps && steps.length > 0 && activeStep !== undefined ? (
+      <StepLayoutStepper
+        steps={steps}
+        activeStep={activeStep}
+        onStepChange={onStepChange}
+        interactive={interactive}
+        orientation={stepperPosition === "start" ? "vertical" : "horizontal"}
+      />
+    ) : null);
+  const hasStepper = resolvedStepper != null;
   const rail = hasStepper && stepperPosition === "start";
   const stableHeight = !isFill && !rail && minHeight != null;
   const banded = chromeStyle === "banded";
+  const bare = chromeStyle === "bare";
   /** Horizontal stepper only: muted chrome strip separates from body; title sits below without the band. */
   const bandedTopStepStrip =
     banded && !rail && hasStepper && stepperPosition === "top";
@@ -261,14 +293,17 @@ export function StepLayout({
     : undefined;
 
   const cardClass = cn(
-    "w-full overflow-hidden shadow-proc-xs",
+    "w-full overflow-hidden",
+    !bare && "shadow-proc-xs",
     banded ? "gap-0 pt-0" : cardGapClass[variant],
-    !rail && !banded && cardTopPadClass[variant],
+    !rail && !banded && !bare && cardTopPadClass[variant],
+    bare && "!p-0",
     isFill ? "flex min-h-0 flex-col" : cn("mx-auto", variantClass[variant]),
     rail && "!py-0",
     isViewportFill && !rail && "!pb-0",
     isViewportFill && "rounded-none bg-transparent shadow-none ring-0",
-    !isViewportFill && "rounded-xl",
+    bare && "rounded-none border-0 bg-transparent shadow-none ring-0",
+    !isViewportFill && !bare && "rounded-xl",
     stableHeight && cn("flex flex-col", minHeight),
   );
 
@@ -280,7 +315,7 @@ export function StepLayout({
           isFill && "shrink-0",
         )}
       >
-        <div className="mx-auto w-[90%]">{stepper}</div>
+        <div className="mx-auto w-[90%]">{resolvedStepper}</div>
       </CardHeader>
     ) : null;
 
@@ -290,13 +325,15 @@ export function StepLayout({
         "flex flex-col gap-region",
         rail
           ? "!px-0"
-          : banded && !rail
-            ? cn(
-                "!px-region",
-                "!pb-section",
-                bandedTopStepStrip ? "!pt-region" : cn(cardTopPadClass[variant], "pt-region"),
-              )
-            : "sm:px-boundary",
+          : bare
+            ? "!p-0"
+            : banded && !rail
+              ? cn(
+                  "!px-region",
+                  "!pb-section",
+                  bandedTopStepStrip ? "!pt-region" : cn(cardTopPadClass[variant], "pt-region"),
+                )
+              : "sm:px-boundary",
         isFill && "shrink-0",
       )}
     >
@@ -317,7 +354,9 @@ export function StepLayout({
   const railContentClass = "space-y-section !px-0";
   const stackedContentClass = banded
     ? "space-y-region p-region"
-    : "space-y-section sm:px-boundary sm:pb-section";
+    : bare
+      ? "space-y-section !p-0"
+      : "space-y-section sm:px-boundary sm:pb-section";
 
   const contentNode = (
     <CardContent
@@ -344,7 +383,10 @@ export function StepLayout({
           )}
         </FadingScrollList>
       ) : animateStep ? (
-        <div key={`body-${stepKey}`} className={cn(banded ? "space-y-region" : "space-y-section", stepAnimClass)}>
+        <div
+          key={`body-${stepKey}`}
+          className={cn(banded ? "space-y-region" : "space-y-section", stepAnimClass)}
+        >
           {children}
         </div>
       ) : (
@@ -359,6 +401,7 @@ export function StepLayout({
         "flex flex-row flex-wrap items-center justify-end gap-component",
         "min-h-11",
         banded ? "border-t bg-muted/40 p-region" : "p-section",
+        bare && "!px-0 !pb-0",
         isFill && "shrink-0",
         isViewportFill && "bg-transparent",
       )}
@@ -388,7 +431,7 @@ export function StepLayout({
               isParentFill && "min-h-0",
             )}
           >
-            {stepper}
+            {resolvedStepper}
           </div>
           <div
             className={cn(
@@ -417,7 +460,7 @@ export function StepLayout({
     >
       {bandedStepStripNode}
       {hasStepper && stepperPosition === "top" && !banded ? (
-        <div className="mx-auto w-[90%]">{stepper}</div>
+        <div className="mx-auto w-[90%]">{resolvedStepper}</div>
       ) : null}
       {titleHeaderNode}
       {contentNode}

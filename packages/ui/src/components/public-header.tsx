@@ -6,6 +6,7 @@ import {
   Tick02Icon,
   ArrowDown01Icon,
   GlobeIcon,
+  Login01Icon,
   Logout01Icon,
   Menu01Icon,
   Search01Icon,
@@ -250,6 +251,7 @@ export function PublicRegistryHeader({
 
   const activeLanguageObj = languages.find((l) => l.code === activeLanguage);
   const initials = user ? getInitials(user) : "";
+  const hasMobileMenuContent = navLinks.length > 0 || languages.length > 1;
 
   return (
     <header
@@ -262,15 +264,17 @@ export function PublicRegistryHeader({
       )}
     >
       <div className="flex h-16 items-center gap-component px-section">
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          className="sm:hidden min-h-11 min-w-11 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-          onClick={() => setMobileMenuOpen(true)}
-        >
-          <HugeiconsIcon icon={Menu01Icon} />
-          <span className="sr-only">Menu</span>
-        </Button>
+        {hasMobileMenuContent && (
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="sm:hidden min-h-11 min-w-11 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            onClick={() => setMobileMenuOpen(true)}
+          >
+            <HugeiconsIcon icon={Menu01Icon} />
+            <span className="sr-only">Menu</span>
+          </Button>
+        )}
 
         {logo && (
           <a href="/" className="flex shrink-0 items-center gap-component">
@@ -357,9 +361,7 @@ export function PublicRegistryHeader({
                   className="relative size-11 rounded-full p-0 lg:size-9 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 >
                   <Avatar className="size-8 after:border-0">
-                    {user.avatar && (
-                      <AvatarImage src={user.avatar} alt={user.name ?? user.email} />
-                    )}
+                    {user.avatar && <AvatarImage src={user.avatar} alt={user.name ?? user.email} />}
                     <AvatarFallback className="bg-background">
                       {user.avatarFallback ?? initials}
                     </AvatarFallback>
@@ -369,9 +371,7 @@ export function PublicRegistryHeader({
               <DropdownMenuContent className="w-64" align="end" sideOffset={8}>
                 <div className="flex items-center gap-component px-component py-component">
                   <Avatar className="size-9">
-                    {user.avatar && (
-                      <AvatarImage src={user.avatar} alt={user.name ?? user.email} />
-                    )}
+                    {user.avatar && <AvatarImage src={user.avatar} alt={user.name ?? user.email} />}
                     <AvatarFallback className="bg-background">
                       {user.avatarFallback ?? initials}
                     </AvatarFallback>
@@ -425,16 +425,10 @@ export function PublicRegistryHeader({
                 Reeds een account?
               </span>
               <Button variant="secondary" size="sm" className="min-h-11 lg:min-h-0" asChild>
-                <a
-                  href={loginUrl}
-                  onClick={(e) => {
-                    if (onLogin) {
-                      e.preventDefault();
-                      onLogin();
-                    }
-                  }}
-                >
-                  Log in
+                <a href={loginUrl} onClick={onLogin}>
+                  <HugeiconsIcon icon={Login01Icon} className="size-4 sm:hidden" />
+                  <span className="hidden sm:inline">Log in</span>
+                  <span className="sr-only sm:hidden">Log in</span>
                 </a>
               </Button>
             </div>
@@ -472,88 +466,90 @@ export function PublicRegistryHeader({
           -webkit-backdrop-filter: blur(1px) !important;
         }
       `}</style>
-      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-        <SheetContent
-          side="left"
-          className="w-72 border-none bg-sidebar p-0 text-sidebar-foreground"
-          showCloseButton={false}
-        >
-          <SheetHeader className="sr-only">
-            <SheetTitle>Menu</SheetTitle>
-            <SheetDescription>Navigatiemenu</SheetDescription>
-          </SheetHeader>
-          <div className="flex h-full flex-col">
-            <div className="flex items-center justify-between px-component py-component">
-              <span className="text-sm font-semibold">Menu</span>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                className="min-h-11 min-w-11 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <HugeiconsIcon icon={Cancel01Icon} />
-                <span className="sr-only">Sluiten</span>
-              </Button>
-            </div>
-            <Separator className="bg-sidebar-border" />
+      {hasMobileMenuContent && (
+        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+          <SheetContent
+            side="left"
+            className="w-72 border-none bg-sidebar p-0 text-sidebar-foreground"
+            showCloseButton={false}
+          >
+            <SheetHeader className="sr-only">
+              <SheetTitle>Menu</SheetTitle>
+              <SheetDescription>Navigatiemenu</SheetDescription>
+            </SheetHeader>
+            <div className="flex h-full flex-col">
+              <div className="flex items-center justify-between px-component py-component">
+                <span className="text-sm font-semibold">Menu</span>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="min-h-11 min-w-11 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <HugeiconsIcon icon={Cancel01Icon} />
+                  <span className="sr-only">Sluiten</span>
+                </Button>
+              </div>
+              <Separator className="bg-sidebar-border" />
 
-            {navLinks.length > 0 && (
-              <nav className="flex flex-col gap-0.5 p-component">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.title}
-                    href={link.url}
-                    className={cn(
-                      "flex min-h-11 items-center rounded-md px-component text-sm font-medium transition-colors",
-                      link.isActive
-                        ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                        : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                    )}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {link.title}
-                  </a>
-                ))}
-              </nav>
-            )}
-
-            {languages.length > 1 && (
-              <>
-                <Separator className="bg-sidebar-border" />
-                <div className="flex flex-col p-component">
-                  <div className="px-component py-1.5 text-xs font-medium text-sidebar-foreground/60">
-                    Kies een taal
-                  </div>
-                  {languages.map((lang) => (
-                    <button
-                      key={lang.code}
-                      type="button"
+              {navLinks.length > 0 && (
+                <nav className="flex flex-col gap-0.5 p-component">
+                  {navLinks.map((link) => (
+                    <a
+                      key={link.title}
+                      href={link.url}
                       className={cn(
-                        "flex min-h-11 items-center justify-between rounded-md px-component text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                        lang.code === (activeLanguage ?? languages[0]?.code) && "font-medium",
+                        "flex min-h-11 items-center rounded-md px-component text-sm font-medium transition-colors",
+                        link.isActive
+                          ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                       )}
-                      onClick={() => {
-                        onLanguageChange?.(lang.code);
-                        setMobileMenuOpen(false);
-                      }}
+                      onClick={() => setMobileMenuOpen(false)}
                     >
-                      <span className="flex items-center gap-micro">
-                        <span>{lang.flag}</span> {lang.label}
-                      </span>
-                      {lang.code === (activeLanguage ?? languages[0]?.code) && (
-                        <HugeiconsIcon
-                          icon={Tick02Icon}
-                          className="size-4 text-sidebar-accent-foreground"
-                        />
-                      )}
-                    </button>
+                      {link.title}
+                    </a>
                   ))}
-                </div>
-              </>
-            )}
-          </div>
-        </SheetContent>
-      </Sheet>
+                </nav>
+              )}
+
+              {languages.length > 1 && (
+                <>
+                  <Separator className="bg-sidebar-border" />
+                  <div className="flex flex-col p-component">
+                    <div className="px-component py-1.5 text-xs font-medium text-sidebar-foreground/60">
+                      Kies een taal
+                    </div>
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        type="button"
+                        className={cn(
+                          "flex min-h-11 items-center justify-between rounded-md px-component text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                          lang.code === (activeLanguage ?? languages[0]?.code) && "font-medium",
+                        )}
+                        onClick={() => {
+                          onLanguageChange?.(lang.code);
+                          setMobileMenuOpen(false);
+                        }}
+                      >
+                        <span className="flex items-center gap-micro">
+                          <span>{lang.flag}</span> {lang.label}
+                        </span>
+                        {lang.code === (activeLanguage ?? languages[0]?.code) && (
+                          <HugeiconsIcon
+                            icon={Tick02Icon}
+                            className="size-4 text-sidebar-accent-foreground"
+                          />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          </SheetContent>
+        </Sheet>
+      )}
     </header>
   );
 }

@@ -1,19 +1,21 @@
 import {
-  OnboardingRequestStep,
-  useOnboardingFlow,
+  ProductSelectionBasketActionBar,
+  ProductSelectionBasketBody,
+  ProductSelectionBasketProvider,
+  TrajectLayout,
+  buildProductIndex,
+  defaultProcertusCategorizationDoc,
+  type CertificationEntryId,
+  type CertificationRequestDraft,
 } from "@procertus-ui/ui-certification";
-import type { CertificationRequestDraft } from "@procertus-ui/ui-certification";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
-import { useSyncOnboardingTrajectFromServiceId } from "../onboarding/use-sync-onboarding-traject-from-service-id";
-import { ActiveInquiryContinueAlert } from "../../layouts/ActiveInquiryContinueAlert";
-import { usePublicPrototypeRegistryLanguageHeaderProps } from "../../layouts/PublicPrototypeLanguageContext";
-import { WelcomePublicHeaderLeading } from "../../layouts/WelcomePublicHeaderLeading";
-import { WelcomePublicHeaderTrailing } from "../../layouts/WelcomePublicHeaderTrailing";
-import { PUBLIC_GUEST_LOGIN_PATH } from "../../routes/guestPaths";
+import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
+import { persistTrajectHandoff, resetTrajectFlow } from "./traject-submission-context";
 
 const WEGWIJZER_PATH = "/welcome";
+const SIGNIN_PATH = "/welcome/login";
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
 
 /**
@@ -21,50 +23,69 @@ const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
  */
 export function TrajectConfigureFlow() {
   const { serviceId } = useParams<{ serviceId: string }>();
+  const service = findWegwijzerService(serviceId);
 
-  if (!serviceId) {
+  // Annuleren = volledige reset. Gebruiker zegt expliciet "ik weet het niet, ik begin opnieuw",
+  // dus traject + klantgegevens worden gewist en we sturen ze terug naar de Wegwijzer. Geen
+  // OnboardingFlowProvider gemount, dus we wissen alleen localStorage.
+  const handleCancel = useCallback(() => {
+    resetTrajectFlow();
+    navigate(WEGWIJZER_PATH);
+  }, [navigate]);
+
+  // Productindex bouwen we eenmalig: lookup per geselecteerd product zodat we node-label,
+  // path en stream-label op elke draft kunnen zetten zonder de boom opnieuw te traversen.
+  const productIndex = useMemo(
+    () => buildProductIndex(defaultProcertusCategorizationDoc.clusters),
+    [],
+  );
+
+  const handleContinue = useCallback(
+    (selectedIds: readonly string[]) => {
+      if (!serviceId || !service) return;
+      const drafts: CertificationRequestDraft[] = selectedIds.flatMap((productId) => {
+        const product = productIndex.get(productId);
+        if (!product || product.node.kind !== "product") return [];
+        return [
+          {
+            id: `${productId}-${serviceId}`,
+            entryId: serviceId as CertificationEntryId,
+            label: service.entry.label,
+            shortLabel: service.entry.shortLabel,
+            productId,
+            productTypeStreamLabel: product.node.productTypeStreamLabel,
+            productLabel: product.node.label,
+            productPath: product.path.slice(0, -1).join(" › "),
+          },
+        ];
+      });
+      if (drafts.length === 0) return;
+      persistTrajectHandoff({ drafts, serviceId });
+      navigate(TRIAGE_PATH(serviceId), { replace: true });
+    },
+    [navigate, productIndex, service, serviceId],
+  );
+
+  if (!serviceId || !service) {
     return <Navigate to={WEGWIJZER_PATH} replace />;
   }
 
-  return <TrajectConfigureFlowBody serviceId={serviceId} />;
-}
-
-function TrajectConfigureFlowBody({ serviceId }: { serviceId: string }) {
-  const navigate = useNavigate();
-  const registryLang = usePublicPrototypeRegistryLanguageHeaderProps();
-  useSyncOnboardingTrajectFromServiceId(serviceId);
-  const { viewProps } = useOnboardingFlow({
-    navigate,
-    activeStep: "request",
-    onRegistrationStepChange: () => {},
-    signInUrl: PUBLIC_GUEST_LOGIN_PATH,
-    registryHeaderLeadingActions: <WelcomePublicHeaderLeading />,
-    registryHeaderTrailingActions: <WelcomePublicHeaderTrailing />,
-  });
-
-  const certificationWizardProps = useMemo(
-    () => ({
-      ...viewProps.certificationWizardProps,
-      onComplete: (nextDrafts: CertificationRequestDraft[]) => {
-        viewProps.certificationWizardProps.onComplete(nextDrafts);
-        navigate(TRIAGE_PATH(serviceId), { replace: true });
-      },
-    }),
-    [navigate, serviceId, viewProps.certificationWizardProps],
-  );
-
   return (
-    <OnboardingRequestStep
-      pageTitle={viewProps.certificationPhaseTitle}
-      pageDescription={viewProps.certificationPhaseDescription}
-      onSignInClick={viewProps.onSignInClick}
-      certificationWizardProps={certificationWizardProps}
-      headerLeadingActions={viewProps.registryHeaderLeadingActions}
-      headerTrailingActions={viewProps.registryHeaderTrailingActions}
-      loginUrl={viewProps.signInUrl}
-      guestLanguagePlacement={viewProps.guestLanguagePlacement}
-      sessionBanner={<ActiveInquiryContinueAlert />}
-      {...registryLang}
-    />
+    <ProductSelectionBasketProvider
+      doc={defaultProcertusCategorizationDoc}
+      onCancel={handleCancel}
+      onContinue={handleContinue}
+    >
+      <TrajectLayout
+        onSignInClick={() => navigate(SIGNIN_PATH)}
+        bodyGap="section"
+        kicker={service.entry.label}
+        title="Selecteer de producten die je wil certificeren"
+        description="Doorzoek de hele catalogus of blader stapsgewijs door categorieën."
+        actionBar={<ProductSelectionBasketActionBar />}
+      >
+        <ProductSelectionBasketBody />
+      </TrajectLayout>
+    </ProductSelectionBasketProvider>
   );
 }

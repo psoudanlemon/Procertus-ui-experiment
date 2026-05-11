@@ -22,14 +22,18 @@ Workspace scope for imports: **`@procertus-ui/…`** (for example `@procertus-ui
 
 ## Frontend roles
 
-| Path | Role |
-|------|------|
-| `packages/ui` | Shadcn registry primitives only |
-| `packages/ui-lib` | Shared composed UI components and hooks |
-| `packages/ui-<feature>` | Feature- or subdomain-owned composed UI packages |
-| `apps/frontend-*` | Application shells, routing, page composition, app-level state |
+Three clearly separated tiers, each with its own Storybook:
 
-UI packages never depend on `svc-*`. Backend packages never import `ui-*`.
+| Path | Tier | Role |
+|------|------|------|
+| `packages/ui` | **Design system** | Generic base building blocks: Shadcn registry primitives plus the parametric, app-agnostic compositions built on top of them (Stepper, PageHeader, AppShell, StepLayout, …). No domain content. |
+| `packages/ui-lib` | **Custom components** | Larger custom organisms and templates reused across multiple pages or apps. Still presentational and domain-agnostic. |
+| `packages/ui-<domain>` | **Domain-driven components** | Domain-specific UI (e.g. `ui-certification`, `ui-pt1-prototype`). Components that only make sense inside one domain live here, together with mock data for that domain. |
+| `apps/frontend-*` | Apps | Application shells, routing, page composition, app-level state. |
+
+Promotion rule: start in the most generic package the component can live in. Only move down a tier when concrete domain content (entity-specific copy, fields, business rules) is unavoidable. A component named after its content (e.g. `CertificationStepLayout`) belongs in a domain package; a component named after its shape (e.g. `StepLayout`) belongs in `ui` or `ui-lib` depending on whether it is a base building block or a larger composed organism.
+
+UI packages never depend on `svc-*`. Backend packages never import `ui-*`. `ui` never imports from `ui-lib` or `ui-<domain>`. `ui-lib` may import from `ui`. `ui-<domain>` may import from both.
 
 ## Choose the right expansion
 
@@ -54,9 +58,10 @@ Inside **`packages/ui-lib`** and **`packages/ui-*`**:
 
 Inside **`packages/ui`**:
 
-- use it only for Shadcn primitives and registry-managed base components
-- do not scaffold composed feature components here
-- use `workspace-ui add-primitive` instead of hand-copying registry snippets
+- house the generic base building blocks: Shadcn primitives and parametric compositions built on those primitives that any app could use (Stepper, PageHeader, AppShell, StepLayout, Timeline, …)
+- keep everything app-agnostic and domain-agnostic: no certification, onboarding, or other domain content
+- a component qualifies if it is named after its shape rather than its consumer, has no domain-bound copy or fields, and is reasonably reused (or expected to be reused) across multiple flows
+- use `workspace-ui add-primitive` instead of hand-copying registry snippets for the Shadcn-managed pieces
 
 ## Mock data inside UI packages
 
@@ -96,7 +101,7 @@ Default sequence for a new subdomain UI flow:
 
 ## Storybook, Tailwind, and app types
 
-- **Storybook:** `bun run storybook` from the repo root runs package storybooks via Turbo.
+- **Storybook:** every UI package owns its own Storybook (`packages/ui`, `packages/ui-lib`, and each `packages/ui-<domain>` package). `bun run storybook` from the repo root runs all package storybooks via Turbo. This separation mirrors the three-tier model: the design system, custom components, and per-domain components are each browsable on their own.
 - **Tailwind v4:** wired into UI packages and Vite apps through scaffolded setup.
 - **Frontend app types:** `frontend-nextjs`, `frontend-vite`, and `frontend-tanstack` each own routing and app bootstrapping; use their app README after scaffolding.
 

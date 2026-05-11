@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useLayoutEffect, useMemo, useState, type ComponentType } from "react";
 
-import { OnboardingStepper, StepLayout } from "@procertus-ui/ui-lib";
+import { StepLayout, StepLayoutStepper } from "@procertus-ui/ui";
 
 import {
   REGISTRATION_PHASE_DESCRIPTION,
@@ -91,7 +91,7 @@ function RegistrationChromeComposer({
         minHeight={STABLE_STEP_MIN_HEIGHT}
         variant="onboarding"
         stepper={
-          <OnboardingStepper
+          <StepLayoutStepper
             steps={viewProps.steps}
             activeStep={viewProps.activeStep}
             onStepChange={(index) => {

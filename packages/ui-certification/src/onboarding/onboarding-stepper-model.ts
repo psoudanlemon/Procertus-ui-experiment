@@ -1,4 +1,4 @@
-import type { OnboardingStepperStep } from "@procertus-ui/ui-lib";
+import type { StepLayoutStep } from "@procertus-ui/ui";
 
 import type {
   OnboardingFlowState,
@@ -82,7 +82,7 @@ export type BuildOnboardingStepperStepsInput = {
 
 export function buildOnboardingStepperSteps(
   input: BuildOnboardingStepperStepsInput,
-): OnboardingStepperStep[] {
+): StepLayoutStep[] {
   const { step, drafts, requestOrigin, context, certificationInquiryDraftIds } = input;
   const hasDrafts = drafts.length > 0;
   const {

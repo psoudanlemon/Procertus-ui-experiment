@@ -132,6 +132,7 @@
         "@procertus-ui/ui": "workspace:*",
         "@procertus-ui/ui-lib": "workspace:*",
         "@procertus-ui/ui-pt1-prototype": "workspace:*",
+        "framer-motion": "^12.38.0",
         "lucide-react": "^0.486.0",
       },
       "devDependencies": {

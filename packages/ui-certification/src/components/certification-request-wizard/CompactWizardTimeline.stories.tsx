@@ -57,7 +57,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Compact **horizontal timeline** for mobile wizard chrome: one row of tappable step labels with optional secondary line. Used above the fold on small viewports when the full vertical `OnboardingStepper` is hidden. `activeStep` is **0-based**; completed steps use primary emphasis; unavailable steps are `disabled` and de-emphasized.",
+          "Compact **horizontal timeline** for mobile wizard chrome: one row of tappable step labels with optional secondary line. Used above the fold on small viewports when the full vertical `StepLayoutStepper` is hidden. `activeStep` is **0-based**; completed steps use primary emphasis; unavailable steps are `disabled` and de-emphasized.",
       },
     },
   },

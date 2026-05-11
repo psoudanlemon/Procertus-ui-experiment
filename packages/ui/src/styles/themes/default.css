@@ -446,6 +446,16 @@
   --max-width-proc-modal-lg: 32rem;
   --max-width-proc-modal-xl: 36rem;
 
+  /* ── Stage-fill sizing (viewport minus traject / wizard chrome) ──────────
+   * 12rem reserves room for the registry header, outer page padding and the
+   * sticky action bar / footer that frame `TrajectLayout` and the anonymous
+   * wizard. Two utilities so both bounds are explicit at the call site:
+   *   • `min-h-stable-step` — keeps a step card from collapsing between steps
+   *   • `max-h-sticky-rail` — caps a sticky right-rail to the viewport so it
+   *      stays scrollable instead of overflowing the layout. */
+  --min-height-stable-step: calc(100svh - 12rem);
+  --max-height-sticky-rail: calc(100svh - 12rem);
+
   /* Brand */
   --color-brand-primary-50: var(--brand-primary-50);
   --color-brand-primary-100: var(--brand-primary-100);

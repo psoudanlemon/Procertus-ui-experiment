@@ -133,10 +133,10 @@ export function PageHeader({
   const descriptionNode = renderDescription(description);
 
   return (
-    <header className={className} {...props}>
+    <header className={cn(className)} {...props}>
       <div className="flex flex-col gap-region">
         <div className="flex flex-col gap-region sm:flex-row sm:justify-between sm:gap-region">
-          <div className="flex min-w-0 flex-1 flex-col [&_[data-slot=page-header-description]]:[text-box:trim-start_text]">
+          <div className="flex min-w-0 max-w-3xl flex-1 flex-col gap-micro [&_[data-slot=page-header-description]]:[text-box:trim-start_text]">
             <div className="flex min-w-0 flex-col gap-component text-left [&_[data-slot=heading]]:[text-box:trim-end_text] [&_[data-slot=page-header-kicker]]:[text-box:trim-both_cap_alphabetic]">
               {renderKicker(kicker)}
               {renderTitle(title)}

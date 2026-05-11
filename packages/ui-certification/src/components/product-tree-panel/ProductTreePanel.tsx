@@ -14,11 +14,11 @@ import {
   Card,
   CardDescription,
   CardHeader,
-  CardTitle,
   Empty,
   EmptyDescription,
   EmptyIcon,
   EmptyTitle,
+  H3,
   Input,
   Tree,
   TreeItem,
@@ -394,40 +394,34 @@ export function ProductTreePanel({
     <Card className={cn("mx-auto w-full max-w-5xl overflow-hidden py-section", className)}>
       <CardHeader className={cn("px-section", hasToolbarRow && "gap-section")}>
         <div>
-          <CardTitle>{title}</CardTitle>
+          <H3>{title}</H3>
           {description ? <CardDescription>{description}</CardDescription> : null}
         </div>
         {showSearch && onSearchChange ? (
-          <div className="flex flex-col gap-component">
+          <div className="flex flex-wrap items-center gap-component">
             <SearchInput
               value={searchValue}
               onChange={onSearchChange}
               placeholder={searchPlaceholder}
             />
-            {onToggleExpandAll || actions ? (
-              <div className="flex flex-wrap items-center justify-between gap-micro">
-                {onToggleExpandAll ? (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={onToggleExpandAll}
-                    className="gap-micro"
-                    aria-pressed={allExpanded}
-                  >
-                    {allExpanded ? (
-                      <ChevronsDownUp className="size-4" aria-hidden />
-                    ) : (
-                      <ChevronsUpDown className="size-4" aria-hidden />
-                    )}
-                    {allExpanded ? "Collapse all" : "Expand all"}
-                  </Button>
+            {onToggleExpandAll ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={onToggleExpandAll}
+                className="gap-micro"
+                aria-pressed={allExpanded}
+              >
+                {allExpanded ? (
+                  <ChevronsDownUp className="size-4" aria-hidden />
                 ) : (
-                  <span aria-hidden />
+                  <ChevronsUpDown className="size-4" aria-hidden />
                 )}
-                {actions ? <div className="flex flex-wrap gap-micro">{actions}</div> : null}
-              </div>
+                {allExpanded ? "Collapse all" : "Expand all"}
+              </Button>
             ) : null}
+            {actions ? <div className="flex flex-wrap gap-micro">{actions}</div> : null}
           </div>
         ) : actions || onToggleExpandAll ? (
           <div className="flex flex-wrap justify-end gap-micro">

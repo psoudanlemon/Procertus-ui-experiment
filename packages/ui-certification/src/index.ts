@@ -73,6 +73,20 @@ export type {
   RegistrationProcessingDialogProps,
   RegistrationProcessingStep,
 } from "./components/registration-processing-dialog";
+export {
+  ProductBasket,
+  ProductSelectionBasketActionBar,
+  ProductSelectionBasketBody,
+  ProductSelectionBasketProvider,
+  TrajectLayout,
+} from "./components/traject";
+export type {
+  ProductBasketItem,
+  ProductBasketProps,
+  ProductSelectionBasketProviderProps,
+  TrajectLayoutAction,
+  TrajectLayoutProps,
+} from "./components/traject";
 export { ProcertusCategorizationTreeView } from "./components/procertus-categorization-tree-view";
 export type {
   CertificationLabelKey,
@@ -89,6 +103,7 @@ export {
   PRODUCT_CERTIFICATION_ENTRY_IDS,
   PRODUCT_REQUIRED_INTENTS,
   CertificationRequestProvider,
+  buildProductIndex,
   entryLabelForIntent,
   getAvailableProductEntries,
   getCertificationOptionText,
@@ -101,6 +116,7 @@ export {
 } from "./CertificationRequestContext";
 export { certificationInquiriesNeedDetailsStep } from "./certification-request/drafts";
 export type {
+  CertificationEntryId,
   CertificationProductTreeNode,
   CertificationRequestContextValue,
   CertificationRequestDraft,

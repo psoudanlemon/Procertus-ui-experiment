@@ -18,7 +18,6 @@ import {
   DensityProvider,
   DownloadableItemGrid,
   type DownloadableItemData,
-  H1,
   H3,
   HoverCard,
   HoverCardContent,
@@ -29,6 +28,7 @@ import {
   ItemDescription,
   ItemGroup,
   ItemTitle,
+  PageHeader,
   PublicRegistryAppShell,
   Skeleton,
 } from "@procertus-ui/ui";
@@ -50,12 +50,18 @@ import {
   type WegwijzerService,
 } from "../features/wegwijzer/wegwijzer-services";
 import { WEGWIJZER_SERVICE_CONTENT } from "../features/wegwijzer/wegwijzer-service-content";
-import { PUBLIC_GUEST_LOGIN_PATH } from "../routes/guestPaths";
+import {
+  TRAJECT_ENTRY_POINT_QUERY_PARAM,
+  clearTrajectBreadcrumbs,
+} from "../features/traject/traject-submission-context";
 
 /** Eerste stap van de TrajectFlow: producttype kiezen en aanvraag controleren in de wizard, voor de triage-keuze. */
 const TRAJECT_CONFIGURE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}/start`;
 const EXPERT_CALL_PATH = (serviceId?: string) =>
   serviceId ? `/welcome/expert-call/${serviceId}` : "/welcome/expert-call";
+/** Detail-card "Hulp nodig?" stuurt mee dat het certificaat al in beeld is, zonder verdere wizard-context. */
+const EXPERT_CALL_FROM_DETAIL_PATH = (serviceId: string) =>
+  `${EXPERT_CALL_PATH(serviceId)}?${TRAJECT_ENTRY_POINT_QUERY_PARAM}=wegwijzer-detail`;
 
 /** Sentinel id for the leading "Alle certificaten" pill that resets the explorer to the overview. */
 const ALL_ID = "all";
@@ -166,20 +172,11 @@ export function WegwijzerPage() {
 
 function Hero() {
   return (
-    <section className="relative isolate overflow-hidden">
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-[image:var(--background-image-gradient-procertus-hero)] opacity-60"
-      />
-      <div className="relative flex w-full flex-col items-start gap-component px-boundary pt-boundary pb-region text-left">
-        <H1 className="max-w-3xl text-heading-xl">Start uw certificeringstraject</H1>
-        <p className="max-w-[44rem] text-base leading-normal text-muted-foreground">
-          Bij PROCERTUS bieden we verschillende diensten aan. Hieronder vindt u een overzicht van
-          ons aanbod. Selecteer een certificaat om meer informatie te krijgen of direct uw aanvraag
-          te starten.
-        </p>
-      </div>
-    </section>
+    <PageHeader
+      className="px-boundary pt-boundary pb-section"
+      title="Start uw certificeringstraject"
+      description="Bij PROCERTUS bieden we verschillende diensten aan. Hieronder vindt u een overzicht van ons aanbod. Selecteer een certificaat om meer informatie te krijgen of direct uw aanvraag te starten."
+    />
   );
 }
 
@@ -249,18 +246,22 @@ function AllCertificatesGrid({
         <BrowseCard
           key={service.entry.id}
           title={service.entry.shortLabel}
-          description={summary(service.entry.id)}
+          description="Dit attest wordt beoordeeld door een andere instantie."
           variant="faded"
           cta={{
             label: "Bezoek website",
-            icon: (
-              <HugeiconsIcon icon={LinkSquare02Icon} className="size-3.5" strokeWidth={1.5} />
-            ),
+            icon: <HugeiconsIcon icon={LinkSquare02Icon} className="size-3.5" strokeWidth={1.5} />,
           }}
           className="col-span-2 md:col-span-1"
           asChild
         >
-          <button type="button" onClick={() => onSelect(service.entry.id)} />
+          <button
+            type="button"
+            onClick={() => {
+              const url = service.externalReferral?.url;
+              if (url) window.open(url, "_blank", "noopener,noreferrer");
+            }}
+          />
         </BrowseCard>
       ))}
       <ExpertCallFooterCard />
@@ -269,6 +270,13 @@ function AllCertificatesGrid({
 }
 
 function ExpertCallFooterCard() {
+  const navigate = useNavigate();
+  // Hero-CTA: gebruiker drukt expliciet de reset, eerdere traject-breadcrumbs worden gewist zodat
+  // het expert-call formulier echt context-loos verzonden wordt.
+  const handleHeroExpertCall = () => {
+    clearTrajectBreadcrumbs();
+    navigate(EXPERT_CALL_PATH());
+  };
   return (
     <Card
       className="relative col-span-4 flex cursor-pointer flex-col gap-section px-section py-section md:col-span-2"
@@ -277,21 +285,18 @@ function ExpertCallFooterCard() {
       <div className="flex flex-col gap-micro">
         <H3>Liever eerst een expert spreken?</H3>
         <p className="text-sm leading-normal text-muted-foreground">
-          Plan een live online sessie van één uur en doorloop de vereisten samen met een PROCERTUS-expert.
+          Plan een live online sessie van één uur en doorloop de vereisten samen met een
+          PROCERTUS-expert.
         </p>
       </div>
       <Button
-        asChild
+        type="button"
         variant="outline"
-        className="self-start bg-background group-hover/card:rounded-tl-[4px] group-hover/card:rounded-tr-[var(--cmd-deep)] group-hover/card:rounded-br-[4px] group-hover/card:rounded-bl-[var(--cmd-deep)] group-hover/card:bg-muted group-hover/card:text-foreground"
+        onClick={handleHeroExpertCall}
+        className="self-start bg-background before:absolute before:inset-0 before:content-[''] group-hover/card:rounded-tl-[4px] group-hover/card:rounded-tr-[var(--cmd-deep)] group-hover/card:rounded-br-[4px] group-hover/card:rounded-bl-[var(--cmd-deep)] group-hover/card:bg-muted group-hover/card:text-foreground"
       >
-        <Link
-          to={EXPERT_CALL_PATH()}
-          className="before:absolute before:inset-0 before:content-['']"
-        >
-          <HugeiconsIcon icon={Call02Icon} className="size-4" />
-          Plan een expert call
-        </Link>
+        <HugeiconsIcon icon={Call02Icon} className="size-4" />
+        Plan een expert call
       </Button>
     </Card>
   );
@@ -348,7 +353,7 @@ function MasterCard({ service }: { service: WegwijzerService }) {
           <HoverCard>
             <HoverCardTrigger asChild>
               <Button asChild variant="link">
-                <Link to={EXPERT_CALL_PATH(entry.id)}>Hulp nodig?</Link>
+                <Link to={EXPERT_CALL_FROM_DETAIL_PATH(entry.id)}>Hulp nodig?</Link>
               </Button>
             </HoverCardTrigger>
             <HoverCardContent side="top" sideOffset={12} align="start" className="w-80">
@@ -356,7 +361,8 @@ function MasterCard({ service }: { service: WegwijzerService }) {
                 Hulp nodig bij uw {entry.shortLabel}-dossier?
               </p>
               <p className="text-muted-foreground">
-                Plan een online sessie van één uur en bereid uw {entry.shortLabel}-dossier samen met een PROCERTUS-expert voor.
+                Plan een online sessie van één uur en bereid uw {entry.shortLabel}-dossier samen met
+                een PROCERTUS-expert voor.
               </p>
             </HoverCardContent>
           </HoverCard>
@@ -380,12 +386,12 @@ function MasterCard({ service }: { service: WegwijzerService }) {
       <MasterCardSections service={service} />
 
       {isInnovation && (
-        <Alert>
+        <Alert variant="warning" className="max-w-3xl">
           <HugeiconsIcon icon={Alert02Icon} />
           <AlertTitle>Richtwaarde formele opstart</AlertTitle>
           <AlertDescription>
-            De ontvankelijkheidsbeoordeling start vanaf <strong>€&nbsp;2.000 (excl. btw)</strong>. Een
-            definitieve offerte volgt na intake.
+            De ontvankelijkheidsbeoordeling start vanaf <strong>€&nbsp;2.000 (excl. btw)</strong>.
+            Een definitieve offerte volgt na intake.
           </AlertDescription>
         </Alert>
       )}
@@ -422,7 +428,8 @@ function buildMockDocuments(service: WegwijzerService): DownloadableItemData[] {
     {
       id: `${entry.id}-checklist`,
       title: "Indien-checklist aanvraagpakket",
-      description: "Controlelijst afgestemd op de samenstelling van dit pakket vóór indiening (prototype).",
+      description:
+        "Controlelijst afgestemd op de samenstelling van dit pakket vóór indiening (prototype).",
       formatHint: "PDF · mock",
       href: "#",
     },
@@ -474,11 +481,7 @@ function MasterCardTimeline({ service }: { service: WegwijzerService }) {
 
 function MasterCardSkeleton() {
   return (
-    <div
-      className="flex flex-col gap-section"
-      aria-busy
-      aria-label="Inhoud wordt voorbereid"
-    >
+    <div className="flex flex-col gap-section" aria-busy aria-label="Inhoud wordt voorbereid">
       {[0, 1, 2, 3].map((i) => (
         <section key={i} className="flex flex-col gap-component">
           <Skeleton className="h-4 w-48" />
@@ -492,4 +495,3 @@ function MasterCardSkeleton() {
     </div>
   );
 }
-

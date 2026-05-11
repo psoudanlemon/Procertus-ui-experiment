@@ -11,6 +11,8 @@ export * from "./components/page-header";
 export * from "./components/panel-section";
 export * from "./components/choice-card";
 export * from "./components/stepper";
+export * from "./components/step-layout";
+export * from "./components/step-layout-stepper";
 export * from "./components/timeline";
 export * from "./components/tree";
 /** Sewdn components copied from the local shadcn-based UI library. */

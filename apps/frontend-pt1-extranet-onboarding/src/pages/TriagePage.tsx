@@ -1,6 +1,5 @@
 import { Link, Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
-  ArrowLeft01Icon,
   ArrowRight02Icon,
   Call02Icon,
   CheckmarkCircle02Icon,
@@ -9,7 +8,6 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Badge,
   Button,
   Card,
   CardContent,
@@ -17,12 +15,9 @@ import {
   CardHeader,
   CardTitle,
   DensityProvider,
-  H1,
   H3,
-  PublicRegistryAppShell,
 } from "@procertus-ui/ui";
-import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
-import { ActiveInquiryContinueAlert } from "../layouts/ActiveInquiryContinueAlert";
+import { TrajectLayout } from "@procertus-ui/ui-certification";
 import { APP_FOOTER } from "../layouts/footerConfig";
 import { usePublicPrototypeRegistryLanguageHeaderProps } from "../layouts/PublicPrototypeLanguageContext";
 import { WelcomePublicHeaderLeading } from "../layouts/WelcomePublicHeaderLeading";
@@ -30,12 +25,18 @@ import { WelcomePublicHeaderTrailing } from "../layouts/WelcomePublicHeaderTrail
 import { FORMAL_ONBOARDING_PATH } from "../routes/formal-request-routing";
 import { useSyncOnboardingTrajectFromServiceId } from "../features/onboarding/use-sync-onboarding-traject-from-service-id";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
-import { PUBLIC_GUEST_LOGIN_PATH } from "../routes/guestPaths";
+import { TRAJECT_ENTRY_POINT_QUERY_PARAM } from "../features/traject/traject-submission-context";
 
 const WEGWIJZER_PATH = "/welcome";
-/** Informatieve aanvraag is afgehandeld via een live expert-call, niet via een placeholder formulier. */
-const INFORMATIONAL_REQUEST_PATH = (serviceId: string) => `/welcome/expert-call/${serviceId}`;
-const EXPERT_CALL_PATH = (serviceId: string) => `/welcome/expert-call/${serviceId}`;
+/**
+ * Informatieve aanvraag wordt afgehandeld via een live expert-call. Het `from=triage` signaal stempelt
+ * de submissie zodat PROCERTUS weet dat de aanvrager al de wizard en de keuze gepasseerd heeft.
+ */
+const INFORMATIONAL_REQUEST_PATH = (serviceId: string) =>
+  `/welcome/expert-call/${serviceId}?${TRAJECT_ENTRY_POINT_QUERY_PARAM}=triage`;
+const FORMAL_REQUEST_PATH = "/welcome/start";
+const EXPERT_CALL_PATH = (serviceId: string) =>
+  `/welcome/expert-call/${serviceId}?${TRAJECT_ENTRY_POINT_QUERY_PARAM}=triage`;
 
 const CATEGORY_LABEL = {
   certification: "Productcertificatie",
@@ -68,48 +69,14 @@ export function TriagePage() {
 
   return (
     <DensityProvider density="spacious">
-    <PublicRegistryAppShell
-      hideFab
-      header={{
-        logo: (
-          <img
-            src={procertusLogo}
-            alt="PROCERTUS, certification that builds trust"
-            className="h-8 w-auto dark:brightness-0 dark:invert"
-          />
-        ),
-        onLogin: () => navigate(PUBLIC_GUEST_LOGIN_PATH),
-        loginUrl: PUBLIC_GUEST_LOGIN_PATH,
-        leadingActions: <WelcomePublicHeaderLeading />,
-        trailingActions: <WelcomePublicHeaderTrailing />,
-        guestLanguagePlacement: "leading",
-        ...registryLang,
-      }}
-      footer={APP_FOOTER}
-    >
-      <div className="mx-auto flex w-full max-w-[960px] flex-col gap-region p-boundary">
-        <ActiveInquiryContinueAlert />
-        <Button
-          variant="ghost"
-          size="sm"
-          className="-ml-2 self-start text-muted-foreground"
-          onClick={handleBack}
-        >
-          <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
-          Terug
-        </Button>
-
-        <section className="flex flex-col gap-micro">
-          <Badge variant="outline" className="self-start">
-            {CATEGORY_LABEL[entry.category]}
-          </Badge>
-          <H1>Hoe wilt u {entry.label} aanvragen?</H1>
-          <p className="max-w-[44rem] text-base leading-normal text-muted-foreground">
-            Kies een vrijblijvende informatieaanvraag voor een prijsopgave en advies, of start
-            meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen.
-          </p>
-        </section>
-
+      <TrajectLayout
+        onSignInClick={() => navigate(LOGIN_PATH)}
+        footer={APP_FOOTER}
+        backAction={{ label: "Terug", onClick: handleBack }}
+        kicker={CATEGORY_LABEL[entry.category]}
+        title={`Hoe wilt u ${entry.label} aanvragen?`}
+        description="Kies een vrijblijvende informatieaanvraag voor een prijsopgave en advies, of start meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen."
+      >
         <div className="flex flex-col gap-section">
           <div className="grid grid-cols-1 gap-section md:grid-cols-2">
             <TriageOptionCard
@@ -147,7 +114,8 @@ export function TriagePage() {
             <div className="flex min-w-0 flex-1 flex-col gap-micro">
               <H3>Liever eerst een expert spreken?</H3>
               <p className="text-sm leading-normal text-muted-foreground">
-                Plan een live online sessie van één uur en doorloop de vereisten samen met een PROCERTUS-expert.
+                Plan een live online sessie van één uur en doorloop de vereisten samen met een
+                PROCERTUS-expert.
               </p>
             </div>
             <Button
@@ -165,8 +133,7 @@ export function TriagePage() {
             </Button>
           </Card>
         </div>
-      </div>
-    </PublicRegistryAppShell>
+      </TrajectLayout>
     </DensityProvider>
   );
 }
@@ -181,7 +148,15 @@ type TriageOptionCardProps = {
   to: string;
 };
 
-function TriageOptionCard({ tone, icon, title, description, bullets, cta, to }: TriageOptionCardProps) {
+function TriageOptionCard({
+  tone,
+  icon,
+  title,
+  description,
+  bullets,
+  cta,
+  to,
+}: TriageOptionCardProps) {
   const isPrimary = tone === "primary";
   return (
     <Card
@@ -210,12 +185,19 @@ function TriageOptionCard({ tone, icon, title, description, bullets, cta, to }: 
         <ul className="flex flex-col gap-micro">
           {bullets.map((b) => (
             <li key={b} className="flex items-start gap-micro text-sm leading-normal">
-              <HugeiconsIcon icon={CheckmarkCircle02Icon} className="mt-0.5 size-4 shrink-0 text-success" />
+              <HugeiconsIcon
+                icon={CheckmarkCircle02Icon}
+                className="mt-0.5 size-4 shrink-0 text-success"
+              />
               <span>{b}</span>
             </li>
           ))}
         </ul>
-        <Button asChild variant={isPrimary ? "default" : "outline"} className="w-full justify-between">
+        <Button
+          asChild
+          variant={isPrimary ? "default" : "outline"}
+          className="w-full justify-between"
+        >
           <Link to={to}>
             {cta}
             <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />

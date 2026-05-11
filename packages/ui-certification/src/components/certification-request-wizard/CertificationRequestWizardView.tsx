@@ -1,4 +1,3 @@
-import { StepLayout } from "@procertus-ui/ui-lib";
 import {
   Badge,
   Button,
@@ -8,6 +7,7 @@ import {
   CardHeader,
   CardList,
   CardTitle,
+  StepLayout,
   DownloadableItemList,
   Empty,
   EmptyDescription,
@@ -144,7 +144,7 @@ export function CertificationRequestWizardView(props: CertificationRequestWizard
               ) : null}
               {(!splitProductInquirySteps || effectiveMobileDetailsStep === "inquiries") &&
               detailsStep.selectedProduct ? (
-                <Card className="h-fit lg:sticky lg:top-component lg:max-h-[calc(100svh-12rem)]">
+                <Card className="h-fit lg:sticky lg:top-component lg:max-h-sticky-rail">
                   <CardHeader>
                     <CardTitle>Certificatie- en attesteringsopties</CardTitle>
                     <CardDescription>

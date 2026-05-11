@@ -21,8 +21,11 @@ import {
   iconStroke,
   Input,
   PageHeader,
+  StepLayout,
+  StepLayoutStepper,
+  useStepLayout,
+  type StepLayoutStep,
 } from "@procertus-ui/ui";
-import { OnboardingStepper, StepLayout, useStepLayout, type OnboardingStepperStep } from "@procertus-ui/ui-lib";
 import {
   formatPrototypePostalAddressLine,
   getPrototypeOrganizationProfile,
@@ -53,7 +56,7 @@ import { ProfileTableField } from "./profile/ProfileTableField";
 
 const orgNav = PROTOTYPE_PRIMARY_NAV.find((item) => item.key === "organization-profile")!;
 
-const ORG_EDIT_STEPS: OnboardingStepperStep[] = [
+const ORG_EDIT_STEPS: StepLayoutStep[] = [
   { id: "workspace", title: "Werkruimte" },
   { id: "company", title: "Bedrijf" },
   { id: "reference", title: "Aanvullend" },
@@ -312,7 +315,7 @@ export function OrganizationProfilePage() {
                 flush
                 stepKey={activeStep}
                 stepper={
-                  <OnboardingStepper
+                  <StepLayoutStepper
                     orientation="horizontal"
                     steps={ORG_EDIT_STEPS}
                     activeStep={activeStep}

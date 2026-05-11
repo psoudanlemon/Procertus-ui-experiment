@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 
-import type { DownloadableItemData } from "@procertus-ui/ui";
-import type { StepLayoutProps } from "@procertus-ui/ui-lib";
+import type { DownloadableItemData, StepLayoutProps } from "@procertus-ui/ui";
 import type { CertificationWizardModel } from "../../certification-request/model";
 import type { CertificationRequestDraft } from "../../certification-request/types";
 import type { RequestPackageReviewRequesterPresentation } from "../request-package-review";
@@ -17,6 +16,8 @@ export type UseCertificationRequestWizardViewOptions = {
   onRequestCreated?: (draft: CertificationRequestDraft) => void;
   onComplete: (drafts: CertificationRequestDraft[]) => void;
   reviewRequester?: RequestPackageReviewRequesterPresentation;
+  /** Override the StepLayout chrome (default: `"banded"`). Pass `"bare"` to drop the surrounding card. */
+  stepLayoutChromeStyle?: StepLayoutProps["chromeStyle"];
 };
 
 export type CertificationRequestWizardViewProps = {

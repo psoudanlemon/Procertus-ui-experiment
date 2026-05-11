@@ -90,11 +90,12 @@ export const WithIcon: StoryObj<typeof meta> = {
 };
 
 export const WithTitleBadge: StoryObj<typeof meta> = {
-  name: "Badge as kicker",
+  name: "Badge + kicker",
   args: {
-    kicker: <Badge variant="success">In behandeling</Badge>,
+    kicker: "Certificatie",
     title: "Aanvraag #2026-0142",
     description: "Status van uw lopende certificatie-aanvraag.",
+    actions: <Badge variant="success">In behandeling</Badge>,
   },
 };
 
@@ -131,7 +132,7 @@ export const CompositionSlots: StoryObj<typeof meta> = {
   render: () => (
     <header>
       <div className="flex flex-col gap-region sm:flex-row sm:justify-between sm:gap-region">
-        <div className="flex min-w-0 flex-1 flex-col [&_[data-slot=page-header-description]]:[text-box:trim-start_text]">
+        <div className="flex min-w-0 max-w-3xl flex-1 flex-col [&_[data-slot=page-header-description]]:[text-box:trim-start_text]">
           <div className="flex min-w-0 flex-col gap-component text-left [&_[data-slot=heading]]:[text-box:trim-end_text] [&_[data-slot=page-header-kicker]]:[text-box:trim-both_cap_alphabetic]">
             <PageHeaderKicker>Custom kicker node</PageHeaderKicker>
             <H1 className="text-balance">Hand-built title with extra classes</H1>

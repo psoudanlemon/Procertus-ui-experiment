@@ -9,23 +9,13 @@ import {
   type OnboardingStep,
 } from "@procertus-ui/ui-certification";
 import { useCallback, useEffect, useMemo } from "react";
-import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
-import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
-import {
-  formalOnboardingStepPath,
-  parseFormalOnboardingStepParam,
-  shouldClampFormalStepToResume,
-} from "../../routes/formal-request-routing";
-import { PUBLIC_GUEST_LOGIN_PATH } from "../../routes/guestPaths";
-import { usePublicPrototypeRegistryLanguageHeaderProps } from "../../layouts/PublicPrototypeLanguageContext";
-import { WelcomePublicHeaderLeading } from "../../layouts/WelcomePublicHeaderLeading";
-import { WelcomePublicHeaderTrailing } from "../../layouts/WelcomePublicHeaderTrailing";
+import { resetTrajectFlow } from "../traject/traject-submission-context";
 
 export { ONBOARDING_REGISTRATION_COMPLETE_PATH } from "@procertus-ui/ui-certification";
 
 const WEGWIJZER_PATH = "/welcome";
-const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
 
 /**
  * Formal onboarding after drafts exist. Expects ancestor {@link OnboardingFlowProvider}
@@ -53,9 +43,12 @@ export function CustomerOnboardingFlow() {
   const flowSurfaceStep = parsedStep ?? resumeStep;
   useOnboardingCompanyLookupPrototypeEffects(urlResumeRedirect ? null : flowSurfaceStep);
 
-  const onRegistrationStepChange = useCallback((next: OnboardingStep) => {
-    navigate(formalOnboardingStepPath(next));
-  }, [navigate]);
+  const onRegistrationStepChange = useCallback(
+    (next: OnboardingStep) => {
+      navigate(formalOnboardingStepPath(next));
+    },
+    [navigate],
+  );
 
   const { redirectToRegistrationComplete, viewProps } = useOnboardingFlow({
     navigate,
@@ -76,12 +69,22 @@ export function CustomerOnboardingFlow() {
 
   const hasDrafts = flowState.drafts.length > 0;
 
-  const cancelTarget = flowState.trajectServiceId
-    ? TRIAGE_PATH(flowState.trajectServiceId)
-    : WEGWIJZER_PATH;
+  useEffect(() => {
+    if (!hasDrafts) return;
+    if (flowState.step === "request") {
+      api.goToOnboardingStep("origin");
+    }
+  }, [hasDrafts, flowState.step, api]);
+
+  // Annuleren = volledige reset. Gebruiker zegt expliciet "ik weet het niet, ik begin opnieuw",
+  // dus traject + klantgegevens worden gewist en we sturen ze terug naar de Wegwijzer.
+  const handleCancel = useCallback(() => {
+    resetTrajectFlow(api);
+    navigate(WEGWIJZER_PATH);
+  }, [api, navigate]);
   const cancelAction = useMemo(
-    () => ({ label: "Annuleren", onClick: () => navigate(cancelTarget) }),
-    [navigate, cancelTarget],
+    () => ({ label: "Annuleren", onClick: handleCancel }),
+    [handleCancel],
   );
   const isFirstRegistrationStep = viewProps.step === "origin";
 
