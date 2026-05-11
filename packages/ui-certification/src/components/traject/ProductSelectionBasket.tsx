@@ -81,14 +81,15 @@ function resolveLevel(
 }
 
 function collectSelectedProducts(
-  ids: ReadonlySet<string>,
+  selectedIds: readonly string[],
   roots: readonly TreeNode[],
 ): SelectedProduct[] {
-  const out: SelectedProduct[] = [];
+  const want = new Set(selectedIds);
+  const found = new Map<string, SelectedProduct>();
   const walk = (input: readonly TreeNode[], trail: readonly string[]) => {
     for (const n of input) {
-      if (n.kind === "product" && ids.has(n.id)) {
-        out.push({
+      if (n.kind === "product" && want.has(n.id) && !found.has(n.id)) {
+        found.set(n.id, {
           id: n.id,
           label: n.label,
           categoryTrail: trail.join(" > "),
@@ -100,7 +101,9 @@ function collectSelectedProducts(
     }
   };
   walk(roots, []);
-  return out;
+  return selectedIds
+    .map((id) => found.get(id))
+    .filter((p): p is SelectedProduct => p != null);
 }
 
 function collectAllProducts(roots: readonly TreeNode[]): TreeNode[] {
@@ -251,8 +254,8 @@ export function ProductSelectionBasketProvider({
   }, [visibleSearchResults]);
 
   const selectedProducts = useMemo(
-    () => collectSelectedProducts(selectedSet, doc.clusters),
-    [selectedSet, doc],
+    () => collectSelectedProducts(selectedIds, doc.clusters),
+    [selectedIds, doc],
   );
 
   const updateSelection = (next: string[]) => {

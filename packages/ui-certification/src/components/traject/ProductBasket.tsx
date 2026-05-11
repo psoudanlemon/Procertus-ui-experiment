@@ -68,17 +68,18 @@ export function ProductBasket({
       {isEmpty ? (
         <EmptyBasket />
       ) : (
-        <>
-          <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-1">
-            {/*
-             * Onzichtbare empty-state als hoogtereferentie: de grid-cel
-             * sized op de grootste child, dus de gevulde lijst zit nooit
-             * korter dan wat we in de empty state zouden tonen.
-             */}
-            <div aria-hidden className="invisible col-start-1 row-start-1">
-              <EmptyBasket />
-            </div>
-            <ul className="col-start-1 row-start-1 flex flex-col self-start divide-y divide-border overflow-y-auto rounded-lg border border-border bg-card">
+        <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-1">
+          {/*
+           * Onzichtbare empty-state als hoogtereferentie: de grid-cel
+           * sized op de grootste child, dus de gevulde winkelmand is exact
+           * even hoog als de empty state. De zichtbare lijst + wis-knop
+           * leven in dezelfde cel, dus tellen niet bovenop die hoogte.
+           */}
+          <div aria-hidden className="invisible col-start-1 row-start-1">
+            <EmptyBasket />
+          </div>
+          <div className="col-start-1 row-start-1 flex flex-col gap-section">
+            <ul className="flex flex-col divide-y divide-border overflow-y-auto rounded-lg border border-border bg-card">
               <AnimatePresence initial={false} mode="popLayout">
                 {items.map((p) => (
                   <SelectedRow
@@ -91,17 +92,17 @@ export function ProductBasket({
                 ))}
               </AnimatePresence>
             </ul>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={onClear}
+              className="mt-auto w-full text-muted-foreground"
+            >
+              Wis alle producten
+            </Button>
           </div>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={onClear}
-            className="w-full text-muted-foreground"
-          >
-            Wis alle producten
-          </Button>
-        </>
+        </div>
       )}
     </aside>
   );
