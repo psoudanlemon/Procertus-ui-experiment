@@ -155,7 +155,7 @@ export function SelectedRow({
         asChild
         variant="outline"
         className={cn(
-          "cursor-pointer p-component text-left transition-colors",
+          "cursor-pointer bg-card p-component text-left transition-colors",
           "hover:bg-accent hover:text-accent-foreground",
           "focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none",
         )}
@@ -170,7 +170,7 @@ export function SelectedRow({
               {label}
               {categoryTrail ? (
                 <span className="ms-2 text-xs font-normal text-muted-foreground">
-                  {`> ${categoryTrail.split(" > ").reverse().join(" > ")}`}
+                  {`› ${categoryTrail.split(" > ").reverse().join(" › ")}`}
                 </span>
               ) : null}
             </ItemTitle>
