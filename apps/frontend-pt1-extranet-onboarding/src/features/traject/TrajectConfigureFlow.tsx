@@ -16,7 +16,10 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { APP_FOOTER } from "../../layouts/footerConfig";
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
-import { persistTrajectHandoff } from "./traject-submission-context";
+import {
+  persistTrajectHandoff,
+  readOnboardingFlowSnapshot,
+} from "./traject-submission-context";
 
 const WEGWIJZER_PATH = "/welcome";
 const SIGNIN_PATH = "/welcome/login";
@@ -35,6 +38,15 @@ export function TrajectConfigureFlow() {
   const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
   const service = findWegwijzerService(serviceId);
+
+  // Wanneer de gebruiker via "Terug" terugkeert vanuit het bundle-assemble scherm, lezen we
+  // de eerder gepersisteerde drafts opnieuw in zodat de productselectie ge-prevuld is.
+  const initialSelectedIds = useMemo<readonly string[]>(() => {
+    const snapshot = readOnboardingFlowSnapshot();
+    if (!serviceId || snapshot.trajectServiceId !== serviceId) return [];
+    const ids = snapshot.drafts.flatMap((d) => (d.productId ? [d.productId] : []));
+    return Array.from(new Set(ids));
+  }, [serviceId]);
 
   // "Terug" houdt de reeds gemaakte productselectie en eventuele klantgegevens vast: we
   // navigeren enkel terug naar de wegwijzer zodat de gebruiker zonder informatieverlies
@@ -86,6 +98,7 @@ export function TrajectConfigureFlow() {
   return (
     <ProductSelectionBasketProvider
       doc={defaultProcertusCategorizationDoc}
+      initialSelectedIds={initialSelectedIds}
       onCancel={handleCancel}
       onContinue={handleContinue}
     >
