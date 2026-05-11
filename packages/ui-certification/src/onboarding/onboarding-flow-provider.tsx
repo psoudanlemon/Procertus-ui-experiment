@@ -137,7 +137,8 @@ export function OnboardingFlowProvider({
       if ((migratedStep as string) === "activation") migratedStep = "summary";
       if ((migratedStep as string) === "review") migratedStep = "summary";
       if ((migratedStep as string) === "intake") migratedStep = "customer";
-      if (!ONBOARDING_STEPS.includes(migratedStep)) migratedStep = "request";
+      if ((migratedStep as string) === "request") migratedStep = "origin";
+      if (!ONBOARDING_STEPS.includes(migratedStep)) migratedStep = "origin";
       if (migratedStep !== prev.step) {
         fixes.step = migratedStep;
       }

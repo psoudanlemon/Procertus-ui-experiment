@@ -154,9 +154,8 @@ export type CustomerContext = {
   certificationSecondaryPersonRegistryId: string;
 };
 
-/** Ordered wizard steps aligned with {@link OnboardingFlowView} and the registration stepper. */
+/** Ordered onboarding steps aligned with {@link OnboardingFlowView} and the registration stepper. */
 export const ONBOARDING_STEPS = [
-  "request",
   "origin",
   "customer",
   "company",
@@ -181,7 +180,6 @@ export type OnboardingFlowState = {
   /** Draft ids included in the submission package on the summary step (all drafts stay listed; toggling updates the left overview only). */
   summaryIncludedDraftIds?: string[];
   context: CustomerContext;
-  wizardInitialStep: "intent" | "drafts";
   /** Prototype: which canned VAT scenario is selected (production: free-text VAT only). */
   prototypeVatPresetId: string;
   /** Short hints under company fields after automatic prefill; cleared when the user edits that field. */

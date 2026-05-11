@@ -13,8 +13,6 @@ import {
   writeOnboardingRegistrationCompletePayload,
 } from "./lib/onboardingRegistrationCompleteSession";
 import {
-  CERTIFICATION_PHASE_DESCRIPTION,
-  CERTIFICATION_PHASE_TITLE,
   COUNTRY_SELECT_NONE,
   ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION,
   REGISTRATION_PHASE_DESCRIPTION,
@@ -27,16 +25,13 @@ import {
   isOnboardingInvoicingStepValid,
   isOnboardingOptionalContactsStepValid,
   isRegistrantCaptureValidForContext,
-  onboardingReviewRequesterFromContext,
   stepIndex,
 } from "./onboarding-flow-helpers";
 import { buildOnboardingStepperSteps } from "./onboarding-stepper-model";
 import { ONBOARDING_STEPS } from "./onboarding-types";
 import { registrationCountryOptionsForRequestOrigin, vatPrototypePresetIdsForOrigin } from "./onboarding-request-origin";
 import type { StepLayoutStep } from "@procertus-ui/ui";
-import type { CertificationRequestDraft } from "../CertificationRequestContext";
 import { useMemo } from "react";
-import type { CertificationRequestWizardProps } from "../components/certification-request-wizard/CertificationRequestWizard";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
 import { useOnboardingFlowContext } from "./onboarding-flow-provider";
 import { isRegistrationIdentifierValidForOrigin } from "./lib/registration-identifier-for-origin";
@@ -45,10 +40,6 @@ export type UseOnboardingFlowOptions = {
   navigate: (to: string, options?: { replace?: boolean }) => void;
   welcomePath?: string;
   flowStorageKey?: string;
-  certificationRequestStorageKey?: string;
-  certificationSessionId?: string;
-  /** Merged after flow-derived wizard props (e.g. Storybook may set `backendKind: "memory"`). */
-  certificationWizardPropsOverrides?: Partial<CertificationRequestWizardProps>;
 };
 
 export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
@@ -58,9 +49,6 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   const {
     navigate,
     welcomePath = "/welcome",
-    certificationRequestStorageKey = ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY,
-    certificationSessionId = "pt1:onboarding:certification-request",
-    certificationWizardPropsOverrides,
     flowStorageKey: _flowStorageKey,
   } = options;
 
@@ -85,7 +73,6 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   const {
     drafts,
     step,
-    wizardInitialStep,
     requestOrigin,
     prototypeVatPresetId,
     companyFieldHints,
@@ -276,29 +263,11 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
                   }
                 : { label: "Doorgaan", onClick: () => {}, disabled: true };
 
-  const certificationWizardProps: CertificationRequestWizardProps = {
-    mode: "onboarding",
-    initialDrafts: drafts,
-    initialStep: wizardInitialStep,
-    backendKind: "localStorage",
-    storageKey: certificationRequestStorageKey,
-    sessionId: certificationSessionId,
-    reviewRequester: onboardingReviewRequesterFromContext(context),
-    onCancel: () => navigate(welcomePath),
-    onComplete: (nextDrafts: CertificationRequestDraft[]) => {
-      api.applyWizardDraftCompletion(nextDrafts);
-    },
-    ...certificationWizardPropsOverrides,
-  };
-
   const viewProps: OnboardingFlowViewProps = {
     step,
-    certificationPhaseTitle: CERTIFICATION_PHASE_TITLE,
-    certificationPhaseDescription: CERTIFICATION_PHASE_DESCRIPTION,
     registrationPhaseTitle: REGISTRATION_PHASE_TITLE,
     registrationPhaseDescription: REGISTRATION_PHASE_DESCRIPTION,
     onSignInClick: () => navigate(welcomePath),
-    certificationWizardProps,
     registrationSubmitOpen,
     onRegistrationSubmitOpenChange: (next) => {
       if (next) setRegistrationSubmitOpen(true);

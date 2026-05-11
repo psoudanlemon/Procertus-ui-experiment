@@ -1,11 +1,7 @@
 export { TrajectLayout } from "./TrajectLayout";
 export type { TrajectLayoutAction, TrajectLayoutProps } from "./TrajectLayout";
-export { CategoryPicker } from "./CategoryPicker";
-export type { CategoryPickerProps } from "./CategoryPicker";
 export { ProductCategoryTrail } from "./ProductCategoryTrail";
 export type { ProductCategoryTrailProps } from "./ProductCategoryTrail";
-export { ProductRow } from "./ProductRow";
-export type { ProductRowProps } from "./ProductRow";
 export { ProductBasket } from "./ProductBasket";
 export type { ProductBasketItem, ProductBasketProps } from "./ProductBasket";
 export {
@@ -27,8 +23,6 @@ export {
   BUNDLE_CERT_ORDER,
   BundleMatrixHeader,
   BundleMatrixProvider,
-  BundleProductCard,
-  BundleProductMobileCard,
   bundleMatrixGridCols,
 } from "./BundleProductCard";
 export type {
@@ -36,19 +30,20 @@ export type {
   BundleCertMeta,
   BundleMatrixProviderProps,
   BundleProduct,
-  BundleProductCardProps,
-  BundleProductMobileCardProps,
 } from "./BundleProductCard";
 export { TrajectStoryFooter } from "./TrajectStoryFooter";
 export type { TrajectStoryFooterProps } from "./TrajectStoryFooter";
-export { RequestValidationCard } from "./RequestValidationCard";
+export { ProductSummaryCard } from "./ProductSummaryCard";
 export type {
-  RequestValidationCardProps,
-  RequestValidationDocument,
-} from "./RequestValidationCard";
+  ProductSummaryCardProps,
+  ProductSummaryCertification,
+  ProductSummaryDocument,
+} from "./ProductSummaryCard";
 export {
   buildGeneralProcessDocuments,
   buildProductDocumentsForDraft,
+  groupDraftsByProduct,
 } from "./build-validation-documents";
+export type { ProductSummaryGroup } from "./build-validation-documents";
 export { useForceScrollConfirmation } from "./use-force-scroll-confirmation";
 export type { UseForceScrollConfirmationResult } from "./use-force-scroll-confirmation";

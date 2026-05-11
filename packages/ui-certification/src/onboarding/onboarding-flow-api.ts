@@ -144,7 +144,6 @@ export function createOnboardingFlowApi(
         return {
           ...prev,
           drafts: nextDrafts,
-          wizardInitialStep: "drafts",
           step: "origin",
           summaryIncludedDraftIds: nextSummaryIncluded,
         };
@@ -169,13 +168,6 @@ export function createOnboardingFlowApi(
         const targetIndex = stepIndex(nextStep);
         if (steps[targetIndex]?.available === false) {
           return prev;
-        }
-        if (nextStep === "request") {
-          return {
-            ...prev,
-            step: nextStep,
-            wizardInitialStep: prev.drafts.length > 0 ? "drafts" : "intent",
-          };
         }
         return {
           ...prev,

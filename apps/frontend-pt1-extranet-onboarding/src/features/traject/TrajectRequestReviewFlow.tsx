@@ -1,8 +1,9 @@
 import {
-  RequestValidationCard,
+  ProductSummaryCard,
   TrajectLayout,
   TrajectStoryFooter,
   buildProductDocumentsForDraft,
+  groupDraftsByProduct,
   useForceScrollConfirmation,
   type CertificationRequestDraft,
 } from "@procertus-ui/ui-certification";
@@ -26,6 +27,7 @@ export function TrajectRequestReviewFlow() {
 
   const snapshot = useMemo(() => readOnboardingFlowSnapshot(), []);
   const inquiries: CertificationRequestDraft[] = snapshot.drafts;
+  const productGroups = useMemo(() => groupDraftsByProduct(inquiries), [inquiries]);
 
   const { sentinelRef, hasReachedBottom } = useForceScrollConfirmation();
 
@@ -78,7 +80,7 @@ export function TrajectRequestReviewFlow() {
     >
       <div className="flex flex-col gap-region">
         <section
-          className="flex max-w-5xl flex-col gap-component"
+          className="flex flex-col gap-component"
           aria-labelledby="aanvraag-pakket-heading"
         >
           <div className="flex flex-col gap-micro">
@@ -91,15 +93,26 @@ export function TrajectRequestReviewFlow() {
             <p className="m-0 text-sm text-muted-foreground">
               {inquiries.length}{" "}
               {inquiries.length === 1 ? "certificaat" : "certificaten"} aangevraagd over{" "}
-              {new Set(inquiries.map((d) => d.productId ?? d.productLabel)).size} producten.
+              {productGroups.length}{" "}
+              {productGroups.length === 1 ? "product" : "producten"}.
             </p>
           </div>
           <div className="flex flex-col gap-component">
-            {inquiries.map((draft) => (
-              <RequestValidationCard
-                key={draft.id}
-                draft={draft}
-                documents={buildProductDocumentsForDraft(draft)}
+            {productGroups.map((group) => (
+              <ProductSummaryCard
+                key={group.productId}
+                product={{
+                  id: group.productId,
+                  label: group.productLabel,
+                  path: group.productPath,
+                  code: group.productTypeStreamLabel,
+                }}
+                certifications={group.drafts.map((draft) => ({
+                  id: draft.id,
+                  entryId: draft.entryId,
+                  value: draft.entryId === "ce" ? draft.value : undefined,
+                  documents: buildProductDocumentsForDraft(draft),
+                }))}
               />
             ))}
           </div>

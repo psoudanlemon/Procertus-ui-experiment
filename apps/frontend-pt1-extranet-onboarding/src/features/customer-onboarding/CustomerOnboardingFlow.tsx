@@ -8,7 +8,7 @@ import {
   useOnboardingFlowApi,
   useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
 import { resetTrajectFlow } from "../traject/traject-submission-context";
@@ -45,13 +45,6 @@ function CustomerOnboardingFlowBody() {
   // in the TrajectConfigureFlow. Without drafts there is nothing to onboard against.
   const hasDrafts = flowState.drafts.length > 0;
 
-  useEffect(() => {
-    if (!hasDrafts) return;
-    if (flowState.step === "request") {
-      api.goToOnboardingStep("origin");
-    }
-  }, [hasDrafts, flowState.step, api]);
-
   // Annuleren = volledige reset. Gebruiker zegt expliciet "ik weet het niet, ik begin opnieuw",
   // dus traject + klantgegevens worden gewist en we sturen ze terug naar de Wegwijzer.
   const handleCancel = useCallback(() => {
@@ -72,14 +65,9 @@ function CustomerOnboardingFlowBody() {
     return <Navigate to={WEGWIJZER_PATH} replace />;
   }
 
-  if (flowState.step === "request") {
-    return null;
-  }
-
   return (
     <OnboardingFlowView
       {...viewProps}
-      hideRequestStep
       backAction={isFirstStep ? undefined : viewProps.backAction}
       cancelAction={cancelAction}
     />

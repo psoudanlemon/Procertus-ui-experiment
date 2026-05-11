@@ -69,7 +69,7 @@ export type BuildOnboardingStepperStepsInput = {
 export function buildOnboardingStepperSteps(
   input: BuildOnboardingStepperStepsInput,
 ): StepLayoutStep[] {
-  const { step, drafts, requestOrigin, context, certificationInquiryDraftIds } = input;
+  const { drafts, requestOrigin, context, certificationInquiryDraftIds } = input;
   const hasDrafts = drafts.length > 0;
   const {
     registrationStepOk,
@@ -81,17 +81,6 @@ export function buildOnboardingStepperSteps(
   const extrasAvailabilityDepsOk = registrationStepOk && companyCoreOk && invoicingStepOk;
 
   return [
-    {
-      id: "request",
-      title: "Aanvraag",
-      description:
-        step !== "request" && drafts.length > 0
-          ? `${drafts.length} concept${drafts.length === 1 ? "" : "en"} vastgelegd`
-          : drafts.length > 0
-            ? `${drafts.length} concepten`
-            : "Start zonder account",
-      available: true,
-    },
     {
       id: "origin",
       title: "Land of regio",

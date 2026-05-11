@@ -1,6 +1,6 @@
 import type { DownloadableItemData } from "@procertus-ui/ui";
 
-import type { CertificationRequestDraft } from "../../certification-request/types";
+import type { CertificationRequestDraft } from "./types";
 
 function slugForDocumentHref(raw: string): string {
   const s = raw

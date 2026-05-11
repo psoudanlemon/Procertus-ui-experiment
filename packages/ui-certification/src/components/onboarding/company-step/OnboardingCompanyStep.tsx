@@ -42,7 +42,7 @@ import {
 import {
   DraftCardDescription,
   sortDraftsByIntentAndProduct,
-} from "../../certification-request-wizard/draft-selection-presentation";
+} from "../../../certification-request/draft-selection-presentation";
 import { PrototypeCard } from "@procertus-ui/ui-pt1-prototype";
 import {
   findVatPrototypePreset,
@@ -110,12 +110,9 @@ export type OnboardingCompanyStepProps = { model: OnboardingRegistrationLayoutMo
 export function OnboardingCompanyStep({ model }: OnboardingCompanyStepProps) {
   const {
     step,
-        certificationPhaseTitle,
-        certificationPhaseDescription,
         registrationPhaseTitle,
         registrationPhaseDescription,
         onSignInClick,
-        certificationWizardProps,
         registrationSubmitOpen,
         onRegistrationSubmitOpenChange,
         registrationProgress,

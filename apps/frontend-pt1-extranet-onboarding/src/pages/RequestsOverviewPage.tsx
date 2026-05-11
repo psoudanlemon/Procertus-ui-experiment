@@ -1,6 +1,5 @@
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, CardList, H1, PageHeader } from "@procertus-ui/ui";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardList, H1, PageHeader } from "@procertus-ui/ui";
 import { CertificationRequestCard } from "@procertus-ui/ui-certification";
-import { useNavigate } from "react-router-dom";
 
 import {
   requestStatus,
@@ -17,21 +16,15 @@ const formatDate = (value?: string) =>
     : undefined;
 
 export function RequestsOverviewPage() {
-  const navigate = useNavigate();
   const { openPanel } = useAppPanels();
   const [requests] = useAuthenticatedRequests();
 
   return (
-    <div className="flex w-full max-w-[1400px] flex-col gap-region px-4 py-6 text-left md:px-6 md:py-8">
+    <div className="flex w-full max-w-7xl flex-col gap-region px-4 py-6 text-left md:px-6 md:py-8">
       <PageHeader
         kicker="Aangemelde omgeving"
         title={<H1>Aanvragen</H1>}
-        description="Concepten en ingestuurde aanvragen blijven zichtbaar in dit overzicht. Start een nieuwe aanvraag of open een bestaande request voor detail en bewerking."
-        actions={
-          <Button type="button" onClick={() => navigate("/requests/create")}>
-            Nieuwe aanvraag
-          </Button>
-        }
+        description="Concepten en ingestuurde aanvragen blijven zichtbaar in dit overzicht. Open een bestaande request voor detail."
       />
 
       <section className="min-w-0 space-y-4">
@@ -66,14 +59,10 @@ export function RequestsOverviewPage() {
             <CardHeader>
               <CardTitle>Nog geen aanvragen</CardTitle>
               <CardDescription>
-                Start een nieuwe aanvraag om productcertificaties of attesten toe te voegen.
+                Aanvragen die je via de wegwijzer opstart, verschijnen hier.
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <Button type="button" onClick={() => navigate("/requests/create")}>
-                Nieuwe aanvraag
-              </Button>
-            </CardContent>
+            <CardContent />
           </Card>
         )}
       </section>

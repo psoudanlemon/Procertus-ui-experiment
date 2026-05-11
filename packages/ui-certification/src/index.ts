@@ -1,20 +1,4 @@
 export { defaultProcertusCategorizationDoc } from "./categorization-data";
-export {
-  CertificationIntentPicker,
-  CERTIFICATION_INTENT_IDS,
-  defaultCertificationIntentOptionsEn,
-} from "./components/certification-intent-picker";
-export type {
-  CertificationIntentId,
-  CertificationIntentOption,
-  CertificationIntentPickerProps,
-} from "./components/certification-intent-picker";
-export { CertificationBadgeRow } from "./components/certification-badge-row";
-export type {
-  CertificationBadgeItem,
-  CertificationBadgePresentation,
-  CertificationBadgeRowProps,
-} from "./components/certification-badge-row";
 export { CertificationRequestCard } from "./components/certification-request-card";
 export type {
   CertificationRequestCardInquiry,
@@ -33,34 +17,11 @@ export type {
 } from "./components/certification-request-lifecycle-timeline";
 export { DraftRequestList } from "./components/draft-request-list";
 export type { DraftRequestItem, DraftRequestListProps } from "./components/draft-request-list";
-export { ProductMultiSelect } from "./components/product-multi-select";
-export type {
-  ProductMultiSelectOption,
-  ProductMultiSelectProps,
-} from "./components/product-multi-select";
-export { ProductTreePanel } from "./components/product-tree-panel";
-export type {
-  ProductTreeGroupNode,
-  ProductTreeNode,
-  ProductTreePanelProps,
-  ProductTreeProductNode,
-} from "./components/product-tree-panel";
 export {
-  CertificationRequestWizard,
-  CertificationRequestWizardView,
-  CompactWizardTimeline,
   DraftCardDescription,
   sortDraftsByIntentAndProduct,
-  buildRulesetDocumentsForInquiries,
-  useCertificationRequestWizardView,
-} from "./components/certification-request-wizard";
-export type {
-  CertificationRequestWizardProps,
-  CertificationWizardDraft,
-  CertificationRequestWizardViewProps,
-  UseCertificationRequestWizardViewOptions,
-  WizardStepperModel,
-} from "./components/certification-request-wizard";
+} from "./certification-request/draft-selection-presentation";
+export { buildRulesetDocumentsForInquiries } from "./certification-request/build-ruleset-documents-for-inquiries";
 export { RequestPackageReview } from "./components/request-package-review";
 export type {
   RequestPackageRequesterContext,
@@ -85,11 +46,12 @@ export {
   ProductSelectionBasketBody,
   ProductSelectionBasketMobileSummaryBar,
   ProductSelectionBasketProvider,
-  RequestValidationCard,
+  ProductSummaryCard,
   TrajectLayout,
   TrajectStoryFooter,
   buildGeneralProcessDocuments,
   buildProductDocumentsForDraft,
+  groupDraftsByProduct,
   useForceScrollConfirmation,
   useProductSelectionBasket,
 } from "./components/traject";
@@ -102,8 +64,10 @@ export type {
   ProductBasketProps,
   ProductCategoryTrailProps,
   ProductSelectionBasketProviderProps,
-  RequestValidationCardProps,
-  RequestValidationDocument,
+  ProductSummaryCardProps,
+  ProductSummaryCertification,
+  ProductSummaryDocument,
+  ProductSummaryGroup,
   TrajectLayoutAction,
   TrajectLayoutProps,
   TrajectStoryFooterProps,
@@ -195,7 +159,6 @@ export {
   OnboardingExtrasStep,
   OnboardingInvoicingStep,
   OnboardingOriginStep,
-  OnboardingRequestStep,
   OnboardingShell,
   OnboardingSummaryStep,
 } from "./components/onboarding";
@@ -207,8 +170,6 @@ export type {
   OnboardingInvoicingStepProps,
   OnboardingOriginStepProps,
   OnboardingOriginStepCopy,
-  OnboardingRequestStepProps,
-  OnboardingRequestStepCopy,
   OnboardingSummaryStepProps,
   OnboardingShellProps,
 } from "./components/onboarding";

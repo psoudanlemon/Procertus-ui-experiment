@@ -1,9 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { type ComponentType, useLayoutEffect } from "react";
+import { type ComponentType, useLayoutEffect, useMemo } from "react";
 
 import type { CertificationRequestDraft } from "../../certification-request/types";
-import { buildProductDocumentsForDraft } from "./build-validation-documents";
-import { RequestValidationCard } from "./RequestValidationCard";
+import {
+  buildProductDocumentsForDraft,
+  groupDraftsByProduct,
+} from "./build-validation-documents";
+import { ProductSummaryCard } from "./ProductSummaryCard";
 import { TrajectLayout } from "./TrajectLayout";
 import { TrajectStoryFooter } from "./TrajectStoryFooter";
 import { useForceScrollConfirmation } from "./use-force-scroll-confirmation";
@@ -45,7 +48,7 @@ const meta = {
       children: null,
       description: {
         component:
-          "Definitief validatiescherm voor het aanvraagpakket. Eén kaart per product/certificaat-combinatie (vijf in deze story: drie producten met 2 / 2 / 1 certificaten) met productspecifieke documentatie in een DownloadableItemGrid. De knop 'Bevestig en verzend' is geforceerd disabled tot de gebruiker tot onderaan heeft gescrold.",
+          "Definitief validatiescherm voor het aanvraagpakket. Eén kaart per uniek product (drie in deze story: 2, 2 en 1 certificatietrajecten) met de productkop bovenaan, daaronder de gezamenlijke documenten en per traject de bijbehorende badge en cert-specifieke documenten. De knop 'Bevestig en verzend' is geforceerd disabled tot de gebruiker tot onderaan heeft gescrold.",
       },
     },
   },
@@ -149,7 +152,7 @@ function RequestReviewStory() {
     >
       <div className="flex flex-col gap-region">
         <section
-          className="flex max-w-5xl flex-col gap-component"
+          className="flex flex-col gap-component"
           aria-labelledby="aanvraag-pakket-heading"
         >
           <div className="flex flex-col gap-micro">

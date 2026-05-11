@@ -1,6 +1,12 @@
 /** Standalone status page (no onboarding shell) after mock registratie-indiening. */
 export const ONBOARDING_REGISTRATION_COMPLETE_PATH = "/registratie-voltooid";
 
+/**
+ * Stable card height for onboarding step pages so they don't shrink to content height between
+ * steps. Resolves to `calc(100svh - 12rem)` via the `--min-height-stable-step` token.
+ */
+export const STABLE_STEP_MIN_HEIGHT = "min-h-stable-step";
+
 export const COUNTRY_SELECT_NONE = "__registration_country_none__";
 
 /**
@@ -9,9 +15,6 @@ export const COUNTRY_SELECT_NONE = "__registration_country_none__";
  */
 export const ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION = true;
 
-export const CERTIFICATION_PHASE_TITLE = "Start je certificatieaanvraag";
-export const CERTIFICATION_PHASE_DESCRIPTION =
-  "Kies eerst wat je wilt aanvragen. We vragen pas organisatie- en accountgegevens wanneer je een conceptaanvraag hebt samengesteld.";
 export const REGISTRATION_PHASE_TITLE = "Registratie";
 export const REGISTRATION_PHASE_DESCRIPTION =
   "Na een korte keuze voor land of regio vullen we de volgende stappen daarop aan: uw contactpersoon, ondernemingsnummer en bedrijfsadres.";

@@ -1,7 +1,7 @@
 import { personSubformEmailStructuralIssue } from "@procertus-ui/domain-certification";
 import { useId, useMemo } from "react";
 
-import { sortDraftsByIntentAndProduct } from "../components/certification-request-wizard/draft-selection-presentation";
+import { sortDraftsByIntentAndProduct } from "../certification-request/draft-selection-presentation";
 import { COUNTRY_SELECT_NONE } from "./onboarding-constants";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
 import {

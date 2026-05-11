@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 
-import { CertificationBadgeRow } from "../certification-badge-row/CertificationBadgeRow";
 import { DraftRequestList, type DraftRequestItem } from "./DraftRequestList";
 
 const meta = {
@@ -20,23 +19,9 @@ const meta = {
 
 export default meta;
 
-const withBadges: DraftRequestItem = {
-  id: "1",
-  title: "Cement board — HPL stream",
-  subtitle: "From drilldown: cluster → type",
-  details: (
-    <CertificationBadgeRow
-      items={[
-        { id: "ce", shortLabel: "CE", presentation: "chip", text: "2+" },
-        { id: "benor", shortLabel: "BENOR", presentation: "not-offered", text: "—" },
-      ]}
-    />
-  ),
-};
-
 function ListStory() {
   const [drafts, setDrafts] = useState<DraftRequestItem[]>([
-    withBadges,
+    { id: "1", title: "Cement board, HPL stream", subtitle: "From drilldown: cluster → type" },
     { id: "2", title: "Second draft (no badges)", subtitle: "Fixture" },
   ]);
   const [last, setLast] = useState("");

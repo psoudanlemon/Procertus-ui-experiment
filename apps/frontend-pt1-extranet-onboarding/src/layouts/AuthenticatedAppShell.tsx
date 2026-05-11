@@ -42,7 +42,6 @@ export function AuthenticatedAppShell() {
   const setActiveOrganization = useMockPrototypeSetActiveOrganization();
   const logout = useMockPrototypeLogout();
   const pathname = location.pathname;
-  const flushMain = pathname === "/requests/create" || pathname.endsWith("/edit");
 
   const sidebar: AppSidebarProps = useMemo(() => {
     const workspaceId = session?.activeOrganization.id ?? "prototype";
@@ -159,7 +158,6 @@ export function AuthenticatedAppShell() {
             sidebar={sidebar}
             header={header}
             footer={APP_FOOTER}
-            mainClassName={flushMain ? "p-0!" : undefined}
           >
             <CloseMobileSidebarOnRouteChange />
             <Outlet />

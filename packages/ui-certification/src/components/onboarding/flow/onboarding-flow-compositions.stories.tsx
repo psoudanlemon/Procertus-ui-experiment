@@ -6,6 +6,7 @@ import { StepLayout, StepLayoutStepper } from "@procertus-ui/ui";
 import {
   REGISTRATION_PHASE_DESCRIPTION,
   REGISTRATION_PHASE_TITLE,
+  STABLE_STEP_MIN_HEIGHT,
 } from "../../../onboarding/onboarding-constants";
 import { mergeRegistrationChromeCopy } from "../../../onboarding/onboarding-registration-chrome-copy";
 import { stepIndex } from "../../../onboarding/onboarding-flow-helpers";
@@ -20,7 +21,6 @@ import {
 import { ONBOARDING_STEPS } from "../../../onboarding/onboarding-types";
 import type { OnboardingStep } from "../../../onboarding/onboarding-types";
 import { useOnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
-import { STABLE_STEP_MIN_HEIGHT } from "../../certification-request-wizard/use-certification-request-wizard-view";
 
 import { OnboardingCompanyStep } from "../company-step/OnboardingCompanyStep";
 import { OnboardingCustomerStep } from "../customer-step/OnboardingCustomerStep";
@@ -44,9 +44,9 @@ const PublicLayoutDecorator = (Story: ComponentType) => {
 function RegistrationChromeComposer({
   initialStep,
 }: {
-  initialStep: Exclude<OnboardingStep, "request">;
+  initialStep: OnboardingStep;
 }) {
-  const [step, setStep] = useState<Exclude<OnboardingStep, "request">>(initialStep);
+  const [step, setStep] = useState<OnboardingStep>(initialStep);
   const [requestOrigin, setRequestOrigin] =
     useState<(typeof storyRequestOrigin) | "">(storyRequestOrigin);
 
@@ -65,8 +65,7 @@ function RegistrationChromeComposer({
         }),
         activeStep: stepIndex(step),
         goToOnboardingStep: (next: OnboardingStep) => {
-          if (next === "request") return;
-          setStep(next as Exclude<OnboardingStep, "request">);
+          setStep(next);
         },
         setRequestOrigin: (o: typeof storyRequestOrigin) => setRequestOrigin(o),
         primaryAction: { label: "Verder (demo)", onClick: noop, disabled: false },
@@ -95,7 +94,7 @@ function RegistrationChromeComposer({
             activeStep={viewProps.activeStep}
             onStepChange={(index) => {
               const nextStep = ONBOARDING_STEPS[index];
-              if (nextStep && nextStep !== "request") {
+              if (nextStep) {
                 setStep(nextStep);
               }
             }}
@@ -124,7 +123,7 @@ function StepBodies({
   requestOrigin,
   setRequestOrigin,
 }: {
-  step: Exclude<OnboardingStep, "request">;
+  step: OnboardingStep;
   model: ReturnType<typeof useOnboardingRegistrationLayoutModel>;
   requestOrigin: (typeof storyRequestOrigin) | "";
   setRequestOrigin: (o: typeof storyRequestOrigin) => void;

@@ -3,16 +3,14 @@ import { OnboardingCustomerStep } from "../components/onboarding/customer-step/O
 import { OnboardingExtrasStep } from "../components/onboarding/extras-step/OnboardingExtrasStep";
 import { OnboardingInvoicingStep } from "../components/onboarding/invoicing-step/OnboardingInvoicingStep";
 import { OnboardingOriginStep } from "../components/onboarding/origin-step/OnboardingOriginStep";
-import { OnboardingRequestStep } from "../components/onboarding/request-step/OnboardingRequestStep";
 import { OnboardingShell } from "../components/onboarding/shell/OnboardingShell";
 import { OnboardingSummaryStep } from "../components/onboarding/summary-step/OnboardingSummaryStep";
 import { RegistrationProcessingDialog } from "../components/registration-processing-dialog";
-import { STABLE_STEP_MIN_HEIGHT } from "../components/certification-request-wizard/use-certification-request-wizard-view";
+import { STABLE_STEP_MIN_HEIGHT } from "./onboarding-constants";
 import { StepLayout, StepLayoutStepper } from "@procertus-ui/ui";
 
 import { mergeRegistrationChromeCopy } from "./onboarding-registration-chrome-copy";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
-import type { OnboardingStep } from "./onboarding-types";
 import { ONBOARDING_STEPS } from "./onboarding-types";
 import { useOnboardingRegistrationLayoutModel } from "./use-onboarding-registration-layout-model";
 
@@ -21,12 +19,9 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
 
   const {
     step,
-    certificationPhaseTitle,
-    certificationPhaseDescription,
     registrationPhaseTitle,
     registrationPhaseDescription,
     onSignInClick,
-    certificationWizardProps,
     registrationSubmitOpen,
     onRegistrationSubmitOpenChange,
     registrationProgress,
@@ -40,28 +35,11 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
     cancelAction,
     requestOrigin,
     setRequestOrigin,
-    hideRequestStep,
   } = props;
 
-  const stepperOffset = hideRequestStep ? 1 : 0;
-  const stepperSteps = hideRequestStep ? steps.slice(stepperOffset) : steps;
-  const stepperActiveStep = Math.max(0, activeStep - stepperOffset);
-
-  if (step === "request") {
-    return (
-      <OnboardingRequestStep
-        pageTitle={certificationPhaseTitle}
-        pageDescription={certificationPhaseDescription}
-        onSignInClick={onSignInClick}
-        certificationWizardProps={certificationWizardProps}
-      />
-    );
-  }
-
-  const chromeStep = step as Exclude<OnboardingStep, "request">;
   const registrationChrome = mergeRegistrationChromeCopy(
-    chromeStep,
-    props.registrationChromeOverrides?.[chromeStep],
+    step,
+    props.registrationChromeOverrides?.[step],
   );
 
   return (
@@ -77,10 +55,10 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
           variant="onboarding"
           stepper={
             <StepLayoutStepper
-              steps={stepperSteps}
-              activeStep={stepperActiveStep}
+              steps={steps}
+              activeStep={activeStep}
               onStepChange={(index) => {
-                const nextStep = ONBOARDING_STEPS[index + stepperOffset];
+                const nextStep = ONBOARDING_STEPS[index];
                 if (nextStep) {
                   goToOnboardingStep(nextStep);
                 }

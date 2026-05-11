@@ -3,9 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthenticatedAppShell } from "./layouts/AuthenticatedAppShell";
 import { PublicAppShell } from "./layouts/PublicAppShell";
 import { RequestsOverviewPage } from "./pages/RequestsOverviewPage";
-import { RequestCreationPage } from "./pages/RequestCreationPage";
 import { RequestDetailPage } from "./pages/RequestDetailPage";
-import { RequestEditPage } from "./pages/RequestEditPage";
 import { CategorizationDemoPage } from "./pages/CategorizationDemoPage";
 import { DesignSystemPage } from "./pages/DesignSystemPage";
 import { CustomerOnboardingFlow } from "./features/customer-onboarding/CustomerOnboardingFlow";
@@ -89,9 +87,7 @@ export default function App() {
           <Route path="/organization-profile" element={<OrganizationProfilePage />} />
           <Route path="/profile-change-requests" element={<ProfileChangeRequestsPage />} />
           <Route path="/requests" element={<RequestsOverviewPage />} />
-          <Route path="/requests/create" element={<RequestCreationPage />} />
           <Route path="/requests/:requestId" element={<RequestDetailPage />} />
-          <Route path="/requests/:requestId/edit" element={<RequestEditPage />} />
           <Route
             path="/certificates-attestations"
             element={
