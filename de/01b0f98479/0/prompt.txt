@@ -113,3 +113,7 @@ When the login button in the app bar is clicked, always navigate to the /login r
 When the login button in the app bar is clicked, always navigate to the /login route.  even if we have an active request with enquiries. 
 
  on all other pages where we are still selecting possible context for the inquiry, while we already have an active inquiry with selected items, please add an alert on the page to show that we have an active request with inquiries and we can just continue this request.
+
+---
+
+Please commit all changes. Use the git commit skill.
