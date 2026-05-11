@@ -48,3 +48,11 @@ It is our goal to capture all the needed context inside the onboarding provider.
  when the user requests or selects a certain service ID and then selects multiple products and certifications, we need to store this information for later formal or informal requests. 
 
 That way, when the user is later on a different route and is doing a formal request, the system will already have the correct context.  it's this context that we also want to display in the title.
+
+---
+
+Commit all changes. Use the "Commit" skill.
+
+---
+
+Commit all changes. Use the "Commit" skill.
