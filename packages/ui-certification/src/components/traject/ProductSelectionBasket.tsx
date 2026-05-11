@@ -494,7 +494,7 @@ export function ProductSelectionBasketMobileSummaryBar({
               >
                 Wis selectie
               </Button>
-              <ul className="flex max-h-sticky-rail flex-col divide-y divide-border overflow-y-auto rounded-lg border border-border bg-card">
+              <ul className="flex max-h-sticky-rail flex-col gap-component overflow-y-auto">
                 <AnimatePresence initial={false} mode="popLayout">
                   {selectedProducts.map((p) => (
                     <SelectedRow
