@@ -40,13 +40,14 @@ export function TrajectBundleAssembleFlow() {
     const extras = BUNDLE_CERT_ORDER.filter((c) => c !== serviceId);
     const seen = new Set<string>();
     return snapshot.drafts.flatMap((draft) => {
-      if (seen.has(draft.productId)) return [];
-      seen.add(draft.productId);
+      const productId = draft.productId;
+      if (!productId || seen.has(productId)) return [];
+      seen.add(productId);
       return [
         {
-          id: draft.productId,
-          label: draft.productLabel,
-          categoryTrail: draft.productPath || draft.productTypeStreamLabel,
+          id: productId,
+          label: draft.productLabel ?? productId,
+          categoryTrail: draft.productPath ?? draft.productTypeStreamLabel ?? "",
           extraCerts: extras,
         } satisfies BundleProduct,
       ];
