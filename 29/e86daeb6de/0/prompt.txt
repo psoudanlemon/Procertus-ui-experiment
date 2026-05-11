@@ -187,3 +187,7 @@ When this option is enabled, we render the legal entity manager. The legal entit
 ---
 
 Use the same select card on the registration step for the required selection if the current user is also the legal representative.
+
+---
+
+please commit all changes. use git commit skill
