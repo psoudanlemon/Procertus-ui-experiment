@@ -5,13 +5,16 @@ import { Button } from "@procertus-ui/ui";
  * Houdt de visuele baseline gelijk tussen flow-stories.
  *
  * Contract voor consumenten:
- * - Latere stap: bedraad `onCancel` (ghost, links, springt naar de wegwijzer) én `onBack`
+ * - Latere stap: bedraad `onCancel` (ghost, springt naar de wegwijzer) én `onBack`
  *   (outline, gaat naar de vorige stap binnen de flow).
  * - Eerste stap: laat `onCancel` weg. De ghost-knop verdwijnt dan en `onBack` neemt de
  *   "terug naar het vorige scherm"-rol over (typisch terug naar de wegwijzer).
  *
- * Elke knop wordt verborgen wanneer zijn handler ontbreekt; layout-positionering blijft
- * behouden via de `justify-between`-rij van TrajectLayout en een lege left-edge placeholder.
+ * Layout:
+ * - Mobile: 2-koloms grid. Primary "Verder" bovenaan op volledige breedte, met daaronder
+ *   "Annuleren" (links) en "Terug" (rechts) naast elkaar. Op de eerste stap vult "Terug"
+ *   de hele tweede rij.
+ * - Desktop (md+): flex row. "Annuleren" links, "Terug" + "Verder" samen rechts.
  */
 export type TrajectStoryFooterProps = {
   onCancel?: () => void;
@@ -32,45 +35,42 @@ export function TrajectStoryFooter({
   continueLabel = "Bevestig selectie",
   continueDisabled = false,
 }: TrajectStoryFooterProps) {
+  const backSpanWhenSolo = onCancel == null ? "col-span-2 md:col-auto" : "";
   return (
-    <>
+    <div className="grid w-full grid-cols-2 items-center gap-component md:flex">
+      {onContinue ? (
+        <Button
+          type="button"
+          size="lg"
+          className="col-span-2 h-12 w-full px-6 md:order-3 md:col-auto md:h-9 md:w-auto md:px-4"
+          disabled={continueDisabled}
+          onClick={onContinue}
+        >
+          {continueLabel}
+        </Button>
+      ) : null}
       {onCancel ? (
         <Button
           type="button"
           variant="ghost"
           size="lg"
-          className="h-12 px-6 md:h-9 md:px-4"
+          className="h-12 w-full px-6 md:order-1 md:h-9 md:w-auto md:px-4"
           onClick={onCancel}
         >
           {cancelLabel}
         </Button>
-      ) : (
-        <span aria-hidden />
-      )}
-      <div className="flex items-center gap-component">
-        {onBack ? (
-          <Button
-            type="button"
-            variant="outline"
-            size="lg"
-            className="h-12 px-6 md:h-9 md:px-4"
-            onClick={onBack}
-          >
-            {backLabel}
-          </Button>
-        ) : null}
-        {onContinue ? (
-          <Button
-            type="button"
-            size="lg"
-            className="h-12 px-6 md:h-9 md:px-4"
-            disabled={continueDisabled}
-            onClick={onContinue}
-          >
-            {continueLabel}
-          </Button>
-        ) : null}
-      </div>
-    </>
+      ) : null}
+      {onBack ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="lg"
+          className={`h-12 w-full px-6 md:order-2 md:ml-auto md:h-9 md:w-auto md:px-4 ${backSpanWhenSolo}`}
+          onClick={onBack}
+        >
+          {backLabel}
+        </Button>
+      ) : null}
+    </div>
   );
 }
