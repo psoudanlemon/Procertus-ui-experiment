@@ -1,0 +1,71 @@
+Please refactor the entire anonymous onboarding flow for better maintainability and readability. PLease disect the entie component and flow first, before starting the refactor.
+
+Set up different presentational components for each step (use the scaffold command to set them up as separate scaffolded components).
+
+Keep the stepper chrome in the current component, but when switching to next and previous steps, always load different underlying presentation components to show that step.
+
+For each presentational component, define a data-structure to define all needed copy that can be propagated to the presentational component, for easy copy changes or translations. Make sure to setup the current copy as the defaults so the copy-object prop overrides are optional.
+
+Set up a context provider to maintain the entire form state. Expose all state mutations as separate hooks, providing an API to mutate and manage the underlying data model for all data captured within the form.
+
+Expose a clean API separate from the hooks, and later expose this API as hooks and subhooks.
+
+Make sure to separate the persistence of the data into a possible persistence backend so we can easily set up port/adaptor patterns for persisting this data differently.
+
+Set up a first implementation to persist the entire state using local storage.@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx make sure to set up the provider for the context and the persistence backend inside the application. @Procertus-ui-experiment/packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-flow-view.tsx
+
+---
+
+Please refactor the entire anonymous onboarding flow for better maintainability and readability. PLease disect the entie component and flow first, before starting the refactor.
+
+Set up different presentational components for each step (use the scaffold command to set them up as separate scaffolded components).
+
+Keep the stepper chrome in the current component, but when switching to next and previous steps, always load different underlying presentation components to show that step.
+
+For each presentational component, define a data-structure to define all needed copy that can be propagated to the presentational component, for easy copy changes or translations. Make sure to setup the current copy as the defaults so the copy-object prop overrides are optional.
+
+Set up a context provider to maintain the entire form state. Expose all state mutations as separate hooks, providing an API to mutate and manage the underlying data model for all data captured within the form.
+
+Expose a clean API separate from the hooks, and later expose this API as hooks and subhooks.
+
+Make sure to separate the persistence of the data into a possible persistence backend so we can easily set up port/adaptor patterns for persisting this data differently.
+
+Set up a first implementation to persist the entire state using local storage.@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx make sure to set up the provider for the context and the persistence backend inside the application. @Procertus-ui-experiment/packages/ui-certification/src/anonymous-onboarding/anonymous-onboarding-flow-view.tsx
+
+---
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+---
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:25 why do we have to provide this registration-complete path when we also expose a read-editor registration-complete afterwards? @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:34
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:25 why do we have to provide this registration-complete path when we also expose a read-editor registration-complete afterwards? @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:34
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:25 why do we have to provide this registrationCompletePath when we also expose a redirectToRegistrationComplete afterwards? @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:34
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:25 why do we have to provide this registrationCompletePath when we also expose a redirectToRegistrationComplete afterwards? @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/onboarding/AnonymousOnboardingFlow.tsx:34
+
+---
+
+Please rename all files related to "anonymous-onboarding" to "onboarding." Remove the "anonymous-" prefix from all files.
+
+Also rename component names and cells from "AnonymousOonboarding" to "Onboarding." Remove the "Anonymous" prefix from all components. Do this with a script or use terminal operations to do it efficiently.
+
+---
+
+Commit all changes in this session using the Git commit skill.
