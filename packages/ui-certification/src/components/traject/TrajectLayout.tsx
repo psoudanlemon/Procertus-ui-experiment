@@ -2,12 +2,13 @@ import {
   Button,
   PageHeader,
   PublicRegistryAppShell,
+  cn,
   type FooterProps,
 } from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 export type TrajectLayoutAction = {
   label: string;
@@ -61,6 +62,28 @@ export function TrajectLayout({
   bodyGap = "region",
 }: TrajectLayoutProps) {
   const gapClass = bodyGap === "section" ? "gap-section" : "gap-region";
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [topFaded, setTopFaded] = useState(false);
+  const [bottomFaded, setBottomFaded] = useState(false);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const update = () => {
+      setTopFaded(el.scrollTop > 0);
+      setBottomFaded(el.scrollTop + el.clientHeight < el.scrollHeight - 1);
+    };
+    update();
+    el.addEventListener("scroll", update, { passive: true });
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => {
+      el.removeEventListener("scroll", update);
+      ro.disconnect();
+    };
+  }, []);
+
   return (
     <PublicRegistryAppShell
       hideFab
@@ -77,25 +100,46 @@ export function TrajectLayout({
       }}
       footer={footer}
     >
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
-        <div className={`mx-auto flex w-full max-w-7xl flex-col p-boundary ${gapClass}`}>
-          {backAction ? (
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="-ml-2 self-start text-muted-foreground"
-              onClick={backAction.onClick}
-            >
-              <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
-              {backAction.label}
-            </Button>
-          ) : null}
-          {title != null ? (
-            <PageHeader kicker={kicker} title={title} description={description} />
-          ) : null}
-          {children}
+      <div className="relative flex min-h-0 flex-1 flex-col">
+        <div
+          ref={scrollRef}
+          className="flex min-h-0 flex-1 flex-col overflow-y-auto"
+        >
+          <div className={`mx-auto flex w-full max-w-7xl flex-col p-boundary ${gapClass}`}>
+            {backAction ? (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="-ml-2 self-start text-muted-foreground"
+                onClick={backAction.onClick}
+              >
+                <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
+                {backAction.label}
+              </Button>
+            ) : null}
+            {title != null ? (
+              <PageHeader kicker={kicker} title={title} description={description} />
+            ) : null}
+            {children}
+          </div>
         </div>
+        <div
+          aria-hidden
+          data-slot="traject-layout-scroll-fade-top"
+          className={cn(
+            "pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-background to-transparent transition-opacity duration-200",
+            topFaded ? "opacity-100" : "opacity-0",
+          )}
+        />
+        <div
+          aria-hidden
+          data-slot="traject-layout-scroll-fade-bottom"
+          className={cn(
+            "pointer-events-none absolute inset-x-0 bottom-0 z-10 h-8 bg-gradient-to-t from-background to-transparent transition-opacity duration-200",
+            bottomFaded ? "opacity-100" : "opacity-0",
+          )}
+        />
       </div>
       {actionBar ? (
         <div className="z-10 rounded-b-xl border-t border-border bg-muted">
