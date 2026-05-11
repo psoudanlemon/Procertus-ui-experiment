@@ -52,10 +52,10 @@ export const ProductSelection: StoryObj<typeof meta> = {
     onSignInClick: noop,
     footer: STORY_FOOTER,
     bodyGap: "section",
-    kicker: "BENOR",
-    title: "Selecteer het producttype",
+    kicker: "BENOR-certificatie",
+    title: "Selecteer de producten die je wil certificeren",
     description:
-      "Doorzoek de hele catalogus of blader stapsgewijs door categorieën. Je keuze blijft altijd zichtbaar in het winkelmandje rechts.",
+      "Doorzoek de hele catalogus of blader stapsgewijs door categorieën.",
     children: null,
   },
   render: (args) => (

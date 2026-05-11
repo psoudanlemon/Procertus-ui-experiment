@@ -18,6 +18,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
   Button,
+  Card,
+  CardContent,
+  H3,
+  H4,
   Input,
 } from "@procertus-ui/ui";
 import { AnimatePresence, motion } from "framer-motion";
@@ -284,7 +288,7 @@ export function ProductSelectionBasketProvider({
 export function ProductSelectionBasketBody() {
   const basket = useBasket();
   return (
-    <div className="grid grid-cols-1 gap-section lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)] lg:items-start">
+    <div className="grid grid-cols-1 gap-region lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)] lg:items-start">
       <DiscoveryArea {...basket} />
       <SelectionSidebar
         selected={basket.selectedProducts}
@@ -353,126 +357,133 @@ function DiscoveryArea({
         />
       </div>
 
-      <AnimatePresence mode="wait">
-        {isSearching ? (
-          <motion.div
-            key="search-mode"
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.18, ease: "easeOut" }}
-            className="flex flex-col gap-section"
-          >
-            <SearchHeader
-              query={searchQuery}
-              totalResults={searchResultsTotal}
-              visibleResults={groupedSearchResults.reduce((sum, g) => sum + g.hits.length, 0)}
-            />
-            {groupedSearchResults.length === 0 ? (
-              <SearchEmptyState
-                query={searchQuery}
-                totalResults={searchResultsTotal}
-              />
-            ) : (
-              <div className="flex flex-col gap-region">
-                {groupedSearchResults.map((group) => (
-                  <section key={group.cluster} className="flex flex-col gap-component">
-                    <SubHeader>Gevonden in {group.cluster}</SubHeader>
-                    <ProductsList>
-                      {group.hits.map((hit) => (
-                        <ProductRow
-                          key={hit.id}
-                          id={hit.id}
-                          label={hit.label}
-                          onAdd={() => addProduct(hit.id)}
-                        />
-                      ))}
-                    </ProductsList>
-                  </section>
-                ))}
-              </div>
-            )}
-          </motion.div>
-        ) : (
-          <motion.div
-            key={path.join("/") || "root"}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="flex flex-col gap-component"
-          >
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  {isRoot ? (
-                    <BreadcrumbPage>Catalogus</BreadcrumbPage>
-                  ) : (
-                    <BreadcrumbLink asChild>
-                      <button type="button" onClick={goRoot} className="cursor-pointer">
-                        Catalogus
-                      </button>
-                    </BreadcrumbLink>
+      <Card>
+        <CardContent>
+          <AnimatePresence mode="wait">
+            {isSearching ? (
+              <motion.div
+                key="search-mode"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+                className="flex flex-col gap-section"
+              >
+                <SearchHeader
+                  query={searchQuery}
+                  totalResults={searchResultsTotal}
+                  visibleResults={groupedSearchResults.reduce(
+                    (sum, g) => sum + g.hits.length,
+                    0,
                   )}
-                </BreadcrumbItem>
-                {trail.map((seg, idx) => {
-                  const isLast = idx === trail.length - 1;
-                  return (
-                    <Fragment key={seg.id}>
-                      <BreadcrumbSeparator />
-                      <BreadcrumbItem>
-                        {isLast ? (
-                          <BreadcrumbPage>{seg.label}</BreadcrumbPage>
-                        ) : (
-                          <BreadcrumbLink asChild>
-                            <button
-                              type="button"
-                              onClick={() => goUpTo(idx + 1)}
-                              className="cursor-pointer"
-                            >
-                              {seg.label}
-                            </button>
-                          </BreadcrumbLink>
-                        )}
-                      </BreadcrumbItem>
-                    </Fragment>
-                  );
-                })}
-              </BreadcrumbList>
-            </Breadcrumb>
-
-            <div className="flex flex-col gap-region">
-              {categories.length > 0 ? (
-                <CategoriesGrid
-                  items={categories}
-                  isAtClusterLevel={isRoot}
-                  onSelect={goTo}
                 />
-              ) : null}
-              {visibleProducts.length > 0 ? (
-                <section className="flex flex-col gap-component">
-                  <SubHeader>Producten</SubHeader>
-                  <ProductsList>
-                    {visibleProducts.map((p) => (
-                      <ProductRow
-                        key={p.id}
-                        id={p.id}
-                        label={p.label}
-                        onAdd={() => addProduct(p.id)}
-                      />
+                {groupedSearchResults.length === 0 ? (
+                  <SearchEmptyState
+                    query={searchQuery}
+                    totalResults={searchResultsTotal}
+                  />
+                ) : (
+                  <div className="flex flex-col gap-region">
+                    {groupedSearchResults.map((group) => (
+                      <section key={group.cluster} className="flex flex-col gap-component">
+                        <SubHeader>Gevonden in {group.cluster}</SubHeader>
+                        <ProductsList>
+                          {group.hits.map((hit) => (
+                            <ProductRow
+                              key={hit.id}
+                              id={hit.id}
+                              label={hit.label}
+                              onAdd={() => addProduct(hit.id)}
+                            />
+                          ))}
+                        </ProductsList>
+                      </section>
                     ))}
-                  </ProductsList>
-                </section>
-              ) : null}
-              {categories.length === 0 && visibleProducts.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  Alle producten op dit niveau staan al in je selectie.
-                </p>
-              ) : null}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  </div>
+                )}
+              </motion.div>
+            ) : (
+              <motion.div
+                key={path.join("/") || "root"}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="flex flex-col gap-component"
+              >
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem>
+                      {isRoot ? (
+                        <BreadcrumbPage>Catalogus</BreadcrumbPage>
+                      ) : (
+                        <BreadcrumbLink asChild>
+                          <button type="button" onClick={goRoot} className="cursor-pointer">
+                            Catalogus
+                          </button>
+                        </BreadcrumbLink>
+                      )}
+                    </BreadcrumbItem>
+                    {trail.map((seg, idx) => {
+                      const isLast = idx === trail.length - 1;
+                      return (
+                        <Fragment key={seg.id}>
+                          <BreadcrumbSeparator />
+                          <BreadcrumbItem>
+                            {isLast ? (
+                              <BreadcrumbPage>{seg.label}</BreadcrumbPage>
+                            ) : (
+                              <BreadcrumbLink asChild>
+                                <button
+                                  type="button"
+                                  onClick={() => goUpTo(idx + 1)}
+                                  className="cursor-pointer"
+                                >
+                                  {seg.label}
+                                </button>
+                              </BreadcrumbLink>
+                            )}
+                          </BreadcrumbItem>
+                        </Fragment>
+                      );
+                    })}
+                  </BreadcrumbList>
+                </Breadcrumb>
+
+                <div className="flex flex-col gap-section">
+                  {categories.length > 0 ? (
+                    <CategoriesGrid
+                      items={categories}
+                      isAtClusterLevel={isRoot}
+                      onSelect={goTo}
+                    />
+                  ) : null}
+                  {visibleProducts.length > 0 ? (
+                    <section className="flex flex-col gap-component">
+                      <SubHeader>Producten</SubHeader>
+                      <ProductsList>
+                        {visibleProducts.map((p) => (
+                          <ProductRow
+                            key={p.id}
+                            id={p.id}
+                            label={p.label}
+                            onAdd={() => addProduct(p.id)}
+                          />
+                        ))}
+                      </ProductsList>
+                    </section>
+                  ) : null}
+                  {categories.length === 0 && visibleProducts.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">
+                      Alle producten op dit niveau staan al in je selectie.
+                    </p>
+                  ) : null}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </CardContent>
+      </Card>
     </div>
   );
 }
@@ -521,11 +532,7 @@ function SearchEmptyState({
 }
 
 function SubHeader({ children }: { children: React.ReactNode }) {
-  return (
-    <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-      {children}
-    </h3>
-  );
+  return <H4>{children}</H4>;
 }
 
 function CategoriesGrid({
@@ -586,7 +593,7 @@ function SelectionSidebar({
       className="flex flex-col gap-section rounded-lg border border-border bg-muted/30 p-section lg:sticky lg:top-component lg:max-h-sticky-rail"
     >
       <header className="flex items-center justify-between gap-component">
-        <span className="text-sm font-semibold">Gekozen producten</span>
+        <H3>Gekozen producten</H3>
         <Badge variant={isEmpty ? "outline" : "secondary"}>{selected.length}</Badge>
       </header>
 

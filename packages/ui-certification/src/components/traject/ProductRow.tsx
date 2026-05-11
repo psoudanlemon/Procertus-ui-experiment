@@ -1,10 +1,9 @@
-import { Add01Icon, Tag01Icon } from "@hugeicons/core-free-icons";
+import { Add01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Item,
   ItemActions,
   ItemContent,
-  ItemMedia,
   ItemTitle,
   cn,
 } from "@procertus-ui/ui";
@@ -22,9 +21,9 @@ export type ProductRowProps = {
 /**
  * Single product row in the catalogus discovery list. Click anywhere on the
  * row to add to the basket; the row animates out (slide right + collapse) so
- * sibling rows reflow. Built on the {@link Item} primitive (Tag icon →
- * `ItemMedia`, label → `ItemTitle`, plus → `ItemActions`) wrapped in a
- * `motion.li` so it can be rendered inside an `AnimatePresence` list.
+ * sibling rows reflow. Built on the {@link Item} primitive (label → `ItemTitle`,
+ * plus → `ItemActions`) wrapped in a `motion.li` so it can be rendered inside
+ * an `AnimatePresence` list.
  */
 export function ProductRow({ id, label, onAdd, className }: ProductRowProps) {
   return (
@@ -53,12 +52,6 @@ export function ProductRow({ id, label, onAdd, className }: ProductRowProps) {
             typeof label === "string" ? `Voeg ${label} toe aan selectie` : undefined
           }
         >
-          <ItemMedia variant="icon" className="translate-y-0.5 self-start">
-            <HugeiconsIcon
-              icon={Tag01Icon}
-              className="size-4 text-muted-foreground transition-colors group-hover/item:text-accent-foreground"
-            />
-          </ItemMedia>
           <ItemContent>
             <ItemTitle className="line-clamp-2 w-full text-sm font-medium leading-snug">
               {label}

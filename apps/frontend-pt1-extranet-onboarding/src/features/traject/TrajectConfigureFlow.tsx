@@ -77,9 +77,9 @@ export function TrajectConfigureFlow() {
       <TrajectLayout
         onSignInClick={() => navigate(SIGNIN_PATH)}
         bodyGap="section"
-        kicker={service.entry.shortLabel}
-        title="Selecteer het producttype"
-        description="Doorzoek de hele catalogus of blader stapsgewijs door categorieën. Je keuze blijft altijd zichtbaar in het winkelmandje rechts."
+        kicker={service.entry.label}
+        title="Selecteer de producten die je wil certificeren"
+        description="Doorzoek de hele catalogus of blader stapsgewijs door categorieën."
         actionBar={<ProductSelectionBasketActionBar />}
       >
         <ProductSelectionBasketBody />
