@@ -33,6 +33,8 @@ export type {
 } from "./BundleProductCard";
 export { TrajectStoryFooter } from "./TrajectStoryFooter";
 export type { TrajectStoryFooterProps } from "./TrajectStoryFooter";
+export { ExpertCallBookingView } from "./ExpertCallBookingView";
+export type { ExpertCallBookingViewProps } from "./ExpertCallBookingView";
 export { ProductInquiryMatrix } from "./ProductInquiryMatrix";
 export type { ProductInquiryMatrixProps } from "./ProductInquiryMatrix";
 export { ProductDocumentationLibrary } from "./ProductDocumentationLibrary";

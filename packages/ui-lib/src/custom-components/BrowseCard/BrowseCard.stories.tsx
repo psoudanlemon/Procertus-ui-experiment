@@ -183,7 +183,7 @@ function ExpertCallFooterCard() {
       <Button asChild variant="outline" className="self-start bg-background">
         <a href="#expert-call" onClick={(e) => e.preventDefault()}>
           <HugeiconsIcon icon={Call02Icon} className="size-4" />
-          Plan een expert call
+          Plan een gesprek
           <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
         </a>
       </Button>

@@ -13,7 +13,6 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  DensityProvider,
   H2,
   H3,
 } from "@procertus-ui/ui";
@@ -25,11 +24,11 @@ import { TRAJECT_ENTRY_POINT_QUERY_PARAM } from "../features/traject/traject-sub
 const LOGIN_PATH = "/welcome/login";
 const WEGWIJZER_PATH = "/welcome";
 /**
- * Informatieve aanvraag wordt afgehandeld via een live expert-call. Het `from=triage` signaal stempelt
- * de submissie zodat PROCERTUS weet dat de aanvrager al de wizard en de keuze gepasseerd heeft.
+ * Informatieve aanvraag krijgt een eigen route (`/welcome/info-request/:serviceId`). De `from=triage`
+ * query stempelt de submissie zodat PROCERTUS weet dat de aanvrager al via de keuze gepasseerd is.
  */
 const INFORMATIONAL_REQUEST_PATH = (serviceId: string) =>
-  `/welcome/expert-call/${serviceId}?${TRAJECT_ENTRY_POINT_QUERY_PARAM}=triage`;
+  `/welcome/info-request/${serviceId}?${TRAJECT_ENTRY_POINT_QUERY_PARAM}=triage`;
 const FORMAL_REQUEST_PATH = "/welcome/start";
 const EXPERT_CALL_PATH = (serviceId: string) =>
   `/welcome/expert-call/${serviceId}?${TRAJECT_ENTRY_POINT_QUERY_PARAM}=triage`;
@@ -62,14 +61,13 @@ export function TriagePage() {
   };
 
   return (
-    <DensityProvider density="spacious">
-      <TrajectLayout
-        onSignInClick={() => navigate(LOGIN_PATH)}
-        footer={APP_FOOTER}
-        kicker={CATEGORY_LABEL[entry.category]}
-        title="Wat voor aanvraag wilt u graag indienen?"
-        description="Kies een vrijblijvende informatieaanvraag voor een prijsopgave en advies, of start meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen."
-        bodyGap="section"
+    <TrajectLayout
+      onSignInClick={() => navigate(LOGIN_PATH)}
+      footer={APP_FOOTER}
+      kicker={CATEGORY_LABEL[entry.category]}
+      title="Wat voor aanvraag wilt u graag indienen?"
+      description="Kies een vrijblijvende informatieaanvraag voor een prijsopgave en advies, of start meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen."
+      bodyGap="section"
         actionBar={
           <TrajectStoryFooter
             onCancel={() => navigate(`${WEGWIJZER_PATH}?service=${entry.id}`)}
@@ -134,8 +132,7 @@ export function TriagePage() {
             </Button>
           </Card>
         </div>
-      </TrajectLayout>
-    </DensityProvider>
+    </TrajectLayout>
   );
 }
 

@@ -311,7 +311,7 @@ function ExpertCallFooterCard() {
         className="self-start bg-background before:absolute before:inset-0 before:content-[''] group-hover/card:rounded-tl-[4px] group-hover/card:rounded-tr-[var(--cmd-deep)] group-hover/card:rounded-br-[4px] group-hover/card:rounded-bl-[var(--cmd-deep)] group-hover/card:bg-muted group-hover/card:text-foreground"
       >
         <HugeiconsIcon icon={Call02Icon} className="size-4" />
-        Plan een expert call
+        Plan een gesprek
       </Button>
     </Card>
   );

@@ -30,6 +30,30 @@ function isProductBoundDraft(draft: CertificationRequestDraft): boolean {
   return Boolean(draft.productId?.trim() || draft.productLabel?.trim());
 }
 
+/**
+ * SessionStorage-sleutel voor de begeleidende-brief textarea zodat terug-navigatie
+ * de eerder ingetypte tekst herstelt. Per service apart bewaard.
+ */
+const NOTE_STORAGE_KEY = (serviceId: string) => `procertus.request-review.note.${serviceId}`;
+
+function readPersistedNote(serviceId: string | undefined): string {
+  if (!serviceId || typeof window === "undefined") return "";
+  try {
+    return window.sessionStorage.getItem(NOTE_STORAGE_KEY(serviceId)) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+function writePersistedNote(serviceId: string | undefined, value: string) {
+  if (!serviceId || typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(NOTE_STORAGE_KEY(serviceId), value);
+  } catch {
+    // Storage kan onbeschikbaar zijn (privémodus, quota) — stille fallback.
+  }
+}
+
 export function TrajectRequestReviewFlow() {
   const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
@@ -48,7 +72,14 @@ export function TrajectRequestReviewFlow() {
   // dossier-element, en daarom verplicht.
   const isNonProductBound = service?.entry.productRelation === "optional";
   const noteRequired = isNonProductBound === true || !hasProducts;
-  const [note, setNote] = useState("");
+  const [note, setNoteState] = useState<string>(() => readPersistedNote(serviceId));
+  const setNote = useCallback(
+    (value: string) => {
+      setNoteState(value);
+      writePersistedNote(serviceId, value);
+    },
+    [serviceId],
+  );
 
   const handleCancel = useCallback(() => navigate(WEGWIJZER_PATH), [navigate]);
   const handleBack = useCallback(() => {
