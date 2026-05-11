@@ -1,5 +1,4 @@
 import {
-  BUNDLE_CERT_META,
   BUNDLE_CERT_ORDER,
   BundleAssembleActionBar,
   BundleAssembleBody,
@@ -79,9 +78,6 @@ export function TrajectBundleAssembleFlow() {
   }
 
   const primaryCert: BundleCertKey = serviceId;
-  const primaryLabel = BUNDLE_CERT_META[primaryCert].title;
-  const productCount = products.length;
-  const productWord = productCount === 1 ? "product" : "producten";
 
   return (
     <BundleAssembleProvider
@@ -95,14 +91,9 @@ export function TrajectBundleAssembleFlow() {
         onSignInClick={() => navigate(SIGNIN_PATH)}
         footer={APP_FOOTER}
         bodyGap="section"
-        kicker={
-          <span className="inline-flex max-w-full items-center gap-micro self-start rounded-full border border-primary/30 bg-primary/10 px-component py-micro text-xs font-medium text-primary">
-            Hoofdcertificatie voor dit pakket:
-            <strong className="font-semibold">{primaryLabel}</strong>
-          </span>
-        }
-        title="Stel je aanvraagpakket samen"
-        description={`U heeft ${productCount} ${productWord} geselecteerd. Breid uw aanvraag hieronder uit per product om uw dossier in één keer volledig te maken.`}
+        kicker={service.entry.label}
+        title="Voeg per product certificaten toe"
+        description="Bekijk elk van uw geselecteerde producten en voeg waar nodig nog extra certificaten toe, zodat je meteen alle benodigdheden voor elk product kan indienen"
         actionBar={<BundleAssembleActionBar />}
       >
         <BundleAssembleBody />

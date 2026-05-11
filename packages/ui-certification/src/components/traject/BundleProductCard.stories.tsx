@@ -30,7 +30,7 @@ const SAMPLE_PRODUCT: BundleProduct = {
   id: "stortklaar-beton",
   label: "Stortklaar beton",
   categoryTrail: "Beton en mortel",
-  extraCerts: ["ce", "atg"],
+  extraCerts: ["ce", "atg", "copro", "epd", "nbn", "iso9001"],
 };
 
 /**

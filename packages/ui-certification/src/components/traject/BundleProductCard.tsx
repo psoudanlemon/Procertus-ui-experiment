@@ -7,7 +7,15 @@ import {
   ChoiceCardGroup,
 } from "@procertus-ui/ui";
 
-export const BUNDLE_CERT_ORDER = ["benor", "ce", "atg"] as const;
+export const BUNDLE_CERT_ORDER = [
+  "benor",
+  "ce",
+  "atg",
+  "copro",
+  "epd",
+  "nbn",
+  "iso9001",
+] as const;
 export type BundleCertKey = (typeof BUNDLE_CERT_ORDER)[number];
 
 export type BundleCertMeta = { title: string; description: string };
@@ -28,6 +36,22 @@ export const BUNDLE_CERT_META: Record<BundleCertKey, BundleCertMeta> = {
   atg: {
     title: "ATG-attest",
     description: "Technische goedkeuring met gekoppelde productcertificatie.",
+  },
+  copro: {
+    title: "COPRO",
+    description: "Onpartijdige certificatie en keuring voor bouwproducten.",
+  },
+  epd: {
+    title: "EPD",
+    description: "Environmental Product Declaration met milieu-impactgegevens.",
+  },
+  nbn: {
+    title: "NBN-norm",
+    description: "Conformiteit met de Belgische normen van het NBN.",
+  },
+  iso9001: {
+    title: "ISO 9001",
+    description: "Kwaliteitsmanagementsysteem volgens de ISO 9001-norm.",
   },
 };
 
@@ -53,19 +77,21 @@ export type BundleProductCardProps = {
  */
 export function BundleProductCard({ product, selected, onToggle }: BundleProductCardProps) {
   return (
-    <Card className="flex-row items-center gap-component py-region">
-      <CardHeader className="gap-micro px-region shrink-0">
-        <span className="text-xs leading-tight text-muted-foreground">
-          {product.categoryTrail}
-        </span>
-        <CardTitle className="text-base font-semibold">{product.label}</CardTitle>
+    <Card className="gap-component py-region">
+      <CardHeader className="px-region">
+        <CardTitle className="text-sm leading-snug font-medium">
+          {product.label}
+          <span className="ms-2 text-xs font-normal text-muted-foreground">
+            {`> ${product.categoryTrail.split(" > ").reverse().join(" > ")}`}
+          </span>
+        </CardTitle>
       </CardHeader>
-      <CardContent className="ml-auto px-region">
+      <CardContent className="px-region">
         <ChoiceCardGroup
           aria-label={`Extra certificaties voor ${product.label}`}
           selectionMode="multiple"
           layout="stack"
-          className="flex-row flex-wrap gap-component"
+          className="grid grid-cols-1 gap-component md:grid-cols-5"
         >
           {product.extraCerts.map((cert) => {
             const meta = BUNDLE_CERT_META[cert];
@@ -80,7 +106,6 @@ export function BundleProductCard({ product, selected, onToggle }: BundleProduct
                 selectionMode="multiple"
                 checked={isChecked}
                 onCheckedChange={(next) => onToggle(cert, next)}
-                className="w-auto"
               />
             );
           })}
