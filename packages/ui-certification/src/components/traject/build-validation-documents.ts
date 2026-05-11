@@ -1,7 +1,8 @@
 import type { DownloadableItemData } from "@procertus-ui/ui";
 
 import type { CertificationRequestDraft } from "../../certification-request/types";
-import type { ProductSummaryDocument } from "./ProductSummaryCard";
+
+export type ProductSummaryDocument = DownloadableItemData;
 
 function slugFor(raw: string): string {
   const s = raw
@@ -16,15 +17,62 @@ function productKeyFor(draft: CertificationRequestDraft): string | undefined {
   return key && key.length > 0 ? key : undefined;
 }
 
+type CertExtraDoc = {
+  /** Suffix toegevoegd aan de id voor stabiele dedup binnen een product. */
+  idSuffix: string;
+  title: string;
+  /** Body-tekst. Mag `{productLabel}` als token bevatten. */
+  description: string;
+};
+
 /**
- * Documenten die {@link ProductSummaryCard} per traject (draft) toont.
- * Levert per draft:
- * 1. Twee productgebonden refs (PTV + normen) met **stabiele, product-gebaseerde
- *    ids** zodat ze identiek zijn voor elk certificatietraject van hetzelfde
- *    product — de kaart kan deze dan in de "Gezamenlijke documenten"-sectie
- *    samenbrengen.
- * 2. Eén certificatiespecifiek reglement waarvan de id wel `entryId` bevat,
- *    zodat dit per traject onder de bijbehorende badge blijft staan.
+ * Cert-specifieke documenten die *bovenop* de gedeelde PTV + normen komen. Niet
+ * elk certificatietraject heeft eigen paperwork: BENOR, SSD en PROCERTUS leunen
+ * volledig op de PTV en de geharmoniseerde normen, dus die staan hier niet.
+ */
+const CERT_EXTRA_DOC: Record<string, CertExtraDoc> = {
+  ce: {
+    idSuffix: "prestatieverklaring",
+    title: "Voorbeeld prestatieverklaring (DoP)",
+    description:
+      "Modelblad voor de prestatieverklaring volgens EU 305/2011, in te vullen per partij {productLabel}.",
+  },
+  atg: {
+    idSuffix: "atg-dossier",
+    title: "ATG-aanvraagdossier",
+    description:
+      "Aanvraagformulier en richtlijnen voor de technische goedkeuringsprocedure voor {productLabel}.",
+  },
+  epd: {
+    idSuffix: "epd-datablad",
+    title: "EPD-datablad — sjabloon",
+    description:
+      "Sjabloon voor de milieu-productverklaring met de te leveren LCA-indicatoren voor {productLabel}.",
+  },
+  "innovation-attest": {
+    idSuffix: "innovatie-dossier",
+    title: "Innovatie-dossier — projectkader",
+    description:
+      "Beschrijving van het innovatieproject en de prestaties die voor {productLabel} af te testen zijn.",
+  },
+  partijkeuring: {
+    idSuffix: "steekproefprotocol",
+    title: "Steekproefprotocol partijkeuring",
+    description:
+      "Procedure en steekproefkader voor de partijkeuring op de aangeboden lots {productLabel}.",
+  },
+};
+
+/**
+ * Documenten die {@link ProductDocumentationLibrary} per draft genereert en
+ * vervolgens binnen het product dedupliceert. Levert maximaal drie items:
+ * 1. PTV per product (gedeeld) — productspecifieke technische voorschriften.
+ * 2. Toepasselijke normen per product (gedeeld) — geharmoniseerd normenkader.
+ * 3. Eventueel één cert-specifiek document voor certificaten met een eigen
+ *    procedure (CE-prestatieverklaring, ATG-dossier, EPD-datablad,
+ *    innovatie-dossier, steekproefprotocol). BENOR, SSD en PROCERTUS halen
+ *    alles uit de gedeelde PTV/normen en krijgen géén extra item, zodat een
+ *    product zelden méér dan drie unieke documenten heeft.
  */
 export function buildProductDocumentsForDraft(
   draft: CertificationRequestDraft,
@@ -34,9 +82,7 @@ export function buildProductDocumentsForDraft(
   const productSlug = slugFor(productKey);
   const productLabel = draft.productLabel?.trim() ?? "dit product";
   const stream = draft.productTypeStreamLabel?.trim();
-  const entrySlug = slugFor(draft.entryId);
-  const entryShort = draft.shortLabel?.trim() ?? draft.entryId.toUpperCase();
-  return [
+  const docs: ProductSummaryDocument[] = [
     {
       id: `ptv-${productSlug}`,
       title: `PTV — ${productLabel}`,
@@ -54,14 +100,18 @@ export function buildProductDocumentsForDraft(
       formatHint: "PDF · mock",
       href: `#procertus-norm-${productSlug}`,
     },
-    {
-      id: `reglement-${entrySlug}-${productSlug}`,
-      title: `Certificatiereglement — ${entryShort}`,
-      description: `Specifieke reglementsbepalingen voor ${entryShort} op ${productLabel}.`,
-      formatHint: "PDF · mock",
-      href: `#procertus-reglement-${entrySlug}-${productSlug}`,
-    },
   ];
+  const extra = CERT_EXTRA_DOC[draft.entryId];
+  if (extra) {
+    docs.push({
+      id: `${extra.idSuffix}-${productSlug}`,
+      title: extra.title,
+      description: extra.description.replace("{productLabel}", productLabel),
+      formatHint: "PDF · mock",
+      href: `#procertus-${extra.idSuffix}-${productSlug}`,
+    });
+  }
+  return docs;
 }
 
 /**
@@ -122,8 +172,8 @@ export type ProductSummaryGroup = {
 /**
  * Groepeert een platte lijst drafts per uniek product, met behoud van de
  * volgorde waarin elk product voor het eerst voorkomt. Producten met
- * meerdere trajecten houden alle drafts in `drafts` zodat
- * {@link ProductSummaryCard} ze als één kaart kan renderen.
+ * meerdere trajecten houden alle drafts in `drafts` zodat ze als één kaart
+ * gerenderd kunnen worden.
  */
 export function groupDraftsByProduct(
   drafts: readonly CertificationRequestDraft[],

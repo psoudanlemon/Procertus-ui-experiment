@@ -1,14 +1,17 @@
 import {
+  PRODUCT_REQUEST_NOTE_MAX_LENGTH,
+  PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG,
   ProductDocumentationLibrary,
   ProductInquiryMatrix,
+  ProductRequestNoteField,
   TrajectLayout,
   TrajectStoryFooter,
   buildProductDocumentsForDraft,
   groupDraftsByProduct,
-  useForceScrollConfirmation,
+  isProductRequestNoteComplete,
   type CertificationRequestDraft,
 } from "@procertus-ui/ui-certification";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { APP_FOOTER } from "../../layouts/footerConfig";
@@ -21,6 +24,11 @@ const BUNDLE_ASSEMBLE_PATH = (serviceId: string) =>
   `/welcome/aanvraag/${serviceId}/pakket`;
 const REGISTRATION_COMPLETE_PATH = "/registratie-voltooid";
 
+/** Een draft telt als "echt productgebonden" als er een productId óf productLabel op staat. */
+function isProductBoundDraft(draft: CertificationRequestDraft): boolean {
+  return Boolean(draft.productId?.trim() || draft.productLabel?.trim());
+}
+
 export function TrajectRequestReviewFlow() {
   const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
@@ -29,14 +37,27 @@ export function TrajectRequestReviewFlow() {
   const snapshot = useMemo(() => readOnboardingFlowSnapshot(), []);
   const inquiries: CertificationRequestDraft[] = snapshot.drafts;
   const productGroups = useMemo(() => groupDraftsByProduct(inquiries), [inquiries]);
-
-  const { sentinelRef, hasReachedBottom } = useForceScrollConfirmation();
+  const hasProducts = useMemo(
+    () => inquiries.some(isProductBoundDraft),
+    [inquiries],
+  );
+  // Niet-productgebonden certificaten (`productRelation === "optional"` in de
+  // wegwijzer) springen via de detail-card-CTA rechtstreeks naar dit scherm,
+  // zonder product- of bundle-stap. De begeleidende brief is dan het enige
+  // dossier-element, en daarom verplicht.
+  const isNonProductBound = service?.entry.productRelation === "optional";
+  const noteRequired = isNonProductBound === true || !hasProducts;
+  const [note, setNote] = useState("");
 
   const handleCancel = useCallback(() => navigate(WEGWIJZER_PATH), [navigate]);
   const handleBack = useCallback(() => {
     if (!serviceId) return;
+    if (isNonProductBound) {
+      navigate(WEGWIJZER_PATH);
+      return;
+    }
     navigate(BUNDLE_ASSEMBLE_PATH(serviceId));
-  }, [navigate, serviceId]);
+  }, [isNonProductBound, navigate, serviceId]);
   const handleContinue = useCallback(() => {
     navigate(REGISTRATION_COMPLETE_PATH, { replace: true });
   }, [navigate]);
@@ -54,70 +75,84 @@ export function TrajectRequestReviewFlow() {
       footer={APP_FOOTER}
       bodyGap="section"
       kicker={service.entry.label}
-      title="Controleer je aanvraagpakket"
-      description="Lees de onderstaande samenvatting van je geselecteerde producten en de bijbehorende documentatie aandachtig na ter validatie voordat je de aanvraag indient."
+      title={
+        hasProducts ? "Controleer je aanvraagpakket" : `Beschrijf je ${service.entry.shortLabel}-aanvraag`
+      }
+      description={
+        hasProducts
+          ? "Lees de onderstaande samenvatting van je geselecteerde producten en de bijbehorende documentatie aandachtig na ter validatie voordat je de aanvraag indient."
+          : `Geef in onderstaande brief de context en details van je ${service.entry.shortLabel}-aanvraag mee. Een PROCERTUS-expert neemt je dossier op basis daarvan op.`
+      }
       actionBar={
-        <div className="flex w-full flex-col gap-micro">
-          {!hasReachedBottom ? (
-            <p
-              className="m-0 text-xs font-medium text-muted-foreground"
-              role="status"
-              aria-live="polite"
-            >
-              Scroll naar beneden om te kunnen bevestigen.
-            </p>
-          ) : null}
-          <TrajectStoryFooter
-            onCancel={handleCancel}
-            onBack={handleBack}
-            onContinue={handleContinue}
-            cancelLabel="Annuleren"
-            backLabel="Terug"
-            continueLabel="Bevestig en verzend"
-            continueDisabled={!hasReachedBottom}
-          />
-        </div>
+        <TrajectStoryFooter
+          onCancel={handleCancel}
+          onBack={handleBack}
+          onContinue={handleContinue}
+          cancelLabel="Annuleren"
+          backLabel="Terug"
+          continueLabel="Bevestig en verzend"
+          continueDisabled={!isProductRequestNoteComplete(note, noteRequired)}
+        />
       }
     >
-      <div className="flex flex-col gap-region">
+      <div className="flex flex-col gap-component">
         <section
-          className="flex flex-col gap-component"
-          aria-labelledby="aanvraag-matrix-heading"
-        >
-          <div className="flex flex-wrap items-baseline gap-x-component gap-y-micro">
-            <h2
-              id="aanvraag-matrix-heading"
-              className="m-0 text-lg font-semibold leading-tight tracking-tight text-foreground"
-            >
-              Overzicht aanvragen
-            </h2>
-            <p className="m-0 text-sm text-muted-foreground">
-              {inquiries.length}{" "}
-              {inquiries.length === 1 ? "certificaat" : "certificaten"} aangevraagd over{" "}
-              {productGroups.length}{" "}
-              {productGroups.length === 1 ? "product" : "producten"}.
-            </p>
-          </div>
-          <ProductInquiryMatrix groups={productGroups} />
-        </section>
-
-        <section
-          className="flex flex-col gap-section"
-          aria-labelledby="documentatie-heading"
+          className="flex flex-col gap-component rounded-xl border border-border bg-card p-section text-card-foreground"
+          aria-labelledby="begeleidende-brief-heading"
         >
           <h2
-            id="documentatie-heading"
-            className="m-0 text-lg font-semibold leading-tight tracking-tight text-foreground"
+            id="begeleidende-brief-heading"
+            className="m-0 text-heading-lg font-semibold text-heading-foreground"
           >
-            Uw documentatie-pakket
+            Begeleidende brief
           </h2>
-          <ProductDocumentationLibrary
-            groups={productGroups}
-            documentsForDraft={buildProductDocumentsForDraft}
+          <ProductRequestNoteField
+            value={note}
+            onChange={setNote}
+            required={noteRequired}
+            maxLength={
+              hasProducts
+                ? PRODUCT_REQUEST_NOTE_MAX_LENGTH
+                : PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG
+            }
+            rows={hasProducts ? 6 : 16}
+            bordered={false}
+            aria-labelledby="begeleidende-brief-heading"
           />
         </section>
 
-        <div ref={sentinelRef} aria-hidden className="h-px w-full" />
+        {hasProducts ? (
+          <>
+            <section
+              className="flex flex-col gap-component rounded-xl border border-border bg-card p-section text-card-foreground"
+              aria-labelledby="aanvraag-matrix-heading"
+            >
+              <div className="flex flex-col">
+                <h2
+                  id="aanvraag-matrix-heading"
+                  className="m-0 text-heading-lg font-semibold text-heading-foreground"
+                >
+                  Overzicht aanvragen
+                </h2>
+                <p className="m-0 text-sm text-muted-foreground">
+                  {inquiries.length}{" "}
+                  {inquiries.length === 1 ? "certificaat" : "certificaten"} aangevraagd over{" "}
+                  {productGroups.length}{" "}
+                  {productGroups.length === 1 ? "product" : "producten"}.
+                </p>
+              </div>
+              <ProductInquiryMatrix
+                groups={productGroups}
+                primaryEntryId={service.entry.id}
+              />
+            </section>
+
+            <ProductDocumentationLibrary
+              groups={productGroups}
+              documentsForDraft={buildProductDocumentsForDraft}
+            />
+          </>
+        ) : null}
       </div>
     </TrajectLayout>
   );

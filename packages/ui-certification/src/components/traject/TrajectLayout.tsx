@@ -162,12 +162,7 @@ export function TrajectLayout({
                 hasContentBelow ? "opacity-100" : "opacity-0",
               )}
             />
-            <div
-              className={cn(
-                "rounded-b-md border-t bg-card transition-colors duration-200",
-                hasContentBelow ? "border-transparent" : "border-border",
-              )}
-            >
+            <div className="rounded-b-md bg-card">
               {aboveActionBar}
               <div
                 className={`mx-auto flex w-full max-w-7xl items-center justify-between gap-component px-boundary ${actionRowSpacing}`}

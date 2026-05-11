@@ -38,7 +38,11 @@ import {
   DetailCardSection,
   type ChoiceBarItem,
 } from "@procertus-ui/ui-lib";
-import { CatalogueExplorer } from "@procertus-ui/ui-certification";
+import {
+  CatalogueExplorer,
+  type CertificationEntryId,
+  type CertificationRequestDraft,
+} from "@procertus-ui/ui-certification";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { APP_FOOTER } from "../layouts/footerConfig";
 import {
@@ -49,11 +53,18 @@ import { WEGWIJZER_SERVICE_CONTENT } from "../features/wegwijzer/wegwijzer-servi
 import {
   TRAJECT_ENTRY_POINT_QUERY_PARAM,
   clearTrajectBreadcrumbs,
+  persistTrajectHandoff,
 } from "../features/traject/traject-submission-context";
 
 const LOGIN_PATH = "/welcome/login";
 /** Eerste stap van de TrajectFlow: producttype kiezen en aanvraag controleren in de wizard, voor de triage-keuze. */
 const TRAJECT_CONFIGURE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}/start`;
+/**
+ * Sprong rechtstreeks naar de validatiepagina, gebruikt vanuit detail-cards van
+ * niet-product-gebonden certificaten (`productRelation === "optional"`).
+ */
+const REQUEST_REVIEW_PATH = (serviceId: string) =>
+  `/welcome/aanvraag/${serviceId}/controleren`;
 const EXPERT_CALL_PATH = (serviceId?: string) =>
   serviceId ? `/welcome/expert-call/${serviceId}` : "/welcome/expert-call";
 /** Detail-card "Hulp nodig?" stuurt mee dat het certificaat al in beeld is, zonder verdere wizard-context. */
@@ -349,10 +360,23 @@ function MasterCard({
   service: WegwijzerService;
   onClose: () => void;
 }) {
+  const navigate = useNavigate();
   const { entry, externalReferral } = service;
   const isInnovation = entry.id === "innovation-attest";
   const isExternal = service.tier === 3;
+  const isNonProductBound = entry.productRelation === "optional";
   const documents = buildMockDocuments(service);
+
+  const handleStartNonProductFlow = () => {
+    const placeholder: CertificationRequestDraft = {
+      id: `${entry.id}-no-product`,
+      entryId: entry.id as CertificationEntryId,
+      label: entry.label,
+      shortLabel: entry.shortLabel,
+    };
+    persistTrajectHandoff({ drafts: [placeholder], serviceId: entry.id });
+    navigate(REQUEST_REVIEW_PATH(entry.id));
+  };
 
   return (
     <DetailCard
@@ -377,12 +401,19 @@ function MasterCard({
               </p>
             </HoverCardContent>
           </HoverCard>
-          <Button asChild size="lg">
-            <Link to={TRAJECT_CONFIGURE_PATH(entry.id)}>
-              Bekijk mogelijkheden
+          {isNonProductBound ? (
+            <Button size="lg" onClick={handleStartNonProductFlow}>
+              Aanvraag indienen
               <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
-            </Link>
-          </Button>
+            </Button>
+          ) : (
+            <Button asChild size="lg">
+              <Link to={TRAJECT_CONFIGURE_PATH(entry.id)}>
+                Bekijk mogelijkheden
+                <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
+              </Link>
+            </Button>
+          )}
         </>
       }
     >

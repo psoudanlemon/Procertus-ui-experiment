@@ -1,5 +1,5 @@
 import {
-  DownloadableItemGrid,
+  DownloadableItem,
   cn,
   type DownloadableItemData,
 } from "@procertus-ui/ui";
@@ -62,7 +62,7 @@ export function ProductDocumentationLibrary({
   documentsForDraft,
 }: ProductDocumentationLibraryProps) {
   return (
-    <div className={cn("flex flex-col gap-region", className)}>
+    <div className={cn("flex flex-col gap-component", className)}>
       {groups.map((group) => {
         const totalTrajects = group.drafts.length;
         const docMap = new Map<
@@ -84,16 +84,23 @@ export function ProductDocumentationLibrary({
         return (
           <section
             key={group.productId}
-            className="flex flex-col gap-component"
+            className="flex flex-col gap-component rounded-xl border border-border bg-card p-section text-card-foreground"
             aria-labelledby={`docs-${group.productId}`}
           >
             <h3
               id={`docs-${group.productId}`}
-              className="m-0 text-base font-semibold leading-tight tracking-tight text-foreground"
+              className="m-0 text-heading-md font-semibold text-heading-foreground"
             >
-              {group.productLabel}
+              Product documentatie voor {group.productLabel}
             </h3>
-            <DownloadableItemGrid items={enriched} />
+            <div
+              role="list"
+              className="grid grid-cols-1 gap-component sm:grid-cols-2 md:grid-cols-3"
+            >
+              {enriched.map((doc) => (
+                <DownloadableItem key={doc.id} variant="card" {...doc} />
+              ))}
+            </div>
           </section>
         );
       })}

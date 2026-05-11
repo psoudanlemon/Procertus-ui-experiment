@@ -33,21 +33,24 @@ export type {
 } from "./BundleProductCard";
 export { TrajectStoryFooter } from "./TrajectStoryFooter";
 export type { TrajectStoryFooterProps } from "./TrajectStoryFooter";
-export { ProductSummaryCard } from "./ProductSummaryCard";
-export type {
-  ProductSummaryCardProps,
-  ProductSummaryCertification,
-  ProductSummaryDocument,
-} from "./ProductSummaryCard";
 export { ProductInquiryMatrix } from "./ProductInquiryMatrix";
 export type { ProductInquiryMatrixProps } from "./ProductInquiryMatrix";
 export { ProductDocumentationLibrary } from "./ProductDocumentationLibrary";
 export type { ProductDocumentationLibraryProps } from "./ProductDocumentationLibrary";
 export {
+  PRODUCT_REQUEST_NOTE_MAX_LENGTH,
+  PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG,
+  PRODUCT_REQUEST_NOTE_MIN_LENGTH,
+  ProductRequestNoteField,
+  isProductRequestNoteComplete,
+} from "./ProductRequestNoteField";
+export type { ProductRequestNoteFieldProps } from "./ProductRequestNoteField";
+export {
   buildGeneralProcessDocuments,
   buildProductDocumentsForDraft,
   groupDraftsByProduct,
 } from "./build-validation-documents";
-export type { ProductSummaryGroup } from "./build-validation-documents";
-export { useForceScrollConfirmation } from "./use-force-scroll-confirmation";
-export type { UseForceScrollConfirmationResult } from "./use-force-scroll-confirmation";
+export type {
+  ProductSummaryDocument,
+  ProductSummaryGroup,
+} from "./build-validation-documents";
