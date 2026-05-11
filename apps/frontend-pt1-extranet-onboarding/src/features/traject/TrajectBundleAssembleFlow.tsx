@@ -1,4 +1,5 @@
 import {
+  BUNDLE_CERT_META,
   BUNDLE_CERT_ORDER,
   BundleAssembleActionBar,
   BundleAssembleBody,
@@ -6,13 +7,18 @@ import {
   TrajectLayout,
   type BundleCertKey,
   type BundleProduct,
+  type CertificationEntryId,
+  type CertificationRequestDraft,
 } from "@procertus-ui/ui-certification";
 import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { APP_FOOTER } from "../../layouts/footerConfig";
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
-import { readOnboardingFlowSnapshot } from "./traject-submission-context";
+import {
+  persistTrajectHandoff,
+  readOnboardingFlowSnapshot,
+} from "./traject-submission-context";
 
 const WEGWIJZER_PATH = "/welcome";
 const SIGNIN_PATH = "/welcome/login";
@@ -63,14 +69,32 @@ export function TrajectBundleAssembleFlow() {
     navigate(WEGWIJZER_PATH);
   }, [navigate]);
 
-  const handleContinue = useCallback(() => {
-    if (!serviceId) return;
-    // De selectie van extra certificaties wordt voorlopig nog niet teruggeschreven naar de
-    // OnboardingFlow-drafts; dat hoort bij een latere data-laag iteratie. Stuur door naar de
-    // "Aanvraag controleren"-stap waar de gebruiker het samengestelde pakket nog ziet voor
-    // hij bevestigt.
-    navigate(REQUEST_REVIEW_PATH(serviceId));
-  }, [navigate, serviceId]);
+  // Expandeer per product de hoofd-cert draft + één extra draft per aangevinkt extra certificaat,
+  // zodat het validatiescherm één kaart per (product, certificaat)-combinatie kan tonen.
+  const handleContinue = useCallback(
+    (selections: Record<string, readonly BundleCertKey[]>) => {
+      if (!serviceId || !isBundleCert(serviceId)) return;
+      const primaryCert: BundleCertKey = serviceId;
+      const expanded: CertificationRequestDraft[] = snapshot.drafts.flatMap((draft) => {
+        const productId = draft.productId;
+        if (!productId) return [draft];
+        const extras = selections[productId] ?? [];
+        const extraDrafts = extras
+          .filter((cert) => cert !== primaryCert)
+          .map<CertificationRequestDraft>((cert) => ({
+            ...draft,
+            id: `${productId}-${cert}`,
+            entryId: cert as CertificationEntryId,
+            label: BUNDLE_CERT_META[cert].title,
+            shortLabel: BUNDLE_CERT_META[cert].shortTitle,
+          }));
+        return [draft, ...extraDrafts];
+      });
+      persistTrajectHandoff({ drafts: expanded, serviceId });
+      navigate(REQUEST_REVIEW_PATH(serviceId));
+    },
+    [navigate, serviceId, snapshot.drafts],
+  );
 
   if (!serviceId || !service || !isBundleCert(serviceId)) {
     return <Navigate to={WEGWIJZER_PATH} replace />;

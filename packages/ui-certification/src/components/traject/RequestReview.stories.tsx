@@ -1,14 +1,8 @@
-import { Alert, AlertDescription, AlertTitle, DownloadableItemList } from "@procertus-ui/ui";
-import { Clock01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { type ComponentType, useLayoutEffect } from "react";
 
-import { storyDrafts } from "../certification-request-wizard/certification-request-wizard-story-fixtures";
-import {
-  buildGeneralProcessDocuments,
-  buildProductDocumentsForDraft,
-} from "./build-validation-documents";
+import type { CertificationRequestDraft } from "../../certification-request/types";
+import { buildProductDocumentsForDraft } from "./build-validation-documents";
 import { RequestValidationCard } from "./RequestValidationCard";
 import { TrajectLayout } from "./TrajectLayout";
 import { TrajectStoryFooter } from "./TrajectStoryFooter";
@@ -51,7 +45,7 @@ const meta = {
       children: null,
       description: {
         component:
-          "Definitief validatiescherm voor het aanvraagpakket. Per product/certificaat een individuele samenvattingskaart met productspecifieke documentatie; daaronder de algemene procesinformatie. De knop 'Bevestig en verzend' is geforceerd disabled tot de gebruiker tot onderaan heeft gescrold.",
+          "Definitief validatiescherm voor het aanvraagpakket. Eén kaart per product/certificaat-combinatie (vijf in deze story: drie producten met 2 / 2 / 1 certificaten) met productspecifieke documentatie in een DownloadableItemGrid. De knop 'Bevestig en verzend' is geforceerd disabled tot de gebruiker tot onderaan heeft gescrold.",
       },
     },
   },
@@ -63,9 +57,62 @@ export default meta;
 
 const noop = () => {};
 
-const STORY_REVIEW_INQUIRIES = storyDrafts.map(({ title: _title, subtitle: _subtitle, ...draft }) => draft);
-
-const STORY_GENERAL_DOCS = buildGeneralProcessDocuments(STORY_REVIEW_INQUIRIES);
+/**
+ * Drie producten met respectievelijk twee, twee en één certificaten — geeft vijf
+ * aanvraagkaartjes (één per product/certificaat-combinatie) zoals voorzien in de spec.
+ */
+const STORY_REVIEW_INQUIRIES: CertificationRequestDraft[] = [
+  {
+    id: "draft-rainscreen-benor",
+    entryId: "benor",
+    label: "BENOR — Rainscreen",
+    shortLabel: "BENOR",
+    productId: "p-rain",
+    productLabel: "Rainscreen",
+    productPath: "Cladding / Facade / Rainscreen",
+    productTypeStreamLabel: "BR01",
+  },
+  {
+    id: "draft-rainscreen-ce",
+    entryId: "ce",
+    label: "CE-markering — Rainscreen",
+    shortLabel: "CE",
+    productId: "p-rain",
+    productLabel: "Rainscreen",
+    productPath: "Cladding / Facade / Rainscreen",
+    productTypeStreamLabel: "BR01",
+    value: "Niveau 1+",
+  },
+  {
+    id: "draft-siding-benor",
+    entryId: "benor",
+    label: "BENOR — Siding panel",
+    shortLabel: "BENOR",
+    productId: "p-siding",
+    productLabel: "Siding panel",
+    productPath: "Cladding / Siding / Siding panel",
+    productTypeStreamLabel: "Q2B-99",
+  },
+  {
+    id: "draft-siding-atg",
+    entryId: "atg",
+    label: "ATG technische goedkeuring — Siding panel",
+    shortLabel: "ATG",
+    productId: "p-siding",
+    productLabel: "Siding panel",
+    productPath: "Cladding / Siding / Siding panel",
+  },
+  {
+    id: "draft-membrane-benor",
+    entryId: "benor",
+    label: "BENOR — Vapour barrier membrane",
+    shortLabel: "BENOR",
+    productId: "p-membrane",
+    productLabel: "Vapour barrier membrane",
+    productPath: "Insulation / Vapour control / Vapour barrier membrane",
+    productTypeStreamLabel: "VB-12",
+  },
+];
 
 function RequestReviewStory() {
   const { sentinelRef, hasReachedBottom } = useForceScrollConfirmation();
@@ -114,8 +161,10 @@ function RequestReviewStory() {
             </h2>
             <p className="m-0 text-sm text-muted-foreground">
               {STORY_REVIEW_INQUIRIES.length}{" "}
-              {STORY_REVIEW_INQUIRIES.length === 1 ? "aanvraag" : "aanvragen"} worden samen
-              gebundeld.
+              {STORY_REVIEW_INQUIRIES.length === 1 ? "certificaat" : "certificaten"} aangevraagd
+              over{" "}
+              {new Set(STORY_REVIEW_INQUIRIES.map((d) => d.productId ?? d.productLabel)).size}{" "}
+              producten.
             </p>
           </div>
           <div className="flex flex-col gap-component">
@@ -127,33 +176,6 @@ function RequestReviewStory() {
               />
             ))}
           </div>
-        </section>
-
-        <section
-          className="flex max-w-5xl flex-col gap-component"
-          aria-labelledby="aanvraag-algemeen-heading"
-        >
-          <div className="flex flex-col gap-micro">
-            <h2
-              id="aanvraag-algemeen-heading"
-              className="m-0 text-heading-md font-semibold leading-tight tracking-tight"
-            >
-              Algemene procesinformatie
-            </h2>
-            <p className="m-0 text-sm text-muted-foreground">
-              Documenten die gelden voor het volledige aanvraagpakket.
-            </p>
-          </div>
-          <DownloadableItemList items={STORY_GENERAL_DOCS} />
-          <Alert variant="info" className="max-w-5xl">
-            <HugeiconsIcon icon={Clock01Icon} />
-            <AlertTitle>Doorlooptijd: 8 tot 12 weken</AlertTitle>
-            <AlertDescription>
-              Vanaf indiening van een volledig dossier verloopt het traject in 8 tot 12 weken:
-              ontvankelijkheidsanalyse, initiële audit, analyse van de proefresultaten en finale
-              beslissing.
-            </AlertDescription>
-          </Alert>
           <div ref={sentinelRef} aria-hidden className="h-px w-full" />
         </section>
       </div>

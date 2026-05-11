@@ -1,15 +1,11 @@
-import { Alert, AlertDescription, AlertTitle, DownloadableItemList } from "@procertus-ui/ui";
 import {
   RequestValidationCard,
   TrajectLayout,
   TrajectStoryFooter,
-  buildGeneralProcessDocuments,
   buildProductDocumentsForDraft,
   useForceScrollConfirmation,
   type CertificationRequestDraft,
 } from "@procertus-ui/ui-certification";
-import { Clock01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
@@ -30,8 +26,6 @@ export function TrajectRequestReviewFlow() {
 
   const snapshot = useMemo(() => readOnboardingFlowSnapshot(), []);
   const inquiries: CertificationRequestDraft[] = snapshot.drafts;
-
-  const generalDocuments = useMemo(() => buildGeneralProcessDocuments(inquiries), [inquiries]);
 
   const { sentinelRef, hasReachedBottom } = useForceScrollConfirmation();
 
@@ -95,8 +89,9 @@ export function TrajectRequestReviewFlow() {
               Aanvragen in dit pakket
             </h2>
             <p className="m-0 text-sm text-muted-foreground">
-              {inquiries.length} {inquiries.length === 1 ? "aanvraag" : "aanvragen"} worden samen
-              gebundeld.
+              {inquiries.length}{" "}
+              {inquiries.length === 1 ? "certificaat" : "certificaten"} aangevraagd over{" "}
+              {new Set(inquiries.map((d) => d.productId ?? d.productLabel)).size} producten.
             </p>
           </div>
           <div className="flex flex-col gap-component">
@@ -108,33 +103,6 @@ export function TrajectRequestReviewFlow() {
               />
             ))}
           </div>
-        </section>
-
-        <section
-          className="flex max-w-5xl flex-col gap-component"
-          aria-labelledby="aanvraag-algemeen-heading"
-        >
-          <div className="flex flex-col gap-micro">
-            <h2
-              id="aanvraag-algemeen-heading"
-              className="m-0 text-heading-md font-semibold leading-tight tracking-tight"
-            >
-              Algemene procesinformatie
-            </h2>
-            <p className="m-0 text-sm text-muted-foreground">
-              Documenten die gelden voor het volledige aanvraagpakket.
-            </p>
-          </div>
-          <DownloadableItemList items={generalDocuments} />
-          <Alert variant="info" className="max-w-5xl">
-            <HugeiconsIcon icon={Clock01Icon} />
-            <AlertTitle>Doorlooptijd: 8 tot 12 weken</AlertTitle>
-            <AlertDescription>
-              Vanaf indiening van een volledig dossier verloopt het traject in 8 tot 12 weken:
-              ontvankelijkheidsanalyse, initiële audit, analyse van de proefresultaten en finale
-              beslissing.
-            </AlertDescription>
-          </Alert>
           <div ref={sentinelRef} aria-hidden className="h-px w-full" />
         </section>
       </div>

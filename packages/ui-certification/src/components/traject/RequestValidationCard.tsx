@@ -1,21 +1,20 @@
-import { Badge, cn } from "@procertus-ui/ui";
+import {
+  Badge,
+  DownloadableItemGrid,
+  cn,
+  type DownloadableItemData,
+} from "@procertus-ui/ui";
 import type { ReactNode } from "react";
 
 import type { CertificationRequestDraft } from "../../certification-request/types";
 
-export type RequestValidationDocument = {
-  id: string;
-  title: string;
-  description?: string;
-  formatHint?: string;
-  href: string;
-};
+export type RequestValidationDocument = DownloadableItemData;
 
 export type RequestValidationCardProps = {
   className?: string;
   draft: CertificationRequestDraft;
-  /** Documents specific to this product / certificate combination (PTVs, normen). */
-  documents?: RequestValidationDocument[];
+  /** Documents specific to this product / certificate combination (PTVs, normen). Rendered as a responsive download grid. */
+  documents?: DownloadableItemData[];
   /** Override for the certificate-type badge label. Defaults to a humanized form of `draft.entryId`. */
   certificateLabel?: ReactNode;
 };
@@ -119,31 +118,7 @@ export function RequestValidationCard({
               PTV's en normen die gelden voor dit product binnen deze certificatie.
             </p>
           </div>
-          <ul className="m-0 flex list-none flex-col gap-micro p-0">
-            {documents.map((doc) => (
-              <li
-                key={doc.id}
-                className="flex flex-col gap-micro sm:flex-row sm:items-baseline sm:justify-between sm:gap-component"
-              >
-                <div className="flex min-w-0 flex-col gap-micro">
-                  <a
-                    href={doc.href}
-                    className="text-sm font-semibold text-primary underline-offset-2 hover:underline"
-                  >
-                    {doc.title}
-                  </a>
-                  {doc.description ? (
-                    <p className="m-0 text-sm leading-snug text-muted-foreground">{doc.description}</p>
-                  ) : null}
-                </div>
-                {doc.formatHint ? (
-                  <span className="shrink-0 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                    {doc.formatHint}
-                  </span>
-                ) : null}
-              </li>
-            ))}
-          </ul>
+          <DownloadableItemGrid items={documents} />
         </section>
       ) : null}
     </article>
