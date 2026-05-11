@@ -16,8 +16,12 @@
  */
 import type { ReactNode } from "react";
 
+import { Cancel01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+
 import { cn } from "@/lib/utils";
 import {
+  Button,
   Card,
   CardContent,
   CardDescription,
@@ -40,6 +44,13 @@ export type DetailCardProps = {
   hideWatermark?: boolean;
   /** Footer strip — typically a help link + primary CTA. */
   footer?: ReactNode;
+  /**
+   * When provided, renders a close icon button in the top-right of the header.
+   * Typically used to return from a detail view to its overview.
+   */
+  onClose?: () => void;
+  /** Accessible label for the close button. */
+  closeLabel?: string;
   /** Body content — alerts, sections, document lists, etc. */
   children: ReactNode;
   className?: string;
@@ -60,6 +71,8 @@ export function DetailCard({
   watermark,
   hideWatermark = false,
   footer,
+  onClose,
+  closeLabel = "Sluiten",
   children,
   className,
 }: DetailCardProps) {
@@ -67,10 +80,27 @@ export function DetailCard({
 
   return (
     <Card className={cn("flex flex-col gap-0 pt-0 shadow-proc-xs md:shadow-proc-sm", className)}>
-      <CardHeader className="gap-1 border-b bg-muted/40 p-region [.border-b]:pb-region">
+      <CardHeader
+        className={cn(
+          "relative gap-1 border-b bg-muted/40 p-region [.border-b]:pb-region",
+          onClose && "pr-[calc(var(--region)+2.5rem)]",
+        )}
+      >
         <H2>{title}</H2>
         {description ? (
           <CardDescription className="text-base leading-normal">{description}</CardDescription>
+        ) : null}
+        {onClose ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            onClick={onClose}
+            className="absolute top-component right-component text-muted-foreground hover:text-foreground"
+          >
+            <HugeiconsIcon icon={Cancel01Icon} />
+            <span className="sr-only">{closeLabel}</span>
+          </Button>
         ) : null}
       </CardHeader>
 

@@ -494,7 +494,7 @@ export function ProductSelectionBasketMobileSummaryBar({
       >
         <span
           className={cn(
-            "flex min-h-11 w-full items-center justify-between gap-component rounded-md bg-card px-component py-micro",
+            "flex w-full items-center justify-between gap-component rounded-md bg-card p-section",
             "transition-colors group-hover/basket-bar:bg-accent group-hover/basket-bar:text-accent-foreground",
             "group-focus-visible/basket-bar:ring-2 group-focus-visible/basket-bar:ring-ring",
           )}
@@ -547,7 +547,7 @@ export function ProductSelectionBasketActionBar() {
         disabled={selectedIds.length === 0}
         onClick={() => onContinue(selectedIds)}
       >
-        Ga verder
+        Bevestig selectie
       </Button>
     </>
   );
