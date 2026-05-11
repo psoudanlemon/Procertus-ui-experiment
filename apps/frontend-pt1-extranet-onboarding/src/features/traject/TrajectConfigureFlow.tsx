@@ -14,7 +14,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { APP_FOOTER } from "../../layouts/footerConfig";
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
-import { persistTrajectHandoff, resetTrajectFlow } from "./traject-submission-context";
+import { persistTrajectHandoff } from "./traject-submission-context";
 
 const WEGWIJZER_PATH = "/welcome";
 const SIGNIN_PATH = "/welcome/login";
@@ -25,11 +25,10 @@ export function TrajectConfigureFlow() {
   const { serviceId } = useParams<{ serviceId: string }>();
   const service = findWegwijzerService(serviceId);
 
-  // Annuleren = volledige reset. Gebruiker zegt expliciet "ik weet het niet, ik begin opnieuw",
-  // dus traject + klantgegevens worden gewist en we sturen ze terug naar de Wegwijzer. Geen
-  // OnboardingFlowProvider gemount, dus we wissen alleen localStorage.
+  // "Terug" houdt de reeds gemaakte productselectie en eventuele klantgegevens vast: we
+  // navigeren enkel terug naar de wegwijzer zodat de gebruiker zonder informatieverlies
+  // van service kan wisselen of zijn keuze kan heroverwegen.
   const handleCancel = useCallback(() => {
-    resetTrajectFlow();
     navigate(WEGWIJZER_PATH);
   }, [navigate]);
 

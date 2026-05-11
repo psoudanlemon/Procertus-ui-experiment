@@ -279,6 +279,7 @@ export const Authenticated: Story = {
         sidebar={managementSidebarProps}
         header={managementHeaderProps}
         footer={publicRegistryFooter}
+        stickyHeader
       >
         <div className="min-h-[200vh] rounded-xl border border-dashed" />
       </ManagementAppShell>

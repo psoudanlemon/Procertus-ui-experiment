@@ -194,7 +194,7 @@ type Story = StoryObj<typeof meta>;
  */
 export const Default: Story = {
   render: () => (
-    <ManagementAppShell sidebar={sidebarProps} header={headerProps}>
+    <ManagementAppShell sidebar={sidebarProps} header={headerProps} stickyHeader>
       <VerificationModal />
     </ManagementAppShell>
   ),

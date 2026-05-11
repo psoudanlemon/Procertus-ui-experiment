@@ -1,5 +1,4 @@
 import {
-  ArrowUp01Icon,
   BrickWallIcon,
   Cancel01Icon,
   FactoryIcon,
@@ -414,7 +413,7 @@ export function ProductSelectionBasketMobileSummaryBar({
 
   if (count === 0) {
     return (
-      <div className={cn("px-boundary py-component", className)}>
+      <div className={cn("px-boundary pt-section", className)}>
         <div
           aria-live="polite"
           className="flex min-h-11 items-center gap-component rounded-md border border-dashed border-border/60 bg-card/50 px-component py-micro text-sm text-muted-foreground"
@@ -442,7 +441,7 @@ export function ProductSelectionBasketMobileSummaryBar({
             transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
             className="overflow-hidden"
           >
-            <div className="flex flex-col gap-component px-boundary pt-component">
+            <div className="flex flex-col gap-component px-boundary pt-component pb-component">
               <button
                 type="button"
                 onClick={() => setOpen(false)}
@@ -451,6 +450,15 @@ export function ProductSelectionBasketMobileSummaryBar({
               >
                 <span aria-hidden className="h-1 w-10 rounded-full bg-border" />
               </button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={clearSelection}
+                className="w-full text-muted-foreground"
+              >
+                Wis selectie
+              </Button>
               <ul className="flex max-h-sticky-rail flex-col divide-y divide-border overflow-y-auto rounded-lg border border-border bg-card">
                 <AnimatePresence initial={false} mode="popLayout">
                   {selectedProducts.map((p) => (
@@ -464,15 +472,6 @@ export function ProductSelectionBasketMobileSummaryBar({
                   ))}
                 </AnimatePresence>
               </ul>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={clearSelection}
-                className="self-start text-muted-foreground"
-              >
-                Wis selectie
-              </Button>
             </div>
           </motion.div>
         ) : null}
@@ -484,7 +483,14 @@ export function ProductSelectionBasketMobileSummaryBar({
         aria-expanded={open}
         aria-controls={trayId}
         aria-label={`${countLabel}. ${open ? "Verberg" : "Bekijk"} lijst.`}
-        className="group/basket-bar block w-full cursor-pointer px-boundary py-component text-left focus-visible:outline-none"
+        className={cn(
+          "group/basket-bar block w-full cursor-pointer px-boundary text-left focus-visible:outline-none",
+          // Wanneer de lade open is, levert de inner tray haar eigen `pb-component`; we laten
+          // dan onze top-padding vallen zodat de visuele afstand tussen items en bar exact
+          // `--spacing-component` is. Bij gesloten lade behoudt de bar zijn ademruimte
+          // tegen de chrome-top.
+          open ? "pt-0" : "pt-section",
+        )}
       >
         <span
           className={cn(
@@ -493,30 +499,20 @@ export function ProductSelectionBasketMobileSummaryBar({
             "group-focus-visible/basket-bar:ring-2 group-focus-visible/basket-bar:ring-ring",
           )}
         >
-          <span className="flex items-center gap-component text-sm font-medium">
-            <motion.span
-              key={addPulseKey}
-              initial={{ scale: 1.35 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 420, damping: 14 }}
-              className="inline-block"
-            >
-              <Badge variant="secondary" className="border-border">
-                {count}
-              </Badge>
-            </motion.span>
-            <span>{count === 1 ? "product geselecteerd" : "producten geselecteerd"}</span>
+          <span className="text-sm font-medium">
+            {count === 1 ? "product geselecteerd" : "producten geselecteerd"}
           </span>
-          <span className="flex items-center gap-micro text-xs font-medium text-muted-foreground">
-            {open ? "Verberg lijst" : "Bekijk lijst"}
-            <motion.span
-              animate={{ rotate: open ? 180 : 0 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="inline-flex"
-            >
-              <HugeiconsIcon icon={ArrowUp01Icon} className="size-4" aria-hidden />
-            </motion.span>
-          </span>
+          <motion.span
+            key={addPulseKey}
+            initial={{ scale: 1.35 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 420, damping: 14 }}
+            className="inline-block"
+          >
+            <Badge variant="secondary" className="border-border">
+              {count}
+            </Badge>
+          </motion.span>
         </span>
       </button>
     </div>
@@ -538,20 +534,20 @@ export function ProductSelectionBasketActionBar() {
         type="button"
         variant="ghost"
         size="lg"
-        className="md:h-9 md:px-4"
+        className="h-12 px-6 md:h-9 md:px-4"
         onClick={onCancel}
         disabled={onCancel == null}
       >
-        Annuleren
+        Terug
       </Button>
       <Button
         type="button"
         size="lg"
-        className="md:h-9 md:px-4"
+        className="h-12 px-6 md:h-9 md:px-4"
         disabled={selectedIds.length === 0}
         onClick={() => onContinue(selectedIds)}
       >
-        Pakket samenstellen
+        Ga verder
       </Button>
     </>
   );

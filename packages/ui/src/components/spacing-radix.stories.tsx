@@ -58,6 +58,13 @@ function readSpacingFromStyleSheets(targetSelector: string): ResolvedTokens {
         rule.selectorText === targetSelector
       ) {
         for (const role of SPACING_ROLES) {
+          // Storybook's `preview.css` forces desktop spacing tokens at every
+          // viewport via `!important` so iframe widths stay visually consistent
+          // across docs & canvas. Skip those forced declarations here so the
+          // table reflects the real design-token values from `default.css`.
+          if (rule.style.getPropertyPriority(`--spacing-${role}`) === "important") {
+            continue;
+          }
           const value = rule.style.getPropertyValue(`--spacing-${role}`);
           if (value) result[role].mobile = remToPx(value);
         }
@@ -71,6 +78,11 @@ function readSpacingFromStyleSheets(targetSelector: string): ResolvedTokens {
             inner.selectorText === targetSelector
           ) {
             for (const role of SPACING_ROLES) {
+              if (
+                inner.style.getPropertyPriority(`--spacing-${role}`) === "important"
+              ) {
+                continue;
+              }
               const value = inner.style.getPropertyValue(`--spacing-${role}`);
               if (value) result[role].desktop = remToPx(value);
             }

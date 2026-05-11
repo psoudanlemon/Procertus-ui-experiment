@@ -351,7 +351,7 @@ export const LongFormContent: StoryObj = {
 export const Shell: StoryObj = {
   name: "Management shell",
   render: () => (
-    <ManagementAppShell sidebar={managementSidebarProps} header={managementHeaderProps}>
+    <ManagementAppShell sidebar={managementSidebarProps} header={managementHeaderProps} stickyHeader>
       <div className="min-h-[200vh] rounded-xl border border-dashed" />
     </ManagementAppShell>
   ),

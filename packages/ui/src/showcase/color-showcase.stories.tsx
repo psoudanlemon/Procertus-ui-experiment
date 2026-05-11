@@ -467,7 +467,7 @@ export default meta;
 export const Default: StoryObj = {
   name: "Default",
   render: () => (
-    <ManagementAppShell sidebar={sidebarProps} header={headerProps}>
+    <ManagementAppShell sidebar={sidebarProps} header={headerProps} stickyHeader>
       <ColorShowcasePage />
     </ManagementAppShell>
   ),

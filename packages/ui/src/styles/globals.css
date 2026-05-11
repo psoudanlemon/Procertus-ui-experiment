@@ -198,10 +198,11 @@
     @apply bg-background text-foreground;
   }
   /*
-   * Public registry/onboarding chrome: footer + action-bar stay on a white surface
-   * regardless of the active theme. Both Storybook (`PublicLayoutDecorator`) and the
-   * app's `PublicAppShell` set `data-public-layout` on `<html>`, so the same rule
-   * paints in stories and in production.
+   * Public registry/onboarding chrome: copyright footer + traject action bar stay
+   * on a white surface regardless of the active theme. Both Storybook
+   * (`PublicLayoutDecorator`) and the app's `PublicAppShell` set
+   * `data-public-layout` on `<html>`, so the same rule paints in stories and in
+   * production.
    */
   html[data-public-layout] [data-slot="footer"] {
     --sidebar: var(--neutral-white);
@@ -210,10 +211,9 @@
     --card: var(--neutral-white);
     --card-foreground: var(--neutral-950);
   }
-  html[data-public-layout]
-    [data-slot="public-registry-bottom-chrome"]
-    > div:not([data-slot]) {
-    background-color: var(--neutral-white);
+  html[data-public-layout] [data-slot="traject-action-bar"] {
+    --card: var(--neutral-white);
+    --card-foreground: var(--neutral-950);
   }
   @media (prefers-reduced-motion: reduce) {
     *,

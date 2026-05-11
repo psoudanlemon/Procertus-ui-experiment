@@ -319,7 +319,7 @@
   --spacing-component: 0.75rem; /* 12px — larger for touch */
   --spacing-section: 1rem; /* 16px */
   --spacing-region: 1.5rem; /* 24px */
-  --spacing-boundary: 1.5rem; /* 24px */
+  --spacing-boundary: 1.25rem; /* 20px */
 }
 
 /* Operational: desktop */
@@ -339,7 +339,7 @@
   --spacing-component: 1rem; /* 16px — larger for touch */
   --spacing-section: 1.25rem; /* 20px */
   --spacing-region: 2rem; /* 32px */
-  --spacing-boundary: 2rem; /* 32px */
+  --spacing-boundary: 1.25rem; /* 20px */
 }
 
 /* Spacious: desktop */

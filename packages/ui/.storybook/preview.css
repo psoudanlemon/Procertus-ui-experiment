@@ -19,13 +19,17 @@ html {
  * toolbar through `[data-density]`. `!important` is required to beat the
  * `@media (min-width: 768px) :root` rule in `default.css`, which has the same
  * specificity and would otherwise tie or win on viewport-dependent cascade.
+ *
+ * NOTE: `--spacing-boundary` is intentionally *not* locked here — the mobile
+ * value (20px) is the page frame token and we want stories rendered in narrow
+ * iframes (and mobile-viewport canvas) to reflect it accurately, since the
+ * boundary deliberately compresses on mobile to recover viewport real estate.
  */
 :root {
   --spacing-micro: 0.25rem !important;
   --spacing-component: 0.5rem !important;
   --spacing-section: 1rem !important;
   --spacing-region: 2rem !important;
-  --spacing-boundary: 2rem !important;
 }
 
 [data-density="spacious"] {
@@ -33,7 +37,6 @@ html {
   --spacing-component: 0.75rem !important;
   --spacing-section: 1.5rem !important;
   --spacing-region: 2.5rem !important;
-  --spacing-boundary: 3rem !important;
 }
 
 body,

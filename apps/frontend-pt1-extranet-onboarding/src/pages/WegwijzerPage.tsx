@@ -112,7 +112,6 @@ export function WegwijzerPage() {
     <DensityProvider density="operational">
       <PublicRegistryAppShell
         hideFab
-        stickyBottomChrome={false}
         header={{
           logo: (
             <img
