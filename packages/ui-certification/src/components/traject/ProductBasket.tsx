@@ -169,7 +169,7 @@ export function SelectedRow({
               {label}
               {categoryTrail ? (
                 <span className="ms-2 text-xs font-normal text-muted-foreground">
-                  {categoryTrail.split(" > ").reverse().join(" < ")}
+                  {`> ${categoryTrail.split(" > ").reverse().join(" > ")}`}
                 </span>
               ) : null}
             </ItemTitle>
