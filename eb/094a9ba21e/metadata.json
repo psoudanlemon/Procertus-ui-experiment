@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "eb094a9ba21e",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx",
+    "packages/ui-certification/src/components/onboarding/extras-step/OnboardingExtrasStep.tsx",
+    "packages/ui-certification/src/components/traject/ProductInquiryMatrix.tsx",
+    "packages/ui-certification/src/index.ts",
+    "packages/ui-certification/src/onboarding/derive-formal-onboarding-resume-step.ts",
+    "packages/ui-certification/src/onboarding/index.ts",
+    "packages/ui-certification/src/onboarding/lib/onboarding-step-completion-navigation.ts",
+    "packages/ui-certification/src/onboarding/onboarding-constants.ts",
+    "packages/ui-certification/src/onboarding/onboarding-default-flow-state.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-api.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-provider.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-story-fixtures.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-types.ts",
+    "packages/ui-certification/src/onboarding/traject-draft-belongs.ts",
+    "packages/ui-certification/src/onboarding/use-active-formal-inquiry-continue-banner.ts",
+    "packages/ui-certification/src/onboarding/use-onboarding-flow.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/eb/094a9ba21e/0/metadata.json",
+      "transcript": "/eb/094a9ba21e/0/full.jsonl",
+      "content_hash": "/eb/094a9ba21e/0/content_hash.txt",
+      "prompt": "/eb/094a9ba21e/0/prompt.txt"
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+@apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx when bundling all inquiries in the request, the user can select extra certification types for the already selected products. I think this should be expanded with an extra column to also display the certification already selected for the previously chosen certification product. 
+
+ please disable this select box so it is not possible to reselect the originally selected certification type for the adult products. 
+
+ also, the extra available certification types to select for the chosen products should be derived from availability in the original dataset. @packages/ui-certification/src/data/procertus-categorization.json 
+
+ please make sure the proper data helpers or hooks are used to enable select boxes when a certification type is available for a product.
+
+Only show columns for certification types if at least one product has availability for that certification type. Skip columns for extra certification types if none of the selected products supports them.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx when bundling all inquiries in the request, the user can select extra certification types for the already selected products. I think this should be expanded with an extra column to also display the certification already selected for the previously chosen certification product. 
+
+ please disable this select box so it is not possible to reselect the originally selected certification type for the adult products. 
+
+ also, the extra available certification types to select for the chosen products should be derived from availability in the original dataset. @packages/ui-certification/src/data/procertus-categorization.json 
+
+ please make sure the proper data helpers or hooks are used to enable select boxes when a certification type is available for a product.
+
+Only show columns for certification types if at least one product has availability for that certification type. Skip columns for extra certification types if none of the selected products supports them.
+
+---
+
+Use the same type of select boxes for all the columns.
+
+---
+
+On the same page, beneath the interactive section for selecting extra certification types for the chosen products, please show a note for all other certification types that are not added to the columns because they are not available for those products.
+
+Please explain that those certification types are not available for the selected products.
+
+---
+
+On the same page, beneath the interactive section for selecting extra certification types for the chosen products, please show a note for all other certification types that are not added to the columns because they are not available for those products.
+
+Please explain that those certification types are not available for the selected products.
+
+---
+
+If CA was already selected as the preselected certification type, still show the CA levels beneath the checkmark.
+
+Always use the same type of checkmark for all columns.
+
+---
+
+I still don't see the CE levels being displayed as a label beneath the (disabled) checkbox.
+
+---
+
+Okay, now I see them, but I notice that not every CE has a level assigned to it. I see Niveau 4 being added, bot no other levels?
+
+Maybe this is the case because I could select products in the previous step that shouldn't have been made available for CE. When I selected CE mark as the certification type in the first step, we should only have seen products that were available or made available for CE mark certification.
+
+---
+
+Okay, now I see them, but I notice that not every CE has a level assigned to it. I see Niveau 4 being added, bot no other levels?
+
+Maybe this is the case because I could select products in the previous step that shouldn't have been made available for CE. When I selected CE mark as the certification type in the first step, we should only have seen products that were available or made available for CE mark certification.
+
+---
+
+Also allow the possibility to add more certifications to the requests. Add a call-to-action button—not just "Go back"—but an "Add more" button.
+
+This will direct the user back to the original certification type selector and allow them to select a different certification type to add to the same request. This will not erase the current selection but will append to it.
+
+Please show on the overview page for all certification types when we have already selected product types or previously selected certification types. 
+
+Allow these cards to appear as already selected and display the number of selected products for each certification type.@apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx @apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx:168-175  please add to the choice bar items a "selected" prop and, optionally, an "amount".
+
+---
+
+I don't see the call-to-action button to add more products or add more certification types to the inquiry.@apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx:214 remove this again. I didn't want this Assemble Session Summary; I just want to use the Assemble Body with the already available Multi-Select Overview.
+
+---
+
+Use the already available bundle to assemble the body. @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx:213 
+
+ Show all available products for the already selected and added certification types. Only allow selecting options that are possible (cfr what is allowed by the master data.@packages/ui-certification/src/data/procertus-categorization.json )
+
+---
+
+Please commit all changes. Use git commit skill.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx:85-96  show the product inquiry matrix on this info request page, positioned above the expert call booking view. @packages/ui-certification/src/components/traject/ProductInquiryMatrix.tsx 
+
+@packages/ui-certification/src/components/traject/ProductInquiryMatrix.tsx Also use this product inquiry matrix inside the cart panel when showing the current complete inquiry overview instead of allowing changes. @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicCertificationRequestsCart.tsx 
+
+In the panel, please also allow options to erase the complete inquiry and still ask for confirmation. 
+
+ add an option to the product inquiry matrix to allow deletion of rows and add a handle.
+
+For this row removal, use a trash icon in an icon button
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx:91 are you sure this check is correct? It is dependent on the flow state, but when I bundle requests and render the same product inquiry matrix in the project request review flow, I get different data. @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx:177-180 @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx:60-66 
+
+ this is because of the difference in how the onboarding flow snapshot works for the traject request review and the onboarding flow context provider. 
+
+ I want to consolidate so all information is stored within the onboarding flow context provider, and no data is duplicated across different providers.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx:91 are you sure this check is correct? It is dependent on the flow state, but when I bundle requests and render the same product inquiry matrix in the project request review flow, I get different data. @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx:177-180 @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx:60-66 
+
+ this is because of the difference in how the onboarding flow snapshot works for the traject request review and the onboarding flow context provider. 
+
+ I want to consolidate so all information is stored within the onboarding flow context provider, and no data is duplicated across different providers.
+
+---
+
+Please also provide a mobile-optimized variant of this product inquiry matrix and set up container queries to detect the available width and switch between the two responsive modes.
+
+In mobile mode, show a minimal list view where each product’s information is shown at full width.
+
+Instead of showing it in the matrix, also display, per product, which certification types have been added for that product.
+
+---
+
+Please also provide a mobile-optimized variant of this product inquiry matrix and set up container queries to detect the available width and switch between the two responsive modes.
+
+In mobile mode, show a minimal list view where each product’s information is shown at full width.
+
+Instead of showing it in the matrix, also display, per product, which certification types have been added for that product.
+
+---
+
+I don't see the normal mode being used in containers wider than 576 pixels.
+
+---
+
+Okay, great. Now it is working.
+
+@apps/frontend-pt1-extranet-onboarding/src/layouts/PublicCertificationRequestsCart.tsx  Can I make the panel wider where this component is being rendered?
+How do I control this panel's props? Or is the panel not configurable?
+
+---
+
+I have changed some width and max-width properties, but the outer element seems to have a fixed width or max-width of 320 pixels.
+
+When using the width system of 4 pixels per unit, that corresponds to 80 units.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx only when the user chooses the triage option to start a certification trajectory do we need to change the data context and package all currently selected certification types and the certification or selected products for those types into a formal request trajectory. 
+
+ at this point in the flow, we switch to the formal onboarding mode.
+
+Based on this data context, we must also show the banner when not in the formal onboarding flow. @apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx:98 @apps/frontend-pt1-extranet-onboarding/src/layouts/ActiveInquiryContinueAlert.tsx @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx:65-70
+
+---
+
+The outermost right step in the formal request onboarding flow is derived from the data state. However, there are currently some issues with this.
+
+When I have selected only a country and chosen to continue, the next time the current step is auto-detected I should still go to step 2 to register information for the user, since I never hit Confirm. And there's no information about registration that could have been stored yet.
+
+---
+
+For the code present, we get this error:
+```
+'vatLookupStepLabels' is declared but its value is never read.
+```
+Fix it, verify, and then give a concise explanation. @packages/ui-certification/src/components/onboarding/extras-step/OnboardingExtrasStep.tsx:136-139 
+
+ Please remove all unused imports and variables.@packages/ui-certification/src/components/onboarding/extras-step/OnboardingExtrasStep.tsx @packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx
+
+---
+
+For the code present, we get this error:
+```
+'vatLookupStepLabels' is declared but its value is never read.
+```
+Fix it, verify, and then give a concise explanation. @packages/ui-certification/src/components/onboarding/extras-step/OnboardingExtrasStep.tsx:136-139 
+
+ Please remove all unused imports and variables.@packages/ui-certification/src/components/onboarding/extras-step/OnboardingExtrasStep.tsx @packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx
+
+---
+
+Now, for the next step after the customer step, we are registering information about the maatschappelijke zetel after entering the AVAT number.
+
+When this has not been confirmed, it shouldn't be added to the data context. Deriving the correct step from the data state should therefore point to the correct third step in the flow.
+
+This isn't currently the case: we are being directed to step 7, he final step
+
+---
+
+@packages/ui-certification/src/onboarding/lib/registration-phase-shell-copy.ts remove this file and also remove all imports for this file.
+
+---
+
+@packages/ui-certification/src/onboarding/use-onboarding-flow.tsx:329-332 we have made the copy for the registration face title and description static.
+
+---
+
+@packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx please use the formatter on this file to make sure all imports and unused variables are removed.
