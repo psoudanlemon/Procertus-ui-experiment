@@ -92,3 +92,7 @@ I shouldn't be able to continue from Step 2  without first making a selection in
 ---
 
 I shouldn't be able to continue from Step 2  without first making a selection in Step 2 to say I'm legal responsable or not@packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx
+
+---
+
+Commit all changes using git commit skill.
