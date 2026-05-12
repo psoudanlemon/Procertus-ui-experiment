@@ -8,7 +8,11 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Button, Card, CardContent, CardDescription, CardHeader, H2, H3 } from "@procertus-ui/ui";
-import { TrajectPageFrame, TrajectStoryFooter, useOnboardingFlowApi } from "@procertus-ui/ui-certification";
+import {
+  TrajectPageFrame,
+  TrajectStoryFooter,
+  useOnboardingFlowApi,
+} from "@procertus-ui/ui-certification";
 import { FORMAL_ONBOARDING_PATH } from "../routes/formal-request-routing";
 import { useSyncOnboardingTrajectFromServiceId } from "../features/onboarding/use-sync-onboarding-traject-from-service-id";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
@@ -72,7 +76,7 @@ export function TriagePage() {
               "Reactie binnen enkele werkdagen",
               "Live sessie mogelijk tijdens het invullen",
             ]}
-            cta="Verstuur aanvraag"
+            cta="Vrijblijvende aanvraag"
             to={INFORMATIONAL_REQUEST_PATH(entry.id)}
             onBeforeNavigate={() => {
               api.resetFormalRequestPackageCommit();
