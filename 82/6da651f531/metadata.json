@@ -1,0 +1,18 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "826da651f531",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "packages/ui-certification/src/components/traject/BundleAssemble.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/82/6da651f531/0/metadata.json",
+      "transcript": "/82/6da651f531/0/full.jsonl",
+      "content_hash": "/82/6da651f531/0/content_hash.txt",
+      "prompt": "/82/6da651f531/0/prompt.txt"
+    }
+  ]
+}
