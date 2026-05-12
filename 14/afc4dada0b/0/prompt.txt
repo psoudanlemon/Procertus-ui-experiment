@@ -20,3 +20,7 @@ Currently, only the inquiries are being removed, but all related information col
 ---
 
 @packages/ui-certification/src/components/traject/BundleAssemble.tsx:345-351 just like on the bundle-assemble page, also show the same "Add More" options on the review. @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx:174-180
+
+---
+
+Commit all changes. Use Commit Skill.
