@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { DensityProvider } from "@procertus-ui/ui";
 import {
   ExpertCallBookingView,
@@ -73,9 +67,7 @@ export function ExpertCallPlaceholderPage() {
     if (location.key !== "default") {
       navigate(-1);
     } else if (entry) {
-      const triageQuery = entryPoint
-        ? `?${TRAJECT_ENTRY_POINT_QUERY_PARAM}=${entryPoint}`
-        : "";
+      const triageQuery = entryPoint ? `?${TRAJECT_ENTRY_POINT_QUERY_PARAM}=${entryPoint}` : "";
       navigate(`/welcome/aanvraag/${entry.id}${triageQuery}`);
     } else {
       navigate(WEGWIJZER_PATH);
@@ -100,6 +92,7 @@ export function ExpertCallPlaceholderPage() {
     >
       <DensityProvider density="spacious">
         <ExpertCallBookingView
+          alwaysShowSchedule
           idPrefix="expert-call"
           storageKey={`procertus.expert-call.${entry?.id ?? "hero"}`}
           onCanSubmitChange={setCanSubmit}

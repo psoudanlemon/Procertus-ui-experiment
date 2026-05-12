@@ -10,6 +10,7 @@ export const PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG = 10_000;
 
 export type ProductRequestNoteFieldProps = {
   className?: string;
+  placeholder?: string;
   value: string;
   onChange: (value: string) => void;
   /**
@@ -63,10 +64,7 @@ export const PRODUCT_REQUEST_NOTE_MIN_LENGTH = 5;
  * {@link PRODUCT_REQUEST_NOTE_MIN_LENGTH} niet-witspace karakters wanneer
  * `required` op `true` staat.
  */
-export function isProductRequestNoteComplete(
-  value: string,
-  required: boolean,
-): boolean {
+export function isProductRequestNoteComplete(value: string, required: boolean): boolean {
   if (!required) return true;
   return value.trim().length >= PRODUCT_REQUEST_NOTE_MIN_LENGTH;
 }
@@ -80,6 +78,7 @@ export function isProductRequestNoteComplete(
  */
 export function ProductRequestNoteField({
   className,
+  placeholder = "Beschrijf hier de context van uw aanvraag: voorgeschiedenis (eerdere keuringen, geplande wijzigingen aan de productie, …), bijzondere omstandigheden of een specifieke vraag voor de auditor die uw dossier moet weten.",
   value,
   onChange,
   maxLength = PRODUCT_REQUEST_NOTE_MAX_LENGTH,
@@ -135,7 +134,7 @@ export function ProductRequestNoteField({
         aria-required={required || undefined}
         aria-labelledby={ariaLabelledBy}
         aria-describedby={counterId}
-        placeholder="Beschrijf hier de context van uw aanvraag: voorgeschiedenis (eerdere keuringen, geplande wijzigingen aan de productie, …), bijzondere omstandigheden of een specifieke vraag voor de auditor die uw dossier moet weten."
+        placeholder={placeholder}
         style={{ minHeight: `calc(${rows} * 1.5em + 1.25rem)` }}
         className={cn(
           "rounded-none border-0 bg-transparent shadow-none dark:bg-transparent",
@@ -159,8 +158,7 @@ export function ProductRequestNoteField({
             (isNearLimit || belowMinimum) && "text-destructive-foreground",
           )}
         >
-          {value.length.toLocaleString("nl-BE")} /{" "}
-          {maxLength.toLocaleString("nl-BE")}
+          {value.length.toLocaleString("nl-BE")} / {maxLength.toLocaleString("nl-BE")}
         </span>
       </div>
     </div>

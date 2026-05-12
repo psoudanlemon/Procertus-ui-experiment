@@ -172,18 +172,6 @@ export function OnboardingCompanyLegalEntitiesStep({
         </div>
       )}
 
-      {overviewRows.length > 0 ? (
-        <p className="text-xs leading-relaxed text-muted-foreground">
-          <span className="font-medium text-foreground">Samenvatting toewijzing:</span>{" "}
-          {overviewRows.map((d) => (
-            <span key={d.id} className="me-4 inline-block last:me-0">
-              <span className="text-muted-foreground">{(d.shortLabel || d.label).trim()} → </span>
-              <span className="font-medium text-foreground">{assignmentSummaryLabel(d.id)}</span>
-            </span>
-          ))}
-        </p>
-      ) : null}
-
       <ChoiceCardGroup
         className="p-0"
         layout="grid"
