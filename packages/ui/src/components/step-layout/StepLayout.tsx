@@ -264,8 +264,7 @@ export function StepLayout({
   const banded = chromeStyle === "banded";
   const bare = chromeStyle === "bare";
   /** Horizontal stepper only: muted chrome strip separates from body; title sits below without the band. */
-  const bandedTopStepStrip =
-    banded && !rail && hasStepper && stepperPosition === "top";
+  const bandedTopStepStrip = banded && !rail && hasStepper && stepperPosition === "top";
 
   const footerActions = (
     <StepLayoutFooterActions
@@ -307,17 +306,16 @@ export function StepLayout({
     stableHeight && cn("flex flex-col", minHeight),
   );
 
-  const bandedStepStripNode =
-    bandedTopStepStrip ? (
-      <CardHeader
-        className={cn(
-          "flex flex-col border-b bg-muted/40 !gap-0 !px-region !pt-region !pb-section",
-          isFill && "shrink-0",
-        )}
-      >
-        <div className="mx-auto w-[90%]">{resolvedStepper}</div>
-      </CardHeader>
-    ) : null;
+  const bandedStepStripNode = bandedTopStepStrip ? (
+    <CardHeader
+      className={cn(
+        "flex flex-col border-b bg-muted/40 !gap-0 !px-region !pt-region !pb-section",
+        isFill && "shrink-0",
+      )}
+    >
+      <div className="mx-auto w-[90%]">{resolvedStepper}</div>
+    </CardHeader>
+  ) : null;
 
   const titleHeaderNode = (
     <CardHeader

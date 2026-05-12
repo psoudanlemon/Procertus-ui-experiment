@@ -263,23 +263,18 @@
 
   /* Static branded glow — brighter halo on dark surfaces. */
   --shadow-proc-glow-tactile:
-    0 0 0 1px oklch(0.803 0.073 173 / 0.3),
-    0 1px 3px oklch(0.477 0.102 227 / 0.22);
+    0 0 0 1px oklch(0.803 0.073 173 / 0.3), 0 1px 3px oklch(0.477 0.102 227 / 0.22);
   --shadow-proc-glow-xs:
-    0 0 0 1px oklch(0.803 0.073 173 / 0.4),
-    0 4px 20px oklch(0.803 0.073 173 / 0.5),
+    0 0 0 1px oklch(0.803 0.073 173 / 0.4), 0 4px 20px oklch(0.803 0.073 173 / 0.5),
     0 2px 10px oklch(0.477 0.102 227 / 0.3);
   --shadow-proc-glow-sm:
-    0 0 0 1px oklch(0.803 0.073 173 / 0.42),
-    0 8px 28px oklch(0.803 0.073 173 / 0.55),
+    0 0 0 1px oklch(0.803 0.073 173 / 0.42), 0 8px 28px oklch(0.803 0.073 173 / 0.55),
     0 4px 14px oklch(0.477 0.102 227 / 0.34);
   --shadow-proc-glow-md:
-    0 0 0 1px oklch(0.803 0.073 173 / 0.45),
-    0 16px 44px oklch(0.803 0.073 173 / 0.6),
+    0 0 0 1px oklch(0.803 0.073 173 / 0.45), 0 16px 44px oklch(0.803 0.073 173 / 0.6),
     0 8px 24px oklch(0.477 0.102 227 / 0.38);
   --shadow-proc-glow-lg:
-    0 0 0 1px oklch(0.803 0.073 173 / 0.48),
-    0 24px 68px oklch(0.803 0.073 173 / 0.65),
+    0 0 0 1px oklch(0.803 0.073 173 / 0.48), 0 24px 68px oklch(0.803 0.073 173 / 0.65),
     0 12px 36px oklch(0.477 0.102 227 / 0.42);
 
   /* ── Dark-mode gradient overrides ──────────────────────────────────────── */
@@ -453,7 +448,7 @@
    *   • `min-h-stable-step` — keeps a step card from collapsing between steps
    *   • `max-h-sticky-rail` — caps a sticky right-rail to the viewport so it
    *      stays scrollable instead of overflowing the layout. */
-  --min-height-stable-step: calc(100svh - 12rem);
+  --min-height-stable-step: calc(100svh - 22rem);
   --max-height-sticky-rail: calc(100svh - 12rem);
 
   /* Brand */
@@ -560,23 +555,18 @@
    * tactile is a 2-layer press-depth equivalent (no halo); xs → lg add the
    * accent halo and grow progressively. */
   --shadow-proc-glow-tactile:
-    0 0 0 1px oklch(0.803 0.073 173 / 0.18),
-    0 1px 3px oklch(0.477 0.102 227 / 0.12);
+    0 0 0 1px oklch(0.803 0.073 173 / 0.18), 0 1px 3px oklch(0.477 0.102 227 / 0.12);
   --shadow-proc-glow-xs:
-    0 0 0 1px oklch(0.803 0.073 173 / 0.25),
-    0 4px 16px oklch(0.803 0.073 173 / 0.45),
+    0 0 0 1px oklch(0.803 0.073 173 / 0.25), 0 4px 16px oklch(0.803 0.073 173 / 0.45),
     0 2px 8px oklch(0.477 0.102 227 / 0.18);
   --shadow-proc-glow-sm:
-    0 0 0 1px oklch(0.803 0.073 173 / 0.28),
-    0 8px 24px oklch(0.803 0.073 173 / 0.5),
+    0 0 0 1px oklch(0.803 0.073 173 / 0.28), 0 8px 24px oklch(0.803 0.073 173 / 0.5),
     0 4px 12px oklch(0.477 0.102 227 / 0.22);
   --shadow-proc-glow-md:
-    0 0 0 1px oklch(0.803 0.073 173 / 0.32),
-    0 16px 40px oklch(0.803 0.073 173 / 0.55),
+    0 0 0 1px oklch(0.803 0.073 173 / 0.32), 0 16px 40px oklch(0.803 0.073 173 / 0.55),
     0 8px 20px oklch(0.477 0.102 227 / 0.26);
   --shadow-proc-glow-lg:
-    0 0 0 1px oklch(0.803 0.073 173 / 0.36),
-    0 24px 64px oklch(0.803 0.073 173 / 0.6),
+    0 0 0 1px oklch(0.803 0.073 173 / 0.36), 0 24px 64px oklch(0.803 0.073 173 / 0.6),
     0 12px 32px oklch(0.477 0.102 227 / 0.3);
 
   --color-chart-1: var(--chart-1);
