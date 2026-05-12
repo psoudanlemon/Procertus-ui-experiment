@@ -24,14 +24,6 @@ function buildQuarterHourSlots(startHour: number, endHour: number): string[] {
   return slots;
 }
 
-function RequiredMark() {
-  return (
-    <span aria-hidden="true" className="text-destructive-foreground">
-      *
-    </span>
-  );
-}
-
 type FormState = {
   selectedDate: Date | undefined;
   selectedSlot: string | undefined;
@@ -133,6 +125,12 @@ export type ExpertCallBookingViewProps = {
    * gegevens herstelt. Geef per route (en service) een unieke sleutel mee.
    */
   storageKey?: string;
+  /**
+   * Wanneer `true` wordt de "Wenst u een call met een van onze experts?"-checkbox
+   * weggelaten en is de agenda permanent zichtbaar. Gebruik dit op de expert-call
+   * variant, waar de keuze voor een call al impliciet is.
+   */
+  alwaysShowSchedule?: boolean;
 };
 
 /**
@@ -150,10 +148,13 @@ export function ExpertCallBookingView({
   prefill,
   idPrefix = "expert-call",
   storageKey,
+  alwaysShowSchedule = false,
 }: ExpertCallBookingViewProps) {
   const initial = useMemo<FormState>(() => {
     const persisted = readPersistedState(storageKey);
-    if (persisted) return persisted;
+    if (persisted) {
+      return alwaysShowSchedule ? { ...persisted, wantsExpertCall: true } : persisted;
+    }
     return {
       selectedDate: new Date(),
       selectedSlot: undefined,
@@ -163,12 +164,12 @@ export function ExpertCallBookingView({
       jobTitle: prefill?.jobTitle ?? "",
       phone: prefill?.phone ?? "",
       company: prefill?.company ?? "",
-      wantsExpertCall: false,
+      wantsExpertCall: alwaysShowSchedule,
     };
     // We bewust geen prefill in deps: prefill is een nieuw object per render bij
     // parent re-renders, en de initial-snapshot mag maar één keer berekend worden.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storageKey]);
+  }, [storageKey, alwaysShowSchedule]);
 
   const [state, setState] = useState<FormState>(initial);
 
@@ -226,9 +227,8 @@ export function ExpertCallBookingView({
     };
   }, [state.wantsExpertCall]);
 
-  return (
-    <div className="flex flex-col gap-component">
-      <Card>
+  const contactCard = (
+    <Card>
         <CardContent>
           <section className="flex flex-col gap-section">
             <div className="flex flex-col gap-micro">
@@ -239,9 +239,7 @@ export function ExpertCallBookingView({
             </div>
             <div className="grid grid-cols-1 gap-section sm:grid-cols-2">
               <Field>
-                <FieldLabel htmlFor={`${idPrefix}-firstname`}>
-                  Voornaam <RequiredMark />
-                </FieldLabel>
+                <FieldLabel htmlFor={`${idPrefix}-firstname`}>Voornaam</FieldLabel>
                 <Input
                   id={`${idPrefix}-firstname`}
                   autoComplete="given-name"
@@ -252,9 +250,7 @@ export function ExpertCallBookingView({
                 />
               </Field>
               <Field>
-                <FieldLabel htmlFor={`${idPrefix}-lastname`}>
-                  Achternaam <RequiredMark />
-                </FieldLabel>
+                <FieldLabel htmlFor={`${idPrefix}-lastname`}>Achternaam</FieldLabel>
                 <Input
                   id={`${idPrefix}-lastname`}
                   autoComplete="family-name"
@@ -265,9 +261,7 @@ export function ExpertCallBookingView({
                 />
               </Field>
               <Field>
-                <FieldLabel htmlFor={`${idPrefix}-email`}>
-                  E-mailadres <RequiredMark />
-                </FieldLabel>
+                <FieldLabel htmlFor={`${idPrefix}-email`}>E-mailadres</FieldLabel>
                 <Input
                   id={`${idPrefix}-email`}
                   type="email"
@@ -284,6 +278,7 @@ export function ExpertCallBookingView({
                   id={`${idPrefix}-phone`}
                   type="tel"
                   autoComplete="tel"
+                  placeholder="Optioneel"
                   value={state.phone}
                   onChange={(e) => update({ phone: e.target.value })}
                 />
@@ -293,6 +288,7 @@ export function ExpertCallBookingView({
                 <Input
                   id={`${idPrefix}-jobtitle`}
                   autoComplete="organization-title"
+                  placeholder="Optioneel"
                   value={state.jobTitle}
                   onChange={(e) => update({ jobTitle: e.target.value })}
                 />
@@ -302,42 +298,36 @@ export function ExpertCallBookingView({
                 <Input
                   id={`${idPrefix}-company`}
                   autoComplete="organization"
+                  placeholder="Optioneel"
                   value={state.company}
                   onChange={(e) => update({ company: e.target.value })}
                 />
               </Field>
             </div>
-            <Field orientation="horizontal" className="mt-component">
-              <Checkbox
-                id={`${idPrefix}-wants-call`}
-                checked={state.wantsExpertCall}
-                onCheckedChange={(checked) =>
-                  update({ wantsExpertCall: checked === true })
-                }
-              />
-              <FieldLabel
-                htmlFor={`${idPrefix}-wants-call`}
-                className="text-sm font-normal"
-              >
-                Wenst u een call met een van onze experts?
-              </FieldLabel>
-            </Field>
+            {alwaysShowSchedule ? null : (
+              <Field orientation="horizontal" className="mt-component">
+                <Checkbox
+                  id={`${idPrefix}-wants-call`}
+                  checked={state.wantsExpertCall}
+                  onCheckedChange={(checked) =>
+                    update({ wantsExpertCall: checked === true })
+                  }
+                />
+                <FieldLabel
+                  htmlFor={`${idPrefix}-wants-call`}
+                  className="text-sm font-normal"
+                >
+                  Wenst u een call met een van onze experts?
+                </FieldLabel>
+              </Field>
+            )}
           </section>
         </CardContent>
       </Card>
+  );
 
-      <AnimatePresence initial={false}>
-        {state.wantsExpertCall ? (
-          <motion.div
-            key="moment"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
-            className="overflow-hidden rounded-xl"
-          >
-          <div className="p-px">
-      <Card>
+  const scheduleCard = (
+    <Card>
         <CardContent>
           <section className="flex flex-col gap-section">
             <div className="flex flex-col gap-micro">
@@ -392,7 +382,31 @@ export function ExpertCallBookingView({
           </section>
         </CardContent>
       </Card>
-          </div>
+  );
+
+  if (alwaysShowSchedule) {
+    return (
+      <div className="flex flex-col gap-component">
+        {scheduleCard}
+        {contactCard}
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-component">
+      {contactCard}
+      <AnimatePresence initial={false}>
+        {state.wantsExpertCall ? (
+          <motion.div
+            key="moment"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+            className="overflow-hidden rounded-xl"
+          >
+            <div className="p-px">{scheduleCard}</div>
           </motion.div>
         ) : null}
       </AnimatePresence>
