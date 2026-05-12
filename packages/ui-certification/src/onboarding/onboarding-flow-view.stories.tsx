@@ -2,17 +2,12 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useLayoutEffect, type ComponentType } from "react";
 
 import { ProcertusCategorizationProvider } from "../ProcertusCategorizationContext";
-import {
-  CERTIFICATION_PHASE_DESCRIPTION,
-  CERTIFICATION_PHASE_TITLE,
-} from "./onboarding-constants";
 import { stepIndex, buildRows } from "./onboarding-flow-helpers";
 import { OnboardingFlowView } from "./onboarding-flow-view";
 import {
   OnboardingFlowViewWithMemoryProvider,
   baseOnboardingFlowViewProps,
   noop,
-  storyCertificationWizardProps,
   storyCustomerContext,
   storyEmptyCompanyFieldKeySet,
   storyOnboardingDrafts,
@@ -65,29 +60,8 @@ const categorizationDecorator = (Story: ComponentType) => (
   </ProcertusCategorizationProvider>
 );
 
-export const RequestPhase: StoryObj<typeof meta> = {
-  name: "01 — Certification (wizard)",
-  decorators: [categorizationDecorator],
-  render: () => {
-    const ctx = storyCustomerContext();
-    return (
-      <OnboardingFlowView
-        {...baseOnboardingFlowViewProps({
-          step: "request",
-          certificationPhaseTitle: CERTIFICATION_PHASE_TITLE,
-          certificationPhaseDescription: CERTIFICATION_PHASE_DESCRIPTION,
-          certificationWizardProps: {
-            ...storyCertificationWizardProps(ctx),
-            sessionId: "storybook-onboarding-request",
-          },
-        })}
-      />
-    );
-  },
-};
-
 export const OriginStep: StoryObj<typeof meta> = {
-  name: "02 — Land of regio (origin)",
+  name: "01 — Land of regio (origin)",
   render: () => {
     const drafts = storyOnboardingDrafts;
     const ctx = storyCustomerContext({

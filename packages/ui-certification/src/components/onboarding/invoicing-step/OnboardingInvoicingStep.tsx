@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@procertus-ui/ui";
-import { DraftCardDescription } from "../../certification-request-wizard/draft-selection-presentation";
+import { DraftCardDescription } from "../../../certification-request/draft-selection-presentation";
 import { registrationIsoCodeFromDutchCountryLabel } from "../../../onboarding/lib/vatPrototypePresets";
 import {
   certificationLegalEntityAssignmentRaw,

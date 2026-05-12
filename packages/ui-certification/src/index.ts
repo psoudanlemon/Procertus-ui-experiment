@@ -1,20 +1,4 @@
 export { defaultProcertusCategorizationDoc } from "./categorization-data";
-export {
-  CertificationIntentPicker,
-  CERTIFICATION_INTENT_IDS,
-  defaultCertificationIntentOptionsEn,
-} from "./components/certification-intent-picker";
-export type {
-  CertificationIntentId,
-  CertificationIntentOption,
-  CertificationIntentPickerProps,
-} from "./components/certification-intent-picker";
-export { CertificationBadgeRow } from "./components/certification-badge-row";
-export type {
-  CertificationBadgeItem,
-  CertificationBadgePresentation,
-  CertificationBadgeRowProps,
-} from "./components/certification-badge-row";
 export { CertificationRequestCard } from "./components/certification-request-card";
 export type {
   CertificationRequestCardInquiry,
@@ -33,34 +17,11 @@ export type {
 } from "./components/certification-request-lifecycle-timeline";
 export { DraftRequestList } from "./components/draft-request-list";
 export type { DraftRequestItem, DraftRequestListProps } from "./components/draft-request-list";
-export { ProductMultiSelect } from "./components/product-multi-select";
-export type {
-  ProductMultiSelectOption,
-  ProductMultiSelectProps,
-} from "./components/product-multi-select";
-export { ProductTreePanel } from "./components/product-tree-panel";
-export type {
-  ProductTreeGroupNode,
-  ProductTreeNode,
-  ProductTreePanelProps,
-  ProductTreeProductNode,
-} from "./components/product-tree-panel";
 export {
-  CertificationRequestWizard,
-  CertificationRequestWizardView,
-  CompactWizardTimeline,
   DraftCardDescription,
   sortDraftsByIntentAndProduct,
-  buildRulesetDocumentsForInquiries,
-  useCertificationRequestWizardView,
-} from "./components/certification-request-wizard";
-export type {
-  CertificationRequestWizardProps,
-  CertificationWizardDraft,
-  CertificationRequestWizardViewProps,
-  UseCertificationRequestWizardViewOptions,
-  WizardStepperModel,
-} from "./components/certification-request-wizard";
+} from "./certification-request/draft-selection-presentation";
+export { buildRulesetDocumentsForInquiries } from "./certification-request/build-ruleset-documents-for-inquiries";
 export { RequestPackageReview } from "./components/request-package-review";
 export type {
   RequestPackageRequesterContext,
@@ -74,19 +35,50 @@ export type {
   RegistrationProcessingStep,
 } from "./components/registration-processing-dialog";
 export {
+  BUNDLE_CERT_META,
+  BUNDLE_CERT_ORDER,
+  BundleAssembleActionBar,
+  BundleAssembleBody,
+  BundleAssembleProvider,
+  ExpertCallBookingView,
   ProductBasket,
+  ProductCategoryTrail,
+  PRODUCT_REQUEST_NOTE_MAX_LENGTH,
+  PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG,
+  PRODUCT_REQUEST_NOTE_MIN_LENGTH,
+  ProductDocumentationLibrary,
+  ProductInquiryMatrix,
+  ProductRequestNoteField,
+  isProductRequestNoteComplete,
   ProductSelectionBasketActionBar,
   ProductSelectionBasketBody,
   ProductSelectionBasketMobileSummaryBar,
   ProductSelectionBasketProvider,
   TrajectLayout,
+  TrajectStoryFooter,
+  buildGeneralProcessDocuments,
+  buildProductDocumentsForDraft,
+  groupDraftsByProduct,
+  useProductSelectionBasket,
 } from "./components/traject";
 export type {
+  BundleAssembleProviderProps,
+  BundleCertKey,
+  BundleCertMeta,
+  BundleProduct,
+  ExpertCallBookingViewProps,
   ProductBasketItem,
   ProductBasketProps,
+  ProductCategoryTrailProps,
+  ProductDocumentationLibraryProps,
+  ProductInquiryMatrixProps,
+  ProductRequestNoteFieldProps,
   ProductSelectionBasketProviderProps,
+  ProductSummaryDocument,
+  ProductSummaryGroup,
   TrajectLayoutAction,
   TrajectLayoutProps,
+  TrajectStoryFooterProps,
 } from "./components/traject";
 export { ProcertusCategorizationTreeView } from "./components/procertus-categorization-tree-view";
 export type {
@@ -178,7 +170,6 @@ export {
   OnboardingExtrasStep,
   OnboardingInvoicingStep,
   OnboardingOriginStep,
-  OnboardingRequestStep,
   OnboardingShell,
   OnboardingSummaryStep,
   CertificationInquiriesOverviewCard,
@@ -192,8 +183,6 @@ export type {
   OnboardingInvoicingStepProps,
   OnboardingOriginStepProps,
   OnboardingOriginStepCopy,
-  OnboardingRequestStepProps,
-  OnboardingRequestStepCopy,
   OnboardingSummaryStepProps,
   OnboardingShellProps,
   CertificationInquiriesOverviewCardProps,

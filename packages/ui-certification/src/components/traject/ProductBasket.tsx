@@ -12,15 +12,17 @@ import {
 } from "@procertus-ui/ui";
 import { AnimatePresence, motion } from "framer-motion";
 
+import { ProductCategoryTrail } from "./ProductCategoryTrail";
+
 export type ProductBasketItem = {
   id: string;
   label: string;
   /**
    * Volledig categoriepad als platte string ("Beton en mortel > Stortklaar
-   * beton"), cluster en alle tussenliggende groepen, zonder het product zelf.
-   * In de winkelmand verloren we de browse-context, dus tonen we het pad als
-   * prefix boven het product, identiek aan de breadcrumb-stijl van
-   * `CategoryPicker`.
+   * beton"), cluster en alle tussenliggende groepen, zonder het product
+   * zelf. In de winkelmand is de browse-context verloren, dus rendert
+   * {@link ProductCategoryTrail} dit pad naast het label om die context
+   * terug te brengen, identiek aan de catalogus- en bundle matrix-rijen.
    */
   categoryTrail: string;
 };
@@ -78,7 +80,7 @@ export function ProductBasket({
             <EmptyBasket />
           </div>
           <div className="col-start-1 row-start-1 flex flex-col gap-section">
-            <ul className="flex flex-col divide-y divide-border overflow-y-auto rounded-lg border border-border bg-card">
+            <ul className="flex flex-col gap-component overflow-y-auto">
               <AnimatePresence initial={false} mode="popLayout">
                 {items.map((p) => (
                   <SelectedRow
@@ -153,8 +155,9 @@ export function SelectedRow({
     >
       <Item
         asChild
+        variant="outline"
         className={cn(
-          "cursor-pointer rounded-none border-transparent p-component text-left transition-colors",
+          "cursor-pointer bg-card p-component text-left transition-colors",
           "hover:bg-accent hover:text-accent-foreground",
           "focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none",
         )}
@@ -167,11 +170,7 @@ export function SelectedRow({
           <ItemContent className="min-w-0">
             <ItemTitle className="line-clamp-none w-full whitespace-normal break-words text-sm font-medium leading-snug">
               {label}
-              {categoryTrail ? (
-                <span className="ms-2 text-xs font-normal text-muted-foreground">
-                  {`> ${categoryTrail.split(" > ").reverse().join(" > ")}`}
-                </span>
-              ) : null}
+              {categoryTrail ? <ProductCategoryTrail trail={categoryTrail} /> : null}
             </ItemTitle>
           </ItemContent>
           <ItemActions>

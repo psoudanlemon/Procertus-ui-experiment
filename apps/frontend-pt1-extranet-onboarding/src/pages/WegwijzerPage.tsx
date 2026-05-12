@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Alert02Icon,
@@ -38,7 +38,11 @@ import {
   DetailCardSection,
   type ChoiceBarItem,
 } from "@procertus-ui/ui-lib";
-import { CatalogueExplorer } from "@procertus-ui/ui-certification";
+import {
+  CatalogueExplorer,
+  type CertificationEntryId,
+  type CertificationRequestDraft,
+} from "@procertus-ui/ui-certification";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { ActiveInquiryContinueAlert } from "../layouts/ActiveInquiryContinueAlert";
 import { APP_FOOTER } from "../layouts/footerConfig";
@@ -53,11 +57,18 @@ import { WEGWIJZER_SERVICE_CONTENT } from "../features/wegwijzer/wegwijzer-servi
 import {
   TRAJECT_ENTRY_POINT_QUERY_PARAM,
   clearTrajectBreadcrumbs,
+  persistTrajectHandoff,
 } from "../features/traject/traject-submission-context";
 import { PUBLIC_GUEST_LOGIN_PATH } from "../routes/guestPaths";
 
 /** Eerste stap van de TrajectFlow: producttype kiezen en aanvraag controleren in de wizard, voor de triage-keuze. */
 const TRAJECT_CONFIGURE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}/start`;
+/**
+ * Sprong rechtstreeks naar de validatiepagina, gebruikt vanuit detail-cards van
+ * niet-product-gebonden certificaten (`productRelation === "optional"`).
+ */
+const REQUEST_REVIEW_PATH = (serviceId: string) =>
+  `/welcome/aanvraag/${serviceId}/controleren`;
 const EXPERT_CALL_PATH = (serviceId?: string) =>
   serviceId ? `/welcome/expert-call/${serviceId}` : "/welcome/expert-call";
 /** Detail-card "Hulp nodig?" stuurt mee dat het certificaat al in beeld is, zonder verdere wizard-context. */
@@ -89,6 +100,7 @@ export function WegwijzerPage() {
   const navigate = useNavigate();
   const registryLang = usePublicPrototypeRegistryLanguageHeaderProps();
   const [searchParams, setSearchParams] = useSearchParams();
+  const explorerRef = useRef<HTMLDivElement>(null);
 
   const rawParam = searchParams.get(SERVICE_PARAM);
   const activeId = rawParam && VALID_SERVICE_IDS.has(rawParam) ? rawParam : ALL_ID;
@@ -110,6 +122,20 @@ export function WegwijzerPage() {
     },
     [setSearchParams],
   );
+
+  /**
+   * Sluit een detail-card en stuur de gebruiker terug naar het overzicht.
+   * Scrollt naar de choice-bar zodat de gebruiker leert dat de selectie ook
+   * vanuit die bar te bedienen is. requestAnimationFrame wacht tot de nieuwe
+   * grid is uitgemonteerd zodat de scroll niet over een collapsing layout heen
+   * springt.
+   */
+  const handleResetToOverview = useCallback(() => {
+    setActiveId(ALL_ID);
+    requestAnimationFrame(() => {
+      explorerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [setActiveId]);
 
   const activeService = WEGWIJZER_SERVICES.find((s) => s.entry.id === activeId);
 
@@ -140,7 +166,7 @@ export function WegwijzerPage() {
           </div>
           <Hero />
 
-          <div className="px-boundary pb-boundary">
+          <div ref={explorerRef} className="px-boundary pb-boundary scroll-mt-section">
             <CatalogueExplorer
               items={CHOICE_BAR_ITEMS}
               activeId={activeId}
@@ -157,7 +183,7 @@ export function WegwijzerPage() {
               ) : activeId === ANDERE_ID ? (
                 <ExternalReferralGrid services={EXTERNAL_SERVICES} />
               ) : activeService ? (
-                <MasterCard service={activeService} />
+                <MasterCard service={activeService} onClose={handleResetToOverview} />
               ) : null}
             </CatalogueExplorer>
           </div>
@@ -297,7 +323,7 @@ function ExpertCallFooterCard() {
         className="self-start bg-background before:absolute before:inset-0 before:content-[''] group-hover/card:rounded-tl-[4px] group-hover/card:rounded-tr-[var(--cmd-deep)] group-hover/card:rounded-br-[4px] group-hover/card:rounded-bl-[var(--cmd-deep)] group-hover/card:bg-muted group-hover/card:text-foreground"
       >
         <HugeiconsIcon icon={Call02Icon} className="size-4" />
-        Plan een expert call
+        Plan een gesprek
       </Button>
     </Card>
   );
@@ -339,16 +365,37 @@ function ExternalReferralItem({ service }: { service: WegwijzerService }) {
 // Master Card — selected service detail
 // ---------------------------------------------------------------------------
 
-function MasterCard({ service }: { service: WegwijzerService }) {
+function MasterCard({
+  service,
+  onClose,
+}: {
+  service: WegwijzerService;
+  onClose: () => void;
+}) {
+  const navigate = useNavigate();
   const { entry, externalReferral } = service;
   const isInnovation = entry.id === "innovation-attest";
   const isExternal = service.tier === 3;
+  const isNonProductBound = entry.productRelation === "optional";
   const documents = buildMockDocuments(service);
+
+  const handleStartNonProductFlow = () => {
+    const placeholder: CertificationRequestDraft = {
+      id: `${entry.id}-no-product`,
+      entryId: entry.id as CertificationEntryId,
+      label: entry.label,
+      shortLabel: entry.shortLabel,
+    };
+    persistTrajectHandoff({ drafts: [placeholder], serviceId: entry.id });
+    navigate(REQUEST_REVIEW_PATH(entry.id));
+  };
 
   return (
     <DetailCard
       title={entry.label}
       description={entry.description}
+      onClose={onClose}
+      closeLabel={`Sluit ${entry.shortLabel} en keer terug naar alle certificaten`}
       footer={
         <>
           <HoverCard>
@@ -367,12 +414,19 @@ function MasterCard({ service }: { service: WegwijzerService }) {
               </p>
             </HoverCardContent>
           </HoverCard>
-          <Button asChild size="lg">
-            <Link to={TRAJECT_CONFIGURE_PATH(entry.id)}>
-              Start traject
+          {isNonProductBound ? (
+            <Button size="lg" onClick={handleStartNonProductFlow}>
+              Aanvraag indienen
               <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
-            </Link>
-          </Button>
+            </Button>
+          ) : (
+            <Button asChild size="lg">
+              <Link to={TRAJECT_CONFIGURE_PATH(entry.id)}>
+                Bekijk mogelijkheden
+                <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
+              </Link>
+            </Button>
+          )}
         </>
       }
     >

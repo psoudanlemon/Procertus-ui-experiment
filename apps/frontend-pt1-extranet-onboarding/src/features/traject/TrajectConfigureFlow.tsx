@@ -1,4 +1,5 @@
 import {
+  BUNDLE_CERT_ORDER,
   ProductSelectionBasketActionBar,
   ProductSelectionBasketBody,
   ProductSelectionBasketMobileSummaryBar,
@@ -6,18 +7,34 @@ import {
   TrajectLayout,
   buildProductIndex,
   defaultProcertusCategorizationDoc,
+  type BundleCertKey,
   type CertificationEntryId,
   type CertificationRequestDraft,
 } from "@procertus-ui/ui-certification";
 import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
+import { APP_FOOTER } from "../../layouts/footerConfig";
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
 import { PUBLIC_GUEST_LOGIN_PATH } from "../../routes/guestPaths";
-import { persistTrajectHandoff, resetTrajectFlow } from "./traject-submission-context";
+import {
+  persistTrajectHandoff,
+  readOnboardingFlowSnapshot,
+} from "./traject-submission-context";
 
 const WEGWIJZER_PATH = "/welcome";
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
+const BUNDLE_ASSEMBLE_PATH = (serviceId: string) =>
+  `/welcome/aanvraag/${serviceId}/pakket`;
+const REQUEST_REVIEW_PATH = (serviceId: string) =>
+  `/welcome/aanvraag/${serviceId}/controleren`;
+
+// Alleen wegwijzer-services die als hoofdcertificatie binnen het bundle-pakket vallen
+// (BENOR/CE/SSD/PROCERTUS) krijgen de extra "Voeg trajecten toe"-stap. Andere services
+// (ATG, Partijkeuring, …) hebben geen bundle-extras en gaan rechtstreeks naar Triage.
+function isBundleCertService(value: string): value is BundleCertKey {
+  return (BUNDLE_CERT_ORDER as readonly string[]).includes(value);
+}
 
 /**
  * Wizard-only step bundled with triage/start under {@link PublicWelcomeOnboardingSessionLayout}.
@@ -27,11 +44,21 @@ export function TrajectConfigureFlow() {
   const { serviceId } = useParams<{ serviceId: string }>();
   const service = findWegwijzerService(serviceId);
 
-  // Annuleren = volledige reset. Gebruiker zegt expliciet "ik weet het niet, ik begin opnieuw",
-  // dus traject + klantgegevens worden gewist en we sturen ze terug naar de Wegwijzer. Geen
-  // OnboardingFlowProvider gemount, dus we wissen alleen localStorage.
-  const handleCancel = useCallback(() => {
-    resetTrajectFlow();
+  // Wanneer de gebruiker via "Terug" terugkeert vanuit het bundle-assemble scherm, lezen we
+  // de eerder gepersisteerde drafts opnieuw in zodat de productselectie ge-prevuld is.
+  const initialSelectedIds = useMemo<readonly string[]>(() => {
+    const snapshot = readOnboardingFlowSnapshot();
+    if (!serviceId || snapshot.trajectServiceId !== serviceId) return [];
+    const ids = snapshot.drafts.flatMap((d) => (d.productId ? [d.productId] : []));
+    return Array.from(new Set(ids));
+  }, [serviceId]);
+
+  // "Terug" houdt de reeds gemaakte productselectie en eventuele klantgegevens vast: we
+  // navigeren enkel terug naar de wegwijzer zodat de gebruiker zonder informatieverlies
+  // van service kan wisselen of zijn keuze kan heroverwegen. Dit is de eerste stap in
+  // de flow, dus "Terug" neemt de rol "naar het voorgaande scherm" over (geen aparte
+  // annuleer-actie nodig).
+  const handleBack = useCallback(() => {
     navigate(WEGWIJZER_PATH);
   }, [navigate]);
 
@@ -63,10 +90,31 @@ export function TrajectConfigureFlow() {
       });
       if (drafts.length === 0) return;
       persistTrajectHandoff({ drafts, serviceId });
-      navigate(TRIAGE_PATH(serviceId), { replace: true });
+      const nextPath = isBundleCertService(serviceId)
+        ? BUNDLE_ASSEMBLE_PATH(serviceId)
+        : TRIAGE_PATH(serviceId);
+      navigate(nextPath, { replace: true });
     },
     [navigate, productIndex, service, serviceId],
   );
+
+  // Escape route wanneer de gebruiker zijn product niet terugvindt in de catalogus.
+  // We slaan de bundle-stap over en sturen rechtstreeks naar "Aanvraag controleren"
+  // in zijn non-product-bound variant: een placeholder-draft zonder productId én
+  // zonder productLabel zorgt dat `isProductBoundDraft` false geeft, waardoor de
+  // review-pagina enkel de begeleidende brief toont. Dat is hier het volledige
+  // dossier: een expert leest de brief en helpt het juiste product te bepalen.
+  const handleProductNotFound = useCallback(() => {
+    if (!serviceId || !service) return;
+    const placeholder: CertificationRequestDraft = {
+      id: `${serviceId}-product-not-found`,
+      entryId: serviceId as CertificationEntryId,
+      label: service.entry.label,
+      shortLabel: service.entry.shortLabel,
+    };
+    persistTrajectHandoff({ drafts: [placeholder], serviceId });
+    navigate(REQUEST_REVIEW_PATH(serviceId), { replace: true });
+  }, [navigate, service, serviceId]);
 
   if (!serviceId || !service) {
     return <Navigate to={WEGWIJZER_PATH} replace />;
@@ -75,11 +123,14 @@ export function TrajectConfigureFlow() {
   return (
     <ProductSelectionBasketProvider
       doc={defaultProcertusCategorizationDoc}
-      onCancel={handleCancel}
+      initialSelectedIds={initialSelectedIds}
+      onBack={handleBack}
       onContinue={handleContinue}
+      onProductNotFound={handleProductNotFound}
     >
       <TrajectLayout
         onSignInClick={() => navigate(PUBLIC_GUEST_LOGIN_PATH)}
+        footer={APP_FOOTER}
         bodyGap="section"
         kicker={service.entry.label}
         title="Selecteer de producten die je wil certificeren"

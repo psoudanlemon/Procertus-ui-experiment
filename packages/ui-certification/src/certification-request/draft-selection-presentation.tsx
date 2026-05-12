@@ -1,6 +1,6 @@
 import { Badge } from "@procertus-ui/ui";
 
-import type { CertificationRequestDraft } from "../../certification-request/types";
+import type { CertificationRequestDraft } from "./types";
 
 export function sortDraftsByIntentAndProduct(
   drafts: CertificationRequestDraft[],

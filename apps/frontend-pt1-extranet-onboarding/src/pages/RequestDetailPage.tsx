@@ -38,7 +38,6 @@ export function RequestDetailPage() {
 
   if (!request) return <Navigate to="/requests" replace />;
 
-  const editable = request.status === "draft";
   const cancellable = request.status === "submitted" || request.status === "in-progress";
 
   const cancelRequest = async () => {
@@ -56,45 +55,11 @@ export function RequestDetailPage() {
     );
   };
 
-  const removeDraftInquiry = async (id: string) => {
-    const confirmed = confirm
-      ? await confirm(
-          "Conceptaanvraag verwijderen?",
-          "Deze conceptaanvraag wordt uit het pakket verwijderd. Dit kan niet ongedaan gemaakt worden.",
-        )
-      : false;
-    if (!confirmed) return;
-    setRequests((prev) =>
-      prev.map((candidate) =>
-        candidate.id === request.id
-          ? {
-              ...candidate,
-              inquiries: candidate.inquiries.filter((inquiry) => inquiry.id !== id),
-              updatedAt: new Date().toISOString(),
-            }
-          : candidate,
-      ),
-    );
-    navigate("/requests");
-  };
-
-  const removeDraftRequest = async () => {
-    const confirmed = confirm
-      ? await confirm(
-          "Conceptaanvraag verwijderen?",
-          "Deze conceptaanvraag wordt verwijderd. Dit kan niet ongedaan gemaakt worden.",
-        )
-      : false;
-    if (!confirmed) return;
-    setRequests((prev) => prev.filter((candidate) => candidate.id !== request.id));
-    navigate("/requests");
-  };
-
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-6">
       <div className="flex flex-col gap-4 rounded-xl border border-border/70 bg-card p-5 shadow-proc-xs md:flex-row md:items-start md:justify-between">
         <div>
-          <Badge variant={editable ? "outline" : "secondary"}>{requestStatus(request)}</Badge>
+          <Badge variant="secondary">{requestStatus(request)}</Badge>
           <h1 className="mt-3 text-2xl font-semibold tracking-tight">{requestTitle(request)}</h1>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
             {requestSubtitle(request)} · Request ID: <span className="font-mono">{request.id}</span>
@@ -104,16 +69,6 @@ export function RequestDetailPage() {
           <Button type="button" variant="outline" onClick={() => navigate("/requests")}>
             Terug naar overzicht
           </Button>
-          {editable ? (
-            <Button type="button" onClick={() => navigate(`/requests/${request.id}/edit`)}>
-              Bewerken
-            </Button>
-          ) : null}
-          {editable ? (
-            <Button type="button" variant="destructive" onClick={removeDraftRequest}>
-              Verwijderen
-            </Button>
-          ) : null}
           {cancellable ? (
             <Button type="button" variant="destructive" onClick={cancelRequest}>
               Annuleren
@@ -151,11 +106,8 @@ export function RequestDetailPage() {
         title="Onderliggende certificatie- en attestvragen"
         description="Na goedkeuring van dit pakket krijgen deze aanvragen elk hun eigen vervolgproces."
         drafts={toDraftItems(request.inquiries)}
-        onEdit={() => navigate(`/requests/${request.id}/edit`)}
-        onRemove={removeDraftInquiry}
-        editLabel={editable ? "Bewerken" : "Openen"}
-        showEdit={editable}
-        showRemove={editable}
+        showEdit={false}
+        showRemove={false}
       />
     </div>
   );

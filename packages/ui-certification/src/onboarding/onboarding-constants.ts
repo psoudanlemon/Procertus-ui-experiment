@@ -1,6 +1,12 @@
 /** Standalone status page (no onboarding shell) after mock registratie-indiening. */
 export const ONBOARDING_REGISTRATION_COMPLETE_PATH = "/registratie-voltooid";
 
+/**
+ * Stable card height for onboarding step pages so they don't shrink to content height between
+ * steps. Resolves to `calc(100svh - 12rem)` via the `--min-height-stable-step` token.
+ */
+export const STABLE_STEP_MIN_HEIGHT = "min-h-stable-step";
+
 export const COUNTRY_SELECT_NONE = "__registration_country_none__";
 
 /**

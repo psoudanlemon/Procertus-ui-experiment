@@ -2,9 +2,7 @@ import type { StepLayoutStep } from "@procertus-ui/ui";
 import type { SetStateAction } from "react";
 import { useCallback, useRef, useState } from "react";
 
-import { storyDrafts } from "../components/certification-request-wizard/certification-request-wizard-story-fixtures";
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
-import type { CertificationRequestWizardProps } from "../components/certification-request-wizard/CertificationRequestWizard";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
 import {
   COUNTRY_SELECT_NONE,
@@ -21,7 +19,6 @@ import {
   isOnboardingCompanyZetelStepValid,
   isOnboardingInvoicingStepValid,
   isRegistrantCaptureValidForContext,
-  onboardingReviewRequesterFromContext,
   resolveFlowContext,
   stepIndex,
 } from "./onboarding-flow-helpers";
@@ -54,9 +51,27 @@ import { useOnboardingCompanyLookupPrototypeEffects } from "./use-onboarding-com
 
 export function noop(): void {}
 
-export const storyOnboardingDrafts: CertificationRequestDraft[] = storyDrafts.map(
-  ({ title: _title, subtitle: _subtitle, ...draft }) => draft,
-);
+export const storyOnboardingDrafts: CertificationRequestDraft[] = [
+  {
+    id: "draft-1",
+    entryId: "product-certification",
+    label: "BENOR, Rainscreen (fixture)",
+    shortLabel: "BENOR",
+    productId: "p-rain",
+    productLabel: "Rainscreen (fixture)",
+    productPath: "Cladding / Facade / Rainscreen",
+    productTypeStreamLabel: "BENOR",
+  },
+  {
+    id: "draft-2",
+    entryId: "atg",
+    label: "ATG technische goedkeuring",
+    shortLabel: "ATG",
+    productId: "p-siding",
+    productLabel: "Siding product (fixture)",
+    productPath: "Cladding / Siding",
+  },
+];
 
 export function storyCustomerContext(overrides: Partial<CustomerContext> = {}): CustomerContext {
   return resolveFlowContext({
@@ -129,7 +144,7 @@ export function storyOnboardingStepperSteps(input: {
   drafts: CertificationRequestDraft[];
   requestOrigin?: OnboardingRequestOrigin | "";
 }): StepLayoutStep[] {
-  const { step, context, drafts } = input;
+  const { context, drafts } = input;
   const requestOrigin = input.requestOrigin ?? "";
   const hasDrafts = drafts.length > 0;
   const hasCust = hasCustomerContext(context, requestOrigin);
@@ -143,17 +158,6 @@ export function storyOnboardingStepperSteps(input: {
   const companyCoreOk = hasCore || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const invoicingStepOk = hasInv || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   return [
-    {
-      id: "request",
-      title: "Aanvraag",
-      description:
-        step !== "request" && drafts.length > 0
-          ? `${drafts.length} concept${drafts.length === 1 ? "" : "en"} vastgelegd`
-          : drafts.length > 0
-            ? `${drafts.length} concepten`
-            : "Start zonder account",
-      available: true,
-    },
     {
       id: "origin",
       title: "Land of regio",
@@ -223,21 +227,6 @@ export function storyOnboardingStepperSteps(input: {
   ];
 }
 
-export function storyCertificationWizardProps(
-  context: CustomerContext,
-): CertificationRequestWizardProps {
-  return {
-    mode: "onboarding",
-    initialDrafts: [],
-    initialStep: "intent",
-    backendKind: "memory",
-    sessionId: "storybook-onboarding",
-    onCancel: noop,
-    onComplete: noop,
-    reviewRequester: onboardingReviewRequesterFromContext(context),
-  };
-}
-
 const defaultRegistrationSimulation = registrationSimulationStepLabels(2);
 
 export const storyEmptyCompanyFieldKeySet = new Set<CompanyFormFieldKey>();
@@ -282,14 +271,10 @@ export function baseOnboardingFlowViewProps(
 
   const base: OnboardingFlowViewProps = {
     step,
-    certificationPhaseTitle: "Start je certificatieaanvraag",
-    certificationPhaseDescription:
-      "Kies eerst wat je wilt aanvragen. We vragen pas organisatie- en accountgegevens wanneer je een conceptaanvraag hebt samengesteld.",
     registrationPhaseTitle: "Registratie",
     registrationPhaseDescription:
       "Na een korte keuze voor land of regio vullen we de volgende stappen daarop aan: uw contactpersoon, ondernemingsnummer en bedrijfsadres.",
     onSignInClick: noop,
-    certificationWizardProps: storyCertificationWizardProps(context),
     registrationSubmitOpen: false,
     onRegistrationSubmitOpenChange: noop,
     registrationProgress: 0,
@@ -340,9 +325,6 @@ export function baseOnboardingFlowViewProps(
 export function flowStateSeedFromOnboardingFlowViewProps(
   props: OnboardingFlowViewProps,
 ): OnboardingFlowState {
-  const w = props.certificationWizardProps;
-  const wizardInitialStep: OnboardingFlowState["wizardInitialStep"] =
-    w.initialStep === "drafts" ? "drafts" : "intent";
   const summaryIds = props.effectiveSummaryIncludedDraftIds;
   return hydrateOnboardingFlowStateFromStored({
     trajectServiceId: "",
@@ -350,31 +332,18 @@ export function flowStateSeedFromOnboardingFlowViewProps(
     drafts: [...props.drafts],
     summaryIncludedDraftIds: summaryIds !== undefined ? [...summaryIds] : undefined,
     context: props.context,
-    wizardInitialStep,
     prototypeVatPresetId: props.prototypeVatPresetId,
     companyFieldHints: props.companyHints ?? {},
     summaryKlantenportaalByPersonId: props.summaryKlantenportaalByPersonId ?? {},
   });
 }
 
-function certificationWizardStoryOverrides(
-  w: CertificationRequestWizardProps,
-): Partial<CertificationRequestWizardProps> {
-  return {
-    backendKind: w.backendKind,
-    sessionId: w.sessionId,
-    storageKey: w.storageKey,
-  };
-}
-
 function OnboardingFlowStoryHookBody({
   activeStep,
   onRegistrationStepChange,
-  certificationWizardPropsOverrides,
 }: {
   activeStep: OnboardingStep;
   onRegistrationStepChange: (next: OnboardingStep) => void;
-  certificationWizardPropsOverrides?: Partial<CertificationRequestWizardProps>;
 }) {
   const navigate = useCallback(() => {}, []);
   useOnboardingCompanyLookupPrototypeEffects(activeStep);
@@ -382,7 +351,6 @@ function OnboardingFlowStoryHookBody({
     navigate,
     activeStep,
     onRegistrationStepChange,
-    certificationWizardPropsOverrides,
   });
   return <OnboardingFlowView {...viewProps} />;
 }
@@ -410,9 +378,6 @@ export function OnboardingFlowViewWithMemoryProvider({
       <OnboardingFlowStoryHookBody
         activeStep={routedStep}
         onRegistrationStepChange={setRoutedStep}
-        certificationWizardPropsOverrides={certificationWizardStoryOverrides(
-          fixtureProps.certificationWizardProps,
-        )}
       />
     </OnboardingFlowProvider>
   );

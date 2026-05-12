@@ -76,6 +76,6 @@ export const ExpertCall: Story = {
     title: "Liever eerst een expert spreken?",
     description:
       "Plan een live online sessie van één uur en doorloop de vereisten samen met een PROCERTUS-expert.",
-    buttonLabel: "Plan een expert call",
+    buttonLabel: "Plan een gesprek",
   },
 };

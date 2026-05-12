@@ -3,12 +3,13 @@ import { type ComponentType, useLayoutEffect } from "react";
 
 import { defaultProcertusCategorizationDoc } from "../../categorization-data";
 import {
-  ProductSelectionBasketActionBar,
   ProductSelectionBasketBody,
   ProductSelectionBasketMobileSummaryBar,
   ProductSelectionBasketProvider,
+  useProductSelectionBasket,
 } from "./ProductSelectionBasket";
 import { TrajectLayout } from "./TrajectLayout";
+import { TrajectStoryFooter } from "./TrajectStoryFooter";
 
 const STORY_FOOTER = {
   companyDetails: [
@@ -25,8 +26,9 @@ const noop = () => {};
 
 /**
  * Mirrors `PublicAppShell` in the production app: sets `data-public-layout` on `<html>` so the
- * shared `globals.css` unlocks document scrolling. Without this, the page can't scroll and the
- * sticky basket sidebar + action bar have no scroll context to anchor against.
+ * shared `globals.css` unlocks document scrolling and paints the public bottom chrome (footer
+ * + action bar) on a white surface. Without this, the page can't scroll and the sticky basket
+ * sidebar + action bar have no scroll context to anchor against.
  */
 const PublicLayoutDecorator = (Story: ComponentType) => {
   useLayoutEffect(() => {
@@ -40,7 +42,7 @@ const PublicLayoutDecorator = (Story: ComponentType) => {
 };
 
 const meta = {
-  title: "Traject/Layout",
+  title: "Traject configuration/Layout/Product selecteren",
   component: TrajectLayout,
   parameters: {
     layout: "fullscreen",
@@ -66,7 +68,7 @@ export default meta;
  * nog zichtbaar in het winkelmandje rechts.
  */
 export const ProductSelection: StoryObj<typeof meta> = {
-  name: "Product selecteren",
+  name: "Default",
   args: {
     onSignInClick: noop,
     footer: STORY_FOOTER,
@@ -80,18 +82,37 @@ export const ProductSelection: StoryObj<typeof meta> = {
   render: (args) => (
     <ProductSelectionBasketProvider
       doc={defaultProcertusCategorizationDoc}
-      onCancel={noop}
+      onBack={noop}
       onContinue={noop}
+      onProductNotFound={noop}
     >
       <TrajectLayout
         {...args}
         aboveActionBar={
           <ProductSelectionBasketMobileSummaryBar className="md:hidden" />
         }
-        actionBar={<ProductSelectionBasketActionBar />}
+        actionBar={<ProductSelectionStoryFooter />}
       >
         <ProductSelectionBasketBody />
       </TrajectLayout>
     </ProductSelectionBasketProvider>
   ),
 };
+
+/**
+ * Verbindt {@link TrajectStoryFooter} met de basket-context: leest `selectedIds` voor de
+ * disabled-staat van "Bevestig selectie" en bedraadt `onBack`/`onContinue` op de provider.
+ * Eerste stap van de flow, dus `onCancel` wordt bewust weggelaten — `onBack` brengt de
+ * gebruiker terug naar de wegwijzer.
+ */
+function ProductSelectionStoryFooter() {
+  const { selectedIds, onBack, onContinue } = useProductSelectionBasket();
+  return (
+    <TrajectStoryFooter
+      onBack={onBack}
+      onContinue={() => onContinue(selectedIds)}
+      continueLabel="Bevestig selectie"
+      continueDisabled={selectedIds.length === 0}
+    />
+  );
+}

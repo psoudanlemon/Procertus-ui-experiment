@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import {
-  CERTIFICATION_PHASE_DESCRIPTION,
-  CERTIFICATION_PHASE_TITLE,
   REGISTRATION_PHASE_DESCRIPTION,
   REGISTRATION_PHASE_TITLE,
 } from "../../../onboarding/onboarding-constants";
@@ -24,21 +22,6 @@ const meta = {
 } satisfies Meta<typeof OnboardingShell>;
 
 export default meta;
-
-export const CertificationPhase: StoryObj<typeof meta> = {
-  args: {
-    pageTitle: CERTIFICATION_PHASE_TITLE,
-    pageDescription: CERTIFICATION_PHASE_DESCRIPTION,
-    onSignInClick: () => {},
-  },
-  render: (args) => (
-    <OnboardingShell {...args}>
-      <div className="rounded-lg border border-dashed border-border/70 bg-muted/20 p-8 text-sm text-muted-foreground">
-        Content slot — certification wizard in production.
-      </div>
-    </OnboardingShell>
-  ),
-};
 
 export const RegistrationPhase: StoryObj<typeof meta> = {
   args: {

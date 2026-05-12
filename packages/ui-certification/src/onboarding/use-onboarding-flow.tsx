@@ -13,8 +13,6 @@ import {
   writeOnboardingRegistrationCompletePayload,
 } from "./lib/onboardingRegistrationCompleteSession";
 import {
-  CERTIFICATION_PHASE_DESCRIPTION,
-  CERTIFICATION_PHASE_TITLE,
   COUNTRY_SELECT_NONE,
   ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION,
   REGISTRATION_PHASE_DESCRIPTION,
@@ -33,16 +31,16 @@ import {
   isOnboardingInvoicingStepValid,
   isOnboardingOptionalContactsStepValid,
   isRegistrantCaptureValidForContext,
-  onboardingReviewRequesterFromContext,
   stepIndex,
 } from "./onboarding-flow-helpers";
 import type { OnboardingStep } from "./onboarding-types";
 import { ONBOARDING_STEPS } from "./onboarding-types";
-import { registrationCountryOptionsForRequestOrigin, vatPrototypePresetIdsForOrigin } from "./onboarding-request-origin";
+import {
+  registrationCountryOptionsForRequestOrigin,
+  vatPrototypePresetIdsForOrigin,
+} from "./onboarding-request-origin";
 import type { StepLayoutStep } from "@procertus-ui/ui";
-import type { CertificationRequestDraft } from "../CertificationRequestContext";
 import { useCallback, useMemo, type ReactNode } from "react";
-import type { CertificationRequestWizardProps } from "../components/certification-request-wizard/CertificationRequestWizard";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
 import { buildOnboardingStepperSteps } from "./onboarding-stepper-model";
 import { useOnboardingFlowContext } from "./onboarding-flow-provider";
@@ -56,10 +54,6 @@ export type UseOnboardingFlowOptions = {
   onRegistrationStepChange: (next: OnboardingStep) => void;
   welcomePath?: string;
   flowStorageKey?: string;
-  certificationRequestStorageKey?: string;
-  certificationSessionId?: string;
-  /** Merged after flow-derived wizard props (e.g. Storybook may set `backendKind: "memory"`). */
-  certificationWizardPropsOverrides?: Partial<CertificationRequestWizardProps>;
   /** Leading registry header slot (e.g. color mode). */
   registryHeaderLeadingActions?: ReactNode;
   /** Trailing registry header slot (e.g. inquiry cart). */
@@ -82,9 +76,6 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     activeStep,
     onRegistrationStepChange,
     welcomePath = "/welcome",
-    certificationRequestStorageKey = ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY,
-    certificationSessionId = "pt1:onboarding:certification-request",
-    certificationWizardPropsOverrides,
     registryHeaderLeadingActions,
     registryHeaderTrailingActions,
     signInUrl = "/login",
@@ -93,6 +84,7 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   } = options;
 
   void _flowStorageKey;
+  void welcomePath;
 
   const {
     flowState,
@@ -110,9 +102,10 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     setRegistrationStepIndex,
   } = useOnboardingFlowContext();
 
+  const { updateContext, patchContext, setRequestOrigin } = api;
+
   const {
     drafts,
-    wizardInitialStep,
     requestOrigin,
     prototypeVatPresetId,
     companyFieldHints,
@@ -155,7 +148,6 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
 
   const stepperActiveIndex = stepIndex(activeStep);
   const hasDrafts = drafts.length > 0;
-  /** Inquiry drafts that must have a mapped legal entity (zetel or vestiging). */
   const certificationInquiryDraftIds = effectiveSummaryIncludedDraftIds;
   const hasCustomerContext =
     (context.applicantIsLegalRepresentative === "yes" ||
@@ -167,7 +159,6 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
       : isVatIdentifierPlausible(context.vatNumber ?? ""));
   const companyZetelOk =
     isOnboardingCompanyZetelStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
-  /** Strikt — los van {@link ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION}: elke aanvraag gekoppeld. */
   const companyLegalEntitiesOk = isOnboardingCompanyLegalEntitiesStepValid(
     context,
     certificationInquiryDraftIds,
@@ -188,13 +179,8 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
         context,
         certificationInquiryDraftIds,
       }),
-    [activeStep, context, drafts, certificationInquiryDraftIds, requestOrigin,
-    ],
+    [activeStep, context, drafts, certificationInquiryDraftIds, requestOrigin],
   );
-
-  const updateContext = api.updateContext;
-  const patchContext = api.patchContext;
-  const setRequestOrigin = api.setRequestOrigin;
 
   const goToOnboardingStep = useCallback(
     (nextStep: OnboardingStep) => {
@@ -216,12 +202,6 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
       setFlowState((prev) => {
         if (nextStep === "company") {
           return { ...prev, companyFieldHints: {} };
-        }
-        if (nextStep === "request") {
-          return {
-            ...prev,
-            wizardInitialStep: prev.drafts.length > 0 ? "drafts" : "intent",
-          };
         }
         return prev;
       });
@@ -370,30 +350,12 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     [drafts, registrationEntryLabel],
   );
 
-  const certificationWizardProps: CertificationRequestWizardProps = {
-    mode: "onboarding",
-    initialDrafts: drafts,
-    initialStep: wizardInitialStep,
-    backendKind: "localStorage",
-    storageKey: certificationRequestStorageKey,
-    sessionId: certificationSessionId,
-    reviewRequester: onboardingReviewRequesterFromContext(context),
-    onCancel: () => navigate(welcomePath),
-    onComplete: (nextDrafts: CertificationRequestDraft[]) => {
-      api.applyWizardDraftCompletion(nextDrafts);
-    },
-    ...certificationWizardPropsOverrides,
-  };
-
   const viewProps: OnboardingFlowViewProps = {
     step: activeStep,
-    certificationPhaseTitle: CERTIFICATION_PHASE_TITLE,
-    certificationPhaseDescription: CERTIFICATION_PHASE_DESCRIPTION,
     registrationPhaseTitle: registrationPhaseTitleDerived,
     registrationPhaseDescription: registrationPhaseDescriptionDerived,
     onSignInClick: () => navigate(signInUrl),
     signInUrl,
-    certificationWizardProps,
     registrationSubmitOpen,
     onRegistrationSubmitOpenChange: (next) => {
       if (next) setRegistrationSubmitOpen(true);

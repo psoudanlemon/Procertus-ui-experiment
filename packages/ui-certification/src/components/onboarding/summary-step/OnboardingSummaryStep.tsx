@@ -104,12 +104,9 @@ export type OnboardingSummaryStepProps = { model: OnboardingRegistrationLayoutMo
 export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
   const {
     step,
-        certificationPhaseTitle,
-        certificationPhaseDescription,
         registrationPhaseTitle,
         registrationPhaseDescription,
         onSignInClick,
-        certificationWizardProps,
         registrationSubmitOpen,
         onRegistrationSubmitOpenChange,
         registrationProgress,
@@ -368,7 +365,7 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
                 return { ...prev, summaryIncludedDraftIds: next };
               });
             }}
-            onEditRequestsClick={() => goToOnboardingStep("request")}
+            onEditRequestsClick={() => {}}
           />
         </div>
 

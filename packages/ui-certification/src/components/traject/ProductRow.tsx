@@ -10,6 +10,8 @@ import {
 import { motion } from "framer-motion";
 import { Fragment, type ReactNode } from "react";
 
+import { ProductCategoryTrail } from "./ProductCategoryTrail";
+
 function renderHighlightedLabel(label: ReactNode, query: string | undefined): ReactNode {
   if (!query || typeof label !== "string") return label;
   const needle = query.trim();
@@ -49,13 +51,9 @@ export type ProductRowProps = {
   label: ReactNode;
   /**
    * Optionele volledige categoriepad ("Beton en mortel > Stortklaar beton"),
-   * cluster eerst, deepest-last, " > "-joined. Wordt ná de productnaam
-   * getoond in omgekeerde volgorde (deepest-first met `>` als separator,
-   * "Stortklaar beton > Beton en mortel"), zodat de productnaam visueel
-   * leidt en het pad als context teruggeeft naar de bredere categorie. Trail-
-   * tekst zit 1 typografische stap onder de productnaam (`text-xs` t.o.v.
-   * `text-sm`) en lijnt op de baseline doordat beide spans `inline` zijn
-   * binnen één regel.
+   * root-to-leaf met " > " als delimiter. Wordt na de productnaam gerenderd
+   * via {@link ProductCategoryTrail}, die het pad deepest-first toont en de
+   * visuele behandeling consistent houdt met basket-rij en bundle matrix.
    */
   categoryTrail?: string;
   /**
@@ -113,11 +111,7 @@ export function ProductRow({
           <ItemContent className="min-w-0">
             <ItemTitle className="line-clamp-2 w-full text-sm font-medium leading-snug">
               {renderHighlightedLabel(label, highlight)}
-              {categoryTrail ? (
-                <span className="ms-2 text-xs font-normal text-muted-foreground">
-                  {`> ${categoryTrail.split(" > ").reverse().join(" > ")}`}
-                </span>
-              ) : null}
+              {categoryTrail ? <ProductCategoryTrail trail={categoryTrail} /> : null}
             </ItemTitle>
           </ItemContent>
           <ItemActions>

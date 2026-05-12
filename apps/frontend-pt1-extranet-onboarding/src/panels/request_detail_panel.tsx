@@ -14,7 +14,6 @@ import {
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { CertificationRequestLifecycleDetailTimeline } from "@procertus-ui/ui-certification";
-import { useNavigate } from "react-router-dom";
 
 import { useMemo } from "react";
 
@@ -56,7 +55,6 @@ function ClosePanelButton({ panelType = REQUEST_DETAIL_PANEL_TYPE }: { panelType
 }
 
 export function RequestDetailPanel({ panelType, requestId }: RequestDetailPanelProps) {
-  const navigate = useNavigate();
   const confirm = useConfirm();
   const [requests, setRequests] = useAuthenticatedRequests();
   const request = requests.find((candidate) => candidate.id === requestId);
@@ -81,7 +79,6 @@ export function RequestDetailPanel({ panelType, requestId }: RequestDetailPanelP
     );
   }
 
-  const editable = request.status === "draft";
   const cancellable = request.status === "submitted" || request.status === "in-progress";
   const cancelRequest = async () => {
     const confirmed = confirm
@@ -96,17 +93,6 @@ export function RequestDetailPanel({ panelType, requestId }: RequestDetailPanelP
         candidate.id === request.id ? cancelAuthenticatedRequestPackage(candidate) : candidate,
       ),
     );
-  };
-
-  const removeDraftRequest = async () => {
-    const confirmed = confirm
-      ? await confirm(
-          "Conceptaanvraag verwijderen?",
-          "Deze conceptaanvraag wordt verwijderd. Dit kan niet ongedaan gemaakt worden.",
-        )
-      : false;
-    if (!confirmed) return;
-    setRequests((prev) => prev.filter((candidate) => candidate.id !== request.id));
   };
 
   const items = (
@@ -137,8 +123,6 @@ export function RequestDetailPanel({ panelType, requestId }: RequestDetailPanelP
   //   { id: "identifier", label: "Request ID", value: request.id },
   // ];
 
-  const showActions = editable || cancellable;
-
   return (
     <CoverView
       title={requestStatus(request)}
@@ -148,27 +132,15 @@ export function RequestDetailPanel({ panelType, requestId }: RequestDetailPanelP
       className="h-full"
     >
       <div className="space-y-12 p-0">
-        {showActions ? (
+        {cancellable ? (
           <PanelSection
             title="Vervolgacties"
-            description="Open de volledige route om te bewerken of beheer de aanvraag rechtstreeks vanuit dit overzicht."
+            description="Beheer de aanvraag rechtstreeks vanuit dit overzicht."
             contentClassName="flex flex-wrap gap-2"
           >
-            {editable ? (
-              <Button type="button" onClick={() => navigate(`/requests/${request.id}/edit`)}>
-                Bewerken
-              </Button>
-            ) : null}
-            {editable ? (
-              <Button type="button" variant="destructive" onClick={removeDraftRequest}>
-                Verwijderen
-              </Button>
-            ) : null}
-            {cancellable ? (
-              <Button type="button" variant="destructive" onClick={cancelRequest}>
-                Annuleren
-              </Button>
-            ) : null}
+            <Button type="button" variant="destructive" onClick={cancelRequest}>
+              Annuleren
+            </Button>
           </PanelSection>
         ) : null}
         <PanelSection

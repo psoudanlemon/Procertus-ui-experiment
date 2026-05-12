@@ -107,7 +107,6 @@ export function CustomerOnboardingFlow() {
     <OnboardingFlowView
       {...viewProps}
       {...registryLang}
-      hideRequestStep
       backAction={isFirstRegistrationStep ? undefined : viewProps.backAction}
       cancelAction={cancelAction}
     />

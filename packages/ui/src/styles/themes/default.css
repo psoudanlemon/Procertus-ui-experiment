@@ -319,7 +319,7 @@
   --spacing-component: 0.75rem; /* 12px — larger for touch */
   --spacing-section: 1rem; /* 16px */
   --spacing-region: 1.5rem; /* 24px */
-  --spacing-boundary: 1.5rem; /* 24px */
+  --spacing-boundary: 1.25rem; /* 20px */
 }
 
 /* Operational: desktop */
@@ -339,7 +339,7 @@
   --spacing-component: 1rem; /* 16px — larger for touch */
   --spacing-section: 1.25rem; /* 20px */
   --spacing-region: 2rem; /* 32px */
-  --spacing-boundary: 2rem; /* 32px */
+  --spacing-boundary: 1.25rem; /* 20px */
 }
 
 /* Spacious: desktop */
@@ -599,13 +599,19 @@
  * Non-inline @theme so Tailwind emits these as real CSS custom properties.
  * The actual values are set by the responsive :root / [data-density]
  * rules above. These initial values register the tokens with Tailwind
- * so it generates p-component, gap-region, m-boundary, etc. */
+ * so it generates p-component, gap-region, m-boundary, etc.
+ *
+ * Set to the **mobile operational** baseline: Tailwind v4 hoists `@theme`
+ * into the compiled output and the emitted `:root { ... }` may land after
+ * our explicit `:root` overrides depending on layer order. Aligning the
+ * default with the mobile value guarantees the smaller token wins below
+ * `md`, with the `@media (min-width: 768px)` rules promoting it on desktop. */
 @theme {
   --spacing-micro: 0.25rem;
-  --spacing-component: 0.5rem;
+  --spacing-component: 0.75rem;
   --spacing-section: 1rem;
-  --spacing-region: 2rem;
-  --spacing-boundary: 2rem;
+  --spacing-region: 1.5rem;
+  --spacing-boundary: 1.25rem;
 }
 
 /* ─── Command button pulse ───────────────────────────────────────────────── */

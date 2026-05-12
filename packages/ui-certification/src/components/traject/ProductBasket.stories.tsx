@@ -31,10 +31,18 @@ function MobileBasketHarness({
     <ProductSelectionBasketProvider
       doc={defaultProcertusCategorizationDoc}
       initialSelectedIds={initialSelectedIds}
-      onCancel={noop}
+      onBack={noop}
       onContinue={noop}
     >
-      <div className="mx-auto flex h-[600px] w-full max-w-sm flex-col justify-end overflow-hidden rounded-xl border border-border bg-background shadow-proc-lg">
+      <div
+        // De Storybook iframe is wijder dan 768px, dus `--spacing-boundary` volgt de
+        // desktop-tak (32px) ook al maakt de harness visueel een 440px telefoon na.
+        // We forceren het mobile token lokaal zodat `px-boundary`-utilities binnen de
+        // harness terug op 20px uitkomen — de rest van de schaal blijft op de door
+        // Storybook geforceerde desktop-waardes (preview.css `!important`).
+        style={{ ["--spacing-boundary" as string]: "1.25rem" }}
+        className="mx-auto flex h-[600px] w-[440px] flex-col justify-end overflow-hidden rounded-xl border border-border bg-background shadow-proc-lg"
+      >
         <div className="rounded-b-xl border-t border-border bg-muted">
           <ProductSelectionBasketMobileSummaryBar />
           <div className="flex w-full items-center justify-between gap-component px-boundary py-section">
@@ -72,7 +80,7 @@ const SAMPLE_ITEMS: readonly ProductBasketItem[] = [
 ] as const;
 
 const meta = {
-  title: "Traject/ProductBasket",
+  title: "Traject configuration/Layout/Product selecteren/ProductBasket",
   component: ProductBasket,
   parameters: {
     layout: "padded",

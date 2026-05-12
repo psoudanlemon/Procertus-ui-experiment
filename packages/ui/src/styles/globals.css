@@ -85,31 +85,24 @@
   text-box-edge: cap alphabetic;
 }
 
-/* ── Card grid (container-query stepped) ──────────────────────────────────
- * Responsive grid with explicit 1 / 2 / 3 column steps based on the
- * nearest query-container's inline size: 1 column under 42rem, 2 columns
- * at 42rem+, 3 columns at 80rem+. The 3-column step is set high on
- * purpose — typical master-card bodies in this app land around 70–75rem,
- * so they stay in the 2-column band as the design intends. 3 columns
- * only kicks in on full-bleed surfaces wider than the standard page.
+/* ── Card grid (auto-fit, fills available width) ──────────────────────────
+ * Responsive grid that auto-steps between 1 / 2 / 3 / ... columns based on
+ * the nearest query-container's inline size, using auto-fit + minmax so the
+ * items always stretch to fill the row. When there are fewer items than
+ * tracks would fit, auto-fit collapses the empty tracks and the visible
+ * items grow to occupy the remaining space. A min track size of ~20rem
+ * keeps each tile readable; the `min(20rem, 100%)` guard prevents overflow
+ * on containers narrower than the floor.
  *
  * Requires an ancestor with `container-type: inline-size` (Tailwind's
- * `@container` utility) so the @container queries have a target. Used by
- * DownloadableItemGrid; reach for it directly whenever you need the
- * same stepped card-grid behavior on another card-style surface.
+ * `@container` utility). Used by DownloadableItemGrid; reach for it
+ * directly whenever you need the same fill-the-row behavior on another
+ * card-style surface.
  * ──────────────────────────────────────────────────────────────────────── */
 
 @utility card-grid {
   display: grid;
-  grid-template-columns: 1fr;
-
-  @container (min-width: 42rem) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @container (min-width: 80rem) {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
 }
 
 /* ── Branded glow (standout) ───────────────────────────────────────────────
@@ -196,6 +189,24 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  /*
+   * Public registry/onboarding chrome: copyright footer + traject action bar stay
+   * on a white surface regardless of the active theme. Both Storybook
+   * (`PublicLayoutDecorator`) and the app's `PublicAppShell` set
+   * `data-public-layout` on `<html>`, so the same rule paints in stories and in
+   * production.
+   */
+  html[data-public-layout] [data-slot="footer"] {
+    --sidebar: var(--neutral-white);
+    --sidebar-foreground: var(--neutral-950);
+    --sidebar-accent-foreground: var(--brand-primary-700);
+    --card: var(--neutral-white);
+    --card-foreground: var(--neutral-950);
+  }
+  html[data-public-layout] [data-slot="traject-action-bar"] {
+    --card: var(--neutral-100);
+    --card-foreground: var(--foreground);
   }
   @media (prefers-reduced-motion: reduce) {
     *,

@@ -29,7 +29,6 @@ export type DraftRequestItem = {
   id: string;
   title: string;
   subtitle?: string;
-  /** Free slot (e.g. a `CertificationBadgeRow` preview). */
   details?: ReactNode;
 };
 
@@ -38,8 +37,8 @@ export type DraftRequestListProps = {
   title: string;
   description?: string;
   drafts: DraftRequestItem[];
-  onEdit: (id: string) => void;
-  onRemove: (id: string) => void;
+  onEdit?: (id: string) => void;
+  onRemove?: (id: string) => void;
   /** Optional string override for the empty `Empty` block. */
   emptyTitle?: string;
   emptyDescription?: string;
@@ -100,7 +99,7 @@ export function DraftRequestList({
                                 type="button"
                                 size="icon-sm"
                                 variant="ghost"
-                                onClick={() => onRemove(d.id)}
+                                onClick={() => onRemove?.(d.id)}
                                 className="text-destructive-foreground hover:bg-destructive/20 hover:text-destructive-foreground dark:hover:bg-destructive/30"
                                 aria-label={`${removeLabel}: ${d.title}`}
                               >
@@ -120,7 +119,7 @@ export function DraftRequestList({
                           type="button"
                           size="sm"
                           variant="secondary"
-                          onClick={() => onEdit(d.id)}
+                          onClick={() => onEdit?.(d.id)}
                           aria-label={`${editLabel}: ${d.title}`}
                         >
                           <HugeiconsIcon

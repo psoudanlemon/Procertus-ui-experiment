@@ -10,14 +10,14 @@ import { Button } from "@/components/ui/button";
 export type PublicRegistryAppShellProps = {
   header: PublicRegistryHeaderProps;
   footer?: FooterProps;
-  /**
-   * Optional sticky action bar rendered above the footer inside the same bottom chrome.
-   * Stays pinned to the viewport bottom on scroll so page-level CTAs remain reachable
-   * without overlapping the footer.
-   */
-  actionBar?: React.ReactNode;
   /** Visual variant — "default" uses sidebar tokens, "transparent" uses background color throughout. */
   variant?: "default" | "transparent";
+  /**
+   * Pin the header to the top of the viewport on scroll. Off by default so the
+   * marketing/registry header scrolls away naturally with the content; opt in for
+   * shells where the header always needs to be reachable (e.g. dashboards).
+   */
+  stickyHeader?: boolean;
   /** URL for the request certificate flow. */
   requestUrl?: string;
   /** Callback when the FAB is clicked (overrides requestUrl). */
@@ -34,62 +34,57 @@ export type PublicRegistryAppShellProps = {
   children: React.ReactNode;
 };
 
+/**
+ * Public registry / onboarding chrome.
+ *
+ * Composition contract:
+ * - **Header** — always rendered, optionally sticky via `stickyHeader`.
+ * - **Main** — scrollable content card, hosts page-level chrome (e.g. `TrajectLayout`).
+ * - **Footer** — copyright/legal bar, always rendered at the **document end**,
+ *   *not* pinned to the viewport.
+ *
+ * Page-level sticky UI (e.g. a traject action bar) belongs **inside `main`** and
+ * uses `position: sticky; bottom: 0`. Because the footer lives outside the page
+ * content wrapper, the sticky element releases naturally just above the footer
+ * when the user scrolls to the document end.
+ */
 function PublicRegistryAppShell({
   header,
   footer,
-  actionBar,
   variant = "default",
+  stickyHeader = false,
   requestUrl = "#",
   onRequestCertificate,
   hideFab = false,
   fillViewport = false,
   children,
 }: PublicRegistryAppShellProps) {
-  const hasBottomChrome = actionBar != null || footer != null;
-  const outerRef = React.useRef<HTMLDivElement>(null);
-  const [scrolledAboveBottom, setScrolledAboveBottom] = React.useState(false);
-
-  React.useEffect(() => {
-    if (fillViewport || !hasBottomChrome) return;
-    const el = outerRef.current;
-    if (!el) return;
-
-    const update = () => {
-      setScrolledAboveBottom(el.scrollTop + el.clientHeight < el.scrollHeight - 1);
-    };
-
-    update();
-    el.addEventListener("scroll", update, { passive: true });
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-
-    return () => {
-      el.removeEventListener("scroll", update);
-      ro.disconnect();
-    };
-  }, [fillViewport, hasBottomChrome]);
-
   return (
     /*
-     * The AppShell owns its own scroll context. Rather than relying on document scroll
-     * (which requires every ancestor — `body`, `#root`, `.app-wrapper`, `.app-height-chain` — to
-     * release the `globals.css` `overflow:hidden` lock via `data-public-layout`), the outer is
-     * a fixed-height flex column with `overflow-y-auto`. That way the sticky bottom chrome
-     * pins reliably to the viewport bottom regardless of how the host app wraps the shell,
-     * and the page header naturally scrolls away with the content above it.
+     * The AppShell owns its own scroll context: a fixed-height flex column with
+     * `overflow-y-auto`. That keeps `stickyHeader` and any page-level sticky UI
+     * anchored to the shell's viewport, regardless of how the host app wraps it.
      *
-     * `fillViewport` keeps the legacy "children manage their own scroll" wiring (outer is
-     * still h-svh, but with `overflow-hidden` so an inner scroll wrapper takes over).
+     * `fillViewport` keeps the legacy "children manage their own scroll" wiring
+     * (outer is still h-svh, but with `overflow-hidden` so an inner scroll
+     * wrapper takes over).
      */
     <div
-      ref={outerRef}
       data-slot="public-registry-app-shell"
       className={cn(
-        "h-svh flex flex-col bg-sidebar [&>header]:border-b-0",
+        "h-svh flex flex-col bg-sidebar [&_header]:border-b-0",
         fillViewport ? "overflow-hidden" : "overflow-y-auto",
       )}
     >
-      <PublicRegistryHeader {...header} variant={variant} />
+      <div
+        data-slot="public-registry-header"
+        className={cn(
+          "shrink-0 bg-sidebar",
+          stickyHeader && "sticky top-0 z-20",
+        )}
+      >
+        <PublicRegistryHeader {...header} variant={variant} />
+      </div>
       <main
         className={cn(
           "relative mt-micro mx-section flex flex-1 flex-col rounded-xl bg-background",
@@ -112,24 +107,9 @@ function PublicRegistryAppShell({
           </Button>
         )}
       </main>
-      {hasBottomChrome && (
-        <div
-          data-slot="public-registry-bottom-chrome"
-          className={cn(
-            "z-20 mx-section flex flex-col",
-            fillViewport ? "static" : "sticky bottom-0",
-          )}
-        >
-          <div
-            aria-hidden
-            data-slot="public-registry-bottom-chrome-scroll-fade"
-            className={cn(
-              "pointer-events-none absolute inset-x-0 -top-8 h-8 bg-linear-to-t from-background to-transparent transition-opacity duration-200",
-              scrolledAboveBottom ? "opacity-100" : "opacity-0",
-            )}
-          />
-          {actionBar}
-          {footer && <Footer {...footer} variant={variant} />}
+      {footer && (
+        <div data-slot="public-registry-footer" className="mx-section shrink-0">
+          <Footer {...footer} variant={variant} />
         </div>
       )}
     </div>

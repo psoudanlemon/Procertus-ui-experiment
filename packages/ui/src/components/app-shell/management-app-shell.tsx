@@ -11,22 +11,36 @@ export type ManagementAppShellProps = {
   sidebar: AppSidebarProps;
   header: AppHeaderProps;
   footer?: FooterProps;
+  /**
+   * Pin the header to the top of the viewport on scroll. Off by default; authenticated
+   * dashboards typically opt in so breadcrumbs and account controls stay reachable
+   * while long content scrolls.
+   */
+  stickyHeader?: boolean;
   children: React.ReactNode;
   mainClassName?: string;
 };
 
-function ManagementAppShell({ sidebar, header, footer, children, mainClassName }: ManagementAppShellProps) {
+function ManagementAppShell({
+  sidebar,
+  header,
+  footer,
+  stickyHeader = false,
+  children,
+  mainClassName,
+}: ManagementAppShellProps) {
   const [scrolled, setScrolled] = React.useState(false);
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
+    if (!stickyHeader) return;
     const el = scrollRef.current;
     if (!el) return;
     const onScroll = () => setScrolled(el.scrollTop > 0);
     onScroll();
     el.addEventListener("scroll", onScroll, { passive: true });
     return () => el.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [stickyHeader]);
 
   return (
     <AlertDialogProvider>
@@ -41,12 +55,19 @@ function ManagementAppShell({ sidebar, header, footer, children, mainClassName }
           ref={scrollRef}
           className="flex h-full min-h-0 flex-1 flex-col overflow-y-auto bg-sidebar"
         >
-          <div className="sticky top-0 z-10 shrink-0 bg-sidebar">
+          <div
+            className={cn(
+              "shrink-0 bg-sidebar",
+              stickyHeader && "sticky top-0 z-10",
+            )}
+          >
             <AppHeader {...header} />
-            <div
-              className="pointer-events-none mx-section -mb-8 h-8 bg-linear-to-b from-sidebar to-transparent transition-opacity duration-200"
-              style={{ opacity: scrolled ? 1 : 0 }}
-            />
+            {stickyHeader && (
+              <div
+                className="pointer-events-none mx-section -mb-8 h-8 bg-linear-to-b from-sidebar to-transparent transition-opacity duration-200"
+                style={{ opacity: scrolled ? 1 : 0 }}
+              />
+            )}
           </div>
           <div className="mx-section flex min-h-full flex-col pb-section">
             <main

@@ -2,6 +2,7 @@
 import {
   Alert02Icon,
   ArrowLeft01Icon,
+  CheckmarkCircle01Icon,
   Clock01Icon,
   SecurityBlockIcon,
 } from "@hugeicons/core-free-icons";
@@ -60,6 +61,24 @@ export const InvitationInvalid: Story = {
       {
         label: "Sign in",
         onClick: () => {},
+        variant: "default",
+        icon: ArrowLeft01Icon,
+      },
+    ],
+  },
+};
+
+/** Aanvraag ontvangen: bevestiging na het indienen van een informatieve aanvraag. */
+export const RequestSubmitted: Story = {
+  args: {
+    icon: CheckmarkCircle01Icon,
+    heading: "Aanvraag verzonden",
+    description:
+      "Bedankt voor uw aanvraag. Wij bekijken uw gegevens en nemen binnenkort met u contact op om deze verder te bespreken.",
+    actions: [
+      {
+        label: "Terug naar startpagina",
+        href: "/welcome",
         variant: "default",
         icon: ArrowLeft01Icon,
       },

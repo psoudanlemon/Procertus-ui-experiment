@@ -8,9 +8,6 @@ export {
   DEFAULT_ONBOARDING_ORIGIN_STEP_COPY,
   mergeOnboardingOriginCopy,
 } from "./origin-step/onboarding-origin-step-copy";
-export { OnboardingRequestStep, type OnboardingRequestStepProps } from "./request-step/OnboardingRequestStep";
-export type { OnboardingRequestStepCopy } from "./request-step/onboarding-request-step-copy";
-export { DEFAULT_ONBOARDING_REQUEST_STEP_COPY } from "./request-step/onboarding-request-step-copy";
 export { OnboardingCustomerStep, type OnboardingCustomerStepProps } from "./customer-step/OnboardingCustomerStep";
 export { OnboardingCompanyLegalEntitiesStep, type OnboardingCompanyLegalEntitiesStepProps } from "./company-step/OnboardingCompanyLegalEntitiesStep";
 export { OnboardingCompanyZetelStep, type OnboardingCompanyZetelStepProps } from "./company-step/OnboardingCompanyZetelStep";

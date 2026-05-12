@@ -16,8 +16,12 @@
  */
 import type { ReactNode } from "react";
 
+import { Cancel01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+
 import { cn } from "@/lib/utils";
 import {
+  Button,
   Card,
   CardContent,
   CardDescription,
@@ -40,6 +44,13 @@ export type DetailCardProps = {
   hideWatermark?: boolean;
   /** Footer strip — typically a help link + primary CTA. */
   footer?: ReactNode;
+  /**
+   * When provided, renders a close icon button in the top-right of the header.
+   * Typically used to return from a detail view to its overview.
+   */
+  onClose?: () => void;
+  /** Accessible label for the close button. */
+  closeLabel?: string;
   /** Body content — alerts, sections, document lists, etc. */
   children: ReactNode;
   className?: string;
@@ -60,6 +71,8 @@ export function DetailCard({
   watermark,
   hideWatermark = false,
   footer,
+  onClose,
+  closeLabel = "Sluiten",
   children,
   className,
 }: DetailCardProps) {
@@ -68,10 +81,26 @@ export function DetailCard({
   return (
     <Card className={cn("flex flex-col gap-0 pt-0 shadow-proc-xs md:shadow-proc-sm", className)}>
       <CardHeader className="gap-1 border-b bg-muted/40 p-region [.border-b]:pb-region">
-        <H2>{title}</H2>
-        {description ? (
-          <CardDescription className="text-base leading-normal">{description}</CardDescription>
-        ) : null}
+        <div className="flex items-start justify-between gap-component">
+          <div className="flex min-w-0 flex-col gap-1">
+            <H2>{title}</H2>
+            {description ? (
+              <CardDescription className="text-base leading-normal">{description}</CardDescription>
+            ) : null}
+          </div>
+          {onClose ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              onClick={onClose}
+              className="-mt-1 -mr-1 shrink-0 text-muted-foreground hover:text-foreground"
+            >
+              <HugeiconsIcon icon={Cancel01Icon} />
+              <span className="sr-only">{closeLabel}</span>
+            </Button>
+          ) : null}
+        </div>
       </CardHeader>
 
       <CardContent className="relative isolate flex flex-col gap-region overflow-hidden p-region">
@@ -80,7 +109,7 @@ export function DetailCard({
       </CardContent>
 
       {footer ? (
-        <CardFooter className="flex-wrap-reverse justify-end gap-component border-t bg-muted/40 p-region sm:flex-nowrap sm:justify-between">
+        <CardFooter className="flex-wrap-reverse justify-between gap-component border-t bg-muted/40 p-region sm:flex-nowrap">
           {footer}
         </CardFooter>
       ) : null}

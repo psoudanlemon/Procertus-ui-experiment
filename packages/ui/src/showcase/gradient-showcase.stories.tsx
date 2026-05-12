@@ -264,7 +264,7 @@ function DashboardContent() {
 
 function GradientShowcase() {
   return (
-    <ManagementAppShell sidebar={sidebarProps} header={headerProps}>
+    <ManagementAppShell sidebar={sidebarProps} header={headerProps} stickyHeader>
       <DashboardContent />
     </ManagementAppShell>
   );

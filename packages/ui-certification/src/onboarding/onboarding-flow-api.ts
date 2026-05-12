@@ -154,7 +154,6 @@ export function createOnboardingFlowApi(
         return {
           ...prev,
           drafts: nextDrafts,
-          wizardInitialStep: nextDrafts.length === 0 ? "intent" : "drafts",
           summaryIncludedDraftIds: nextSummaryIncluded,
           context: {
             ...prev.context,

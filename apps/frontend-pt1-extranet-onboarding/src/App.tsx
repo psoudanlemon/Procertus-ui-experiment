@@ -4,20 +4,21 @@ import { AuthenticatedAppShell } from "./layouts/AuthenticatedAppShell";
 import { PublicAppShell } from "./layouts/PublicAppShell";
 import { PublicWelcomeOnboardingSessionLayout } from "./layouts/PublicWelcomeOnboardingSessionLayout";
 import { RequestsOverviewPage } from "./pages/RequestsOverviewPage";
-import { RequestCreationPage } from "./pages/RequestCreationPage";
 import { RequestDetailPage } from "./pages/RequestDetailPage";
-import { RequestEditPage } from "./pages/RequestEditPage";
 import { CategorizationDemoPage } from "./pages/CategorizationDemoPage";
 import { DesignSystemPage } from "./pages/DesignSystemPage";
 import { CustomerOnboardingFlow } from "./features/customer-onboarding/CustomerOnboardingFlow";
 import { FormalRequestStepRedirect } from "./features/customer-onboarding/FormalRequestStepRedirect";
 import { TrajectConfigureFlow } from "./features/traject/TrajectConfigureFlow";
+import { TrajectBundleAssembleFlow } from "./features/traject/TrajectBundleAssembleFlow";
+import { TrajectRequestReviewFlow } from "./features/traject/TrajectRequestReviewFlow";
 import { AppPlaceholderPage } from "./pages/AppPlaceholderPage";
 import { OnboardingRegistrationCompletePage } from "./pages/OnboardingRegistrationCompletePage";
 import { SignupPage } from "./pages/SignupPage";
 import { WegwijzerPage } from "./pages/WegwijzerPage";
 import { TriagePage } from "./pages/TriagePage";
 import { InfoRequestPlaceholderPage } from "./pages/InfoRequestPlaceholderPage";
+import { InfoRequestSubmittedPage } from "./pages/InfoRequestSubmittedPage";
 import { ExpertCallPlaceholderPage } from "./pages/ExpertCallPlaceholderPage";
 import { OrganizationPage } from "./pages/OrganizationPage";
 import { OrganizationProfilePage } from "./pages/OrganizationProfilePage";
@@ -46,12 +47,24 @@ export default function App() {
     <Routes>
       <Route path="/" element={<RootRedirect />} />
       <Route path="/registratie-voltooid" element={<OnboardingRegistrationCompletePage />} />
+      <Route
+        path="/welcome/info-request/:serviceId/verzonden"
+        element={<InfoRequestSubmittedPage />}
+      />
 
       <Route element={<PublicAppShell />}>
         <Route path="/login" element={<SignupPage />} />
         <Route path="/welcome" element={<WegwijzerPage />} />
         <Route element={<PublicWelcomeOnboardingSessionLayout />}>
           <Route path="/welcome/aanvraag/:serviceId/start" element={<TrajectConfigureFlow />} />
+          <Route
+            path="/welcome/aanvraag/:serviceId/pakket"
+            element={<TrajectBundleAssembleFlow />}
+          />
+          <Route
+            path="/welcome/aanvraag/:serviceId/controleren"
+            element={<TrajectRequestReviewFlow />}
+          />
           <Route path="/welcome/aanvraag/:serviceId" element={<TriagePage />} />
           <Route path="/welcome/formal-request" element={<FormalRequestStepRedirect />} />
           <Route path="/welcome/formal-request/:stepId" element={<CustomerOnboardingFlow />} />
@@ -78,9 +91,7 @@ export default function App() {
           <Route path="/organization-profile" element={<OrganizationProfilePage />} />
           <Route path="/profile-change-requests" element={<ProfileChangeRequestsPage />} />
           <Route path="/requests" element={<RequestsOverviewPage />} />
-          <Route path="/requests/create" element={<RequestCreationPage />} />
           <Route path="/requests/:requestId" element={<RequestDetailPage />} />
-          <Route path="/requests/:requestId/edit" element={<RequestEditPage />} />
           <Route
             path="/certificates-attestations"
             element={

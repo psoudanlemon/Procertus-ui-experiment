@@ -8,7 +8,6 @@ export const DEFAULT_ONBOARDING_FLOW_STATE: OnboardingFlowState = {
   drafts: [],
   summaryIncludedDraftIds: [],
   context: DEFAULT_CONTEXT,
-  wizardInitialStep: "intent",
   prototypeVatPresetId: DEFAULT_VAT_PROTOTYPE_PRESET_ID,
   companyFieldHints: {},
   summaryKlantenportaalByPersonId: {},
