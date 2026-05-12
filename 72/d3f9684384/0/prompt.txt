@@ -81,3 +81,7 @@ I don't see the call-to-action button to add more products or add more certifica
 Use the already available bundle to assemble the body. @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx:213 
 
  Show all available products for the already selected and added certification types. Only allow selecting options that are possible (cfr what is allowed by the master data.@packages/ui-certification/src/data/procertus-categorization.json )
+
+---
+
+Please commit all changes. Use git commit skill.
