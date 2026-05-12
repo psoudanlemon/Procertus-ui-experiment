@@ -58,10 +58,12 @@ export const Default: StoryObj<typeof meta> = {
   args: {
     onSignInClick: noop,
     footer: STORY_FOOTER,
-    title: "Plan een expert call",
+    kicker: "Productcertificatie",
+    title: "Een informatieve aanvraag",
+    bodyGap: "section",
     children: null,
     description:
-      "Eén uur live met een PROCERTUS-expert om uw vraag, uw dossier en de juiste route samen door te nemen.",
+      "Gelieve uw gegevens achter te laten. Wij bekijken uw aanvraag en nemen binnenkort met u contact op om deze verder te bespreken.",
   },
   render: (args) => <ExpertCallStoryBody args={args} />,
 };
@@ -85,7 +87,6 @@ function ExpertCallStoryBody({ args }: { args: React.ComponentProps<typeof Traje
       {...args}
       actionBar={
         <TrajectStoryFooter
-          onCancel={noop}
           onBack={noop}
           onContinue={noop}
           continueLabel="Verzenden"

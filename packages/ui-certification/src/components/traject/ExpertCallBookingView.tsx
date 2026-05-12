@@ -1,23 +1,36 @@
-import { CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Button,
   Calendar,
+  Card,
+  CardContent,
+  Checkbox,
   Field,
   FieldLabel,
   H3,
   Input,
-  Separator,
 } from "@procertus-ui/ui";
-import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-const SESSION_HIGHLIGHTS = [
-  "Eén uur live online, videogesprek met scherm delen",
-  "Doorloop van de minimale vereisten en uw dossier",
-  "Concrete inschatting van het te volgen traject",
-] as const;
+const TIME_SLOTS = buildQuarterHourSlots(9, 17);
 
-const TIME_SLOTS = ["09:00", "09:30", "10:00", "10:30", "11:00"] as const;
+function buildQuarterHourSlots(startHour: number, endHour: number): string[] {
+  const slots: string[] = [];
+  for (let h = startHour; h < endHour; h++) {
+    for (const m of [0, 15, 30, 45]) {
+      slots.push(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`);
+    }
+  }
+  return slots;
+}
+
+function RequiredMark() {
+  return (
+    <span aria-hidden="true" className="text-destructive-foreground">
+      *
+    </span>
+  );
+}
 
 type FormState = {
   selectedDate: Date | undefined;
@@ -25,7 +38,10 @@ type FormState = {
   firstName: string;
   lastName: string;
   email: string;
+  jobTitle: string;
+  phone: string;
   company: string;
+  wantsExpertCall: boolean;
 };
 
 type PersistedShape = {
@@ -34,7 +50,10 @@ type PersistedShape = {
   firstName: string;
   lastName: string;
   email: string;
+  jobTitle: string;
+  phone: string;
   company: string;
+  wantsExpertCall: boolean;
 };
 
 function serialize(state: FormState): PersistedShape {
@@ -44,7 +63,10 @@ function serialize(state: FormState): PersistedShape {
     firstName: state.firstName,
     lastName: state.lastName,
     email: state.email,
+    jobTitle: state.jobTitle,
+    phone: state.phone,
     company: state.company,
+    wantsExpertCall: state.wantsExpertCall,
   };
 }
 
@@ -60,7 +82,10 @@ function deserialize(raw: PersistedShape): FormState {
     firstName: raw.firstName ?? "",
     lastName: raw.lastName ?? "",
     email: raw.email ?? "",
+    jobTitle: raw.jobTitle ?? "",
+    phone: raw.phone ?? "",
     company: raw.company ?? "",
+    wantsExpertCall: raw.wantsExpertCall ?? false,
   };
 }
 
@@ -96,6 +121,8 @@ export type ExpertCallBookingViewProps = {
     firstName?: string;
     lastName?: string;
     email?: string;
+    jobTitle?: string;
+    phone?: string;
     company?: string;
   };
   /** Optioneel prefix voor input-ids zodat meerdere instances geen conflicten geven. */
@@ -128,12 +155,15 @@ export function ExpertCallBookingView({
     const persisted = readPersistedState(storageKey);
     if (persisted) return persisted;
     return {
-      selectedDate: undefined,
+      selectedDate: new Date(),
       selectedSlot: undefined,
       firstName: prefill?.firstName ?? "",
       lastName: prefill?.lastName ?? "",
       email: prefill?.email ?? "",
+      jobTitle: prefill?.jobTitle ?? "",
+      phone: prefill?.phone ?? "",
       company: prefill?.company ?? "",
+      wantsExpertCall: false,
     };
     // We bewust geen prefill in deps: prefill is een nieuw object per render bij
     // parent re-renders, en de initial-snapshot mag maar één keer berekend worden.
@@ -150,106 +180,222 @@ export function ExpertCallBookingView({
     });
   };
 
+  const hasRequiredContact =
+    state.firstName.trim() !== "" &&
+    state.lastName.trim() !== "" &&
+    state.email.trim() !== "";
+
+  const hasMoment = state.selectedDate != null && state.selectedSlot != null;
+
   useEffect(() => {
-    onCanSubmitChange?.(state.selectedDate != null && state.selectedSlot != null);
-  }, [state.selectedDate, state.selectedSlot, onCanSubmitChange]);
+    onCanSubmitChange?.(
+      hasRequiredContact && (!state.wantsExpertCall || hasMoment),
+    );
+  }, [hasRequiredContact, state.wantsExpertCall, hasMoment, onCanSubmitChange]);
+
+  const slotScrollRef = useRef<HTMLDivElement>(null);
+  const [slotFadeMask, setSlotFadeMask] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (!state.wantsExpertCall) return;
+    const el = slotScrollRef.current;
+    if (!el) return;
+    const update = () => {
+      const overflow = el.scrollHeight - el.clientHeight;
+      if (overflow <= 1) {
+        setSlotFadeMask(undefined);
+        return;
+      }
+      const atTop = el.scrollTop <= 0;
+      const atBottom = el.scrollTop >= overflow - 1;
+      const topStop = atTop ? "0" : "1rem";
+      const topStart = atTop ? "black 0" : "transparent 0";
+      const bottomStop = atBottom ? "100%" : "calc(100% - 1rem)";
+      const bottomEnd = atBottom ? "black 100%" : "transparent 100%";
+      setSlotFadeMask(
+        `linear-gradient(to bottom, ${topStart}, black ${topStop}, black ${bottomStop}, ${bottomEnd})`,
+      );
+    };
+    update();
+    el.addEventListener("scroll", update, { passive: true });
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => {
+      el.removeEventListener("scroll", update);
+      ro.disconnect();
+    };
+  }, [state.wantsExpertCall]);
 
   return (
-    <div className="flex flex-col gap-section">
-      <section className="flex flex-col gap-component">
-        <H3>Wat u kunt verwachten</H3>
-        <ul className="flex flex-col gap-component">
-          {SESSION_HIGHLIGHTS.map((item) => (
-            <li key={item} className="flex items-start gap-component text-sm leading-normal">
-              <HugeiconsIcon
-                icon={CheckmarkCircle02Icon}
-                className="mt-0.5 size-5 shrink-0 text-accent-foreground"
+    <div className="flex flex-col gap-component">
+      <Card>
+        <CardContent>
+          <section className="flex flex-col gap-section">
+            <div className="flex flex-col gap-micro">
+              <H3>Uw gegevens</H3>
+              <p className="text-sm text-muted-foreground">
+                Vul uw contactgegevens in zodat wij u kunnen bereiken.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-section sm:grid-cols-2">
+              <Field>
+                <FieldLabel htmlFor={`${idPrefix}-firstname`}>
+                  Voornaam <RequiredMark />
+                </FieldLabel>
+                <Input
+                  id={`${idPrefix}-firstname`}
+                  autoComplete="given-name"
+                  required
+                  aria-required="true"
+                  value={state.firstName}
+                  onChange={(e) => update({ firstName: e.target.value })}
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor={`${idPrefix}-lastname`}>
+                  Achternaam <RequiredMark />
+                </FieldLabel>
+                <Input
+                  id={`${idPrefix}-lastname`}
+                  autoComplete="family-name"
+                  required
+                  aria-required="true"
+                  value={state.lastName}
+                  onChange={(e) => update({ lastName: e.target.value })}
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor={`${idPrefix}-email`}>
+                  E-mailadres <RequiredMark />
+                </FieldLabel>
+                <Input
+                  id={`${idPrefix}-email`}
+                  type="email"
+                  autoComplete="email"
+                  required
+                  aria-required="true"
+                  value={state.email}
+                  onChange={(e) => update({ email: e.target.value })}
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor={`${idPrefix}-phone`}>Telefoonnummer</FieldLabel>
+                <Input
+                  id={`${idPrefix}-phone`}
+                  type="tel"
+                  autoComplete="tel"
+                  value={state.phone}
+                  onChange={(e) => update({ phone: e.target.value })}
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor={`${idPrefix}-jobtitle`}>Functie</FieldLabel>
+                <Input
+                  id={`${idPrefix}-jobtitle`}
+                  autoComplete="organization-title"
+                  value={state.jobTitle}
+                  onChange={(e) => update({ jobTitle: e.target.value })}
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor={`${idPrefix}-company`}>Bedrijfsnaam</FieldLabel>
+                <Input
+                  id={`${idPrefix}-company`}
+                  autoComplete="organization"
+                  value={state.company}
+                  onChange={(e) => update({ company: e.target.value })}
+                />
+              </Field>
+            </div>
+            <Field orientation="horizontal" className="mt-component">
+              <Checkbox
+                id={`${idPrefix}-wants-call`}
+                checked={state.wantsExpertCall}
+                onCheckedChange={(checked) =>
+                  update({ wantsExpertCall: checked === true })
+                }
               />
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+              <FieldLabel
+                htmlFor={`${idPrefix}-wants-call`}
+                className="text-sm font-normal"
+              >
+                Wenst u een call met een van onze experts?
+              </FieldLabel>
+            </Field>
+          </section>
+        </CardContent>
+      </Card>
 
-      <section className="flex flex-col gap-component">
-        <div className="flex flex-col gap-micro">
-          <H3>Kies een moment</H3>
-          <p className="text-sm text-muted-foreground">
-            Sessies duren één uur en starten op het hele of halve uur.
-          </p>
-        </div>
-        <div className="flex flex-col gap-section md:flex-row md:items-stretch md:gap-0">
-          <div className="flex flex-1 justify-center md:justify-start">
-            <Calendar
-              mode="single"
-              selected={state.selectedDate}
-              onSelect={(date) => update({ selectedDate: date })}
-              className="w-fit"
-            />
-          </div>
-          <Separator orientation="vertical" className="hidden md:block" />
-          <div className="flex max-h-80 flex-col gap-micro overflow-y-auto md:w-44 md:pl-section">
-            {TIME_SLOTS.map((slot) => {
-              const isSelected = state.selectedSlot === slot;
-              return (
-                <Button
-                  key={slot}
-                  type="button"
-                  variant={isSelected ? "default" : "outline"}
-                  onClick={() => update({ selectedSlot: slot })}
-                  className="w-full justify-center"
-                  disabled={!state.selectedDate}
+      <AnimatePresence initial={false}>
+        {state.wantsExpertCall ? (
+          <motion.div
+            key="moment"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+            className="overflow-hidden rounded-xl"
+          >
+          <div className="p-px">
+      <Card>
+        <CardContent>
+          <section className="flex flex-col gap-section">
+            <div className="flex flex-col gap-micro">
+              <H3>Kies een moment</H3>
+              <p className="text-sm text-muted-foreground">
+                Tijdslots zijn beschikbaar elk kwartier tussen 09:00 en 17:00.
+              </p>
+            </div>
+            <div className="flex flex-col gap-section sm:grid sm:grid-cols-[auto_1fr] sm:items-stretch sm:gap-section">
+              <Calendar
+                mode="single"
+                selected={state.selectedDate}
+                onSelect={(date) => update({ selectedDate: date })}
+                className="!w-full rounded-lg border border-border p-section [--cell-size:--spacing(9)] sm:!w-fit"
+                classNames={{
+                  week: "mt-micro flex w-full gap-micro",
+                  weekdays: "flex gap-micro",
+                }}
+              />
+              <div className="@container sm:relative">
+                <div
+                  ref={slotScrollRef}
+                  className="max-h-72 overflow-y-auto pr-micro sm:absolute sm:inset-0 sm:max-h-none"
+                  style={
+                    slotFadeMask
+                      ? { maskImage: slotFadeMask, WebkitMaskImage: slotFadeMask }
+                      : undefined
+                  }
                 >
-                  {slot}
-                </Button>
-              );
-            })}
+                  <div className="grid grid-cols-2 gap-component @xs:grid-cols-3 @sm:grid-cols-4">
+                    {TIME_SLOTS.map((slot) => {
+                      const isSelected = state.selectedSlot === slot;
+                      return (
+                        <Button
+                          key={slot}
+                          type="button"
+                          variant={isSelected ? "default" : "secondary"}
+                          onClick={() =>
+                            update({ selectedSlot: isSelected ? undefined : slot })
+                          }
+                          className="w-full cursor-pointer justify-center transition-none hover:!rounded-md"
+                          disabled={!state.selectedDate}
+                        >
+                          {slot}
+                        </Button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </CardContent>
+      </Card>
           </div>
-        </div>
-      </section>
-
-      <section className="flex flex-col gap-component">
-        <H3>Uw gegevens</H3>
-        <div className="grid grid-cols-1 gap-section sm:grid-cols-2">
-          <Field>
-            <FieldLabel htmlFor={`${idPrefix}-firstname`}>Voornaam</FieldLabel>
-            <Input
-              id={`${idPrefix}-firstname`}
-              autoComplete="given-name"
-              value={state.firstName}
-              onChange={(e) => update({ firstName: e.target.value })}
-            />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor={`${idPrefix}-lastname`}>Achternaam</FieldLabel>
-            <Input
-              id={`${idPrefix}-lastname`}
-              autoComplete="family-name"
-              value={state.lastName}
-              onChange={(e) => update({ lastName: e.target.value })}
-            />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor={`${idPrefix}-email`}>E-mailadres</FieldLabel>
-            <Input
-              id={`${idPrefix}-email`}
-              type="email"
-              autoComplete="email"
-              value={state.email}
-              onChange={(e) => update({ email: e.target.value })}
-            />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor={`${idPrefix}-company`}>Bedrijfsnaam</FieldLabel>
-            <Input
-              id={`${idPrefix}-company`}
-              autoComplete="organization"
-              value={state.company}
-              onChange={(e) => update({ company: e.target.value })}
-            />
-          </Field>
-        </div>
-      </section>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }
