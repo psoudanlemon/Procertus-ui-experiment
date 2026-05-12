@@ -98,11 +98,12 @@ export function OnboardingCompanyLegalEntitiesStep({
         </p>
       </div>
 
-      {overviewRows.length === 0 ?
+      {overviewRows.length === 0 ? (
         <p className="rounded-md border border-dashed border-border bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
           Er zijn in dit dossier geen gekozen certificatieaanvragen om te tonen.
         </p>
-      : <div className="overflow-x-auto rounded-lg border border-border">
+      ) : (
+        <div className="overflow-x-auto rounded-lg border border-border">
           <Table>
             <TableHeader>
               <TableRow>
@@ -122,11 +123,9 @@ export function OnboardingCompanyLegalEntitiesStep({
                     </div>
                   </TableCell>
                   <TableCell className="align-top">
-                    {rel === "" ?
-                      <span className="text-sm text-muted-foreground">
-                        Maak hieronder eerst uw keuze.
-                      </span>
-                    : rel === "yes" ?
+                    {rel === "" ? (
+                      <span className="text-sm text-muted-foreground">—</span>
+                    ) : rel === "yes" ? (
                       <div className="text-sm text-foreground">
                         <span className="font-medium">
                           {headOfficeLegalEntityName || "Maatschappelijke zetel"}
@@ -135,7 +134,8 @@ export function OnboardingCompanyLegalEntitiesStep({
                           Maatschappelijke zetel — {headOfficeLegalEntityAddress}
                         </span>
                       </div>
-                    : <Select
+                    ) : (
+                      <Select
                         value={assignmentSelectValue(draft.id)}
                         onValueChange={(v) => {
                           if (v === CERT_INQUIRY_VEST_UNASSIGNED) {
@@ -146,11 +146,12 @@ export function OnboardingCompanyLegalEntitiesStep({
                         }}
                       >
                         <SelectTrigger size="sm" className="h-auto min-h-9 w-full max-w-md py-2">
-                          <SelectValue placeholder="Kies juridische entiteit" />
+                          <SelectValue placeholder="—" />
                         </SelectTrigger>
                         <SelectContent position="popper">
                           <SelectItem value={CERT_INQUIRY_VEST_UNASSIGNED}>
-                            — Nog niet gekozen —
+                            <span aria-hidden>—</span>
+                            <span className="sr-only">Nog niet gekozen</span>
                           </SelectItem>
                           <SelectItem value={CERT_INQUIRY_LEGAL_ENTITY_ZETEL}>
                             Maatschappelijke zetel
@@ -162,16 +163,16 @@ export function OnboardingCompanyLegalEntitiesStep({
                           ))}
                         </SelectContent>
                       </Select>
-                    }
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </div>
-      }
+      )}
 
-      {overviewRows.length > 0 ?
+      {overviewRows.length > 0 ? (
         <p className="text-xs leading-relaxed text-muted-foreground">
           <span className="font-medium text-foreground">Samenvatting toewijzing:</span>{" "}
           {overviewRows.map((d) => (
@@ -181,7 +182,7 @@ export function OnboardingCompanyLegalEntitiesStep({
             </span>
           ))}
         </p>
-      : null}
+      ) : null}
 
       <ChoiceCardGroup
         className="p-0"
@@ -190,7 +191,7 @@ export function OnboardingCompanyLegalEntitiesStep({
         hint="Maak eerst een keuze. U past daarna per aanvraag toe wanneer u aparte entiteiten gebruikt."
         name={`${legalEntityFieldBase}-legal-entity-mode`}
         value={rel === "" ? undefined : rel}
-        onValueChange={(v) => {
+        onValueChange={(v: string) => {
           if (v !== "yes" && v !== "no") return;
           if (v === "yes") {
             patchContext({
@@ -227,19 +228,7 @@ export function OnboardingCompanyLegalEntitiesStep({
         />
       </ChoiceCardGroup>
 
-      {overviewRows.length > 0 && rel === "yes" ?
-        <div className="rounded-lg border border-border bg-muted/20 px-4 py-4">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            Bevestiging
-          </p>
-          <p className="mt-2 text-sm text-foreground">
-            Voor elke aanvraag in dit dossier geldt uw maatschappelijke zetel als juridische
-            tegenpartij voor certificatie.
-          </p>
-        </div>
-      : null}
-
-      {rel === "no" ?
+      {rel === "no" ? (
         <div className="border-t border-border pt-8">
           <OnboardingVestigingenLegalEntityManager
             fieldBaseId={legalEntityFieldBase}
@@ -254,15 +243,15 @@ export function OnboardingCompanyLegalEntitiesStep({
                 </h3>
                 <p className="text-xs leading-relaxed text-muted-foreground">
                   Vul hieronder een juridische entiteit in en klik Add. Het land wordt automatisch
-                  gelijkgezet met uw maatschappelijke zetel. Na toevoegen verschijnen ze in de lijst;
-                  gebruik Bewerken en Save voor wijzigingen. Daarna wijst u toe in het overzicht
-                  bovenaan.
+                  gelijkgezet met uw maatschappelijke zetel. Na toevoegen verschijnen ze in de
+                  lijst; gebruik Bewerken en Save voor wijzigingen. Daarna wijst u toe in het
+                  overzicht bovenaan.
                 </p>
               </div>
             }
           />
         </div>
-      : null}
+      ) : null}
     </div>
   );
 }
