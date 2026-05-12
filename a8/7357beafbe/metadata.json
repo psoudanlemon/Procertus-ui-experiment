@@ -1,0 +1,19 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "a87357beafbe",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/PublicCertificationRequestsCart.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/a8/7357beafbe/0/metadata.json",
+      "transcript": "/a8/7357beafbe/0/full.jsonl",
+      "content_hash": "/a8/7357beafbe/0/content_hash.txt",
+      "prompt": "/a8/7357beafbe/0/prompt.txt"
+    }
+  ]
+}
