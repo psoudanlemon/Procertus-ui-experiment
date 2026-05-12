@@ -12,6 +12,7 @@ import {
 } from "@procertus-ui/ui-certification";
 
 import { useSyncOnboardingTrajectFromServiceId } from "../features/onboarding/use-sync-onboarding-traject-from-service-id";
+import { resetTrajectFlow } from "../features/traject/traject-submission-context";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
 
 const WEGWIJZER_PATH = "/welcome";
@@ -64,7 +65,7 @@ export function InfoRequestPlaceholderPage() {
     } catch {
       // sessionStorage may be unavailable — ignore.
     }
-    api.clearInformalIntakeCapture();
+    resetTrajectFlow(api);
     navigate(`/welcome/info-request/${entry.id}/verzonden`, { replace: true });
   };
 

@@ -21,7 +21,7 @@ import {
 } from "@procertus-ui/ui-certification";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FORMAL_ONBOARDING_PATH } from "../routes/formal-request-routing";
+import { resetTrajectFlow } from "../features/traject/traject-submission-context";
 
 const WELCOME_PATH = "/welcome";
 
@@ -37,9 +37,14 @@ export function PublicCertificationRequestsCart() {
 
   const productGroups = useMemo(() => groupDraftsByProduct(drafts), [drafts]);
 
-  const closePanelAndClearDrafts = () => {
+  /**
+   * Sluit het paneel, volledige onboarding-flow in geheugen + localStorage gewist via
+   * {@link resetTrajectFlow}, daarna `/welcome` zodat de gebruiker certificaat- en productkeuze
+   * opnieuw samenstelt (formeel traject, informatieaanvraag of expert-call).
+   */
+  const closePanelResetGuestFlowAndGoWelcome = () => {
     setOpen(false);
-    api.applyWizardDraftCompletion([]);
+    resetTrajectFlow(api);
     navigate(WELCOME_PATH, { replace: true });
   };
 
@@ -47,10 +52,10 @@ export function PublicCertificationRequestsCart() {
     const ok =
       (await confirm?.(
         "Alle aanvragen wissen?",
-        "Alle conceptaanvragen worden uit uw mandje verwijderd. U wordt daarna naar de welkomstpagina gestuurd.",
+        "Alle conceptaanvragen worden uit uw mandje verwijderd en alle gegevens uit de registratiewizard worden gewist. U wordt daarna naar de welkomstpagina gestuurd.",
       )) ?? false;
     if (!ok) return;
-    closePanelAndClearDrafts();
+    closePanelResetGuestFlowAndGoWelcome();
   };
 
   const removeProductRow = async (productId: string) => {
@@ -63,20 +68,15 @@ export function PublicCertificationRequestsCart() {
       (await confirm?.(
         isLast ? "Laatste aanvraag verwijderen?" : "Product verwijderen uit mandje?",
         isLast
-          ? "Uw mandje wordt leeggemaakt. U wordt daarna naar de welkomstpagina gestuurd."
+          ? "Uw mandje wordt leeggemaakt en alle registratiegegevens worden gewist. U wordt daarna naar de welkomstpagina gestuurd."
           : "Alle certificaataanvragen voor dit product worden uit uw mandje gehaald.",
       )) ?? false;
     if (!ok) return;
     if (isLast) {
-      closePanelAndClearDrafts();
+      closePanelResetGuestFlowAndGoWelcome();
     } else {
       api.applyWizardDraftCompletion(nextDrafts);
     }
-  };
-
-  const openRequestWizard = () => {
-    setOpen(false);
-    navigate(FORMAL_ONBOARDING_PATH);
   };
 
   const label =
@@ -117,8 +117,9 @@ export function PublicCertificationRequestsCart() {
         <SheetHeader className="pr-10 text-left">
           <SheetTitle>Aanvragen</SheetTitle>
           <SheetDescription>
-            Overzicht van uw huidige certificaataanvragen per product. Open de wizard om de
-            samenstelling te wijzigen, verwijder een productrij, of wis het volledige mandje.
+            Overzicht van uw huidige certificaataanvragen per product. Ga naar de startpagina om uw
+            certificaat- en productkeuze opnieuw samen te stellen (formeel of informatief), verwijder
+            een productrij, of wis het volledige mandje.
           </SheetDescription>
         </SheetHeader>
         <SheetScrollFade />
@@ -136,7 +137,7 @@ export function PublicCertificationRequestsCart() {
                 variant="outline"
                 size="sm"
                 className="w-full sm:w-auto"
-                onClick={openRequestWizard}
+                onClick={closePanelResetGuestFlowAndGoWelcome}
               >
                 Aanvragen bewerken
               </Button>
