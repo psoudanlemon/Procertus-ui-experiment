@@ -1,4 +1,4 @@
-import { cn } from "@procertus-ui/ui";
+import { Button, cn } from "@procertus-ui/ui";
 import {
   PRODUCT_REQUEST_NOTE_MAX_LENGTH,
   PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG,
@@ -19,8 +19,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
 
 const WEGWIJZER_PATH = "/welcome";
-const BUNDLE_ASSEMBLE_PATH = (serviceId: string) =>
-  `/welcome/aanvraag/${serviceId}/pakket`;
+const BUNDLE_ASSEMBLE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}/pakket`;
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
 
 /** Een draft telt als "echt productgebonden" als er een productId óf productLabel op staat. */
@@ -59,10 +58,7 @@ export function TrajectRequestReviewFlow() {
   const { flowState } = useOnboardingFlowState();
   const inquiries: CertificationRequestDraft[] = flowState.drafts;
   const productGroups = useMemo(() => groupDraftsByProduct(inquiries), [inquiries]);
-  const hasProducts = useMemo(
-    () => inquiries.some(isProductBoundDraft),
-    [inquiries],
-  );
+  const hasProducts = useMemo(() => inquiries.some(isProductBoundDraft), [inquiries]);
   // Niet-productgebonden certificaten (`productRelation === "optional"` in de
   // wegwijzer) springen via de detail-card-CTA rechtstreeks naar dit scherm,
   // zonder product- of bundle-stap. De begeleidende brief is dan het enige
@@ -92,6 +88,11 @@ export function TrajectRequestReviewFlow() {
     navigate(TRIAGE_PATH(serviceId));
   }, [navigate, serviceId]);
 
+  /** Zelfde als pakket-samenstellen: terug naar de wegwijzer om een bijkomend certificaattype te kiezen. */
+  const handleAddMore = useCallback(() => {
+    navigate(WEGWIJZER_PATH);
+  }, [navigate]);
+
   if (!serviceId || !service) {
     return <Navigate to={WEGWIJZER_PATH} replace />;
   }
@@ -104,7 +105,9 @@ export function TrajectRequestReviewFlow() {
       bodyGap="section"
       kicker={service.entry.label}
       title={
-        hasProducts ? "Controleer je aanvraagpakket" : `Beschrijf je ${service.entry.shortLabel}-aanvraag`
+        hasProducts
+          ? "Controleer je aanvraagpakket"
+          : `Beschrijf je ${service.entry.shortLabel}-aanvraag`
       }
       description={
         hasProducts
@@ -143,9 +146,7 @@ export function TrajectRequestReviewFlow() {
             onChange={setNote}
             required={noteRequired}
             maxLength={
-              hasProducts
-                ? PRODUCT_REQUEST_NOTE_MAX_LENGTH
-                : PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG
+              hasProducts ? PRODUCT_REQUEST_NOTE_MAX_LENGTH : PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG
             }
             rows={hasProducts ? 6 : 16}
             bordered={false}
@@ -167,17 +168,19 @@ export function TrajectRequestReviewFlow() {
                   Overzicht aanvragen
                 </h2>
                 <p className="m-0 text-sm text-muted-foreground">
-                  {inquiries.length}{" "}
-                  {inquiries.length === 1 ? "certificaat" : "certificaten"} aangevraagd over{" "}
-                  {productGroups.length}{" "}
+                  {inquiries.length} {inquiries.length === 1 ? "certificaat" : "certificaten"}{" "}
+                  aangevraagd over {productGroups.length}{" "}
                   {productGroups.length === 1 ? "product" : "producten"}.
                 </p>
               </div>
-              <ProductInquiryMatrix
-                groups={productGroups}
-                primaryEntryId={service.entry.id}
-              />
+              <ProductInquiryMatrix groups={productGroups} primaryEntryId={service.entry.id} />
             </section>
+
+            <div className="flex flex-wrap items-center gap-component">
+              <Button type="button" variant="outline" size="sm" onClick={handleAddMore}>
+                Nog certificatie toevoegen
+              </Button>
+            </div>
 
             <ProductDocumentationLibrary
               groups={productGroups}
