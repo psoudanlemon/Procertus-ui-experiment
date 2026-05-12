@@ -38,15 +38,17 @@ export function deriveOnboardingPhaseValidityForFlow(
   context: CustomerContext,
   certificationInquiryDraftIds: readonly string[],
 ): OnboardingPhaseValidity & { hasCustomerContext: boolean } {
-  const hasCustomerContext =
-    (context.applicantIsLegalRepresentative === "yes" ||
-      context.applicantIsLegalRepresentative === "no") &&
+  const legalRepChoiceOk = isApplicantLegalRepresentativeChoiceComplete(context);
+  const registrationBodyComplete =
     isRegistrantCaptureValidForContext(context) &&
     isLegalRepresentativeCaptureComplete(context) &&
     (requestOrigin
       ? isRegistrationIdentifierValidForOrigin(context.vatNumber ?? "", requestOrigin)
       : isVatIdentifierPlausible(context.vatNumber ?? ""));
-  const registrationStepOk = hasCustomerContext || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  const hasCustomerContext = legalRepChoiceOk && registrationBodyComplete;
+  const registrationStepOk =
+    legalRepChoiceOk &&
+    (registrationBodyComplete || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION);
   const companyZetelOk =
     isOnboardingCompanyZetelStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   /** Strict: alle aanvragen moeten gekoppeld zijn voor verder naar facturatie. */

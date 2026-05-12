@@ -26,6 +26,7 @@ import {
   isOnboardingCompanyZetelStepValid,
   isOnboardingInvoicingStepValid,
   isOnboardingOptionalContactsStepValid,
+  isApplicantLegalRepresentativeChoiceComplete,
   isRegistrantCaptureValidForContext,
   stepIndex,
 } from "./onboarding-flow-helpers";
@@ -145,14 +146,16 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   const stepperActiveIndex = stepIndex(activeStep);
   const hasDrafts = drafts.length > 0;
   const certificationInquiryDraftIds = effectiveSummaryIncludedDraftIds;
-  const hasCustomerContext =
-    (context.applicantIsLegalRepresentative === "yes" ||
-      context.applicantIsLegalRepresentative === "no") &&
+  const legalRepChoiceOk = isApplicantLegalRepresentativeChoiceComplete(context);
+  const registrationBodyComplete =
     isRegistrantCaptureValidForContext(context) &&
     isLegalRepresentativeCaptureComplete(context) &&
     (requestOrigin
       ? isRegistrationIdentifierValidForOrigin(context.vatNumber ?? "", requestOrigin)
       : isVatIdentifierPlausible(context.vatNumber ?? ""));
+  const hasCustomerContext = legalRepChoiceOk && registrationBodyComplete;
+  const registrationStepOk =
+    legalRepChoiceOk && (registrationBodyComplete || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION);
   const companyZetelOk =
     isOnboardingCompanyZetelStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const companyLegalEntitiesOk = isOnboardingCompanyLegalEntitiesStepValid(
@@ -164,7 +167,6 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const optionalContactsOk =
     isOnboardingOptionalContactsStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
-  const registrationStepOk = hasCustomerContext || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const extrasStepOk = optionalContactsOk;
   const steps: StepLayoutStep[] = useMemo(
     () =>

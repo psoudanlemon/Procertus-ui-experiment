@@ -14,6 +14,7 @@ import {
   effectiveIncludedCertificationDraftIds,
   formatRequesterStepperLabel,
   isLegalRepresentativeCaptureComplete,
+  isApplicantLegalRepresentativeChoiceComplete,
   isOnboardingCompanyCoreStepValid,
   isOnboardingCompanyStepValid,
   isOnboardingCompanyZetelStepValid,
@@ -95,17 +96,26 @@ export function storyCustomerContext(overrides: Partial<CustomerContext> = {}): 
   });
 }
 
-function hasCustomerContext(
+function onboardingRegistrationBodyComplete(
   ctx: CustomerContext,
   requestOrigin: OnboardingRequestOrigin | "",
 ): boolean {
   return (
-    (ctx.applicantIsLegalRepresentative === "yes" || ctx.applicantIsLegalRepresentative === "no") &&
     isRegistrantCaptureValidForContext(ctx) &&
     isLegalRepresentativeCaptureComplete(ctx) &&
     (requestOrigin
       ? isRegistrationIdentifierValidForOrigin(ctx.vatNumber ?? "", requestOrigin)
       : isVatIdentifierPlausible(ctx.vatNumber ?? ""))
+  );
+}
+
+function hasCustomerContext(
+  ctx: CustomerContext,
+  requestOrigin: OnboardingRequestOrigin | "",
+): boolean {
+  return (
+    isApplicantLegalRepresentativeChoiceComplete(ctx) &&
+    onboardingRegistrationBodyComplete(ctx, requestOrigin)
   );
 }
 
@@ -149,12 +159,15 @@ export function storyOnboardingStepperSteps(input: {
   const requestOrigin = input.requestOrigin ?? "";
   const hasDrafts = drafts.length > 0;
   const hasCust = hasCustomerContext(context, requestOrigin);
+  const registrationBodyOk = onboardingRegistrationBodyComplete(context, requestOrigin);
+  const legalRepOk = isApplicantLegalRepresentativeChoiceComplete(context);
   const hasInv = hasInvoicingContext(context, drafts);
   const hasComp = hasCompanyContext(context, drafts);
   const hasCore = hasCompanyCoreContext(context, drafts);
   const companyZetelOk =
     hasCompanyZetelContext(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
-  const registrationStepOk = hasCust || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  const registrationStepOk =
+    legalRepOk && (registrationBodyOk || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION);
   const companyStepOk = hasComp || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const companyCoreOk = hasCore || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const invoicingStepOk = hasInv || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
