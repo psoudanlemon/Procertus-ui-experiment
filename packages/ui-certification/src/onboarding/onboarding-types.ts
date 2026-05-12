@@ -219,6 +219,12 @@ export type OnboardingFlowState = {
    * Wegwijzer toonlabel (bv. naam van het dienstkanaal uit de triage) voor kopie in de registratiefase.
    */
   registrationEntryLabel?: string;
+  /**
+   * Gezet op de triagekaart “Traject opstarten”; `false` bij informatieaanvraag of expert-call.
+   * Bepaalt mee of het gast‑mandje en de voortgangbanner een lopend **formeel** dossier tonen
+   * (samen met {@link requestOrigin} zodra de registratie is gestart).
+   */
+  formalRequestPackageCommitted: boolean;
   /** Where the requesting company is based; drives preset and country options for later steps. */
   requestOrigin: OnboardingRequestOrigin | "";
   drafts: CertificationRequestDraft[];
@@ -234,4 +240,21 @@ export type OnboardingFlowState = {
    * Omitted ids default to enabled (true).
    */
   summaryKlantenportaalByPersonId?: Record<string, boolean>;
+  /**
+   * Wordt `true` pas na “Verder” van de maatschappelijke‑zetelstap. De VAT‑lookup vult `context` al
+   * vóór die bevestiging; zonder deze vlag zou resume ten onrechte latere stappen kiezen.
+   */
+  companyZetelStepCompleted: boolean;
+  /**
+   * Na **Verder** van certificatie‑/juridische entiteit (zetel vs vestigingen per aanvraag).
+   * Een keuze zoals “zetel voor alle aanvragen” kan `context` meteen valide maken zonder deze stap te verlaten.
+   */
+  companyLegalEntitiesStepCompleted: boolean;
+  /** Na **Verder** van de facturatiestap (of stapoverslaan rechtstreeks naar nazicht via de stepper). */
+  invoicingStepCompleted: boolean;
+  /**
+   * Na **Verder** van de stap met optionele contacten. Standaard is die inhoud vaak al “geldig” zonder invoer,
+   * dus zonder vlag zou resume nazicht overslaan.
+   */
+  extrasStepCompleted: boolean;
 };

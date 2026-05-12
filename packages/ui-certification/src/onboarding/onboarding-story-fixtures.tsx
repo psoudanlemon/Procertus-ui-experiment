@@ -27,6 +27,7 @@ import type {
   CustomerContext,
   OnboardingStep,
 } from "./onboarding-types";
+import { ONBOARDING_STEPS } from "./onboarding-types";
 import { registrationSimulationStepLabels } from "./lib/registrationSubmitSimulation";
 import {
   DEFAULT_VAT_PROTOTYPE_PRESET_ID,
@@ -326,9 +327,12 @@ export function flowStateSeedFromOnboardingFlowViewProps(
   props: OnboardingFlowViewProps,
 ): OnboardingFlowState {
   const summaryIds = props.effectiveSummaryIncludedDraftIds;
+  const stepIdx = ONBOARDING_STEPS.indexOf(props.step);
   return hydrateOnboardingFlowStateFromStored({
     trajectServiceId: "",
     guestIntakeChannel: props.requestOrigin ? "formal" : "",
+    formalRequestPackageCommitted:
+      props.requestOrigin !== "" || (props.drafts?.length ?? 0) > 0,
     requestOrigin: props.requestOrigin,
     drafts: [...props.drafts],
     summaryIncludedDraftIds: summaryIds !== undefined ? [...summaryIds] : undefined,
@@ -336,6 +340,11 @@ export function flowStateSeedFromOnboardingFlowViewProps(
     prototypeVatPresetId: props.prototypeVatPresetId,
     companyFieldHints: props.companyHints ?? {},
     summaryKlantenportaalByPersonId: props.summaryKlantenportaalByPersonId ?? {},
+    companyZetelStepCompleted: stepIdx > ONBOARDING_STEPS.indexOf("company"),
+    companyLegalEntitiesStepCompleted:
+      stepIdx > ONBOARDING_STEPS.indexOf("companyLegalEntities"),
+    invoicingStepCompleted: stepIdx > ONBOARDING_STEPS.indexOf("invoicing"),
+    extrasStepCompleted: stepIdx > ONBOARDING_STEPS.indexOf("extras"),
   });
 }
 

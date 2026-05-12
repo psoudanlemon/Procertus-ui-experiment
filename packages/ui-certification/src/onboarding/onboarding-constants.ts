@@ -18,7 +18,7 @@ export const ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION = true;
 export const CERTIFICATION_PHASE_TITLE = "Start je certificatieaanvraag";
 export const CERTIFICATION_PHASE_DESCRIPTION =
   "Kies eerst wat je wilt aanvragen. We vragen pas organisatie- en accountgegevens wanneer je een conceptaanvraag hebt samengesteld.";
-export const REGISTRATION_PHASE_TITLE = "Registratie — formeel dossier";
-/** Used when onboarding state has nog geen wegwijzerlabel of drafts om te laten uitstralen */
+export const REGISTRATION_PHASE_TITLE = "Start traject voor certificatie";
+/** Vaste shell‑tekst voor de formele registratiefase (geen dynamische echo van label of concepten). */
 export const REGISTRATION_PHASE_DESCRIPTION =
-  "Na een korte keuze voor land of regio vullen we de volgende stappen daarop aan: uw contactpersoon, ondernemingsnummer en bedrijfsadres.";
+  "Nadat we alle nodige informatie verzameld hebben, kunt u uw traject insturen en zal u kunnen aanmelden op het PROCERTUS klantenportaal.";

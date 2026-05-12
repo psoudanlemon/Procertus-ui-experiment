@@ -19,10 +19,6 @@ import {
   REGISTRATION_PHASE_TITLE,
 } from "./onboarding-constants";
 import {
-  buildRegistrationPhaseDescription,
-  buildRegistrationPhaseTitle,
-} from "./lib/registration-phase-shell-copy";
-import {
   buildRows,
   effectiveIncludedCertificationDraftIds,
   isLegalRepresentativeCaptureComplete,
@@ -33,6 +29,7 @@ import {
   isRegistrantCaptureValidForContext,
   stepIndex,
 } from "./onboarding-flow-helpers";
+import { stepCompletionStateAfterNavigation } from "./lib/onboarding-step-completion-navigation";
 import type { OnboardingStep } from "./onboarding-types";
 import { ONBOARDING_STEPS } from "./onboarding-types";
 import {
@@ -110,7 +107,6 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     prototypeVatPresetId,
     companyFieldHints,
     summaryIncludedDraftIds,
-    registrationEntryLabel,
   } = flowState;
   const companyHints = companyFieldHints ?? {};
 
@@ -199,12 +195,10 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
       if (stepperModel[targetIndex]?.available === false) {
         return;
       }
-      setFlowState((prev) => {
-        if (nextStep === "company") {
-          return { ...prev, companyFieldHints: {} };
-        }
-        return prev;
-      });
+      setFlowState((prev) => ({
+        ...prev,
+        ...stepCompletionStateAfterNavigation(prev, activeStep, nextStep),
+      }));
       onRegistrationStepChange(nextStep);
     },
     [
@@ -330,30 +324,10 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
                     }
                   : { label: "Doorgaan", onClick: () => {}, disabled: true };
 
-  const registrationPhaseDescriptionDerived = useMemo(
-    () =>
-      buildRegistrationPhaseDescription({
-        registrationEntryLabel,
-        drafts,
-        fallbackDescription: REGISTRATION_PHASE_DESCRIPTION,
-      }),
-    [drafts, registrationEntryLabel],
-  );
-
-  const registrationPhaseTitleDerived = useMemo(
-    () =>
-      buildRegistrationPhaseTitle({
-        registrationEntryLabel,
-        drafts,
-        fallbackTitle: REGISTRATION_PHASE_TITLE,
-      }),
-    [drafts, registrationEntryLabel],
-  );
-
   const viewProps: OnboardingFlowViewProps = {
     step: activeStep,
-    registrationPhaseTitle: registrationPhaseTitleDerived,
-    registrationPhaseDescription: registrationPhaseDescriptionDerived,
+    registrationPhaseTitle: REGISTRATION_PHASE_TITLE,
+    registrationPhaseDescription: REGISTRATION_PHASE_DESCRIPTION,
     onSignInClick: () => navigate(signInUrl),
     signInUrl,
     registrationSubmitOpen,
@@ -380,7 +354,12 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
       label: "Terug",
       onClick: () => {
         const previous = ONBOARDING_STEPS[Math.max(0, stepperActiveIndex - 1)];
-        if (previous) onRegistrationStepChange(previous);
+        if (!previous) return;
+        setFlowState((prev) => ({
+          ...prev,
+          ...stepCompletionStateAfterNavigation(prev, activeStep, previous),
+        }));
+        onRegistrationStepChange(previous);
       },
     },
     companyLookupPhase,

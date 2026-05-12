@@ -34,6 +34,10 @@ export type { UseOnboardingFlowOptions } from "./use-onboarding-flow";
 export {
   deriveFormalOnboardingResumeStep,
 } from "./derive-formal-onboarding-resume-step";
+export {
+  draftBelongsToTrajectRoot,
+  formalPackageSummaryDraftIds,
+} from "./traject-draft-belongs";
 export * from "./onboarding-constants";
 export type {
   CustomerContext,

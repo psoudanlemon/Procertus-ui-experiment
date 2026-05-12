@@ -21,6 +21,7 @@ import {
   defaultPrototypePresetIdForRequestOrigin,
   type OnboardingRequestOrigin,
 } from "./onboarding-request-origin";
+import { formalPackageSummaryDraftIds } from "./traject-draft-belongs";
 
 const ADDRESS_DETAIL_KEYS: (keyof CustomerContext)[] = [
   "addressStreet",
@@ -52,6 +53,13 @@ export type OnboardingFlowApi = {
   /** Mirror informal booking formulier-state uit ExpertCallBookingView. */
   readonly patchInformalIntakeCapture: (capture: InformalIntakeCapture) => void;
   readonly clearInformalIntakeCapture: () => void;
+  /**
+   * Na triage “Traject opstarten”: markeer het pakket als formeel en neem alle relevante
+   * concept‑aanvragen op in {@link OnboardingFlowState.summaryIncludedDraftIds}.
+   */
+  readonly commitFormalRequestPackageFromTriage: () => void;
+  /** Informatieaanvraag of expert-call vanaf triage: geen lopend formeel dossier‑stempel. */
+  readonly resetFormalRequestPackageCommit: () => void;
 };
 
 type LegacyContext = Partial<CustomerContext> & {
@@ -125,6 +133,10 @@ export function createOnboardingFlowApi(
         ...prev,
         prototypeVatPresetId: presetId,
         companyFieldHints: {},
+        companyZetelStepCompleted: false,
+        companyLegalEntitiesStepCompleted: false,
+        invoicingStepCompleted: false,
+        extrasStepCompleted: false,
         context: customerContextAfterPrototypePresetChange(resolvePrevContext(prev), preset),
       }));
     },
@@ -140,9 +152,35 @@ export function createOnboardingFlowApi(
           requestOrigin: origin,
           prototypeVatPresetId: preset.id,
           companyFieldHints: {},
+          companyZetelStepCompleted: false,
+          companyLegalEntitiesStepCompleted: false,
+          invoicingStepCompleted: false,
+          extrasStepCompleted: false,
           context: customerContextAfterPrototypePresetChange(baseContext, preset),
         };
       });
+    },
+
+    commitFormalRequestPackageFromTriage() {
+      setFlowState((prev) => {
+        const summaryIncludedDraftIds = formalPackageSummaryDraftIds(
+          prev.drafts,
+          prev.trajectServiceId,
+        );
+        return {
+          ...prev,
+          formalRequestPackageCommitted: true,
+          summaryIncludedDraftIds,
+        };
+      });
+    },
+
+    resetFormalRequestPackageCommit() {
+      setFlowState((prev) =>
+        prev.formalRequestPackageCommitted
+          ? { ...prev, formalRequestPackageCommitted: false }
+          : prev,
+      );
     },
 
     applyWizardDraftCompletion(nextDrafts) {

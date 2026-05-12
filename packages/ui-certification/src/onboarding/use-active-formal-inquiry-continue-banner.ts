@@ -8,13 +8,13 @@ import type { OnboardingStep } from "./onboarding-types";
 
 export type ActiveFormalInquiryContinueBannerModel = {
   /**
-   * In-progress formal dossier (past origin, inquiries in scope, registration not complete).
-   * Use for header chrome such as the certification cart on **all** guest routes including `/welcome/formal-request`.
+   * In-progress formal dossier past triage (“traject opstarten”) or after registratie‑origin,
+   * met minstens één opgenomen certificatie‑concept. Gebruikt voor het mandje (ook op
+   * `/welcome/formal-request`).
    */
   sessionActive: boolean;
   /**
-   * “Continue aanvraag” banner above the outlet — same as `sessionActive` except hidden while already
-   * on the formal onboarding URL prefix.
+   * “Continue aanvraag” boven de outlet — verborgen op het formele onboarding‑pad zelf.
    */
   visible: boolean;
   includedCount: number;
@@ -37,13 +37,14 @@ export function useActiveFormalInquiryContinueBanner(input: {
       flowState.drafts,
       flowState.summaryIncludedDraftIds,
     ).length;
-    const formalRegistrationStarted = flowState.requestOrigin !== "";
+    const formalDossierContextStarted =
+      flowState.formalRequestPackageCommitted || flowState.requestOrigin !== "";
     const onFormalRoute = input.pathname.startsWith(input.formalOnboardingPathPrefix);
 
     const sessionActive =
       registrationCompletePayload == null &&
       includedCount > 0 &&
-      formalRegistrationStarted;
+      formalDossierContextStarted;
 
     const visible = sessionActive && !onFormalRoute;
 

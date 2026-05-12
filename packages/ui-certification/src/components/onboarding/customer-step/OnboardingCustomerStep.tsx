@@ -1,18 +1,4 @@
-/** Presentational onboarding step; shared import aggregate (unused bindings possible). */
-/* eslint-disable eslint/no-unused-vars -- keep one import block aligned across registration steps */
-import { Alert01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-  Badge,
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
   ChoiceCard,
   ChoiceCardGroup,
   Field,
@@ -25,78 +11,23 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  CardList,
   cn,
-  Switch,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
 } from "@procertus-ui/ui";
-import {
-  DraftCardDescription,
-  sortDraftsByIntentAndProduct,
-} from "../../../certification-request/draft-selection-presentation";
 import { PrototypeCard } from "@procertus-ui/ui-pt1-prototype";
 import {
   findVatPrototypePreset,
   getRegistrantContextFieldsForPrototypePreset,
-  registrationIsoCodeFromDutchCountryLabel,
-  VAT_LOOKUP_OUTCOME_LABELS,
   VAT_PROTOTYPE_PRESETS,
-  type VatLookupMockOutcome,
 } from "../../../onboarding/lib/vatPrototypePresets";
 import {
-  isRegistrationIdentifierValidForOrigin,
-  registrationIdentifierFieldMeta,
-  registrationIdentifierStructuralIssue,
-} from "../../../onboarding/lib/registration-identifier-for-origin";
-import { COUNTRY_SELECT_NONE } from "../../../onboarding/onboarding-constants";
-import {
-  canEnableCertificationSecondaryContact,
-  certificationSecondaryContactDisabledHint,
   customerContextAfterPrototypePresetChange,
   emptyIdentificatiePersonState,
-  emptyOnboardingVestiging,
-  firmaAddressSubformValue,
-  formatVestigingRegistryOptionLabel,
-  formatPostalAddressDisplay,
-  invoicingAddressSubformValue,
   isLegalRepresentativeCaptureComplete,
-  isOnboardingVestigingCaptureComplete,
   isRegistrantCaptureValidForContext,
-  legalRepresentativePersonValue,
-  ONBOARDING_PERSON_NEW_ID,
-  vestigingAddressSubformValue,
-  newOnboardingVestigingId,
   resolveFlowContext,
-  summaryDisplayNameForRegisteredPerson,
-  summaryRolesForRegisteredPerson,
 } from "../../../onboarding/onboarding-flow-helpers";
-import type { OnboardingRequestOrigin } from "../../../onboarding/onboarding-request-origin";
-import {
-  ONBOARDING_REQUEST_ORIGIN_IDS,
-  companyRegistrationSourceCountryLabel,
-  isFirmaCountryLockedToRequestOrigin,
-  ONBOARDING_REQUEST_ORIGIN_HERO_OPTIONS,
-  ONBOARDING_REQUEST_ORIGIN_SECONDARY_OPTIONS,
-} from "../../../onboarding/onboarding-request-origin";
-import { RequestOriginFlag } from "../../../onboarding/onboarding-request-origin-flag";
 import { SubformCompletionBadge } from "../../../onboarding/subform-completion-badge";
-import {
-  IdentificatieAddressSubform,
-  IdentificatieOptionalBlock,
-  IdentificatiePersonRegistrySummary,
-  IdentificatiePersonSubform,
-} from "../../../onboarding/identificatie-subforms";
 import { IdentificatiePersonTitleRoleCapture } from "../../../onboarding/identificatie-person-title-role-capture";
-import { IdentificatiePersonRegistryPicker } from "../../../onboarding/identificatie-person-registry-picker";
-import {
-  OnboardingCompanyPrefillSkeleton,
-  OnboardingContextField,
-} from "../shared/onboarding-shared-fields";
 import type { OnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
 import { personFormCardClassName } from "../../../onboarding/person-form-card-variants";
 
@@ -104,71 +35,19 @@ export type OnboardingCustomerStepProps = { model: OnboardingRegistrationLayoutM
 
 export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
   const {
-    step,
-    registrationPhaseTitle,
-    registrationPhaseDescription,
-    onSignInClick,
-    registrationSubmitOpen,
-    onRegistrationSubmitOpenChange,
-    registrationProgress,
-    registrationStepIndex,
-    registrationSimulationLabels,
     context,
     updateContext,
     patchContext,
     setFlowState,
-    drafts,
-    effectiveSummaryIncludedDraftIds,
-    rows,
-    steps,
-    activeStep,
-    goToOnboardingStep,
-    primaryAction,
-    backAction,
-    cancelAction,
-    companyLookupPhase,
-    lookupProgress,
-    lookupStepIndex,
-    vatLookupStepLabels,
-    companyPrefillFieldKeys,
-    companyFieldsResolvedInSimulation,
-    vatNumberForDisplay,
-    emailForDisplay,
-    activeVatPreset,
     prototypeVatPresetId,
     vatPrototypePresetChoices,
-    requestOrigin,
-    setRequestOrigin,
-    countrySelectOptions,
-    countrySelectValue,
-    companyHints,
-    summaryKlantenportaalByPersonId,
-    originFieldBase,
-    applicantLegalRepFieldBase,
-    applicantLegalRepPersonFieldsLocked,
-    invoicingFieldBase,
-    legalEntityFieldBase,
-    draftsSortedForCertification,
-    invoicingCountryOptions,
-    invoicingCountrySelectValue,
-    registrationIdOrigin,
+    activeVatPreset,
     registrationIdFieldMeta,
     registrationIdentifierIssue,
     registrationIdentifierStructurallyValid,
-    invoicingEmailIssue,
-    canAddCertificationSecondary,
-    fullPackageEntityRecords,
-    summaryRequesterLabel,
-    summaryRequesterEmailLabel,
-    summaryOrganizationLabel,
-    summarySectionTitle,
-    summaryRc,
-    firmaCountryLocked,
-    companySourceCountryLabel,
-    CERT_INQUIRY_VEST_UNASSIGNED,
+    applicantLegalRepFieldBase,
+    applicantLegalRepPersonFieldsLocked,
   } = model;
-
-  void step;
 
   return (
     <div className="space-y-6">
@@ -176,27 +55,25 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
         title="Voorbeeldmodus"
         description={
           <>
-            Kies een voorbeeld om het identificatieveld hieronder automatisch in te vullen en de
-            flow te doorlopen. U kunt het nummer altijd zelf aanpassen. Bij een andere keuze worden
-            naam, aanhef, functie en e-mail bijgewerkt en worden bedrijfsgegevens leeggemaakt tot de
+            Kies een voorbeeld om het identificatieveld hieronder automatisch in te vullen en de flow
+            te doorlopen. U kunt het nummer altijd zelf aanpassen. Bij een andere keuze worden naam,
+            aanhef, functie en e-mail bijgewerkt en worden bedrijfsgegevens leeggemaakt tot de
             opzoeking klaar is.
           </>
         }
         notice={
           activeVatPreset?.demoSupplementsOrgAddressFromEmailDomain ? (
             <>
-              <span className="font-medium text-foreground">Let op bij dit voorbeeld:</span> uw
-              nummer levert hier geen bedrijfsnaam en volledig adres op. Waar mogelijk vullen we die
-              aan op basis van uw professionele e-mailadres. Controleer de velden. Gebruikt u een
-              gratis of algemeen e-mailadres, vult u naam en adres zelf in.
+              <span className="font-medium text-foreground">Let op bij dit voorbeeld:</span> uw nummer
+              levert hier geen bedrijfsnaam en volledig adres op. Waar mogelijk vullen we die aan op
+              basis van uw professionele e-mailadres. Controleer de velden. Gebruikt u een gratis of
+              algemeen e-mailadres, vult u naam en adres zelf in.
             </>
           ) : undefined
         }
       >
         <Field>
-          <FieldLabel htmlFor="prototype-vat-preset">
-            Voorbeeld btw- / ondernemingsnummer
-          </FieldLabel>
+          <FieldLabel htmlFor="prototype-vat-preset">Voorbeeld btw- / ondernemingsnummer</FieldLabel>
           <FieldContent>
             <Select
               value={prototypeVatPresetId}

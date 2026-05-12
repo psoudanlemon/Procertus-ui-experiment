@@ -154,6 +154,10 @@ export function OnboardingFlowProvider({
       ...prev,
       prototypeVatPresetId: preset.id,
       companyFieldHints: {},
+      companyZetelStepCompleted: false,
+      companyLegalEntitiesStepCompleted: false,
+      invoicingStepCompleted: false,
+      extrasStepCompleted: false,
       context: customerContextAfterPrototypePresetChange(
         resolveFlowContext(
           prev.context as Partial<CustomerContext> & {
