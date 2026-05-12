@@ -7,7 +7,8 @@ import {
   BundleMatrixProvider,
   BundleProductCard,
   BundleProductMobileCard,
-  bundleMatrixGridCols,
+  bundleAssembleMatrixGridTemplate,
+  bundleMatrixExtraColumnKeys,
   type BundleCertKey,
   type BundleProduct,
 } from "./BundleProductCard";
@@ -22,7 +23,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Eén rij in de \"Stel je aanvraagpakket samen\"-matrix. Links staat het productlabel en het volledige categoriepad; rechts staan op vaste kolomposities één compacte `ChoiceCard` per certificatie uit `BUNDLE_CERT_ORDER`. Lege cellen blijven gereserveerd zodat de verticale uitlijning over alle rijen heen behouden blijft. Wikkel meerdere rijen in een `BundleMatrixProvider` om de kolom-hover state te delen.",
+          "Eén rij in de \"Stel je aanvraagpakket samen\"-matrix. Links staat het productlabel en het volledige categoriepad; daarna een read-only kolom voor de vast gekozen certificatie; rechts compacte selectiecellen per extra type (kolommen alleen wanneer minstens één product in het pakket dat type in de dataset heeft). Wikkel meerdere rijen in een `BundleMatrixProvider` plus raster met `bundleAssembleMatrixGridTemplate`.",
       },
     },
   },
@@ -35,22 +36,33 @@ const SAMPLE_PRODUCT: BundleProduct = {
   id: "stortklaar-beton",
   label: "Stortklaar beton",
   categoryTrail: "Beton en mortel",
-  extraCerts: ["ce", "ssd", "procertus"],
+  availableBundleCerts: ["benor", "ce", "ssd", "procertus"],
+  rowPrimaryCert: "benor",
+  ceAvailabilityRaw: "2+",
 };
 
 const SECONDARY_PRODUCT: BundleProduct = {
   id: "granulaten-voor-beton",
   label: "Granulaten voor beton",
   categoryTrail: "Bestanddelen voor beton > Granulaten",
-  extraCerts: ["ce"],
+  availableBundleCerts: ["benor", "ce"],
+  rowPrimaryCert: "benor",
+  ceAvailabilityRaw: "1",
 };
 
 const TERTIARY_PRODUCT: BundleProduct = {
   id: "betonstaal",
   label: "Betonstaal",
   categoryTrail: "Staal > Wapeningsstaal",
-  extraCerts: ["ce", "procertus"],
+  availableBundleCerts: ["benor", "ce", "procertus"],
+  rowPrimaryCert: "benor",
+  ceAvailabilityRaw: "4",
 };
+
+const DEMO_PRIMARY: BundleCertKey = "benor";
+const MATRIX_DEMO_PRODUCTS = [SAMPLE_PRODUCT, SECONDARY_PRODUCT, TERTIARY_PRODUCT] as const;
+const DEMO_MATRIX_EXTRAS = bundleMatrixExtraColumnKeys(DEMO_PRIMARY, [...MATRIX_DEMO_PRODUCTS]);
+const DEMO_GRID_TEMPLATE = bundleAssembleMatrixGridTemplate(DEMO_MATRIX_EXTRAS.length);
 
 /**
  * Standaardvariant: één rij in de matrix, nog niets geselecteerd. De lege cellen
@@ -63,14 +75,14 @@ export const Default: StoryObj<typeof meta> = {
     onToggle: noop,
   },
   render: (args) => (
-    <SingleRowMatrix>
+    <SingleRowMatrix primaryCert={DEMO_PRIMARY} product={args.product}>
       <InteractiveCard {...args} />
     </SingleRowMatrix>
   ),
 };
 
 /**
- * Pre-geselecteerde extra certificaties. Toont de `ChoiceCard` checked-state zoals
+ * Pre-geselecteerde extra certificaties. Toont de `Checkbox` checked-state zoals
  * die zichtbaar wordt nadat de gebruiker enkele opties heeft aangevinkt.
  */
 export const WithSelection: StoryObj<typeof meta> = {
@@ -80,7 +92,7 @@ export const WithSelection: StoryObj<typeof meta> = {
     onToggle: noop,
   },
   render: (args) => (
-    <SingleRowMatrix>
+    <SingleRowMatrix primaryCert={DEMO_PRIMARY} product={args.product}>
       <InteractiveCard {...args} />
     </SingleRowMatrix>
   ),
@@ -99,15 +111,16 @@ export const MatrixStack: StoryObj<typeof meta> = {
     onToggle: noop,
   },
   render: () => (
-    <BundleMatrixProvider>
+    <BundleMatrixProvider primaryCert={DEMO_PRIMARY} matrixExtraCerts={DEMO_MATRIX_EXTRAS}>
       <div className="overflow-x-auto">
         <section
           role="table"
           aria-label="Voorbeeld matrix"
-          className={`grid min-w-3xl gap-component ${bundleMatrixGridCols.all}`}
+          className="grid min-w-3xl gap-component"
+          style={{ gridTemplateColumns: DEMO_GRID_TEMPLATE }}
         >
           <BundleMatrixHeader />
-          {[SAMPLE_PRODUCT, SECONDARY_PRODUCT, TERTIARY_PRODUCT].map((product) => (
+          {MATRIX_DEMO_PRODUCTS.map((product) => (
             <InteractiveCard
               key={product.id}
               product={product}
@@ -137,13 +150,13 @@ export const MobileStack: StoryObj<typeof meta> = {
   },
   render: () => (
     <ul className="flex flex-col gap-section">
-      {[SAMPLE_PRODUCT, SECONDARY_PRODUCT, TERTIARY_PRODUCT].map((product) => (
+      {MATRIX_DEMO_PRODUCTS.map((product) => (
         <li key={product.id}>
           <InteractiveMobileCard
             product={product}
+            matrixExtraCerts={DEMO_MATRIX_EXTRAS}
             selected={new Set<BundleCertKey>()}
             onToggle={noop}
-            primaryCert="benor"
           />
         </li>
       ))}
@@ -155,18 +168,18 @@ function InteractiveMobileCard({
   product,
   selected: initial,
   onToggle,
-  primaryCert,
+  matrixExtraCerts,
 }: {
   product: BundleProduct;
+  matrixExtraCerts: readonly BundleCertKey[];
   selected: ReadonlySet<BundleCertKey>;
   onToggle: (cert: BundleCertKey, checked: boolean) => void;
-  primaryCert: BundleCertKey;
 }) {
   const [selected, setSelected] = useState<ReadonlySet<BundleCertKey>>(initial);
   return (
     <BundleProductMobileCard
       product={product}
-      primaryCert={primaryCert}
+      matrixExtraCerts={matrixExtraCerts}
       selected={selected}
       onToggle={(cert, checked) => {
         onToggle(cert, checked);
@@ -181,14 +194,25 @@ function InteractiveMobileCard({
   );
 }
 
-function SingleRowMatrix({ children }: { children: ReactNode }) {
+function SingleRowMatrix({
+  children,
+  primaryCert,
+  product,
+}: {
+  children: ReactNode;
+  primaryCert: BundleCertKey;
+  product: BundleProduct;
+}) {
+  const extras = bundleMatrixExtraColumnKeys(primaryCert, [product]);
+  const gridTemplate = bundleAssembleMatrixGridTemplate(extras.length);
   return (
-    <BundleMatrixProvider>
+    <BundleMatrixProvider primaryCert={primaryCert} matrixExtraCerts={extras}>
       <div className="overflow-x-auto">
         <section
           role="table"
           aria-label="Voorbeeld matrix"
-          className={`grid min-w-3xl gap-component ${bundleMatrixGridCols.all}`}
+          className="grid min-w-3xl gap-component"
+          style={{ gridTemplateColumns: gridTemplate }}
         >
           <BundleMatrixHeader />
           {children}
@@ -225,6 +249,4 @@ function InteractiveCard({
   );
 }
 
-// Touch the export so unused-imports doesn't strip BUNDLE_CERT_ORDER from the
-// docgen — pages may want to reference it from stories.
 void BUNDLE_CERT_ORDER;

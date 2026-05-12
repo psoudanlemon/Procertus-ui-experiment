@@ -27,6 +27,8 @@ export {
   BUNDLE_CERT_ORDER,
   BundleMatrixHeader,
   BundleMatrixProvider,
+  bundleAssembleMatrixGridTemplate,
+  bundleMatrixExtraColumnKeys,
   bundleMatrixGridCols,
 } from "./BundleProductCard";
 export type {

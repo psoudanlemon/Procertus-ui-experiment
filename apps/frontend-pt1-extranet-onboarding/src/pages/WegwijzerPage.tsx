@@ -1,5 +1,5 @@
-import { useCallback, useRef } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useCallback, useMemo, useRef } from "react";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Alert02Icon,
   ArrowRight02Icon,
@@ -50,6 +50,8 @@ import {
   TRAJECT_ENTRY_POINT_QUERY_PARAM,
   clearTrajectBreadcrumbs,
   persistTrajectHandoff,
+  readOnboardingFlowSnapshot,
+  trajectRouteChoiceStats,
 } from "../features/traject/traject-submission-context";
 
 /** Eerste stap van de TrajectFlow: producttype kiezen en aanvraag controleren in de wizard, voor de triage-keuze. */
@@ -87,8 +89,28 @@ const VALID_SERVICE_IDS = new Set<string>([
 // ---------------------------------------------------------------------------
 
 export function WegwijzerPage() {
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const explorerRef = useRef<HTMLDivElement>(null);
+
+  const flowSnapshot = useMemo(() => readOnboardingFlowSnapshot(), [location.key]);
+
+  const choiceBarItems = useMemo((): readonly ChoiceBarItem[] => {
+    const drafts = flowSnapshot.drafts;
+    return [
+      { value: ALL_ID, label: "Alle certificaten", variant: "elevated" as const },
+      ...PRIMARY_SERVICES.map((service) => {
+        const { selected, amount } = trajectRouteChoiceStats(drafts, service.entry.id);
+        return {
+          value: service.entry.id,
+          label: service.pillLabel ?? service.entry.label,
+          variant: service.tier === 1 ? ("elevated" as const) : ("default" as const),
+          selected,
+          ...(amount != null && amount > 0 ? { amount } : {}),
+        };
+      }),
+    ];
+  }, [flowSnapshot.drafts]);
 
   const rawParam = searchParams.get(SERVICE_PARAM);
   const activeId = rawParam && VALID_SERVICE_IDS.has(rawParam) ? rawParam : ALL_ID;
@@ -137,7 +159,7 @@ export function WegwijzerPage() {
 
       <div ref={explorerRef} className="px-boundary pb-boundary scroll-mt-section">
         <CatalogueExplorer
-          items={CHOICE_BAR_ITEMS}
+          items={choiceBarItems}
           activeId={activeId}
           onActiveIdChange={setActiveId}
           ariaLabel="Kies een certificaat"
@@ -147,6 +169,7 @@ export function WegwijzerPage() {
             <AllCertificatesGrid
               primary={PRIMARY_SERVICES}
               external={EXTERNAL_SERVICES}
+              drafts={flowSnapshot.drafts}
               onSelect={setActiveId}
             />
           ) : activeId === ANDERE_ID ? (
@@ -161,34 +184,19 @@ export function WegwijzerPage() {
 }
 
 // ---------------------------------------------------------------------------
-// Choice-bar items — primary services first (tier 1 elevated, tier 2 default),
-// trailing "Overige" ghost pill bundles tier-3 external referrals.
-// ---------------------------------------------------------------------------
-
-const CHOICE_BAR_ITEMS: readonly ChoiceBarItem[] = [
-  { value: ALL_ID, label: "Alle certificaten", variant: "elevated" as const },
-  ...PRIMARY_SERVICES.map((service) => ({
-    value: service.entry.id,
-    label: service.pillLabel ?? service.entry.label,
-    variant: service.tier === 1 ? ("elevated" as const) : ("default" as const),
-  })),
-];
-
-// ---------------------------------------------------------------------------
-// All Certificates Grid — shown when "Alle certificaten" is active.
-// Three-tier visual hierarchy mirrors the choice-bar pill variants:
-//   elevated (full width) → tier 1 primary services (BENOR, CE)
-//   default  (50/50)      → tier 2 primary services
-//   faded    (25% each)   → tier 3 external referrals (ATG, EPD)
+// Choice-bar items worden dynamisch opgebouwd (geselecteerde producten per route)
+// in {@link WegwijzerPage}.
 // ---------------------------------------------------------------------------
 
 function AllCertificatesGrid({
   primary,
   external,
+  drafts,
   onSelect,
 }: {
   primary: readonly WegwijzerService[];
   external: readonly WegwijzerService[];
+  drafts: readonly CertificationRequestDraft[];
   onSelect: (id: string) => void;
 }) {
   const elevated = primary.filter((s) => s.tier === 1);
@@ -198,30 +206,40 @@ function AllCertificatesGrid({
 
   return (
     <div role="list" className="grid w-full grid-cols-4 gap-section">
-      {elevated.map((service) => (
-        <BrowseCard
-          key={service.entry.id}
-          title={service.entry.label}
-          description={summary(service.entry.id)}
-          variant="elevated"
-          className="col-span-4"
-          asChild
-        >
-          <button type="button" onClick={() => onSelect(service.entry.id)} />
-        </BrowseCard>
-      ))}
-      {secondary.map((service) => (
-        <BrowseCard
-          key={service.entry.id}
-          title={service.entry.label}
-          description={summary(service.entry.id)}
-          variant="default"
-          className="col-span-4 md:col-span-2"
-          asChild
-        >
-          <button type="button" onClick={() => onSelect(service.entry.id)} />
-        </BrowseCard>
-      ))}
+      {elevated.map((service) => {
+        const { selected, amount } = trajectRouteChoiceStats(drafts, service.entry.id);
+        return (
+          <BrowseCard
+            key={service.entry.id}
+            title={service.entry.label}
+            description={summary(service.entry.id)}
+            variant="elevated"
+            className="col-span-4"
+            selected={selected}
+            selectionCount={amount}
+            asChild
+          >
+            <button type="button" onClick={() => onSelect(service.entry.id)} />
+          </BrowseCard>
+        );
+      })}
+      {secondary.map((service) => {
+        const { selected, amount } = trajectRouteChoiceStats(drafts, service.entry.id);
+        return (
+          <BrowseCard
+            key={service.entry.id}
+            title={service.entry.label}
+            description={summary(service.entry.id)}
+            variant="default"
+            className="col-span-4 md:col-span-2"
+            selected={selected}
+            selectionCount={amount}
+            asChild
+          >
+            <button type="button" onClick={() => onSelect(service.entry.id)} />
+          </BrowseCard>
+        );
+      })}
       {external.map((service) => (
         <BrowseCard
           key={service.entry.id}
@@ -332,6 +350,7 @@ function MasterCard({ service, onClose }: { service: WegwijzerService; onClose: 
       entryId: entry.id as CertificationEntryId,
       label: entry.label,
       shortLabel: entry.shortLabel,
+      trajectRootServiceId: entry.id,
     };
     persistTrajectHandoff({ drafts: [placeholder], serviceId: entry.id });
     navigate(REQUEST_REVIEW_PATH(entry.id));

@@ -1,4 +1,10 @@
 import {
+  defaultProcertusCategorizationDoc,
+  findNodeById,
+  getAvailableBundleProductCertKeys,
+  getAvailableEntries,
+  getCertValue,
+  hasCertifiableChip,
   BUNDLE_CERT_META,
   BUNDLE_CERT_ORDER,
   BundleAssembleActionBar,
@@ -15,6 +21,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
 import {
+  draftBelongsToTrajectRoot,
   persistTrajectHandoff,
   readOnboardingFlowSnapshot,
 } from "./traject-submission-context";
@@ -36,55 +43,88 @@ export function TrajectBundleAssembleFlow() {
 
   const snapshot = useMemo(() => readOnboardingFlowSnapshot(), []);
 
-  // Producten worden afgeleid uit de drafts die TrajectConfigureFlow heeft gepersisteerd.
-  // Eén kaart per uniek product, met `productPath` als categoriepad-prefix. Extra
-  // certificaties zijn de andere bundle-certs (BENOR/CE/SSD/PROCERTUS) minus de hoofdcertificatie.
-  // De eerste draft per product (de primaire-cert draft uit de configure-stap) is gezaghebbend
-  // voor de cosmetische product-metadata; volgende extras-drafts dragen dezelfde metadata.
+  const categorizationDoc = defaultProcertusCategorizationDoc;
+  const categorizationEntries = useMemo(
+    () => getAvailableEntries(categorizationDoc),
+    [categorizationDoc],
+  );
+
+  // Alle producten op dit traject met minstens één bundle-cert-concept (configure, extras,
+  // terugkeer van review). Label/pad: bij voorkeur draft met entryId === route; anders
+  // eender welke bundle-draft. Matrix-hoofdcert per rij is altijd `serviceId` (wegwijzer).
+  // Welke extra’s kiesbaar zijn volgt uit `getAvailableBundleProductCertKeys` (masterdata).
   const baseDraftByProduct = useMemo(() => {
     const map = new Map<string, CertificationRequestDraft>();
+    if (!serviceId || !isBundleCert(serviceId)) return map;
+
+    const byProduct = new Map<string, CertificationRequestDraft[]>();
     for (const draft of snapshot.drafts) {
-      const productId = draft.productId;
-      if (!productId || map.has(productId)) continue;
-      map.set(productId, draft);
+      if (!draftBelongsToTrajectRoot(draft, serviceId)) continue;
+      const productId = draft.productId?.trim();
+      if (!productId) continue;
+      if (!isBundleCert(draft.entryId as string)) continue;
+      const list = byProduct.get(productId) ?? [];
+      list.push(draft);
+      byProduct.set(productId, list);
     }
+
+    byProduct.forEach((drafts, productId) => {
+      const withPrimary = drafts.find(
+        (d: CertificationRequestDraft) => (d.entryId as string) === serviceId,
+      );
+      map.set(productId, withPrimary ?? drafts[0]!);
+    });
     return map;
-  }, [snapshot.drafts]);
+  }, [snapshot.drafts, serviceId]);
 
   const products: readonly BundleProduct[] = useMemo(() => {
     if (!serviceId || !isBundleCert(serviceId)) return [];
-    const extras = BUNDLE_CERT_ORDER.filter((c) => c !== serviceId);
-    return Array.from(baseDraftByProduct, ([productId, draft]) => ({
-      id: productId,
-      label: draft.productLabel ?? productId,
-      categoryTrail: draft.productPath ?? draft.productTypeStreamLabel ?? "",
-      extraCerts: extras,
-    } satisfies BundleProduct));
-  }, [serviceId, baseDraftByProduct]);
+    const rows: BundleProduct[] = Array.from(baseDraftByProduct, ([productId, draft]) => {
+      const node = findNodeById(categorizationDoc, productId);
+      const availableBundleCerts = getAvailableBundleProductCertKeys(node, categorizationEntries);
+      const ceRaw =
+        node?.kind === "product" && node.certification != null
+          ? getCertValue(node.certification, "ce")
+          : "";
+      const ceAvailabilityRaw = hasCertifiableChip(ceRaw) ? ceRaw : undefined;
+      return {
+        id: productId,
+        label: draft.productLabel ?? productId,
+        categoryTrail: draft.productPath ?? draft.productTypeStreamLabel ?? "",
+        availableBundleCerts,
+        rowPrimaryCert: serviceId,
+        ceAvailabilityRaw,
+      } satisfies BundleProduct;
+    }).filter((p) => p.availableBundleCerts.includes(serviceId));
+    return rows.sort((a, b) => a.label.localeCompare(b.label, "nl"));
+  }, [serviceId, baseDraftByProduct, categorizationDoc, categorizationEntries]);
 
-  // Bij terugkomst vanuit "Aanvraag controleren" lezen we de eerder gekozen extra
-  // certificaties terug uit de gepersisteerde drafts, zodat de checkboxen per product
-  // ge-prevuld zijn en de gebruiker zijn werk niet opnieuw moet doen.
   const initialSelections = useMemo<Record<string, readonly BundleCertKey[]>>(() => {
     if (!serviceId || !isBundleCert(serviceId)) return {};
-    const primary: BundleCertKey = serviceId;
+    const allowed = new Map(products.map((p) => [p.id, new Set(p.availableBundleCerts)]));
     const result: Record<string, BundleCertKey[]> = {};
     for (const draft of snapshot.drafts) {
-      const productId = draft.productId;
+      if (!draftBelongsToTrajectRoot(draft, serviceId)) continue;
+      const productId = draft.productId?.trim();
       if (!productId) continue;
       const entryId = draft.entryId as string;
-      if (entryId === primary) continue;
       if (!isBundleCert(entryId)) continue;
+      if (entryId === serviceId) continue;
+      if (!allowed.get(productId)?.has(entryId)) continue;
       const list = result[productId] ?? (result[productId] = []);
       if (!list.includes(entryId)) list.push(entryId);
     }
     return result;
-  }, [serviceId, snapshot.drafts]);
+  }, [serviceId, snapshot.drafts, products]);
 
   const handleBack = useCallback(() => {
     if (!serviceId) return;
     navigate(PRODUCT_SELECTION_PATH(serviceId));
   }, [navigate, serviceId]);
+
+  const handleAddMore = useCallback(() => {
+    navigate(WEGWIJZER_PATH);
+  }, [navigate]);
 
   const handleCancel = useCallback(() => {
     navigate(WEGWIJZER_PATH);
@@ -99,38 +139,50 @@ export function TrajectBundleAssembleFlow() {
       if (!serviceId || !isBundleCert(serviceId)) return;
       const primaryCert: BundleCertKey = serviceId;
 
+      const tag = (d: CertificationRequestDraft): CertificationRequestDraft => ({
+        ...d,
+        trajectRootServiceId: d.trajectRootServiceId ?? serviceId,
+      });
+
       const expanded: CertificationRequestDraft[] = [];
       for (const draft of snapshot.drafts) {
         if (!draft.productId) expanded.push(draft);
       }
+      const shownIds = new Set(products.map((p) => p.id));
       for (const [productId, base] of Array.from(baseDraftByProduct.entries())) {
+        if (!shownIds.has(productId)) continue;
+        const rootTag = base.trajectRootServiceId ?? serviceId;
         const primaryDraft: CertificationRequestDraft =
           base.entryId === primaryCert
-            ? base
-            : {
+            ? tag({ ...base, trajectRootServiceId: rootTag })
+            : tag({
                 ...base,
                 id: `${productId}-${primaryCert}`,
                 entryId: primaryCert as CertificationEntryId,
                 label: BUNDLE_CERT_META[primaryCert].title,
                 shortLabel: BUNDLE_CERT_META[primaryCert].shortTitle,
-              };
+                trajectRootServiceId: rootTag,
+              });
         expanded.push(primaryDraft);
         for (const cert of selections[productId] ?? []) {
           if (cert === primaryCert) continue;
-          expanded.push({
-            ...base,
-            id: `${productId}-${cert}`,
-            entryId: cert as CertificationEntryId,
-            label: BUNDLE_CERT_META[cert].title,
-            shortLabel: BUNDLE_CERT_META[cert].shortTitle,
-          });
+          expanded.push(
+            tag({
+              ...base,
+              id: `${productId}-${cert}`,
+              entryId: cert as CertificationEntryId,
+              label: BUNDLE_CERT_META[cert].title,
+              shortLabel: BUNDLE_CERT_META[cert].shortTitle,
+              trajectRootServiceId: rootTag,
+            }),
+          );
         }
       }
 
       persistTrajectHandoff({ drafts: expanded, serviceId });
       navigate(REQUEST_REVIEW_PATH(serviceId));
     },
-    [navigate, serviceId, snapshot.drafts, baseDraftByProduct],
+    [navigate, serviceId, snapshot.drafts, baseDraftByProduct, products],
   );
 
   if (!serviceId || !service || !isBundleCert(serviceId)) {
@@ -148,7 +200,10 @@ export function TrajectBundleAssembleFlow() {
       primaryCert={primaryCert}
       initialSelections={initialSelections}
       onBack={handleBack}
+      backLabel="Meer producten"
       onCancel={handleCancel}
+      onAddMore={handleAddMore}
+      addMoreLabel="Nog certificatie toevoegen"
       onContinue={handleContinue}
     >
       <TrajectPageFrame

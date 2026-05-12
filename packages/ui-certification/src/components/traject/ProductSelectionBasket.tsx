@@ -35,7 +35,16 @@ import {
   useState,
 } from "react";
 
-import type { ProcertusCategorizationDoc, TreeNode } from "../../types";
+import {
+  productEligibleForCatalogEntry,
+  subtreeHasProductEligibleForCatalogEntry,
+} from "../../certification-request/product-tree";
+import type {
+  AvailableEntry,
+  AvailableEntryKey,
+  ProcertusCategorizationDoc,
+  TreeNode,
+} from "../../types";
 import { CategoryPicker } from "./CategoryPicker";
 import { ProductBasket, SelectedRow } from "./ProductBasket";
 import { ProductRow } from "./ProductRow";
@@ -133,11 +142,15 @@ type VisibleProduct = {
 
 function collectDescendantProducts(
   nodes: readonly TreeNode[],
+  routeEntry: AvailableEntry | undefined,
 ): VisibleProduct[] {
   const out: VisibleProduct[] = [];
   const walk = (input: readonly TreeNode[], trail: readonly string[]) => {
     for (const n of input) {
       if (n.kind === "product") {
+        if (!productEligibleForCatalogEntry(n, routeEntry)) {
+          continue;
+        }
         out.push({
           id: n.id,
           label: n.label,
@@ -153,13 +166,21 @@ function collectDescendantProducts(
   return out.sort(byLabel);
 }
 
-function searchProducts(query: string, roots: readonly TreeNode[]): SearchHit[] {
+function searchProducts(
+  query: string,
+  roots: readonly TreeNode[],
+  routeEntry: AvailableEntry | undefined,
+): SearchHit[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
   const out: SearchHit[] = [];
   const walk = (input: readonly TreeNode[], trail: readonly string[]) => {
     for (const n of input) {
-      if (n.kind === "product" && n.label.toLowerCase().includes(q)) {
+      if (
+        n.kind === "product" &&
+        n.label.toLowerCase().includes(q) &&
+        productEligibleForCatalogEntry(n, routeEntry)
+      ) {
         out.push({ id: n.id, label: n.label, categoryTrail: trail.join(" > ") });
       }
       if (n.children?.length) {
@@ -267,6 +288,12 @@ export type ProductSelectionBasketProviderProps = {
    * landt direct in review.
    */
   onProductNotFound?: () => void;
+  /**
+   * Traject: id van de gekozen wegwijzer-route (bv. `ce`). Indien gezet en de entry heeft
+   * een {@link AvailableEntry.productAvailabilityKey}, worden browse, zoekresultaten en
+   * categorieën beperkt tot producten die in de dataset voor die route beschikbaar zijn.
+   */
+  productRouteEntryId?: AvailableEntryKey;
   children: ReactNode;
 };
 
@@ -283,6 +310,7 @@ export function ProductSelectionBasketProvider({
   onBack,
   onContinue,
   onProductNotFound,
+  productRouteEntryId,
   children,
 }: ProductSelectionBasketProviderProps) {
   const [path, setPath] = useState<readonly string[]>([]);
@@ -298,19 +326,32 @@ export function ProductSelectionBasketProvider({
     [path, doc],
   );
 
+  const routeAvailabilityEntry = useMemo((): AvailableEntry | undefined => {
+    if (!productRouteEntryId) return undefined;
+    return doc.meta.availableEntries?.find((e) => e.id === productRouteEntryId);
+  }, [doc, productRouteEntryId]);
+
   const isRoot = path.length === 0;
   const isSearching = searchValue.trim().length > 0;
 
-  const categories = useMemo(() => nodes.filter((n) => n.kind === "group"), [nodes]);
+  const categories = useMemo(() => {
+    const groups = nodes.filter((n) => n.kind === "group");
+    const entry = routeAvailabilityEntry;
+    if (!entry?.productAvailabilityKey) return groups;
+    return groups.filter((g) => subtreeHasProductEligibleForCatalogEntry(g, entry));
+  }, [nodes, routeAvailabilityEntry]);
+
   const visibleProducts = useMemo<readonly VisibleProduct[]>(
     () =>
-      collectDescendantProducts(nodes).filter((p) => !selectedSet.has(p.id)),
-    [nodes, selectedSet],
+      collectDescendantProducts(nodes, routeAvailabilityEntry).filter(
+        (p) => !selectedSet.has(p.id),
+      ),
+    [nodes, selectedSet, routeAvailabilityEntry],
   );
 
   const searchResults = useMemo(
-    () => searchProducts(searchValue, doc.clusters),
-    [searchValue, doc],
+    () => searchProducts(searchValue, doc.clusters, routeAvailabilityEntry),
+    [searchValue, doc.clusters, routeAvailabilityEntry],
   );
   const visibleSearchResults = useMemo(
     () => searchResults.filter((r) => !selectedSet.has(r.id)),

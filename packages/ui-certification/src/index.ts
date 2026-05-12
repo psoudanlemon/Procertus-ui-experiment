@@ -101,6 +101,7 @@ export {
   CertificationRequestProvider,
   buildProductIndex,
   entryLabelForIntent,
+  getAvailableBundleProductCertKeys,
   getAvailableProductEntries,
   getCertificationOptionText,
   getCertificationProductAvailability,

@@ -66,19 +66,25 @@ const STORY_BUNDLE_PRODUCTS: readonly BundleProduct[] = [
     id: "stortklaar-beton",
     label: "Stortklaar beton",
     categoryTrail: "Beton en mortel",
-    extraCerts: ["ce", "ssd", "procertus"],
+    availableBundleCerts: ["benor", "ce", "ssd", "procertus"],
+    rowPrimaryCert: "benor",
+    ceAvailabilityRaw: "2+",
   },
   {
     id: "granulaten-voor-beton",
     label: "Granulaten voor beton",
     categoryTrail: "Bestanddelen voor beton > Granulaten",
-    extraCerts: ["ce"],
+    availableBundleCerts: ["benor", "ce"],
+    rowPrimaryCert: "benor",
+    ceAvailabilityRaw: "1",
   },
   {
     id: "betonstaal",
     label: "Betonstaal",
     categoryTrail: "Staal > Wapeningsstaal",
-    extraCerts: ["ce", "procertus"],
+    availableBundleCerts: ["benor", "ce", "procertus"],
+    rowPrimaryCert: "benor",
+    ceAvailabilityRaw: "4",
   },
 ];
 

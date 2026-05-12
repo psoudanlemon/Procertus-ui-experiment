@@ -64,6 +64,51 @@ export function readOnboardingFlowSnapshot(): OnboardingFlowState {
 }
 
 /**
+ * Bepaalt of een draft bij een wegwijzer-route (`serviceId`) hoort voor merge/filter.
+ * Nieuwe states zetten {@link CertificationRequestDraft.trajectRootServiceId}; legacy gebruikt
+ * `id === productId-serviceId` of placeholders gekoppeld aan de route.
+ */
+export function draftBelongsToTrajectRoot(
+  draft: CertificationRequestDraft,
+  serviceId: string,
+): boolean {
+  const root = draft.trajectRootServiceId;
+  if (root != null) return root === serviceId;
+  if (!draft.productId?.trim()) {
+    return draft.entryId === serviceId || draft.id.startsWith(`${serviceId}-`);
+  }
+  return draft.id === `${draft.productId}-${serviceId}`;
+}
+
+/** Aantal unieke product-IDs in het pakket voor de opgegeven wegwijzer-route. */
+export function countDistinctProductsForTrajectService(
+  drafts: readonly CertificationRequestDraft[],
+  serviceId: string,
+): number {
+  const seen = new Set<string>();
+  for (const d of drafts) {
+    if (!d.productId?.trim()) continue;
+    if (draftBelongsToTrajectRoot(d, serviceId)) seen.add(d.productId);
+  }
+  return seen.size;
+}
+
+/**
+ * Voor wegwijzer-keuzebalk en -kaarten: is er activiteit voor deze route, en zo ja
+ * een weergaveteller (unieke producten, of 1 bij een niet-productgebonden placeholder).
+ */
+export function trajectRouteChoiceStats(
+  drafts: readonly CertificationRequestDraft[],
+  serviceId: string,
+): { selected: boolean; amount?: number } {
+  const productCount = countDistinctProductsForTrajectService(drafts, serviceId);
+  const hasAny = drafts.some((d) => draftBelongsToTrajectRoot(d, serviceId));
+  if (!hasAny) return { selected: false };
+  if (productCount > 0) return { selected: true, amount: productCount };
+  return { selected: true, amount: 1 };
+}
+
+/**
  * Wis de traject-breadcrumbs (serviceId, drafts) uit de gepersisteerde state, maar laat klant- en
  * registratiegegevens staan. Aangeroepen wanneer de gebruiker bewust uit een eerder traject stapt en
  * met een verse intentie opnieuw begint, bv. de hero "Plan een expert call" knop op de Wegwijzer.
@@ -101,31 +146,44 @@ export function resetTrajectFlow(api?: OnboardingFlowApi): void {
  * localStorage. CustomerOnboardingFlow leest deze state bij het mounten en kan zo doorgaan
  * vanaf de "origin"-stap met de samengestelde aanvraagpakketten.
  *
- * Bedoeld als hand-off vanuit `TrajectConfigureFlow` zodat die feature geen
- * `OnboardingFlowProvider` hoeft te mounten — de write replicaat de logica van
- * `applyWizardDraftCompletion` rechtstreeks op de gepersisteerde state.
+ * Standaard **wordt samengevoegd** met bestaande drafts: alles wat bij dezelfde
+ * `trajectRootServiceId` / route hoort wordt vervangen door `drafts`, andere routes blijven staan.
+ * Zet `replaceAll: true` voor een volledige vervanging (Zelden; bv. tests).
  */
 export function persistTrajectHandoff(input: {
   drafts: CertificationRequestDraft[];
   serviceId: string;
+  replaceAll?: boolean;
 }): void {
   const port = createLocalStorageOnboardingFlowPersistence({
     storageKey: ONBOARDING_FLOW_STORAGE_KEY,
   });
   const stored = hydrateOnboardingFlowStateFromStored(port.load());
 
+  const tagRoot = (d: CertificationRequestDraft): CertificationRequestDraft => ({
+    ...d,
+    trajectRootServiceId: d.trajectRootServiceId ?? input.serviceId,
+  });
+  const incoming = input.drafts.map(tagRoot);
+
+  const mergedDrafts =
+    input.replaceAll === true
+      ? incoming
+      : [
+          ...stored.drafts.filter((d) => !draftBelongsToTrajectRoot(d, input.serviceId)),
+          ...incoming,
+        ];
+
   const prevDraftIds = new Set(stored.drafts.map((d) => d.id));
-  const nextIds = input.drafts.map((d) => d.id);
-  const baseSel = stored.summaryIncludedDraftIds ?? Array.from(prevDraftIds);
-  const keptSelection = baseSel.filter(
-    (id) => nextIds.includes(id) && prevDraftIds.has(id),
-  );
-  const newDraftIds = nextIds.filter((id) => !prevDraftIds.has(id));
-  const nextSummaryIncluded = Array.from(new Set([...keptSelection, ...newDraftIds]));
+  const mergedIds = new Set(mergedDrafts.map((d) => d.id));
+  const prevSel = stored.summaryIncludedDraftIds ?? Array.from(prevDraftIds);
+  const keptSelection = prevSel.filter((id) => mergedIds.has(id));
+  const brandNewIds = incoming.map((d) => d.id).filter((id) => !prevDraftIds.has(id));
+  const nextSummaryIncluded = Array.from(new Set([...keptSelection, ...brandNewIds]));
 
   const next: OnboardingFlowState = {
     ...stored,
-    drafts: input.drafts,
+    drafts: mergedDrafts,
     trajectServiceId: input.serviceId,
     summaryIncludedDraftIds: nextSummaryIncluded,
   };

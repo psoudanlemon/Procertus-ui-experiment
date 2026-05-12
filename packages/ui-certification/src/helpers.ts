@@ -157,6 +157,20 @@ export function chipDisplay(short: string, value: string): string {
   return `${short} · ${v}`;
 }
 
+/**
+ * Second line under the CE checkbox in the bundle-assemble matrix. Uses the raw
+ * `certification.ce` cell from procertus-categorization (levels 1, 1+, 2+, …).
+ */
+export function bundleMatrixCeSublabel(rawCeCell: string | undefined): string | undefined {
+  if (rawCeCell == null) return undefined;
+  const v = rawCeCell.trim();
+  if (!hasCertifiableChip(v)) return undefined;
+  // "x" = “beschikbaar / conform fiche” in de matrix; geen numeriek niveau in de dataset.
+  if (v === "x") return "Volgens productfiche";
+  if (v === "(x)") return "Later / federatie";
+  return `Niveau ${v}`;
+}
+
 export function hasAnyProductAttestationData(attestations: ProductAttestations): boolean {
   return (
     attestations.atg.trim().length > 0 ||

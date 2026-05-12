@@ -29,9 +29,25 @@ export function hydrateOnboardingFlowStateFromStored(
     step?: unknown;
   };
   const trimmedLabel = rawEntryLabel?.trim();
+  const rawDrafts = restStored.drafts ?? [];
+  const backfillTrajectRoot = (restStored.trajectServiceId ?? "").trim();
+  const productDrafts = rawDrafts.filter((d) => Boolean(d.productId?.trim()));
+  const allProductRootsMissing =
+    productDrafts.length > 0 &&
+    productDrafts.every((d) => (d as { trajectRootServiceId?: string }).trajectRootServiceId == null);
+  const migratedDrafts =
+    allProductRootsMissing && backfillTrajectRoot
+      ? rawDrafts.map((d) =>
+          d.productId?.trim() && (d as { trajectRootServiceId?: string }).trajectRootServiceId == null
+            ? { ...d, trajectRootServiceId: backfillTrajectRoot }
+            : d,
+        )
+      : rawDrafts;
+
   return {
     ...DEFAULT_ONBOARDING_FLOW_STATE,
     ...restStored,
+    drafts: migratedDrafts,
     guestIntakeChannel: coerceGuestIntakeChannel(stored.guestIntakeChannel),
     ...(trimmedLabel ? { registrationEntryLabel: trimmedLabel } : {}),
     context: { ...DEFAULT_CONTEXT, ...stored.context },

@@ -16,6 +16,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
 import {
+  draftBelongsToTrajectRoot,
   persistTrajectHandoff,
   readOnboardingFlowSnapshot,
 } from "./traject-submission-context";
@@ -45,10 +46,20 @@ export function TrajectConfigureFlow() {
   // Wanneer de gebruiker via "Terug" terugkeert vanuit het bundle-assemble scherm, lezen we
   // de eerder gepersisteerde drafts opnieuw in zodat de productselectie ge-prevuld is.
   const initialSelectedIds = useMemo<readonly string[]>(() => {
+    if (!serviceId) return [];
     const snapshot = readOnboardingFlowSnapshot();
-    if (!serviceId || snapshot.trajectServiceId !== serviceId) return [];
-    const ids = snapshot.drafts.flatMap((d) => (d.productId ? [d.productId] : []));
-    return Array.from(new Set(ids));
+    return Array.from(
+      new Set(
+        snapshot.drafts
+          .filter(
+            (d) =>
+              Boolean(d.productId?.trim()) &&
+              draftBelongsToTrajectRoot(d, serviceId) &&
+              d.entryId === serviceId,
+          )
+          .map((d) => d.productId!),
+      ),
+    );
   }, [serviceId]);
 
   // "Terug" houdt de reeds gemaakte productselectie en eventuele klantgegevens vast: we
@@ -83,6 +94,7 @@ export function TrajectConfigureFlow() {
             productTypeStreamLabel: product.node.productTypeStreamLabel,
             productLabel: product.node.label,
             productPath: product.path.slice(0, -1).join(" › "),
+            trajectRootServiceId: serviceId,
           },
         ];
       });
@@ -109,6 +121,7 @@ export function TrajectConfigureFlow() {
       entryId: serviceId as CertificationEntryId,
       label: service.entry.label,
       shortLabel: service.entry.shortLabel,
+      trajectRootServiceId: serviceId,
     };
     persistTrajectHandoff({ drafts: [placeholder], serviceId });
     navigate(REQUEST_REVIEW_PATH(serviceId), { replace: true });
@@ -121,6 +134,9 @@ export function TrajectConfigureFlow() {
   return (
     <ProductSelectionBasketProvider
       doc={defaultProcertusCategorizationDoc}
+      productRouteEntryId={
+        service.entry.productAvailabilityKey != null ? service.entry.id : undefined
+      }
       initialSelectedIds={initialSelectedIds}
       onBack={handleBack}
       onContinue={handleContinue}

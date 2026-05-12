@@ -24,6 +24,7 @@ import {
   ChoiceCard,
   ChoiceCardGroup,
   type ChoiceVariant,
+  Badge,
 } from "@procertus-ui/ui";
 
 export type ChoiceBarItem = {
@@ -38,6 +39,13 @@ export type ChoiceBarItem = {
    */
   variant?: ChoiceVariant;
   disabled?: boolean;
+  /**
+   * Visuele hint dat er al een traject- of productselectie voor deze optie bestaat
+   * (los van de actieve tab).
+   */
+  selected?: boolean;
+  /** Tbv. wegwijzer: aantal gekozen producten voor deze certificaatroute. */
+  amount?: number;
 };
 
 export type ChoiceBarProps = {
@@ -116,7 +124,20 @@ export function ChoiceBar({
                 key={item.value}
                 value={item.value}
                 controlId={`${idPrefix}-${item.value}`}
-                title={item.label}
+                title={
+                  <span className="flex min-w-0 items-center gap-micro">
+                    <span className="truncate">{item.label}</span>
+                    {item.amount != null && item.amount > 0 ? (
+                      <Badge
+                        variant="secondary"
+                        className="shrink-0 tabular-nums"
+                        aria-label={`${item.amount} geselecteerde producten`}
+                      >
+                        {item.amount}
+                      </Badge>
+                    ) : null}
+                  </span>
+                }
                 variant={item.variant ?? "default"}
                 appearance="minimal"
                 disabled={item.disabled}
@@ -124,6 +145,8 @@ export function ChoiceBar({
                   "shrink-0 cursor-pointer has-[>[data-slot=field]]:w-auto",
                   "transition-[transform,box-shadow,background-color,border-color,opacity] duration-300 ease-out",
                   "motion-safe:hover:-translate-y-0.5",
+                  item.selected &&
+                    "ring-2 ring-primary/35 ring-offset-2 ring-offset-background",
                 )}
               />
             ))}

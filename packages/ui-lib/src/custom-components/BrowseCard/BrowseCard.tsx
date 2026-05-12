@@ -93,6 +93,10 @@ export type BrowseCardProps = Omit<ComponentProps<"div">, "title" | "children"> 
   asChild?: boolean;
   /** Single wrapper element when `asChild` is true; ignored otherwise. */
   children?: ReactNode;
+  /** Traject/wegwijzer: versterkte rand wanneer er al producten voor deze route gekozen zijn. */
+  selected?: boolean;
+  /** Optioneel aantal unieke producten in het lopende pakket voor deze route. */
+  selectionCount?: number;
 };
 
 const defaultCtaIcon = (
@@ -110,16 +114,29 @@ export function BrowseCard({
   asChild = false,
   className,
   children,
+  selected = false,
+  selectionCount,
   ...props
 }: BrowseCardProps) {
   const ctaNode = cta === null ? null : (cta ?? defaultCta);
   const ctaIcon = ctaNode ? (ctaNode.icon === null ? null : (ctaNode.icon ?? defaultCtaIcon)) : null;
 
+  const resolvedEyebrow =
+    eyebrow ??
+    (selectionCount != null && selectionCount > 0 ? (
+      <span className="flex flex-wrap items-center gap-micro">
+        <span>Al in uw pakket</span>
+        <span className="rounded-full bg-primary/15 px-2 py-0.5 text-xs font-semibold tabular-nums text-primary">
+          {selectionCount} {selectionCount === 1 ? "product" : "producten"}
+        </span>
+      </span>
+    ) : undefined);
+
   const inner = (
     <ItemContent className="gap-component">
-      {eyebrow ? (
+      {resolvedEyebrow ? (
         <span className="text-xs font-medium tracking-wide uppercase text-muted-foreground">
-          {eyebrow}
+          {resolvedEyebrow}
         </span>
       ) : null}
       <ItemTitle className="text-base leading-snug">{title}</ItemTitle>
@@ -144,6 +161,7 @@ export function BrowseCard({
   const itemClassName = cn(
     "items-start gap-region p-section",
     browseCardVariants({ variant }),
+    selected && "ring-2 ring-primary/40 ring-offset-2 ring-offset-background",
     className,
   );
 

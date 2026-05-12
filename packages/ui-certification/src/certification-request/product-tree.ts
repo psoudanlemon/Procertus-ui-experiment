@@ -4,6 +4,7 @@ import {
   PRODUCT_ATTESTATION_META,
   PRODUCT_ATTESTATION_ORDER,
 } from "../constants";
+import { BUNDLE_CERT_ORDER, type BundleCertKey } from "../bundle-product-certs";
 import {
   chipDisplay,
   getCertValue,
@@ -91,6 +92,48 @@ export function getCertificationProductAvailability(
       : { available: false, value, reason: statusTextWhenNoChip(value) };
   }
   return { available: false, reason: "Niet beschikbaar voor dit producttype." };
+}
+
+/**
+ * Traject/wizard-catalogus: mag dit product getoond worden voor de gekozen route
+ * (`ce`, `benor`, `procertus`, …)? Zonder route-entry of zonder `productAvailabilityKey`
+ * blijft de volledige boom zichtbaar.
+ */
+export function productEligibleForCatalogEntry(
+  node: TreeNode,
+  routeEntry: AvailableEntry | undefined,
+): boolean {
+  if (!routeEntry?.productAvailabilityKey) return true;
+  if (node.kind !== "product") return false;
+  return getCertificationProductAvailability(node, routeEntry).available;
+}
+
+/** Of `node` (groep of product) onder zich minstens één product heeft dat voor `routeEntry` in aanmerking komt. */
+export function subtreeHasProductEligibleForCatalogEntry(
+  node: TreeNode,
+  routeEntry: AvailableEntry,
+): boolean {
+  if (node.kind === "product") {
+    return getCertificationProductAvailability(node, routeEntry).available;
+  }
+  if (!node.children?.length) return false;
+  return node.children.some((ch) => subtreeHasProductEligibleForCatalogEntry(ch, routeEntry));
+}
+
+/**
+ * Bundle assembly: which of {@link BUNDLE_CERT_ORDER} the categorization dataset marks as
+ * available for this product (via {@link getCertificationProductAvailability}).
+ */
+export function getAvailableBundleProductCertKeys(
+  node: TreeNode | undefined,
+  availableEntries: readonly AvailableEntry[],
+): BundleCertKey[] {
+  if (!node || node.kind !== "product") return [];
+  return BUNDLE_CERT_ORDER.filter((cert) => {
+    const entry = availableEntries.find((e) => e.id === cert);
+    if (!entry) return false;
+    return getCertificationProductAvailability(node, entry).available;
+  });
 }
 
 export function getAvailableProductEntries(

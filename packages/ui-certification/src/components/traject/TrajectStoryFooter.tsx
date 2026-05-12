@@ -20,8 +20,11 @@ export type TrajectStoryFooterProps = {
   onCancel?: () => void;
   onBack?: () => void;
   onContinue?: () => void;
+  /** Secundaire CTA (bv. terug naar wegwijzer om nog een certificaat toe te voegen). */
+  onAddMore?: () => void;
   cancelLabel?: string;
   backLabel?: string;
+  addMoreLabel?: string;
   continueLabel?: string;
   continueDisabled?: boolean;
 };
@@ -30,14 +33,16 @@ export function TrajectStoryFooter({
   onCancel,
   onBack,
   onContinue,
+  onAddMore,
   cancelLabel = "Annuleren",
   backLabel = "Terug",
+  addMoreLabel = "Nog certificatie toevoegen",
   continueLabel = "Bevestig selectie",
   continueDisabled = false,
 }: TrajectStoryFooterProps) {
-  const backSpanWhenSolo = onCancel == null ? "col-span-2 md:col-auto" : "";
+  const backSpanWhenSolo = onCancel == null && onAddMore == null ? "col-span-2 md:col-auto" : "";
   return (
-    <div className="grid w-full grid-cols-2 items-center gap-component md:flex">
+    <div className="grid w-full grid-cols-2 items-center gap-component md:flex md:flex-wrap">
       {onContinue ? (
         <Button
           type="button"
@@ -54,10 +59,21 @@ export function TrajectStoryFooter({
           type="button"
           variant="ghost"
           size="lg"
-          className="h-12 w-full px-6 md:order-1 md:h-9 md:w-auto md:px-4"
+          className="h-12 w-full px-6 md:order-1 md:col-auto md:h-9 md:w-auto md:px-4"
           onClick={onCancel}
         >
           {cancelLabel}
+        </Button>
+      ) : null}
+      {onAddMore ? (
+        <Button
+          type="button"
+          variant="secondary"
+          size="lg"
+          className="h-12 w-full px-6 md:order-2 md:col-auto md:h-9 md:w-auto md:px-4"
+          onClick={onAddMore}
+        >
+          {addMoreLabel}
         </Button>
       ) : null}
       {onBack ? (
@@ -65,7 +81,7 @@ export function TrajectStoryFooter({
           type="button"
           variant="outline"
           size="lg"
-          className={`h-12 w-full px-6 md:order-2 md:ml-auto md:h-9 md:w-auto md:px-4 ${backSpanWhenSolo}`}
+          className={`h-12 w-full px-6 md:order-2 md:ml-auto md:h-9 md:w-auto md:px-4 ${onAddMore != null ? "md:order-4" : ""} ${backSpanWhenSolo}`}
           onClick={onBack}
         >
           {backLabel}

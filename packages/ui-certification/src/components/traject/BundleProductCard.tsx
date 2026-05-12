@@ -17,10 +17,12 @@ import {
   type ReactNode,
 } from "react";
 
+import { BUNDLE_CERT_ORDER, type BundleCertKey } from "../../bundle-product-certs";
+import { bundleMatrixCeSublabel } from "../../helpers";
 import { ProductCategoryTrail } from "./ProductCategoryTrail";
 
-export const BUNDLE_CERT_ORDER = ["benor", "ce", "ssd", "procertus"] as const;
-export type BundleCertKey = (typeof BUNDLE_CERT_ORDER)[number];
+export { BUNDLE_CERT_ORDER, type BundleCertKey } from "../../bundle-product-certs";
+export { bundleMatrixExtraColumnKeys } from "../../bundle-product-certs";
 
 export type BundleCertMeta = {
   /** Volledige naam zoals getoond in de wegwijzer; gebruikt op kaart-niveau. */
@@ -63,8 +65,22 @@ export type BundleProduct = {
   label: string;
   /** Volledig categoriepad als platte string, identiek aan de basketrij-prefix. */
   categoryTrail: string;
-  /** Certificaties die de gebruiker bovenop de hoofdcertificatie kan kiezen. */
-  extraCerts: readonly BundleCertKey[];
+  /**
+   * Certificaties die volgens het categorisatiebestand voor dit product aangeboden worden
+   * ({@link getAvailableBundleProductCertKeys}).
+   */
+  availableBundleCerts: readonly BundleCertKey[];
+  /**
+   * Reeds gekozen certificatie in de productselectie-stap (wegwijzer / concept); niet opnieuw
+   * kiesbaar in de extra-kolommen.
+   */
+  rowPrimaryCert: BundleCertKey;
+  /**
+   * Ruwe `certification.ce` cel uit het categorisatiebestand wanneer CE voor dit product
+   * in de dataset voorkomt (bv. `2+`, `4`) — ook als CE de hoofdcertificatie is;
+   * gebruikt voor een sublabel onder CE-matrixcellen.
+   */
+  ceAvailabilityRaw?: string;
 };
 
 export type BundleProductCardProps = {
@@ -74,58 +90,56 @@ export type BundleProductCardProps = {
 };
 
 type MatrixContextValue = {
-  /**
-   * Hoofdcertificatie van het pakket. Wanneer ingesteld, wordt deze cert uit
-   * de matrix-kolommen gefilterd: de pagina-kicker toont hem al en herhaling
-   * binnen elke productrij is overbodig.
-   */
-  primaryCert: BundleCertKey | null;
+  /** Pakket-brede hoofdcertificatie (wegwijzer); eigen kolom als read-only basis per rij. */
+  primaryCert: BundleCertKey;
+  /** Toggle-kolommen: certs ≠ primary waarvoor minstens één product in het pakket data-ondersteuning heeft. */
+  matrixExtraCerts: readonly BundleCertKey[];
 };
 
 const BundleMatrixContext = createContext<MatrixContextValue | null>(null);
 
 export type BundleMatrixProviderProps = {
   children: ReactNode;
-  /**
-   * Hoofdcertificatie waarin de pagina staat. Wordt uit de matrix-kolommen
-   * gefilterd zodat de matrix alleen de toggleable extras toont.
-   */
-  primaryCert?: BundleCertKey;
+  /** Pakket-brede hoofdcertificatie (wegwijzer-service). */
+  primaryCert: BundleCertKey;
+  /** Extra kolommen in vaste volgorde; zie {@link bundleMatrixExtraColumnKeys}. */
+  matrixExtraCerts: readonly BundleCertKey[];
 };
 
 /**
- * Geeft het gedeeld matrix-grid + hoofdcertificatie door aan alle
- * {@link BundleProductCard}s. Verwacht zelf in een parent te zitten die de
- * matrix-kolommen definieert (zie {@link bundleMatrixGridCols}).
+ * Geeft het gedeelde matrix-raster en kolomset door aan {@link BundleProductCard} /
+ * {@link BundleMatrixHeader}. De ouder zet {@link bundleAssembleMatrixGridTemplate} op de
+ * `section`.
  */
-export function BundleMatrixProvider({ children, primaryCert }: BundleMatrixProviderProps) {
+export function BundleMatrixProvider({
+  children,
+  primaryCert,
+  matrixExtraCerts,
+}: BundleMatrixProviderProps) {
   const value = useMemo<MatrixContextValue>(
-    () => ({ primaryCert: primaryCert ?? null }),
-    [primaryCert],
+    () => ({ primaryCert, matrixExtraCerts }),
+    [primaryCert, matrixExtraCerts],
   );
   return (
     <BundleMatrixContext.Provider value={value}>{children}</BundleMatrixContext.Provider>
   );
 }
 
+/** `grid-template-columns` voor desktop bundle-matrix. */
+export function bundleAssembleMatrixGridTemplate(matrixExtraCertCount: number): string {
+  if (matrixExtraCertCount <= 0) {
+    return "minmax(0,1fr) 7rem";
+  }
+  return `minmax(0,1fr) 7rem repeat(${matrixExtraCertCount}, 7rem)`;
+}
+
 /**
- * Tailwind grid-template-columns voor de matrix. Twee statische varianten zodat
- * Tailwind JIT de class-strings tijdens build kan vinden:
- *
- * - `all`: één productinfo-kolom + alle vier cert-kolommen (5 cols totaal).
- * - `excludingPrimary`: één productinfo-kolom + drie cert-kolommen (4 cols totaal),
- *   gebruikt wanneer de hoofdcertificatie al uit de pagina-context blijkt.
+ * @deprecated Gebruik {@link bundleAssembleMatrixGridTemplate}; enkel voor oudere stories.
  */
 export const bundleMatrixGridCols = {
   all: "grid-cols-[1fr_repeat(4,7rem)]",
   excludingPrimary: "grid-cols-[1fr_repeat(3,7rem)]",
 } as const;
-
-function visibleCerts(primaryCert: BundleCertKey | null): readonly BundleCertKey[] {
-  return primaryCert == null
-    ? BUNDLE_CERT_ORDER
-    : BUNDLE_CERT_ORDER.filter((cert) => cert !== primaryCert);
-}
 
 /**
  * Productlabel + breadcrumb op één regel, met truncate-detectie. Wanneer de
@@ -192,7 +206,11 @@ function ProductLabelLine({
  */
 export function BundleMatrixHeader() {
   const matrix = useContext(BundleMatrixContext);
-  const certs = visibleCerts(matrix?.primaryCert ?? null);
+  if (!matrix) {
+    throw new Error("BundleMatrixHeader must be used within BundleMatrixProvider");
+  }
+  const { primaryCert, matrixExtraCerts } = matrix;
+  const primaryMeta = BUNDLE_CERT_META[primaryCert];
   return (
     <div
       role="row"
@@ -201,7 +219,13 @@ export function BundleMatrixHeader() {
       <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
         Gekozen product
       </span>
-      {certs.map((cert) => (
+      <span
+        className="py-micro text-center text-xs font-medium tracking-wide text-muted-foreground uppercase"
+        title={primaryMeta.title}
+      >
+        {primaryMeta.shortTitle}
+      </span>
+      {matrixExtraCerts.map((cert) => (
         <span
           key={cert}
           className="py-micro text-center text-xs font-medium tracking-wide text-muted-foreground uppercase"
@@ -224,25 +248,28 @@ export function BundleMatrixHeader() {
  * definieert de kaart zijn eigen grid op basis van {@link bundleMatrixGridCols}.
  */
 export type BundleProductMobileCardProps = BundleProductCardProps & {
-  /** Hoofdcertificatie van het pakket; wordt uit de extras-lijst gefilterd. */
-  primaryCert: BundleCertKey;
+  /** Zelfde kolomvolgorde als de desktop-matrix. */
+  matrixExtraCerts: readonly BundleCertKey[];
 };
 
 /**
- * Mobiele variant van {@link BundleProductCard}: verticaal gestapelde ChoiceCards
- * onder een sticky product-header. Toont één full-width ChoiceCard per beschikbare
- * extra-cert met expliciete "Voeg X toe"-labels (kolom-headers ontbreken hier).
- * De hoofdcertificatie wordt overgeslagen omdat de pagina-context die al communiceert.
+ * Mobiele variant van {@link BundleProductCard}: eerst de vast gekozen certificatie,
+ * daarna één Control per extra kolom (alleen items die in de dataset voor dit product
+ * bestaan).
  */
 export function BundleProductMobileCard({
   product,
   selected,
   onToggle,
-  primaryCert,
+  matrixExtraCerts,
 }: BundleProductMobileCardProps) {
-  const extras = BUNDLE_CERT_ORDER.filter(
-    (cert) => cert !== primaryCert && product.extraCerts.includes(cert),
-  );
+  const rowPrimary = product.rowPrimaryCert;
+  const primaryMeta = BUNDLE_CERT_META[rowPrimary];
+  const ceSublabel = bundleMatrixCeSublabel(product.ceAvailabilityRaw);
+
+  const extras = matrixExtraCerts
+    .filter((cert) => cert !== rowPrimary)
+    .filter((cert) => product.availableBundleCerts.includes(cert));
 
   return (
     <article
@@ -253,6 +280,21 @@ export function BundleProductMobileCard({
         <ProductLabelLine label={product.label} trail={product.categoryTrail} />
       </header>
       <div className="flex flex-col gap-component p-section pt-0">
+        <ChoiceCard
+          value={`${product.id}-primary`}
+          controlId={`${product.id}-row-primary-mobile`}
+          title={primaryMeta.title}
+          description={
+            rowPrimary === "ce" && ceSublabel
+              ? `Reeds gekozen voor dit product — niet wijzigbaar. ${ceSublabel}`
+              : "Reeds gekozen voor dit product — niet wijzigbaar"
+          }
+          controlPosition="leading"
+          selectionMode="multiple"
+          checked
+          disabled
+          className="w-full"
+        />
         {extras.length === 0 ? (
           <p className="text-xs text-muted-foreground">
             Geen extra certificaten beschikbaar voor dit product.
@@ -267,6 +309,7 @@ export function BundleProductMobileCard({
                 value={cert}
                 controlId={`${product.id}-${cert}-mobile`}
                 title={meta.title}
+                description={cert === "ce" ? ceSublabel : undefined}
                 controlPosition="leading"
                 selectionMode="multiple"
                 checked={isChecked}
@@ -281,14 +324,142 @@ export function BundleProductMobileCard({
   );
 }
 
+type MatrixCertCheckboxMode = "primary-readonly" | "extra-locked" | "unavailable" | "editable";
+
+/**
+ * Read-only maar aangevinkt: zelfde primary filled box + tick als bij interactieve checkboxes
+ * (default `disabled:opacity-50` zou de tick anders doen verbleken). Radix-checkbox gebruikt
+ * `data-checked` op de root (zie `@procertus-ui/ui`).
+ */
+const MATRIX_CERT_CHECKBOX_READONLY_CHECKED_CLASS =
+  "disabled:data-checked:border-primary disabled:data-checked:bg-primary disabled:data-checked:text-primary-foreground disabled:data-checked:opacity-100 dark:disabled:data-checked:bg-primary";
+
+/**
+ * Één cert-cel in de desktop-matrix: overal dezelfde checkbox + hover-rand als de
+ * bevestigde kolommen (geen afwijkende “kaal” checkboxen of extra sublabels).
+ */
+function MatrixCertCheckboxCell({
+  productId,
+  productLabel,
+  cert,
+  mode,
+  checked,
+  onCheckedChange,
+  ceSublabel,
+}: {
+  productId: string;
+  productLabel: string;
+  cert: BundleCertKey;
+  mode: MatrixCertCheckboxMode;
+  checked: boolean;
+  onCheckedChange?: (next: boolean) => void;
+  /** Alleen voor `cert === "ce"`: CE-niveau uit de dataset. */
+  ceSublabel?: string;
+}) {
+  const meta = BUNDLE_CERT_META[cert];
+  const suffix =
+    mode === "primary-readonly"
+      ? "matrix-primary"
+      : mode === "extra-locked"
+        ? `matrix-${cert}-locked`
+        : mode === "unavailable"
+          ? `matrix-${cert}-na`
+          : `matrix-${cert}`;
+  const controlId = `${productId}-${suffix}`;
+  const readonlySelectedLabel = `${meta.title} voor ${productLabel} — vast gekozen, niet wijzigbaar`;
+  const lockedExtraLabel = `${meta.title} vast gekozen voor ${productLabel}`;
+  const naLabel = `${meta.title} niet beschikbaar voor ${productLabel}`;
+  const editableLabel = `${meta.title} voor ${productLabel} — toevoegen of verwijderen`;
+
+  const ariaLabel =
+    mode === "primary-readonly"
+      ? readonlySelectedLabel
+      : mode === "extra-locked"
+        ? lockedExtraLabel
+        : naLabel;
+
+  const shellClass = cn(
+    "flex min-h-10 flex-col items-center justify-center gap-micro rounded-md py-component",
+    mode === "editable" &&
+      "cursor-pointer transition-colors hover:bg-accent hover:text-accent-foreground",
+    mode !== "editable" && mode !== "unavailable" && "cursor-not-allowed",
+    mode === "unavailable" && "cursor-default opacity-60",
+  );
+
+  const control = (
+    <Checkbox
+      id={mode === "editable" ? controlId : undefined}
+      checked={checked}
+      disabled={mode !== "editable"}
+      tabIndex={mode === "editable" ? undefined : -1}
+      aria-label={mode === "editable" ? undefined : ariaLabel}
+      aria-describedby={ceSublabel ? `${controlId}-ce-level` : undefined}
+      onCheckedChange={
+        mode === "editable" ? (state) => onCheckedChange?.(state === true) : undefined
+      }
+      className={cn(
+        mode !== "editable" && "cursor-not-allowed",
+        (mode === "primary-readonly" || mode === "extra-locked") &&
+          checked &&
+          MATRIX_CERT_CHECKBOX_READONLY_CHECKED_CLASS,
+      )}
+    />
+  );
+
+  const levelLine =
+    ceSublabel != null && ceSublabel !== "" ? (
+      <span
+        id={`${controlId}-ce-level`}
+        className="max-w-[6.5rem] text-center text-xs font-medium leading-snug tracking-wide text-muted-foreground"
+      >
+        {ceSublabel}
+      </span>
+    ) : null;
+
+  const body = (
+    <>
+      {control}
+      {levelLine}
+    </>
+  );
+
+  if (mode === "editable") {
+    return (
+      <label htmlFor={controlId} className={shellClass}>
+        <span className="sr-only">{editableLabel}</span>
+        {body}
+      </label>
+    );
+  }
+
+  return <div className={shellClass}>{body}</div>;
+}
+
 export function BundleProductCard({ product, selected, onToggle }: BundleProductCardProps) {
   const matrix = useContext(BundleMatrixContext);
   const inMatrix = matrix != null;
-  const certs = visibleCerts(matrix?.primaryCert ?? null);
-  const standaloneGridCols =
-    matrix?.primaryCert != null
-      ? bundleMatrixGridCols.excludingPrimary
-      : bundleMatrixGridCols.all;
+  const rowPrimary = product.rowPrimaryCert;
+
+  if (!inMatrix) {
+    return (
+      <div
+        role="row"
+        aria-label={`BundleProductCard vereist BundleMatrixProvider (product ${product.label})`}
+        className={cn(
+          "grid items-stretch gap-component rounded-lg border border-destructive/50 bg-card px-component py-component",
+          bundleMatrixGridCols.all,
+        )}
+      >
+        <p className="col-span-full text-sm text-destructive">
+          Bundle-matrix: gebruik BundleMatrixProvider met primaryCert en matrixExtraCerts.
+        </p>
+      </div>
+    );
+  }
+
+  const { matrixExtraCerts } = matrix;
+
+  const ceSublabel = bundleMatrixCeSublabel(product.ceAvailabilityRaw);
 
   return (
     <div
@@ -296,44 +467,66 @@ export function BundleProductCard({ product, selected, onToggle }: BundleProduct
       aria-label={`Extra certificaties voor ${product.label}`}
       className={cn(
         "grid items-stretch gap-component rounded-lg border bg-card px-component py-component transition-colors",
-        inMatrix ? "col-span-full grid-cols-subgrid" : standaloneGridCols,
+        "col-span-full grid-cols-subgrid",
       )}
     >
       <div className="flex min-w-0 items-center">
         <ProductLabelLine label={product.label} trail={product.categoryTrail} />
       </div>
-      {certs.map((cert) => {
-        const available = product.extraCerts.includes(cert);
-        const isChecked = selected.has(cert);
+      <MatrixCertCheckboxCell
+        productId={product.id}
+        productLabel={product.label}
+        cert={rowPrimary}
+        mode="primary-readonly"
+        checked
+        ceSublabel={rowPrimary === "ce" ? ceSublabel : undefined}
+      />
+      {matrixExtraCerts.map((cert) => {
+        const datasetOk = product.availableBundleCerts.includes(cert);
+        const lockedPrimary = cert === rowPrimary;
+        const isChecked = lockedPrimary || selected.has(cert);
 
-        if (!available) {
+        const cellCeSublabel = cert === "ce" ? ceSublabel : undefined;
+
+        if (!datasetOk) {
           return (
-            <div
+            <MatrixCertCheckboxCell
               key={cert}
-              aria-hidden
-              className="flex items-center justify-center py-component"
-            >
-              <Checkbox disabled tabIndex={-1} />
-            </div>
+              productId={product.id}
+              productLabel={product.label}
+              cert={cert}
+              mode="unavailable"
+              checked={false}
+              ceSublabel={cellCeSublabel}
+            />
           );
         }
 
-        const controlId = `${product.id}-${cert}`;
-        return (
-          <label
-            key={cert}
-            htmlFor={controlId}
-            className="flex h-full cursor-pointer items-center justify-center rounded-md py-component transition-colors hover:bg-accent hover:text-accent-foreground"
-          >
-            <span className="sr-only">
-              {`${BUNDLE_CERT_META[cert].title} voor ${product.label}`}
-            </span>
-            <Checkbox
-              id={controlId}
-              checked={isChecked}
-              onCheckedChange={(next) => onToggle(cert, next === true)}
+        if (lockedPrimary) {
+          return (
+            <MatrixCertCheckboxCell
+              key={cert}
+              productId={product.id}
+              productLabel={product.label}
+              cert={cert}
+              mode="extra-locked"
+              checked
+              ceSublabel={cellCeSublabel}
             />
-          </label>
+          );
+        }
+
+        return (
+          <MatrixCertCheckboxCell
+            key={cert}
+            productId={product.id}
+            productLabel={product.label}
+            cert={cert}
+            mode="editable"
+            checked={isChecked}
+            onCheckedChange={(next) => onToggle(cert, next)}
+            ceSublabel={cellCeSublabel}
+          />
         );
       })}
     </div>

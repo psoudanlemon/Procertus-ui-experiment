@@ -33,6 +33,11 @@ export const CertificationRequestDraft = Schema.Struct({
   productPath: Schema.optional(Schema.String),
   value: Schema.optional(Schema.String),
   context: Schema.optional(Schema.String),
+  /**
+   * Welke wegwijzer-route dit dossierfragment oorspronkelijk toebehoorde (bv. `ce`, `benor`).
+   * Nodig om meerdere certificatieroutes in één aanvraag te combineren zonder lijnen te verliezen.
+   */
+  trajectRootServiceId: Schema.optional(Schema.String),
 });
 export type CertificationRequestDraft = typeof CertificationRequestDraft.Type;
 
