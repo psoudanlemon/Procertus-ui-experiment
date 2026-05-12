@@ -1,11 +1,5 @@
 import { Button } from "@procertus-ui/ui";
-import {
-  type ReactNode,
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import { type ReactNode, createContext, useContext, useMemo, useState } from "react";
 
 import { TrajectStoryFooter } from "./TrajectStoryFooter";
 
@@ -118,10 +112,7 @@ export function BundleAssembleProvider({
       products.map((p) => {
         const raw = initial[p.id] ?? [];
         const cleaned = raw.filter(
-          (c) =>
-            c !== p.rowPrimaryCert &&
-            c !== primaryCert &&
-            p.availableBundleCerts.includes(c),
+          (c) => c !== p.rowPrimaryCert && c !== primaryCert && p.availableBundleCerts.includes(c),
         );
         return [p.id, new Set<BundleCertKey>(cleaned)] as const;
       }),
@@ -149,10 +140,7 @@ export function BundleAssembleProvider({
     for (const p of products) {
       const set = selections.get(p.id) ?? new Set<BundleCertKey>();
       out[p.id] = BUNDLE_CERT_ORDER.filter(
-        (c) =>
-          set.has(c) &&
-          c !== p.rowPrimaryCert &&
-          p.availableBundleCerts.includes(c),
+        (c) => set.has(c) && c !== p.rowPrimaryCert && p.availableBundleCerts.includes(c),
       );
     }
     onContinue(out);
@@ -187,9 +175,7 @@ export function BundleAssembleProvider({
     ],
   );
 
-  return (
-    <BundleAssembleContext.Provider value={value}>{children}</BundleAssembleContext.Provider>
-  );
+  return <BundleAssembleContext.Provider value={value}>{children}</BundleAssembleContext.Provider>;
 }
 
 export type BundleAssembleBodyProps = {
@@ -223,11 +209,7 @@ function formatDutchEnumeration(items: readonly string[]): string {
  * Toelichting wanneer bepaalde bundel-certificaties geen kolom krijgen omdat geen enkel
  * geselecteerd product ze in de dataset heeft.
  */
-function BundleAssembleOmittedCertTypesCallout({
-  omitted,
-}: {
-  omitted: readonly BundleCertKey[];
-}) {
+function BundleAssembleOmittedCertTypesCallout({ omitted }: { omitted: readonly BundleCertKey[] }) {
   if (omitted.length === 0) return null;
   const labels = omitted.map((c) => BUNDLE_CERT_META[c].title);
   const listPhrase = formatDutchEnumeration(labels);
@@ -240,8 +222,8 @@ function BundleAssembleOmittedCertTypesCallout({
         <span className="font-medium text-foreground">
           Deze certificatietypes staan niet in de kolommen:{" "}
         </span>
-        {listPhrase}. Ze zijn voor geen van uw geselecteerde producten beschikbaar in het
-        aanbod en kunnen daarom niet aan dit pakket worden toegevoegd.
+        {listPhrase}. Ze zijn voor geen van uw geselecteerde producten beschikbaar in het aanbod en
+        kunnen daarom niet aan dit pakket worden toegevoegd.
       </p>
     </aside>
   );
@@ -259,10 +241,10 @@ function BundleAssembleCeLevelsGuideCallout() {
     >
       <p className="font-medium text-foreground">CE-niveaus in deze tabel</p>
       <p className="mt-micro">
-        Onder de CE-checkbox staat het <strong>beoordelings- en verificatieniveau</strong> uit
-        ons productoverzicht (conform Europese verordening 305/2011). Het cijfer zegt
-        <strong> wie welke rol speelt</strong> bij typebeoordeling, productiecontrole en
-        opvolging — niet “hoe goed” het product is.
+        Onder de CE-checkbox staat het <strong>beoordelings- en verificatieniveau</strong> uit ons
+        productoverzicht (conform Europese verordening 305/2011). Het cijfer zegt
+        <strong> wie welke rol speelt</strong> bij typebeoordeling, productiecontrole en opvolging —
+        niet “hoe goed” het product is.
       </p>
       <ul className="mt-micro list-disc space-y-micro pl-5">
         <li>
@@ -272,23 +254,23 @@ function BundleAssembleCeLevelsGuideCallout() {
         </li>
         <li>
           <span className="font-medium text-foreground">2+</span>: de fabrikant voert een
-          fabriekskwaliteitscontrole uit; een aangemelde instantie doet periodiek controles
-          en audits.
+          fabriekskwaliteitscontrole uit; een aangemelde instantie doet periodiek controles en
+          audits.
         </li>
         <li>
-          <span className="font-medium text-foreground">3</span>: nadruk op typebeproeving
-          door een aangemelde instantie; de fabrikant volgt de prestaties in productie op.
+          <span className="font-medium text-foreground">3</span>: nadruk op typebeproeving door een
+          aangemelde instantie; de fabrikant volgt de prestaties in productie op.
         </li>
         <li>
-          <span className="font-medium text-foreground">4</span>: route waarbij de fabrikant
-          de voornaamste verantwoordelijkheid draagt; de aangemelde instantie is beperkter
-          betrokken (vaak vooral typebeproeving waar het dossier dat vereist).
+          <span className="font-medium text-foreground">4</span>: route waarbij de fabrikant de
+          voornaamste verantwoordelijkheid draagt; de aangemelde instantie is beperkter betrokken
+          (vaak vooral typebeproeving waar het dossier dat vereist).
         </li>
       </ul>
       <p className="mt-micro text-xs leading-normal">
-        Staat er <span className="font-medium text-foreground">Volgens productfiche</span>, dan
-        is CE wel voorzien in het aanbod voor dat product, maar het overzicht hanteert geen
-        vast cijferniveau in de cel.
+        Staat er <span className="font-medium text-foreground">Volgens productfiche</span>, dan is
+        CE wel voorzien in het aanbod voor dat product, maar het overzicht hanteert geen vast
+        cijferniveau in de cel.
       </p>
     </aside>
   );
@@ -319,10 +301,7 @@ export function BundleAssembleBody({ withColumnHeader = true }: BundleAssembleBo
   const gridTemplate = bundleAssembleMatrixGridTemplate(matrixExtraCerts.length);
 
   const omittedExtraCertTypes = useMemo(
-    () =>
-      BUNDLE_CERT_ORDER.filter(
-        (c) => c !== primaryCert && !matrixExtraCerts.includes(c),
-      ),
+    () => BUNDLE_CERT_ORDER.filter((c) => c !== primaryCert && !matrixExtraCerts.includes(c)),
     [primaryCert, matrixExtraCerts],
   );
 
@@ -333,17 +312,7 @@ export function BundleAssembleBody({ withColumnHeader = true }: BundleAssembleBo
 
   return (
     <>
-      {onAddMore ? (
-        <div className="flex flex-wrap items-center gap-component">
-          <Button type="button" variant="outline" size="sm" onClick={onAddMore}>
-            {addMoreLabel ?? "Nog certificatie toevoegen"}
-          </Button>
-        </div>
-      ) : null}
-      <ul
-        aria-label="Geselecteerde producten"
-        className="flex flex-col gap-section md:hidden"
-      >
+      <ul aria-label="Geselecteerde producten" className="flex flex-col gap-section md:hidden">
         {products.map((product) => (
           <li key={product.id}>
             <BundleProductMobileCard
@@ -373,7 +342,14 @@ export function BundleAssembleBody({ withColumnHeader = true }: BundleAssembleBo
           ))}
         </section>
       </BundleMatrixProvider>
-      {(omittedExtraCertTypes.length > 0 || showCeLevelsGuide) ? (
+      {onAddMore ? (
+        <div className="flex flex-wrap items-center gap-component">
+          <Button type="button" variant="outline" size="sm" onClick={onAddMore}>
+            {addMoreLabel ?? "Nog certificatie toevoegen"}
+          </Button>
+        </div>
+      ) : null}
+      {omittedExtraCertTypes.length > 0 || showCeLevelsGuide ? (
         <div className="mt-section flex flex-col gap-section">
           <BundleAssembleOmittedCertTypesCallout omitted={omittedExtraCertTypes} />
           {showCeLevelsGuide ? <BundleAssembleCeLevelsGuideCallout /> : null}
@@ -401,4 +377,3 @@ export function BundleAssembleActionBar() {
     />
   );
 }
-
