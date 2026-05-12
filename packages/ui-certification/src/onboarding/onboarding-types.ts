@@ -216,6 +216,16 @@ export type OnboardingFlowState = {
   /** Latest informal booking form snapshot (info-request / expert-call). */
   informalIntake?: InformalIntakeCapture;
   /**
+   * Free-text note bundled with informational and/or formal submission when the informational
+   * intake path (`/welcome/info-request/…`) has been opened — editable again on nazicht summary.
+   */
+  submissionNote?: string;
+  /**
+   * Set when the guest opens the informational-request page so the submission note applies to both
+   * that flow and subsequent formal dossier nazicht until reset.
+   */
+  submissionNoteUnlocked?: boolean;
+  /**
    * Wegwijzer toonlabel (bv. naam van het dienstkanaal uit de triage) voor kopie in de registratiefase.
    */
   registrationEntryLabel?: string;

@@ -62,6 +62,8 @@ export type OnboardingFlowViewProps = {
   companyHints: RegistrationEnrichmentHints;
   /** Nazicht: Klantenportaal onboarding per registered person id (`false` = opt-out; omitted = on). */
   summaryKlantenportaalByPersonId: Record<string, boolean>;
+  submissionNote: string;
+  submissionNoteUnlocked: boolean;
   /** Leading public registry header slot (e.g. color mode). */
   registryHeaderLeadingActions?: ReactNode;
   /** Trailing header slot (e.g. inquiry cart). */

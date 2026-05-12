@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { DensityProvider } from "@procertus-ui/ui";
+import { DensityProvider, cn } from "@procertus-ui/ui";
 import {
+  PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG,
   ExpertCallBookingView,
   TrajectPageFrame,
   TrajectStoryFooter,
   ProductInquiryMatrix,
+  ProductRequestNoteField,
   groupDraftsByProduct,
   useOnboardingFlowApi,
   useOnboardingFlowState,
@@ -26,24 +28,24 @@ export function InfoRequestPlaceholderPage() {
   const api = useOnboardingFlowApi();
   const { flowState, resolvedContext } = useOnboardingFlowState();
 
-  const productGroups = useMemo(
-    () => groupDraftsByProduct(flowState.drafts),
-    [flowState.drafts],
-  );
+  const productGroups = useMemo(() => groupDraftsByProduct(flowState.drafts), [flowState.drafts]);
   const hasProductInquiries = useMemo(
-    () =>
-      flowState.drafts.some(
-        (d) => Boolean(d.productId?.trim() || d.productLabel?.trim()),
-      ),
+    () => flowState.drafts.some((d) => Boolean(d.productId?.trim() || d.productLabel?.trim())),
     [flowState.drafts],
   );
 
   const informationalEntryId = service?.entry.id;
 
   useEffect(() => {
+    api.unlockSubmissionNoteFromInformationalPath();
+  }, [api]);
+
+  useEffect(() => {
     if (!informationalEntryId || flowState.requestOrigin) return;
     api.setGuestIntakeChannel("informational", informationalEntryId);
   }, [api, flowState.requestOrigin, informationalEntryId]);
+
+  const submissionNote = flowState.submissionNote ?? "";
 
   if (!service) {
     return <Navigate to={WEGWIJZER_PATH} replace />;
@@ -95,18 +97,45 @@ export function InfoRequestPlaceholderPage() {
               id="info-request-matrix-heading"
               className="m-0 text-heading-lg font-semibold text-heading-foreground"
             >
-              Overzicht aanvragen
+              Overzicht informatieaanvragen
             </h2>
             <p className="m-0 text-sm text-muted-foreground">
-              {flowState.drafts.length}{" "}
-              {flowState.drafts.length === 1 ? "certificaat" : "certificaten"} aangevraagd over{" "}
-              {productGroups.length}{" "}
-              {productGroups.length === 1 ? "product" : "producten"}.
+              Informatie over {flowState.drafts.length}{" "}
+              {flowState.drafts.length === 1 ? "certificaat" : "certificaten"} aan te vragen over{" "}
+              {productGroups.length} {productGroups.length === 1 ? "product" : "producten"}.
             </p>
           </div>
           <ProductInquiryMatrix groups={productGroups} primaryEntryId={entry.id} />
         </section>
       ) : null}
+
+      <section
+        className={cn(
+          "flex flex-col gap-component rounded-xl border bg-card p-section text-card-foreground transition-colors",
+          "focus-within:ring-3 focus-within:ring-ring/50",
+          submissionNote.trim().length > 0 ? "border-primary/50" : "border-border",
+        )}
+        aria-labelledby="info-request-note-heading"
+      >
+        <h2
+          id="info-request-note-heading"
+          className="m-0 text-heading-lg font-semibold text-heading-foreground"
+        >
+          Begeleidende toelichting
+        </h2>
+        <ProductRequestNoteField
+          value={submissionNote}
+          onChange={(v) => api.setSubmissionNote(v)}
+          required={false}
+          maxLength={PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG}
+          rows={8}
+          bordered={false}
+          autoFocus={false}
+          aria-labelledby="info-request-note-heading"
+          placeholder="Beschrijf hier de context van uw informatieaanvraag of een concrete vraag."
+        />
+      </section>
+
       <DensityProvider density="spacious">
         <ExpertCallBookingView
           idPrefix="info-request"

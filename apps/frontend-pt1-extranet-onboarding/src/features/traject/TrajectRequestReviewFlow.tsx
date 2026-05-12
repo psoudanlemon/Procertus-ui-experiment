@@ -1,19 +1,15 @@
-import { Button, cn } from "@procertus-ui/ui";
+import { Button } from "@procertus-ui/ui";
 import {
-  PRODUCT_REQUEST_NOTE_MAX_LENGTH,
-  PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG,
   ProductDocumentationLibrary,
   ProductInquiryMatrix,
-  ProductRequestNoteField,
   TrajectPageFrame,
   TrajectStoryFooter,
   buildProductDocumentsForDraft,
   groupDraftsByProduct,
-  isProductRequestNoteComplete,
   type CertificationRequestDraft,
   useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
@@ -27,30 +23,6 @@ function isProductBoundDraft(draft: CertificationRequestDraft): boolean {
   return Boolean(draft.productId?.trim() || draft.productLabel?.trim());
 }
 
-/**
- * SessionStorage-sleutel voor de begeleidende-brief textarea zodat terug-navigatie
- * de eerder ingetypte tekst herstelt. Per service apart bewaard.
- */
-const NOTE_STORAGE_KEY = (serviceId: string) => `procertus.request-review.note.${serviceId}`;
-
-function readPersistedNote(serviceId: string | undefined): string {
-  if (!serviceId || typeof window === "undefined") return "";
-  try {
-    return window.sessionStorage.getItem(NOTE_STORAGE_KEY(serviceId)) ?? "";
-  } catch {
-    return "";
-  }
-}
-
-function writePersistedNote(serviceId: string | undefined, value: string) {
-  if (!serviceId || typeof window === "undefined") return;
-  try {
-    window.sessionStorage.setItem(NOTE_STORAGE_KEY(serviceId), value);
-  } catch {
-    // Storage kan onbeschikbaar zijn (privémodus, quota) — stille fallback.
-  }
-}
-
 export function TrajectRequestReviewFlow() {
   const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
@@ -59,20 +31,7 @@ export function TrajectRequestReviewFlow() {
   const inquiries: CertificationRequestDraft[] = flowState.drafts;
   const productGroups = useMemo(() => groupDraftsByProduct(inquiries), [inquiries]);
   const hasProducts = useMemo(() => inquiries.some(isProductBoundDraft), [inquiries]);
-  // Niet-productgebonden certificaten (`productRelation === "optional"` in de
-  // wegwijzer) springen via de detail-card-CTA rechtstreeks naar dit scherm,
-  // zonder product- of bundle-stap. De begeleidende brief is dan het enige
-  // dossier-element, en daarom verplicht.
   const isNonProductBound = service?.entry.productRelation === "optional";
-  const noteRequired = isNonProductBound === true || !hasProducts;
-  const [note, setNoteState] = useState<string>(() => readPersistedNote(serviceId));
-  const setNote = useCallback(
-    (value: string) => {
-      setNoteState(value);
-      writePersistedNote(serviceId, value);
-    },
-    [serviceId],
-  );
 
   const handleCancel = useCallback(() => navigate(WEGWIJZER_PATH), [navigate]);
   const handleBack = useCallback(() => {
@@ -104,15 +63,11 @@ export function TrajectRequestReviewFlow() {
     <TrajectPageFrame
       bodyGap="section"
       kicker={service.entry.label}
-      title={
-        hasProducts
-          ? "Controleer je aanvraagpakket"
-          : `Beschrijf je ${service.entry.shortLabel}-aanvraag`
-      }
+      title="Controleer je aanvraagpakket"
       description={
         hasProducts
-          ? "Lees de onderstaande samenvatting van je geselecteerde producten en de bijbehorende documentatie aandachtig na ter validatie voordat je de aanvraag indient."
-          : `Geef in onderstaande brief de context en details van je ${service.entry.shortLabel}-aanvraag mee. Een PROCERTUS-expert neemt je dossier op basis daarvan op.`
+          ? "Lees de onderstaande samenvatting van je geselecteerde producten en de bijbehorende documentatie aandachtig na ter validatie voordat je verder gaat naar je keuze (informatie of formeel traject)."
+          : "Valideer het overzicht van je geselecteerde traject(en) hieronder voordat je verder gaat naar je keuze (informatie of formeel traject)."
       }
       actionBar={
         <TrajectStoryFooter
@@ -122,71 +77,41 @@ export function TrajectRequestReviewFlow() {
           cancelLabel="Annuleren"
           backLabel="Terug"
           continueLabel="Bevestig"
-          continueDisabled={!isProductRequestNoteComplete(note, noteRequired)}
         />
       }
     >
       <div className="flex flex-col gap-component">
         <section
-          className={cn(
-            "flex flex-col gap-component rounded-xl border bg-card p-section text-card-foreground transition-colors",
-            "focus-within:ring-3 focus-within:ring-ring/50",
-            note.trim().length > 0 ? "border-primary/50" : "border-border",
-          )}
-          aria-labelledby="begeleidende-brief-heading"
+          className="flex flex-col gap-component rounded-xl border border-border bg-card p-section text-card-foreground"
+          aria-labelledby="aanvraag-matrix-heading"
         >
-          <h2
-            id="begeleidende-brief-heading"
-            className="m-0 text-heading-lg font-semibold text-heading-foreground"
-          >
-            Begeleidende brief
-          </h2>
-          <ProductRequestNoteField
-            value={note}
-            onChange={setNote}
-            required={noteRequired}
-            maxLength={
-              hasProducts ? PRODUCT_REQUEST_NOTE_MAX_LENGTH : PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG
-            }
-            rows={hasProducts ? 6 : 16}
-            bordered={false}
-            aria-labelledby="begeleidende-brief-heading"
-          />
+          <div className="flex flex-col">
+            <h2
+              id="aanvraag-matrix-heading"
+              className="m-0 text-heading-lg font-semibold text-heading-foreground"
+            >
+              Overzicht aanvragen
+            </h2>
+            <p className="m-0 text-sm text-muted-foreground">
+              {inquiries.length} {inquiries.length === 1 ? "certificaat" : "certificaten"}{" "}
+              aangevraagd over {productGroups.length}{" "}
+              {productGroups.length === 1 ? "product" : "producten"}.
+            </p>
+          </div>
+          <ProductInquiryMatrix groups={productGroups} primaryEntryId={service.entry.id} />
         </section>
 
+        <div className="flex flex-wrap items-center gap-component">
+          <Button type="button" variant="outline" size="sm" onClick={handleAddMore}>
+            Nog certificatie toevoegen
+          </Button>
+        </div>
+
         {hasProducts ? (
-          <>
-            <section
-              className="flex flex-col gap-component rounded-xl border border-border bg-card p-section text-card-foreground"
-              aria-labelledby="aanvraag-matrix-heading"
-            >
-              <div className="flex flex-col">
-                <h2
-                  id="aanvraag-matrix-heading"
-                  className="m-0 text-heading-lg font-semibold text-heading-foreground"
-                >
-                  Overzicht aanvragen
-                </h2>
-                <p className="m-0 text-sm text-muted-foreground">
-                  {inquiries.length} {inquiries.length === 1 ? "certificaat" : "certificaten"}{" "}
-                  aangevraagd over {productGroups.length}{" "}
-                  {productGroups.length === 1 ? "product" : "producten"}.
-                </p>
-              </div>
-              <ProductInquiryMatrix groups={productGroups} primaryEntryId={service.entry.id} />
-            </section>
-
-            <div className="flex flex-wrap items-center gap-component">
-              <Button type="button" variant="outline" size="sm" onClick={handleAddMore}>
-                Nog certificatie toevoegen
-              </Button>
-            </div>
-
-            <ProductDocumentationLibrary
-              groups={productGroups}
-              documentsForDraft={buildProductDocumentsForDraft}
-            />
-          </>
+          <ProductDocumentationLibrary
+            groups={productGroups}
+            documentsForDraft={buildProductDocumentsForDraft}
+          />
         ) : null}
       </div>
     </TrajectPageFrame>

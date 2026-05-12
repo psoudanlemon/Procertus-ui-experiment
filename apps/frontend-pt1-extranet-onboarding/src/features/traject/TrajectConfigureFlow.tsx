@@ -109,11 +109,9 @@ export function TrajectConfigureFlow() {
   );
 
   // Escape route wanneer de gebruiker zijn product niet terugvindt in de catalogus.
-  // We slaan de bundle-stap over en sturen rechtstreeks naar "Aanvraag controleren"
-  // in zijn non-product-bound variant: een placeholder-draft zonder productId én
-  // zonder productLabel zorgt dat `isProductBoundDraft` false geeft, waardoor de
-  // review-pagina enkel de begeleidende brief toont. Dat is hier het volledige
-  // dossier: een expert leest de brief en helpt het juiste product te bepalen.
+  // We slaan de bundle-stap over en gaan naar "Aanvraag controleren": een placeholder-draft
+  // zonder productId én zonder productLabel laat daar het overzicht per traject toe (zonder
+  // documentatiebibliotheek voor productbundels).
   const handleProductNotFound = useCallback(() => {
     if (!serviceId || !service) return;
     const placeholder: CertificationRequestDraft = {

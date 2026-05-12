@@ -53,6 +53,9 @@ export type OnboardingFlowApi = {
   /** Mirror informal booking formulier-state uit ExpertCallBookingView. */
   readonly patchInformalIntakeCapture: (capture: InformalIntakeCapture) => void;
   readonly clearInformalIntakeCapture: () => void;
+  /** After opening the informational request surface; enables the persisted submission note. */
+  readonly unlockSubmissionNoteFromInformationalPath: () => void;
+  readonly setSubmissionNote: (note: string) => void;
   /**
    * Na triage “Traject opstarten”: markeer het pakket als formeel en neem alle relevante
    * concept‑aanvragen op in {@link OnboardingFlowState.summaryIncludedDraftIds}.
@@ -260,6 +263,16 @@ export function createOnboardingFlowApi(
         delete next.informalIntakeServiceId;
         return next;
       });
+    },
+
+    unlockSubmissionNoteFromInformationalPath() {
+      setFlowState((prev) =>
+        prev.submissionNoteUnlocked === true ? prev : { ...prev, submissionNoteUnlocked: true },
+      );
+    },
+
+    setSubmissionNote(note) {
+      setFlowState((prev) => ({ ...prev, submissionNote: note }));
     },
   };
 }

@@ -15,6 +15,10 @@ import {
   TableRow,
   cn,
 } from "@procertus-ui/ui";
+import {
+  PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG,
+  ProductRequestNoteField,
+} from "../../traject/ProductRequestNoteField";
 import { CertificationInquiriesOverviewCard } from "../certification-inquiries-overview/CertificationInquiriesOverviewCard";
 import {
   summaryDisplayNameForRegisteredPerson,
@@ -38,7 +42,11 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
     summarySectionTitle,
     summaryRc,
     fullPackageEntityRecords,
+    submissionNote,
+    submissionNoteUnlocked,
   } = model;
+
+  const submissionNoteDraft = submissionNote ?? "";
 
   return (
     <div className="flex w-full min-w-0 flex-col gap-8">
@@ -237,6 +245,43 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
           onEditRequestsClick={() => {}}
         />
       </div>
+
+      {submissionNoteUnlocked ? (
+        <section
+          className={cn(
+            "flex w-full min-w-0 flex-col gap-component rounded-xl border bg-card p-section text-card-foreground transition-colors",
+            "focus-within:ring-3 focus-within:ring-ring/50",
+            submissionNoteDraft.trim().length > 0 ? "border-primary/50" : "border-border",
+          )}
+          aria-labelledby="summary-submission-note-heading"
+        >
+          <h3
+            id="summary-submission-note-heading"
+            className="m-0 text-base font-semibold leading-snug tracking-tight text-foreground"
+          >
+            Begeleidende toelichting
+          </h3>
+          <p className="m-0 max-w-[60ch] text-sm text-muted-foreground">
+            Dezelfde toelichting als bij een vrijblijvende informatieaanvraag. Optioneel; pas aan of
+            vul aan vóór u indient.
+          </p>
+          <ProductRequestNoteField
+            value={submissionNoteDraft}
+            onChange={(v) =>
+              setFlowState((prev) => ({
+                ...prev,
+                submissionNote: v,
+              }))
+            }
+            required={false}
+            maxLength={PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG}
+            rows={6}
+            bordered={false}
+            autoFocus={false}
+            aria-labelledby="summary-submission-note-heading"
+          />
+        </section>
+      ) : null}
 
       <Card className="w-full max-w-none overflow-hidden">
         <CardHeader>

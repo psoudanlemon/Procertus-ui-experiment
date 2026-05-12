@@ -670,6 +670,7 @@ export function buildFullOnboardingPackageEntityRecords(
   includedDraftIds: readonly string[],
   requestOrigin: OnboardingRequestOrigin | "",
   klantenportaalByPersonId: Record<string, boolean | undefined>,
+  submissionNote?: string,
 ): OnboardingPackageEntityRecord[] {
   const records: OnboardingPackageEntityRecord[] = [];
   const included = drafts.filter((d) => includedDraftIds.includes(d.id));
@@ -934,6 +935,15 @@ export function buildFullOnboardingPackageEntityRecords(
       ]),
     });
   });
+
+  const noteTrimmed = submissionNote?.trim();
+  if (noteTrimmed) {
+    records.push({
+      id: "submission-note",
+      title: "Begeleidende toelichting",
+      summary: noteTrimmed,
+    });
+  }
 
   return records;
 }

@@ -64,6 +64,7 @@ export function useOnboardingRegistrationLayoutModel(
     requestOrigin,
     countrySelectOptions,
     summaryKlantenportaalByPersonId,
+    submissionNote,
   } = props;
 
   const originFieldBase = useId();
@@ -132,6 +133,7 @@ export function useOnboardingRegistrationLayoutModel(
         effectiveSummaryIncludedDraftIds,
         requestOrigin,
         summaryKlantenportaalByPersonId,
+        submissionNote,
       ),
     [
       context,
@@ -139,6 +141,7 @@ export function useOnboardingRegistrationLayoutModel(
       effectiveSummaryIncludedDraftIds,
       requestOrigin,
       summaryKlantenportaalByPersonId,
+      submissionNote,
     ],
   );
 

@@ -381,6 +381,8 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     countrySelectValue,
     companyHints,
     summaryKlantenportaalByPersonId: flowState.summaryKlantenportaalByPersonId ?? {},
+    submissionNote: flowState.submissionNote ?? "",
+    submissionNoteUnlocked: flowState.submissionNoteUnlocked === true,
     registryHeaderLeadingActions,
     registryHeaderTrailingActions,
     guestLanguagePlacement,

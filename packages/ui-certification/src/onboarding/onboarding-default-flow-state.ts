@@ -18,6 +18,7 @@ function coerceGuestIntakeChannel(raw: unknown): GuestIntakeChannel {
 export const DEFAULT_ONBOARDING_FLOW_STATE: OnboardingFlowState = {
   trajectServiceId: "",
   guestIntakeChannel: "",
+  submissionNote: "",
   formalRequestPackageCommitted: false,
   requestOrigin: "",
   drafts: [],

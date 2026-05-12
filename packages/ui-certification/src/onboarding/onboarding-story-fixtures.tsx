@@ -330,6 +330,8 @@ export function baseOnboardingFlowViewProps(
     countrySelectValue,
     companyHints: {},
     summaryKlantenportaalByPersonId: {},
+    submissionNote: "",
+    submissionNoteUnlocked: false,
   };
 
   return { ...base, ...overrides };
@@ -353,6 +355,8 @@ export function flowStateSeedFromOnboardingFlowViewProps(
     prototypeVatPresetId: props.prototypeVatPresetId,
     companyFieldHints: props.companyHints ?? {},
     summaryKlantenportaalByPersonId: props.summaryKlantenportaalByPersonId ?? {},
+    submissionNote: props.submissionNote,
+    submissionNoteUnlocked: props.submissionNoteUnlocked,
     companyZetelStepCompleted: stepIdx > ONBOARDING_STEPS.indexOf("company"),
     companyLegalEntitiesStepCompleted:
       stepIdx > ONBOARDING_STEPS.indexOf("companyLegalEntities"),
