@@ -1,0 +1,41 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "43f4b0ba314a",
+  "session_id": "c3560bbf-28e9-4320-a535-de35f9336890",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-12T18:35:12.131412Z",
+  "branch": "main",
+  "checkpoints_count": 0,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/pages/ExpertCallPlaceholderPage.tsx",
+    "packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyLegalEntitiesStep.tsx",
+    "packages/ui-certification/src/components/traject/ProductRequestNoteField.tsx"
+  ],
+  "agent": "Claude Code",
+  "model": "composer-2",
+  "turn_id": "7da8ec1f1a0b",
+  "checkpoint_transcript_start": 42,
+  "transcript_lines_at_start": 42,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-12T18:35:12.129366Z",
+    "agent_lines": 8,
+    "agent_removed": 29,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 8,
+    "total_lines_changed": 37,
+    "agent_percentage": 100,
+    "metric_version": 2
+  }
+}
