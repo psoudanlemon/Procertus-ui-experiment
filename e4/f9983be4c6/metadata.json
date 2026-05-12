@@ -1,0 +1,20 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "e4f9983be4c6",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 9,
+  "files_touched": [
+    "packages/ui-certification/src/onboarding/onboarding-stepper-model.ts",
+    "packages/ui-certification/src/onboarding/onboarding-story-fixtures.tsx",
+    "packages/ui-certification/src/onboarding/use-onboarding-flow.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/e4/f9983be4c6/0/metadata.json",
+      "transcript": "/e4/f9983be4c6/0/full.jsonl",
+      "content_hash": "/e4/f9983be4c6/0/content_hash.txt",
+      "prompt": "/e4/f9983be4c6/0/prompt.txt"
+    }
+  ]
+}

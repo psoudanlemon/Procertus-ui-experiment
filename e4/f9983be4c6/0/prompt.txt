@@ -1,0 +1,94 @@
+@apps/frontend-pt1-extranet-onboarding/src/layouts/PublicCertificationRequestsCart.tsx when the user chooses to erase all inquiries, the full data package in the flow provider should be erased and reset.
+
+Currently, only the inquiries are being removed, but all related information collected during onboarding should also be removed.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/layouts/PublicCertificationRequestsCart.tsx when the user chooses to erase all inquiries, the full data package in the flow provider should be erased and reset.
+
+Currently, only the inquiries are being removed, but all related information collected during onboarding should also be removed.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx when the user submits their informal requests, all currently captured information from the onboarding flow provider should also be erased. @apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx:61-69
+
+---
+
+@packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx When the user has never completed the onboarding customer step and therefore has not made the choice. They can only be directed to step 2 and never to anything other than step 2.
+ @packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx:176-246 @apps/frontend-pt1-extranet-onboarding/src/features/customer-onboarding/FormalRequestStepRedirect.tsx
+
+---
+
+@packages/ui-certification/src/components/traject/BundleAssemble.tsx:345-351 just like on the bundle-assemble page, also show the same "Add More" options on the review. @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx:174-180
+
+---
+
+Commit all changes. Use Commit Skill.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/layouts/PublicCertificationRequestsCart.tsx:140 when the user chooses to adjust their certification request, they should only be redirected to the welcome page—nothing else, nothing more.   except for closing the dialog, or the cart panel, I mean.
+
+---
+
+Currently, the card icon in the app bar is only shown when a formal trajectory request has been started. I want the card icon to be shown as soon as we have added some products for a certification type, or added a certification type to our request package in the request flow. It should not be dependent on the formal request trajectory. @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx:57 
+
+ Don't rely on the logic that the formal banner will be shown, because the formal banner is shown only when we have a formal inquiry.
+
+Instead, add an extra check to make sure we already have data to be shown in our cards.
+
+---
+
+Currently, the card icon in the app bar is only shown when a formal trajectory request has been started. I want the card icon to be shown as soon as we have added some products for a certification type, or added a certification type to our request package in the request flow. It should not be dependent on the formal request trajectory. @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx:57 
+
+ Don't rely on the logic that the formal banner will be shown, because the formal banner is shown only when we have a formal inquiry.
+
+Instead, add an extra check to make sure we already have data to be shown in our cards.
+
+---
+
+Please introduce an animation that slides this guard icon in when it is shown for the first time, i.e., when the user has added certification inquiries to their request state.
+
+For any other request change—changing the badge number on top of the guard icon—please use an animation to change the badge state.
+
+---
+
+Please introduce an animation that slides this guard icon in when it is shown for the first time, i.e., when the user has added certification inquiries to their request state.
+
+For any other request change—changing the badge number on top of the guard icon—please use an animation to change the badge state.
+
+---
+
+Please introduce an animation that slides this cart icon in when it is shown for the first time, i.e., when the user has added certification inquiries to their request state.
+
+For any other request change—changing the badge number on top of the cart icon—please use an animation to change the badge state.
+
+---
+
+Please introduce an animation that slides this cart icon in when it is shown for the first time, i.e., when the user has added certification inquiries to their request state.
+
+For any other request change—changing the badge number on top of the cart icon—please use an animation to change the badge state.
+
+---
+
+Maybe you have misinterpreted my requests. I didn't want to change any animations in the request cart panel itself; I only want to animate the request cart icon at the top of the app bar.
+
+I want to show and hide this icon with an animation so that when it first appears or when it disappears, it transitions in and out.
+
+Also add animations to change the badge number.
+
+---
+
+@packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyLegalEntitiesStep.tsx:186-228 these cards cannot be automatically selected. By default, none of the cards should be selected, and the user must explicitly select one of the two options before being able to continue.
+
+---
+
+I shouldn't be able to continue to Step 2  without first making a selection in Step 2 to say I'm legal responsable or not@packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx
+
+---
+
+I shouldn't be able to continue from Step 2  without first making a selection in Step 2 to say I'm legal responsable or not@packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx
+
+---
+
+I shouldn't be able to continue from Step 2  without first making a selection in Step 2 to say I'm legal responsable or not@packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx
