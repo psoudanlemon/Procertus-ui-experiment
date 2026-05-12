@@ -406,6 +406,9 @@ function prototypeDemoEmailDomain(representativeEmail: string): string {
  * Prototype demo: after {@link enrichRegistrationContext}, merge this patch so optional blocks
  * (cert contacts, invoicing, phones, ISO code) are on and filled. Scalar fields use `||` fallbacks
  * when still empty so existing user input is kept.
+ *
+ * Does **not** set {@link CustomerContext.headOfficeIsCertificationLegalEntity}: that choice is only
+ * made on the certificatie‑entiteit stap.
  */
 export function prototypeOptionalDemoContextPatch(
   base: CustomerContext,
@@ -477,7 +480,6 @@ export function prototypeOptionalDemoContextPatch(
     invoicingAddressCity: city,
     invoicingCountry: country,
     invoicingAddressCountryCode: iso,
-    headOfficeIsCertificationLegalEntity: "yes",
   };
 }
 
