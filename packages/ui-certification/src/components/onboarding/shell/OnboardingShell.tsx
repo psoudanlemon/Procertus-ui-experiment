@@ -54,7 +54,7 @@ export function OnboardingShell({
 }: OnboardingShellProps) {
   const body = (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-region p-boundary">
-      <PageHeader title={pageTitle} description={pageDescription} />
+      <PageHeader kicker="Uw PROCERTUS traject" title={pageTitle} description={pageDescription} />
       {sessionBanner}
       {children}
     </div>
