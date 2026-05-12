@@ -1,0 +1,89 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "14afc4dada0b",
+  "session_id": "efb79551-3621-4a23-a843-054a7775c11b",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-12T13:48:28.741783Z",
+  "branch": "main",
+  "checkpoints_count": 4,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/customer-onboarding/CustomerOnboardingFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/customer-onboarding/FormalRequestStepRedirect.tsx",
+    "packages/ui-certification/src/onboarding/derive-formal-onboarding-resume-step.ts",
+    "packages/ui-certification/src/onboarding/index.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-helpers.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-stepper-model.ts"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "f4efcdb95cf2",
+  "checkpoint_transcript_start": 551,
+  "transcript_lines_at_start": 551,
+  "session_metrics": {
+    "turn_count": 54,
+    "context_tokens": 182371,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-12T13:48:28.728147Z",
+    "agent_lines": 49,
+    "agent_removed": 9,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 49,
+    "total_lines_changed": 58,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 7,
+      "user_lines_removed": 3,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx": 6,
+        "packages/ui-certification/src/components/onboarding/shell/OnboardingShell.tsx": 1
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 23,
+      "agent_lines_removed": 18
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 10,
+      "user_lines_removed": 8,
+      "agent_lines_added": 25,
+      "agent_lines_removed": 19,
+      "user_added_per_file": {
+        "packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx": 10
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 60,
+      "user_lines_removed": 94,
+      "agent_lines_added": 95,
+      "agent_lines_removed": 50,
+      "user_added_per_file": {
+        "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx": 17,
+        "packages/ui-certification/src/components/traject/BundleAssemble.tsx": 31,
+        "packages/ui/src/components/step-layout/StepLayout.tsx": 1,
+        "packages/ui/src/styles/themes/default.css": 11
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 158,
+      "agent_lines_removed": 144
+    }
+  ]
+}
