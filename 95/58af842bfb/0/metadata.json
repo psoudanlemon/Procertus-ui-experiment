@@ -1,0 +1,44 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "9558af842bfb",
+  "session_id": "efb79551-3621-4a23-a843-054a7775c11b",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-12T13:02:32.516513Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/customer-onboarding/CustomerOnboardingFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/customer-onboarding/FormalRequestStepRedirect.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/traject-submission-context.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/ActiveInquiryContinueAlert.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/PublicCertificationRequestsCart.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/ExpertCallPlaceholderPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "4880a7a5f71b",
+  "session_metrics": {
+    "turn_count": 44,
+    "context_tokens": 182511,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-12T13:02:32.500475Z",
+    "agent_lines": 329,
+    "agent_removed": 283,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 329,
+    "total_lines_changed": 612,
+    "agent_percentage": 100,
+    "metric_version": 2
+  }
+}
