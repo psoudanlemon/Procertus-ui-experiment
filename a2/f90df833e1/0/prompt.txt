@@ -35,3 +35,7 @@ When I switch to dark mode, the footer and action bar with the dimmed scroll sem
 ---
 
 We have now lost the semi-transparent gradient overlay when scrolling. Both in light and dark mode.
+
+---
+
+Please commit these app shell changes. Use git commit skill.
