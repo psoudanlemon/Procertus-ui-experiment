@@ -55,6 +55,7 @@ export {
   ProductSelectionBasketMobileSummaryBar,
   ProductSelectionBasketProvider,
   TrajectLayout,
+  TrajectPageFrame,
   TrajectStoryFooter,
   buildGeneralProcessDocuments,
   buildProductDocumentsForDraft,
@@ -78,6 +79,7 @@ export type {
   ProductSummaryGroup,
   TrajectLayoutAction,
   TrajectLayoutProps,
+  TrajectPageFrameProps,
   TrajectStoryFooterProps,
 } from "./components/traject";
 export { ProcertusCategorizationTreeView } from "./components/procertus-categorization-tree-view";

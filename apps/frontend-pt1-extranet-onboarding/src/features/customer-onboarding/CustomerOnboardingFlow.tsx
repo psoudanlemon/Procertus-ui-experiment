@@ -11,9 +11,6 @@ import {
 import { useCallback, useEffect, useMemo } from "react";
 import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
-import { usePublicPrototypeRegistryLanguageHeaderProps } from "../../layouts/PublicPrototypeLanguageContext";
-import { WelcomePublicHeaderLeading } from "../../layouts/WelcomePublicHeaderLeading";
-import { WelcomePublicHeaderTrailing } from "../../layouts/WelcomePublicHeaderTrailing";
 import {
   formalOnboardingStepPath,
   parseFormalOnboardingStepParam,
@@ -29,11 +26,10 @@ const WEGWIJZER_PATH = "/welcome";
 
 /**
  * Formal onboarding after drafts exist. Expects ancestor {@link OnboardingFlowProvider}
- * ({@link PublicWelcomeOnboardingSessionLayout}).
+ * from {@link PublicAppShell}.
  */
 export function CustomerOnboardingFlow() {
   const navigate = useNavigate();
-  const registryLang = usePublicPrototypeRegistryLanguageHeaderProps();
   const { stepId } = useParams<{ stepId: string }>();
   const [searchParams] = useSearchParams();
   const { flowState, resolvedContext } = useOnboardingFlowState();
@@ -65,8 +61,6 @@ export function CustomerOnboardingFlow() {
     activeStep: flowSurfaceStep,
     onRegistrationStepChange,
     signInUrl: PUBLIC_GUEST_LOGIN_PATH,
-    registryHeaderLeadingActions: <WelcomePublicHeaderLeading />,
-    registryHeaderTrailingActions: <WelcomePublicHeaderTrailing />,
   });
 
   const svcParam = searchParams.get("service")?.trim() ?? "";
@@ -106,7 +100,7 @@ export function CustomerOnboardingFlow() {
   return (
     <OnboardingFlowView
       {...viewProps}
-      {...registryLang}
+      embeddedRegistryShell
       backAction={isFirstRegistrationStep ? undefined : viewProps.backAction}
       cancelAction={cancelAction}
     />

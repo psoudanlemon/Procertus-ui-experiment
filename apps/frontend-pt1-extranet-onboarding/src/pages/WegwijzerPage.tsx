@@ -15,7 +15,6 @@ import {
   AlertTitle,
   Button,
   Card,
-  DensityProvider,
   DownloadableItemGrid,
   type DownloadableItemData,
   H3,
@@ -29,7 +28,6 @@ import {
   ItemGroup,
   ItemTitle,
   PageHeader,
-  PublicRegistryAppShell,
   Skeleton,
 } from "@procertus-ui/ui";
 import {
@@ -43,12 +41,6 @@ import {
   type CertificationEntryId,
   type CertificationRequestDraft,
 } from "@procertus-ui/ui-certification";
-import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
-import { ActiveInquiryContinueAlert } from "../layouts/ActiveInquiryContinueAlert";
-import { APP_FOOTER } from "../layouts/footerConfig";
-import { usePublicPrototypeRegistryLanguageHeaderProps } from "../layouts/PublicPrototypeLanguageContext";
-import { WelcomePublicHeaderLeading } from "../layouts/WelcomePublicHeaderLeading";
-import { WelcomePublicHeaderTrailing } from "../layouts/WelcomePublicHeaderTrailing";
 import {
   WEGWIJZER_SERVICES,
   type WegwijzerService,
@@ -59,7 +51,6 @@ import {
   clearTrajectBreadcrumbs,
   persistTrajectHandoff,
 } from "../features/traject/traject-submission-context";
-import { PUBLIC_GUEST_LOGIN_PATH } from "../routes/guestPaths";
 
 /** Eerste stap van de TrajectFlow: producttype kiezen en aanvraag controleren in de wizard, voor de triage-keuze. */
 const TRAJECT_CONFIGURE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}/start`;
@@ -67,8 +58,7 @@ const TRAJECT_CONFIGURE_PATH = (serviceId: string) => `/welcome/aanvraag/${servi
  * Sprong rechtstreeks naar de validatiepagina, gebruikt vanuit detail-cards van
  * niet-product-gebonden certificaten (`productRelation === "optional"`).
  */
-const REQUEST_REVIEW_PATH = (serviceId: string) =>
-  `/welcome/aanvraag/${serviceId}/controleren`;
+const REQUEST_REVIEW_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}/controleren`;
 const EXPERT_CALL_PATH = (serviceId?: string) =>
   serviceId ? `/welcome/expert-call/${serviceId}` : "/welcome/expert-call";
 /** Detail-card "Hulp nodig?" stuurt mee dat het certificaat al in beeld is, zonder verdere wizard-context. */
@@ -97,8 +87,6 @@ const VALID_SERVICE_IDS = new Set<string>([
 // ---------------------------------------------------------------------------
 
 export function WegwijzerPage() {
-  const navigate = useNavigate();
-  const registryLang = usePublicPrototypeRegistryLanguageHeaderProps();
   const [searchParams, setSearchParams] = useSearchParams();
   const explorerRef = useRef<HTMLDivElement>(null);
 
@@ -140,56 +128,31 @@ export function WegwijzerPage() {
   const activeService = WEGWIJZER_SERVICES.find((s) => s.entry.id === activeId);
 
   return (
-    <DensityProvider density="operational">
-      <PublicRegistryAppShell
-        hideFab
-        header={{
-          logo: (
-            <img
-              src={procertusLogo}
-              alt="PROCERTUS, certification that builds trust"
-              className="h-8 w-auto dark:brightness-0 dark:invert"
-            />
-          ),
-          onLogin: () => navigate(PUBLIC_GUEST_LOGIN_PATH),
-          loginUrl: PUBLIC_GUEST_LOGIN_PATH,
-          leadingActions: <WelcomePublicHeaderLeading />,
-          trailingActions: <WelcomePublicHeaderTrailing />,
-          guestLanguagePlacement: "leading",
-          ...registryLang,
-        }}
-        footer={APP_FOOTER}
-      >
-        <div className="mx-auto w-full max-w-7xl">
-          <div className="px-boundary pt-boundary">
-            <ActiveInquiryContinueAlert />
-          </div>
-          <Hero />
+    <div className="mx-auto w-full max-w-7xl">
+      <Hero />
 
-          <div ref={explorerRef} className="px-boundary pb-boundary scroll-mt-section">
-            <CatalogueExplorer
-              items={CHOICE_BAR_ITEMS}
-              activeId={activeId}
-              onActiveIdChange={setActiveId}
-              ariaLabel="Kies een certificaat"
-              navLabels={{ prev: "Vorige certificaat", next: "Volgende certificaat" }}
-            >
-              {activeId === ALL_ID ? (
-                <AllCertificatesGrid
-                  primary={PRIMARY_SERVICES}
-                  external={EXTERNAL_SERVICES}
-                  onSelect={setActiveId}
-                />
-              ) : activeId === ANDERE_ID ? (
-                <ExternalReferralGrid services={EXTERNAL_SERVICES} />
-              ) : activeService ? (
-                <MasterCard service={activeService} onClose={handleResetToOverview} />
-              ) : null}
-            </CatalogueExplorer>
-          </div>
-        </div>
-      </PublicRegistryAppShell>
-    </DensityProvider>
+      <div ref={explorerRef} className="px-boundary pb-boundary scroll-mt-section">
+        <CatalogueExplorer
+          items={CHOICE_BAR_ITEMS}
+          activeId={activeId}
+          onActiveIdChange={setActiveId}
+          ariaLabel="Kies een certificaat"
+          navLabels={{ prev: "Vorige certificaat", next: "Volgende certificaat" }}
+        >
+          {activeId === ALL_ID ? (
+            <AllCertificatesGrid
+              primary={PRIMARY_SERVICES}
+              external={EXTERNAL_SERVICES}
+              onSelect={setActiveId}
+            />
+          ) : activeId === ANDERE_ID ? (
+            <ExternalReferralGrid services={EXTERNAL_SERVICES} />
+          ) : activeService ? (
+            <MasterCard service={activeService} onClose={handleResetToOverview} />
+          ) : null}
+        </CatalogueExplorer>
+      </div>
+    </div>
   );
 }
 
@@ -365,13 +328,7 @@ function ExternalReferralItem({ service }: { service: WegwijzerService }) {
 // Master Card — selected service detail
 // ---------------------------------------------------------------------------
 
-function MasterCard({
-  service,
-  onClose,
-}: {
-  service: WegwijzerService;
-  onClose: () => void;
-}) {
+function MasterCard({ service, onClose }: { service: WegwijzerService; onClose: () => void }) {
   const navigate = useNavigate();
   const { entry, externalReferral } = service;
   const isInnovation = entry.id === "innovation-attest";

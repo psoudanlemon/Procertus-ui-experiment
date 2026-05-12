@@ -191,20 +191,17 @@
     @apply bg-background text-foreground;
   }
   /*
-   * Public registry/onboarding chrome: copyright footer + traject action bar stay
-   * on a white surface regardless of the active theme. Both Storybook
-   * (`PublicLayoutDecorator`) and the app's `PublicAppShell` set
-   * `data-public-layout` on `<html>`, so the same rule paints in stories and in
-   * production.
+   * Public registry/onboarding (light appearance): footer + traject sticky bar use a
+   * crisp neutral strip. Under `html.dark`, semantic `--sidebar` / `--card` apply instead.
    */
-  html[data-public-layout] [data-slot="footer"] {
+  html[data-public-layout]:not(.dark) [data-slot="footer"] {
     --sidebar: var(--neutral-white);
     --sidebar-foreground: var(--neutral-950);
     --sidebar-accent-foreground: var(--brand-primary-700);
     --card: var(--neutral-white);
     --card-foreground: var(--neutral-950);
   }
-  html[data-public-layout] [data-slot="traject-action-bar"] {
+  html[data-public-layout]:not(.dark) [data-slot="traject-action-bar"] {
     --card: var(--neutral-100);
     --card-foreground: var(--foreground);
   }

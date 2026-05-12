@@ -43,6 +43,7 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
     activeLanguage,
     onLanguageChange,
     guestLanguagePlacement,
+    embeddedRegistryShell,
   } = props;
 
   const registrationChrome = mergeRegistrationChromeCopy(
@@ -53,6 +54,7 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
   return (
     <>
       <OnboardingShell
+        embedded={embeddedRegistryShell}
         pageTitle={registrationPhaseTitle}
         pageDescription={registrationPhaseDescription}
         onSignInClick={onSignInClick}

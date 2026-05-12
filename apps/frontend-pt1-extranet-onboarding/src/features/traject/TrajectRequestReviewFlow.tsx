@@ -5,7 +5,7 @@ import {
   ProductDocumentationLibrary,
   ProductInquiryMatrix,
   ProductRequestNoteField,
-  TrajectLayout,
+  TrajectPageFrame,
   TrajectStoryFooter,
   buildProductDocumentsForDraft,
   groupDraftsByProduct,
@@ -15,8 +15,6 @@ import {
 import { useCallback, useMemo, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
-import { APP_FOOTER } from "../../layouts/footerConfig";
-import { PUBLIC_GUEST_LOGIN_PATH } from "../../routes/guestPaths";
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
 import { readOnboardingFlowSnapshot } from "./traject-submission-context";
 
@@ -103,9 +101,7 @@ export function TrajectRequestReviewFlow() {
   }
 
   return (
-    <TrajectLayout
-      onSignInClick={() => navigate(PUBLIC_GUEST_LOGIN_PATH)}
-      footer={APP_FOOTER}
+    <TrajectPageFrame
       bodyGap="section"
       kicker={service.entry.label}
       title={
@@ -191,6 +187,6 @@ export function TrajectRequestReviewFlow() {
           </>
         ) : null}
       </div>
-    </TrajectLayout>
+    </TrajectPageFrame>
   );
 }

@@ -1,5 +1,9 @@
-export { TrajectLayout } from "./TrajectLayout";
-export type { TrajectLayoutAction, TrajectLayoutProps } from "./TrajectLayout";
+export { TrajectLayout, TrajectPageFrame } from "./TrajectLayout";
+export type {
+  TrajectLayoutAction,
+  TrajectLayoutProps,
+  TrajectPageFrameProps,
+} from "./TrajectLayout";
 export { ProductCategoryTrail } from "./ProductCategoryTrail";
 export type { ProductCategoryTrailProps } from "./ProductCategoryTrail";
 export { ProductBasket } from "./ProductBasket";

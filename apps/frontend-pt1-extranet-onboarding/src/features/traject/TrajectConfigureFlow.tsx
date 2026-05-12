@@ -4,7 +4,7 @@ import {
   ProductSelectionBasketBody,
   ProductSelectionBasketMobileSummaryBar,
   ProductSelectionBasketProvider,
-  TrajectLayout,
+  TrajectPageFrame,
   buildProductIndex,
   defaultProcertusCategorizationDoc,
   type BundleCertKey,
@@ -14,9 +14,7 @@ import {
 import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
-import { APP_FOOTER } from "../../layouts/footerConfig";
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
-import { PUBLIC_GUEST_LOGIN_PATH } from "../../routes/guestPaths";
 import {
   persistTrajectHandoff,
   readOnboardingFlowSnapshot,
@@ -37,7 +35,7 @@ function isBundleCertService(value: string): value is BundleCertKey {
 }
 
 /**
- * Wizard-only step bundled with triage/start under {@link PublicWelcomeOnboardingSessionLayout}.
+ * Product selection wizard under {@link PublicAppShell}.
  */
 export function TrajectConfigureFlow() {
   const navigate = useNavigate();
@@ -128,9 +126,7 @@ export function TrajectConfigureFlow() {
       onContinue={handleContinue}
       onProductNotFound={handleProductNotFound}
     >
-      <TrajectLayout
-        onSignInClick={() => navigate(PUBLIC_GUEST_LOGIN_PATH)}
-        footer={APP_FOOTER}
+      <TrajectPageFrame
         bodyGap="section"
         kicker={service.entry.label}
         title="Selecteer de producten die je wil certificeren"
@@ -141,7 +137,7 @@ export function TrajectConfigureFlow() {
         actionBar={<ProductSelectionBasketActionBar />}
       >
         <ProductSelectionBasketBody />
-      </TrajectLayout>
+      </TrajectPageFrame>
     </ProductSelectionBasketProvider>
   );
 }

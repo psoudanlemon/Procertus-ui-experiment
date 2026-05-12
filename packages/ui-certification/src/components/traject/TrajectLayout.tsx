@@ -1,10 +1,4 @@
-import {
-  Button,
-  PageHeader,
-  PublicRegistryAppShell,
-  cn,
-  type FooterProps,
-} from "@procertus-ui/ui";
+import { Button, PageHeader, PublicRegistryAppShell, cn, type FooterProps } from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -15,11 +9,7 @@ export type TrajectLayoutAction = {
   onClick: () => void;
 };
 
-export type TrajectLayoutProps = {
-  /** Header sign-in callback (rendered as the "Log in" link in the public header). */
-  onSignInClick: () => void;
-  /** Footer config for {@link PublicRegistryAppShell}. Omit for pages that should not show the public footer. */
-  footer?: FooterProps;
+export type TrajectPageFrameProps = {
   /** Optional “Terug” link rendered above the page title block. */
   backAction?: TrajectLayoutAction;
   /** Small uppercase eyebrow above the page title (e.g. category label). */
@@ -50,20 +40,18 @@ export type TrajectLayoutProps = {
   bodyGap?: "region" | "section";
 };
 
+export type TrajectLayoutProps = TrajectPageFrameProps & {
+  /** Header sign-in callback (standalone shell — omitted when using {@link TrajectPageFrame} inside a host shell). */
+  onSignInClick: () => void;
+  /** Footer config for {@link PublicRegistryAppShell}. Omit for pages that should not show the public footer. */
+  footer?: FooterProps;
+};
+
 /**
- * Public traject pages (wegwijzer ➜ triage ➜ wizard ➜ expert call) share this chrome:
- * a capped 7xl content column with consistent boundary padding, optional back link,
- * a `PageHeader` for the title block, and an optional sticky action bar that pins to
- * the viewport bottom while page content scrolls.
- *
- * The sticky action bar lives inside this layout (not in `PublicRegistryAppShell`)
- * so the shell's footer can stay at the document end — when the user scrolls to the
- * footer, the action bar releases naturally above it. Page-specific content lives in
- * `children`.
+ * Traject page chrome inside an existing {@link PublicRegistryAppShell} (or Storybook wrapper).
+ * Title column, optional sticky action bar, no outer registry shell — see {@link TrajectLayout} for the full shell.
  */
-export function TrajectLayout({
-  onSignInClick,
-  footer,
+export function TrajectPageFrame({
   backAction,
   kicker,
   title,
@@ -72,49 +60,127 @@ export function TrajectLayout({
   actionBar,
   aboveActionBar,
   bodyGap = "region",
-}: TrajectLayoutProps) {
+}: TrajectPageFrameProps) {
   const gapClass = bodyGap === "section" ? "gap-section" : "gap-region";
   // Wanneer `aboveActionBar` aanwezig is (mobile-only samenvattingsbalk via `md:hidden`),
   // levert die zelf zijn `pb-component` (12px). De action-rij laat dan haar eigen top-padding
   // vallen op mobiel zodat de visuele tussenruimte exact 12px is, en herstelt `pt-region`
   // vanaf `md:` waar de bovenste balk is uitgeschakeld.
-  const actionRowSpacing =
-    aboveActionBar != null ? "pt-0 pb-section md:pt-section" : "py-section";
+  const actionRowSpacing = aboveActionBar != null ? "pt-0 pb-section md:pt-section" : "py-section";
 
   const actionBarRef = useRef<HTMLDivElement>(null);
   const [hasContentBelow, setHasContentBelow] = useState(false);
 
   useEffect(() => {
     if (actionBar == null) return;
-    const el = actionBarRef.current;
-    if (!el) return;
-    // Find the nearest scrolling ancestor — that's the shell's outer container.
-    let parent: HTMLElement | null = el.parentElement;
-    let scrollEl: HTMLElement | null = null;
-    while (parent) {
-      const overflowY = getComputedStyle(parent).overflowY;
-      if (overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay") {
-        scrollEl = parent;
-        break;
+    const barEl = actionBarRef.current;
+    if (barEl == null || typeof document === "undefined") return;
+
+    /**
+     * Guest/public layouts (`html[data-public-layout]`) often scroll the document instead of an
+     * inner overflow pane. Prefer ancestors whose overflow settings actually absorb scroll; fall
+     * back to the document when `html` is the scroll root.
+     */
+    function resolveScrollRoot(start: HTMLElement): HTMLElement | null {
+      let parent: HTMLElement | null = start.parentElement;
+      while (parent != null) {
+        const overflowY = getComputedStyle(parent).overflowY;
+        if (
+          overflowY === "auto" ||
+          overflowY === "scroll" ||
+          overflowY === "overlay"
+        ) {
+          if (parent.scrollHeight > parent.clientHeight + 2) return parent;
+        }
+        parent = parent.parentElement;
       }
-      parent = parent.parentElement;
+      const docEl = document.documentElement;
+      if (docEl.scrollHeight > window.innerHeight + 2) return docEl;
+      return null;
     }
-    if (!scrollEl) return;
+
+    const scrollRoot = resolveScrollRoot(barEl);
+    const isDocumentScroll =
+      scrollRoot == null || scrollRoot === document.documentElement;
+
     const update = () => {
+      if (isDocumentScroll) {
+        const docEl = document.documentElement;
+        const top = window.scrollY || docEl.scrollTop;
+        setHasContentBelow(top + window.innerHeight < docEl.scrollHeight - 1);
+        return;
+      }
       setHasContentBelow(
-        scrollEl.scrollTop + scrollEl.clientHeight < scrollEl.scrollHeight - 1,
+        scrollRoot.scrollTop + scrollRoot.clientHeight < scrollRoot.scrollHeight - 1,
       );
     };
+
     update();
-    scrollEl.addEventListener("scroll", update, { passive: true });
+
+    const scrollTarget: Window | HTMLElement = isDocumentScroll ? window : scrollRoot;
+    scrollTarget.addEventListener("scroll", update, { passive: true });
+
     const ro = new ResizeObserver(update);
-    ro.observe(scrollEl);
+    ro.observe(isDocumentScroll ? document.documentElement : scrollRoot);
+
     return () => {
-      scrollEl.removeEventListener("scroll", update);
+      scrollTarget.removeEventListener("scroll", update);
       ro.disconnect();
     };
   }, [actionBar]);
 
+  return (
+    <div data-slot="traject-layout" className="flex flex-1 flex-col">
+      <div className={`mx-auto flex w-full max-w-7xl flex-col p-boundary ${gapClass}`}>
+        {backAction ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="-ml-2 self-start text-muted-foreground"
+            onClick={backAction.onClick}
+          >
+            <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
+            {backAction.label}
+          </Button>
+        ) : null}
+        {title != null ? (
+          <PageHeader kicker={kicker} title={title} description={description} />
+        ) : null}
+        {children}
+      </div>
+      {actionBar ? (
+        <div
+          ref={actionBarRef}
+          data-slot="traject-action-bar"
+          className="sticky bottom-0 z-10 mt-auto rounded-b-xl bg-background"
+        >
+          <div
+            aria-hidden
+            className={cn(
+              "pointer-events-none absolute inset-x-0 -top-8 h-8 bg-linear-to-t from-card to-transparent transition-opacity duration-200",
+              hasContentBelow ? "opacity-100" : "opacity-0",
+            )}
+          />
+          <div className="rounded-b-md bg-card">
+            {aboveActionBar}
+            <div
+              className={`mx-auto flex w-full max-w-7xl items-center justify-between gap-component px-boundary ${actionRowSpacing}`}
+            >
+              {actionBar}
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/**
+ * Storybook / standalone: full {@link PublicRegistryAppShell} plus {@link TrajectPageFrame}.
+ * Host apps that already render the registry shell should use {@link TrajectPageFrame} only.
+ */
+export function TrajectLayout({ onSignInClick, footer, ...frame }: TrajectLayoutProps) {
   return (
     <PublicRegistryAppShell
       hideFab
@@ -130,49 +196,7 @@ export function TrajectLayout({
       }}
       footer={footer}
     >
-      <div data-slot="traject-layout" className="flex flex-1 flex-col">
-        <div className={`mx-auto flex w-full max-w-7xl flex-col p-boundary ${gapClass}`}>
-          {backAction ? (
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="-ml-2 self-start text-muted-foreground"
-              onClick={backAction.onClick}
-            >
-              <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
-              {backAction.label}
-            </Button>
-          ) : null}
-          {title != null ? (
-            <PageHeader kicker={kicker} title={title} description={description} />
-          ) : null}
-          {children}
-        </div>
-        {actionBar ? (
-          <div
-            ref={actionBarRef}
-            data-slot="traject-action-bar"
-            className="sticky bottom-0 z-10 mt-auto rounded-b-xl bg-background"
-          >
-            <div
-              aria-hidden
-              className={cn(
-                "pointer-events-none absolute inset-x-0 -top-8 h-8 bg-linear-to-t from-card to-transparent transition-opacity duration-200",
-                hasContentBelow ? "opacity-100" : "opacity-0",
-              )}
-            />
-            <div className="rounded-b-md bg-card">
-              {aboveActionBar}
-              <div
-                className={`mx-auto flex w-full max-w-7xl items-center justify-between gap-component px-boundary ${actionRowSpacing}`}
-              >
-                {actionBar}
-              </div>
-            </div>
-          </div>
-        ) : null}
-      </div>
+      <TrajectPageFrame {...frame} />
     </PublicRegistryAppShell>
   );
 }

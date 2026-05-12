@@ -3,12 +3,10 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { DensityProvider } from "@procertus-ui/ui";
 import {
   ExpertCallBookingView,
-  TrajectLayout,
+  TrajectPageFrame,
   TrajectStoryFooter,
 } from "@procertus-ui/ui-certification";
 
-import { APP_FOOTER } from "../layouts/footerConfig";
-import { PUBLIC_GUEST_LOGIN_PATH } from "../routes/guestPaths";
 import { useSyncOnboardingTrajectFromServiceId } from "../features/onboarding/use-sync-onboarding-traject-from-service-id";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
 import { readOnboardingFlowSnapshot } from "../features/traject/traject-submission-context";
@@ -56,24 +54,22 @@ export function InfoRequestPlaceholderPage() {
   };
 
   return (
-    <DensityProvider density="spacious">
-      <TrajectLayout
-        onSignInClick={() => navigate(PUBLIC_GUEST_LOGIN_PATH)}
-        footer={APP_FOOTER}
-        kicker={CATEGORY_LABEL[entry.category]}
-        title="Een informatieve aanvraag"
-        description="Gelieve uw gegevens achter te laten. Wij bekijken uw aanvraag en nemen binnenkort met u contact op om deze verder te bespreken."
-        bodyGap="section"
-        actionBar={
-          <TrajectStoryFooter
-            onCancel={handleCancel}
-            onBack={handleBack}
-            onContinue={handleSubmit}
-            continueLabel="Aanvraag verzenden"
-            continueDisabled={!canSubmit}
-          />
-        }
-      >
+    <TrajectPageFrame
+      kicker={CATEGORY_LABEL[entry.category]}
+      title="Een informatieve aanvraag"
+      description="Gelieve uw gegevens achter te laten. Wij bekijken uw aanvraag en nemen binnenkort met u contact op om deze verder te bespreken."
+      bodyGap="section"
+      actionBar={
+        <TrajectStoryFooter
+          onCancel={handleCancel}
+          onBack={handleBack}
+          onContinue={handleSubmit}
+          continueLabel="Aanvraag verzenden"
+          continueDisabled={!canSubmit}
+        />
+      }
+    >
+      <DensityProvider density="spacious">
         <ExpertCallBookingView
           idPrefix="info-request"
           storageKey={`procertus.info-request.${entry.id}`}
@@ -85,7 +81,7 @@ export function InfoRequestPlaceholderPage() {
             company: prefill.organizationName || undefined,
           }}
         />
-      </TrajectLayout>
-    </DensityProvider>
+      </DensityProvider>
+    </TrajectPageFrame>
   );
 }

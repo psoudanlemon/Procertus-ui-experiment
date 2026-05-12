@@ -31,6 +31,8 @@ export type OnboardingShellProps = {
   guestLanguagePlacement?: RegistryGuestLanguagePlacement;
   /** Rendered after {@link PageHeader}, before main content (e.g. session notices). */
   sessionBanner?: ReactNode;
+  /** When true, skip {@link PublicRegistryAppShell} — host supplies outer registry chrome + footer. */
+  embedded?: boolean;
   children: ReactNode;
 };
 
@@ -47,8 +49,21 @@ export function OnboardingShell({
   loginUrl,
   guestLanguagePlacement,
   sessionBanner,
+  embedded = false,
   children,
 }: OnboardingShellProps) {
+  const body = (
+    <div className="mx-auto flex w-full max-w-7xl flex-col gap-region p-boundary">
+      <PageHeader title={pageTitle} description={pageDescription} />
+      {sessionBanner}
+      {children}
+    </div>
+  );
+
+  if (embedded) {
+    return body;
+  }
+
   return (
     <PublicRegistryAppShell
       header={{
@@ -70,11 +85,7 @@ export function OnboardingShell({
       }}
       hideFab
     >
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-region p-boundary">
-        <PageHeader title={pageTitle} description={pageDescription} />
-        {sessionBanner}
-        {children}
-      </div>
+      {body}
     </PublicRegistryAppShell>
   );
 }

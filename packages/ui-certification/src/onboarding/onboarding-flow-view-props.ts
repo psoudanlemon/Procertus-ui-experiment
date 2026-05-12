@@ -72,6 +72,8 @@ export type OnboardingFlowViewProps = {
   onLanguageChange?: RegistryHeaderLanguageProps["onLanguageChange"];
   /** Guest language control placement for {@link PublicRegistryHeaderProps}. */
   guestLanguagePlacement?: PublicRegistryHeaderProps["guestLanguagePlacement"];
+  /** Host-provided registry shell — omit duplicate {@link PublicRegistryAppShell} wrapper. */
+  embeddedRegistryShell?: boolean;
   /** Optional StepLayout title/description overrides per registration step (i18n). */
   registrationChromeOverrides?: Partial<
     Record<OnboardingStep, Partial<RegistrationStepChromeCopy>>

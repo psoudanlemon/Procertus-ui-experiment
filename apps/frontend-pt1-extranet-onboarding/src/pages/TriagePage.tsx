@@ -16,10 +16,8 @@ import {
   H2,
   H3,
 } from "@procertus-ui/ui";
-import { TrajectLayout, TrajectStoryFooter } from "@procertus-ui/ui-certification";
-import { APP_FOOTER } from "../layouts/footerConfig";
+import { TrajectPageFrame, TrajectStoryFooter } from "@procertus-ui/ui-certification";
 import { FORMAL_ONBOARDING_PATH } from "../routes/formal-request-routing";
-import { PUBLIC_GUEST_LOGIN_PATH } from "../routes/guestPaths";
 import { useSyncOnboardingTrajectFromServiceId } from "../features/onboarding/use-sync-onboarding-traject-from-service-id";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
 import { TRAJECT_ENTRY_POINT_QUERY_PARAM } from "../features/traject/traject-submission-context";
@@ -63,9 +61,7 @@ export function TriagePage() {
   };
 
   return (
-    <TrajectLayout
-      onSignInClick={() => navigate(PUBLIC_GUEST_LOGIN_PATH)}
-      footer={APP_FOOTER}
+    <TrajectPageFrame
       kicker={CATEGORY_LABEL[entry.category]}
       title="Wat voor aanvraag wilt u graag indienen?"
       description="Kies een vrijblijvende informatieaanvraag voor een prijsopgave en advies, of start meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen."
@@ -135,7 +131,7 @@ export function TriagePage() {
             </Button>
           </Card>
         </div>
-    </TrajectLayout>
+    </TrajectPageFrame>
   );
 }
 

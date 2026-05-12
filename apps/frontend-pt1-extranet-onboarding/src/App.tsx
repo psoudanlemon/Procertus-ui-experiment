@@ -2,7 +2,6 @@ import { useMockPrototypeIsAuthenticated } from "@procertus-ui/ui-pt1-prototype"
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthenticatedAppShell } from "./layouts/AuthenticatedAppShell";
 import { PublicAppShell } from "./layouts/PublicAppShell";
-import { PublicWelcomeOnboardingSessionLayout } from "./layouts/PublicWelcomeOnboardingSessionLayout";
 import { RequestsOverviewPage } from "./pages/RequestsOverviewPage";
 import { RequestDetailPage } from "./pages/RequestDetailPage";
 import { CategorizationDemoPage } from "./pages/CategorizationDemoPage";
@@ -52,26 +51,25 @@ export default function App() {
         element={<InfoRequestSubmittedPage />}
       />
 
+      <Route path="/login" element={<SignupPage />} />
+
       <Route element={<PublicAppShell />}>
-        <Route path="/login" element={<SignupPage />} />
         <Route path="/welcome" element={<WegwijzerPage />} />
-        <Route element={<PublicWelcomeOnboardingSessionLayout />}>
-          <Route path="/welcome/aanvraag/:serviceId/start" element={<TrajectConfigureFlow />} />
-          <Route
-            path="/welcome/aanvraag/:serviceId/pakket"
-            element={<TrajectBundleAssembleFlow />}
-          />
-          <Route
-            path="/welcome/aanvraag/:serviceId/controleren"
-            element={<TrajectRequestReviewFlow />}
-          />
-          <Route path="/welcome/aanvraag/:serviceId" element={<TriagePage />} />
-          <Route path="/welcome/formal-request" element={<FormalRequestStepRedirect />} />
-          <Route path="/welcome/formal-request/:stepId" element={<CustomerOnboardingFlow />} />
-          <Route path="/welcome/info-request/:serviceId" element={<InfoRequestPlaceholderPage />} />
-          <Route path="/welcome/expert-call" element={<ExpertCallPlaceholderPage />} />
-          <Route path="/welcome/expert-call/:serviceId" element={<ExpertCallPlaceholderPage />} />
-        </Route>
+        <Route path="/welcome/aanvraag/:serviceId/start" element={<TrajectConfigureFlow />} />
+        <Route
+          path="/welcome/aanvraag/:serviceId/pakket"
+          element={<TrajectBundleAssembleFlow />}
+        />
+        <Route
+          path="/welcome/aanvraag/:serviceId/controleren"
+          element={<TrajectRequestReviewFlow />}
+        />
+        <Route path="/welcome/aanvraag/:serviceId" element={<TriagePage />} />
+        <Route path="/welcome/formal-request" element={<FormalRequestStepRedirect />} />
+        <Route path="/welcome/formal-request/:stepId" element={<CustomerOnboardingFlow />} />
+        <Route path="/welcome/info-request/:serviceId" element={<InfoRequestPlaceholderPage />} />
+        <Route path="/welcome/expert-call" element={<ExpertCallPlaceholderPage />} />
+        <Route path="/welcome/expert-call/:serviceId" element={<ExpertCallPlaceholderPage />} />
       </Route>
 
       <Route element={<RequireAuth />}>

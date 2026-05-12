@@ -4,7 +4,7 @@ import {
   BundleAssembleActionBar,
   BundleAssembleBody,
   BundleAssembleProvider,
-  TrajectLayout,
+  TrajectPageFrame,
   type BundleCertKey,
   type BundleProduct,
   type CertificationEntryId,
@@ -13,8 +13,6 @@ import {
 import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
-import { APP_FOOTER } from "../../layouts/footerConfig";
-import { PUBLIC_GUEST_LOGIN_PATH } from "../../routes/guestPaths";
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
 import {
   persistTrajectHandoff,
@@ -153,9 +151,7 @@ export function TrajectBundleAssembleFlow() {
       onCancel={handleCancel}
       onContinue={handleContinue}
     >
-      <TrajectLayout
-        onSignInClick={() => navigate(PUBLIC_GUEST_LOGIN_PATH)}
-        footer={APP_FOOTER}
+      <TrajectPageFrame
         bodyGap="section"
         kicker={service.entry.label}
         title="Voeg per product certificaten toe"
@@ -163,7 +159,7 @@ export function TrajectBundleAssembleFlow() {
         actionBar={<BundleAssembleActionBar />}
       >
         <BundleAssembleBody />
-      </TrajectLayout>
+      </TrajectPageFrame>
     </BundleAssembleProvider>
   );
 }

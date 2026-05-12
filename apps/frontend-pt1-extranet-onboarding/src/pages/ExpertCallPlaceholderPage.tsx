@@ -9,12 +9,10 @@ import {
 import { DensityProvider } from "@procertus-ui/ui";
 import {
   ExpertCallBookingView,
-  TrajectLayout,
+  TrajectPageFrame,
   TrajectStoryFooter,
 } from "@procertus-ui/ui-certification";
 
-import { APP_FOOTER } from "../layouts/footerConfig";
-import { PUBLIC_GUEST_LOGIN_PATH } from "../routes/guestPaths";
 import { useSyncOnboardingTrajectFromServiceId } from "../features/onboarding/use-sync-onboarding-traject-from-service-id";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
 import {
@@ -78,24 +76,22 @@ export function ExpertCallPlaceholderPage() {
   };
 
   return (
-    <DensityProvider density="spacious">
-      <TrajectLayout
-        onSignInClick={() => navigate(PUBLIC_GUEST_LOGIN_PATH)}
-        footer={APP_FOOTER}
-        kicker={entry ? CATEGORY_LABEL[entry.category] : undefined}
-        title="Plan een expert call"
-        description="Eén uur live met een PROCERTUS-expert om uw vraag, uw dossier en de juiste route samen door te nemen."
-        bodyGap="section"
-        actionBar={
-          <TrajectStoryFooter
-            onCancel={handleCancel}
-            onBack={handleBack}
-            onContinue={() => {}}
-            continueLabel="Verzenden"
-            continueDisabled={!canSubmit}
-          />
-        }
-      >
+    <TrajectPageFrame
+      kicker={entry ? CATEGORY_LABEL[entry.category] : undefined}
+      title="Plan een expert call"
+      description="Eén uur live met een PROCERTUS-expert om uw vraag, uw dossier en de juiste route samen door te nemen."
+      bodyGap="section"
+      actionBar={
+        <TrajectStoryFooter
+          onCancel={handleCancel}
+          onBack={handleBack}
+          onContinue={() => {}}
+          continueLabel="Verzenden"
+          continueDisabled={!canSubmit}
+        />
+      }
+    >
+      <DensityProvider density="spacious">
         <ExpertCallBookingView
           idPrefix="expert-call"
           storageKey={`procertus.expert-call.${entry?.id ?? "hero"}`}
@@ -107,7 +103,7 @@ export function ExpertCallPlaceholderPage() {
             company: prefill.organizationName || undefined,
           }}
         />
-      </TrajectLayout>
-    </DensityProvider>
+      </DensityProvider>
+    </TrajectPageFrame>
   );
 }
