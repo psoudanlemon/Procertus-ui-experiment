@@ -1,0 +1,34 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "b20ac3b69f4e",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/ActiveInquiryContinueAlert.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/ExpertCallPlaceholderPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/routes/guestPaths.ts",
+    "packages/ui-certification/src/components/traject/ExpertCallBookingView.tsx",
+    "packages/ui-certification/src/components/traject/index.ts",
+    "packages/ui-certification/src/index.ts",
+    "packages/ui-certification/src/onboarding/index.ts",
+    "packages/ui-certification/src/onboarding/onboarding-default-flow-state.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-api.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-provider.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-story-fixtures.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-types.ts",
+    "packages/ui-certification/src/onboarding/use-active-formal-inquiry-continue-banner.ts",
+    "packages/ui/src/components/public-header.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/b2/0ac3b69f4e/0/metadata.json",
+      "transcript": "/b2/0ac3b69f4e/0/full.jsonl",
+      "content_hash": "/b2/0ac3b69f4e/0/content_hash.txt",
+      "prompt": "/b2/0ac3b69f4e/0/prompt.txt"
+    }
+  ]
+}
