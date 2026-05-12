@@ -1,0 +1,40 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "2eb0b5823fdd",
+  "session_id": "c2709645-4c90-4f30-8642-9709e704d803",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-12T08:36:43.558884Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/traject-submission-context.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/PublicCertificationRequestsCart.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/routes/formal-request-routing.ts",
+    "packages/ui-certification/src/components/onboarding/certification-inquiries-overview/CertificationInquiriesOverviewCard.tsx",
+    "packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyLegalEntitiesStep.tsx",
+    "packages/ui-certification/src/components/traject/BundleAssemble.tsx",
+    "packages/ui-certification/src/components/traject/ProductInquiryMatrix.tsx"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "7a01a5e25653",
+  "session_metrics": {
+    "turn_count": 6,
+    "context_tokens": 189195,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-12T08:36:43.55131Z",
+    "agent_lines": 12,
+    "agent_removed": 17,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 12,
+    "total_lines_changed": 29,
+    "agent_percentage": 100,
+    "metric_version": 2
+  }
+}

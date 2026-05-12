@@ -1,0 +1,13 @@
+Resolve these 37 merge conflicts across 21 files @Branch
+
+---
+
+Resolve these 37 merge conflicts across 21 files @Branch
+
+---
+
+@Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/App.tsx are you sure no conflicts remain? @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/customer-onboarding/CustomerOnboardingFlow.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/ExpertCallPlaceholderPage.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx @Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx @Procertus-ui-experiment/packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyStep.tsx @Procertus-ui-experiment/packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx @Procertus-ui-experiment/packages/ui-certification/src/components/onboarding/invoicing-step/OnboardingInvoicingStep.tsx @Procertus-ui-experiment/packages/ui-certification/src/components/onboarding/request-step/OnboardingRequestStep.tsx @Procertus-ui-experiment/packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx @Procertus-ui-experiment/packages/ui-certification/src/onboarding/onboarding-constants.ts @Procertus-ui-experiment/packages/ui-certification/src/onboarding/onboarding-default-flow-state.ts @Procertus-ui-experiment/packages/ui-certification/src/onboarding/onboarding-flow-api.ts @Procertus-ui-experiment/packages/ui-certification/src/onboarding/onboarding-flow-provider.tsx @Procertus-ui-experiment/packages/ui-certification/src/onboarding/onboarding-flow-view-props.ts @Procertus-ui-experiment/packages/ui-certification/src/onboarding/onboarding-flow-view.stories.tsx @Procertus-ui-experiment/packages/ui-certification/src/onboarding/onboarding-flow-view.tsx @Procertus-ui-experiment/packages/ui-certification/src/onboarding/onboarding-story-fixtures.tsx @Procertus-ui-experiment/packages/ui-certification/src/onboarding/use-onboarding-flow.tsx @Procertus-ui-experiment/packages/ui-certification/src/onboarding/use-onboarding-registration-layout-model.ts
+
+---
+
+@Procertus-ui-experiment/packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyStep.tsx "Deleted by us" and "changed by them." How do I resolve this?
