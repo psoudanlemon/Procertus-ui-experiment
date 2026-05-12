@@ -16,6 +16,7 @@ import { SignupPage } from "./pages/SignupPage";
 import { WegwijzerPage } from "./pages/WegwijzerPage";
 import { TriagePage } from "./pages/TriagePage";
 import { InfoRequestPlaceholderPage } from "./pages/InfoRequestPlaceholderPage";
+import { InfoRequestSubmittedPage } from "./pages/InfoRequestSubmittedPage";
 import { ExpertCallPlaceholderPage } from "./pages/ExpertCallPlaceholderPage";
 import { OrganizationPage } from "./pages/OrganizationPage";
 import { OrganizationProfilePage } from "./pages/OrganizationProfilePage";
@@ -44,6 +45,10 @@ export default function App() {
     <Routes>
       <Route path="/" element={<RootRedirect />} />
       <Route path="/registratie-voltooid" element={<OnboardingRegistrationCompletePage />} />
+      <Route
+        path="/welcome/info-request/:serviceId/verzonden"
+        element={<InfoRequestSubmittedPage />}
+      />
 
       <Route element={<PublicAppShell />}>
         <Route path="/welcome" element={<WegwijzerPage />} />

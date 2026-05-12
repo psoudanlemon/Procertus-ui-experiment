@@ -1,11 +1,5 @@
 import { useMemo, useState } from "react";
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { DensityProvider } from "@procertus-ui/ui";
 import {
   ExpertCallBookingView,
@@ -14,12 +8,7 @@ import {
 } from "@procertus-ui/ui-certification";
 import { APP_FOOTER } from "../layouts/footerConfig";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
-import {
-  TRAJECT_ENTRY_POINT_QUERY_PARAM,
-  isTrajectEntryPoint,
-  readOnboardingFlowSnapshot,
-  type TrajectEntryPoint,
-} from "../features/traject/traject-submission-context";
+import { readOnboardingFlowSnapshot } from "../features/traject/traject-submission-context";
 
 const LOGIN_PATH = "/welcome/login";
 const WEGWIJZER_PATH = "/welcome";
@@ -33,16 +22,9 @@ const CATEGORY_LABEL = {
 
 export function InfoRequestPlaceholderPage() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { serviceId } = useParams<{ serviceId: string }>();
-  const [searchParams] = useSearchParams();
   const service = findWegwijzerService(serviceId);
   const [canSubmit, setCanSubmit] = useState(false);
-
-  const fromParam = searchParams.get(TRAJECT_ENTRY_POINT_QUERY_PARAM);
-  const entryPoint: TrajectEntryPoint | undefined = isTrajectEntryPoint(fromParam)
-    ? fromParam
-    : undefined;
 
   const flowSnapshot = useMemo(() => readOnboardingFlowSnapshot(), []);
   const prefill = flowSnapshot.context;
@@ -58,14 +40,16 @@ export function InfoRequestPlaceholderPage() {
   };
 
   const handleBack = () => {
-    if (location.key !== "default") {
-      navigate(-1);
-    } else {
-      const triageQuery = entryPoint
-        ? `?${TRAJECT_ENTRY_POINT_QUERY_PARAM}=${entryPoint}`
-        : "";
-      navigate(`/welcome/aanvraag/${entry.id}${triageQuery}`);
+    navigate(-1);
+  };
+
+  const handleSubmit = () => {
+    try {
+      window.sessionStorage.removeItem(`procertus.info-request.${entry.id}`);
+    } catch {
+      // sessionStorage may be unavailable — ignore.
     }
+    navigate(`/welcome/info-request/${entry.id}/verzonden`, { replace: true });
   };
 
   return (
@@ -74,15 +58,15 @@ export function InfoRequestPlaceholderPage() {
         onSignInClick={() => navigate(LOGIN_PATH)}
         footer={APP_FOOTER}
         kicker={CATEGORY_LABEL[entry.category]}
-        title="Plan een expert call"
-        description="Eén uur live met een PROCERTUS-expert om uw vraag, uw dossier en de juiste route samen door te nemen."
+        title="Een informatieve aanvraag"
+        description="Gelieve uw gegevens achter te laten. Wij bekijken uw aanvraag en nemen binnenkort met u contact op om deze verder te bespreken."
         bodyGap="section"
         actionBar={
           <TrajectStoryFooter
             onCancel={handleCancel}
             onBack={handleBack}
-            onContinue={() => {}}
-            continueLabel="Verzenden"
+            onContinue={handleSubmit}
+            continueLabel="Aanvraag verzenden"
             continueDisabled={!canSubmit}
           />
         }
