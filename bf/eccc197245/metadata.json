@@ -1,0 +1,18 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "bfeccc197245",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 12,
+  "files_touched": [
+    "packages/ui/src/components/ui/sheet.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/bf/eccc197245/0/metadata.json",
+      "transcript": "/bf/eccc197245/0/full.jsonl",
+      "content_hash": "/bf/eccc197245/0/content_hash.txt",
+      "prompt": "/bf/eccc197245/0/prompt.txt"
+    }
+  ]
+}
