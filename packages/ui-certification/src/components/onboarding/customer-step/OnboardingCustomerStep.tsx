@@ -55,25 +55,27 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
         title="Voorbeeldmodus"
         description={
           <>
-            Kies een voorbeeld om het identificatieveld hieronder automatisch in te vullen en de flow
-            te doorlopen. U kunt het nummer altijd zelf aanpassen. Bij een andere keuze worden naam,
-            aanhef, functie en e-mail bijgewerkt en worden bedrijfsgegevens leeggemaakt tot de
+            Kies een voorbeeld om het identificatieveld hieronder automatisch in te vullen en de
+            flow te doorlopen. U kunt het nummer altijd zelf aanpassen. Bij een andere keuze worden
+            naam, aanhef, functie en e-mail bijgewerkt en worden bedrijfsgegevens leeggemaakt tot de
             opzoeking klaar is.
           </>
         }
         notice={
           activeVatPreset?.demoSupplementsOrgAddressFromEmailDomain ? (
             <>
-              <span className="font-medium text-foreground">Let op bij dit voorbeeld:</span> uw nummer
-              levert hier geen bedrijfsnaam en volledig adres op. Waar mogelijk vullen we die aan op
-              basis van uw professionele e-mailadres. Controleer de velden. Gebruikt u een gratis of
-              algemeen e-mailadres, vult u naam en adres zelf in.
+              <span className="font-medium text-foreground">Let op bij dit voorbeeld:</span> uw
+              nummer levert hier geen bedrijfsnaam en volledig adres op. Waar mogelijk vullen we die
+              aan op basis van uw professionele e-mailadres. Controleer de velden. Gebruikt u een
+              gratis of algemeen e-mailadres, vult u naam en adres zelf in.
             </>
           ) : undefined
         }
       >
         <Field>
-          <FieldLabel htmlFor="prototype-vat-preset">Voorbeeld btw- / ondernemingsnummer</FieldLabel>
+          <FieldLabel htmlFor="prototype-vat-preset">
+            Voorbeeld btw- / ondernemingsnummer
+          </FieldLabel>
           <FieldContent>
             <Select
               value={prototypeVatPresetId}
