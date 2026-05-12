@@ -1,0 +1,35 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "a2f90df833e1",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/App.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/customer-onboarding/CustomerOnboardingFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/layouts/PublicWelcomeOnboardingSessionLayout.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/ExpertCallPlaceholderPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx",
+    "packages/ui-certification/src/components/onboarding/shell/OnboardingShell.tsx",
+    "packages/ui-certification/src/components/traject/TrajectLayout.tsx",
+    "packages/ui-certification/src/components/traject/index.ts",
+    "packages/ui-certification/src/index.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-view-props.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-view.tsx",
+    "packages/ui/src/styles/globals.css"
+  ],
+  "sessions": [
+    {
+      "metadata": "/a2/f90df833e1/0/metadata.json",
+      "transcript": "/a2/f90df833e1/0/full.jsonl",
+      "content_hash": "/a2/f90df833e1/0/content_hash.txt",
+      "prompt": "/a2/f90df833e1/0/prompt.txt"
+    }
+  ]
+}

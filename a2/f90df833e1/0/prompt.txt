@@ -1,0 +1,37 @@
+@apps/frontend-pt1-extranet-onboarding/src/App.tsx:57 we have a public app shell, but it currently only contains the correct providers for onboarding. Individual pages have their own app shell.
+
+I want to set up a reusable app shell with the correct providers in the top layout route so we don't need to duplicate app shells for every page. I also want all pages to use the same app shell. @apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx:142-165 
+
+ I want the density provider, the public registry app shell together with the onLogin, the header, the leading action, the trailing action, and the footer to be part of the new setup.
+
+I also want the active inquiry and continue alert included. 
+
+@apps/frontend-pt1-extranet-onboarding/src/App.tsx:59  I think this route grouping can be removed since it doesn't add anything to the layout. @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicWelcomeOnboardingSessionLayout.tsx 
+
+@packages/ui-certification/src/components/traject/TrajectLayout.tsx @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx:131-144 
+
+ we also have a TrajectLayout that contains AppShell and needs to be consolidated in the  @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/App.tsx:57 we have a public app shell, but it currently only contains the correct providers for onboarding. Individual pages have their own app shell.
+
+I want to set up a reusable app shell with the correct providers in the top layout route so we don't need to duplicate app shells for every page. I also want all pages to use the same app shell. @apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx:142-165 
+
+ I want the density provider, the public registry app shell together with the onLogin, the header, the leading action, the trailing action, and the footer to be part of the new setup.
+
+I also want the active inquiry and continue alert included. 
+
+@apps/frontend-pt1-extranet-onboarding/src/App.tsx:59  I think this route grouping can be removed since it doesn't add anything to the layout. @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicWelcomeOnboardingSessionLayout.tsx 
+
+@packages/ui-certification/src/components/traject/TrajectLayout.tsx @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx:131-144 
+
+ we also have a TrajectLayout that contains AppShell and needs to be consolidated in the  @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx
+
+---
+
+When I switch to dark mode, the footer and action bar with the dimmed scroll semi-transparent gradient overlay do not adapt to the dark theme. Please see the screenshot. @packages/ui/src/components/app-shell/public-registry-app-shell.tsx:110-114 @packages/ui/src/components/footer.tsx
+
+---
+
+We have now lost the semi-transparent gradient overlay when scrolling. Both in light and dark mode.
