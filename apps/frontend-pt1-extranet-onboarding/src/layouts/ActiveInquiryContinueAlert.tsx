@@ -1,62 +1,42 @@
 import { ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Alert, AlertDescription, AlertTitle, Button } from "@procertus-ui/ui";
-import {
-  deriveFormalOnboardingResumeStep,
-  effectiveIncludedCertificationDraftIds,
-  useOnboardingFlowState,
-} from "@procertus-ui/ui-certification";
-import { useMemo } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { FORMAL_ONBOARDING_PATH, formalOnboardingStepPath } from "../routes/formal-request-routing";
+export type ActiveInquiryContinueAlertProps = {
+  includedCount: number;
+  continuePath: string;
+};
 
 /**
- * Shown on guest “intake” pages when the session already has certification inquiries selected,
- * so users know they can continue the in‑progress request instead of only browsing.
+ * Presentational banner — visibility is decided by the shell via `useActiveFormalInquiryContinueBanner`.
  */
-export function ActiveInquiryContinueAlert() {
-  const location = useLocation();
-  const { flowState, resolvedContext } = useOnboardingFlowState();
-
-  const includedCount = useMemo(
-    () =>
-      effectiveIncludedCertificationDraftIds(
-        flowState.drafts,
-        flowState.summaryIncludedDraftIds,
-      ).length,
-    [flowState.drafts, flowState.summaryIncludedDraftIds],
-  );
-
-  const continuePath = useMemo(() => {
-    const step = deriveFormalOnboardingResumeStep(flowState, resolvedContext);
-    return formalOnboardingStepPath(step);
-  }, [flowState, resolvedContext]);
-
-  if (includedCount === 0) {
-    return null;
-  }
-
-  if (location.pathname.startsWith(FORMAL_ONBOARDING_PATH)) {
-    return null;
-  }
+export function ActiveInquiryContinueAlert({
+  includedCount,
+  continuePath,
+}: ActiveInquiryContinueAlertProps) {
+  const navigate = useNavigate();
 
   return (
     <Alert className="border-primary/25 bg-primary/5">
       <AlertTitle>Actieve aanvraag met onderzoeken</AlertTitle>
       <AlertDescription className="flex flex-col gap-component sm:flex-row sm:items-center sm:justify-between">
         <span className="text-sm leading-normal">
-          U hebt een lopende aanvraag met{" "}
+          U hebt een lopende formele aanvraag met{" "}
           {includedCount === 1
             ? "één geselecteerd certificatieonderzoek"
             : `${includedCount} geselecteerde certificatieonderzoeken`}
           . U kunt deze aanvraag op elk moment verderzetten.
         </span>
-        <Button variant="default" size="sm" className="shrink-0 gap-micro" asChild>
-          <Link to={continuePath}>
-            Ga verder met aanvraag
-            <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" aria-hidden />
-          </Link>
+        <Button
+          type="button"
+          variant="default"
+          size="sm"
+          className="shrink-0 gap-micro"
+          onClick={() => navigate(continuePath)}
+        >
+          Ga verder met aanvraag
+          <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" aria-hidden />
         </Button>
       </AlertDescription>
     </Alert>

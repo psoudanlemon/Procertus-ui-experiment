@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Navigate,
   useLocation,
@@ -11,6 +11,8 @@ import {
   ExpertCallBookingView,
   TrajectPageFrame,
   TrajectStoryFooter,
+  useOnboardingFlowApi,
+  useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
 
 import { useSyncOnboardingTrajectFromServiceId } from "../features/onboarding/use-sync-onboarding-traject-from-service-id";
@@ -39,6 +41,8 @@ export function ExpertCallPlaceholderPage() {
   useSyncOnboardingTrajectFromServiceId(serviceId);
   const service = findWegwijzerService(serviceId);
   const [canSubmit, setCanSubmit] = useState(false);
+  const api = useOnboardingFlowApi();
+  const { flowState } = useOnboardingFlowState();
 
   const fromParam = searchParams.get(TRAJECT_ENTRY_POINT_QUERY_PARAM);
   const entryPoint: TrajectEntryPoint | undefined = isTrajectEntryPoint(fromParam)
@@ -47,6 +51,13 @@ export function ExpertCallPlaceholderPage() {
 
   const flowSnapshot = useMemo(() => readOnboardingFlowSnapshot(), []);
   const prefill = flowSnapshot.context;
+
+  const expertCallEntryId = service?.entry?.id;
+
+  useEffect(() => {
+    if (flowState.requestOrigin) return;
+    api.setGuestIntakeChannel("expert-call", expertCallEntryId);
+  }, [api, flowState.requestOrigin, expertCallEntryId]);
 
   if (serviceId && !service) {
     return <Navigate to={WEGWIJZER_PATH} replace />;
@@ -96,6 +107,7 @@ export function ExpertCallPlaceholderPage() {
           idPrefix="expert-call"
           storageKey={`procertus.expert-call.${entry?.id ?? "hero"}`}
           onCanSubmitChange={setCanSubmit}
+          onPersistedSnapshotChange={api.patchInformalIntakeCapture}
           prefill={{
             firstName: prefill.representativeFirstName || undefined,
             lastName: prefill.representativeLastName || undefined,

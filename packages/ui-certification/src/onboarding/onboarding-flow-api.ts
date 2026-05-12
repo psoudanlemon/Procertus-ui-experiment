@@ -1,7 +1,12 @@
 import type { Dispatch, SetStateAction } from "react";
 
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
-import type { OnboardingFlowState, CustomerContext } from "./onboarding-types";
+import type {
+  CustomerContext,
+  GuestIntakeChannel,
+  InformalIntakeCapture,
+  OnboardingFlowState,
+} from "./onboarding-types";
 import {
   customerContextAfterPrototypePresetChange,
   mergeCustomerContextDeep,
@@ -39,6 +44,14 @@ export type OnboardingFlowApi = {
     /** Toon voor shell‑kopie in de registratiefase (Wegwijzer / triage). */
     registrationEntryLabel?: string,
   ) => void;
+  /** Guest-intake surface (`informational` / `expert-call`); wordt `"formal"` zodra `setRequestOrigin` draait. */
+  readonly setGuestIntakeChannel: (
+    channel: GuestIntakeChannel,
+    informalServiceId?: string,
+  ) => void;
+  /** Mirror informal booking formulier-state uit ExpertCallBookingView. */
+  readonly patchInformalIntakeCapture: (capture: InformalIntakeCapture) => void;
+  readonly clearInformalIntakeCapture: () => void;
 };
 
 type LegacyContext = Partial<CustomerContext> & {
@@ -123,6 +136,7 @@ export function createOnboardingFlowApi(
         const baseContext = resolvePrevContext(prev);
         return {
           ...prev,
+          guestIntakeChannel: "formal",
           requestOrigin: origin,
           prototypeVatPresetId: preset.id,
           companyFieldHints: {},
@@ -182,6 +196,31 @@ export function createOnboardingFlowApi(
           delete nextState.registrationEntryLabel;
         }
         return nextState;
+      });
+    },
+
+    setGuestIntakeChannel(channel, informalServiceId) {
+      setFlowState((prev) => {
+        const next: OnboardingFlowState = { ...prev, guestIntakeChannel: channel };
+        if (informalServiceId !== undefined) {
+          const t = informalServiceId.trim();
+          if (t.length > 0) next.informalIntakeServiceId = t;
+          else delete next.informalIntakeServiceId;
+        }
+        return next;
+      });
+    },
+
+    patchInformalIntakeCapture(capture) {
+      setFlowState((prev) => ({ ...prev, informalIntake: capture }));
+    },
+
+    clearInformalIntakeCapture() {
+      setFlowState((prev) => {
+        const next: OnboardingFlowState = { ...prev };
+        delete next.informalIntake;
+        delete next.informalIntakeServiceId;
+        return next;
       });
     },
   };

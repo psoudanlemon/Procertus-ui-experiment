@@ -77,6 +77,13 @@ export type PublicHeaderUser = {
 export type PublicRegistryHeaderProps = {
   /** App logo — render any React node (image, SVG, text). */
   logo?: React.ReactNode;
+  /**
+   * `href` for the logo link (middle‑click, copy link). When `onLogoClick` is set, navigation uses that
+   * handler instead (after `preventDefault`).
+   */
+  logoHref?: string;
+  /** Client navigation for the logo (e.g. React Router). When set, click does not perform a full document load. */
+  onLogoClick?: () => void;
   /** Primary horizontal navigation links. */
   navLinks?: PublicHeaderNavLink[];
   /** Breadcrumb trail. When provided, it replaces `navLinks` in the same slot. */
@@ -208,6 +215,8 @@ export function PublicRegistryGuestLanguageDropdown({
 
 export function PublicRegistryHeader({
   logo,
+  logoHref = "/",
+  onLogoClick,
   navLinks = [],
   breadcrumbs,
   showSearch = false,
@@ -269,7 +278,16 @@ export function PublicRegistryHeader({
         )}
 
         {logo && (
-          <a href="/" className="flex shrink-0 items-center gap-component">
+          <a
+            href={logoHref}
+            className="flex shrink-0 items-center gap-component"
+            onClick={(e) => {
+              if (onLogoClick) {
+                e.preventDefault();
+                onLogoClick();
+              }
+            }}
+          >
             {logo}
           </a>
         )}
@@ -417,7 +435,15 @@ export function PublicRegistryHeader({
                 Reeds een account?
               </span>
               <Button variant="secondary" size="sm" className="min-h-11 lg:min-h-0" asChild>
-                <a href={loginUrl} onClick={onLogin}>
+                <a
+                  href={loginUrl}
+                  onClick={(e) => {
+                    if (onLogin) {
+                      e.preventDefault();
+                      onLogin();
+                    }
+                  }}
+                >
                   <HugeiconsIcon icon={Login01Icon} className="size-4 sm:hidden" />
                   <span className="hidden sm:inline">Log in</span>
                   <span className="sr-only sm:hidden">Log in</span>

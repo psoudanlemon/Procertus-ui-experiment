@@ -1,9 +1,17 @@
 import { DEFAULT_VAT_PROTOTYPE_PRESET_ID } from "./lib/vatPrototypePresets";
 import type { OnboardingFlowState } from "./onboarding-types";
+import { GUEST_INTAKE_CHANNELS, type GuestIntakeChannel } from "./onboarding-types";
 import { DEFAULT_CONTEXT } from "./onboarding-flow-helpers";
+
+function coerceGuestIntakeChannel(raw: unknown): GuestIntakeChannel {
+  return typeof raw === "string" && (GUEST_INTAKE_CHANNELS as readonly string[]).includes(raw)
+    ? (raw as GuestIntakeChannel)
+    : "";
+}
 
 export const DEFAULT_ONBOARDING_FLOW_STATE: OnboardingFlowState = {
   trajectServiceId: "",
+  guestIntakeChannel: "",
   requestOrigin: "",
   drafts: [],
   summaryIncludedDraftIds: [],
@@ -24,6 +32,7 @@ export function hydrateOnboardingFlowStateFromStored(
   return {
     ...DEFAULT_ONBOARDING_FLOW_STATE,
     ...restStored,
+    guestIntakeChannel: coerceGuestIntakeChannel(stored.guestIntakeChannel),
     ...(trimmedLabel ? { registrationEntryLabel: trimmedLabel } : {}),
     context: { ...DEFAULT_CONTEXT, ...stored.context },
     companyFieldHints: stored.companyFieldHints ?? {},

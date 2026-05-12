@@ -129,7 +129,11 @@ export function WegwijzerPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl">
-      <Hero />
+      <PageHeader
+        className="px-boundary pt-boundary pb-section"
+        title="Start uw certificeringstraject"
+        description="Bij PROCERTUS bieden we verschillende diensten aan. Hieronder vindt u een overzicht van ons aanbod. Selecteer een certificaat om meer informatie te krijgen of direct uw aanvraag te starten."
+      />
 
       <div ref={explorerRef} className="px-boundary pb-boundary scroll-mt-section">
         <CatalogueExplorer
@@ -153,20 +157,6 @@ export function WegwijzerPage() {
         </CatalogueExplorer>
       </div>
     </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Hero
-// ---------------------------------------------------------------------------
-
-function Hero() {
-  return (
-    <PageHeader
-      className="px-boundary pt-boundary pb-section"
-      title="Start uw certificeringstraject"
-      description="Bij PROCERTUS bieden we verschillende diensten aan. Hieronder vindt u een overzicht van ons aanbod. Selecteer een certificaat om meer informatie te krijgen of direct uw aanvraag te starten."
-    />
   );
 }
 

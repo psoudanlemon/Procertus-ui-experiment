@@ -178,6 +178,30 @@ export const ONBOARDING_STEPS = [
 
 export type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
 
+/**
+ * Which guest-facing intake surface the user is on / last chose before committing to formal dossier
+ * registration (`requestOrigin`). Formal registration sets this to `"formal"` when origin is chosen.
+ */
+export const GUEST_INTAKE_CHANNELS = ["", "formal", "informational", "expert-call"] as const;
+
+export type GuestIntakeChannel = (typeof GUEST_INTAKE_CHANNELS)[number];
+
+/**
+ * Serializable snapshot of {@link ExpertCallBookingView} fields mirrored into {@link OnboardingFlowState}
+ * so informal intake progress survives navigation within the guest shell.
+ */
+export type InformalIntakeCapture = {
+  selectedDate: string | null;
+  selectedSlot: string | null;
+  firstName: string;
+  lastName: string;
+  email: string;
+  jobTitle: string;
+  phone: string;
+  company: string;
+  wantsExpertCall: boolean;
+};
+
 export type OnboardingFlowState = {
   /**
    * Wegwijzer-service id van het lopende traject. Gezet wanneer de aanvraag via TrajectConfigureFlow
@@ -185,6 +209,12 @@ export type OnboardingFlowState = {
    * onboarding terug te koppelen aan de juiste TriagePage, ook na een refresh.
    */
   trajectServiceId: string;
+  /** Guest intake branch for analytics / copy; `"formal"` once origin step commits. */
+  guestIntakeChannel: GuestIntakeChannel;
+  /** Service id for informational / expert-call flows when tied to a Wegwijzer entry. */
+  informalIntakeServiceId?: string;
+  /** Latest informal booking form snapshot (info-request / expert-call). */
+  informalIntake?: InformalIntakeCapture;
   /**
    * Wegwijzer toonlabel (bv. naam van het dienstkanaal uit de triage) voor kopie in de registratiefase.
    */

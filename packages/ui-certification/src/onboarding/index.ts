@@ -15,6 +15,8 @@ export {
   useOnboardingCompanyLookupUi,
   useOnboardingRegistrationSubmitUi,
 } from "./onboarding-flow-provider";
+export { useActiveFormalInquiryContinueBanner } from "./use-active-formal-inquiry-continue-banner";
+export type { ActiveFormalInquiryContinueBannerModel } from "./use-active-formal-inquiry-continue-banner";
 export type { OnboardingFlowApi } from "./onboarding-flow-api";
 export {
   DEFAULT_ONBOARDING_FLOW_STATE,
@@ -42,6 +44,11 @@ export type {
   OnboardingRegisteredPerson,
   CertificationLegalEntityAnswer,
   OnboardingVestiging,
+  GuestIntakeChannel,
+  InformalIntakeCapture,
+} from "./onboarding-types";
+export {
+  GUEST_INTAKE_CHANNELS,
 } from "./onboarding-types";
 export {
   IdentificatiePersonTitleRoleCapture,

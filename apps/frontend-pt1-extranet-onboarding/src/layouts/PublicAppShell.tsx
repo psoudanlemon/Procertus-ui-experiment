@@ -3,26 +3,39 @@ import {
   ONBOARDING_REGISTRATION_COMPLETE_PATH,
   OnboardingFlowProvider,
   createLocalStorageOnboardingFlowPersistence,
+  useActiveFormalInquiryContinueBanner,
 } from "@procertus-ui/ui-certification";
 import { AlertDialogProvider, DensityProvider, PublicRegistryAppShell } from "@procertus-ui/ui";
 import { useMockPrototypeIsAuthenticated } from "@procertus-ui/ui-pt1-prototype";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { useLayoutEffect, useMemo } from "react";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { ActiveInquiryContinueAlert } from "./ActiveInquiryContinueAlert";
 import { APP_FOOTER } from "./footerConfig";
+import { PublicCertificationRequestsCart } from "./PublicCertificationRequestsCart";
 import {
   PublicPrototypeLanguageProvider,
   usePublicPrototypeRegistryLanguageHeaderProps,
 } from "./PublicPrototypeLanguageContext";
 import { WelcomePublicHeaderLeading } from "./WelcomePublicHeaderLeading";
-import { WelcomePublicHeaderTrailing } from "./WelcomePublicHeaderTrailing";
-import { PUBLIC_GUEST_LOGIN_PATH } from "../routes/guestPaths";
+import { FORMAL_ONBOARDING_PATH, formalOnboardingStepPath } from "../routes/formal-request-routing";
+import { PUBLIC_GUEST_LOGIN_PATH, PUBLIC_GUEST_WELCOME_PATH } from "../routes/guestPaths";
 
 function PublicGuestRegistryChrome() {
   const navigate = useNavigate();
+  const location = useLocation();
   const registryLang = usePublicPrototypeRegistryLanguageHeaderProps();
+
+  const formalBanner = useActiveFormalInquiryContinueBanner({
+    pathname: location.pathname,
+    formalOnboardingPathPrefix: FORMAL_ONBOARDING_PATH,
+  });
+
+  const continuePath = useMemo(
+    () => formalOnboardingStepPath(formalBanner.resumeStep),
+    [formalBanner.resumeStep],
+  );
 
   return (
     <DensityProvider density="operational">
@@ -36,10 +49,12 @@ function PublicGuestRegistryChrome() {
               className="h-8 w-auto dark:brightness-0 dark:invert"
             />
           ),
-          onLogin: () => navigate(PUBLIC_GUEST_LOGIN_PATH),
+          logoHref: PUBLIC_GUEST_WELCOME_PATH,
+          onLogoClick: () => navigate(PUBLIC_GUEST_WELCOME_PATH),
           loginUrl: PUBLIC_GUEST_LOGIN_PATH,
+          onLogin: () => navigate(PUBLIC_GUEST_LOGIN_PATH),
           leadingActions: <WelcomePublicHeaderLeading />,
-          trailingActions: <WelcomePublicHeaderTrailing />,
+          trailingActions: formalBanner.sessionActive ? <PublicCertificationRequestsCart /> : null,
           guestLanguagePlacement: "leading",
           ...registryLang,
         }}
@@ -47,7 +62,12 @@ function PublicGuestRegistryChrome() {
       >
         <div data-slot="public-guest-outlet" className="flex flex-1 flex-col">
           <div className="mx-auto w-full max-w-7xl px-boundary pt-boundary">
-            <ActiveInquiryContinueAlert />
+            {formalBanner.visible ? (
+              <ActiveInquiryContinueAlert
+                includedCount={formalBanner.includedCount}
+                continuePath={continuePath}
+              />
+            ) : null}
           </div>
           <Outlet />
         </div>
@@ -63,7 +83,8 @@ function PublicGuestRegistryChrome() {
  * **`globals.css`** locks **`overflow`** on html/body/#root for the signed-in shell).
  *
  * Wraps public guest flows in {@link OnboardingFlowProvider} plus shared registry chrome
- * ({@link PublicRegistryAppShell}, density, footer, header actions); see {@link PublicCertificationRequestsCart}.
+ * ({@link PublicRegistryAppShell}, density, footer, header actions). The certification cart is shown in the
+ * header only while `useActiveFormalInquiryContinueBanner` reports `sessionActive` (formal dossier in progress).
  */
 export function PublicAppShell() {
   const isAuthenticated = useMockPrototypeIsAuthenticated();

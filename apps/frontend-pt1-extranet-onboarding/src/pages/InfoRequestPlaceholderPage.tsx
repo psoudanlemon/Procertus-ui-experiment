@@ -1,10 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { DensityProvider } from "@procertus-ui/ui";
 import {
   ExpertCallBookingView,
   TrajectPageFrame,
   TrajectStoryFooter,
+  useOnboardingFlowApi,
+  useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
 
 import { useSyncOnboardingTrajectFromServiceId } from "../features/onboarding/use-sync-onboarding-traject-from-service-id";
@@ -26,9 +28,18 @@ export function InfoRequestPlaceholderPage() {
   useSyncOnboardingTrajectFromServiceId(serviceId);
   const service = findWegwijzerService(serviceId);
   const [canSubmit, setCanSubmit] = useState(false);
+  const api = useOnboardingFlowApi();
+  const { flowState } = useOnboardingFlowState();
 
   const flowSnapshot = useMemo(() => readOnboardingFlowSnapshot(), []);
   const prefill = flowSnapshot.context;
+
+  const informationalEntryId = service?.entry.id;
+
+  useEffect(() => {
+    if (!informationalEntryId || flowState.requestOrigin) return;
+    api.setGuestIntakeChannel("informational", informationalEntryId);
+  }, [api, flowState.requestOrigin, informationalEntryId]);
 
   if (!service) {
     return <Navigate to={WEGWIJZER_PATH} replace />;
@@ -50,6 +61,7 @@ export function InfoRequestPlaceholderPage() {
     } catch {
       // sessionStorage may be unavailable — ignore.
     }
+    api.clearInformalIntakeCapture();
     navigate(`/welcome/info-request/${entry.id}/verzonden`, { replace: true });
   };
 
@@ -74,6 +86,7 @@ export function InfoRequestPlaceholderPage() {
           idPrefix="info-request"
           storageKey={`procertus.info-request.${entry.id}`}
           onCanSubmitChange={setCanSubmit}
+          onPersistedSnapshotChange={api.patchInformalIntakeCapture}
           prefill={{
             firstName: prefill.representativeFirstName || undefined,
             lastName: prefill.representativeLastName || undefined,

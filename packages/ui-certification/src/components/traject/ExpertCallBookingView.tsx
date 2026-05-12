@@ -36,7 +36,8 @@ type FormState = {
   wantsExpertCall: boolean;
 };
 
-type PersistedShape = {
+/** Serializable mirror written to sessionStorage and optionally forwarded to hosts (onboarding snapshot). */
+export type ExpertCallBookingPersistedSnapshot = {
   selectedDate: string | null;
   selectedSlot: string | null;
   firstName: string;
@@ -48,7 +49,7 @@ type PersistedShape = {
   wantsExpertCall: boolean;
 };
 
-function serialize(state: FormState): PersistedShape {
+function serialize(state: FormState): ExpertCallBookingPersistedSnapshot {
   return {
     selectedDate: state.selectedDate ? state.selectedDate.toISOString() : null,
     selectedSlot: state.selectedSlot ?? null,
@@ -62,7 +63,7 @@ function serialize(state: FormState): PersistedShape {
   };
 }
 
-function deserialize(raw: PersistedShape): FormState {
+function deserialize(raw: ExpertCallBookingPersistedSnapshot): FormState {
   let selectedDate: Date | undefined = undefined;
   if (raw.selectedDate) {
     const d = new Date(raw.selectedDate);
@@ -86,7 +87,7 @@ function readPersistedState(storageKey: string | undefined): FormState | null {
   try {
     const raw = window.sessionStorage.getItem(storageKey);
     if (!raw) return null;
-    return deserialize(JSON.parse(raw) as PersistedShape);
+    return deserialize(JSON.parse(raw) as ExpertCallBookingPersistedSnapshot);
   } catch {
     return null;
   }
@@ -131,6 +132,8 @@ export type ExpertCallBookingViewProps = {
    * variant, waar de keuze voor een call al impliciet is.
    */
   alwaysShowSchedule?: boolean;
+  /** Elke wijziging aan formulier-state wordt hier geserialiseerd doorgegeven (bv. onboarding snapshot). */
+  onPersistedSnapshotChange?: (snapshot: ExpertCallBookingPersistedSnapshot) => void;
 };
 
 /**
@@ -149,6 +152,7 @@ export function ExpertCallBookingView({
   idPrefix = "expert-call",
   storageKey,
   alwaysShowSchedule = false,
+  onPersistedSnapshotChange,
 }: ExpertCallBookingViewProps) {
   const initial = useMemo<FormState>(() => {
     const persisted = readPersistedState(storageKey);
@@ -172,6 +176,10 @@ export function ExpertCallBookingView({
   }, [storageKey, alwaysShowSchedule]);
 
   const [state, setState] = useState<FormState>(initial);
+
+  useEffect(() => {
+    onPersistedSnapshotChange?.(serialize(state));
+  }, [state, onPersistedSnapshotChange]);
 
   const update = (patch: Partial<FormState>) => {
     setState((prev) => {

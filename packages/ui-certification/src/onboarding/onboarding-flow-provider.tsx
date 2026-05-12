@@ -126,6 +126,9 @@ export function OnboardingFlowProvider({
       if (prev.companyFieldHints === undefined) {
         fixes.companyFieldHints = {};
       }
+      if (prev.guestIntakeChannel === undefined) {
+        fixes.guestIntakeChannel = "";
+      }
       const nextContext = resolveFlowContext(
         prev.context as Partial<CustomerContext> & {
           representativeName?: string;
