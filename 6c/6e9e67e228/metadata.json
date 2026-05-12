@@ -1,0 +1,18 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "6c6e9e67e228",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/6c/6e9e67e228/0/metadata.json",
+      "transcript": "/6c/6e9e67e228/0/full.jsonl",
+      "content_hash": "/6c/6e9e67e228/0/content_hash.txt",
+      "prompt": "/6c/6e9e67e228/0/prompt.txt"
+    }
+  ]
+}

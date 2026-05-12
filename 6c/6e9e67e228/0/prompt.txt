@@ -1,0 +1,26 @@
+@apps/frontend-pt1-extranet-onboarding/src/layouts/PublicCertificationRequestsCart.tsx when the user chooses to erase all inquiries, the full data package in the flow provider should be erased and reset.
+
+Currently, only the inquiries are being removed, but all related information collected during onboarding should also be removed.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/layouts/PublicCertificationRequestsCart.tsx when the user chooses to erase all inquiries, the full data package in the flow provider should be erased and reset.
+
+Currently, only the inquiries are being removed, but all related information collected during onboarding should also be removed.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx when the user submits their informal requests, all currently captured information from the onboarding flow provider should also be erased. @apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx:61-69
+
+---
+
+@packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx When the user has never completed the onboarding customer step and therefore has not made the choice. They can only be directed to step 2 and never to anything other than step 2.
+ @packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx:176-246 @apps/frontend-pt1-extranet-onboarding/src/features/customer-onboarding/FormalRequestStepRedirect.tsx
+
+---
+
+@packages/ui-certification/src/components/traject/BundleAssemble.tsx:345-351 just like on the bundle-assemble page, also show the same "Add More" options on the review. @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx:174-180
+
+---
+
+Commit all changes. Use Commit Skill.
