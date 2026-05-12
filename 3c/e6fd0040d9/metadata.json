@@ -1,0 +1,18 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "3ce6fd0040d9",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyLegalEntitiesStep.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/3c/e6fd0040d9/0/metadata.json",
+      "transcript": "/3c/e6fd0040d9/0/full.jsonl",
+      "content_hash": "/3c/e6fd0040d9/0/content_hash.txt",
+      "prompt": "/3c/e6fd0040d9/0/prompt.txt"
+    }
+  ]
+}
