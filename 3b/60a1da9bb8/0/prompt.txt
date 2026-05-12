@@ -1,0 +1,83 @@
+@apps/frontend-pt1-extranet-onboarding/src/App.tsx:57 we have a public app shell, but it currently only contains the correct providers for onboarding. Individual pages have their own app shell.
+
+I want to set up a reusable app shell with the correct providers in the top layout route so we don't need to duplicate app shells for every page. I also want all pages to use the same app shell. @apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx:142-165 
+
+ I want the density provider, the public registry app shell together with the onLogin, the header, the leading action, the trailing action, and the footer to be part of the new setup.
+
+I also want the active inquiry and continue alert included. 
+
+@apps/frontend-pt1-extranet-onboarding/src/App.tsx:59  I think this route grouping can be removed since it doesn't add anything to the layout. @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicWelcomeOnboardingSessionLayout.tsx 
+
+@packages/ui-certification/src/components/traject/TrajectLayout.tsx @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx:131-144 
+
+ we also have a TrajectLayout that contains AppShell and needs to be consolidated in the  @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/App.tsx:57 we have a public app shell, but it currently only contains the correct providers for onboarding. Individual pages have their own app shell.
+
+I want to set up a reusable app shell with the correct providers in the top layout route so we don't need to duplicate app shells for every page. I also want all pages to use the same app shell. @apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx:142-165 
+
+ I want the density provider, the public registry app shell together with the onLogin, the header, the leading action, the trailing action, and the footer to be part of the new setup.
+
+I also want the active inquiry and continue alert included. 
+
+@apps/frontend-pt1-extranet-onboarding/src/App.tsx:59  I think this route grouping can be removed since it doesn't add anything to the layout. @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicWelcomeOnboardingSessionLayout.tsx 
+
+@packages/ui-certification/src/components/traject/TrajectLayout.tsx @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx:131-144 
+
+ we also have a TrajectLayout that contains AppShell and needs to be consolidated in the  @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx
+
+---
+
+When I switch to dark mode, the footer and action bar with the dimmed scroll semi-transparent gradient overlay do not adapt to the dark theme. Please see the screenshot. @packages/ui/src/components/app-shell/public-registry-app-shell.tsx:110-114 @packages/ui/src/components/footer.tsx
+
+---
+
+We have now lost the semi-transparent gradient overlay when scrolling. Both in light and dark mode.
+
+---
+
+Please commit these app shell changes. Use git commit skill.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx:49-51 I want to show this "active inquiry continue" alert only when there is an active formal request already started. 
+
+ please use the appropriate hook from the onboarding flow provider to check whether this is the case. 
+
+ don't do this within the activeInquiryContinueAlert.
+
+ @packages/ui-certification/src/onboarding/onboarding-flow-provider.tsx  I want to keep track, inside the onboarding flow provider, of all the data that is currently being captured throughout the entire onboarding flow. 
+
+ this also means determining whether the user requested a formal or informal tone, and the data that was captured within that request. @apps/frontend-pt1-extranet-onboarding/src/App.tsx:68-72
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/layouts/WelcomePublicHeaderTrailing.tsx this is a needleless rubber component. @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx:55  we can just show the certification request card directly. @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicCertificationRequestsCart.tsx 
+
+ we only want to do this when we have an active formal request, so we must check the same conditions as for displaying the banner. @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx:30-33 
+
+ the difference is that we display the banner only when we are not inside the formal request, but we continue showing the card icon when we are inside the formal request flow.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/layouts/WelcomePublicHeaderTrailing.tsx this is a needleless rubber component. @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx:55  we can just show the certification request card directly. @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicCertificationRequestsCart.tsx 
+
+ we only want to do this when we have an active formal request, so we must check the same conditions as for displaying the banner. @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx:30-33 
+
+ the difference is that we display the banner only when we are not inside the formal request, but we continue showing the card icon when we are inside the formal request flow.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/layouts/PublicAppShell.tsx:45-53 when clicking the logo to return to the route, or clicking the login button to go to the login page, the app completely reloads and no hot push seems to be used. I don't think real navigation is being used.
+
+Please check the click handlers and ensure navigation is controlled from outside the presentational components. Bind these click handlers from the application itself, inside the app shell layout and within the application scope.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/layouts/ActiveInquiryContinueAlert.tsx:29-34 please show the proper way to set up a button together with a navigational component to link. Use the navigate hook.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/layouts/ActiveInquiryContinueAlert.tsx:29-34 please show the proper way to set up a button together with a navigational component to link. Use the navigate hook.

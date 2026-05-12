@@ -1,0 +1,86 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "3b60a1da9bb8",
+  "session_id": "27f52d3e-81b2-4101-ba30-2f3fb005bb10",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-12T09:41:02.221264Z",
+  "branch": "main",
+  "checkpoints_count": 7,
+  "files_touched": [
+    "Procertus-ui-experiment.code-workspace"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "b2d10b444080",
+  "session_metrics": {
+    "turn_count": 16,
+    "context_tokens": 194532,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-12T09:41:02.208957Z",
+    "agent_lines": 6,
+    "agent_removed": 15,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 6,
+    "total_lines_changed": 21,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 5,
+      "user_lines_removed": 15,
+      "agent_lines_added": 6,
+      "agent_lines_removed": 15,
+      "user_added_per_file": {
+        "apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx": 5
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 225,
+      "agent_lines_removed": 76
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 237,
+      "agent_lines_removed": 85
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 272,
+      "agent_lines_removed": 89
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 283,
+      "agent_lines_removed": 94
+    }
+  ]
+}
