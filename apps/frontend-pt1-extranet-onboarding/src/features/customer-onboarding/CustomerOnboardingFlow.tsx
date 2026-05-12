@@ -27,6 +27,9 @@ const WEGWIJZER_PATH = "/welcome";
 /**
  * Formal onboarding after drafts exist. Expects ancestor {@link OnboardingFlowProvider}
  * from {@link PublicAppShell}.
+ *
+ * URL steps ahead of {@link deriveFormalOnboardingResumeStep} are clamped backward; resume stays on
+ * **customer** until the legal‑representative choice (Ja/Nee) is set.
  */
 export function CustomerOnboardingFlow() {
   const navigate = useNavigate();

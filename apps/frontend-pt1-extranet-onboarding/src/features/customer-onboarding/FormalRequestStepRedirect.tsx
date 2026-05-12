@@ -14,6 +14,9 @@ const WEGWIJZER_PATH = "/welcome";
 /**
  * `/welcome/formal-request` without a step segment: sends users to the step implied by stored flow
  * data (drafts + context), or away when the session cannot continue here.
+ *
+ * {@link deriveFormalOnboardingResumeStep} keeps resume on **customer** until “wettelijke
+ * vertegenwoordiger” is answered (Ja/Nee), so users are never sent to company or later without that choice.
  */
 export function FormalRequestStepRedirect() {
   const { flowState, resolvedContext } = useOnboardingFlowState();

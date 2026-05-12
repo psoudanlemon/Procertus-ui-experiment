@@ -1,5 +1,6 @@
 import {
   effectiveIncludedCertificationDraftIds,
+  isApplicantLegalRepresentativeChoiceComplete,
   isLegalRepresentativeCaptureComplete,
   isOnboardingCompanyLegalEntitiesStepValid,
   isOnboardingCompanyZetelStepValid,
@@ -18,6 +19,8 @@ import { isVatIdentifierPlausible } from "./lib/vatPrototypePresets";
  * Uses **strict** completion checks only — unlike the live stepper UI, which may honor the prototype
  * relax-validation flag for faster navigation. Resume must reflect what is actually captured so users
  * who only chose a country (origin) are sent back to **customer** until registratiegegevens are complete.
+ * Zolang “Bent u de wettelijke vertegenwoordiger?” onbeantwoord is, blijft resume **altijd** `customer`
+ * (tweede stap na origin), nooit een latere stap — ook niet bij een diepe URL of stapper onder prototype‑relax.
  * De maatschappelijke‑zetelstap telt pas als afgerond als {@link OnboardingFlowState.companyZetelStepCompleted}
  * `true` is (na **Verder**); alléén een geldige lookup vult `context` al in.
  * Hetzelfde patroon geldt voor latere stappen waar validatie `true` kan zijn vóór **Verder**
@@ -36,13 +39,14 @@ export function deriveFormalOnboardingResumeStep(
   >,
   context: CustomerContext,
 ): OnboardingStep {
+  if (flowState.requestOrigin === "") return "origin";
+  if (!isApplicantLegalRepresentativeChoiceComplete(context)) return "customer";
+
   const certificationInquiryDraftIds = effectiveIncludedCertificationDraftIds(
     flowState.drafts,
     flowState.summaryIncludedDraftIds,
   );
   const hasCustomerContext =
-    (context.applicantIsLegalRepresentative === "yes" ||
-      context.applicantIsLegalRepresentative === "no") &&
     isRegistrantCaptureValidForContext(context) &&
     isLegalRepresentativeCaptureComplete(context) &&
     (flowState.requestOrigin
@@ -61,8 +65,7 @@ export function deriveFormalOnboardingResumeStep(
     isOnboardingOptionalContactsStepValid(context) && flowState.extrasStepCompleted;
 
   let step: OnboardingStep;
-  if (flowState.requestOrigin === "") step = "origin";
-  else if (!registrationStepOk) step = "customer";
+  if (!registrationStepOk) step = "customer";
   else if (!companyZetelOk) step = "company";
   else if (!companyLegalEntitiesOk) step = "companyLegalEntities";
   else if (!invoicingStepOk) step = "invoicing";

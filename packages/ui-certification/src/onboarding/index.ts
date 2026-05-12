@@ -69,6 +69,7 @@ export {
   isCertificationVestigingMappingComplete,
   isOnboardingInvoicingStepValid,
   isOnboardingVestigingCaptureComplete,
+  isApplicantLegalRepresentativeChoiceComplete,
   newOnboardingVestigingId,
   vestigingAddressSubformValue,
 } from "./onboarding-flow-helpers";

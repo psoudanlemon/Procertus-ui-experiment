@@ -1087,6 +1087,17 @@ export function isLegalRepresentativeCaptureComplete(context: CustomerContext): 
   return isLegalRepresentativePersonValid(context);
 }
 
+/**
+ * `true` once the user has answered “Bent u de wettelijke vertegenwoordiger?” (Ja of Nee).
+ * Formal resume must not advance past the **customer** step until this is set.
+ */
+export function isApplicantLegalRepresentativeChoiceComplete(context: CustomerContext): boolean {
+  return (
+    context.applicantIsLegalRepresentative === "yes" ||
+    context.applicantIsLegalRepresentative === "no"
+  );
+}
+
 /** When the applicant is not the legal representative, their details must be complete. */
 export function isRegistrantCaptureValidForContext(context: CustomerContext): boolean {
   if (context.applicantIsLegalRepresentative !== "no") return true;

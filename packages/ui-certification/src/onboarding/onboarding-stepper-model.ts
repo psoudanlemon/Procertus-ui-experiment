@@ -7,6 +7,7 @@ import type {
 } from "./onboarding-types";
 import {
   formatRequesterStepperLabel,
+  isApplicantLegalRepresentativeChoiceComplete,
   isLegalRepresentativeCaptureComplete,
   isOnboardingCompanyCoreStepValid,
   isOnboardingCompanyLegalEntitiesStepValid,
@@ -85,6 +86,7 @@ export function buildOnboardingStepperSteps(
 ): StepLayoutStep[] {
   const { drafts, requestOrigin, context, certificationInquiryDraftIds } = input;
   const hasDrafts = drafts.length > 0;
+  const legalRepChoiceOk = isApplicantLegalRepresentativeChoiceComplete(context);
   const {
     registrationStepOk,
     companyZetelOk,
@@ -93,7 +95,8 @@ export function buildOnboardingStepperSteps(
     summaryStepOk,
   } = deriveOnboardingPhaseValidityForFlow(requestOrigin, context, certificationInquiryDraftIds);
   const companyStepOk = companyCoreOk;
-  const extrasAvailabilityDepsOk = registrationStepOk && companyCoreOk && invoicingStepOk;
+  const extrasAvailabilityDepsOk =
+    legalRepChoiceOk && registrationStepOk && companyCoreOk && invoicingStepOk;
 
   return [
     {
@@ -123,7 +126,8 @@ export function buildOnboardingStepperSteps(
       description:
         context.organizationName.trim() ||
         "Officiële gegevens van de hoofdrechtspersoon",
-      available: hasDrafts && requestOrigin !== "" && registrationStepOk,
+      available:
+        hasDrafts && requestOrigin !== "" && legalRepChoiceOk && registrationStepOk,
     },
     {
       id: "companyLegalEntities",
@@ -134,7 +138,12 @@ export function buildOnboardingStepperSteps(
           : context.headOfficeIsCertificationLegalEntity === "yes"
             ? "Zetel voor alle aanvragen in dit dossier"
             : "Vestiging per aanvraag",
-      available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyZetelOk,
+      available:
+        hasDrafts &&
+        requestOrigin !== "" &&
+        legalRepChoiceOk &&
+        registrationStepOk &&
+        companyZetelOk,
     },
     {
       id: "invoicing",
@@ -144,7 +153,12 @@ export function buildOnboardingStepperSteps(
         (context.invoicingMirrorCertificationLegalEntities
           ? "Zelfde rechts‑persoon als bij certificatie"
           : "Factuur‑rechtspersoon per aanvraag"),
-      available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyStepOk,
+      available:
+        hasDrafts &&
+        requestOrigin !== "" &&
+        legalRepChoiceOk &&
+        registrationStepOk &&
+        companyStepOk,
     },
     {
       id: "extras",
@@ -156,7 +170,12 @@ export function buildOnboardingStepperSteps(
       id: "summary",
       title: "Nazicht",
       description: "Gegevens en aanvragen nakijken",
-      available: hasDrafts && requestOrigin !== "" && registrationStepOk && summaryStepOk,
+      available:
+        hasDrafts &&
+        requestOrigin !== "" &&
+        legalRepChoiceOk &&
+        registrationStepOk &&
+        summaryStepOk,
     },
   ];
 }
