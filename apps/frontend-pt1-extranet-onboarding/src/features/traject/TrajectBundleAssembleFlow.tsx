@@ -15,6 +15,7 @@ import {
   type BundleProduct,
   type CertificationEntryId,
   type CertificationRequestDraft,
+  useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
 import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -22,8 +23,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
 import {
   draftBelongsToTrajectRoot,
-  persistTrajectHandoff,
-  readOnboardingFlowSnapshot,
+  reduceTrajectHandoffState,
 } from "./traject-submission-context";
 
 const WEGWIJZER_PATH = "/welcome";
@@ -40,8 +40,7 @@ export function TrajectBundleAssembleFlow() {
   const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
   const service = findWegwijzerService(serviceId);
-
-  const snapshot = useMemo(() => readOnboardingFlowSnapshot(), []);
+  const { flowState, setFlowState } = useOnboardingFlowState();
 
   const categorizationDoc = defaultProcertusCategorizationDoc;
   const categorizationEntries = useMemo(
@@ -58,7 +57,7 @@ export function TrajectBundleAssembleFlow() {
     if (!serviceId || !isBundleCert(serviceId)) return map;
 
     const byProduct = new Map<string, CertificationRequestDraft[]>();
-    for (const draft of snapshot.drafts) {
+    for (const draft of flowState.drafts) {
       if (!draftBelongsToTrajectRoot(draft, serviceId)) continue;
       const productId = draft.productId?.trim();
       if (!productId) continue;
@@ -75,7 +74,7 @@ export function TrajectBundleAssembleFlow() {
       map.set(productId, withPrimary ?? drafts[0]!);
     });
     return map;
-  }, [snapshot.drafts, serviceId]);
+  }, [flowState.drafts, serviceId]);
 
   const products: readonly BundleProduct[] = useMemo(() => {
     if (!serviceId || !isBundleCert(serviceId)) return [];
@@ -103,7 +102,7 @@ export function TrajectBundleAssembleFlow() {
     if (!serviceId || !isBundleCert(serviceId)) return {};
     const allowed = new Map(products.map((p) => [p.id, new Set(p.availableBundleCerts)]));
     const result: Record<string, BundleCertKey[]> = {};
-    for (const draft of snapshot.drafts) {
+    for (const draft of flowState.drafts) {
       if (!draftBelongsToTrajectRoot(draft, serviceId)) continue;
       const productId = draft.productId?.trim();
       if (!productId) continue;
@@ -115,7 +114,7 @@ export function TrajectBundleAssembleFlow() {
       if (!list.includes(entryId)) list.push(entryId);
     }
     return result;
-  }, [serviceId, snapshot.drafts, products]);
+  }, [serviceId, flowState.drafts, products]);
 
   const handleBack = useCallback(() => {
     if (!serviceId) return;
@@ -132,7 +131,7 @@ export function TrajectBundleAssembleFlow() {
 
   // Regenereer de draftlijst idempotent vanuit (product × huidige selectie): per product
   // exact één primaire-cert draft + één draft per aangevinkte extra cert. Niet flatMappen
-  // over `snapshot.drafts`, anders zouden eerder toegevoegde extras blijven plakken bij
+  // over `flowState.drafts`, anders zouden eerder toegevoegde extras blijven plakken bij
   // een terug-trip vanuit "Aanvraag controleren".
   const handleContinue = useCallback(
     (selections: Record<string, readonly BundleCertKey[]>) => {
@@ -144,45 +143,46 @@ export function TrajectBundleAssembleFlow() {
         trajectRootServiceId: d.trajectRootServiceId ?? serviceId,
       });
 
-      const expanded: CertificationRequestDraft[] = [];
-      for (const draft of snapshot.drafts) {
-        if (!draft.productId) expanded.push(draft);
-      }
-      const shownIds = new Set(products.map((p) => p.id));
-      for (const [productId, base] of Array.from(baseDraftByProduct.entries())) {
-        if (!shownIds.has(productId)) continue;
-        const rootTag = base.trajectRootServiceId ?? serviceId;
-        const primaryDraft: CertificationRequestDraft =
-          base.entryId === primaryCert
-            ? tag({ ...base, trajectRootServiceId: rootTag })
-            : tag({
-                ...base,
-                id: `${productId}-${primaryCert}`,
-                entryId: primaryCert as CertificationEntryId,
-                label: BUNDLE_CERT_META[primaryCert].title,
-                shortLabel: BUNDLE_CERT_META[primaryCert].shortTitle,
-                trajectRootServiceId: rootTag,
-              });
-        expanded.push(primaryDraft);
-        for (const cert of selections[productId] ?? []) {
-          if (cert === primaryCert) continue;
-          expanded.push(
-            tag({
-              ...base,
-              id: `${productId}-${cert}`,
-              entryId: cert as CertificationEntryId,
-              label: BUNDLE_CERT_META[cert].title,
-              shortLabel: BUNDLE_CERT_META[cert].shortTitle,
-              trajectRootServiceId: rootTag,
-            }),
-          );
+      setFlowState((prev) => {
+        const expanded: CertificationRequestDraft[] = [];
+        for (const draft of prev.drafts) {
+          if (!draft.productId) expanded.push(draft);
         }
-      }
-
-      persistTrajectHandoff({ drafts: expanded, serviceId });
+        const shownIds = new Set(products.map((p) => p.id));
+        for (const [productId, base] of Array.from(baseDraftByProduct.entries())) {
+          if (!shownIds.has(productId)) continue;
+          const rootTag = base.trajectRootServiceId ?? serviceId;
+          const primaryDraft: CertificationRequestDraft =
+            base.entryId === primaryCert
+              ? tag({ ...base, trajectRootServiceId: rootTag })
+              : tag({
+                  ...base,
+                  id: `${productId}-${primaryCert}`,
+                  entryId: primaryCert as CertificationEntryId,
+                  label: BUNDLE_CERT_META[primaryCert].title,
+                  shortLabel: BUNDLE_CERT_META[primaryCert].shortTitle,
+                  trajectRootServiceId: rootTag,
+                });
+          expanded.push(primaryDraft);
+          for (const cert of selections[productId] ?? []) {
+            if (cert === primaryCert) continue;
+            expanded.push(
+              tag({
+                ...base,
+                id: `${productId}-${cert}`,
+                entryId: cert as CertificationEntryId,
+                label: BUNDLE_CERT_META[cert].title,
+                shortLabel: BUNDLE_CERT_META[cert].shortTitle,
+                trajectRootServiceId: rootTag,
+              }),
+            );
+          }
+        }
+        return reduceTrajectHandoffState(prev, { drafts: expanded, serviceId });
+      });
       navigate(REQUEST_REVIEW_PATH(serviceId));
     },
-    [navigate, serviceId, snapshot.drafts, baseDraftByProduct, products],
+    [navigate, serviceId, baseDraftByProduct, products, setFlowState],
   );
 
   if (!serviceId || !service || !isBundleCert(serviceId)) {

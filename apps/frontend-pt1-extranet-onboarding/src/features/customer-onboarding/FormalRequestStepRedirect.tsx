@@ -41,5 +41,18 @@ export function FormalRequestStepRedirect() {
     return <Navigate to={WEGWIJZER_PATH} replace />;
   }
 
+  const mayEnterFormal =
+    flowState.formalRequestPackageCommitted || flowState.requestOrigin !== "";
+
+  if (!mayEnterFormal) {
+    const sid = flowState.trajectServiceId.trim();
+    return (
+      <Navigate
+        to={sid ? `/welcome/aanvraag/${sid}` : WEGWIJZER_PATH}
+        replace
+      />
+    );
+  }
+
   return <Navigate to={target} replace />;
 }

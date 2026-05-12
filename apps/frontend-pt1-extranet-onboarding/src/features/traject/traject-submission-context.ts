@@ -3,12 +3,15 @@ import {
   ONBOARDING_FLOW_STORAGE_KEY,
   clearOnboardingStorage,
   createLocalStorageOnboardingFlowPersistence,
+  draftBelongsToTrajectRoot,
   hydrateOnboardingFlowStateFromStored,
   type CertificationRequestDraft,
   type CustomerContext,
   type OnboardingFlowApi,
   type OnboardingFlowState,
 } from "@procertus-ui/ui-certification";
+
+export { draftBelongsToTrajectRoot } from "@procertus-ui/ui-certification";
 
 /**
  * Vanaf welk punt in de TrajectFlow het formulier is geopend. Een afwezige stempel betekent
@@ -52,32 +55,15 @@ export function isTrajectEntryPoint(value: string | null | undefined): value is 
 }
 
 /**
- * Lees een snapshot van de OnboardingFlowProvider state direct uit localStorage zonder een
- * provider te mounten. Bedoeld voor pagina's die enkel willen zien "wat de gebruiker tot nu toe
- * deed" zonder zelf state-updates te doen.
+ * Lees onboarding-state rechtstreeks uit localStorage (zonder provider).
+ * **Voor gast-shell flows onder {@link OnboardingFlowProvider}:** gebruik
+ * {@link useOnboardingFlowState} als bron van waarheid zodat geheugen en storage synchroon blijven.
  */
 export function readOnboardingFlowSnapshot(): OnboardingFlowState {
   const port = createLocalStorageOnboardingFlowPersistence({
     storageKey: ONBOARDING_FLOW_STORAGE_KEY,
   });
   return hydrateOnboardingFlowStateFromStored(port.load());
-}
-
-/**
- * Bepaalt of een draft bij een wegwijzer-route (`serviceId`) hoort voor merge/filter.
- * Nieuwe states zetten {@link CertificationRequestDraft.trajectRootServiceId}; legacy gebruikt
- * `id === productId-serviceId` of placeholders gekoppeld aan de route.
- */
-export function draftBelongsToTrajectRoot(
-  draft: CertificationRequestDraft,
-  serviceId: string,
-): boolean {
-  const root = draft.trajectRootServiceId;
-  if (root != null) return root === serviceId;
-  if (!draft.productId?.trim()) {
-    return draft.entryId === serviceId || draft.id.startsWith(`${serviceId}-`);
-  }
-  return draft.id === `${draft.productId}-${serviceId}`;
 }
 
 /** Aantal unieke product-IDs in het pakket voor de opgegeven wegwijzer-route. */
@@ -124,6 +110,7 @@ export function clearTrajectBreadcrumbs(): void {
     trajectServiceId: "",
     drafts: [],
     summaryIncludedDraftIds: [],
+    formalRequestPackageCommitted: false,
   });
 }
 
@@ -142,24 +129,19 @@ export function resetTrajectFlow(api?: OnboardingFlowApi): void {
 }
 
 /**
- * Schrijft de wizard-output (drafts + service id) door naar de OnboardingFlow-state in
- * localStorage. CustomerOnboardingFlow leest deze state bij het mounten en kan zo doorgaan
- * vanaf de "origin"-stap met de samengestelde aanvraagpakketten.
- *
- * Standaard **wordt samengevoegd** met bestaande drafts: alles wat bij dezelfde
- * `trajectRootServiceId` / route hoort wordt vervangen door `drafts`, andere routes blijven staan.
- * Zet `replaceAll: true` voor een volledige vervanging (Zelden; bv. tests).
+ * Zuivere merge van traject-handoff in een bestaande {@link OnboardingFlowState}.
+ * Gebruik via {@link useOnboardingFlowState}.`setFlowState` zodat de provider en
+ * localStorage synchroon blijven; alleen {@link persistTrajectHandoff} schrijft nog
+ * rechtstreeks naar storage wanneer er geen provider is.
  */
-export function persistTrajectHandoff(input: {
-  drafts: CertificationRequestDraft[];
-  serviceId: string;
-  replaceAll?: boolean;
-}): void {
-  const port = createLocalStorageOnboardingFlowPersistence({
-    storageKey: ONBOARDING_FLOW_STORAGE_KEY,
-  });
-  const stored = hydrateOnboardingFlowStateFromStored(port.load());
-
+export function reduceTrajectHandoffState(
+  stored: OnboardingFlowState,
+  input: {
+    drafts: CertificationRequestDraft[];
+    serviceId: string;
+    replaceAll?: boolean;
+  },
+): OnboardingFlowState {
   const tagRoot = (d: CertificationRequestDraft): CertificationRequestDraft => ({
     ...d,
     trajectRootServiceId: d.trajectRootServiceId ?? input.serviceId,
@@ -181,13 +163,36 @@ export function persistTrajectHandoff(input: {
   const brandNewIds = incoming.map((d) => d.id).filter((id) => !prevDraftIds.has(id));
   const nextSummaryIncluded = Array.from(new Set([...keptSelection, ...brandNewIds]));
 
-  const next: OnboardingFlowState = {
+  return {
     ...stored,
     drafts: mergedDrafts,
     trajectServiceId: input.serviceId,
     summaryIncludedDraftIds: nextSummaryIncluded,
   };
-  port.save(next);
+}
+
+/**
+ * Schrijft de wizard-output (drafts + service id) door naar de OnboardingFlow-state in
+ * localStorage. CustomerOnboardingFlow leest deze state bij het mounten en kan zo doorgaan
+ * vanaf de "origin"-stap met de samengestelde aanvraagpakketten.
+ *
+ * Standaard **wordt samengevoegd** met bestaande drafts: alles wat bij dezelfde
+ * `trajectRootServiceId` / route hoort wordt vervangen door `drafts`, andere routes blijven staan.
+ * Zet `replaceAll: true` voor een volledige vervanging (Zelden; bv. tests).
+ *
+ * Binnen de app: liever `setFlowState(prev => reduceTrajectHandoffState(prev, input))` zodat
+ * {@link OnboardingFlowProvider} de single source of truth blijft.
+ */
+export function persistTrajectHandoff(input: {
+  drafts: CertificationRequestDraft[];
+  serviceId: string;
+  replaceAll?: boolean;
+}): void {
+  const port = createLocalStorageOnboardingFlowPersistence({
+    storageKey: ONBOARDING_FLOW_STORAGE_KEY,
+  });
+  const stored = hydrateOnboardingFlowStateFromStored(port.load());
+  port.save(reduceTrajectHandoffState(stored, input));
 }
 
 export type BuildTrajectSubmissionContextInput = {
@@ -210,7 +215,8 @@ export function buildTrajectSubmissionContext(
   if (serviceId) ctx.serviceId = serviceId;
   if (entryPoint === "triage") {
     if (flowState.drafts.length > 0) ctx.drafts = flowState.drafts;
-    ctx.intent = "informational";
+    if (flowState.formalRequestPackageCommitted) ctx.intent = "formal";
+    else ctx.intent = "informational";
   }
   return ctx;
 }

@@ -10,6 +10,7 @@ import {
   type BundleCertKey,
   type CertificationEntryId,
   type CertificationRequestDraft,
+  useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
 import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -17,8 +18,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
 import {
   draftBelongsToTrajectRoot,
-  persistTrajectHandoff,
-  readOnboardingFlowSnapshot,
+  reduceTrajectHandoffState,
 } from "./traject-submission-context";
 
 const WEGWIJZER_PATH = "/welcome";
@@ -42,15 +42,15 @@ export function TrajectConfigureFlow() {
   const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
   const service = findWegwijzerService(serviceId);
+  const { flowState, setFlowState } = useOnboardingFlowState();
 
-  // Wanneer de gebruiker via "Terug" terugkeert vanuit het bundle-assemble scherm, lezen we
-  // de eerder gepersisteerde drafts opnieuw in zodat de productselectie ge-prevuld is.
+  // Wanneer de gebruiker via "Terug" terugkeert vanuit het bundle-assemble scherm, zijn
+  // de drafts in de provider al bijgewerkt; initialSelectedIds volgt live state.
   const initialSelectedIds = useMemo<readonly string[]>(() => {
     if (!serviceId) return [];
-    const snapshot = readOnboardingFlowSnapshot();
     return Array.from(
       new Set(
-        snapshot.drafts
+        flowState.drafts
           .filter(
             (d) =>
               Boolean(d.productId?.trim()) &&
@@ -60,7 +60,7 @@ export function TrajectConfigureFlow() {
           .map((d) => d.productId!),
       ),
     );
-  }, [serviceId]);
+  }, [serviceId, flowState.drafts]);
 
   // "Terug" houdt de reeds gemaakte productselectie en eventuele klantgegevens vast: we
   // navigeren enkel terug naar de wegwijzer zodat de gebruiker zonder informatieverlies
@@ -99,13 +99,13 @@ export function TrajectConfigureFlow() {
         ];
       });
       if (drafts.length === 0) return;
-      persistTrajectHandoff({ drafts, serviceId });
+      setFlowState((prev) => reduceTrajectHandoffState(prev, { drafts, serviceId }));
       const nextPath = isBundleCertService(serviceId)
         ? BUNDLE_ASSEMBLE_PATH(serviceId)
         : TRIAGE_PATH(serviceId);
       navigate(nextPath, { replace: true });
     },
-    [navigate, productIndex, service, serviceId],
+    [navigate, productIndex, service, serviceId, setFlowState],
   );
 
   // Escape route wanneer de gebruiker zijn product niet terugvindt in de catalogus.
@@ -123,9 +123,9 @@ export function TrajectConfigureFlow() {
       shortLabel: service.entry.shortLabel,
       trajectRootServiceId: serviceId,
     };
-    persistTrajectHandoff({ drafts: [placeholder], serviceId });
+    setFlowState((prev) => reduceTrajectHandoffState(prev, { drafts: [placeholder], serviceId }));
     navigate(REQUEST_REVIEW_PATH(serviceId), { replace: true });
-  }, [navigate, service, serviceId]);
+  }, [navigate, service, serviceId, setFlowState]);
 
   if (!serviceId || !service) {
     return <Navigate to={WEGWIJZER_PATH} replace />;

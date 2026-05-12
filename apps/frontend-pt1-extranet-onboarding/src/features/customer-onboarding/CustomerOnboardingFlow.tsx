@@ -93,6 +93,13 @@ export function CustomerOnboardingFlow() {
     return <Navigate to={WEGWIJZER_PATH} replace />;
   }
 
+  const mayEnterFormal =
+    flowState.formalRequestPackageCommitted || flowState.requestOrigin !== "";
+  if (!mayEnterFormal) {
+    const sid = flowState.trajectServiceId.trim();
+    return <Navigate to={sid ? `/welcome/aanvraag/${sid}` : WEGWIJZER_PATH} replace />;
+  }
+
   if (urlResumeRedirect) {
     return <Navigate to={urlResumeRedirect} replace />;
   }

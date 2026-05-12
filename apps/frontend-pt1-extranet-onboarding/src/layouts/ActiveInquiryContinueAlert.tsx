@@ -19,14 +19,14 @@ export function ActiveInquiryContinueAlert({
 
   return (
     <Alert className="border-primary/25 bg-primary/5">
-      <AlertTitle>Actieve aanvraag met onderzoeken</AlertTitle>
+      <AlertTitle>Actieve certificatie aanvraag</AlertTitle>
       <AlertDescription className="flex flex-col gap-component sm:flex-row sm:items-center sm:justify-between">
         <span className="text-sm leading-normal">
           U hebt een lopende formele aanvraag met{" "}
           {includedCount === 1
             ? "één geselecteerd certificatieonderzoek"
             : `${includedCount} geselecteerde certificatieonderzoeken`}
-          . U kunt deze aanvraag op elk moment verderzetten.
+          . U kunt de aanvraag voor de opstart van dit traject op elk moment verderzetten.
         </span>
         <Button
           type="button"
@@ -35,7 +35,7 @@ export function ActiveInquiryContinueAlert({
           className="shrink-0 gap-micro"
           onClick={() => navigate(continuePath)}
         >
-          Ga verder met aanvraag
+          Ga verder
           <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" aria-hidden />
         </Button>
       </AlertDescription>

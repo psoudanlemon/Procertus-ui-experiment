@@ -14,8 +14,8 @@ import {
   useConfirm,
 } from "@procertus-ui/ui";
 import {
-  CertificationInquiriesOverviewCard,
-  effectiveIncludedCertificationDraftIds,
+  ProductInquiryMatrix,
+  groupDraftsByProduct,
   useOnboardingFlowApi,
   useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
@@ -29,25 +29,18 @@ export function PublicCertificationRequestsCart() {
   const navigate = useNavigate();
   const confirm = useConfirm();
   const [open, setOpen] = useState(false);
-  const { flowState, setFlowState } = useOnboardingFlowState();
+  const { flowState } = useOnboardingFlowState();
   const api = useOnboardingFlowApi();
-  const { drafts, summaryIncludedDraftIds } = flowState;
+  const { drafts } = flowState;
 
-  const effectiveIncludedDraftIds = useMemo(
-    () => effectiveIncludedCertificationDraftIds(drafts, summaryIncludedDraftIds),
-    [drafts, summaryIncludedDraftIds],
-  );
+  const count = drafts.length;
 
-  const count = effectiveIncludedDraftIds.length;
+  const productGroups = useMemo(() => groupDraftsByProduct(drafts), [drafts]);
 
   const closePanelAndClearDrafts = () => {
     setOpen(false);
     api.applyWizardDraftCompletion([]);
     navigate(WELCOME_PATH, { replace: true });
-  };
-
-  const resetSummarySelection = () => {
-    setFlowState((prev) => ({ ...prev, summaryIncludedDraftIds: undefined }));
   };
 
   const eraseAllInquiries = async () => {
@@ -60,20 +53,24 @@ export function PublicCertificationRequestsCart() {
     closePanelAndClearDrafts();
   };
 
-  const removeDraftFromList = async (draftId: string) => {
-    const isLast = drafts.length === 1;
+  const removeProductRow = async (productId: string) => {
+    const nextDrafts = drafts.filter((d) => {
+      const key = d.productId?.trim() || d.productLabel?.trim() || d.id;
+      return key !== productId;
+    });
+    const isLast = nextDrafts.length === 0;
     const ok =
       (await confirm?.(
-        isLast ? "Laatste aanvraag verwijderen?" : "Aanvraag verwijderen uit mandje?",
+        isLast ? "Laatste aanvraag verwijderen?" : "Product verwijderen uit mandje?",
         isLast
           ? "Uw mandje wordt leeggemaakt. U wordt daarna naar de welkomstpagina gestuurd."
-          : "Deze aanvraag wordt definitief uit uw mandje gehaald.",
+          : "Alle certificaataanvragen voor dit product worden uit uw mandje gehaald.",
       )) ?? false;
     if (!ok) return;
     if (isLast) {
       closePanelAndClearDrafts();
     } else {
-      api.applyWizardDraftCompletion(drafts.filter((d) => d.id !== draftId));
+      api.applyWizardDraftCompletion(nextDrafts);
     }
   };
 
@@ -112,62 +109,51 @@ export function PublicCertificationRequestsCart() {
           ) : null}
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="flex w-full max-w-lg flex-col sm:max-w-lg" showCloseButton>
+      <SheetContent
+        side="right"
+        className="flex flex-col [--sheet-side-width:min(42rem,calc(100vw-2rem))]"
+        showCloseButton
+      >
         <SheetHeader className="pr-10 text-left">
           <SheetTitle>Aanvragen</SheetTitle>
           <SheetDescription>
-            Uw huidige certificatieaanvragen en onderzoeken voor dit traject. Pas de selectie aan of
-            ga terug naar de wizard.
+            Overzicht van uw huidige certificaataanvragen per product. Open de wizard om de
+            samenstelling te wijzigen, verwijder een productrij, of wis het volledige mandje.
           </SheetDescription>
         </SheetHeader>
         <SheetScrollFade />
         <SheetBody className="min-h-0 flex-1">
-          <CertificationInquiriesOverviewCard
-            showHeader={false}
-            drafts={drafts}
-            effectiveIncludedDraftIds={effectiveIncludedDraftIds}
-            controlIdPrefix="public-shell-draft"
-            listToolbar={
-              <>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="w-full sm:w-auto"
-                  disabled={drafts.length === 0 || summaryIncludedDraftIds === undefined}
-                  onClick={resetSummarySelection}
-                >
-                  Selectie herstellen
-                </Button>
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="sm"
-                  className="w-full sm:w-auto"
-                  disabled={drafts.length === 0}
-                  onClick={() => {
-                    void eraseAllInquiries();
-                  }}
-                >
-                  Alle aanvragen wissen
-                </Button>
-              </>
-            }
-            onRemoveDraft={(id) => {
-              void removeDraftFromList(id);
-            }}
-            onDraftIncludedChange={(draftId, included) => {
-              setFlowState((prev) => {
-                const ids = prev.drafts.map((d) => d.id);
-                const base = prev.summaryIncludedDraftIds ?? [...ids];
-                const next = included
-                  ? Array.from(new Set([...base, draftId]))
-                  : base.filter((id) => id !== draftId);
-                return { ...prev, summaryIncludedDraftIds: next };
-              });
-            }}
-            onEditRequestsClick={openRequestWizard}
-          />
+          <div className="flex flex-col gap-section">
+            <ProductInquiryMatrix
+              groups={productGroups}
+              onRemoveProductRow={(productId) => {
+                void removeProductRow(productId);
+              }}
+            />
+            <div className="flex flex-col gap-component sm:flex-row sm:flex-wrap">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="w-full sm:w-auto"
+                onClick={openRequestWizard}
+              >
+                Aanvragen bewerken
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                size="sm"
+                className="w-full sm:w-auto"
+                disabled={drafts.length === 0}
+                onClick={() => {
+                  void eraseAllInquiries();
+                }}
+              >
+                Alle aanvragen wissen
+              </Button>
+            </div>
+          </div>
         </SheetBody>
         <SheetScrollFadeBottom />
       </SheetContent>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Navigate,
   useLocation,
@@ -20,7 +20,6 @@ import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
 import {
   TRAJECT_ENTRY_POINT_QUERY_PARAM,
   isTrajectEntryPoint,
-  readOnboardingFlowSnapshot,
   type TrajectEntryPoint,
 } from "../features/traject/traject-submission-context";
 
@@ -42,15 +41,12 @@ export function ExpertCallPlaceholderPage() {
   const service = findWegwijzerService(serviceId);
   const [canSubmit, setCanSubmit] = useState(false);
   const api = useOnboardingFlowApi();
-  const { flowState } = useOnboardingFlowState();
+  const { flowState, resolvedContext } = useOnboardingFlowState();
 
   const fromParam = searchParams.get(TRAJECT_ENTRY_POINT_QUERY_PARAM);
   const entryPoint: TrajectEntryPoint | undefined = isTrajectEntryPoint(fromParam)
     ? fromParam
     : undefined;
-
-  const flowSnapshot = useMemo(() => readOnboardingFlowSnapshot(), []);
-  const prefill = flowSnapshot.context;
 
   const expertCallEntryId = service?.entry?.id;
 
@@ -109,10 +105,10 @@ export function ExpertCallPlaceholderPage() {
           onCanSubmitChange={setCanSubmit}
           onPersistedSnapshotChange={api.patchInformalIntakeCapture}
           prefill={{
-            firstName: prefill.representativeFirstName || undefined,
-            lastName: prefill.representativeLastName || undefined,
-            email: prefill.representativeEmail || undefined,
-            company: prefill.organizationName || undefined,
+            firstName: resolvedContext.representativeFirstName || undefined,
+            lastName: resolvedContext.representativeLastName || undefined,
+            email: resolvedContext.representativeEmail || undefined,
+            company: resolvedContext.organizationName || undefined,
           }}
         />
       </DensityProvider>

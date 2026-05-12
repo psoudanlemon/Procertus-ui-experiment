@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef } from "react";
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import type { Dispatch, SetStateAction } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Alert02Icon,
   ArrowRight02Icon,
@@ -40,6 +41,8 @@ import {
   CatalogueExplorer,
   type CertificationEntryId,
   type CertificationRequestDraft,
+  type OnboardingFlowState,
+  useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
 import {
   WEGWIJZER_SERVICES,
@@ -49,8 +52,7 @@ import { WEGWIJZER_SERVICE_CONTENT } from "../features/wegwijzer/wegwijzer-servi
 import {
   TRAJECT_ENTRY_POINT_QUERY_PARAM,
   clearTrajectBreadcrumbs,
-  persistTrajectHandoff,
-  readOnboardingFlowSnapshot,
+  reduceTrajectHandoffState,
   trajectRouteChoiceStats,
 } from "../features/traject/traject-submission-context";
 
@@ -89,14 +91,12 @@ const VALID_SERVICE_IDS = new Set<string>([
 // ---------------------------------------------------------------------------
 
 export function WegwijzerPage() {
-  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const explorerRef = useRef<HTMLDivElement>(null);
-
-  const flowSnapshot = useMemo(() => readOnboardingFlowSnapshot(), [location.key]);
+  const { flowState, setFlowState } = useOnboardingFlowState();
+  const { drafts } = flowState;
 
   const choiceBarItems = useMemo((): readonly ChoiceBarItem[] => {
-    const drafts = flowSnapshot.drafts;
     return [
       { value: ALL_ID, label: "Alle certificaten", variant: "elevated" as const },
       ...PRIMARY_SERVICES.map((service) => {
@@ -110,7 +110,7 @@ export function WegwijzerPage() {
         };
       }),
     ];
-  }, [flowSnapshot.drafts]);
+  }, [drafts]);
 
   const rawParam = searchParams.get(SERVICE_PARAM);
   const activeId = rawParam && VALID_SERVICE_IDS.has(rawParam) ? rawParam : ALL_ID;
@@ -169,13 +169,17 @@ export function WegwijzerPage() {
             <AllCertificatesGrid
               primary={PRIMARY_SERVICES}
               external={EXTERNAL_SERVICES}
-              drafts={flowSnapshot.drafts}
+              drafts={drafts}
               onSelect={setActiveId}
             />
           ) : activeId === ANDERE_ID ? (
             <ExternalReferralGrid services={EXTERNAL_SERVICES} />
           ) : activeService ? (
-            <MasterCard service={activeService} onClose={handleResetToOverview} />
+            <MasterCard
+              service={activeService}
+              onClose={handleResetToOverview}
+              setFlowState={setFlowState}
+            />
           ) : null}
         </CatalogueExplorer>
       </div>
@@ -336,7 +340,15 @@ function ExternalReferralItem({ service }: { service: WegwijzerService }) {
 // Master Card — selected service detail
 // ---------------------------------------------------------------------------
 
-function MasterCard({ service, onClose }: { service: WegwijzerService; onClose: () => void }) {
+function MasterCard({
+  service,
+  onClose,
+  setFlowState,
+}: {
+  service: WegwijzerService;
+  onClose: () => void;
+  setFlowState: Dispatch<SetStateAction<OnboardingFlowState>>;
+}) {
   const navigate = useNavigate();
   const { entry, externalReferral } = service;
   const isInnovation = entry.id === "innovation-attest";
@@ -352,7 +364,9 @@ function MasterCard({ service, onClose }: { service: WegwijzerService; onClose: 
       shortLabel: entry.shortLabel,
       trajectRootServiceId: entry.id,
     };
-    persistTrajectHandoff({ drafts: [placeholder], serviceId: entry.id });
+    setFlowState((prev) =>
+      reduceTrajectHandoffState(prev, { drafts: [placeholder], serviceId: entry.id }),
+    );
     navigate(REQUEST_REVIEW_PATH(entry.id));
   };
 

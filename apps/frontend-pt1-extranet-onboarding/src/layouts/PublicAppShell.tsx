@@ -84,7 +84,8 @@ function PublicGuestRegistryChrome() {
  *
  * Wraps public guest flows in {@link OnboardingFlowProvider} plus shared registry chrome
  * ({@link PublicRegistryAppShell}, density, footer, header actions). The certification cart is shown in the
- * header only while `useActiveFormalInquiryContinueBanner` reports `sessionActive` (formal dossier in progress).
+ * header when {@link useActiveFormalInquiryContinueBanner} reports `sessionActive` (formele aanvraag na
+ * triage “traject opstarten”, of wanneer de gebruiker de registratie‑herkomst al gekozen heeft).
  */
 export function PublicAppShell() {
   const isAuthenticated = useMockPrototypeIsAuthenticated();

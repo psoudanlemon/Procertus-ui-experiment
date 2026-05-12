@@ -11,12 +11,12 @@ import {
   groupDraftsByProduct,
   isProductRequestNoteComplete,
   type CertificationRequestDraft,
+  useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
 import { useCallback, useMemo, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
-import { readOnboardingFlowSnapshot } from "./traject-submission-context";
 
 const WEGWIJZER_PATH = "/welcome";
 const BUNDLE_ASSEMBLE_PATH = (serviceId: string) =>
@@ -56,9 +56,8 @@ export function TrajectRequestReviewFlow() {
   const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
   const service = findWegwijzerService(serviceId);
-
-  const snapshot = useMemo(() => readOnboardingFlowSnapshot(), []);
-  const inquiries: CertificationRequestDraft[] = snapshot.drafts;
+  const { flowState } = useOnboardingFlowState();
+  const inquiries: CertificationRequestDraft[] = flowState.drafts;
   const productGroups = useMemo(() => groupDraftsByProduct(inquiries), [inquiries]);
   const hasProducts = useMemo(
     () => inquiries.some(isProductBoundDraft),
