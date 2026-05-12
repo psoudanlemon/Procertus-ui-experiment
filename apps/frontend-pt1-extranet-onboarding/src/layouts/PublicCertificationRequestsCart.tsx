@@ -21,7 +21,7 @@ import {
 } from "@procertus-ui/ui-certification";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { formalOnboardingStepPath } from "../routes/formal-request-routing";
+import { FORMAL_ONBOARDING_PATH } from "../routes/formal-request-routing";
 
 const WELCOME_PATH = "/welcome";
 
@@ -79,11 +79,7 @@ export function PublicCertificationRequestsCart() {
 
   const openRequestWizard = () => {
     setOpen(false);
-    setFlowState((prev) => ({
-      ...prev,
-      wizardInitialStep: prev.drafts.length > 0 ? "drafts" : "intent",
-    }));
-    navigate(formalOnboardingStepPath("request"));
+    navigate(FORMAL_ONBOARDING_PATH);
   };
 
   const label =

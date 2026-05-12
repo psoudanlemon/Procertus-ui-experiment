@@ -126,7 +126,6 @@ export function persistTrajectHandoff(input: {
   const next: OnboardingFlowState = {
     ...stored,
     drafts: input.drafts,
-    step: "origin",
     trajectServiceId: input.serviceId,
     summaryIncludedDraftIds: nextSummaryIncluded,
   };

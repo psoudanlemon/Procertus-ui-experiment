@@ -10,7 +10,7 @@ export function formalOnboardingStepPath(step: OnboardingStep): string {
 export function parseFormalOnboardingStepParam(param: string | undefined): OnboardingStep | null {
   if (param == null || param === "") return null;
   const s = param as OnboardingStep;
-  if (s === "request" || !ONBOARDING_STEPS.includes(s)) return null;
+  if (!ONBOARDING_STEPS.includes(s)) return null;
   return s;
 }
 

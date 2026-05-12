@@ -19,7 +19,7 @@ import type { CertificationRequestDraft } from "../../../CertificationRequestCon
 import {
   DraftCardDescription,
   sortDraftsByIntentAndProduct,
-} from "../../certification-request-wizard/draft-selection-presentation";
+} from "../../../certification-request/draft-selection-presentation";
 
 export type CertificationInquiriesOverviewCardProps = {
   drafts: CertificationRequestDraft[];

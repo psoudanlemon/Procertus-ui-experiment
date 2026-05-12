@@ -112,7 +112,7 @@ export function BundleAssembleProvider({
 
   const emitContinue = () => {
     const out: Record<string, readonly BundleCertKey[]> = {};
-    for (const [id, set] of selections) {
+    for (const [id, set] of Array.from(selections.entries())) {
       out[id] = BUNDLE_CERT_ORDER.filter((c) => set.has(c));
     }
     onContinue(out);

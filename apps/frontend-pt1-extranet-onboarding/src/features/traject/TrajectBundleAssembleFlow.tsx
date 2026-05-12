@@ -14,6 +14,7 @@ import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { APP_FOOTER } from "../../layouts/footerConfig";
+import { PUBLIC_GUEST_LOGIN_PATH } from "../../routes/guestPaths";
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
 import {
   persistTrajectHandoff,
@@ -21,7 +22,6 @@ import {
 } from "./traject-submission-context";
 
 const WEGWIJZER_PATH = "/welcome";
-const SIGNIN_PATH = "/welcome/login";
 const PRODUCT_SELECTION_PATH = (serviceId: string) =>
   `/welcome/aanvraag/${serviceId}/start`;
 const REQUEST_REVIEW_PATH = (serviceId: string) =>
@@ -105,7 +105,7 @@ export function TrajectBundleAssembleFlow() {
       for (const draft of snapshot.drafts) {
         if (!draft.productId) expanded.push(draft);
       }
-      for (const [productId, base] of baseDraftByProduct) {
+      for (const [productId, base] of Array.from(baseDraftByProduct.entries())) {
         const primaryDraft: CertificationRequestDraft =
           base.entryId === primaryCert
             ? base
@@ -154,7 +154,7 @@ export function TrajectBundleAssembleFlow() {
       onContinue={handleContinue}
     >
       <TrajectLayout
-        onSignInClick={() => navigate(SIGNIN_PATH)}
+        onSignInClick={() => navigate(PUBLIC_GUEST_LOGIN_PATH)}
         footer={APP_FOOTER}
         bodyGap="section"
         kicker={service.entry.label}

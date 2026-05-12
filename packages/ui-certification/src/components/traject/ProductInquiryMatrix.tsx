@@ -78,7 +78,7 @@ function deriveCertOrder(
   for (const cert of PRIMARY_CERT_ORDER) {
     if (present.has(cert) && !ordered.includes(cert)) ordered.push(cert);
   }
-  for (const cert of present) {
+  for (const cert of Array.from(present)) {
     if (!ordered.includes(cert)) ordered.push(cert);
   }
   return ordered;
