@@ -1,0 +1,36 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "72d3f9684384",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 10,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/traject-submission-context.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx",
+    "packages/_certification-domain-certification/src/entities.ts",
+    "packages/ui-certification/src/bundle-product-certs.ts",
+    "packages/ui-certification/src/certification-request/product-tree.ts",
+    "packages/ui-certification/src/components/traject/BundleAssemble.stories.tsx",
+    "packages/ui-certification/src/components/traject/BundleAssemble.tsx",
+    "packages/ui-certification/src/components/traject/BundleProductCard.stories.tsx",
+    "packages/ui-certification/src/components/traject/BundleProductCard.tsx",
+    "packages/ui-certification/src/components/traject/ProductSelectionBasket.tsx",
+    "packages/ui-certification/src/components/traject/TrajectStoryFooter.tsx",
+    "packages/ui-certification/src/components/traject/index.ts",
+    "packages/ui-certification/src/helpers.ts",
+    "packages/ui-certification/src/index.ts",
+    "packages/ui-certification/src/onboarding/onboarding-default-flow-state.ts",
+    "packages/ui-lib/src/custom-components/BrowseCard/BrowseCard.tsx",
+    "packages/ui-lib/src/custom-components/CatalogueExplorer/ChoiceBar/ChoiceBar.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/72/d3f9684384/0/metadata.json",
+      "transcript": "/72/d3f9684384/0/full.jsonl",
+      "content_hash": "/72/d3f9684384/0/content_hash.txt",
+      "prompt": "/72/d3f9684384/0/prompt.txt"
+    }
+  ]
+}

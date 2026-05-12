@@ -1,0 +1,83 @@
+@apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx when bundling all inquiries in the request, the user can select extra certification types for the already selected products. I think this should be expanded with an extra column to also display the certification already selected for the previously chosen certification product. 
+
+ please disable this select box so it is not possible to reselect the originally selected certification type for the adult products. 
+
+ also, the extra available certification types to select for the chosen products should be derived from availability in the original dataset. @packages/ui-certification/src/data/procertus-categorization.json 
+
+ please make sure the proper data helpers or hooks are used to enable select boxes when a certification type is available for a product.
+
+Only show columns for certification types if at least one product has availability for that certification type. Skip columns for extra certification types if none of the selected products supports them.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx when bundling all inquiries in the request, the user can select extra certification types for the already selected products. I think this should be expanded with an extra column to also display the certification already selected for the previously chosen certification product. 
+
+ please disable this select box so it is not possible to reselect the originally selected certification type for the adult products. 
+
+ also, the extra available certification types to select for the chosen products should be derived from availability in the original dataset. @packages/ui-certification/src/data/procertus-categorization.json 
+
+ please make sure the proper data helpers or hooks are used to enable select boxes when a certification type is available for a product.
+
+Only show columns for certification types if at least one product has availability for that certification type. Skip columns for extra certification types if none of the selected products supports them.
+
+---
+
+Use the same type of select boxes for all the columns.
+
+---
+
+On the same page, beneath the interactive section for selecting extra certification types for the chosen products, please show a note for all other certification types that are not added to the columns because they are not available for those products.
+
+Please explain that those certification types are not available for the selected products.
+
+---
+
+On the same page, beneath the interactive section for selecting extra certification types for the chosen products, please show a note for all other certification types that are not added to the columns because they are not available for those products.
+
+Please explain that those certification types are not available for the selected products.
+
+---
+
+If CA was already selected as the preselected certification type, still show the CA levels beneath the checkmark.
+
+Always use the same type of checkmark for all columns.
+
+---
+
+I still don't see the CE levels being displayed as a label beneath the (disabled) checkbox.
+
+---
+
+Okay, now I see them, but I notice that not every CE has a level assigned to it. I see Niveau 4 being added, bot no other levels?
+
+Maybe this is the case because I could select products in the previous step that shouldn't have been made available for CE. When I selected CE mark as the certification type in the first step, we should only have seen products that were available or made available for CE mark certification.
+
+---
+
+Okay, now I see them, but I notice that not every CE has a level assigned to it. I see Niveau 4 being added, bot no other levels?
+
+Maybe this is the case because I could select products in the previous step that shouldn't have been made available for CE. When I selected CE mark as the certification type in the first step, we should only have seen products that were available or made available for CE mark certification.
+
+---
+
+Also allow the possibility to add more certifications to the requests. Add a call-to-action button—not just "Go back"—but an "Add more" button.
+
+This will direct the user back to the original certification type selector and allow them to select a different certification type to add to the same request. This will not erase the current selection but will append to it.
+
+Please show on the overview page for all certification types when we have already selected product types or previously selected certification types. 
+
+Allow these cards to appear as already selected and display the number of selected products for each certification type.@apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx @apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx:168-175  please add to the choice bar items a "selected" prop and, optionally, an "amount".
+
+---
+
+I don't see the call-to-action button to add more products or add more certification types to the inquiry.@apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx:214 remove this again. I didn't want this Assemble Session Summary; I just want to use the Assemble Body with the already available Multi-Select Overview.
+
+---
+
+Use the already available bundle to assemble the body. @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx:213 
+
+ Show all available products for the already selected and added certification types. Only allow selecting options that are possible (cfr what is allowed by the master data.@packages/ui-certification/src/data/procertus-categorization.json )

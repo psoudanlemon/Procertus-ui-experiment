@@ -1,0 +1,132 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "72d3f9684384",
+  "session_id": "efb79551-3621-4a23-a843-054a7775c11b",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-12T10:39:48.960666Z",
+  "branch": "main",
+  "checkpoints_count": 10,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/traject-submission-context.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx",
+    "packages/_certification-domain-certification/src/entities.ts",
+    "packages/ui-certification/src/bundle-product-certs.ts",
+    "packages/ui-certification/src/certification-request/product-tree.ts",
+    "packages/ui-certification/src/components/traject/BundleAssemble.stories.tsx",
+    "packages/ui-certification/src/components/traject/BundleAssemble.tsx",
+    "packages/ui-certification/src/components/traject/BundleProductCard.stories.tsx",
+    "packages/ui-certification/src/components/traject/BundleProductCard.tsx",
+    "packages/ui-certification/src/components/traject/ProductSelectionBasket.tsx",
+    "packages/ui-certification/src/components/traject/TrajectStoryFooter.tsx",
+    "packages/ui-certification/src/components/traject/index.ts",
+    "packages/ui-certification/src/helpers.ts",
+    "packages/ui-certification/src/index.ts",
+    "packages/ui-certification/src/onboarding/onboarding-default-flow-state.ts",
+    "packages/ui-lib/src/custom-components/BrowseCard/BrowseCard.tsx",
+    "packages/ui-lib/src/custom-components/CatalogueExplorer/ChoiceBar/ChoiceBar.tsx"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "194da53dc6fa",
+  "session_metrics": {
+    "turn_count": 19,
+    "context_tokens": 185841,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-12T10:39:48.95071Z",
+    "agent_lines": 980,
+    "agent_removed": 268,
+    "human_added": 31,
+    "human_modified": 41,
+    "human_removed": 0,
+    "total_committed": 1016,
+    "total_lines_changed": 1320,
+    "agent_percentage": 94.54545454545455,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 297,
+      "agent_lines_removed": 110
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 435,
+      "agent_lines_removed": 130
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 482,
+      "agent_lines_removed": 130
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 495,
+      "agent_lines_removed": 130
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 497,
+      "agent_lines_removed": 130
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 644,
+      "agent_lines_removed": 138
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 933,
+      "agent_lines_removed": 237
+    },
+    {
+      "checkpoint_number": 9,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1132,
+      "agent_lines_removed": 278
+    },
+    {
+      "checkpoint_number": 10,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 994,
+      "agent_lines_removed": 277
+    },
+    {
+      "checkpoint_number": 11,
+      "user_lines_added": 36,
+      "user_lines_removed": 41,
+      "agent_lines_added": 1021,
+      "agent_lines_removed": 289,
+      "user_added_per_file": {
+        "packages/ui-certification/src/components/traject/TrajectStoryFooter.tsx": 36
+      }
+    }
+  ]
+}
