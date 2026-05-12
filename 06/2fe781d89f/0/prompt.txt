@@ -1,0 +1,21 @@
+@apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx remove the product request note field from the request review.
+
+The request review is only to confirm that we finished providing all certification types and products. @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx:130-155
+
+ @apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx:68-84  only after we select "Request an informational request" does the user have the option to add a note to their request.
+
+ @apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx  please move this node field to this page instead, and also allow this node to be added together with the formal request in the summary step. 
+
+@packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx  the consistency is to allow the user to send a note in the final step before sending one or both requests.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx remove the product request note field from the request review.
+
+The request review is only to confirm that we finished providing all certification types and products. @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx:130-155
+
+ @apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx:68-84  only after we select "Request an informational request" does the user have the option to add a note to their request.
+
+ @apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx  please move this node field to this page instead, and also allow this node to be added together with the formal request in the summary step. 
+
+@packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx  the consistency is to allow the user to send a note in the final step before sending one or both requests.

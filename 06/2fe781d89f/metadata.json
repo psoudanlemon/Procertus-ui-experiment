@@ -1,0 +1,36 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "062fe781d89f",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx",
+    "packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-default-flow-state.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-api.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-helpers.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-flow-view-props.ts",
+    "packages/ui-certification/src/onboarding/onboarding-story-fixtures.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-types.ts",
+    "packages/ui-certification/src/onboarding/use-onboarding-flow.tsx",
+    "packages/ui-certification/src/onboarding/use-onboarding-registration-layout-model.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/06/2fe781d89f/0/metadata.json",
+      "transcript": "/06/2fe781d89f/0/full.jsonl",
+      "content_hash": "/06/2fe781d89f/0/content_hash.txt",
+      "prompt": "/06/2fe781d89f/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}
