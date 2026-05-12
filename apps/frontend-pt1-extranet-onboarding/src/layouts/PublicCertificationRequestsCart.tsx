@@ -2,6 +2,7 @@ import { ShoppingBasket01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Button,
+  cn,
   Sheet,
   SheetBody,
   SheetContent,
@@ -19,11 +20,21 @@ import {
   useOnboardingFlowApi,
   useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type AnimationEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { resetTrajectFlow } from "../features/traject/traject-submission-context";
 
 const WELCOME_PATH = "/welcome";
+
+type CartIconMode = "hidden" | "enter" | "shown" | "leave";
+
+const ICON_ENTER_CLASSES =
+  "animate-in fade-in-0 slide-in-from-right-2 duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:animate-none motion-reduce:duration-0";
+const ICON_LEAVE_CLASSES =
+  "animate-out fade-out-0 slide-out-to-right-2 duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:animate-none motion-reduce:duration-0 fill-mode-forwards";
+
+const BADGE_COUNT_CHANGE_CLASSES =
+  "animate-in fade-in-0 zoom-in-95 duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:animate-none motion-reduce:duration-0";
 
 export function PublicCertificationRequestsCart() {
   const navigate = useNavigate();
@@ -35,7 +46,61 @@ export function PublicCertificationRequestsCart() {
 
   const count = drafts.length;
 
+  const [mode, setMode] = useState<CartIconMode>(() => (count > 0 ? "enter" : "hidden"));
+  const modeRef = useRef(mode);
+
+  const [badgePulse, setBadgePulse] = useState(0);
+  const prevCountRef = useRef<number | undefined>(undefined);
+
+  useEffect(() => {
+    modeRef.current = mode;
+  }, [mode]);
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      if (drafts.length === 0) setOpen(false);
+      if (drafts.length > 0) {
+        setMode((m) => (m === "hidden" || m === "leave" ? "enter" : m));
+      } else {
+        setMode((m) => (m === "shown" || m === "enter" ? "leave" : m));
+      }
+    });
+  }, [drafts.length]);
+
+  useEffect(() => {
+    if (prevCountRef.current === undefined) {
+      prevCountRef.current = count;
+      return;
+    }
+    if (prevCountRef.current === count) return;
+    prevCountRef.current = count;
+    setBadgePulse((p) => p + 1);
+  }, [count]);
+
+  useEffect(() => {
+    if (mode !== "enter" && mode !== "leave") return;
+    if (typeof window === "undefined") return;
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = window.setTimeout(() => {
+      setMode((m) => (m === "enter" ? "shown" : m === "leave" ? "hidden" : m));
+    }, 0);
+    return () => window.clearTimeout(id);
+  }, [mode]);
+
   const productGroups = useMemo(() => groupDraftsByProduct(drafts), [drafts]);
+
+  const handleTriggerAnimationEnd = (event: AnimationEvent<HTMLButtonElement>) => {
+    if (event.target !== event.currentTarget) return;
+    const m = modeRef.current;
+    if (m === "enter") setMode("shown");
+    else if (m === "leave") setMode("hidden");
+  };
+
+  /** Sluit het mandje en ga naar de welkomstpagina; flowstate en mandje blijven intact. */
+  const closePanelAndGoWelcome = () => {
+    setOpen(false);
+    navigate(WELCOME_PATH, { replace: true });
+  };
 
   /**
    * Sluit het paneel, volledige onboarding-flow in geheugen + localStorage gewist via
@@ -84,7 +149,7 @@ export function PublicCertificationRequestsCart() {
       ? "Certificatieaanvragen — geen selectie"
       : `Certificatieaanvragen — ${count} geselecteerd`;
 
-  if (drafts.length === 0) {
+  if (mode === "hidden") {
     return null;
   }
 
@@ -95,13 +160,22 @@ export function PublicCertificationRequestsCart() {
           type="button"
           variant="outline"
           size="icon"
-          className="relative shrink-0 bg-background/80 shadow-sm backdrop-blur-sm"
+          className={cn(
+            "relative shrink-0 bg-background/80 shadow-sm backdrop-blur-sm",
+            mode === "enter" && ICON_ENTER_CLASSES,
+            mode === "leave" && ICON_LEAVE_CLASSES,
+          )}
           aria-label={label}
+          onAnimationEnd={handleTriggerAnimationEnd}
         >
           <HugeiconsIcon icon={ShoppingBasket01Icon} className="size-5" aria-hidden />
           {count > 0 ? (
             <span
-              className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold leading-none text-primary-foreground shadow-sm"
+              key={badgePulse}
+              className={cn(
+                "absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold leading-none text-primary-foreground shadow-sm",
+                badgePulse > 0 && BADGE_COUNT_CHANGE_CLASSES,
+              )}
               aria-hidden
             >
               {count > 99 ? "99+" : count}
@@ -117,9 +191,9 @@ export function PublicCertificationRequestsCart() {
         <SheetHeader className="pr-10 text-left">
           <SheetTitle>Aanvragen</SheetTitle>
           <SheetDescription>
-            Overzicht van uw huidige certificaataanvragen per product. Ga naar de startpagina om uw
-            certificaat- en productkeuze opnieuw samen te stellen (formeel of informatief), verwijder
-            een productrij, of wis het volledige mandje.
+            Overzicht van uw huidige certificaataanvragen per product. Met Aanvragen bewerken gaat u
+            naar de welkomstpagina; uw selectie blijft bewaard. Verwijder een productrij of wis alle
+            aanvragen.
           </SheetDescription>
         </SheetHeader>
         <SheetScrollFade />
@@ -137,7 +211,7 @@ export function PublicCertificationRequestsCart() {
                 variant="outline"
                 size="sm"
                 className="w-full sm:w-auto"
-                onClick={closePanelResetGuestFlowAndGoWelcome}
+                onClick={closePanelAndGoWelcome}
               >
                 Aanvragen bewerken
               </Button>

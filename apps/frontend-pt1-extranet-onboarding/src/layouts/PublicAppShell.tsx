@@ -54,7 +54,7 @@ function PublicGuestRegistryChrome() {
           loginUrl: PUBLIC_GUEST_LOGIN_PATH,
           onLogin: () => navigate(PUBLIC_GUEST_LOGIN_PATH),
           leadingActions: <WelcomePublicHeaderLeading />,
-          trailingActions: formalBanner.sessionActive ? <PublicCertificationRequestsCart /> : null,
+          trailingActions: <PublicCertificationRequestsCart />,
           guestLanguagePlacement: "leading",
           ...registryLang,
         }}
@@ -83,9 +83,9 @@ function PublicGuestRegistryChrome() {
  * **`globals.css`** locks **`overflow`** on html/body/#root for the signed-in shell).
  *
  * Wraps public guest flows in {@link OnboardingFlowProvider} plus shared registry chrome
- * ({@link PublicRegistryAppShell}, density, footer, header actions). The certification cart is shown in the
- * header when {@link useActiveFormalInquiryContinueBanner} reports `sessionActive` (formele aanvraag na
- * triage “traject opstarten”, of wanneer de gebruiker de registratie‑herkomst al gekozen heeft).
+ * ({@link PublicRegistryAppShell}, density, footer, header actions). The header always mounts
+ * {@link PublicCertificationRequestsCart}; it shows the basket trigger only when drafts exist and
+ * animates that icon in and out (sheet content is unchanged).
  */
 export function PublicAppShell() {
   const isAuthenticated = useMockPrototypeIsAuthenticated();
