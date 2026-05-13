@@ -20,10 +20,7 @@ export { draftBelongsToTrajectRoot } from "@procertus-ui/ui-certification";
 export type TrajectEntryPoint = "wegwijzer-detail" | "triage";
 
 /** Geldige waarden voor `?from=...` op een expert-call URL. */
-export const TRAJECT_ENTRY_POINTS: readonly TrajectEntryPoint[] = [
-  "wegwijzer-detail",
-  "triage",
-];
+export const TRAJECT_ENTRY_POINTS: readonly TrajectEntryPoint[] = ["wegwijzer-detail", "triage"];
 
 export const TRAJECT_ENTRY_POINT_QUERY_PARAM = "from";
 
@@ -128,6 +125,35 @@ export function resetTrajectFlow(api?: OnboardingFlowApi): void {
   clearOnboardingStorage();
 }
 
+/** Eerste wint — concept-ids zijn uniek bedoeld; voorkomt dubbele merges (bv. bundel+pakket). */
+function dedupeDraftsById(list: CertificationRequestDraft[]): CertificationRequestDraft[] {
+  const seen = new Set<string>();
+  const out: CertificationRequestDraft[] = [];
+  for (const d of list) {
+    if (seen.has(d.id)) continue;
+    seen.add(d.id);
+    out.push(d);
+  }
+  return out;
+}
+
+/** Niet-productgebonden aanvragen: maximaal één per certificaat-route (`entryId`). */
+function dedupeStandaloneInquiriesByEntryId(
+  list: CertificationRequestDraft[],
+): CertificationRequestDraft[] {
+  const seenEntry = new Set<string>();
+  const out: CertificationRequestDraft[] = [];
+  for (const d of list) {
+    const productBound = Boolean(d.productId?.trim() || d.productLabel?.trim());
+    if (!productBound) {
+      if (seenEntry.has(d.entryId)) continue;
+      seenEntry.add(d.entryId);
+    }
+    out.push(d);
+  }
+  return out;
+}
+
 /**
  * Zuivere merge van traject-handoff in een bestaande {@link OnboardingFlowState}.
  * Gebruik via {@link useOnboardingFlowState}.`setFlowState` zodat de provider en
@@ -148,13 +174,14 @@ export function reduceTrajectHandoffState(
   });
   const incoming = input.drafts.map(tagRoot);
 
-  const mergedDrafts =
+  const mergedDraftsRaw =
     input.replaceAll === true
       ? incoming
       : [
           ...stored.drafts.filter((d) => !draftBelongsToTrajectRoot(d, input.serviceId)),
           ...incoming,
         ];
+  const mergedDrafts = dedupeStandaloneInquiriesByEntryId(dedupeDraftsById(mergedDraftsRaw));
 
   const prevDraftIds = new Set(stored.drafts.map((d) => d.id));
   const mergedIds = new Set(mergedDrafts.map((d) => d.id));

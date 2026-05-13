@@ -15,11 +15,18 @@ import {
   cn,
 } from "@procertus-ui/ui";
 import type { ReactNode } from "react";
+import { useMemo } from "react";
 import type { CertificationRequestDraft } from "../../../CertificationRequestContext";
 import {
   DraftCardDescription,
   sortDraftsByIntentAndProduct,
 } from "../../../certification-request/draft-selection-presentation";
+import {
+  groupDraftsByProduct,
+  productBoundDrafts,
+  standaloneInquiryDrafts,
+} from "../../traject/build-validation-documents";
+import { ProductInquiryMatrix } from "../../traject/ProductInquiryMatrix";
 
 export type CertificationInquiriesOverviewCardProps = {
   drafts: CertificationRequestDraft[];
@@ -66,6 +73,20 @@ export function CertificationInquiriesOverviewCard({
   onRemoveDraft,
   removeDraftAriaLabel = "Aanvraag verwijderen uit mandje",
 }: CertificationInquiriesOverviewCardProps) {
+  const productBoundDraftList = useMemo(() => productBoundDrafts(drafts), [drafts]);
+  const standaloneDraftList = useMemo(() => standaloneInquiryDrafts(drafts), [drafts]);
+  const productGroups = useMemo(
+    () => groupDraftsByProduct(productBoundDraftList),
+    [productBoundDraftList],
+  );
+  const choiceItems = useMemo(
+    () => [
+      ...sortDraftsByIntentAndProduct(standaloneDraftList),
+      ...sortDraftsByIntentAndProduct(productBoundDraftList),
+    ],
+    [standaloneDraftList, productBoundDraftList],
+  );
+
   const body = (
     <CardContent className={cn("space-y-4", !showHeader && "pt-0", className)}>
       {drafts.length === 0 ? (
@@ -84,12 +105,12 @@ export function CertificationInquiriesOverviewCard({
         </>
       ) : (
         <>
-          {listToolbar ? <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">{listToolbar}</div> : null}
+          {listToolbar ? (
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">{listToolbar}</div>
+          ) : null}
+          {productGroups.length > 0 ? <ProductInquiryMatrix groups={productGroups} /> : null}
           <ChoiceCardGroup selectionMode="multiple">
-            <CardList
-              items={sortDraftsByIntentAndProduct(drafts)}
-              widthClass="@min-[40rem]:grid-cols-1"
-            >
+            <CardList items={choiceItems} widthClass="@min-[40rem]:grid-cols-1">
               {(draft) => (
                 <div key={draft.id} className="flex gap-2 @min-[40rem]:items-start">
                   <div className="min-w-0 flex-1">
@@ -100,7 +121,9 @@ export function CertificationInquiriesOverviewCard({
                       title={draft.label}
                       description={<DraftCardDescription draft={draft} />}
                       checked={effectiveIncludedDraftIds.includes(draft.id)}
-                      onCheckedChange={(checked) => onDraftIncludedChange(draft.id, checked === true)}
+                      onCheckedChange={(checked) =>
+                        onDraftIncludedChange(draft.id, checked === true)
+                      }
                       variant="elevated"
                     />
                   </div>
@@ -145,9 +168,7 @@ export function CertificationInquiriesOverviewCard({
   }
 
   return (
-    <Card
-      className={cn("w-full min-w-0 overflow-hidden lg:max-w-none", cardClassName)}
-    >
+    <Card className={cn("w-full min-w-0 overflow-hidden lg:max-w-none", cardClassName)}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

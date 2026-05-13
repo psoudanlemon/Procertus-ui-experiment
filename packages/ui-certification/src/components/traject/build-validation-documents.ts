@@ -149,8 +149,7 @@ export function buildGeneralProcessDocuments(
     {
       id: "indien-checklist",
       title: "Indien-checklist aanvraagpakket",
-      description:
-        "Controlelijst afgestemd op de samenstelling van dit pakket vóór indiening.",
+      description: "Controlelijst afgestemd op de samenstelling van dit pakket vóór indiening.",
       formatHint: "PDF · mock",
       href: "#procertus-doc-submission-checklist",
     },
@@ -170,6 +169,26 @@ export type ProductSummaryGroup = {
 };
 
 /**
+ * Draft is productgebonden wanneer product-id of productlabel is ingevuld
+ * (zelfde criterium als traject-overview en mandje).
+ */
+export function isProductBoundDraft(draft: CertificationRequestDraft): boolean {
+  return Boolean(draft.productId?.trim() || draft.productLabel?.trim());
+}
+
+export function productBoundDrafts(
+  drafts: readonly CertificationRequestDraft[],
+): CertificationRequestDraft[] {
+  return drafts.filter(isProductBoundDraft);
+}
+
+export function standaloneInquiryDrafts(
+  drafts: readonly CertificationRequestDraft[],
+): CertificationRequestDraft[] {
+  return drafts.filter((d) => !isProductBoundDraft(d));
+}
+
+/**
  * Groepeert een platte lijst drafts per uniek product, met behoud van de
  * volgorde waarin elk product voor het eerst voorkomt. Producten met
  * meerdere trajecten houden alle drafts in `drafts` zodat ze als één kaart
@@ -180,8 +199,7 @@ export function groupDraftsByProduct(
 ): ProductSummaryGroup[] {
   const map = new Map<string, ProductSummaryGroup>();
   for (const draft of drafts) {
-    const productKey =
-      draft.productId?.trim() || draft.productLabel?.trim() || draft.id;
+    const productKey = draft.productId?.trim() || draft.productLabel?.trim() || draft.id;
     let group = map.get(productKey);
     if (!group) {
       group = {

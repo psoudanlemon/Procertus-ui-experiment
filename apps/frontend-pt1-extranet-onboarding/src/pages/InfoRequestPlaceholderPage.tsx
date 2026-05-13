@@ -8,7 +8,10 @@ import {
   TrajectStoryFooter,
   ProductInquiryMatrix,
   ProductRequestNoteField,
+  StandaloneInquiriesOverview,
   groupDraftsByProduct,
+  isProductBoundDraft,
+  standaloneInquiryDrafts,
   useOnboardingFlowApi,
   useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
@@ -28,11 +31,15 @@ export function InfoRequestPlaceholderPage() {
   const api = useOnboardingFlowApi();
   const { flowState, resolvedContext } = useOnboardingFlowState();
 
-  const productGroups = useMemo(() => groupDraftsByProduct(flowState.drafts), [flowState.drafts]);
-  const hasProductInquiries = useMemo(
-    () => flowState.drafts.some((d) => Boolean(d.productId?.trim() || d.productLabel?.trim())),
+  const productGroups = useMemo(
+    () => groupDraftsByProduct(flowState.drafts.filter(isProductBoundDraft)),
     [flowState.drafts],
   );
+  const standaloneInquiries = useMemo(
+    () => standaloneInquiryDrafts(flowState.drafts),
+    [flowState.drafts],
+  );
+  const showInquiryOverview = productGroups.length > 0 || standaloneInquiries.length > 0;
 
   const informationalEntryId = service?.entry.id;
 
@@ -87,7 +94,7 @@ export function InfoRequestPlaceholderPage() {
         />
       }
     >
-      {hasProductInquiries ? (
+      {showInquiryOverview ? (
         <section
           className="flex flex-col gap-component rounded-xl border border-border bg-card p-section text-card-foreground"
           aria-labelledby="info-request-matrix-heading"
@@ -100,12 +107,38 @@ export function InfoRequestPlaceholderPage() {
               Overzicht informatieaanvragen
             </h2>
             <p className="m-0 text-sm text-muted-foreground">
-              Informatie over {flowState.drafts.length}{" "}
-              {flowState.drafts.length === 1 ? "certificaat" : "certificaten"} aan te vragen over{" "}
-              {productGroups.length} {productGroups.length === 1 ? "product" : "producten"}.
+              {productGroups.length > 0 && standaloneInquiries.length === 0 ? (
+                <>
+                  Informatie over {flowState.drafts.length}{" "}
+                  {flowState.drafts.length === 1 ? "certificaat" : "certificaten"} aan te vragen
+                  over {productGroups.length} {productGroups.length === 1 ? "product" : "producten"}
+                  .
+                </>
+              ) : null}
+              {productGroups.length > 0 && standaloneInquiries.length > 0 ? (
+                <>
+                  Informatie over {flowState.drafts.length}{" "}
+                  {flowState.drafts.length === 1 ? "certificaat" : "certificaten"}:{" "}
+                  {flowState.drafts.length - standaloneInquiries.length} gekoppeld aan{" "}
+                  {productGroups.length} {productGroups.length === 1 ? "product" : "producten"} en{" "}
+                  {standaloneInquiries.length}{" "}
+                  {standaloneInquiries.length === 1 ? "aanvraag" : "aanvragen"} zonder gekoppeld
+                  product.
+                </>
+              ) : null}
+              {productGroups.length === 0 && standaloneInquiries.length > 0 ? (
+                <>
+                  Informatie over {standaloneInquiries.length}{" "}
+                  {standaloneInquiries.length === 1 ? "certificaat" : "certificaten"} zonder
+                  gekoppeld product uit de catalogus.
+                </>
+              ) : null}
             </p>
           </div>
-          <ProductInquiryMatrix groups={productGroups} primaryEntryId={entry.id} />
+          {productGroups.length > 0 ? (
+            <ProductInquiryMatrix groups={productGroups} primaryEntryId={entry.id} />
+          ) : null}
+          <StandaloneInquiriesOverview drafts={standaloneInquiries} />
         </section>
       ) : null}
 

@@ -46,6 +46,8 @@ export type {
 } from "./ExpertCallBookingView";
 export { ProductInquiryMatrix } from "./ProductInquiryMatrix";
 export type { ProductInquiryMatrixProps } from "./ProductInquiryMatrix";
+export { StandaloneInquiriesOverview } from "./StandaloneInquiriesOverview";
+export type { StandaloneInquiriesOverviewProps } from "./StandaloneInquiriesOverview";
 export { ProductDocumentationLibrary } from "./ProductDocumentationLibrary";
 export type { ProductDocumentationLibraryProps } from "./ProductDocumentationLibrary";
 export {
@@ -60,8 +62,8 @@ export {
   buildGeneralProcessDocuments,
   buildProductDocumentsForDraft,
   groupDraftsByProduct,
+  isProductBoundDraft,
+  productBoundDrafts,
+  standaloneInquiryDrafts,
 } from "./build-validation-documents";
-export type {
-  ProductSummaryDocument,
-  ProductSummaryGroup,
-} from "./build-validation-documents";
+export type { ProductSummaryDocument, ProductSummaryGroup } from "./build-validation-documents";

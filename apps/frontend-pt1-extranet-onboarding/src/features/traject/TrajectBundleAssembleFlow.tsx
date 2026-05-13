@@ -21,16 +21,11 @@ import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { findWegwijzerService } from "../wegwijzer/wegwijzer-services";
-import {
-  draftBelongsToTrajectRoot,
-  reduceTrajectHandoffState,
-} from "./traject-submission-context";
+import { draftBelongsToTrajectRoot, reduceTrajectHandoffState } from "./traject-submission-context";
 
 const WEGWIJZER_PATH = "/welcome";
-const PRODUCT_SELECTION_PATH = (serviceId: string) =>
-  `/welcome/aanvraag/${serviceId}/start`;
-const REQUEST_REVIEW_PATH = (serviceId: string) =>
-  `/welcome/aanvraag/${serviceId}/controleren`;
+const PRODUCT_SELECTION_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}/start`;
+const REQUEST_REVIEW_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}/controleren`;
 
 function isBundleCert(value: string): value is BundleCertKey {
   return (BUNDLE_CERT_ORDER as readonly string[]).includes(value);
@@ -144,10 +139,9 @@ export function TrajectBundleAssembleFlow() {
       });
 
       setFlowState((prev) => {
+        // Alleen productbundel opnieuw uit `selections`; niet-productgebonden drafts blijven via
+        // `reduceTrajectHandoffState` staan (anders zouden ze dubbel in de merge zitten).
         const expanded: CertificationRequestDraft[] = [];
-        for (const draft of prev.drafts) {
-          if (!draft.productId) expanded.push(draft);
-        }
         const shownIds = new Set(products.map((p) => p.id));
         for (const [productId, base] of Array.from(baseDraftByProduct.entries())) {
           if (!shownIds.has(productId)) continue;

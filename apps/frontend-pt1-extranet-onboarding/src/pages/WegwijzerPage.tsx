@@ -358,9 +358,9 @@ function MasterCard({
 
   const handleStartNonProductFlow = () => {
     const placeholder: CertificationRequestDraft = {
-      id: `${entry.id}-no-product`,
+      id: `standalone-${entry.id}`,
       entryId: entry.id as CertificationEntryId,
-      label: entry.label,
+      label: entry.id === "innovation-attest" ? "Innovation attest" : entry.label,
       shortLabel: entry.shortLabel,
       trajectRootServiceId: entry.id,
     };
@@ -528,7 +528,9 @@ function MasterCardSections({ service }: { service: WegwijzerService }) {
             {content.requirements.map((req) => (
               <div key={req.title}>
                 <dt className="text-sm font-semibold text-foreground">{req.title}</dt>
-                <dd className="mt-micro text-sm leading-normal text-muted-foreground">{req.content}</dd>
+                <dd className="mt-micro text-sm leading-normal text-muted-foreground">
+                  {req.content}
+                </dd>
               </div>
             ))}
           </dl>

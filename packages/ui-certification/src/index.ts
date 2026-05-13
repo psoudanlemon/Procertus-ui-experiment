@@ -49,6 +49,7 @@ export {
   ProductDocumentationLibrary,
   ProductInquiryMatrix,
   ProductRequestNoteField,
+  StandaloneInquiriesOverview,
   isProductRequestNoteComplete,
   ProductSelectionBasketActionBar,
   ProductSelectionBasketBody,
@@ -60,6 +61,9 @@ export {
   buildGeneralProcessDocuments,
   buildProductDocumentsForDraft,
   groupDraftsByProduct,
+  isProductBoundDraft,
+  productBoundDrafts,
+  standaloneInquiryDrafts,
   useProductSelectionBasket,
 } from "./components/traject";
 export type {
@@ -78,6 +82,7 @@ export type {
   ProductSelectionBasketProviderProps,
   ProductSummaryDocument,
   ProductSummaryGroup,
+  StandaloneInquiriesOverviewProps,
   TrajectLayoutAction,
   TrajectLayoutProps,
   TrajectPageFrameProps,

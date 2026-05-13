@@ -16,7 +16,10 @@ import {
 } from "@procertus-ui/ui";
 import {
   ProductInquiryMatrix,
+  StandaloneInquiriesOverview,
   groupDraftsByProduct,
+  isProductBoundDraft,
+  standaloneInquiryDrafts,
   useOnboardingFlowApi,
   useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
@@ -87,7 +90,11 @@ export function PublicCertificationRequestsCart() {
     return () => window.clearTimeout(id);
   }, [mode]);
 
-  const productGroups = useMemo(() => groupDraftsByProduct(drafts), [drafts]);
+  const productGroups = useMemo(
+    () => groupDraftsByProduct(drafts.filter(isProductBoundDraft)),
+    [drafts],
+  );
+  const standaloneInquiries = useMemo(() => standaloneInquiryDrafts(drafts), [drafts]);
 
   const handleTriggerAnimationEnd = (event: AnimationEvent<HTMLButtonElement>) => {
     if (event.target !== event.currentTarget) return;
@@ -125,6 +132,7 @@ export function PublicCertificationRequestsCart() {
 
   const removeProductRow = async (productId: string) => {
     const nextDrafts = drafts.filter((d) => {
+      if (!isProductBoundDraft(d)) return true;
       const key = d.productId?.trim() || d.productLabel?.trim() || d.id;
       return key !== productId;
     });
@@ -135,6 +143,24 @@ export function PublicCertificationRequestsCart() {
         isLast
           ? "Uw mandje wordt leeggemaakt en alle registratiegegevens worden gewist. U wordt daarna naar de welkomstpagina gestuurd."
           : "Alle certificaataanvragen voor dit product worden uit uw mandje gehaald.",
+      )) ?? false;
+    if (!ok) return;
+    if (isLast) {
+      closePanelResetGuestFlowAndGoWelcome();
+    } else {
+      api.applyWizardDraftCompletion(nextDrafts);
+    }
+  };
+
+  const removeStandaloneDraft = async (draftId: string) => {
+    const nextDrafts = drafts.filter((d) => d.id !== draftId);
+    const isLast = nextDrafts.length === 0;
+    const ok =
+      (await confirm?.(
+        isLast ? "Laatste aanvraag verwijderen?" : "Aanvraag verwijderen uit mandje?",
+        isLast
+          ? "Uw mandje wordt leeggemaakt en alle registratiegegevens worden gewist. U wordt daarna naar de welkomstpagina gestuurd."
+          : "Deze aanvraag (zonder gekoppeld product) wordt uit uw mandje gehaald.",
       )) ?? false;
     if (!ok) return;
     if (isLast) {
@@ -191,18 +217,26 @@ export function PublicCertificationRequestsCart() {
         <SheetHeader className="pr-10 text-left">
           <SheetTitle>Aanvragen</SheetTitle>
           <SheetDescription>
-            Overzicht van uw huidige certificaataanvragen per product. Met Aanvragen bewerken gaat u
-            naar de welkomstpagina; uw selectie blijft bewaard. Verwijder een productrij of wis alle
-            aanvragen.
+            Overzicht van certificaataanvragen gekoppeld aan producten waar van toepassing, plus
+            overige aanvragen zonder catalogus-product. Met Aanvragen bewerken gaat u naar de
+            welkomstpagina; uw selectie blijft bewaard. Verwijder rijen of wis alle aanvragen.
           </SheetDescription>
         </SheetHeader>
         <SheetScrollFade />
         <SheetBody className="min-h-0 flex-1">
           <div className="flex flex-col gap-section">
-            <ProductInquiryMatrix
-              groups={productGroups}
-              onRemoveProductRow={(productId) => {
-                void removeProductRow(productId);
+            {productGroups.length > 0 ? (
+              <ProductInquiryMatrix
+                groups={productGroups}
+                onRemoveProductRow={(productId) => {
+                  void removeProductRow(productId);
+                }}
+              />
+            ) : null}
+            <StandaloneInquiriesOverview
+              drafts={standaloneInquiries}
+              onRemoveDraft={(draftId) => {
+                void removeStandaloneDraft(draftId);
               }}
             />
             <div className="flex flex-col gap-component sm:flex-row sm:flex-wrap">

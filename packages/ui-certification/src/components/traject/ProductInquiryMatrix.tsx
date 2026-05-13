@@ -2,9 +2,8 @@ import { Cancel01Icon, Delete02Icon, Tick02Icon } from "@hugeicons/core-free-ico
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Button, cn } from "@procertus-ui/ui";
 
-import { defaultProcertusCategorizationDoc } from "../../categorization-data";
-import type { AvailableEntry } from "../../types";
 import type { ProductSummaryGroup } from "./build-validation-documents";
+import { inquiryMatrixColumnLabelFor } from "./inquiry-matrix-column-label";
 import { ProductCategoryTrail } from "./ProductCategoryTrail";
 
 /**
@@ -13,10 +12,7 @@ import { ProductCategoryTrail } from "./ProductCategoryTrail";
  * niet het oude `@[576px]/inquiry`-patroon.
  */
 
-function categoryTrailWithoutLeaf(
-  path: string | undefined,
-  label: string,
-): string {
+function categoryTrailWithoutLeaf(path: string | undefined, label: string): string {
   if (!path) return "";
   const parts = path
     .split(/\s*[/›>]\s*/)
@@ -37,35 +33,6 @@ function categoryTrailWithoutLeaf(
  * daarna in de volgorde waarin ze voor het eerst opduiken.
  */
 const PRIMARY_CERT_ORDER = ["benor", "ce", "ssd", "procertus"] as const;
-
-/**
- * Single source of truth voor certificaatnamen: dezelfde
- * `availableEntries` die ook de Wegwijzer-pillbar en master-card titels
- * voeden, zodat kolomheaders in de aanvraag-matrix dezelfde nomenclatuur
- * gebruiken (bv. "BENOR-certificatie", "CE-markering", "Innovatie-attest").
- */
-const ENTRIES_BY_ID = new Map<string, AvailableEntry>(
-  (defaultProcertusCategorizationDoc.meta.availableEntries ?? []).map(
-    (entry) => [entry.id, entry],
-  ),
-);
-
-/**
- * Fallback voor wizard-entry-points die niet als `availableEntry` zijn
- * geregistreerd (bv. `product-certification` is een intent, niet één van de
- * concrete certificaten).
- */
-const FALLBACK_COLUMN_LABEL: Record<string, string> = {
-  "product-certification": "Productcertificatie",
-};
-
-function columnLabelFor(entryId: string): string {
-  return (
-    ENTRIES_BY_ID.get(entryId)?.label ??
-    FALLBACK_COLUMN_LABEL[entryId] ??
-    entryId.toUpperCase()
-  );
-}
 
 function deriveCertOrder(
   groups: ProductSummaryGroup[],
@@ -97,7 +64,7 @@ function requestedCertsOrderedForGroup(
   const requested = new Set<string>(group.drafts.map((d) => d.entryId));
   return certOrder
     .filter((id) => requested.has(id))
-    .map((entryId) => ({ entryId, label: columnLabelFor(entryId) }));
+    .map((entryId) => ({ entryId, label: inquiryMatrixColumnLabelFor(entryId) }));
 }
 
 export type ProductInquiryMatrixProps = {
@@ -165,9 +132,14 @@ export function ProductInquiryMatrix({
                     Toegevoegde certificaattypes
                   </p>
                   {certs.length === 0 ? (
-                    <p className="m-0 text-sm text-muted-foreground">Geen certificaattypes gekoppeld.</p>
+                    <p className="m-0 text-sm text-muted-foreground">
+                      Geen certificaattypes gekoppeld.
+                    </p>
                   ) : (
-                    <ul className="m-0 flex list-none flex-wrap gap-micro p-0" aria-label="Certificaattypes voor dit product">
+                    <ul
+                      className="m-0 flex list-none flex-wrap gap-micro p-0"
+                      aria-label="Certificaattypes voor dit product"
+                    >
                       {certs.map(({ entryId, label }) => (
                         <li key={entryId}>
                           <span className="inline-flex max-w-full items-center rounded-md border border-border/80 bg-muted/50 px-2 py-1 text-xs font-medium leading-snug text-foreground">
@@ -211,7 +183,7 @@ export function ProductInquiryMatrix({
                 Gekozen producten
               </th>
               {certOrder.map((cert) => {
-                const col = columnLabelFor(cert);
+                const col = inquiryMatrixColumnLabelFor(cert);
                 return (
                   <th
                     key={cert}
@@ -235,35 +207,24 @@ export function ProductInquiryMatrix({
           </thead>
           <tbody>
             {groups.map((group) => {
-              const requested = new Set<string>(
-                group.drafts.map((draft) => draft.entryId),
-              );
+              const requested = new Set<string>(group.drafts.map((draft) => draft.entryId));
               return (
-                <tr
-                  key={group.productId}
-                  className="border-b border-border/60 last:border-b-0"
-                >
+                <tr key={group.productId} className="border-b border-border/60 last:border-b-0">
                   <th
                     scope="row"
                     className="py-component pe-component text-start text-sm font-medium text-foreground"
                   >
                     {group.productLabel}
                     {(() => {
-                      const trail = categoryTrailWithoutLeaf(
-                        group.productPath,
-                        group.productLabel,
-                      );
+                      const trail = categoryTrailWithoutLeaf(group.productPath, group.productLabel);
                       return trail ? <ProductCategoryTrail trail={trail} /> : null;
                     })()}
                   </th>
                   {certOrder.map((cert) => {
                     const isRequested = requested.has(cert);
-                    const columnTitle = columnLabelFor(cert);
+                    const columnTitle = inquiryMatrixColumnLabelFor(cert);
                     return (
-                      <td
-                        key={cert}
-                        className="px-component py-component text-center"
-                      >
+                      <td key={cert} className="px-component py-component text-center">
                         {isRequested ? (
                           <HugeiconsIcon
                             icon={Tick02Icon}

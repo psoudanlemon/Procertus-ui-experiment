@@ -2,10 +2,13 @@ import { Button } from "@procertus-ui/ui";
 import {
   ProductDocumentationLibrary,
   ProductInquiryMatrix,
+  StandaloneInquiriesOverview,
   TrajectPageFrame,
   TrajectStoryFooter,
   buildProductDocumentsForDraft,
   groupDraftsByProduct,
+  isProductBoundDraft,
+  standaloneInquiryDrafts,
   type CertificationRequestDraft,
   useOnboardingFlowState,
 } from "@procertus-ui/ui-certification";
@@ -18,18 +21,17 @@ const WEGWIJZER_PATH = "/welcome";
 const BUNDLE_ASSEMBLE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}/pakket`;
 const TRIAGE_PATH = (serviceId: string) => `/welcome/aanvraag/${serviceId}`;
 
-/** Een draft telt als "echt productgebonden" als er een productId óf productLabel op staat. */
-function isProductBoundDraft(draft: CertificationRequestDraft): boolean {
-  return Boolean(draft.productId?.trim() || draft.productLabel?.trim());
-}
-
 export function TrajectRequestReviewFlow() {
   const navigate = useNavigate();
   const { serviceId } = useParams<{ serviceId: string }>();
   const service = findWegwijzerService(serviceId);
   const { flowState } = useOnboardingFlowState();
   const inquiries: CertificationRequestDraft[] = flowState.drafts;
-  const productGroups = useMemo(() => groupDraftsByProduct(inquiries), [inquiries]);
+  const standaloneInquiries = useMemo(() => standaloneInquiryDrafts(inquiries), [inquiries]);
+  const productGroups = useMemo(
+    () => groupDraftsByProduct(inquiries.filter(isProductBoundDraft)),
+    [inquiries],
+  );
   const hasProducts = useMemo(() => inquiries.some(isProductBoundDraft), [inquiries]);
   const isNonProductBound = service?.entry.productRelation === "optional";
 
@@ -93,12 +95,39 @@ export function TrajectRequestReviewFlow() {
               Overzicht aanvragen
             </h2>
             <p className="m-0 text-sm text-muted-foreground">
-              {inquiries.length} {inquiries.length === 1 ? "certificaat" : "certificaten"}{" "}
-              aangevraagd over {productGroups.length}{" "}
-              {productGroups.length === 1 ? "product" : "producten"}.
+              {productGroups.length > 0 && standaloneInquiries.length === 0 ? (
+                <>
+                  {inquiries.length}{" "}
+                  {inquiries.length === 1 ? "certificaataanvraag" : "certificaataanvragen"} over{" "}
+                  {productGroups.length} {productGroups.length === 1 ? "product" : "producten"}.
+                </>
+              ) : null}
+              {productGroups.length > 0 && standaloneInquiries.length > 0 ? (
+                <>
+                  {inquiries.length}{" "}
+                  {inquiries.length === 1 ? "certificaataanvraag" : "certificaataanvragen"}:{" "}
+                  {inquiries.length - standaloneInquiries.length} gekoppeld aan{" "}
+                  {productGroups.length} {productGroups.length === 1 ? "product" : "producten"} en{" "}
+                  {standaloneInquiries.length}{" "}
+                  {standaloneInquiries.length === 1 ? "aanvraag" : "aanvragen"} zonder gekoppeld
+                  product uit de catalogus.
+                </>
+              ) : null}
+              {productGroups.length === 0 && standaloneInquiries.length > 0 ? (
+                <>
+                  {standaloneInquiries.length}{" "}
+                  {standaloneInquiries.length === 1
+                    ? "certificaataanvraag"
+                    : "certificaataanvragen"}{" "}
+                  zonder gekoppeld product uit de catalogus.
+                </>
+              ) : null}
             </p>
           </div>
-          <ProductInquiryMatrix groups={productGroups} primaryEntryId={service.entry.id} />
+          {productGroups.length > 0 ? (
+            <ProductInquiryMatrix groups={productGroups} primaryEntryId={service.entry.id} />
+          ) : null}
+          <StandaloneInquiriesOverview drafts={standaloneInquiries} />
         </section>
 
         <div className="flex flex-wrap items-center gap-component">
