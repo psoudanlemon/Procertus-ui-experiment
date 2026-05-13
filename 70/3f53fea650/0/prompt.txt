@@ -1,0 +1,49 @@
+@packages/ui/src/components/step-layout-stepper/StepLayoutStepper.tsx when lots of long-form content is added to the Stepply Hard Stepper, it currently overlaps and the text becomes unreadable. Please make sure the text is wrapped.
+
+---
+
+@packages/ui/src/components/step-layout-stepper/StepLayoutStepper.tsx when lots of long-form content is added to the Stepply Hard Stepper, it currently overlaps and the text becomes unreadable. Please make sure the text is wrapped.
+
+---
+
+@packages/ui/src/components/step-layout-stepper/StepLayoutStepper.tsx when lots of long-form content is added to the StepLayoutStepper, it currently overlaps and the text becomes unreadable. Please make sure the text is wrapped.
+
+---
+
+@packages/ui/src/components/step-layout-stepper/StepLayoutStepper.tsx when lots of long-form content is added to the StepLayoutStepper, it currently overlaps and the text becomes unreadable. Please make sure the text is wrapped.
+
+---
+
+Add the option to not show the secondary labels. Use this option specifically in the onboarding flow stepper.
+
+---
+
+Instead of using the stepper layout with the banded header, remove the header altogether and show a floating navigational element where all the steps are laid out and stacked vertically.
+
+On mobile, hide this by default and allow it to be shown as a panel. Provide an icon next to a summary of the stepper that shows the total number of steps and the current step.
+
+---
+
+Instead of using the stepper layout with the banded header, remove the header altogether and show a floating navigational element where all the steps are laid out and stacked vertically.
+
+On mobile, hide this by default and allow it to be shown as a panel. Provide an icon next to a summary of the stepper that shows the total number of steps and the current step.
+
+---
+
+Don't apply a max height to this floating side panel. Make sure it is laid out directly next to the main view of the step layout; there is currently too much margin between them.
+
+Also show the secondary labels again specifically for this onboarding flow. We now have the room again to display these second labels. Also, use appropriate semantic padding in the floating side panel.
+
+---
+
+Don't apply a max height to this floating side panel. Make sure it is laid out directly next to the main view of the step layout; there is currently too much margin between them.
+
+Also show the secondary labels again specifically for this onboarding flow. We now have the room again to display these second labels. Also, use appropriate semantic padding in the floating side panel.
+
+---
+
+@packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx:176-246 why is this choice card group not stretching to the full width, or why does it seem there is a third column? Please look at the screenshot.
+
+---
+
+@packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx:176-246 why is this choice card group not stretching to the full width, or why does it seem there is a third column? Please look at the screenshot.
