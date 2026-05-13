@@ -7,7 +7,13 @@ const meta = {
   component: VerifyCodeForm,
   tags: ["autodocs"],
   parameters: { layout: "centered" },
-  decorators: [(Story) => <div className="w-sm"><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div className="w-sm">
+        <Story />
+      </div>
+    ),
+  ],
   args: {
     email: "jane.doe@company.com",
     onResendCode: () => {},

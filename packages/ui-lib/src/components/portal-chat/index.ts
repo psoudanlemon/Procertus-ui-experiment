@@ -25,5 +25,16 @@ export type {
   PortalChatMessagePlacement,
   PortalChatWindowProps,
 } from "./portal-chat-types";
+export { PortalEmailThreadWindow } from "../../custom-components/Chat/PortalEmailThreadWindow";
+export type {
+  PortalEmailAttachment,
+  PortalEmailComposerProps,
+  PortalEmailMessage,
+  PortalEmailThreadSummary,
+  PortalEmailThreadWindowProps,
+} from "./portal-email-thread-types";
 
-export { AvatarFallback as ChatBubbleAvatarFallback, AvatarImage as ChatBubbleAvatarImage } from "@procertus-ui/ui";
+export {
+  AvatarFallback as ChatBubbleAvatarFallback,
+  AvatarImage as ChatBubbleAvatarImage,
+} from "@procertus-ui/ui";

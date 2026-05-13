@@ -25,10 +25,7 @@ export type SetPasswordFormProps = {
   onNewPasswordChange?: (value: string) => void;
   confirmPassword?: string;
   onConfirmPasswordChange?: (value: string) => void;
-  onSubmit?: (data: {
-    newPassword: string;
-    confirmPassword: string;
-  }) => void;
+  onSubmit?: (data: { newPassword: string; confirmPassword: string }) => void;
   /** Label for the submit button. Defaults to "Set password". */
   submitLabel?: string;
   /** Called when the secondary back button is clicked. Hidden when not provided. */
@@ -87,7 +84,9 @@ function SetPasswordForm({
             aria-invalid={!!fieldErrors?.newPassword}
           />
           <PasswordStrength password={newPassword} />
-          {fieldErrors?.newPassword && <FieldError errors={[{ message: fieldErrors.newPassword }]} />}
+          {fieldErrors?.newPassword && (
+            <FieldError errors={[{ message: fieldErrors.newPassword }]} />
+          )}
         </Field>
         <Field>
           <FieldLabel htmlFor="set-confirm">Confirm new password</FieldLabel>

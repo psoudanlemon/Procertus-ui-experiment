@@ -106,13 +106,31 @@ export const ComposedThread: StoryObj<typeof meta> = {
           }
           actions={
             <>
-              <Button type="button" variant="ghost" size="icon" className="rounded-full" aria-label="Bellen">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="rounded-full"
+                aria-label="Bellen"
+              >
                 <HugeiconsIcon icon={Call02Icon} className="size-4" />
               </Button>
-              <Button type="button" variant="ghost" size="icon" className="rounded-full" aria-label="Video">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="rounded-full"
+                aria-label="Video"
+              >
                 <HugeiconsIcon icon={Video01Icon} className="size-4" />
               </Button>
-              <Button type="button" variant="ghost" size="icon" className="rounded-full" aria-label="Info">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="rounded-full"
+                aria-label="Info"
+              >
                 <HugeiconsIcon icon={InformationCircleIcon} className="size-4" />
               </Button>
             </>

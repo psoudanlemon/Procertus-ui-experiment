@@ -1,9 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import {
-  ArrowRight02Icon,
-  Call02Icon,
-  LinkSquare02Icon,
-} from "@hugeicons/core-free-icons";
+import { ArrowRight02Icon, Call02Icon, LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Button, Card } from "@procertus-ui/ui";
 

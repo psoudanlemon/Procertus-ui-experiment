@@ -1,11 +1,6 @@
 import * as React from "react";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  H1,
-} from "@procertus-ui/ui";
+import { Card, CardContent, CardHeader, H1 } from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus Logo with tagline.svg";
 
 function ProcertusLogo({ className }: { className?: string }) {
@@ -131,8 +126,16 @@ function AuthLayout({
         <div className="flex w-full max-w-sm justify-center">
           {logo ?? (
             <>
-              <img src={procertusLogo} alt="PROCERTUS, certification that builds trust" className="h-16 w-auto dark:hidden" />
-              <img src={procertusLogo} alt="PROCERTUS, certification that builds trust" className="hidden h-16 w-auto brightness-0 invert dark:block" />
+              <img
+                src={procertusLogo}
+                alt="PROCERTUS, certification that builds trust"
+                className="h-16 w-auto dark:hidden"
+              />
+              <img
+                src={procertusLogo}
+                alt="PROCERTUS, certification that builds trust"
+                className="hidden h-16 w-auto brightness-0 invert dark:block"
+              />
             </>
           )}
         </div>
@@ -143,9 +146,15 @@ function AuthLayout({
               <Card className="gap-section py-section shadow-[var(--shadow-proc-md)] ring-0">
                 <CardHeader className="gap-0 px-section text-center">
                   <H1>{title}</H1>
-                  {description && <p className="text-base leading-[1.4] text-muted-foreground mt-micro">{description}</p>}
+                  {description && (
+                    <p className="text-base leading-[1.4] text-muted-foreground mt-micro">
+                      {description}
+                    </p>
+                  )}
                   {notice && (
-                    <div className="mt-2 text-xs leading-relaxed text-muted-foreground">{notice}</div>
+                    <div className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                      {notice}
+                    </div>
                   )}
                 </CardHeader>
                 <CardContent className="px-section">{children}</CardContent>

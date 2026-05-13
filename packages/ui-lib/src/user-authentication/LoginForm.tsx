@@ -70,8 +70,7 @@ function LoginForm({
     }
   };
 
-  const resolvedSubmitLabel =
-    submitLabel ?? (isPasswordless ? "Send sign-in link" : "Sign in");
+  const resolvedSubmitLabel = submitLabel ?? (isPasswordless ? "Send sign-in link" : "Sign in");
 
   return (
     <form onSubmit={handleSubmit}>

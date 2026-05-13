@@ -18,6 +18,7 @@ export type PortalChatMessage = {
 
 export type PortalChatComposerToolbarOptions = {
   hideEmojiPicker?: boolean;
+  hideMentionButton?: boolean;
   emojiPresets?: readonly string[];
   /** Wrap row in `<form>` for Enter-to-send. Default true. */
   asForm?: boolean;

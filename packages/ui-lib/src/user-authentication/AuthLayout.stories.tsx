@@ -39,12 +39,7 @@ export const Login: Story = {
   args: {
     title: "Welcome back",
     description: "Sign in to your PROCERTUS account",
-    children: (
-      <LoginForm
-        email="jane.doe@company.com"
-        onForgotPassword={() => {}}
-      />
-    ),
+    children: <LoginForm email="jane.doe@company.com" onForgotPassword={() => {}} />,
   },
 };
 
@@ -54,12 +49,7 @@ export const LoginWithNotice: Story = {
     title: "Welcome back",
     description: "Sign in to your PROCERTUS account",
     notice: "If you were invited, use the same email as in your invitation message.",
-    children: (
-      <LoginForm
-        email="jane.doe@company.com"
-        onForgotPassword={() => {}}
-      />
-    ),
+    children: <LoginForm email="jane.doe@company.com" onForgotPassword={() => {}} />,
   },
 };
 
@@ -99,12 +89,7 @@ export const ForgotPassword: Story = {
   args: {
     title: "Forgot your password?",
     description: "We'll send you a link to reset it",
-    children: (
-      <ForgotPasswordForm
-        email="jane.doe@company.com"
-        onBackToLogin={() => {}}
-      />
-    ),
+    children: <ForgotPasswordForm email="jane.doe@company.com" onBackToLogin={() => {}} />,
   },
 };
 

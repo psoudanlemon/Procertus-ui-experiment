@@ -7,7 +7,13 @@ const meta = {
   component: SetPasswordForm,
   tags: ["autodocs"],
   parameters: { layout: "centered" },
-  decorators: [(Story) => <div data-density="operational" className="w-sm"><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div data-density="operational" className="w-sm">
+        <Story />
+      </div>
+    ),
+  ],
   args: {
     onBack: () => {},
   },

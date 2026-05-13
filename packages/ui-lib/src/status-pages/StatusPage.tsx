@@ -113,7 +113,9 @@ function StatusPage({
           actions={actions}
         />
         {children != null ? (
-          <div className="flex w-full flex-col items-center gap-section text-center">{children}</div>
+          <div className="flex w-full flex-col items-center gap-section text-center">
+            {children}
+          </div>
         ) : null}
       </div>
     </div>

@@ -46,13 +46,7 @@ const sidebarProps = {
     {
       id: "3",
       name: "PROCERTUS",
-      logo: (
-        <img
-          src={logomark}
-          alt="PROCERTUS"
-          className="size-full rounded-sm"
-        />
-      ),
+      logo: <img src={logomark} alt="PROCERTUS" className="size-full rounded-sm" />,
       plan: "Documentation portal",
     },
   ] as Workspace[],
@@ -174,8 +168,7 @@ export const SomethingWentWrong: Story = {
           </EmptyIcon>
           <EmptyTitle>Something went wrong</EmptyTitle>
           <EmptyDescription>
-            An unexpected error occurred. Please return to the homepage and try
-            again.
+            An unexpected error occurred. Please return to the homepage and try again.
           </EmptyDescription>
           <EmptyActions>
             <Button asChild>

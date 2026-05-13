@@ -2,12 +2,7 @@ import * as React from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { EyeIcon, ViewOffIcon } from "@hugeicons/core-free-icons";
 
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@procertus-ui/ui";
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@procertus-ui/ui";
 
 type PasswordInputProps = Omit<React.ComponentProps<typeof InputGroupInput>, "type">;
 

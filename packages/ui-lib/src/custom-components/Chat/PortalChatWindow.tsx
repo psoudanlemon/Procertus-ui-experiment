@@ -60,7 +60,9 @@ export function PortalChatWindow({
   const toolbarOpts = normalizeToolbarOptions(composer?.toolbar);
 
   return (
-    <div className={cn("flex min-h-0 min-w-0 flex-col gap-3 bg-card text-card-foreground", className)}>
+    <div
+      className={cn("flex min-h-0 min-w-0 flex-col gap-3 bg-card text-card-foreground", className)}
+    >
       {messages.length === 0 ? (
         <div className="text-sm text-muted-foreground">
           {emptyContent ?? "Nog geen berichten in dit gesprek."}

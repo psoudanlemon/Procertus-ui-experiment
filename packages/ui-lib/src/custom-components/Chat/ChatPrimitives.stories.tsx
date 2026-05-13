@@ -82,7 +82,9 @@ export const ListWithScrollButton: StoryObj<typeof meta> = {
               <AvatarFallback>{i % 2 === 0 ? "P" : "U"}</AvatarFallback>
             </ChatBubbleAvatar>
             <ChatBubbleMessage>
-              <p className="text-sm">Regel {i + 1}, scroll omhoog om de “naar beneden”-knop te zien.</p>
+              <p className="text-sm">
+                Regel {i + 1}, scroll omhoog om de “naar beneden”-knop te zien.
+              </p>
             </ChatBubbleMessage>
           </ChatBubble>
         ))}

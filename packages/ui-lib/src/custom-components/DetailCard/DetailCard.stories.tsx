@@ -1,11 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ArrowRight02Icon, ClockIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Button,
-  DownloadableItemGrid,
-  type DownloadableItemData,
-} from "@procertus-ui/ui";
+import { Button, DownloadableItemGrid, type DownloadableItemData } from "@procertus-ui/ui";
 
 import { DetailCard, DetailCardSection } from "./DetailCard";
 
@@ -54,59 +50,59 @@ function DefaultStory() {
   return (
     <div className="mx-auto w-full max-w-7xl">
       <DetailCard
-      title="BENOR-certificatie"
-      description="Productgebonden BENOR-certificatie."
-      footer={
-        <>
-          <Button variant="link">Hulp nodig?</Button>
-          <Button size="lg">
-            Start traject
-            <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
-          </Button>
-        </>
-      }
-    >
-      <DetailCardSection title="Wat is een BENOR-certificatie?">
-        <p className="max-w-3xl text-sm leading-normal">
-          BENOR is een Belgisch productcertificaat dat aantoont dat een bouwproduct voldoet aan de
-          geldende normen voor samenstelling, productie en prestatie. PROCERTUS kent het toe na een
-          uitgebreide initiële beoordeling en houdt het in stand via continue externe controles op
-          de productielocatie en op de markt.
-        </p>
-      </DetailCardSection>
-
-      <DetailCardSection title="Wanneer vraag je dit het beste aan?">
-        <ul className="flex flex-col gap-micro">
-          {[
-            "U wenst een gestandaardiseerd bouwproduct (beton, mortel, granulaten, hydraulische bindmiddelen) op de Belgische markt aan te bieden.",
-            "Aanbestedende overheden (SPW, AWV, MOW, Infrabel) leggen BENOR op in hun lastenboeken.",
-            "U wilt uw kwaliteitssysteem en productprestaties extern laten valideren.",
-          ].map((item) => (
-            <li key={item} className="flex items-start gap-component text-sm leading-normal">
-              <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />
-              <span className="max-w-3xl">{item}</span>
-            </li>
-          ))}
-        </ul>
-      </DetailCardSection>
-
-      <DetailCardSection
-        title="Regels en documentatie"
-        description="Documenten op basis van uw selectie voor BENOR (prototype, downloadlinks zijn gemockt)."
+        title="BENOR-certificatie"
+        description="Productgebonden BENOR-certificatie."
+        footer={
+          <>
+            <Button variant="link">Hulp nodig?</Button>
+            <Button size="lg">
+              Start traject
+              <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
+            </Button>
+          </>
+        }
       >
-        <DownloadableItemGrid items={documents} />
-      </DetailCardSection>
-
-      <DetailCardSection>
-        <div className="flex items-start gap-component self-start rounded-md bg-info/40 p-component text-info-foreground">
-          <HugeiconsIcon icon={ClockIcon} className="mt-0.5 size-5 shrink-0" />
-          <p className="text-sm leading-normal">
-            Vanaf indiening van een volledig dossier verloopt het traject in 8 tot 12 weken:
-            ontvankelijkheidsanalyse, initiële audit, analyse van de proefresultaten en finale
-            beslissing.
+        <DetailCardSection title="Wat is een BENOR-certificatie?">
+          <p className="max-w-3xl text-sm leading-normal">
+            BENOR is een Belgisch productcertificaat dat aantoont dat een bouwproduct voldoet aan de
+            geldende normen voor samenstelling, productie en prestatie. PROCERTUS kent het toe na
+            een uitgebreide initiële beoordeling en houdt het in stand via continue externe
+            controles op de productielocatie en op de markt.
           </p>
-        </div>
-      </DetailCardSection>
+        </DetailCardSection>
+
+        <DetailCardSection title="Wanneer vraag je dit het beste aan?">
+          <ul className="flex flex-col gap-micro">
+            {[
+              "U wenst een gestandaardiseerd bouwproduct (beton, mortel, granulaten, hydraulische bindmiddelen) op de Belgische markt aan te bieden.",
+              "Aanbestedende overheden (SPW, AWV, MOW, Infrabel) leggen BENOR op in hun lastenboeken.",
+              "U wilt uw kwaliteitssysteem en productprestaties extern laten valideren.",
+            ].map((item) => (
+              <li key={item} className="flex items-start gap-component text-sm leading-normal">
+                <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />
+                <span className="max-w-3xl">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </DetailCardSection>
+
+        <DetailCardSection
+          title="Regels en documentatie"
+          description="Documenten op basis van uw selectie voor BENOR (prototype, downloadlinks zijn gemockt)."
+        >
+          <DownloadableItemGrid items={documents} />
+        </DetailCardSection>
+
+        <DetailCardSection>
+          <div className="flex items-start gap-component self-start rounded-md bg-info/40 p-component text-info-foreground">
+            <HugeiconsIcon icon={ClockIcon} className="mt-0.5 size-5 shrink-0" />
+            <p className="text-sm leading-normal">
+              Vanaf indiening van een volledig dossier verloopt het traject in 8 tot 12 weken:
+              ontvankelijkheidsanalyse, initiële audit, analyse van de proefresultaten en finale
+              beslissing.
+            </p>
+          </div>
+        </DetailCardSection>
       </DetailCard>
     </div>
   );

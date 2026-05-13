@@ -1,4 +1,4 @@
-/** Raw lines for mocked portal chat threads (mapped to `PortalChatMessage` in the conversation panel). */
+/** Raw lines for mocked dossier threads (mapped to `PortalEmailMessage` in het communicatiepaneel). */
 
 export type MockPortalChatLine = {
   id: string;
@@ -6,6 +6,14 @@ export type MockPortalChatLine = {
   authorLabel: string;
   atIso: string;
   body: string;
+  subject?: string;
+  attachments?: readonly {
+    id: string;
+    title: string;
+    description?: string;
+    formatHint?: string;
+    href: string;
+  }[];
 };
 
 export const CONVERSATION_SUITES = ["profileChange", "certification"] as const;
@@ -25,13 +33,24 @@ const PROFILE_DEFAULT: MockPortalChatLine[] = [
     side: "requester",
     authorLabel: "U",
     atIso: "2026-04-28T09:12:00.000Z",
-    body: "Hierbij de aangevulde profielgegevens. Kunnen jullie dit valideren wanneer mogelijk?",
+    subject: "Profielwijziging — validatie gevraagd",
+    attachments: [
+      {
+        id: "mock-profiel-pdf",
+        title: "ingevuld_profielsjabloon.pdf",
+        formatHint: "PDF",
+        href: "/favicon.svg",
+      },
+    ],
+    body:
+      "Hierbij de **aangevulde profielgegevens** als bijlage en in het dossier.\n\nKunnen jullie dit valideren wanneer mogelijk?",
   },
   {
     id: "mock-adm-1",
     side: "PROCERTUS",
     authorLabel: "PROCERTUS",
     atIso: "2026-04-28T11:40:00.000Z",
+    subject: "Re: Profielwijziging — validatie gevraagd",
     body: "Ontvangen. We nemen uw wijziging in behandeling en sturen u een update zodra er een beslissing is.",
   },
   {
@@ -39,6 +58,7 @@ const PROFILE_DEFAULT: MockPortalChatLine[] = [
     side: "PROCERTUS",
     authorLabel: "PROCERTUS — backoffice",
     atIso: "2026-04-28T14:05:00.000Z",
+    subject: "Re: Profielwijziging — validatie gevraagd",
     body: "Voor de volledigheid: controleer of het BTW-nummer overeenkomt met de KBO-gegevens voordat we definitief doorvoeren.",
   },
 ];
@@ -50,6 +70,7 @@ const PROFILE_FOLLOW_UP: MockPortalChatLine[] = [
     side: "requester",
     authorLabel: "U",
     atIso: "2026-04-28T15:30:00.000Z",
+    subject: "Re: Profielwijziging — validatie gevraagd",
     body: "Bedankt — ik heb de KBO-link bijgevoegd in het dossier.",
   },
   {
@@ -57,6 +78,7 @@ const PROFILE_FOLLOW_UP: MockPortalChatLine[] = [
     side: "PROCERTUS",
     authorLabel: "PROCERTUS",
     atIso: "2026-04-28T16:02:00.000Z",
+    subject: "Re: Profielwijziging — validatie gevraagd",
     body: "Dank u. We hervatten de controle en melden het resultaat hier.",
   },
 ];
@@ -69,6 +91,7 @@ const CERT_DEFAULT: MockPortalChatLine[] = [
     side: "requester",
     authorLabel: "U",
     atIso: "2026-04-27T10:05:00.000Z",
+    subject: "Certificatieaanvraag — bevestiging intake",
     body: "Het aanvraagpakket is ingediend. Graag bevestigen wanneer de intake gepland kan worden.",
   },
   {
@@ -76,13 +99,23 @@ const CERT_DEFAULT: MockPortalChatLine[] = [
     side: "PROCERTUS",
     authorLabel: "PROCERTUS",
     atIso: "2026-04-27T13:22:00.000Z",
-    body: "Ontvangen. Uw dossier staat in de wachtrij voor eerste beoordeling; u ontvangt een seintje zodra er een datum is.",
+    subject: "Re: Certificatieaanvraag — bevestiging intake",
+    attachments: [
+      {
+        id: "mock-checklist-link",
+        title: "intake_checklist_prototype.pdf",
+        formatHint: "PDF",
+        href: "/icons.svg",
+      },
+    ],
+    body: "Ontvangen. Uw dossier staat in de wachtrij voor eerste beoordeling; u ontvangt een seintje zodra er een datum is.\n\nBijgevoegd vindt u de checklist voor de technische review.",
   },
   {
     id: "cert-adm-2",
     side: "PROCERTUS",
     authorLabel: "PROCERTUS — backoffice",
     atIso: "2026-04-28T08:15:00.000Z",
+    subject: "Re: Certificatieaanvraag — bevestiging intake",
     body: "Controleer of alle geüploade documenten nog geldig zijn vóór de technische review; verlopen attesten vertragen het traject.",
   },
 ];
@@ -94,6 +127,7 @@ const CERT_FOLLOW_UP: MockPortalChatLine[] = [
     side: "requester",
     authorLabel: "U",
     atIso: "2026-04-29T09:00:00.000Z",
+    subject: "Re: Certificatieaanvraag — bevestiging intake",
     body: "Documenten zijn vernieuwd; graag opnieuw vrij te geven voor planning.",
   },
   {
@@ -101,6 +135,7 @@ const CERT_FOLLOW_UP: MockPortalChatLine[] = [
     side: "PROCERTUS",
     authorLabel: "PROCERTUS",
     atIso: "2026-04-29T09:45:00.000Z",
+    subject: "Re: Certificatieaanvraag — bevestiging intake",
     body: "Noted. Intake wordt opnieuw ingepland zodra de checklist groen is.",
   },
 ];

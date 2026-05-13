@@ -96,9 +96,7 @@ export function ChoiceBar({
     requestAnimationFrame(() => {
       const container = groupRef.current;
       if (!container) return;
-      const el = container.querySelector<HTMLElement>(
-        `label[for="${idPrefix}-${target}"]`,
-      );
+      const el = container.querySelector<HTMLElement>(`label[for="${idPrefix}-${target}"]`);
       el?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
     });
   };
@@ -145,8 +143,7 @@ export function ChoiceBar({
                   "shrink-0 cursor-pointer has-[>[data-slot=field]]:w-auto",
                   "transition-[transform,box-shadow,background-color,border-color,opacity] duration-300 ease-out",
                   "motion-safe:hover:-translate-y-0.5",
-                  item.selected &&
-                    "ring-2 ring-primary/35 ring-offset-2 ring-offset-background",
+                  item.selected && "ring-2 ring-primary/35 ring-offset-2 ring-offset-background",
                 )}
               />
             ))}

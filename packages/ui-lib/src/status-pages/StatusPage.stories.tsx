@@ -1,4 +1,4 @@
- import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Alert02Icon,
   ArrowLeft01Icon,
@@ -91,8 +91,7 @@ export const SomethingWentWrong: Story = {
   args: {
     icon: Alert02Icon,
     heading: "Something went wrong",
-    description:
-      "An unexpected error occurred. Please return to the homepage and try again.",
+    description: "An unexpected error occurred. Please return to the homepage and try again.",
     actions: [
       {
         label: "Homepage",

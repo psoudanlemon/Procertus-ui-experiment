@@ -93,7 +93,9 @@ export const SendDisabled: StoryObj<typeof meta> = {
 
     return (
       <div className="mx-auto w-full max-w-md space-y-2">
-        <p className="text-xs text-muted-foreground">Send stays disabled even with text (`sendDisabled`).</p>
+        <p className="text-xs text-muted-foreground">
+          Send stays disabled even with text (`sendDisabled`).
+        </p>
         <div className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
           <ChatComposerToolbar
             value={value}
@@ -132,7 +134,9 @@ export const ReadOnly: StoryObj<typeof meta> = {
 
     return (
       <div className="mx-auto w-full max-w-md space-y-2">
-        <p className="text-xs text-muted-foreground">No send button; emoji popover hidden when `readOnly`.</p>
+        <p className="text-xs text-muted-foreground">
+          No send button; emoji popover hidden when `readOnly`.
+        </p>
         <div className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
           <ChatComposerToolbar value={value} onChange={() => {}} readOnly placeholder="Preview…" />
         </div>
@@ -148,8 +152,8 @@ export const NotWrappedInForm: StoryObj<typeof meta> = {
     return (
       <div className="mx-auto w-full max-w-md space-y-2">
         <p className="text-xs text-muted-foreground">
-          Set <code className="rounded bg-muted px-1">asForm</code> to false when a parent already wraps the row in
-          a form element, to avoid invalid nested forms.
+          Set <code className="rounded bg-muted px-1">asForm</code> to false when a parent already
+          wraps the row in a form element, to avoid invalid nested forms.
         </p>
         <div className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
           <ChatComposerToolbar

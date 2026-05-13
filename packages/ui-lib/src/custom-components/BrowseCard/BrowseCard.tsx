@@ -28,13 +28,7 @@ import { ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import { cn } from "@/lib/utils";
-import {
-  Button,
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemTitle,
-} from "@procertus-ui/ui";
+import { Button, Item, ItemContent, ItemDescription, ItemTitle } from "@procertus-ui/ui";
 
 const browseCardVariants = cva(
   "cursor-pointer transition-[border-color,color,opacity] duration-200",
@@ -119,7 +113,11 @@ export function BrowseCard({
   ...props
 }: BrowseCardProps) {
   const ctaNode = cta === null ? null : (cta ?? defaultCta);
-  const ctaIcon = ctaNode ? (ctaNode.icon === null ? null : (ctaNode.icon ?? defaultCtaIcon)) : null;
+  const ctaIcon = ctaNode
+    ? ctaNode.icon === null
+      ? null
+      : (ctaNode.icon ?? defaultCtaIcon)
+    : null;
 
   const resolvedEyebrow =
     eyebrow ??
@@ -184,12 +182,7 @@ export function BrowseCard({
   }
 
   return (
-    <Item
-      role="listitem"
-      data-browse-variant={variant}
-      className={itemClassName}
-      {...props}
-    >
+    <Item role="listitem" data-browse-variant={variant} className={itemClassName} {...props}>
       {inner}
     </Item>
   );

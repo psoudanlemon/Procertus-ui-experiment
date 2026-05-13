@@ -29,11 +29,7 @@ export type AccountDetailsFormProps = {
   termsAccepted?: boolean;
   onTermsAcceptedChange?: (accepted: boolean) => void;
   showTermsCheckbox?: boolean;
-  onSubmit?: (data: {
-    firstName: string;
-    lastName: string;
-    termsAccepted: boolean;
-  }) => void;
+  onSubmit?: (data: { firstName: string; lastName: string; termsAccepted: boolean }) => void;
   isSubmitting?: boolean;
   error?: string;
   fieldErrors?: {
@@ -125,9 +121,19 @@ function AccountDetailsForm({
               />
               <Label htmlFor="invite-terms" className="inline text-sm leading-normal font-normal">
                 I agree to the{" "}
-                <a href="#" className="text-primary underline underline-offset-2 hover:text-primary/80">terms of service</a>
-                {" "}and{" "}
-                <a href="#" className="text-primary underline underline-offset-2 hover:text-primary/80">privacy policy</a>
+                <a
+                  href="#"
+                  className="text-primary underline underline-offset-2 hover:text-primary/80"
+                >
+                  terms of service
+                </a>{" "}
+                and{" "}
+                <a
+                  href="#"
+                  className="text-primary underline underline-offset-2 hover:text-primary/80"
+                >
+                  privacy policy
+                </a>
               </Label>
             </div>
           </Field>

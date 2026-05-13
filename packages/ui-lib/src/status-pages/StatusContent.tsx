@@ -37,14 +37,19 @@ function StatusContent({
   className,
 }: StatusContentProps) {
   return (
-    <Card className={`relative z-10 w-full max-w-md shadow-[var(--shadow-proc-md)] ring-0 ${className ?? ""}`}>
+    <Card
+      className={`relative z-10 w-full max-w-md shadow-[var(--shadow-proc-md)] ring-0 ${className ?? ""}`}
+    >
       <CardContent className="flex flex-col items-center gap-section px-section py-section text-center">
         {/* Visual */}
         {illustration ? (
           <div className="flex items-center justify-center">{illustration}</div>
         ) : icon ? (
           <div className="flex size-16 items-center justify-center rounded-full bg-background">
-            <HugeiconsIcon icon={icon} className="size-8 text-brand-primary-700 dark:text-brand-primary-200" />
+            <HugeiconsIcon
+              icon={icon}
+              className="size-8 text-brand-primary-700 dark:text-brand-primary-200"
+            />
           </div>
         ) : null}
 
@@ -52,13 +57,13 @@ function StatusContent({
         <div className="space-y-micro">
           <H1>{heading}</H1>
           {description != null &&
-          (typeof description === "string" ? (
-            <p className="text-base leading-relaxed text-muted-foreground">{description}</p>
-          ) : (
-            <div className="space-y-section text-balance text-base leading-relaxed text-muted-foreground [&_strong]:font-semibold [&_strong]:text-foreground [&_a]:font-medium [&_a]:text-primary [&_a]:underline-offset-4 hover:[&_a]:underline">
-              {description}
-            </div>
-          ))}
+            (typeof description === "string" ? (
+              <p className="text-base leading-relaxed text-muted-foreground">{description}</p>
+            ) : (
+              <div className="space-y-section text-balance text-base leading-relaxed text-muted-foreground [&_strong]:font-semibold [&_strong]:text-foreground [&_a]:font-medium [&_a]:text-primary [&_a]:underline-offset-4 hover:[&_a]:underline">
+                {description}
+              </div>
+            ))}
         </div>
 
         {/* Actions */}

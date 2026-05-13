@@ -18,7 +18,13 @@ export type ChatThreadHeaderProps = {
  * Top bar for a chat surface: peer avatar + title stack + optional action icons
  * (matches the header row from the shadcn-svelte-extras chat example).
  */
-export function ChatThreadHeader({ className, title, subtitle, avatar, actions }: ChatThreadHeaderProps) {
+export function ChatThreadHeader({
+  className,
+  title,
+  subtitle,
+  avatar,
+  actions,
+}: ChatThreadHeaderProps) {
   return (
     <div
       className={cn(

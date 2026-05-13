@@ -95,8 +95,7 @@ export function ChatComposerToolbar({
     setEmojiQuery("");
   };
 
-  const sendBlocked =
-    disabled || readOnly || sendDisabled === true || value.trim().length === 0;
+  const sendBlocked = disabled || readOnly || sendDisabled === true || value.trim().length === 0;
 
   const submit = () => {
     if (sendBlocked) return;
