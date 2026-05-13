@@ -1,0 +1,41 @@
+@packages/ui-certification/src/components/onboarding/invoicing-step/OnboardingInvoicingStep.tsx during the invoicing step, when displaying the mapping of inquiries to invoicing entities, please use the same visualization for listing a link as when displaying the same kind of list for linking legal entities on the previous step. @packages/ui-certification/src/components/onboarding/legal-entity-step/OnboardingVestigingenLegalEntityManager.tsx
+
+---
+
+@packages/ui-certification/src/components/onboarding/invoicing-step/OnboardingInvoicingStep.tsx during the invoicing step, when displaying the mapping of inquiries to invoicing entities, please use the same visualization for listing a link as when displaying the same kind of list for linking legal entities on the previous step. @packages/ui-certification/src/components/onboarding/legal-entity-step/OnboardingVestigingenLegalEntityManager.tsx
+
+---
+
+It still looks different. Use the same reusable presentational component to build this kind of legal-entity listing.
+
+---
+
+When I try to continue from the invoicing step to the next step, I am returned to the invoicing step.
+
+---
+
+I'm still being redirected from Extras to Invoicing. I think the redirect logic and the attempt to derive state are probably not working, since no data for the Invoicing state is being stored.
+
+---
+
+I'm still being redirected from Extras to Invoicing. I think the redirect logic and the attempt to derive state are probably not working, since no data for the Invoicing state is being stored.
+
+---
+
+Sorry — I now know why this was the case. I enabled an option to add other contact information but never filled in the form. The "Next" button remained enabled, but clicking it had no effect.
+
+This is probably due to the logic redirecting back to the invoicing state when the option is enabled but the extra person's information is missing. Please prevent the "Next" button from being clickable, or better, disable it as long as the entire step is not valid.
+
+---
+
+Sorry — I now know why this was the case. I enabled an option to add other contact information but never filled in the form. The "Next" button remained enabled, but clicking it had no effect.
+
+This is probably due to the logic redirecting back to the invoicing state when the option is enabled but the extra person's information is missing. Please prevent the "Next" button from being clickable, or better, disable it as long as the entire step is not valid.
+
+---
+
+I have enabled the option "Andere contactpersoon voor facturatie", but didnt enter any infornation in this etxra subform, and the "verder" button is still enabled...
+
+---
+
+I have enabled the option "Andere contactpersoon voor facturatie", but didnt enter any infornation in this etxra subform, and the "verder" button is still enabled...

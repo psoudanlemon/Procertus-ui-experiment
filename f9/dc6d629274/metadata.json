@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "f9dc6d629274",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 7,
+  "files_touched": [
+    "packages/ui-certification/package.json",
+    "packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyLegalEntitiesStep.tsx",
+    "packages/ui-certification/src/components/onboarding/invoicing-step/OnboardingInvoicingStep.tsx",
+    "packages/ui-certification/src/components/onboarding/shared/OnboardingInquiryLegalEntityLinkCard.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-flow-helpers.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-stepper-model.ts",
+    "packages/ui-certification/src/onboarding/use-onboarding-flow.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/f9/dc6d629274/0/metadata.json",
+      "transcript": "/f9/dc6d629274/0/full.jsonl",
+      "content_hash": "/f9/dc6d629274/0/content_hash.txt",
+      "prompt": "/f9/dc6d629274/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}
