@@ -16,12 +16,6 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
 } from "@procertus-ui/ui";
 import { DraftCardDescription } from "../../../certification-request/draft-selection-presentation";
 import { registrationIsoCodeFromDutchCountryLabel } from "../../../onboarding/lib/vatPrototypePresets";
@@ -32,9 +26,9 @@ import {
   formatVestigingRegistryOptionLabel,
   invoicingAddressSubformValue,
   legalRepresentativePersonValue,
+  legalEntityAssignmentDisplayParts,
   ONBOARDING_PERSON_NEW_ID,
   seedInvoicingInquiryMapFromCertification,
-  summaryLegalEntityFromAssignmentRaw,
 } from "../../../onboarding/onboarding-flow-helpers";
 import { COUNTRY_SELECT_NONE } from "../../../onboarding/onboarding-constants";
 import { SubformCompletionBadge } from "../../../onboarding/subform-completion-badge";
@@ -47,6 +41,10 @@ import {
 import { IdentificatiePersonRegistryPicker } from "../../../onboarding/identificatie-person-registry-picker";
 import type { OnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
 import { OnboardingVestigingenLegalEntityManager } from "../legal-entity-step/OnboardingVestigingenLegalEntityManager";
+import {
+  OnboardingInquiryLegalEntityLinkCard,
+  OnboardingLegalEntityLinkSummaryText,
+} from "../shared/OnboardingInquiryLegalEntityLinkCard";
 
 export type OnboardingInvoicingStepProps = { model: OnboardingRegistrationLayoutModel };
 
@@ -201,37 +199,35 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
         <p className="rounded-md border border-dashed border-border bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
           Geen gekozen aanvragen in dit dossier.
         </p>
-      : <div className="overflow-x-auto rounded-lg border border-border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="min-w-[200px]">Certificatie / product</TableHead>
-                <TableHead className="min-w-[260px]">Rechts‑persoon bij certificatie</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {overviewRows.map((draft) => {
-                const certRaw = certificationLegalEntityAssignmentRaw(context, draft.id);
-                const certDisplay = summaryLegalEntityFromAssignmentRaw(context, certRaw);
-                return (
-                  <TableRow key={draft.id}>
-                    <TableCell className="align-top">
-                      <p className="text-sm font-medium text-foreground">
-                        {draft.shortLabel || draft.label}
-                      </p>
-                      <div className="mt-1 text-xs text-muted-foreground [&_.font-medium]:text-foreground">
-                        <DraftCardDescription draft={draft} />
-                      </div>
-                    </TableCell>
-                    <TableCell className="align-top">
-                      <span className="text-sm leading-snug text-foreground">{certDisplay}</span>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </div>
+      : <ul className="space-y-2">
+          {overviewRows.map((draft) => {
+            const certRaw = certificationLegalEntityAssignmentRaw(context, draft.id);
+            const parts = legalEntityAssignmentDisplayParts(context, certRaw);
+            return (
+              <OnboardingInquiryLegalEntityLinkCard
+                key={draft.id}
+                leftColumnLabel="Certificatie / product"
+                rightColumnLabel="Rechts‑persoon bij certificatie"
+                left={
+                  <>
+                    <p className="text-sm font-medium text-foreground">
+                      {draft.shortLabel || draft.label}
+                    </p>
+                    <div className="mt-1 text-xs text-muted-foreground [&_.font-medium]:text-foreground">
+                      <DraftCardDescription draft={draft} />
+                    </div>
+                  </>
+                }
+                right={
+                  <OnboardingLegalEntityLinkSummaryText
+                    primary={parts.primary}
+                    secondary={parts.secondary}
+                  />
+                }
+              />
+            );
+          })}
+        </ul>
       }
 
       <IdentificatieOptionalBlock
@@ -266,62 +262,57 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
               <h4 className="text-sm font-semibold tracking-tight text-foreground">
                 Factuur rechts‑persoon per aanvraag
               </h4>
-              <div className="overflow-x-auto rounded-lg border border-border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="min-w-[200px]">Certificatie / product</TableHead>
-                      <TableHead className="min-w-[260px]">Rechts‑persoon op factuur</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {overviewRows.map((draft) => (
-                      <TableRow key={`inv-${draft.id}`}>
-                        <TableCell className="align-top">
-                          <p className="text-sm font-medium text-foreground">
-                            {draft.shortLabel || draft.label}
-                          </p>
-                          <div className="mt-1 text-xs text-muted-foreground [&_.font-medium]:text-foreground">
-                            <DraftCardDescription draft={draft} />
-                          </div>
-                        </TableCell>
-                        <TableCell className="align-top">
-                          <Select
-                            value={invoicingDraftSelectRadix(draft.id)}
-                            onValueChange={(v: string) => {
-                              if (v === CERT_INQUIRY_VEST_UNASSIGNED) {
-                                setInvoicingDraftAssignment(draft.id, "");
-                              } else {
-                                setInvoicingDraftAssignment(draft.id, v);
-                              }
-                            }}
-                          >
-                            <SelectTrigger
-                              size="sm"
-                              className="h-auto min-h-9 w-full max-w-lg py-2"
-                            >
-                              <SelectValue placeholder="Kies rechts‑persoon voor factuur" />
-                            </SelectTrigger>
-                            <SelectContent position="popper">
-                              <SelectItem value={CERT_INQUIRY_VEST_UNASSIGNED}>
-                                — Nog niet gekozen —
-                              </SelectItem>
-                              <SelectItem value={CERT_INQUIRY_LEGAL_ENTITY_ZETEL}>
-                                Maatschappelijke zetel
-                              </SelectItem>
-                              {context.onboardingVestigingen.map((ve) => (
-                                <SelectItem key={ve.id} value={ve.id}>
-                                  {formatVestigingRegistryOptionLabel(ve)}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
+              <ul className="space-y-2">
+                {overviewRows.map((draft) => (
+                  <OnboardingInquiryLegalEntityLinkCard
+                    key={`inv-${draft.id}`}
+                    leftColumnLabel="Certificatie / product"
+                    rightColumnLabel="Rechts‑persoon op factuur"
+                    left={
+                      <>
+                        <p className="text-sm font-medium text-foreground">
+                          {draft.shortLabel || draft.label}
+                        </p>
+                        <div className="mt-1 text-xs text-muted-foreground [&_.font-medium]:text-foreground">
+                          <DraftCardDescription draft={draft} />
+                        </div>
+                      </>
+                    }
+                    right={
+                      <Select
+                        value={invoicingDraftSelectRadix(draft.id)}
+                        onValueChange={(v: string) => {
+                          if (v === CERT_INQUIRY_VEST_UNASSIGNED) {
+                            setInvoicingDraftAssignment(draft.id, "");
+                          } else {
+                            setInvoicingDraftAssignment(draft.id, v);
+                          }
+                        }}
+                      >
+                        <SelectTrigger
+                          size="sm"
+                          className="h-auto min-h-9 w-full max-w-lg py-2"
+                        >
+                          <SelectValue placeholder="Kies rechts‑persoon voor factuur" />
+                        </SelectTrigger>
+                        <SelectContent position="popper">
+                          <SelectItem value={CERT_INQUIRY_VEST_UNASSIGNED}>
+                            — Nog niet gekozen —
+                          </SelectItem>
+                          <SelectItem value={CERT_INQUIRY_LEGAL_ENTITY_ZETEL}>
+                            Maatschappelijke zetel
+                          </SelectItem>
+                          {context.onboardingVestigingen.map((ve) => (
+                            <SelectItem key={ve.id} value={ve.id}>
+                              {formatVestigingRegistryOptionLabel(ve)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    }
+                  />
+                ))}
+              </ul>
 
               {overviewRows.length > 0 ?
                 <div className="flex flex-wrap items-center gap-2">

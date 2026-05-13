@@ -37,6 +37,7 @@ import {
 } from "./onboarding-request-origin";
 import type { StepLayoutStep } from "@procertus-ui/ui";
 import { useCallback, useMemo, type ReactNode } from "react";
+import { flushSync } from "react-dom";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
 import { buildOnboardingStepperSteps } from "./onboarding-stepper-model";
 import {
@@ -162,7 +163,6 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     (requestOrigin
       ? isRegistrationIdentifierValidForOrigin(context.vatNumber ?? "", requestOrigin)
       : isVatIdentifierPlausible(context.vatNumber ?? ""));
-  const hasCustomerContext = legalRepChoiceOk && registrationBodyComplete;
   const registrationStepOk =
     legalRepChoiceOk && (registrationBodyComplete || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION);
   const companyZetelOk =
@@ -171,11 +171,10 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     context,
     certificationInquiryDraftIds,
   );
-  const invoicingStepOk =
-    isOnboardingInvoicingStepValid(context, certificationInquiryDraftIds) ||
-    ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
-  const optionalContactsOk =
-    isOnboardingOptionalContactsStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  /** Strict: facturatie‑opties (e‑mail, afwijkend adres/contact) moeten echt kloppen voor “Verder”. */
+  const invoicingStepOk = isOnboardingInvoicingStepValid(context, certificationInquiryDraftIds);
+  /** Strict: toggles op de extra's-stap verplichten volledige invoer vóór “Verder” / nazicht. */
+  const optionalContactsOk = isOnboardingOptionalContactsStepValid(context);
   const extrasStepOk = optionalContactsOk;
 
   const registrationSeq = useMemo(
@@ -228,10 +227,12 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
       if (!isSequentialForward && stepperModel[targetIndex]?.available === false) {
         return;
       }
-      setFlowState((prev) => ({
-        ...prev,
-        ...stepCompletionStateAfterNavigation(prev, activeStep, nextStep),
-      }));
+      flushSync(() => {
+        setFlowState((prev) => ({
+          ...prev,
+          ...stepCompletionStateAfterNavigation(prev, activeStep, nextStep),
+        }));
+      });
       onRegistrationStepChange(nextStep);
     },
     [

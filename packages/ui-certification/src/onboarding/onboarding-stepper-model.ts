@@ -76,11 +76,9 @@ export function deriveOnboardingPhaseValidityForFlow(
     certificationInquiryDraftIds,
   );
   const companyCoreOk = isOnboardingCompanyCoreStepValid(context, certificationInquiryDraftIds);
-  const invoicingStepOk =
-    isOnboardingInvoicingStepValid(context, certificationInquiryDraftIds) ||
-    ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
-  const optionalContactsOk =
-    isOnboardingOptionalContactsStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
+  const invoicingStepOk = isOnboardingInvoicingStepValid(context, certificationInquiryDraftIds);
+  /** Strict: gelijk aan {@link deriveFormalOnboardingResumeStep} — geen prototype‑relax. */
+  const optionalContactsOk = isOnboardingOptionalContactsStepValid(context);
 
   const needsInnovationAttest = registrationDraftsIncludeInnovationAttest(
     drafts,

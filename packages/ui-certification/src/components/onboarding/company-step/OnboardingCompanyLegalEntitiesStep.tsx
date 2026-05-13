@@ -7,20 +7,18 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
 } from "@procertus-ui/ui";
 import { DraftCardDescription } from "../../../certification-request/draft-selection-presentation";
 import {
-  formatPostalAddressDisplay,
   formatVestigingRegistryOptionLabel,
+  legalEntityAssignmentDisplayParts,
 } from "../../../onboarding/onboarding-flow-helpers";
 import type { OnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
 import { OnboardingVestigingenLegalEntityManager } from "../legal-entity-step/OnboardingVestigingenLegalEntityManager";
+import {
+  OnboardingInquiryLegalEntityLinkCard,
+  OnboardingLegalEntityLinkSummaryText,
+} from "../shared/OnboardingInquiryLegalEntityLinkCard";
 
 export type OnboardingCompanyLegalEntitiesStepProps = {
   model: OnboardingRegistrationLayoutModel;
@@ -52,8 +50,6 @@ export function OnboardingCompanyLegalEntitiesStep({
 
   const map = context.certificationInquiryVestigingId;
   const rel = context.headOfficeIsCertificationLegalEntity;
-  const headOfficeLegalEntityName = context.organizationName.trim();
-  const headOfficeLegalEntityAddress = formatPostalAddressDisplay(context);
 
   function setDraftAssignment(draftId: string, value: string) {
     const next = value.trim()
@@ -69,18 +65,6 @@ export function OnboardingCompanyLegalEntitiesStep({
   function assignmentSelectValue(draftId: string): string {
     const raw = (map[draftId] ?? "").trim();
     return raw === "" ? CERT_INQUIRY_VEST_UNASSIGNED : raw;
-  }
-
-  function assignmentSummaryLabel(draftId: string): string {
-    const raw = (map[draftId] ?? "").trim();
-    if (!raw) return "—";
-    if (raw === CERT_INQUIRY_LEGAL_ENTITY_ZETEL) {
-      return headOfficeLegalEntityName
-        ? `Maatschappelijke zetel · ${headOfficeLegalEntityName}`
-        : "Maatschappelijke zetel";
-    }
-    const ve = context.onboardingVestigingen.find((x) => x.id === raw);
-    return ve ? formatVestigingRegistryOptionLabel(ve) : "—";
   }
 
   const overviewRows = draftsInRegistrationScope;
@@ -103,73 +87,70 @@ export function OnboardingCompanyLegalEntitiesStep({
           Er zijn in dit dossier geen gekozen certificatieaanvragen om te tonen.
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="min-w-[200px]">Certificatie / product</TableHead>
-                <TableHead className="min-w-[240px]">Juridische entiteit</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {overviewRows.map((draft) => (
-                <TableRow key={draft.id}>
-                  <TableCell className="align-top">
+        <ul className="space-y-2">
+          {overviewRows.map((draft) => {
+            const zetelParts = legalEntityAssignmentDisplayParts(
+              context,
+              CERT_INQUIRY_LEGAL_ENTITY_ZETEL,
+            );
+            return (
+              <OnboardingInquiryLegalEntityLinkCard
+                key={draft.id}
+                leftColumnLabel="Certificatie / product"
+                rightColumnLabel="Juridische entiteit"
+                left={
+                  <>
                     <p className="text-sm font-medium text-foreground">
                       {draft.shortLabel || draft.label}
                     </p>
                     <div className="mt-1 text-xs text-muted-foreground [&_.font-medium]:text-foreground">
                       <DraftCardDescription draft={draft} />
                     </div>
-                  </TableCell>
-                  <TableCell className="align-top">
-                    {rel === "" ? (
-                      <span className="text-sm text-muted-foreground">—</span>
-                    ) : rel === "yes" ? (
-                      <div className="text-sm text-foreground">
-                        <span className="font-medium">
-                          {headOfficeLegalEntityName || "Maatschappelijke zetel"}
-                        </span>
-                        <span className="mt-1 block text-xs text-muted-foreground">
-                          Maatschappelijke zetel — {headOfficeLegalEntityAddress}
-                        </span>
-                      </div>
-                    ) : (
-                      <Select
-                        value={assignmentSelectValue(draft.id)}
-                        onValueChange={(v) => {
-                          if (v === CERT_INQUIRY_VEST_UNASSIGNED) {
-                            setDraftAssignment(draft.id, "");
-                          } else {
-                            setDraftAssignment(draft.id, v);
-                          }
-                        }}
-                      >
-                        <SelectTrigger size="sm" className="h-auto min-h-9 w-full max-w-md py-2">
-                          <SelectValue placeholder="—" />
-                        </SelectTrigger>
-                        <SelectContent position="popper">
-                          <SelectItem value={CERT_INQUIRY_VEST_UNASSIGNED}>
-                            <span aria-hidden>—</span>
-                            <span className="sr-only">Nog niet gekozen</span>
+                  </>
+                }
+                right={
+                  rel === "" ? (
+                    <OnboardingLegalEntityLinkSummaryText primary="—" />
+                  ) : rel === "yes" ? (
+                    <OnboardingLegalEntityLinkSummaryText
+                      primary={zetelParts.primary}
+                      secondary={zetelParts.secondary}
+                    />
+                  ) : (
+                    <Select
+                      value={assignmentSelectValue(draft.id)}
+                      onValueChange={(v) => {
+                        if (v === CERT_INQUIRY_VEST_UNASSIGNED) {
+                          setDraftAssignment(draft.id, "");
+                        } else {
+                          setDraftAssignment(draft.id, v);
+                        }
+                      }}
+                    >
+                      <SelectTrigger size="sm" className="h-auto min-h-9 w-full max-w-md py-2">
+                        <SelectValue placeholder="—" />
+                      </SelectTrigger>
+                      <SelectContent position="popper">
+                        <SelectItem value={CERT_INQUIRY_VEST_UNASSIGNED}>
+                          <span aria-hidden>—</span>
+                          <span className="sr-only">Nog niet gekozen</span>
+                        </SelectItem>
+                        <SelectItem value={CERT_INQUIRY_LEGAL_ENTITY_ZETEL}>
+                          Maatschappelijke zetel
+                        </SelectItem>
+                        {context.onboardingVestigingen.map((ve) => (
+                          <SelectItem key={ve.id} value={ve.id}>
+                            {formatVestigingRegistryOptionLabel(ve)}
                           </SelectItem>
-                          <SelectItem value={CERT_INQUIRY_LEGAL_ENTITY_ZETEL}>
-                            Maatschappelijke zetel
-                          </SelectItem>
-                          {context.onboardingVestigingen.map((ve) => (
-                            <SelectItem key={ve.id} value={ve.id}>
-                              {formatVestigingRegistryOptionLabel(ve)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )
+                }
+              />
+            );
+          })}
+        </ul>
       )}
 
       <ChoiceCardGroup

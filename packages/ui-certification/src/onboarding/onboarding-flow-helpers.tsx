@@ -222,6 +222,42 @@ export function summaryLegalEntityFromAssignmentRaw(
       : "—";
 }
 
+/** Twee regels voor aanvraag↔entiteit kaarten (vet + ondertitel); sluit aan bij certificatiestap. */
+export type LegalEntityAssignmentDisplayParts = {
+  primary: string;
+  secondary: string | null;
+};
+
+export function legalEntityAssignmentDisplayParts(
+  context: CustomerContext,
+  rawUntrimmed: string,
+): LegalEntityAssignmentDisplayParts {
+  const raw = rawUntrimmed.trim();
+  if (!raw) {
+    return { primary: "—", secondary: null };
+  }
+  if (raw === CERT_INQUIRY_LEGAL_ENTITY_ZETEL) {
+    const name = context.organizationName.trim() || "Maatschappelijke zetel";
+    const addr = formatPostalAddressDisplay(context);
+    return {
+      primary: name,
+      secondary: addr ? `Maatschappelijke zetel — ${addr}` : "Maatschappelijke zetel",
+    };
+  }
+  const ve = context.onboardingVestigingen.find((x) => x.id === raw);
+  if (ve === undefined) {
+    return { primary: "—", secondary: null };
+  }
+  if (!isOnboardingVestigingCaptureComplete(ve)) {
+    return { primary: "— (vestiging onvolledig)", secondary: null };
+  }
+  const line = formatOnboardingVestigingPostalLine(ve);
+  return {
+    primary: ve.legalName.trim() || "—",
+    secondary: line.trim() ? line : null,
+  };
+}
+
 export function isInvoicingLegalEntitySelectionsComplete(
   context: CustomerContext,
   inquiryDraftIds: readonly string[],
