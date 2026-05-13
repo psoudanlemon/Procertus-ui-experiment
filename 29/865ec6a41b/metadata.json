@@ -1,0 +1,49 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "29865ec6a41b",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 20,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/customer-onboarding/CustomerOnboardingFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-service-content.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-services.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/routes/formal-request-routing.ts",
+    "packages/ui-certification/src/components/onboarding/flow/onboarding-flow-compositions.stories.tsx",
+    "packages/ui-certification/src/components/onboarding/index.ts",
+    "packages/ui-certification/src/components/onboarding/innovation-attest-step/OnboardingInnovationAttestStep.tsx",
+    "packages/ui-certification/src/index.ts",
+    "packages/ui-certification/src/onboarding/derive-formal-onboarding-resume-step.ts",
+    "packages/ui-certification/src/onboarding/index.ts",
+    "packages/ui-certification/src/onboarding/lib/onboarding-step-completion-navigation.ts",
+    "packages/ui-certification/src/onboarding/onboarding-default-flow-state.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-api.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-helpers.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-flow-provider.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-flow-view.stories.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-flow-view.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-innovation-attest.ts",
+    "packages/ui-certification/src/onboarding/onboarding-registration-chrome-copy.ts",
+    "packages/ui-certification/src/onboarding/onboarding-registration-steps.ts",
+    "packages/ui-certification/src/onboarding/onboarding-stepper-model.ts",
+    "packages/ui-certification/src/onboarding/onboarding-story-fixtures.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-types.ts",
+    "packages/ui-certification/src/onboarding/use-onboarding-flow.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/29/865ec6a41b/0/metadata.json",
+      "transcript": "/29/865ec6a41b/0/full.jsonl",
+      "content_hash": "/29/865ec6a41b/0/content_hash.txt",
+      "prompt": "/29/865ec6a41b/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}

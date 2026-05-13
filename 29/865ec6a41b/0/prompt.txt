@@ -1,0 +1,210 @@
+@apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx @apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-services.ts @apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-services.ts:54  partijkeuring is tier 3 and is not provided by a process itself; it must be requested elsewhere. 
+
+ instead, EPD is Tier 2 and can be provided by Procertus.  
+It can be requested using this onboarding. 
+
+ so these two need to be switched around. 
+
+ please provide a detailed view of the EPD as well.
+
+For external referral for partijkeuring, use this URL instead: https://www.copro.eu/nl/keuring/partijkeuring 
+
+EPD = Environmental Product Declaration (Milieuproductverklaring), een gestandaardiseerd document dat de milieueffecten van een product (vaak bouwmaterialen) over de hele levenscyclus transparant en geverifieerd weergeeft
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx @apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-services.ts @apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-services.ts:54  partijkeuring is tier 3 and is not provided by a process itself; it must be requested elsewhere. 
+
+ instead, EPD is Tier 2 and can be provided by Procertus.  
+It can be requested using this onboarding. 
+
+ so these two need to be switched around. 
+
+ please provide a detailed view of the EPD as well.
+
+For external referral for partijkeuring, use this URL instead: https://www.copro.eu/nl/keuring/partijkeuring 
+
+EPD = Environmental Product Declaration (Milieuproductverklaring), een gestandaardiseerd document dat de milieueffecten van een product (vaak bouwmaterialen) over de hele levenscyclus transparant en geverifieerd weergeeft
+
+---
+
+Specifically for an innovation attest, extra structured information needs to be gathered during the regular onboarding flow with the seven steps to register company information.
+
+We need a specific innovation attest form step instead of selecting possible products for a product-band attest or certifications.
+
+This is an overview of all the information needed for the innovation attest. These are all open input text form fields and an upload dropzone to upload multiple files (and manage uploads by deleting again, and adding extra documents). Mock this file upload.
+===
+
+Innovatief product
+Beschrijving van het innovatieve product
+Toepassing(en)
+
+Argumentatie waarom het innovatieve product niet onder de bestaande voorschriften (normen, PTV,
+standaardbestekken…) kan vallen
+
+Opgave van de gereglementeerde productgroep waarbij het innovatieve product het meest aansluit voor
+toepassing in het geselecteerde project
+
+Technische beschrijving van het product (incl. grondstoffen, samenstelling, dimensies …)
+Indien van toepassing: Specifieke kenmerken van het product, afwijkend van deze van de gereglementeerde
+productgroep
+Indien van toepassing: Specifieke uitvoerings- of nabehandelingseisen gelinkt aan het gebruik van het
+product
+
+(dropzone)
+Bestaande bewijsvoering van het innovatief product dient te worden toegevoegd aan de aanvraag:
+- Samenvattende overzichtstabel van de uitgevoerde of lopende proeven, de uitvoerder, de proefmethode, desgevallend de proefresultaten die de technische beschrijving van het product onderbouwen
+- Proefverslagen opgesteld door onderzoeksinstellingen
+- Beschrijvingen van reeds eerder uitgevoerde pilootprojecten
+
+Project om het innovatief product toe te passen
+Bouwheer
+Adres bouwheer
+
+Naam project
+Adres project
+
+Contactpersoon voor de bouwheer in het
+kader van het project
+Telefoonnummer van deze
+contactpersoon
+E-mail van deze contactpersoon
+Beschrijving van het project (toepassing, volumes, afmetingen, uitvoeringsperiode, gewenste levensduur,
+specifieke elementen…)
+Beschrijving van de gevraagde prestaties van het product, of vermelding van gereglementeerd product,
+geschikt voor dezelfde toepassing
+Beschrijving van voor de bouwheer ontoelaatbare risico’s voor het project (bv. instorting, overdreven
+doorbuiging, lekkage…)
+Akkoord van de bouwheer om de relevante gegevens van zijn project op te nemen in het dossier en te
+gebruiken voor de verdere uitbouw van het attest
+
+ place this innovation attest specific form step only when an innovation attest inquiry was added to the request and after registering. Place this step as an extra step after confirm customer information and "maatschappelijke zetel."
+@packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx
+
+---
+
+Specifically for an innovation attest, extra structured information needs to be gathered during the regular onboarding flow with the seven steps to register company information.
+
+We need a specific innovation attest form step instead of selecting possible products for a product-band attest or certifications.
+
+This is an overview of all the information needed for the innovation attest. These are all open input text form fields and an upload dropzone to upload multiple files (and manage uploads by deleting again, and adding extra documents). Mock this file upload.
+===
+
+Innovatief product
+Beschrijving van het innovatieve product
+Toepassing(en)
+
+Argumentatie waarom het innovatieve product niet onder de bestaande voorschriften (normen, PTV,
+standaardbestekken…) kan vallen
+
+Opgave van de gereglementeerde productgroep waarbij het innovatieve product het meest aansluit voor
+toepassing in het geselecteerde project
+
+Technische beschrijving van het product (incl. grondstoffen, samenstelling, dimensies …)
+Indien van toepassing: Specifieke kenmerken van het product, afwijkend van deze van de gereglementeerde
+productgroep
+Indien van toepassing: Specifieke uitvoerings- of nabehandelingseisen gelinkt aan het gebruik van het
+product
+
+(dropzone)
+Bestaande bewijsvoering van het innovatief product dient te worden toegevoegd aan de aanvraag:
+- Samenvattende overzichtstabel van de uitgevoerde of lopende proeven, de uitvoerder, de proefmethode, desgevallend de proefresultaten die de technische beschrijving van het product onderbouwen
+- Proefverslagen opgesteld door onderzoeksinstellingen
+- Beschrijvingen van reeds eerder uitgevoerde pilootprojecten
+
+Project om het innovatief product toe te passen
+Bouwheer
+Adres bouwheer
+
+Naam project
+Adres project
+
+Contactpersoon voor de bouwheer in het
+kader van het project
+Telefoonnummer van deze
+contactpersoon
+E-mail van deze contactpersoon
+Beschrijving van het project (toepassing, volumes, afmetingen, uitvoeringsperiode, gewenste levensduur,
+specifieke elementen…)
+Beschrijving van de gevraagde prestaties van het product, of vermelding van gereglementeerd product,
+geschikt voor dezelfde toepassing
+Beschrijving van voor de bouwheer ontoelaatbare risico’s voor het project (bv. instorting, overdreven
+doorbuiging, lekkage…)
+Akkoord van de bouwheer om de relevante gegevens van zijn project op te nemen in het dossier en te
+gebruiken voor de verdere uitbouw van het attest
+
+ place this innovation attest specific form step only when an innovation attest inquiry was added to the request and after registering. Place this step as an extra step after confirm customer information and "maatschappelijke zetel."
+@packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx
+
+---
+
+You shouldn't have mimicked the design of the provided form. This was just for structure and copy.
+
+Please make sure to use a form design more in line with the other forms.
+
+---
+
+You shouldn't have mimicked the design of the provided form. This was just for structure and copy.
+
+Please make sure to use a form design more in line with the other forms.
+
+---
+
+Use shorter labels for the form fields and add extra helper text below each field.
+
+---
+
+Please set up a dropzone mock and use a prototype mock card to explain that, during the prototype, we only mock the file upload and random documents seem to be added, but the user needs to upload them themselves.@packages/ui-pt1-prototype/src/mock-prototype-auth/PrototypeCard.tsx
+
+---
+
+Please set up a dropzone mock and use a prototype mock card to explain that, during the prototype, we only mock the file upload and random documents seem to be added, but the user needs to upload them themselves.@packages/ui-pt1-prototype/src/mock-prototype-auth/PrototypeCard.tsx
+
+---
+
+Move the drop zone outside of the demo card or prototype card, but use the prototype card to add a call-to-action button that adds some mocked files to the drop zone.  
+Those mocked files should be removable by the user.
+
+---
+
+Move the drop zone outside of the demo card or prototype card, but use the prototype card to add a call-to-action button that adds some mocked files to the drop zone.  
+Those mocked files should be removable by the user.
+
+---
+
+Please store all information from the form inside a specific innovation attest inquiry data element in the onboarding flow context provider, just like the other steps as well.
+
+Use this information or data element to derive the correct step from the provided data.  
+Again, do this just like the other steps and the stored data from those steps.
+
+---
+
+Please indicate a few required fields and make sure we can only continue to the next step when all the required fields are provided.
+
+Also add a mock integration or a prototype card to pre-fill these fields automatically from mock data.
+
+---
+
+Please indicate a few required fields and make sure we can only continue to the next step when all the required fields are provided.
+
+Also add a mock integration or a prototype card to pre-fill these fields automatically from mock data.
+
+---
+
+Please indicate the required fields by marking the labels with an asterisk.
+
+---
+
+Please indicate the required fields by marking the labels with an asterisk.
+
+---
+
+For the final field, "akkoord bouwheer", set up a final checkbox that must be checked before being able to continue.
+
+---
+
+disable the continue button, as lon as not all resuired field have been filled, or this checkbox has been checked
+
+---
+
+disable the continue button, as lon as not all resuired field have been filled, or this checkbox has been checked
