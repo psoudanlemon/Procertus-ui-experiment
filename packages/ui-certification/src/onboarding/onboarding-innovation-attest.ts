@@ -1,6 +1,8 @@
+import type { DownloadableItemData } from "@procertus-ui/ui";
 import type {
   InnovationAttestCapture,
   InnovationAttestInquiryState,
+  InnovationAttestMockAttachment,
 } from "./onboarding-types";
 
 export function createEmptyInnovationAttestCapture(): InnovationAttestCapture {
@@ -110,6 +112,64 @@ export function normalizeInnovationAttestInquiry(
     capture: normalizeInnovationAttestCapture(partial?.capture),
     stepCompleted: typeof partial?.stepCompleted === "boolean" ? partial.stepCompleted : false,
   };
+}
+
+/** Rijen voor nazicht-tabellen: alleen velden met ingevoerde inhoud (zelfde volgorde als de stap). */
+export function innovationAttestCaptureSummaryRows(
+  capture: InnovationAttestCapture,
+): readonly { id: string; label: string; value: string }[] {
+  const rows: { id: string; label: string; value: string }[] = [];
+  const push = (id: string, label: string, raw: string) => {
+    const v = raw.trim();
+    if (v.length > 0) rows.push({ id, label, value: v });
+  };
+
+  push("productDescription", "Productbeschrijving", capture.productDescription);
+  push("applications", "Toepassingen", capture.applications);
+  push(
+    "regulatoryGapArgumentation",
+    "Motivering buiten bestaande voorschriften",
+    capture.regulatoryGapArgumentation,
+  );
+  push("regulatedProductGroup", "Gereglementeerde productgroep", capture.regulatedProductGroup);
+  push("technicalDescription", "Technische beschrijving", capture.technicalDescription);
+  push("deviatingCharacteristics", "Afwijkende kenmerken", capture.deviatingCharacteristics);
+  push("executionRequirements", "Uitvoering en nabehandeling", capture.executionRequirements);
+  push("clientName", "Bouwheer", capture.clientName);
+  push("clientAddress", "Adres bouwheer", capture.clientAddress);
+  push("projectName", "Projectnaam", capture.projectName);
+  push("projectAddress", "Projectadres", capture.projectAddress);
+  push("clientContactName", "Contactpersoon bouwheer", capture.clientContactName);
+  push("clientContactPhone", "Telefoon", capture.clientContactPhone);
+  push("clientContactEmail", "E-mail", capture.clientContactEmail);
+  push("projectDescription", "Projectbeschrijving", capture.projectDescription);
+  push("requestedPerformance", "Gevraagde prestaties", capture.requestedPerformance);
+  push("unacceptableRisks", "Ontoelaatbare risico's", capture.unacceptableRisks);
+
+  if (capture.clientConsentAccepted) {
+    rows.push({
+      id: "clientConsentAccepted",
+      label: "Akkoord bouwheer",
+      value: "Ja",
+    });
+  }
+
+  return rows;
+}
+
+/**
+ * Mapt mock-bijlagen naar downloadkaarten (`href` is een ankerplaatshouder; geen echte blob-URL).
+ */
+export function innovationAttestAttachmentsAsDownloadableItems(
+  attachments: readonly InnovationAttestMockAttachment[],
+): DownloadableItemData[] {
+  return attachments.map((a) => ({
+    id: a.id,
+    title: a.name,
+    formatHint: a.sizeLabel,
+    description: "Tijdelijk toegevoegd tijdens het invullen van het innovatie-attest.",
+    href: `#onboarding-innovation-attest-attachment-${a.id}`,
+  }));
 }
 
 /** Strict resume/stepper: inquiry stap geldt als afgerond voor dit pakket. */

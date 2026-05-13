@@ -5,7 +5,12 @@ import type { Dispatch, SetStateAction, ReactNode } from "react";
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
 import type { RegistrationProcessingStep } from "../components/registration-processing-dialog";
 import type { RequestPackageRow } from "../components/request-package-review";
-import type { OnboardingFlowState, CustomerContext, OnboardingStep } from "./onboarding-types";
+import type {
+  CustomerContext,
+  InnovationAttestInquiryState,
+  OnboardingFlowState,
+  OnboardingStep,
+} from "./onboarding-types";
 import type { RegistrationStepChromeCopy } from "./onboarding-registration-chrome-copy";
 import type {
   CompanyFormFieldKey,
@@ -64,6 +69,8 @@ export type OnboardingFlowViewProps = {
   summaryKlantenportaalByPersonId: Record<string, boolean>;
   submissionNote: string;
   submissionNoteUnlocked: boolean;
+  /** Innovatie-attest inhoud voor nazicht (los van `drafts`). */
+  innovationAttestInquiry: InnovationAttestInquiryState;
   /** Leading public registry header slot (e.g. color mode). */
   registryHeaderLeadingActions?: ReactNode;
   /** Trailing header slot (e.g. inquiry cart). */
@@ -80,4 +87,6 @@ export type OnboardingFlowViewProps = {
   registrationChromeOverrides?: Partial<
     Record<OnboardingStep, Partial<RegistrationStepChromeCopy>>
   >;
+  /** Summary step: go to welcome / wegwijzer to change which certification inquiries are in the dossier. */
+  onSummaryEditInquiriesClick?: () => void;
 };

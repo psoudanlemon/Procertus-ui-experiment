@@ -119,6 +119,7 @@ export function CustomerOnboardingFlow() {
       embeddedRegistryShell
       backAction={isFirstRegistrationStep ? undefined : viewProps.backAction}
       cancelAction={cancelAction}
+      onSummaryEditInquiriesClick={() => navigate(WEGWIJZER_PATH)}
     />
   );
 }

@@ -86,7 +86,10 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   } = options;
 
   void _flowStorageKey;
-  void welcomePath;
+
+  const onSummaryEditInquiriesClick = useCallback(() => {
+    navigate(welcomePath);
+  }, [navigate, welcomePath]);
 
   const {
     flowState,
@@ -431,6 +434,8 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     summaryKlantenportaalByPersonId: flowState.summaryKlantenportaalByPersonId ?? {},
     submissionNote: flowState.submissionNote ?? "",
     submissionNoteUnlocked: flowState.submissionNoteUnlocked === true,
+    innovationAttestInquiry: flowState.innovationAttestInquiry,
+    onSummaryEditInquiriesClick,
     registryHeaderLeadingActions,
     registryHeaderTrailingActions,
     guestLanguagePlacement,

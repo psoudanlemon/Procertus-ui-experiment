@@ -13,7 +13,10 @@ import {
   effectiveIncludedCertificationDraftIds,
   resolveFlowContext,
 } from "./onboarding-flow-helpers";
-import { createEmptyInnovationAttestCapture } from "./onboarding-innovation-attest";
+import {
+  createEmptyInnovationAttestCapture,
+  createEmptyInnovationAttestInquiry,
+} from "./onboarding-innovation-attest";
 import { buildOnboardingStepperSteps } from "./onboarding-stepper-model";
 import type {
   OnboardingFlowState,
@@ -204,6 +207,8 @@ export function baseOnboardingFlowViewProps(
     summaryKlantenportaalByPersonId: {},
     submissionNote: "",
     submissionNoteUnlocked: false,
+    innovationAttestInquiry: createEmptyInnovationAttestInquiry(),
+    onSummaryEditInquiriesClick: noop,
   };
 
   return { ...base, ...overrides };
@@ -236,7 +241,7 @@ export function flowStateSeedFromOnboardingFlowViewProps(
     summaryKlantenportaalByPersonId: props.summaryKlantenportaalByPersonId ?? {},
     submissionNote: props.submissionNote,
     submissionNoteUnlocked: props.submissionNoteUnlocked,
-    innovationAttestInquiry: {
+    innovationAttestInquiry: props.innovationAttestInquiry ?? {
       capture: createEmptyInnovationAttestCapture(),
       stepCompleted: innoIdx >= 0 ? stepIdx > innoIdx : false,
     },
