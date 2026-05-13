@@ -1,0 +1,5 @@
+When the Next button is clicked on the Innovation step, we don't continue to the next step in the stepper.
+
+---
+
+When the Next button is clicked on the Innovation step, we don't continue to the next step in the stepper.
