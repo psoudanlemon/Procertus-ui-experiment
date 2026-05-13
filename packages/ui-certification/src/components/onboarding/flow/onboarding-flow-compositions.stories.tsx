@@ -9,7 +9,10 @@ import {
   STABLE_STEP_MIN_HEIGHT,
 } from "../../../onboarding/onboarding-constants";
 import { mergeRegistrationChromeCopy } from "../../../onboarding/onboarding-registration-chrome-copy";
-import { stepIndex } from "../../../onboarding/onboarding-flow-helpers";
+import {
+  registrationStepsSequence,
+  registrationStepIndex,
+} from "../../../onboarding/onboarding-registration-steps";
 import {
   baseOnboardingFlowViewProps,
   noop,
@@ -18,7 +21,6 @@ import {
   storyOnboardingStepperSteps,
   storyRequestOrigin,
 } from "../../../onboarding/onboarding-story-fixtures";
-import { ONBOARDING_STEPS } from "../../../onboarding/onboarding-types";
 import type { OnboardingStep } from "../../../onboarding/onboarding-types";
 import { useOnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
 
@@ -51,6 +53,8 @@ function RegistrationChromeComposer({
   const [requestOrigin, setRequestOrigin] =
     useState<(typeof storyRequestOrigin) | "">(storyRequestOrigin);
 
+  const includedDraftIds = useMemo(() => storyOnboardingDrafts.map((d) => d.id), []);
+
   const viewProps = useMemo(
     () =>
       baseOnboardingFlowViewProps({
@@ -64,7 +68,7 @@ function RegistrationChromeComposer({
           drafts: storyOnboardingDrafts,
           requestOrigin,
         }),
-        activeStep: stepIndex(step),
+        activeStep: registrationStepIndex(step, storyOnboardingDrafts, includedDraftIds),
         goToOnboardingStep: (next: OnboardingStep) => {
           setStep(next);
         },
@@ -72,7 +76,7 @@ function RegistrationChromeComposer({
         primaryAction: { label: "Verder (demo)", onClick: noop, disabled: false },
         backAction: { label: "Terug", onClick: noop },
       }),
-    [step, requestOrigin],
+    [step, requestOrigin, includedDraftIds],
   );
 
   const model = useOnboardingRegistrationLayoutModel(viewProps);
@@ -94,7 +98,8 @@ function RegistrationChromeComposer({
             steps={viewProps.steps}
             activeStep={viewProps.activeStep}
             onStepChange={(index) => {
-              const nextStep = ONBOARDING_STEPS[index];
+              const seq = registrationStepsSequence(storyOnboardingDrafts, includedDraftIds);
+              const nextStep = seq[index];
               if (nextStep) {
                 setStep(nextStep);
               }
@@ -142,6 +147,13 @@ function StepBodies({
       return <OnboardingCustomerStep model={model} />;
     case "company":
       return <OnboardingCompanyZetelStep model={model} />;
+    case "innovationAttest":
+      return (
+        <p className="max-w-prose text-sm text-muted-foreground">
+          Het innovatie‑attest formulier wordt getoond in de volledige flow met{" "}
+          <code className="rounded bg-muted px-1 py-0.5 text-xs">OnboardingFlowProvider</code>.
+        </p>
+      );
     case "companyLegalEntities":
       return <OnboardingCompanyLegalEntitiesStep model={model} />;
     case "invoicing":

@@ -45,7 +45,13 @@ export function CustomerOnboardingFlow() {
 
   const parsedStep = parseFormalOnboardingStepParam(stepId);
   const urlResumeRedirect =
-    parsedStep == null || shouldClampFormalStepToResume(parsedStep, resumeStep)
+    parsedStep == null ||
+    shouldClampFormalStepToResume(
+      parsedStep,
+      resumeStep,
+      flowState.drafts,
+      flowState.summaryIncludedDraftIds,
+    )
       ? formalOnboardingStepPath(resumeStep)
       : null;
 

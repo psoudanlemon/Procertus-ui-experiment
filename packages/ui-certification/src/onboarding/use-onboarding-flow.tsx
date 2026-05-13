@@ -28,11 +28,9 @@ import {
   isOnboardingOptionalContactsStepValid,
   isApplicantLegalRepresentativeChoiceComplete,
   isRegistrantCaptureValidForContext,
-  stepIndex,
 } from "./onboarding-flow-helpers";
 import { stepCompletionStateAfterNavigation } from "./lib/onboarding-step-completion-navigation";
 import type { OnboardingStep } from "./onboarding-types";
-import { ONBOARDING_STEPS } from "./onboarding-types";
 import {
   registrationCountryOptionsForRequestOrigin,
   vatPrototypePresetIdsForOrigin,
@@ -41,8 +39,13 @@ import type { StepLayoutStep } from "@procertus-ui/ui";
 import { useCallback, useMemo, type ReactNode } from "react";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
 import { buildOnboardingStepperSteps } from "./onboarding-stepper-model";
+import {
+  registrationStepIndex as registrationStepOrdinalInSequence,
+  registrationStepsSequence,
+} from "./onboarding-registration-steps";
 import { useOnboardingFlowContext } from "./onboarding-flow-provider";
 import { isRegistrationIdentifierValidForOrigin } from "./lib/registration-identifier-for-origin";
+import { isInnovationAttestCaptureComplete } from "./onboarding-innovation-attest";
 
 export type UseOnboardingFlowOptions = {
   navigate: (to: string, options?: { replace?: boolean }) => void;
@@ -108,7 +111,9 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     prototypeVatPresetId,
     companyFieldHints,
     summaryIncludedDraftIds,
+    innovationAttestInquiry,
   } = flowState;
+  const innovationAttestCapture = innovationAttestInquiry.capture;
   const companyHints = companyFieldHints ?? {};
 
   const effectiveSummaryIncludedDraftIds = useMemo(
@@ -143,7 +148,11 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     [allowedVatPrototypePresetIds],
   );
 
-  const stepperActiveIndex = stepIndex(activeStep);
+  const stepperActiveIndex = registrationStepOrdinalInSequence(
+    activeStep,
+    drafts,
+    effectiveSummaryIncludedDraftIds,
+  );
   const hasDrafts = drafts.length > 0;
   const certificationInquiryDraftIds = effectiveSummaryIncludedDraftIds;
   const legalRepChoiceOk = isApplicantLegalRepresentativeChoiceComplete(context);
@@ -168,16 +177,28 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   const optionalContactsOk =
     isOnboardingOptionalContactsStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const extrasStepOk = optionalContactsOk;
+
+  const registrationSeq = useMemo(
+    () => registrationStepsSequence(drafts, effectiveSummaryIncludedDraftIds),
+    [drafts, effectiveSummaryIncludedDraftIds],
+  );
+
   const steps: StepLayoutStep[] = useMemo(
     () =>
       buildOnboardingStepperSteps({
-        step: activeStep,
         drafts,
         requestOrigin,
         context,
         certificationInquiryDraftIds,
+        innovationAttestInquiry,
       }),
-    [activeStep, context, drafts, certificationInquiryDraftIds, requestOrigin],
+    [
+      certificationInquiryDraftIds,
+      context,
+      drafts,
+      innovationAttestInquiry,
+      requestOrigin,
+    ],
   );
 
   const goToOnboardingStep = useCallback(
@@ -187,13 +208,17 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
         flowState.summaryIncludedDraftIds,
       );
       const stepperModel = buildOnboardingStepperSteps({
-        step: activeStep,
         drafts: flowState.drafts,
         requestOrigin: flowState.requestOrigin,
         context,
         certificationInquiryDraftIds: certificationInquiryDraftIdsInner,
+        innovationAttestInquiry: flowState.innovationAttestInquiry,
       });
-      const targetIndex = stepIndex(nextStep);
+      const targetIndex = registrationStepOrdinalInSequence(
+        nextStep,
+        flowState.drafts,
+        certificationInquiryDraftIdsInner,
+      );
       if (stepperModel[targetIndex]?.available === false) {
         return;
       }
@@ -209,9 +234,19 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
       flowState.drafts,
       flowState.requestOrigin,
       flowState.summaryIncludedDraftIds,
+      flowState.innovationAttestInquiry,
       onRegistrationStepChange,
       setFlowState,
     ],
+  );
+
+  const goNextFrom = useCallback(
+    (current: OnboardingStep) => {
+      const i = registrationSeq.indexOf(current);
+      const next = registrationSeq[i + 1];
+      if (next) goToOnboardingStep(next);
+    },
+    [goToOnboardingStep, registrationSeq],
   );
 
   const activeVatPreset = useMemo(
@@ -279,27 +314,33 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
         : activeStep === "company"
           ? {
               label: "Verder",
-              onClick: () => goToOnboardingStep("companyLegalEntities"),
+              onClick: () => goNextFrom("company"),
               disabled: !companyZetelOk || companyLookupPhase !== "ready",
             }
-          : activeStep === "companyLegalEntities"
+          : activeStep === "innovationAttest"
             ? {
                 label: "Verder",
-                onClick: () => goToOnboardingStep("invoicing"),
-                disabled: !companyLegalEntitiesOk,
+                onClick: () => goNextFrom("innovationAttest"),
+                disabled: !isInnovationAttestCaptureComplete(innovationAttestCapture),
               }
-            : activeStep === "invoicing"
+            : activeStep === "companyLegalEntities"
               ? {
                   label: "Verder",
-                  onClick: () => goToOnboardingStep("extras"),
-                  disabled: !invoicingStepOk,
+                  onClick: () => goNextFrom("companyLegalEntities"),
+                  disabled: !companyLegalEntitiesOk,
                 }
-              : activeStep === "extras"
+              : activeStep === "invoicing"
                 ? {
                     label: "Verder",
-                    onClick: () => goToOnboardingStep("summary"),
-                    disabled: !extrasStepOk,
+                    onClick: () => goNextFrom("invoicing"),
+                    disabled: !invoicingStepOk,
                   }
+                : activeStep === "extras"
+                  ? {
+                      label: "Verder",
+                      onClick: () => goNextFrom("extras"),
+                      disabled: !extrasStepOk,
+                    }
                 : activeStep === "summary"
                   ? {
                       label: "Indienen",
@@ -355,7 +396,7 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     backAction: {
       label: "Terug",
       onClick: () => {
-        const previous = ONBOARDING_STEPS[Math.max(0, stepperActiveIndex - 1)];
+        const previous = registrationSeq[Math.max(0, stepperActiveIndex - 1)];
         if (!previous) return;
         setFlowState((prev) => ({
           ...prev,

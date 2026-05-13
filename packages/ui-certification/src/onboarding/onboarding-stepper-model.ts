@@ -1,6 +1,7 @@
 import type { StepLayoutStep } from "@procertus-ui/ui";
 
 import type {
+  InnovationAttestInquiryState,
   OnboardingFlowState,
   CustomerContext,
   OnboardingStep,
@@ -16,6 +17,8 @@ import {
   isOnboardingOptionalContactsStepValid,
   isRegistrantCaptureValidForContext,
 } from "./onboarding-flow-helpers";
+import { isInnovationAttestInquiryResumeOk } from "./onboarding-innovation-attest";
+import { registrationDraftsIncludeInnovationAttest, registrationStepsSequence } from "./onboarding-registration-steps";
 import { isRegistrationIdentifierValidForOrigin } from "./lib/registration-identifier-for-origin";
 import { isVatIdentifierPlausible } from "./lib/vatPrototypePresets";
 import { ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION } from "./onboarding-constants";
@@ -29,15 +32,31 @@ export type OnboardingPhaseValidity = {
   companyCoreOk: boolean;
   invoicingStepOk: boolean;
   optionalContactsOk: boolean;
+  /** Innovatie‑attest blok afgerond (of niet van toepassing). */
+  innovationAttestOk: boolean;
   summaryStepOk: boolean;
+};
+
+export type DeriveOnboardingPhaseValidityInput = {
+  requestOrigin: OnboardingFlowState["requestOrigin"];
+  context: CustomerContext;
+  drafts: OnboardingFlowState["drafts"];
+  certificationInquiryDraftIds: readonly string[];
+  innovationAttestInquiry: InnovationAttestInquiryState;
 };
 
 /** @param requestOrigin Flow `requestOrigin`; `""` treated as unset. */
 export function deriveOnboardingPhaseValidityForFlow(
-  requestOrigin: OnboardingFlowState["requestOrigin"],
-  context: CustomerContext,
-  certificationInquiryDraftIds: readonly string[],
+  input: DeriveOnboardingPhaseValidityInput,
 ): OnboardingPhaseValidity & { hasCustomerContext: boolean } {
+  const {
+    requestOrigin,
+    context,
+    drafts,
+    certificationInquiryDraftIds,
+    innovationAttestInquiry,
+  } = input;
+
   const legalRepChoiceOk = isApplicantLegalRepresentativeChoiceComplete(context);
   const registrationBodyComplete =
     isRegistrantCaptureValidForContext(context) &&
@@ -62,7 +81,19 @@ export function deriveOnboardingPhaseValidityForFlow(
     ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const optionalContactsOk =
     isOnboardingOptionalContactsStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
-  const summaryStepOk = companyCoreOk && invoicingStepOk && optionalContactsOk;
+
+  const needsInnovationAttest = registrationDraftsIncludeInnovationAttest(
+    drafts,
+    certificationInquiryDraftIds,
+  );
+  const innovationAttestOk = isInnovationAttestInquiryResumeOk(
+    innovationAttestInquiry,
+    needsInnovationAttest,
+  );
+
+  const summaryStepOk =
+    companyCoreOk && invoicingStepOk && optionalContactsOk && innovationAttestOk;
+
   return {
     hasCustomerContext,
     registrationStepOk,
@@ -71,37 +102,80 @@ export function deriveOnboardingPhaseValidityForFlow(
     companyCoreOk,
     invoicingStepOk,
     optionalContactsOk,
+    innovationAttestOk,
     summaryStepOk,
   };
 }
 
 export type BuildOnboardingStepperStepsInput = {
-  step: OnboardingStep;
   drafts: OnboardingFlowState["drafts"];
   requestOrigin: OnboardingFlowState["requestOrigin"];
   context: CustomerContext;
   certificationInquiryDraftIds: readonly string[];
+  innovationAttestInquiry: InnovationAttestInquiryState;
 };
 
 export function buildOnboardingStepperSteps(
   input: BuildOnboardingStepperStepsInput,
 ): StepLayoutStep[] {
-  const { drafts, requestOrigin, context, certificationInquiryDraftIds } = input;
+  const {
+    drafts,
+    requestOrigin,
+    context,
+    certificationInquiryDraftIds,
+    innovationAttestInquiry,
+  } = input;
+
   const hasDrafts = drafts.length > 0;
   const legalRepChoiceOk = isApplicantLegalRepresentativeChoiceComplete(context);
+  const needsInnovationAttest = registrationDraftsIncludeInnovationAttest(
+    drafts,
+    certificationInquiryDraftIds,
+  );
+
   const {
     registrationStepOk,
     companyZetelOk,
     companyCoreOk,
     invoicingStepOk,
     summaryStepOk,
-  } = deriveOnboardingPhaseValidityForFlow(requestOrigin, context, certificationInquiryDraftIds);
+    innovationAttestOk,
+  } = deriveOnboardingPhaseValidityForFlow({
+    requestOrigin,
+    context,
+    drafts,
+    certificationInquiryDraftIds,
+    innovationAttestInquiry,
+  });
+
   const companyStepOk = companyCoreOk;
   const extrasAvailabilityDepsOk =
-    legalRepChoiceOk && registrationStepOk && companyCoreOk && invoicingStepOk;
+    legalRepChoiceOk &&
+    registrationStepOk &&
+    companyCoreOk &&
+    invoicingStepOk &&
+    innovationAttestOk;
 
-  return [
-    {
+  const seq = registrationStepsSequence(drafts, certificationInquiryDraftIds);
+
+  const innovationStepAvailable =
+    hasDrafts &&
+    requestOrigin !== "" &&
+    legalRepChoiceOk &&
+    registrationStepOk &&
+    companyZetelOk &&
+    needsInnovationAttest;
+
+  const legalEntitiesAvailable =
+    hasDrafts &&
+    requestOrigin !== "" &&
+    legalRepChoiceOk &&
+    registrationStepOk &&
+    companyZetelOk &&
+    (!needsInnovationAttest || innovationAttestInquiry.stepCompleted);
+
+  const stepLayouts: Record<OnboardingStep, StepLayoutStep> = {
+    origin: {
       id: "origin",
       title: "Land of regio",
       description:
@@ -116,22 +190,26 @@ export function buildOnboardingStepperSteps(
             }[requestOrigin] ?? ""),
       available: hasDrafts,
     },
-    {
+    customer: {
       id: "customer",
       title: "Registratie",
       description: formatRequesterStepperLabel(context),
       available: hasDrafts && requestOrigin !== "",
     },
-    {
+    company: {
       id: "company",
       title: "Maatschappelijke zetel",
       description:
-        context.organizationName.trim() ||
-        "Officiële gegevens van de hoofdrechtspersoon",
-      available:
-        hasDrafts && requestOrigin !== "" && legalRepChoiceOk && registrationStepOk,
+        context.organizationName.trim() || "Officiële gegevens van de hoofdrechtspersoon",
+      available: hasDrafts && requestOrigin !== "" && legalRepChoiceOk && registrationStepOk,
     },
-    {
+    innovationAttest: {
+      id: "innovationAttest",
+      title: "Innovatie-attest",
+      description: "Innovatief product en project",
+      available: innovationStepAvailable,
+    },
+    companyLegalEntities: {
       id: "companyLegalEntities",
       title: "Certificatie (entiteit)",
       description:
@@ -140,14 +218,9 @@ export function buildOnboardingStepperSteps(
           : context.headOfficeIsCertificationLegalEntity === "yes"
             ? "Zetel voor alle aanvragen in dit dossier"
             : "Vestiging per aanvraag",
-      available:
-        hasDrafts &&
-        requestOrigin !== "" &&
-        legalRepChoiceOk &&
-        registrationStepOk &&
-        companyZetelOk,
+      available: legalEntitiesAvailable,
     },
-    {
+    invoicing: {
       id: "invoicing",
       title: "Facturatie",
       description:
@@ -162,13 +235,13 @@ export function buildOnboardingStepperSteps(
         registrationStepOk &&
         companyStepOk,
     },
-    {
+    extras: {
       id: "extras",
       title: "Extra contacten",
       description: "Certificatie- en reservecontact (optioneel)",
       available: hasDrafts && requestOrigin !== "" && extrasAvailabilityDepsOk,
     },
-    {
+    summary: {
       id: "summary",
       title: "Nazicht",
       description: "Gegevens en aanvragen nakijken",
@@ -179,5 +252,7 @@ export function buildOnboardingStepperSteps(
         registrationStepOk &&
         summaryStepOk,
     },
-  ];
+  };
+
+  return seq.map((id) => stepLayouts[id]);
 }

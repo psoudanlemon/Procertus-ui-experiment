@@ -22,10 +22,18 @@ import {
   readInitialCompanyLookupPhase,
   resolveFlowContext,
 } from "./onboarding-flow-helpers";
-import type { OnboardingFlowState, CustomerContext } from "./onboarding-types";
+import type {
+  OnboardingFlowState,
+  CustomerContext,
+  InnovationAttestInquiryState,
+} from "./onboarding-types";
 import { vatPrototypePresetIdsForOrigin } from "./onboarding-request-origin";
 import { ONBOARDING_REGISTRATION_COMPLETE_PATH } from "./onboarding-constants";
 import { hydrateOnboardingFlowStateFromStored } from "./onboarding-default-flow-state";
+import {
+  createEmptyInnovationAttestInquiry,
+  normalizeInnovationAttestInquiry,
+} from "./onboarding-innovation-attest";
 import type { OnboardingFlowPersistencePort } from "./persistence/onboarding-flow-persistence-port";
 import {
   createOnboardingFlowApi,
@@ -120,6 +128,15 @@ export function OnboardingFlowProvider({
       if (prev.summaryIncludedDraftIds === undefined && prev.drafts.length > 0) {
         fixes.summaryIncludedDraftIds = prev.drafts.map((d) => d.id);
       }
+      if (
+        !prev.innovationAttestInquiry ||
+        typeof prev.innovationAttestInquiry.stepCompleted !== "boolean" ||
+        !prev.innovationAttestInquiry.capture
+      ) {
+        fixes.innovationAttestInquiry = normalizeInnovationAttestInquiry(
+          prev.innovationAttestInquiry as Partial<InnovationAttestInquiryState>,
+        );
+      }
       if (!prev.prototypeVatPresetId) {
         fixes.prototypeVatPresetId = DEFAULT_VAT_PROTOTYPE_PRESET_ID;
       }
@@ -155,6 +172,7 @@ export function OnboardingFlowProvider({
       prototypeVatPresetId: preset.id,
       companyFieldHints: {},
       companyZetelStepCompleted: false,
+      innovationAttestInquiry: createEmptyInnovationAttestInquiry(),
       companyLegalEntitiesStepCompleted: false,
       invoicingStepCompleted: false,
       extrasStepCompleted: false,

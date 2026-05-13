@@ -8,6 +8,8 @@ import {
   isOnboardingOptionalContactsStepValid,
   isRegistrantCaptureValidForContext,
 } from "./onboarding-flow-helpers";
+import { isInnovationAttestInquiryResumeOk } from "./onboarding-innovation-attest";
+import { registrationDraftsIncludeInnovationAttest } from "./onboarding-registration-steps";
 import type { CustomerContext, OnboardingFlowState, OnboardingStep } from "./onboarding-types";
 import { isRegistrationIdentifierValidForOrigin } from "./lib/registration-identifier-for-origin";
 import { isVatIdentifierPlausible } from "./lib/vatPrototypePresets";
@@ -24,7 +26,7 @@ import { isVatIdentifierPlausible } from "./lib/vatPrototypePresets";
  * De maatschappelijke‑zetelstap telt pas als afgerond als {@link OnboardingFlowState.companyZetelStepCompleted}
  * `true` is (na **Verder**); alléén een geldige lookup vult `context` al in.
  * Hetzelfde patroon geldt voor latere stappen waar validatie `true` kan zijn vóór **Verder**
- * (o.a. certificatie‑entiteit, facturatie, optionele contacten).
+ * (o.a. innovatie‑attest, certificatie‑entiteit, facturatie, optionele contacten).
  */
 export function deriveFormalOnboardingResumeStep(
   flowState: Pick<
@@ -36,6 +38,7 @@ export function deriveFormalOnboardingResumeStep(
     | "companyLegalEntitiesStepCompleted"
     | "invoicingStepCompleted"
     | "extrasStepCompleted"
+    | "innovationAttestInquiry"
   >,
   context: CustomerContext,
 ): OnboardingStep {
@@ -55,6 +58,16 @@ export function deriveFormalOnboardingResumeStep(
   const registrationStepOk = hasCustomerContext;
   const companyZetelOk =
     isOnboardingCompanyZetelStepValid(context) && flowState.companyZetelStepCompleted;
+
+  const needsInnovationAttest = registrationDraftsIncludeInnovationAttest(
+    flowState.drafts,
+    certificationInquiryDraftIds,
+  );
+  const innovationResumeOk = isInnovationAttestInquiryResumeOk(
+    flowState.innovationAttestInquiry,
+    needsInnovationAttest,
+  );
+
   const companyLegalEntitiesOk =
     isOnboardingCompanyLegalEntitiesStepValid(context, certificationInquiryDraftIds) &&
     flowState.companyLegalEntitiesStepCompleted;
@@ -67,6 +80,7 @@ export function deriveFormalOnboardingResumeStep(
   let step: OnboardingStep;
   if (!registrationStepOk) step = "customer";
   else if (!companyZetelOk) step = "company";
+  else if (!innovationResumeOk) step = "innovationAttest";
   else if (!companyLegalEntitiesOk) step = "companyLegalEntities";
   else if (!invoicingStepOk) step = "invoicing";
   else if (!optionalContactsOk) step = "extras";

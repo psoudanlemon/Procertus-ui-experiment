@@ -165,11 +165,56 @@ export type CustomerContext = {
   certificationSecondaryPersonRegistryId: string;
 };
 
-/** Ordered onboarding steps aligned with {@link OnboardingFlowView} and the registration stepper. */
+/** Mock-only bijlage voor het innovatie-attest uploadblok (geen echte blob‑opslag). */
+export type InnovationAttestMockAttachment = {
+  id: string;
+  name: string;
+  sizeLabel: string;
+};
+
+/** Innovatie-attest intake vastgelegd tijdens formele registratie (open tekst + mock uploads). */
+export type InnovationAttestCapture = {
+  productDescription: string;
+  applications: string;
+  regulatoryGapArgumentation: string;
+  regulatedProductGroup: string;
+  technicalDescription: string;
+  deviatingCharacteristics: string;
+  executionRequirements: string;
+  clientName: string;
+  clientAddress: string;
+  projectName: string;
+  projectAddress: string;
+  clientContactName: string;
+  clientContactPhone: string;
+  clientContactEmail: string;
+  projectDescription: string;
+  requestedPerformance: string;
+  unacceptableRisks: string;
+  /** Bouwheer bevestigt dat projectgegevens in het dossier mogen worden opgenomen (verplicht om verder te gaan). */
+  clientConsentAccepted: boolean;
+  attachments: InnovationAttestMockAttachment[];
+};
+
+/**
+ * Innovatie‑attest‑aanvraag in het dossierpakket: formulierinhoud + stap‑bevestiging (zoals
+ * {@link companyZetelStepCompleted} elders op flow‑niveau, maar gegroepeerd bij deze inquiry).
+ */
+export type InnovationAttestInquiryState = {
+  capture: InnovationAttestCapture;
+  /** Na **Verder** van het innovatie‑attest blok (alleen relevant als het pakket die inquiry bevat). */
+  stepCompleted: boolean;
+};
+
+/**
+ * Canonical registration step ids (URL‑segmenten). Het innovatie‑attest wordt dynamisch uit de stepper
+ * weggelaten wanneer het pakket geen innovatie‑aanvraag bevat (`registrationStepsSequence` in onboarding-registration-steps.ts).
+ */
 export const ONBOARDING_STEPS = [
   "origin",
   "customer",
   "company",
+  "innovationAttest",
   "companyLegalEntities",
   "invoicing",
   "extras",
@@ -255,6 +300,8 @@ export type OnboardingFlowState = {
    * vóór die bevestiging; zonder deze vlag zou resume ten onrechte latere stappen kiezen.
    */
   companyZetelStepCompleted: boolean;
+  /** Innovatie-attest inquiry: inhoud plus stap-afgerond vlag (resume/stepper zoals andere registratiestappen). */
+  innovationAttestInquiry: InnovationAttestInquiryState;
   /**
    * Na **Verder** van certificatie‑/juridische entiteit (zetel vs vestigingen per aanvraag).
    * Een keuze zoals “zetel voor alle aanvragen” kan `context` meteen valide maken zonder deze stap te verlaten.

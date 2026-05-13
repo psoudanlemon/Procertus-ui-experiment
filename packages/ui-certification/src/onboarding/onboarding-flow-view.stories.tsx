@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useLayoutEffect, type ComponentType } from "react";
 
 import { ProcertusCategorizationProvider } from "../ProcertusCategorizationContext";
-import { stepIndex, buildRows } from "./onboarding-flow-helpers";
+import { buildRows } from "./onboarding-flow-helpers";
+import { registrationStepIndex } from "./onboarding-registration-steps";
 import { OnboardingFlowView } from "./onboarding-flow-view";
 import {
   OnboardingFlowViewWithMemoryProvider,
@@ -85,7 +86,7 @@ export const OriginStep: StoryObj<typeof meta> = {
             drafts,
             requestOrigin: "",
           }),
-          activeStep: stepIndex("origin"),
+          activeStep: registrationStepIndex("origin", drafts, []),
           primaryAction: { label: "Verder", onClick: noop, disabled: true },
           rows: [],
           effectiveSummaryIncludedDraftIds: [],
@@ -119,7 +120,7 @@ export const CustomerStep: StoryObj<typeof meta> = {
             drafts,
             requestOrigin: storyRequestOrigin,
           }),
-          activeStep: stepIndex("customer"),
+          activeStep: registrationStepIndex("customer", drafts, []),
           primaryAction: { label: "Verder", onClick: noop, disabled: false },
           rows: [],
           effectiveSummaryIncludedDraftIds: [],
@@ -155,7 +156,7 @@ export const CompanyLookupLoading: StoryObj<typeof meta> = {
             drafts,
             requestOrigin: storyRequestOrigin,
           }),
-          activeStep: stepIndex("company"),
+          activeStep: registrationStepIndex("company", drafts, []),
           companyLookupPhase: "loading",
           lookupProgress: 48,
           lookupStepIndex: 2,
@@ -194,7 +195,7 @@ export const CompanyLookupReady: StoryObj<typeof meta> = {
             drafts,
             requestOrigin: storyRequestOrigin,
           }),
-          activeStep: stepIndex("company"),
+          activeStep: registrationStepIndex("company", drafts, []),
           companyLookupPhase: "ready",
           lookupProgress: 100,
           lookupStepIndex: 4,
@@ -239,7 +240,7 @@ export const CompanyLegalEntitiesStep: StoryObj<typeof meta> = {
             drafts,
             requestOrigin: storyRequestOrigin,
           }),
-          activeStep: stepIndex("companyLegalEntities"),
+          activeStep: registrationStepIndex("companyLegalEntities", drafts, included),
           companyLookupPhase: "ready",
           lookupProgress: 100,
           lookupStepIndex: 4,
@@ -270,7 +271,7 @@ export const InvoicingStep: StoryObj<typeof meta> = {
             drafts,
             requestOrigin: storyRequestOrigin,
           }),
-          activeStep: stepIndex("invoicing"),
+          activeStep: registrationStepIndex("invoicing", drafts, []),
           companyLookupPhase: "ready",
           lookupProgress: 100,
           lookupStepIndex: 4,
@@ -301,7 +302,7 @@ export const ExtrasStep: StoryObj<typeof meta> = {
             drafts,
             requestOrigin: storyRequestOrigin,
           }),
-          activeStep: stepIndex("extras"),
+          activeStep: registrationStepIndex("extras", drafts, []),
           companyLookupPhase: "ready",
           primaryAction: { label: "Verder", onClick: noop, disabled: false },
           rows: [],

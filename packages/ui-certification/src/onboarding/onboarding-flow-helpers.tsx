@@ -1857,7 +1857,7 @@ export function readInitialCompanyLookupPhase(): "idle" | "loading" | "ready" {
     const s = parsed.step;
     return s === "company" || s === "kyc"
       ? "loading"
-      : s === "companyLegalEntities"
+      : s === "companyLegalEntities" || s === "innovationAttest"
         ? "ready"
         : "idle";
   } catch {

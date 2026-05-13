@@ -12,8 +12,8 @@ export type ServiceRequirement = {
 };
 
 export type ServiceContent = {
-  /** Long-form explanation. Rendered as a paragraph below "Wat is …" heading. */
-  what: string;
+  /** Long-form explanation. Rendered below "Wat is …" — string or multiple paragraphs. */
+  what: string | readonly string[];
   /** Bullet list under "Wanneer vraag je dit het beste aan". */
   whenToApply: readonly string[];
   /** Rendered as a Table under "Vereisten". */
@@ -198,60 +198,87 @@ export const WEGWIJZER_SERVICE_CONTENT: Partial<Record<AvailableEntryKey, Servic
   },
 
   epd: {
-    what: "Een Environmental Product Declaration (EPD) documenteert de milieuprestaties van een bouwproduct over zijn volledige levenscyclus. PROCERTUS treedt op als intake-partner; de finale publicatie verloopt via EPD-Hub of een gelijkwaardig erkend programma.",
+    what: [
+      "Een Environmental Product Declaration (EPD), in het Nederlands ook milieuproductverklaring genoemd, is een gestandaardiseerd document dat de milieueffecten van een product — veelal bouwmaterialen — over de volledige levenscyclus transparant en onder voorwaarden van derden gecontroleerd (geverifieerd) weergeeft.",
+      "In tegenstelling tot een marketingclaim bundelt een EPD LCA-resultaten volgens vastgelegde regels (productcategorie-regels / PCR), een functionele eenheid en rapportagescenario’s zodat vergelijkbaarheid en traceerbaarheid mogelijk zijn in aanbestedingen en milieukeuzes.",
+      "PROCERTUS begeleidt uw aanvraag voor een EPD via dit onboarding-portaal: intake, inhoudelijke clearing en afstemming met erkende verificatie en registratie — conform het gekozen programma (bv. publicatie via een erkend platform zoals EPD-Hub).",
+    ],
     whenToApply: [
-      "U wilt de milieu-impact van uw product transparant communiceren in tenders of duurzaamheidsdossiers.",
-      "Een opdrachtgever vereist een EPD voor BREEAM, LEED of een gelijkaardig duurzaamheidsschema.",
-      "U beschikt over een gevalideerde levenscyclusanalyse (LCA) of bent klaar om er één te laten uitvoeren.",
+      "U moet een EPD aanleveren voor een tender, een overheidsopdracht of een bouwproject waarin milieuprestaties contractueel worden opgenomen.",
+      "U wilt het CO₂-footprintprofiel en andere milieu-indicatoren van uw product aantonen voor BREEAM, LEED of gelijkwaardige duurzaamheidsschema’s.",
+      "U brengt een nieuwe productlijn uit of wijzigt productie (locatie, energiebron, receptuur) waardoor een update van het milieuprofiel nodig is.",
+      "Uw klanten vragen om gestandaardiseerde, gecontroleerde milieugegevens naast CE of BENOR-documentatie.",
     ],
     requirements: [
       {
-        title: "Levenscyclusanalyse",
-        content: "Volledige LCA-studie volgens EN 15804+A2, opgemaakt door een onafhankelijke verificateur.",
+        title: "Productcategorieregels (PCR)",
+        content:
+          "Het van toepassing zijnde PCR-kader voor uw productfamilie: systeemgrenzen, referentieservicelevensduur en verplichte milieu-indicatoren (conform EN 15804 en aanvullingen waar relevant).",
       },
       {
-        title: "Productspecificatie",
-        content: "Samenstelling, productieproces en functionele eenheid van het product.",
+        title: "Levenscyclusanalyse (LCA)",
+        content:
+          "Model en datasets voor alle relevante levenscyclusfasen (grondstoffen, transport, productie, einde levensduur). Vaak uitgewerkt door een gespecialiseerde LCA-auteur.",
       },
       {
-        title: "Productieplaats",
-        content: "Identificatie van de productielocatie(s) waarop het EPD betrekking heeft.",
+        title: "Functionele eenheid en declared unit",
+        content:
+          "Eenduidige declaratie-eenheid (bv. per ton product, per m², per geleverde hoeveelheid) zodat gebruikers het product eerlijk kunnen vergelijken.",
       },
       {
-        title: "Verificatierapport",
-        content: "Onafhankelijk verificatieverslag conform de eisen van het gekozen EPD-programma.",
+        title: "Productgegevens en productiestroomspecificatie",
+        content:
+          "Samenstelling, energie- en hulpstoffenverbruik, afvalstromen en verpakking gekoppeld aan de concrete productielocatie(s) waar het EPD op betrekking heeft.",
+      },
+      {
+        title: "Onafhankelijke verificatie",
+        content:
+          "Externe kritische review door een erkende reviewer volgens de regels van het EPD-programma; dit levert een verklaring die aan het document wordt gekoppeld.",
+      },
+      {
+        title: "Registratie en publicatie",
+        content:
+          "Indiening bij het gekozen programma en registratie op het bijhorende platform zodat het EPD vindbaar en citeerbaar is voor marktpartijen.",
       },
     ],
     timeline:
-      "Vanaf indiening tot publicatie bedraagt de doorlooptijd typisch 8 tot 16 weken, afhankelijk van de volledigheid van de LCA en de verificatieronde.",
+      "Na een volledige intake door PROCERTUS verloopt een traject typisch in 8 tot 18 weken: vastleggen PCR-scope, afronden LCA en reviewronde, gevolgd door verificatie en registratie. Complexere producten of meerdere fabrieken verlengen deze bandbreedte.",
   },
 
   partijkeuring: {
-    what: "Een partijkeuring is een ad-hoc keuring waarbij PROCERTUS één afgebakende batch of partij van een bouwproduct controleert op conformiteit met de gevraagde specificaties. Het is een eenmalig traject zonder doorlopende certificatie.",
+    what: [
+      "Een partijkeuring is een controle door een onpartijdige instelling van een specifieke, afgebakende hoeveelheid product (een partij). Ze heeft als doel na te gaan of er voldoende vertrouwen bestaat dat de kenmerken van die partij aan de vastgelegde eisen voldoen.",
+      "Partijkeuring betreft steeds een afgebakende hoeveelheid; de volledige partij moet bij keuring beschikbaar zijn. De controle is éénmalig en richt zich in principe op het eindproduct — ze waarborgt daarmee niet het volledige productieproces of alle grondstoffen.",
+      "In dit portaal wordt partijkeuring niet als eigen aanvraagtraject aangeboden. Aanvragen voor partijkeuring lopen via COPRO; zie het officiële overzicht op copro.eu voor werkwijze, attesten en formulieren.",
+    ],
     whenToApply: [
-      "U wilt een specifieke partij valideren zonder lopende BENOR- of CE-certificatie.",
-      "Er is twijfel over de conformiteit van een levering of voorraadpartij.",
-      "Een bouwheer vraagt een onafhankelijke keuring als voorwaarde tot acceptatie.",
+      "Uw lastenboek of technisch bestek schrijft een partijkeuring voor (bv. verwijzing naar norm of standaardbestek zoals SB250 waar dat van toepassing is).",
+      "U wilt conformiteit van één levering of opslagpartij aantonen voordat ze op de werf wordt toegepast.",
+      "Er bestaat geen lopend productcertificaat voor het betreffende product, of er worden bijkomende eisen gesteld die een eenmalige batchbevestiging vereisen.",
     ],
     requirements: [
       {
-        title: "Identificatie van de partij",
-        content: "Volume, productiedatum, lotnummer en opslag- of leveringslocatie.",
+        title: "Keuringsdocument",
+        content:
+          "De eisen zijn vastgelegd in een keuringsdocument op basis van een norm, type- of standaardbestek, bijzonder bestek, technisch voorschrift (PTV) of een geschreven overeenkomst.",
       },
       {
-        title: "Productdocumentatie",
-        content: "Beschikbare technische documentatie en interne kwaliteitsanalyses.",
+        title: "Markering van de partij",
+        content:
+          "Producten worden vooraf gekenmerkt met een partijnummer (eerste stempeling). Bij gunstige resultaten volgt markering conform het programma van de keuringsinstantie.",
       },
       {
-        title: "Toegang voor staalname",
-        content: "Mogelijkheid voor PROCERTUS om representatieve stalen te nemen op locatie.",
+        title: "Monstername en proeven",
+        content:
+          "De partij wordt bemonsterd en beproefd volgens het keuringsdocument; alle materiaal moet tijdens het onderzoek beschikbaar zijn.",
       },
       {
-        title: "Te verifiëren parameters",
-        content: "Specificatie van de prestatiekenmerken die binnen de keuring worden onderzocht.",
+        title: "Attest of niet-conformiteitsverslag",
+        content:
+          "Bij conformiteit volgt een attest van overeenkomstigheid met product, hoeveelheid, identificatie en bouwplaats; anders een verslag van niet-overeenkomstigheid met vermelding van afwijkende kenmerken.",
       },
     ],
     timeline:
-      "Vanaf staalname tot eindrapport duurt een typische partijkeuring 2 tot 4 weken, afhankelijk van het type proeven en de productfamilie.",
+      "Doorlooptijd hangt af van planning bij de keuringsinstantie en het proefpakket; informeer tijdig bij COPRO en vermeld uw gewenste lever- of werkdatum.",
   },
 };

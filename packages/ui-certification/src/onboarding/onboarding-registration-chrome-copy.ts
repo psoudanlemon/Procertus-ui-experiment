@@ -5,7 +5,7 @@ export type RegistrationStepChromeCopy = {
   description: string;
 };
 
-const DEFAULTS: Record<Exclude<OnboardingStep, "request">, RegistrationStepChromeCopy> = {
+const DEFAULTS: Record<OnboardingStep, RegistrationStepChromeCopy> = {
   origin: {
     title: "Land of regio",
     description:
@@ -20,6 +20,11 @@ const DEFAULTS: Record<Exclude<OnboardingStep, "request">, RegistrationStepChrom
     title: "Maatschappelijke zetel",
     description:
       "Na het opzoeken vult u de officiële gegevens van uw hoofdrechtspersoon in zoals gekoppeld aan uw organisatienummer: juridische naam, telefoon en adres.",
+  },
+  innovationAttest: {
+    title: "Innovatie-attest dossiergegevens",
+    description:
+      "Vul het innovatief product, de bewijsvoering en het project waarin het wordt toegepast in. Dit vervangt de productselectie uit het traject‑wizard voor deze aanvraag.",
   },
   companyLegalEntities: {
     title: "Certificatie en juridische entiteit",
@@ -43,14 +48,7 @@ const DEFAULTS: Record<Exclude<OnboardingStep, "request">, RegistrationStepChrom
 };
 
 export function mergeRegistrationChromeCopy(
-  registrationStep:
-    | "origin"
-    | "customer"
-    | "company"
-    | "companyLegalEntities"
-    | "invoicing"
-    | "extras"
-    | "summary",
+  registrationStep: OnboardingStep,
   override?: Partial<RegistrationStepChromeCopy> | undefined,
 ): RegistrationStepChromeCopy {
   return {

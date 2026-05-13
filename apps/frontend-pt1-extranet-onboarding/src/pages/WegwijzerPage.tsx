@@ -353,8 +353,8 @@ function MasterCard({
   const { entry, externalReferral } = service;
   const isInnovation = entry.id === "innovation-attest";
   const isExternal = service.tier === 3;
+  const isExternalRequestOnly = Boolean(service.externalRequestOnly && externalReferral);
   const isNonProductBound = entry.productRelation === "optional";
-  const documents = buildMockDocuments(service);
 
   const handleStartNonProductFlow = () => {
     const placeholder: CertificationRequestDraft = {
@@ -394,7 +394,14 @@ function MasterCard({
               </p>
             </HoverCardContent>
           </HoverCard>
-          {isNonProductBound ? (
+          {isExternalRequestOnly && externalReferral ? (
+            <Button size="lg" asChild>
+              <a href={externalReferral.url} target="_blank" rel="noopener noreferrer">
+                Ga naar {externalReferral.name}
+                <HugeiconsIcon icon={LinkSquare02Icon} className="size-4" strokeWidth={1.5} />
+              </a>
+            </Button>
+          ) : isNonProductBound ? (
             <Button size="lg" onClick={handleStartNonProductFlow}>
               Aanvraag indienen
               <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
@@ -431,12 +438,14 @@ function MasterCard({
         </Alert>
       )}
 
-      <DetailCardSection
-        title="Regels en documentatie"
-        description={`Documenten op basis van uw selectie voor ${entry.shortLabel} (prototype, downloadlinks zijn gemockt).`}
-      >
-        <DownloadableItemGrid items={documents} />
-      </DetailCardSection>
+      {!isExternalRequestOnly && (
+        <DetailCardSection
+          title="Regels en documentatie"
+          description={`Documenten op basis van uw selectie voor ${entry.shortLabel} (prototype, downloadlinks zijn gemockt).`}
+        >
+          <DownloadableItemGrid items={buildMockDocuments(service)} />
+        </DetailCardSection>
+      )}
 
       <MasterCardTimeline service={service} />
     </DetailCard>
@@ -481,10 +490,18 @@ function MasterCardSections({ service }: { service: WegwijzerService }) {
 
   if (!content) return <MasterCardSkeleton />;
 
+  const whatParagraphs = Array.isArray(content.what) ? content.what : [content.what];
+
   return (
     <>
       <DetailCardSection title={`Wat is een ${entry.label}?`}>
-        <p className="max-w-3xl text-sm leading-normal">{content.what}</p>
+        <div className="flex max-w-3xl flex-col gap-component">
+          {whatParagraphs.map((paragraph, index) => (
+            <p key={index} className="text-sm leading-normal">
+              {paragraph}
+            </p>
+          ))}
+        </div>
       </DetailCardSection>
 
       <DetailCardSection title="Wanneer vraag je dit het beste aan?">
@@ -497,6 +514,26 @@ function MasterCardSections({ service }: { service: WegwijzerService }) {
           ))}
         </ul>
       </DetailCardSection>
+
+      {content.requirements.length > 0 ? (
+        <DetailCardSection
+          title="Vereisten en dossierinhoud"
+          description={
+            entry.id === "epd"
+              ? "EPD’s bouwen voornamelijk op een levenscyclusanalyse (LCA) en een erkend publicatieprogramma; hieronder staat wat PROCERTUS typisch met u aligned tijdens intake."
+              : `Kenmerken van een volledig dossier voor ${entry.shortLabel}.`
+          }
+        >
+          <dl className="flex max-w-3xl flex-col gap-section">
+            {content.requirements.map((req) => (
+              <div key={req.title}>
+                <dt className="text-sm font-semibold text-foreground">{req.title}</dt>
+                <dd className="mt-micro text-sm leading-normal text-muted-foreground">{req.content}</dd>
+              </div>
+            ))}
+          </dl>
+        </DetailCardSection>
+      ) : null}
     </>
   );
 }

@@ -6,39 +6,32 @@ import type { CertificationRequestDraft } from "../CertificationRequestContext";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
 import {
   COUNTRY_SELECT_NONE,
-  ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION,
 } from "./onboarding-constants";
 import {
   buildRows,
   DEFAULT_CONTEXT,
   effectiveIncludedCertificationDraftIds,
-  formatRequesterStepperLabel,
-  isLegalRepresentativeCaptureComplete,
-  isApplicantLegalRepresentativeChoiceComplete,
-  isOnboardingCompanyCoreStepValid,
-  isOnboardingCompanyStepValid,
-  isOnboardingCompanyZetelStepValid,
-  isOnboardingInvoicingStepValid,
-  isRegistrantCaptureValidForContext,
   resolveFlowContext,
-  stepIndex,
 } from "./onboarding-flow-helpers";
+import { createEmptyInnovationAttestCapture } from "./onboarding-innovation-attest";
+import { buildOnboardingStepperSteps } from "./onboarding-stepper-model";
 import type {
   OnboardingFlowState,
   CustomerContext,
   OnboardingStep,
 } from "./onboarding-types";
-import { ONBOARDING_STEPS } from "./onboarding-types";
+import {
+  registrationStepIndex,
+  registrationStepsSequence,
+} from "./onboarding-registration-steps";
 import { registrationSimulationStepLabels } from "./lib/registrationSubmitSimulation";
 import {
   DEFAULT_VAT_PROTOTYPE_PRESET_ID,
   findVatPrototypePreset,
-  isVatIdentifierPlausible,
   vatLookupSimulationStepsForPreset,
   VAT_PROTOTYPE_PRESETS,
   type CompanyFormFieldKey,
 } from "./lib/vatPrototypePresets";
-import { isRegistrationIdentifierValidForOrigin } from "./lib/registration-identifier-for-origin";
 import {
   registrationCountryOptionsForRequestOrigin,
   vatPrototypePresetIdsForOrigin,
@@ -96,55 +89,6 @@ export function storyCustomerContext(overrides: Partial<CustomerContext> = {}): 
   });
 }
 
-function onboardingRegistrationBodyComplete(
-  ctx: CustomerContext,
-  requestOrigin: OnboardingRequestOrigin | "",
-): boolean {
-  return (
-    isRegistrantCaptureValidForContext(ctx) &&
-    isLegalRepresentativeCaptureComplete(ctx) &&
-    (requestOrigin
-      ? isRegistrationIdentifierValidForOrigin(ctx.vatNumber ?? "", requestOrigin)
-      : isVatIdentifierPlausible(ctx.vatNumber ?? ""))
-  );
-}
-
-function hasCustomerContext(
-  ctx: CustomerContext,
-  requestOrigin: OnboardingRequestOrigin | "",
-): boolean {
-  return (
-    isApplicantLegalRepresentativeChoiceComplete(ctx) &&
-    onboardingRegistrationBodyComplete(ctx, requestOrigin)
-  );
-}
-
-function hasInvoicingContext(
-  ctx: CustomerContext,
-  drafts: CertificationRequestDraft[],
-): boolean {
-  return isOnboardingInvoicingStepValid(
-    ctx,
-    effectiveIncludedCertificationDraftIds(drafts, undefined),
-  );
-}
-
-function includedDraftIdsForStoryFixtures(drafts: CertificationRequestDraft[]): string[] {
-  return effectiveIncludedCertificationDraftIds(drafts, undefined);
-}
-
-function hasCompanyContext(ctx: CustomerContext, drafts: CertificationRequestDraft[]): boolean {
-  return isOnboardingCompanyStepValid(ctx, includedDraftIdsForStoryFixtures(drafts));
-}
-
-function hasCompanyCoreContext(ctx: CustomerContext, drafts: CertificationRequestDraft[]): boolean {
-  return isOnboardingCompanyCoreStepValid(ctx, includedDraftIdsForStoryFixtures(drafts));
-}
-
-function hasCompanyZetelContext(ctx: CustomerContext): boolean {
-  return isOnboardingCompanyZetelStepValid(ctx);
-}
-
 /** Default origin for Storybook fixtures (Belgium). */
 export const storyRequestOrigin: OnboardingRequestOrigin = "be";
 
@@ -154,91 +98,19 @@ export function storyOnboardingStepperSteps(input: {
   context: CustomerContext;
   drafts: CertificationRequestDraft[];
   requestOrigin?: OnboardingRequestOrigin | "";
+  innovationAttestStepCompleted?: boolean;
 }): StepLayoutStep[] {
-  const { context, drafts } = input;
-  const requestOrigin = input.requestOrigin ?? "";
-  const hasDrafts = drafts.length > 0;
-  const hasCust = hasCustomerContext(context, requestOrigin);
-  const registrationBodyOk = onboardingRegistrationBodyComplete(context, requestOrigin);
-  const legalRepOk = isApplicantLegalRepresentativeChoiceComplete(context);
-  const hasInv = hasInvoicingContext(context, drafts);
-  const hasComp = hasCompanyContext(context, drafts);
-  const hasCore = hasCompanyCoreContext(context, drafts);
-  const companyZetelOk =
-    hasCompanyZetelContext(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
-  const registrationStepOk =
-    legalRepOk && (registrationBodyOk || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION);
-  const companyStepOk = hasComp || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
-  const companyCoreOk = hasCore || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
-  const invoicingStepOk = hasInv || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
-  return [
-    {
-      id: "origin",
-      title: "Land of regio",
-      description:
-        requestOrigin === ""
-          ? "Waar is uw bedrijf?"
-          : ({
-              be: "België",
-              nl: "Nederland",
-              eu: "Europa (EU)",
-              us: "Verenigde Staten",
-              other: "Anders",
-            }[requestOrigin] ?? ""),
-      available: hasDrafts,
+  const ids = effectiveIncludedCertificationDraftIds(input.drafts, undefined);
+  return buildOnboardingStepperSteps({
+    drafts: input.drafts,
+    requestOrigin: input.requestOrigin ?? "",
+    context: input.context,
+    certificationInquiryDraftIds: ids,
+    innovationAttestInquiry: {
+      capture: createEmptyInnovationAttestCapture(),
+      stepCompleted: input.innovationAttestStepCompleted ?? false,
     },
-    {
-      id: "customer",
-      title: "Registratie",
-      description: formatRequesterStepperLabel(context),
-      available: hasDrafts && requestOrigin !== "",
-    },
-    {
-      id: "company",
-      title: "Maatschappelijke zetel",
-      description:
-        context.organizationName.trim() || "Officiële gegevens van de hoofdrechtspersoon",
-      available: hasDrafts && requestOrigin !== "" && registrationStepOk,
-    },
-    {
-      id: "companyLegalEntities",
-      title: "Certificatie (entiteit)",
-      description:
-        context.headOfficeIsCertificationLegalEntity === ""
-          ? "Zetel of vestigingen per aanvraag"
-          : context.headOfficeIsCertificationLegalEntity === "yes"
-            ? "Zetel voor alle aanvragen in dit dossier"
-            : "Vestiging per aanvraag",
-      available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyZetelOk,
-    },
-    {
-      id: "invoicing",
-      title: "Facturatie",
-      description:
-        context.invoicingEmail.trim() ||
-        (context.invoicingMirrorCertificationLegalEntities
-          ? "Zelfde rechts‑persoon als bij certificatie"
-          : "Factuur‑rechtspersoon per aanvraag"),
-      available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyStepOk,
-    },
-    {
-      id: "extras",
-      title: "Extra contacten",
-      description: "Certificatie- en reservecontact (optioneel)",
-      available:
-        hasDrafts &&
-        requestOrigin !== "" &&
-        registrationStepOk &&
-        companyCoreOk &&
-        invoicingStepOk,
-    },
-    {
-      id: "summary",
-      title: "Nazicht",
-      description: "Gegevens en aanvragen nakijken",
-      available: hasDrafts && requestOrigin !== "" && registrationStepOk && companyStepOk,
-    },
-  ];
+  });
 }
 
 const defaultRegistrationSimulation = registrationSimulationStepLabels(2);
@@ -302,7 +174,7 @@ export function baseOnboardingFlowViewProps(
     effectiveSummaryIncludedDraftIds: includedIds,
     rows: buildRows(context, drafts, includedIds, { includeDraftRows: false }),
     steps: storyOnboardingStepperSteps({ step, context, drafts, requestOrigin }),
-    activeStep: stepIndex(step),
+    activeStep: registrationStepIndex(step, drafts, includedIds),
     goToOnboardingStep: noop as OnboardingFlowViewProps["goToOnboardingStep"],
     primaryAction: { label: "Indienen", onClick: noop, disabled: false },
     backAction: {
@@ -342,7 +214,14 @@ export function flowStateSeedFromOnboardingFlowViewProps(
   props: OnboardingFlowViewProps,
 ): OnboardingFlowState {
   const summaryIds = props.effectiveSummaryIncludedDraftIds;
-  const stepIdx = ONBOARDING_STEPS.indexOf(props.step);
+  const ids =
+    summaryIds !== undefined && summaryIds.length > 0
+      ? [...summaryIds]
+      : props.drafts.map((d) => d.id);
+  const seq = registrationStepsSequence(props.drafts, ids);
+  const stepIdx = seq.indexOf(props.step);
+  const innoIdx = seq.indexOf("innovationAttest");
+
   return hydrateOnboardingFlowStateFromStored({
     trajectServiceId: "",
     guestIntakeChannel: props.requestOrigin ? "formal" : "",
@@ -357,11 +236,14 @@ export function flowStateSeedFromOnboardingFlowViewProps(
     summaryKlantenportaalByPersonId: props.summaryKlantenportaalByPersonId ?? {},
     submissionNote: props.submissionNote,
     submissionNoteUnlocked: props.submissionNoteUnlocked,
-    companyZetelStepCompleted: stepIdx > ONBOARDING_STEPS.indexOf("company"),
-    companyLegalEntitiesStepCompleted:
-      stepIdx > ONBOARDING_STEPS.indexOf("companyLegalEntities"),
-    invoicingStepCompleted: stepIdx > ONBOARDING_STEPS.indexOf("invoicing"),
-    extrasStepCompleted: stepIdx > ONBOARDING_STEPS.indexOf("extras"),
+    innovationAttestInquiry: {
+      capture: createEmptyInnovationAttestCapture(),
+      stepCompleted: innoIdx >= 0 ? stepIdx > innoIdx : false,
+    },
+    companyZetelStepCompleted: stepIdx > seq.indexOf("company"),
+    companyLegalEntitiesStepCompleted: stepIdx > seq.indexOf("companyLegalEntities"),
+    invoicingStepCompleted: stepIdx > seq.indexOf("invoicing"),
+    extrasStepCompleted: stepIdx > seq.indexOf("extras"),
   });
 }
 

@@ -1,6 +1,15 @@
 import { DEFAULT_VAT_PROTOTYPE_PRESET_ID } from "./lib/vatPrototypePresets";
-import type { OnboardingFlowState } from "./onboarding-types";
+import type {
+  InnovationAttestCapture,
+  InnovationAttestInquiryState,
+  OnboardingFlowState,
+} from "./onboarding-types";
 import { GUEST_INTAKE_CHANNELS, type GuestIntakeChannel } from "./onboarding-types";
+import {
+  createEmptyInnovationAttestInquiry,
+  normalizeInnovationAttestCapture,
+  normalizeInnovationAttestInquiry,
+} from "./onboarding-innovation-attest";
 import {
   DEFAULT_CONTEXT,
   effectiveIncludedCertificationDraftIds,
@@ -13,6 +22,33 @@ function coerceGuestIntakeChannel(raw: unknown): GuestIntakeChannel {
   return typeof raw === "string" && (GUEST_INTAKE_CHANNELS as readonly string[]).includes(raw)
     ? (raw as GuestIntakeChannel)
     : "";
+}
+
+/** Migrates legacy top-level innovation keys into {@link OnboardingFlowState.innovationAttestInquiry}. */
+function migrateInnovationAttestInquiryFromStored(stored: {
+  innovationAttestInquiry?: Partial<InnovationAttestInquiryState>;
+  innovationAttestCapture?: InnovationAttestCapture;
+  innovationAttestStepCompleted?: boolean;
+}): InnovationAttestInquiryState {
+  const nested = stored.innovationAttestInquiry;
+  if (nested && typeof nested === "object") {
+    return normalizeInnovationAttestInquiry({
+      capture: normalizeInnovationAttestCapture(nested.capture),
+      stepCompleted:
+        typeof nested.stepCompleted === "boolean"
+          ? nested.stepCompleted
+          : typeof stored.innovationAttestStepCompleted === "boolean"
+            ? stored.innovationAttestStepCompleted
+            : false,
+    });
+  }
+  return normalizeInnovationAttestInquiry({
+    capture: normalizeInnovationAttestCapture(stored.innovationAttestCapture),
+    stepCompleted:
+      typeof stored.innovationAttestStepCompleted === "boolean"
+        ? stored.innovationAttestStepCompleted
+        : false,
+  });
 }
 
 export const DEFAULT_ONBOARDING_FLOW_STATE: OnboardingFlowState = {
@@ -28,6 +64,7 @@ export const DEFAULT_ONBOARDING_FLOW_STATE: OnboardingFlowState = {
   companyFieldHints: {},
   summaryKlantenportaalByPersonId: {},
   companyZetelStepCompleted: false,
+  innovationAttestInquiry: createEmptyInnovationAttestInquiry(),
   companyLegalEntitiesStepCompleted: false,
   invoicingStepCompleted: false,
   extrasStepCompleted: false,
@@ -37,9 +74,28 @@ export function hydrateOnboardingFlowStateFromStored(
   stored: OnboardingFlowState | null | undefined,
 ): OnboardingFlowState {
   if (!stored) return DEFAULT_ONBOARDING_FLOW_STATE;
-  const { step: _legacyStep, registrationEntryLabel: rawEntryLabel, ...restStored } = stored as OnboardingFlowState & {
+
+  const compat = stored as Partial<OnboardingFlowState> & {
     step?: unknown;
+    innovationAttestCapture?: InnovationAttestCapture;
+    innovationAttestStepCompleted?: boolean;
   };
+
+  const {
+    step: _legacyStep,
+    registrationEntryLabel: rawEntryLabel,
+    innovationAttestCapture: legacyInnovCapture,
+    innovationAttestStepCompleted: legacyInnovStepDone,
+    innovationAttestInquiry: legacyInnovInquiry,
+    ...restStored
+  } = compat;
+
+  const innovationAttestInquiry = migrateInnovationAttestInquiryFromStored({
+    innovationAttestInquiry: legacyInnovInquiry,
+    innovationAttestCapture: legacyInnovCapture,
+    innovationAttestStepCompleted: legacyInnovStepDone,
+  });
+
   const trimmedLabel = rawEntryLabel?.trim();
   const rawDrafts = restStored.drafts ?? [];
   const backfillTrajectRoot = (restStored.trajectServiceId ?? "").trim();
@@ -108,6 +164,7 @@ export function hydrateOnboardingFlowStateFromStored(
     companyFieldHints: stored.companyFieldHints ?? {},
     summaryKlantenportaalByPersonId: stored.summaryKlantenportaalByPersonId ?? {},
     companyZetelStepCompleted,
+    innovationAttestInquiry,
     companyLegalEntitiesStepCompleted,
     invoicingStepCompleted,
     extrasStepCompleted,

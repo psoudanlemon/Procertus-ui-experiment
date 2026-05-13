@@ -13,6 +13,9 @@ export { OnboardingCompanyLegalEntitiesStep, type OnboardingCompanyLegalEntities
 export { OnboardingCompanyZetelStep, type OnboardingCompanyZetelStepProps } from "./company-step/OnboardingCompanyZetelStep";
 export { OnboardingInvoicingStep, type OnboardingInvoicingStepProps } from "./invoicing-step/OnboardingInvoicingStep";
 export { OnboardingExtrasStep, type OnboardingExtrasStepProps } from "./extras-step/OnboardingExtrasStep";
+export {
+  OnboardingInnovationAttestStep,
+} from "./innovation-attest-step/OnboardingInnovationAttestStep";
 export { OnboardingSummaryStep, type OnboardingSummaryStepProps } from "./summary-step/OnboardingSummaryStep";
 export {
   CertificationInquiriesOverviewCard,

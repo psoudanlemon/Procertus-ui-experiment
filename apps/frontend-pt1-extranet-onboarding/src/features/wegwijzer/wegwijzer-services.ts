@@ -15,8 +15,8 @@ import {
 /**
  * Visual hierarchy:
  *  - 1 = focus (BENOR, CE) — prominent 2-koloms grid
- *  - 2 = bijkomende PROCERTUS-diensten (SSD, Innovation, PROCERTUS-attest, Partijkeuring)
- *  - 3 = externe verwijzing (ATG → BUtgb, EPD → EPD-Hub) — gebundeld onder de
+ *  - 2 = bijkomende PROCERTUS-diensten (SSD, Innovation, PROCERTUS-attest, EPD)
+ *  - 3 = externe verwijzing (ATG → BUtgb, Partijkeuring → COPRO) — gebundeld onder de
  *        "Andere"-pill (ghost variant) en getoond als 2-koloms verwijspaneel.
  */
 export type WegwijzerTier = 1 | 2 | 3;
@@ -27,6 +27,11 @@ export type WegwijzerService = {
   icon: IconSvgElement;
   externalReferral?: { name: string; description: string; url: string };
   /**
+   * Tier-3 routes waar aanvragen niet via dit onboarding-portaal lopen — alleen doorverwijzen.
+   * (Bv. partijkeuring bij COPRO.) ATG blijft via PROCERTUS-intake beschikbaar in de wizard.
+   */
+  externalRequestOnly?: boolean;
+  /**
    * Override label used in the choice-card pill on the Wegwijzer page.
    * Defaults to `entry.label` (same as the master-card title) — set this
    * only when the master-card title is too long for a pill, e.g. SSD's
@@ -36,7 +41,10 @@ export type WegwijzerService = {
 };
 
 const ENTRIES_BY_ID = new Map<AvailableEntryKey, AvailableEntry>(
-  (defaultProcertusCategorizationDoc.meta.availableEntries ?? []).map((entry) => [entry.id, entry]),
+  (defaultProcertusCategorizationDoc.meta.availableEntries ?? []).map((availableEntry) => [
+    availableEntry.id,
+    availableEntry,
+  ]),
 );
 
 function entry(id: AvailableEntryKey): AvailableEntry {
@@ -51,7 +59,7 @@ export const WEGWIJZER_SERVICES: readonly WegwijzerService[] = [
   { entry: entry("ssd"), tier: 2, icon: CheckmarkCircle02Icon, pillLabel: "SSD" },
   { entry: entry("innovation-attest"), tier: 2, icon: FilePlusIcon },
   { entry: entry("procertus"), tier: 2, icon: File01Icon },
-  { entry: entry("partijkeuring"), tier: 2, icon: Search01Icon },
+  { entry: entry("epd"), tier: 2, icon: Search01Icon, pillLabel: "EPD" },
   {
     entry: entry("atg"),
     tier: 3,
@@ -64,15 +72,16 @@ export const WEGWIJZER_SERVICES: readonly WegwijzerService[] = [
     },
   },
   {
-    entry: entry("epd"),
+    entry: entry("partijkeuring"),
     tier: 3,
     icon: Share01Icon,
     externalReferral: {
-      name: "EPD-Hub",
+      name: "COPRO",
       description:
-        "Milieuverklaringen worden gepubliceerd via EPD-Hub; PROCERTUS verwijst u gericht door.",
-      url: "https://www.epdhub.com/",
+        "Partijkeuring wordt niet via dit portaal aangevraagd. COPRO voert partijkeuringen uit volgens het COPRO-partijkeuringsreglement (PKRL); gebruik het aanvraagkanaal van COPRO.",
+      url: "https://www.copro.eu/nl/keuring/partijkeuring",
     },
+    externalRequestOnly: true,
   },
 ];
 

@@ -14,6 +14,9 @@ import {
   syncOnboardingVestigingenOnePerRegistrationDraft,
 } from "./onboarding-flow-helpers";
 import {
+  createEmptyInnovationAttestInquiry,
+} from "./onboarding-innovation-attest";
+import {
   findVatPrototypePreset,
   VAT_PROTOTYPE_PRESETS,
 } from "./lib/vatPrototypePresets";
@@ -137,6 +140,7 @@ export function createOnboardingFlowApi(
         prototypeVatPresetId: presetId,
         companyFieldHints: {},
         companyZetelStepCompleted: false,
+        innovationAttestInquiry: createEmptyInnovationAttestInquiry(),
         companyLegalEntitiesStepCompleted: false,
         invoicingStepCompleted: false,
         extrasStepCompleted: false,
@@ -156,6 +160,7 @@ export function createOnboardingFlowApi(
           prototypeVatPresetId: preset.id,
           companyFieldHints: {},
           companyZetelStepCompleted: false,
+          innovationAttestInquiry: createEmptyInnovationAttestInquiry(),
           companyLegalEntitiesStepCompleted: false,
           invoicingStepCompleted: false,
           extrasStepCompleted: false,

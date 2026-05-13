@@ -5,6 +5,7 @@ import { OnboardingExtrasStep } from "../components/onboarding/extras-step/Onboa
 import { OnboardingInvoicingStep } from "../components/onboarding/invoicing-step/OnboardingInvoicingStep";
 import { OnboardingOriginStep } from "../components/onboarding/origin-step/OnboardingOriginStep";
 import { OnboardingShell } from "../components/onboarding/shell/OnboardingShell";
+import { OnboardingInnovationAttestStep } from "../components/onboarding/innovation-attest-step/OnboardingInnovationAttestStep";
 import { OnboardingSummaryStep } from "../components/onboarding/summary-step/OnboardingSummaryStep";
 import { RegistrationProcessingDialog } from "../components/registration-processing-dialog";
 import { STABLE_STEP_MIN_HEIGHT } from "./onboarding-constants";
@@ -12,7 +13,7 @@ import { StepLayout, StepLayoutStepper } from "@procertus-ui/ui";
 
 import { mergeRegistrationChromeCopy } from "./onboarding-registration-chrome-copy";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
-import { ONBOARDING_STEPS } from "./onboarding-types";
+import { registrationStepsSequence } from "./onboarding-registration-steps";
 import { useOnboardingRegistrationLayoutModel } from "./use-onboarding-registration-layout-model";
 
 export function OnboardingFlowView(props: OnboardingFlowViewProps) {
@@ -44,6 +45,8 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
     onLanguageChange,
     guestLanguagePlacement,
     embeddedRegistryShell,
+    drafts,
+    effectiveSummaryIncludedDraftIds,
   } = props;
 
   const registrationChrome = mergeRegistrationChromeCopy(
@@ -76,7 +79,8 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
               steps={steps}
               activeStep={activeStep}
               onStepChange={(index) => {
-                const nextStep = ONBOARDING_STEPS[index];
+                const seq = registrationStepsSequence(drafts, effectiveSummaryIncludedDraftIds);
+                const nextStep = seq[index];
                 if (nextStep) {
                   goToOnboardingStep(nextStep);
                 }
@@ -99,6 +103,7 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
           ) : null}
           {step === "customer" ? <OnboardingCustomerStep model={rb} /> : null}
           {step === "company" ? <OnboardingCompanyZetelStep model={rb} /> : null}
+          {step === "innovationAttest" ? <OnboardingInnovationAttestStep /> : null}
           {step === "companyLegalEntities" ? (
             <OnboardingCompanyLegalEntitiesStep model={rb} />
           ) : null}

@@ -1,4 +1,9 @@
-import { ONBOARDING_STEPS, type OnboardingStep } from "@procertus-ui/ui-certification";
+import type { CertificationRequestDraft, OnboardingStep } from "@procertus-ui/ui-certification";
+import {
+  effectiveIncludedCertificationDraftIds,
+  ONBOARDING_STEPS,
+  registrationStepIndex,
+} from "@procertus-ui/ui-certification";
 
 /** Base path for anonymous formal registration; `:stepId` is required for the step view. */
 export const FORMAL_ONBOARDING_PATH = "/welcome/formal-request";
@@ -18,6 +23,11 @@ export function parseFormalOnboardingStepParam(param: string | undefined): Onboa
 export function shouldClampFormalStepToResume(
   requested: OnboardingStep,
   resume: OnboardingStep,
+  drafts: readonly CertificationRequestDraft[],
+  summaryIncludedDraftIds: readonly string[] | undefined,
 ): boolean {
-  return ONBOARDING_STEPS.indexOf(requested) > ONBOARDING_STEPS.indexOf(resume);
+  const ids = effectiveIncludedCertificationDraftIds(drafts, summaryIncludedDraftIds);
+  const rq = registrationStepIndex(requested, drafts, ids);
+  const rr = registrationStepIndex(resume, drafts, ids);
+  return rq < 0 || rq > rr;
 }

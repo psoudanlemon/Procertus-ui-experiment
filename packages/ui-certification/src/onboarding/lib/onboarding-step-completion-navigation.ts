@@ -1,4 +1,4 @@
-import { stepIndex } from "../onboarding-flow-helpers";
+import { registrationStepsSequenceForFlowState } from "../onboarding-registration-steps";
 import type { OnboardingFlowState } from "../onboarding-types";
 import type { OnboardingStep } from "../onboarding-types";
 
@@ -10,6 +10,7 @@ export type StepCompletionNavigationFields = Pick<
   | "invoicingStepCompleted"
   | "extrasStepCompleted"
   | "companyFieldHints"
+  | "innovationAttestInquiry"
 >;
 
 /**
@@ -21,16 +22,19 @@ export function stepCompletionStateAfterNavigation(
   activeStep: OnboardingStep,
   nextStep: OnboardingStep,
 ): StepCompletionNavigationFields {
-  const fromIdx = stepIndex(activeStep);
-  const toIdx = stepIndex(nextStep);
+  const seq = registrationStepsSequenceForFlowState(prev);
+  const fromIdx = seq.indexOf(activeStep);
+  const toIdx = seq.indexOf(nextStep);
   const backward = toIdx < fromIdx;
 
-  const companyIdx = stepIndex("company");
-  const legalIdx = stepIndex("companyLegalEntities");
-  const invoicingIdx = stepIndex("invoicing");
-  const extrasIdx = stepIndex("extras");
+  const companyIdx = seq.indexOf("company");
+  const innovationIdx = seq.indexOf("innovationAttest");
+  const legalIdx = seq.indexOf("companyLegalEntities");
+  const invoicingIdx = seq.indexOf("invoicing");
+  const extrasIdx = seq.indexOf("extras");
 
   let companyZetelStepCompleted = prev.companyZetelStepCompleted;
+  let innovationAttestStepCompleted = prev.innovationAttestInquiry.stepCompleted;
   let companyLegalEntitiesStepCompleted = prev.companyLegalEntitiesStepCompleted;
   let invoicingStepCompleted = prev.invoicingStepCompleted;
   let extrasStepCompleted = prev.extrasStepCompleted;
@@ -38,25 +42,39 @@ export function stepCompletionStateAfterNavigation(
 
   if (toIdx <= companyIdx) {
     companyZetelStepCompleted = false;
+    innovationAttestStepCompleted = false;
     companyLegalEntitiesStepCompleted = false;
     invoicingStepCompleted = false;
     extrasStepCompleted = false;
     if (nextStep === "company") {
       companyFieldHints = {};
     }
-  } else if (backward && toIdx <= legalIdx) {
-    companyLegalEntitiesStepCompleted = false;
-    invoicingStepCompleted = false;
-    extrasStepCompleted = false;
-  } else if (backward && toIdx <= invoicingIdx) {
-    invoicingStepCompleted = false;
-    extrasStepCompleted = false;
-  } else if (backward && toIdx <= extrasIdx) {
-    extrasStepCompleted = false;
+  } else if (backward) {
+    if (innovationIdx >= 0 && toIdx <= innovationIdx) {
+      innovationAttestStepCompleted = false;
+      companyLegalEntitiesStepCompleted = false;
+      invoicingStepCompleted = false;
+      extrasStepCompleted = false;
+    } else if (toIdx <= legalIdx) {
+      companyLegalEntitiesStepCompleted = false;
+      invoicingStepCompleted = false;
+      extrasStepCompleted = false;
+    } else if (toIdx <= invoicingIdx) {
+      invoicingStepCompleted = false;
+      extrasStepCompleted = false;
+    } else if (toIdx <= extrasIdx) {
+      extrasStepCompleted = false;
+    }
   }
 
-  if (activeStep === "company" && nextStep === "companyLegalEntities") {
+  if (
+    activeStep === "company" &&
+    (nextStep === "innovationAttest" || nextStep === "companyLegalEntities")
+  ) {
     companyZetelStepCompleted = true;
+  }
+  if (activeStep === "innovationAttest" && nextStep === "companyLegalEntities") {
+    innovationAttestStepCompleted = true;
   }
   if (activeStep === "companyLegalEntities" && nextStep === "invoicing") {
     companyLegalEntitiesStepCompleted = true;
@@ -74,6 +92,10 @@ export function stepCompletionStateAfterNavigation(
 
   return {
     companyZetelStepCompleted,
+    innovationAttestInquiry: {
+      ...prev.innovationAttestInquiry,
+      stepCompleted: innovationAttestStepCompleted,
+    },
     companyLegalEntitiesStepCompleted,
     invoicingStepCompleted,
     extrasStepCompleted,

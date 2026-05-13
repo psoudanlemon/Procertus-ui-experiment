@@ -35,6 +35,13 @@ export {
   deriveFormalOnboardingResumeStep,
 } from "./derive-formal-onboarding-resume-step";
 export {
+  registrationDraftsIncludeInnovationAttest,
+  registrationDraftsIncludeInnovationAttestForFlowState,
+  registrationStepsSequence,
+  registrationStepsSequenceForFlowState,
+  registrationStepIndex,
+} from "./onboarding-registration-steps";
+export {
   draftBelongsToTrajectRoot,
   formalPackageSummaryDraftIds,
 } from "./traject-draft-belongs";
@@ -50,6 +57,9 @@ export type {
   OnboardingVestiging,
   GuestIntakeChannel,
   InformalIntakeCapture,
+  InnovationAttestCapture,
+  InnovationAttestInquiryState,
+  InnovationAttestMockAttachment,
 } from "./onboarding-types";
 export {
   GUEST_INTAKE_CHANNELS,
