@@ -80,6 +80,11 @@ export type StepLayoutProps = {
    * background, shadow, or rail padding). Use when the page already supplies its own chrome.
    */
   chromeStyle?: "card" | "banded" | "bare";
+  /**
+   * When true, omits the title / description header block entirely (e.g. copy lives in body or floats),
+   * but keeps footer actions and optional top step rail.
+   */
+  hideHeader?: boolean;
   title: ReactNode;
   description?: ReactNode;
   /** e.g. “Step 2 of 6” — not a second heading. */
@@ -233,6 +238,7 @@ export function StepLayout({
   interactive = true,
   stepperPosition = "top",
   chromeStyle = "card",
+  hideHeader = false,
   title,
   description,
   stepLabel,
@@ -317,7 +323,7 @@ export function StepLayout({
     </CardHeader>
   ) : null;
 
-  const titleHeaderNode = (
+  const titleHeaderNode = hideHeader ? null : (
     <CardHeader
       className={cn(
         "flex flex-col gap-region",
@@ -363,14 +369,22 @@ export function StepLayout({
           ? "flex min-h-0 flex-1 flex-col !p-0 max-w-7xl"
           : rail
             ? railContentClass
-            : cn(stackedContentClass, stableHeight && "flex-1"),
+            : cn(
+                stackedContentClass,
+                stableHeight && "flex-1",
+                hideHeader && !bare && "!pt-region",
+              ),
       )}
     >
       {isFill ? (
         <FadingScrollList
           fadeColor={isViewportFill ? "from-background" : "from-card"}
           wrapperClassName="flex min-h-0 flex-1 flex-col"
-          className={cn(rail ? railContentClass : stackedContentClass, "min-h-0 flex-1")}
+          className={cn(
+            rail ? railContentClass : stackedContentClass,
+            hideHeader && !rail && !bare && !banded && "pt-region",
+            "min-h-0 flex-1",
+          )}
         >
           {animateStep ? (
             <div key={`body-${stepKey}`} className={cn("space-y-section", stepAnimClass)}>
@@ -436,6 +450,7 @@ export function StepLayout({
               "flex min-h-0 min-w-0 flex-1 flex-col p-section",
               cardGapClass[variant],
               isFill && "min-h-0 flex-1",
+              hideHeader && !bare && "!pt-region",
             )}
           >
             {titleHeaderNode}

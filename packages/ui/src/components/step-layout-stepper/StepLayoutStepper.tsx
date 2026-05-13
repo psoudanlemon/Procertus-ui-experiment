@@ -46,6 +46,11 @@ export type StepLayoutStepperProps = {
    * If false, step triggers do not call `onStepChange` and are inert. Use for progress-only UI.
    */
   interactive?: boolean;
+  /**
+   * When false, hides each step’s secondary line (`step.description`). Primary titles stay visible.
+   * @default true
+   */
+  showDescriptions?: boolean;
 };
 
 const completedIcon = (
@@ -59,8 +64,8 @@ const completedIcon = (
 const indicators = { completed: completedIcon };
 
 // Indicator size scales with density: base 32px + a density-scaled micro padding
-// (4/4/8px), giving roughly 36/36/40px circles. Every dependent measurement (line
-// center alignment, label `top`) is derived from the same calc so geometry stays correct.
+// (4/4/8px), giving roughly 36/36/40px circles. Horizontal connector line vertical
+// placement uses the same sizing calc so geometry stays aligned.
 const indicatorClass =
   "size-[calc(2rem+var(--spacing-micro))] min-h-[calc(2rem+var(--spacing-micro))] min-w-[calc(2rem+var(--spacing-micro))]";
 
@@ -68,13 +73,16 @@ const indicatorClass =
 const horizontalSeparatorClass =
   "group-data-[orientation=horizontal]/stepper-nav:mt-[calc((2rem+var(--spacing-micro))/2-1px)]";
 
-// Horizontal trigger is a fixed-size box around the indicator so the connecting line
-// lands at the same gap from every indicator. The label group is positioned absolutely
-// below so its width never affects the trigger.
+// Horizontal: each segment shares space between label column (`grow-[999]`) and the
+// connector line (`flex-1` on `StepperSeparator` ≈ ~1× grow), so long labels wrap inside
+// the segment instead of overflowing into neighbors.
 const horizontalTriggerClass =
-  "relative w-fit min-h-20 shrink-0 flex-col items-center justify-start rounded-md px-section";
-const horizontalLabelClass =
-  "absolute left-1/2 top-[calc(2rem+var(--spacing-micro)*2)] -translate-x-1/2 text-center";
+  "relative flex w-full min-w-0 shrink-0 flex-col items-center rounded-md px-section";
+
+const horizontalColumnClass =
+  "flex min-h-16 min-w-0 grow-[999] shrink basis-0 flex-col items-center pt-px";
+
+const horizontalLabelGroupClass = "mt-2 w-full min-w-0 text-pretty text-center wrap-break-word";
 
 // Vertical: indicator + text group on a row, separator shifted right to align with the
 // indicator's center. `my-component` keeps line breathing room density-aware (8–12px).
@@ -88,6 +96,7 @@ export function StepLayoutStepper({
   onStepChange,
   orientation = "horizontal",
   interactive = true,
+  showDescriptions = true,
 }: StepLayoutStepperProps) {
   const value1 = useMemo(
     () => Math.min(steps.length, Math.max(1, activeStep + 1)),
@@ -135,6 +144,7 @@ export function StepLayoutStepper({
               interactive={interactive}
               isLast={i === steps.length - 1}
               orientation={orientation}
+              showDescriptions={showDescriptions}
             />
           );
         })}
@@ -149,16 +159,24 @@ type ItemProps = {
   interactive: boolean;
   isLast: boolean;
   orientation: "horizontal" | "vertical";
+  showDescriptions: boolean;
 };
 
-function StepLayoutStepperItem({ n, step, interactive, isLast, orientation }: ItemProps) {
+function StepLayoutStepperItem({
+  n,
+  step,
+  interactive,
+  isLast,
+  orientation,
+  showDescriptions,
+}: ItemProps) {
   const available = step.available !== false;
   const inert = !interactive || !available;
 
   if (orientation === "vertical") {
     return (
       <StepperItem
-        className="w-full !items-stretch !justify-start"
+        className="w-full min-w-0 !items-stretch !justify-start"
         step={n}
         disabled={!available}
       >
@@ -173,11 +191,11 @@ function StepLayoutStepperItem({ n, step, interactive, isLast, orientation }: It
             <StepperIndicator className={indicatorClass}>{n}</StepperIndicator>
           </StepperTrigger>
           <div className={cn("min-w-0 flex-1 text-left", !available && "opacity-55")}>
-            <StepperTitle className="line-clamp-2 font-semibold text-foreground">
+            <StepperTitle className="wrap-break-word font-semibold leading-snug text-foreground whitespace-normal">
               {step.title}
             </StepperTitle>
-            {step.description ? (
-              <p className="whitespace-nowrap text-xs leading-[1.4] text-muted-foreground">
+            {showDescriptions && step.description ? (
+              <p className="mt-1 text-xs leading-[1.4] text-muted-foreground whitespace-normal wrap-break-word">
                 {step.description}
               </p>
             ) : null}
@@ -189,26 +207,28 @@ function StepLayoutStepperItem({ n, step, interactive, isLast, orientation }: It
   }
 
   return (
-    <StepperItem className="items-start" step={n} disabled={inert}>
-      <StepperTrigger
-        className={cn(
-          horizontalTriggerClass,
-          inert && "pointer-events-none cursor-default",
-          !available && "opacity-55"
-        )}
-      >
-        <StepperIndicator className={indicatorClass}>{n}</StepperIndicator>
-        <div className={horizontalLabelClass}>
-          <StepperTitle className="line-clamp-2 font-semibold text-foreground">
-            {step.title}
-          </StepperTitle>
-          {step.description ? (
-            <p className="whitespace-nowrap text-xs leading-[1.4] text-muted-foreground">
-              {step.description}
-            </p>
-          ) : null}
-        </div>
-      </StepperTrigger>
+    <StepperItem className="min-w-0 items-start" step={n} disabled={inert}>
+      <div className={horizontalColumnClass}>
+        <StepperTrigger
+          className={cn(
+            horizontalTriggerClass,
+            inert && "pointer-events-none cursor-default",
+            !available && "opacity-55"
+          )}
+        >
+          <StepperIndicator className={indicatorClass}>{n}</StepperIndicator>
+          <div className={horizontalLabelGroupClass}>
+            <StepperTitle className="wrap-break-word font-semibold leading-snug text-foreground whitespace-normal">
+              {step.title}
+            </StepperTitle>
+            {showDescriptions && step.description ? (
+              <p className="mt-1 text-xs leading-[1.4] text-muted-foreground whitespace-normal wrap-break-word">
+                {step.description}
+              </p>
+            ) : null}
+          </div>
+        </StepperTrigger>
+      </div>
       {isLast ? null : <StepperSeparator className={horizontalSeparatorClass} />}
     </StepperItem>
   );

@@ -2,14 +2,16 @@ import { OnboardingCompanyLegalEntitiesStep } from "../components/onboarding/com
 import { OnboardingCompanyZetelStep } from "../components/onboarding/company-step/OnboardingCompanyZetelStep";
 import { OnboardingCustomerStep } from "../components/onboarding/customer-step/OnboardingCustomerStep";
 import { OnboardingExtrasStep } from "../components/onboarding/extras-step/OnboardingExtrasStep";
+import { OnboardingFloatingStepsNav } from "../components/onboarding/flow/OnboardingFloatingStepsNav";
+import { OnboardingInnovationAttestStep } from "../components/onboarding/innovation-attest-step/OnboardingInnovationAttestStep";
 import { OnboardingInvoicingStep } from "../components/onboarding/invoicing-step/OnboardingInvoicingStep";
 import { OnboardingOriginStep } from "../components/onboarding/origin-step/OnboardingOriginStep";
 import { OnboardingShell } from "../components/onboarding/shell/OnboardingShell";
-import { OnboardingInnovationAttestStep } from "../components/onboarding/innovation-attest-step/OnboardingInnovationAttestStep";
 import { OnboardingSummaryStep } from "../components/onboarding/summary-step/OnboardingSummaryStep";
 import { RegistrationProcessingDialog } from "../components/registration-processing-dialog";
 import { STABLE_STEP_MIN_HEIGHT } from "./onboarding-constants";
-import { StepLayout, StepLayoutStepper } from "@procertus-ui/ui";
+
+import { cn, H1, P, StepLayout } from "@procertus-ui/ui";
 
 import { mergeRegistrationChromeCopy } from "./onboarding-registration-chrome-copy";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
@@ -54,6 +56,14 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
     props.registrationChromeOverrides?.[step],
   );
 
+  const onStepChange = (index: number) => {
+    const seq = registrationStepsSequence(drafts, effectiveSummaryIncludedDraftIds);
+    const nextStep = seq[index];
+    if (nextStep) {
+      goToOnboardingStep(nextStep);
+    }
+  };
+
   return (
     <>
       <OnboardingShell
@@ -69,48 +79,55 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
         loginUrl={signInUrl}
         guestLanguagePlacement={guestLanguagePlacement}
       >
-        <StepLayout
-          chromeStyle="banded"
-          className="w-full"
-          minHeight={STABLE_STEP_MIN_HEIGHT}
-          variant="onboarding"
-          stepper={
-            <StepLayoutStepper
-              steps={steps}
-              activeStep={activeStep}
-              onStepChange={(index) => {
-                const seq = registrationStepsSequence(drafts, effectiveSummaryIncludedDraftIds);
-                const nextStep = seq[index];
-                if (nextStep) {
-                  goToOnboardingStep(nextStep);
-                }
-              }}
-              interactive
-            />
-          }
-          title={registrationChrome.title}
-          description={registrationChrome.description}
-          backAction={backAction}
-          primaryAction={primaryAction}
-          cancelAction={cancelAction}
-        >
-          {step === "origin" ? (
-            <OnboardingOriginStep
-              originFieldBase={rb.originFieldBase}
-              requestOrigin={requestOrigin}
-              setRequestOrigin={setRequestOrigin}
-            />
-          ) : null}
-          {step === "customer" ? <OnboardingCustomerStep model={rb} /> : null}
-          {step === "company" ? <OnboardingCompanyZetelStep model={rb} /> : null}
-          {step === "innovationAttest" ? <OnboardingInnovationAttestStep /> : null}
-          {step === "companyLegalEntities" ? (
-            <OnboardingCompanyLegalEntitiesStep model={rb} />
-          ) : null}
-          {step === "invoicing" ? <OnboardingInvoicingStep model={rb} /> : null}
-          {step === "extras" ? <OnboardingExtrasStep model={rb} /> : null}
-          {step === "summary" ? <OnboardingSummaryStep model={rb} /> : null}
-        </StepLayout>
+        <div className="flex w-full flex-col gap-region md:flex-row md:items-start md:gap-region">
+          <div className="min-w-0 flex-1">
+            <StepLayout
+              hideHeader
+              chromeStyle="card"
+              className={cn("ms-auto me-0 w-full")}
+              minHeight={STABLE_STEP_MIN_HEIGHT}
+              stepKey={activeStep}
+              variant="onboarding"
+              title={registrationChrome.title}
+              description={registrationChrome.description}
+              backAction={backAction}
+              primaryAction={primaryAction}
+              cancelAction={cancelAction}
+            >
+              <div className="flex flex-col gap-micro">
+                <H1>{registrationChrome.title}</H1>
+                {registrationChrome.description ? (
+                  <P className="text-base leading-[1.6] text-muted-foreground">
+                    {registrationChrome.description}
+                  </P>
+                ) : null}
+              </div>
+              {step === "origin" ? (
+                <OnboardingOriginStep
+                  originFieldBase={rb.originFieldBase}
+                  requestOrigin={requestOrigin}
+                  setRequestOrigin={setRequestOrigin}
+                />
+              ) : null}
+              {step === "customer" ? <OnboardingCustomerStep model={rb} /> : null}
+              {step === "company" ? <OnboardingCompanyZetelStep model={rb} /> : null}
+              {step === "innovationAttest" ? <OnboardingInnovationAttestStep /> : null}
+              {step === "companyLegalEntities" ? (
+                <OnboardingCompanyLegalEntitiesStep model={rb} />
+              ) : null}
+              {step === "invoicing" ? <OnboardingInvoicingStep model={rb} /> : null}
+              {step === "extras" ? <OnboardingExtrasStep model={rb} /> : null}
+              {step === "summary" ? <OnboardingSummaryStep model={rb} /> : null}
+            </StepLayout>
+          </div>
+
+          <OnboardingFloatingStepsNav
+            steps={steps}
+            activeStep={activeStep}
+            interactive
+            onStepChange={onStepChange}
+          />
+        </div>
       </OnboardingShell>
 
       <RegistrationProcessingDialog

@@ -118,6 +118,7 @@ function AppearanceHeroStory() {
         legend="Hero appearance"
         hint="Two-zone tier-card layout — title + control in the header strip, description in the body."
         layout="grid"
+        className="xl:grid-cols-3"
         selectionMode="single"
         value={choice.selectedId ?? ""}
         onValueChange={(id) => choice.setSelectedId(id === "" ? undefined : id)}
@@ -183,6 +184,7 @@ function AppearanceMinimalStory() {
         legend="Minimal appearance"
         hint="Title-only chip — no description, no leading icon. The native control stays sr-only for keyboard + screen-reader access, so this also covers the “no visible control” case."
         layout="grid"
+        className="xl:grid-cols-3"
         value={v}
         onValueChange={setV}
         selectionMode="single"

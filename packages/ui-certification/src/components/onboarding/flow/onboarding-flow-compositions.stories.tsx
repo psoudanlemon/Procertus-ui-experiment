@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useLayoutEffect, useMemo, useState, type ComponentType } from "react";
 
-import { StepLayout, StepLayoutStepper } from "@procertus-ui/ui";
+import { cn, H1, P, StepLayout } from "@procertus-ui/ui";
 
 import {
   REGISTRATION_PHASE_DESCRIPTION,
@@ -29,6 +29,7 @@ import { OnboardingCompanyZetelStep } from "../company-step/OnboardingCompanyZet
 import { OnboardingCustomerStep } from "../customer-step/OnboardingCustomerStep";
 import { OnboardingExtrasStep } from "../extras-step/OnboardingExtrasStep";
 import { OnboardingInvoicingStep } from "../invoicing-step/OnboardingInvoicingStep";
+import { OnboardingFloatingStepsNav } from "./OnboardingFloatingStepsNav";
 import { OnboardingOriginStep } from "../origin-step/OnboardingOriginStep";
 import { OnboardingShell } from "../shell/OnboardingShell";
 import { OnboardingSummaryStep } from "../summary-step/OnboardingSummaryStep";
@@ -44,14 +45,11 @@ const PublicLayoutDecorator = (Story: ComponentType) => {
   return <Story />;
 };
 
-function RegistrationChromeComposer({
-  initialStep,
-}: {
-  initialStep: OnboardingStep;
-}) {
+function RegistrationChromeComposer({ initialStep }: { initialStep: OnboardingStep }) {
   const [step, setStep] = useState<OnboardingStep>(initialStep);
-  const [requestOrigin, setRequestOrigin] =
-    useState<(typeof storyRequestOrigin) | "">(storyRequestOrigin);
+  const [requestOrigin, setRequestOrigin] = useState<typeof storyRequestOrigin | "">(
+    storyRequestOrigin,
+  );
 
   const includedDraftIds = useMemo(() => storyOnboardingDrafts.map((d) => d.id), []);
 
@@ -83,42 +81,56 @@ function RegistrationChromeComposer({
   const chromeStep = step;
   const registrationChrome = mergeRegistrationChromeCopy(chromeStep);
 
+  const handleStepChange = (index: number) => {
+    const seq = registrationStepsSequence(storyOnboardingDrafts, includedDraftIds);
+    const nextStep = seq[index];
+    if (nextStep) {
+      setStep(nextStep);
+    }
+  };
+
   return (
     <OnboardingShell
       pageTitle={REGISTRATION_PHASE_TITLE}
       pageDescription={REGISTRATION_PHASE_DESCRIPTION}
       onSignInClick={noop}
     >
-      <StepLayout
-        className="w-full"
-        minHeight={STABLE_STEP_MIN_HEIGHT}
-        variant="onboarding"
-        stepper={
-          <StepLayoutStepper
-            steps={viewProps.steps}
-            activeStep={viewProps.activeStep}
-            onStepChange={(index) => {
-              const seq = registrationStepsSequence(storyOnboardingDrafts, includedDraftIds);
-              const nextStep = seq[index];
-              if (nextStep) {
-                setStep(nextStep);
-              }
-            }}
-            interactive
-          />
-        }
-        title={`${registrationChrome.title} (${step})`}
-        description={`${registrationChrome.description} Storybook-demo: gebruik de stepper hierboven om te navigeren.`}
-        backAction={viewProps.backAction}
-        primaryAction={viewProps.primaryAction}
-      >
-        <StepBodies
-          model={model}
-          step={step}
-          requestOrigin={requestOrigin}
-          setRequestOrigin={setRequestOrigin}
+      <div className="flex w-full flex-col gap-region md:flex-row md:items-start md:gap-region">
+        <div className="min-w-0 flex-1">
+          <StepLayout
+            className={cn("ms-auto me-0 w-full")}
+            hideHeader
+            chromeStyle="card"
+            minHeight={STABLE_STEP_MIN_HEIGHT}
+            stepKey={viewProps.activeStep}
+            variant="onboarding"
+            title={`${registrationChrome.title} (${step})`}
+            description={`${registrationChrome.description} Storybook-demo: gebruik het stappen-paneel rechts.`}
+            backAction={viewProps.backAction}
+            primaryAction={viewProps.primaryAction}
+          >
+            <div className="flex flex-col gap-micro">
+              <H1>{`${registrationChrome.title} (${step})`}</H1>
+              <P className="text-base leading-[1.6] text-muted-foreground">
+                {`${registrationChrome.description} Storybook-demo: gebruik het stappen-paneel rechts (smal scherm via knop rechts onder).`}
+              </P>
+            </div>
+            <StepBodies
+              model={model}
+              step={step}
+              requestOrigin={requestOrigin}
+              setRequestOrigin={setRequestOrigin}
+            />
+          </StepLayout>
+        </div>
+
+        <OnboardingFloatingStepsNav
+          steps={viewProps.steps}
+          activeStep={viewProps.activeStep}
+          interactive
+          onStepChange={handleStepChange}
         />
-      </StepLayout>
+      </div>
     </OnboardingShell>
   );
 }
@@ -131,7 +143,7 @@ function StepBodies({
 }: {
   step: OnboardingStep;
   model: ReturnType<typeof useOnboardingRegistrationLayoutModel>;
-  requestOrigin: (typeof storyRequestOrigin) | "";
+  requestOrigin: typeof storyRequestOrigin | "";
   setRequestOrigin: (o: typeof storyRequestOrigin) => void;
 }) {
   switch (step) {
@@ -177,7 +189,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Composes onboarding shell plus `StepLayout` / stepper plus presentational registration steps.",
+          "Composes onboarding shell with the step rail beside the main card on wide viewports or a compact sheet trigger on narrow viewports.",
       },
     },
   },

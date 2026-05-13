@@ -9,3 +9,4 @@
 # ChoiceCardGroup
 
 - `selectionMode` — `single` (default) wraps a `RadioGroup`; `multiple` uses a `div role="group"` and ignores Radix radio props.
+- `layout="grid"` — `grid-cols-1`, then **`md:grid-cols-2`** (two columns on medium+ viewports). For three columns on large screens, pass `className="xl:grid-cols-3"` (suited to three or more cards).

@@ -207,6 +207,12 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
         flowState.drafts,
         flowState.summaryIncludedDraftIds,
       );
+      const seq = registrationStepsSequence(flowState.drafts, certificationInquiryDraftIdsInner);
+      const fromIdx = seq.indexOf(activeStep);
+      const toIdx = seq.indexOf(nextStep);
+      /** Next step in the canonical sequence — allowed even if availability still depends on flags set by this navigation (e.g. innovation attest → certificatie). */
+      const isSequentialForward = fromIdx >= 0 && toIdx === fromIdx + 1;
+
       const stepperModel = buildOnboardingStepperSteps({
         drafts: flowState.drafts,
         requestOrigin: flowState.requestOrigin,
@@ -219,7 +225,7 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
         flowState.drafts,
         certificationInquiryDraftIdsInner,
       );
-      if (stepperModel[targetIndex]?.available === false) {
+      if (!isSequentialForward && stepperModel[targetIndex]?.available === false) {
         return;
       }
       setFlowState((prev) => ({

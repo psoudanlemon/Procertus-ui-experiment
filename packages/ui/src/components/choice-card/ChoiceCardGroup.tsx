@@ -16,7 +16,9 @@ export type ChoiceCardGroupProps = Omit<ComponentProps<typeof RadioGroup>, "chil
   /** Renders as supportive copy under the legend. */
   hint?: string;
   /**
-   * `stack` — one column. `grid` — responsive multi-column for equal card widths.
+   * `stack` — one column. `grid` — responsive grid: one column narrow, **two columns from `md` up**
+   * (full width split evenly). Omit a phantom third column on wide viewports when you only render
+   * two cards. For dense 3-column layouts add e.g. `className="xl:grid-cols-3"` on the group.
    * @default "stack"
    */
   layout?: "stack" | "grid";
@@ -32,7 +34,7 @@ export type ChoiceCardGroupProps = Omit<ComponentProps<typeof RadioGroup>, "chil
 const layoutClass = (layout: "stack" | "grid") =>
   cn(
     "w-full gap-component p-0",
-    layout === "grid" && "grid grid-cols-1 gap-component md:grid-cols-2 xl:grid-cols-3",
+    layout === "grid" && "grid grid-cols-1 gap-component md:grid-cols-2",
     layout === "stack" && "flex flex-col",
   );
 
