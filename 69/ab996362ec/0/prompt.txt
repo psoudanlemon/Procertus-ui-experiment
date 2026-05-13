@@ -1,0 +1,31 @@
+Since the innovation attest is not bound to products, we don't need the product selector. This is fine.
+
+In the overview, don't place the innovation attest in the productInquiryMatrix, since it is not related to products. List this inquiry separately, just after the productInquiryMatrix. 
+
+Do this everywhere we currently place the productInquiryMatrix (just below it), to add all the inquiries not related to products: both on the TrajectRequestReview and on the summaryStep and also included on the cart panel.
+
+Also, use an onther label then the ID `innovation-attest-no-product` for this inquiry, Just name it "Innovation attest" @apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx:361 @apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-services.ts:60 @packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx @packages/ui-certification/src/components/traject/ProductInquiryMatrix.tsx @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicCertificationRequestsCart.tsx
+
+---
+
+Since the innovation attest is not bound to products, we don't need the product selector. This is fine.
+
+In the overview, don't place the innovation attest in the productInquiryMatrix, since it is not related to products. List this inquiry separately, just after the productInquiryMatrix. 
+
+Do this everywhere we currently place the productInquiryMatrix (just below it), to add all the inquiries not related to products: both on the TrajectRequestReview and on the summaryStep and also included on the cart panel.
+
+Also, use an onther label then the ID `innovation-attest-no-product` for this inquiry, Just name it "Innovation attest" @apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx:361 @apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-services.ts:60 @packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx @packages/ui-certification/src/components/traject/ProductInquiryMatrix.tsx @apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx @apps/frontend-pt1-extranet-onboarding/src/layouts/PublicCertificationRequestsCart.tsx
+
+---
+
+I can see that non-product-related inquiries are listed multiple times. How is this possible? Please check.
+
+This happened only after I added an EPD and then added some product-related inquiries, like the Benor certification.
+
+Each Non-product-related inquiry can only be added once to a request.
+
+---
+
+Now we have doubled the headings for the non-product-related inquiries because of the table head. Don't show this table head.
+
+Also, don't add redundant columns for certification type. Only show the full label of the certification type as the first column and a check mark in the last column.
