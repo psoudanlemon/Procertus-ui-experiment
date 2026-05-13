@@ -1,0 +1,77 @@
+@packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx 
+
+ I want to completely revise the layout of the onboarding summary step.
+
+Begin by removing the two-column layout, and then remove the complete packet overview. @packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx:286-313
+
+---
+
+@packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx 
+
+ I want to completely revise the layout of the onboarding summary step.
+
+Begin by removing the two-column layout, and then remove the complete packet overview. @packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx:286-313
+
+---
+
+@packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx:105-140 remove this listing with all rows.
+
+@packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx:143-219  just like having a section with all of the registered people, also add a section with all of the registered legal entities.
+
+---
+
+@packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx:105-140 remove this listing with all rows.
+
+@packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx:143-219  just like having a section with all of the registered people, also add a section with all of the registered legal entities.
+
+---
+
+@packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx:238-253 instead of giving a single overview card for all the certification inquiries, please separately show the product inquiry matrix for all product-related inquiries.
+
+Follow that with the individual, separate non-product-related inquiries in the same layout.
+
+Specifically for innovation, please give an overview table of all the fielding information from the innovation step. 
+
+ beneath all of these overviews, add a simple checkbox to include or exclude all plot-related and non-plot-related inquiries from the request. 
+
+This directly impacts the overview immediately before it.
+
+---
+
+@packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx:238-253 instead of giving a single overview card for all the certification inquiries, please separately show the product inquiry matrix for all product-related inquiries.
+
+Follow that with the individual, separate non-product-related inquiries in the same layout.
+
+Specifically for innovation, please give an overview table of all the fielding information from the innovation step. 
+
+ beneath all of these overviews, add a simple checkbox to include or exclude all plot-related and non-plot-related inquiries from the request. 
+
+This directly impacts the overview immediately before it.
+
+---
+
+If the innovation attest is unselected, do not show the innovation attest information.
+
+For all innovation attest fields, do not display blank fields. Do not include them in the overview if no information was provided.
+
+Also lists all of the uploaded documents in the innovation-attest form using the download cards.@packages/ui/src/components/downloadable-item/DownloadableItem.tsx
+
+---
+
+We don't need two buttons, only one.
+
+To change the requests, this goes back to the welcome page. Don't be too verbose in your explanation; it is clear what this button does.
+
+Also, this table from the screenshot with registered people is still horizontally scrollable.
+
+---
+
+We don't need two buttons, only one.
+
+To change the requests, this goes back to the welcome page. Don't be too verbose in your explanation; it is clear what this button does.
+
+Also, this table from the screenshot with registered people is still horizontally scrollable.
+
+---
+
+Don't make this a fully stretched, full-bleed button. Just make it a normal button.

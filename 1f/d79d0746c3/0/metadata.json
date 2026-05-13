@@ -1,0 +1,102 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "1fd79d0746c3",
+  "session_id": "accde6c9-c92b-4e23-ba9a-969bbc72a817",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-13T07:20:28.089361Z",
+  "branch": "main",
+  "checkpoints_count": 6,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/customer-onboarding/CustomerOnboardingFlow.tsx",
+    "packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-flow-view-props.ts",
+    "packages/ui-certification/src/onboarding/onboarding-innovation-attest.ts",
+    "packages/ui-certification/src/onboarding/onboarding-story-fixtures.tsx",
+    "packages/ui-certification/src/onboarding/use-onboarding-flow.tsx",
+    "packages/ui/src/components/ui/table.tsx"
+  ],
+  "agent": "Claude Code",
+  "model": "composer-2",
+  "turn_id": "0a7ee880e65b",
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "session_metrics": {
+    "turn_count": 12,
+    "context_tokens": 181839,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-13T07:20:28.084576Z",
+    "agent_lines": 425,
+    "agent_removed": 222,
+    "human_added": 28,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 453,
+    "total_lines_changed": 675,
+    "agent_percentage": 95.85185185185185,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 1,
+      "user_lines_removed": 4,
+      "agent_lines_added": 184,
+      "agent_lines_removed": 224,
+      "user_added_per_file": {
+        "packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx": 1
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 202,
+      "agent_lines_removed": 228
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 394,
+      "agent_lines_removed": 223
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 504,
+      "agent_lines_removed": 219
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 27,
+      "user_lines_removed": 23,
+      "agent_lines_added": 459,
+      "agent_lines_removed": 222,
+      "user_added_per_file": {
+        "packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx": 27
+      }
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 453,
+      "agent_lines_removed": 222
+    }
+  ]
+}
