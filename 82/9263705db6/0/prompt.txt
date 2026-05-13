@@ -1,0 +1,63 @@
+@apps/frontend-pt1-extranet-onboarding/src/panels/conversation_detail_panel.tsx we currently show conversations in the prototype app like chat conversations. However, I want to move to more long-form content creation, more aligned with how people communicate using email.
+
+Please set up a detailed panel to visualize the entire conversation between Prosertus and the client, or vice versa. Show an email-thread view that clearly depicts when a new message was sent, by whom, and possible subjects. Since we have only one conversation thread per request, we don't need an overview of different threads; it's just the view of a single conversation thread. 
+
+ please set up this email conversation thread presentational component in the uylib package first, just like we currently have the portal chat window. 
+
+ it should also be possible to allow file uploads as attachments in these email conversations. When writing a new reply, please show the downloadable attachments inline in the credit message layout. 
+
+@apps/frontend-pt1-extranet-onboarding/src/panels/conversation_detail_panel.tsx:138-154 @packages/ui-lib/src/custom-components/Chat/PortalChatWindow.tsx @packages/ui/src/components/downloadable-item/DownloadableItem.tsx
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/panels/conversation_detail_panel.tsx we currently show conversations in the prototype app like chat conversations. However, I want to move to more long-form content creation, more aligned with how people communicate using email.
+
+Please set up a detailed panel to visualize the entire conversation between Prosertus and the client, or vice versa. Show an email-thread view that clearly depicts when a new message was sent, by whom, and possible subjects. Since we have only one conversation thread per request, we don't need an overview of different threads; it's just the view of a single conversation thread. 
+
+ please set up this email conversation thread presentational component in the uylib package first, just like we currently have the portal chat window. 
+
+ it should also be possible to allow file uploads as attachments in these email conversations. When writing a new reply, please show the downloadable attachments inline in the credit message layout. 
+
+@apps/frontend-pt1-extranet-onboarding/src/panels/conversation_detail_panel.tsx:138-154 @packages/ui-lib/src/custom-components/Chat/PortalChatWindow.tsx @packages/ui/src/components/downloadable-item/DownloadableItem.tsx
+
+---
+
+Please make the tip-tap input field much bigger.
+
+Place the call-to-action button for adding attachments below this input field.
+
+Also show a call-to-action button (in the same actionbar as where the CTA for attachment upload is added) to load the composer for the current draft of the message in a dialog overlaying the entire application to allow more space for content editing. Allow switching between these two modes (comparable with how Gmail organizes email composer n different modes).
+
+---
+
+For some reason, inside the email composer using TipTap we can see bold text, but ordered and unordered lists are not being displayed.
+
+I can see internally that this information is being stored, but it's not being rendered correctly inside the composer.
+
+When I submit, I can see the Markdown is rendered in the non-editable display of the message. The information is correctly stored, but it is not being previewed correctly inside the composer.
+
+---
+
+Also, currently when no content is added to the draft, the entire composer seems disabled. Please don't support this disabled view or disabled state. Make it always clearly visible and make it look like it's always enabled.
+
+Also, there's a problem with the pen: the padding inside the dip-tap composer element. Please add correct semantic padding within this composer contenteditable element.
+
+---
+
+Also give this element to edit the draft of a new message a minimum height of at least three lines.
+
+---
+
+Also give this element to edit the draft of a new message a minimum height of at least three lines.
+
+---
+
+Add a button in the top-right of the composer element to dock it to a minimal line at the bottom of the conversation window so more of the conversation can be read.
+
+When clicked, return to the normal mode.
+
+---
+
+Add a button in the top-right of the composer element to dock it to a minimal line at the bottom of the conversation window so more of the conversation can be read.
+
+When clicked, return to the normal mode.

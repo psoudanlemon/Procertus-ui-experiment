@@ -1,0 +1,160 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "829263705db6",
+  "session_id": "bd1c855b-96e7-4910-b828-b8159af66f55",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-13T07:54:46.501711Z",
+  "branch": "main",
+  "checkpoints_count": 11,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/conversations/conversation-detail-panel-mocks.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/conversation_detail_panel.tsx",
+    "bun.lock",
+    "packages/ui-lib/.storybook/preview-head.html",
+    "packages/ui-lib/package.json",
+    "packages/ui-lib/src/components/portal-chat/chat-thread-header.tsx",
+    "packages/ui-lib/src/components/portal-chat/index.ts",
+    "packages/ui-lib/src/components/portal-chat/portal-chat-types.ts",
+    "packages/ui-lib/src/components/portal-chat/portal-email-thread-types.ts",
+    "packages/ui-lib/src/custom-components/BrowseCard/BrowseCard.stories.tsx",
+    "packages/ui-lib/src/custom-components/BrowseCard/BrowseCard.tsx",
+    "packages/ui-lib/src/custom-components/CatalogueExplorer/ChoiceBar/ChoiceBar.tsx",
+    "packages/ui-lib/src/custom-components/Chat/ChatPrimitives.stories.tsx",
+    "packages/ui-lib/src/custom-components/Chat/PortalChatFullExperience.stories.tsx",
+    "packages/ui-lib/src/custom-components/Chat/PortalChatWindow.tsx",
+    "packages/ui-lib/src/custom-components/Chat/PortalEmailThreadWindow.stories.tsx",
+    "packages/ui-lib/src/custom-components/Chat/PortalEmailThreadWindow.tsx",
+    "packages/ui-lib/src/custom-components/Chat/chat-composer-toolbar.stories.tsx",
+    "packages/ui-lib/src/custom-components/Chat/chat-composer-toolbar.tsx",
+    "packages/ui-lib/src/custom-components/Chat/email-thread-markdown-body.tsx",
+    "packages/ui-lib/src/custom-components/Chat/email-thread-markdown-editor.tsx",
+    "packages/ui-lib/src/custom-components/DetailCard/DetailCard.stories.tsx",
+    "packages/ui-lib/src/index.ts",
+    "packages/ui-lib/src/status-pages/StatusContent.stories.tsx",
+    "packages/ui-lib/src/status-pages/StatusContent.tsx",
+    "packages/ui-lib/src/status-pages/StatusPage.stories.tsx",
+    "packages/ui-lib/src/status-pages/StatusPage.tsx",
+    "packages/ui-lib/src/user-authentication/AccountDetailsForm.stories.tsx",
+    "packages/ui-lib/src/user-authentication/AccountDetailsForm.tsx",
+    "packages/ui-lib/src/user-authentication/AuthLayout.stories.tsx",
+    "packages/ui-lib/src/user-authentication/AuthLayout.tsx",
+    "packages/ui-lib/src/user-authentication/ForgotPasswordForm.stories.tsx",
+    "packages/ui-lib/src/user-authentication/ForgotPasswordForm.tsx",
+    "packages/ui-lib/src/user-authentication/LoginForm.stories.tsx",
+    "packages/ui-lib/src/user-authentication/LoginForm.tsx",
+    "packages/ui-lib/src/user-authentication/PasswordInput.tsx",
+    "packages/ui-lib/src/user-authentication/SetPasswordForm.stories.tsx",
+    "packages/ui-lib/src/user-authentication/SetPasswordForm.tsx",
+    "packages/ui-lib/src/user-authentication/VerifyCodeForm.stories.tsx"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "411d2d2b5342",
+  "session_metrics": {
+    "turn_count": 12,
+    "context_tokens": 185678,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-13T07:54:46.494407Z",
+    "agent_lines": 2094,
+    "agent_removed": 223,
+    "human_added": 13,
+    "human_modified": 3,
+    "human_removed": 0,
+    "total_committed": 2107,
+    "total_lines_changed": 2333,
+    "agent_percentage": 99.31418774110587,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1808,
+      "agent_lines_removed": 223
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1994,
+      "agent_lines_removed": 223
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1999,
+      "agent_lines_removed": 223
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 2003,
+      "agent_lines_removed": 223
+    },
+    {
+      "checkpoint_number": 9,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 10,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 2004,
+      "agent_lines_removed": 223
+    },
+    {
+      "checkpoint_number": 11,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 12,
+      "user_lines_added": 8,
+      "user_lines_removed": 3,
+      "agent_lines_added": 2102,
+      "agent_lines_removed": 223,
+      "user_added_per_file": {
+        "packages/ui-lib/src/custom-components/Chat/PortalEmailThreadWindow.tsx": 7,
+        "packages/ui-lib/src/custom-components/Chat/email-thread-markdown-editor.tsx": 1
+      }
+    }
+  ]
+}
