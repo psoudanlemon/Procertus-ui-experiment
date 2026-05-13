@@ -1,0 +1,21 @@
+Please look at the last commit. We changed the onboarding flow for a better stepper layout with a floating Stepper, but now the main content of the step layout has too much spacing at the top.
+
+We seem to have a combination of spacing or padding applied to the card content, the card header, and the card container. Please look at the screenshot.@packages/ui/src/components/step-layout/StepLayout.tsx @packages/ui/src/components/step-layout-stepper/StepLayoutStepper.tsx
+
+---
+
+Please look at the last commit. We changed the onboarding flow for a better stepper layout with a floating Stepper, but now the main content of the step layout has too much spacing at the top.
+
+We seem to have a combination of spacing or padding applied to the card content, the card header, and the card container. Please look at the screenshot.@packages/ui/src/components/step-layout/StepLayout.tsx @packages/ui/src/components/step-layout-stepper/StepLayoutStepper.tsx
+
+---
+
+In the mobile view, even when using the floating panel, don't show the small summary of the stepper as a floating element; display it in the Bandit step play-out card header instead.
+
+This applies only to the mobile view — do not show the Bandit header in the non-mobile view. On mobile, display the current step and the total number of steps together with the call-to-action button that opens the panel with the full stepper.
+
+---
+
+In the mobile view, even when using the floating panel, don't show the small summary of the stepper as a floating element; display it in the Bandit step play-out card header instead.
+
+This applies only to the mobile view — do not show the Bandit header in the non-mobile view. On mobile, display the current step and the total number of steps together with the call-to-action button that opens the panel with the full stepper.
