@@ -29,7 +29,10 @@ import { OnboardingCompanyZetelStep } from "../company-step/OnboardingCompanyZet
 import { OnboardingCustomerStep } from "../customer-step/OnboardingCustomerStep";
 import { OnboardingExtrasStep } from "../extras-step/OnboardingExtrasStep";
 import { OnboardingInvoicingStep } from "../invoicing-step/OnboardingInvoicingStep";
-import { OnboardingFloatingStepsNav } from "./OnboardingFloatingStepsNav";
+import {
+  OnboardingFloatingStepsMobileCardLead,
+  OnboardingFloatingStepsNav,
+} from "./OnboardingFloatingStepsNav";
 import { OnboardingOriginStep } from "../origin-step/OnboardingOriginStep";
 import { OnboardingShell } from "../shell/OnboardingShell";
 import { OnboardingSummaryStep } from "../summary-step/OnboardingSummaryStep";
@@ -47,6 +50,7 @@ const PublicLayoutDecorator = (Story: ComponentType) => {
 
 function RegistrationChromeComposer({ initialStep }: { initialStep: OnboardingStep }) {
   const [step, setStep] = useState<OnboardingStep>(initialStep);
+  const [stepsSheetOpen, setStepsSheetOpen] = useState(false);
   const [requestOrigin, setRequestOrigin] = useState<typeof storyRequestOrigin | "">(
     storyRequestOrigin,
   );
@@ -108,11 +112,21 @@ function RegistrationChromeComposer({ initialStep }: { initialStep: OnboardingSt
             description={`${registrationChrome.description} Storybook-demo: gebruik het stappen-paneel rechts.`}
             backAction={viewProps.backAction}
             primaryAction={viewProps.primaryAction}
+            mobileCardLead={
+              viewProps.steps.length > 0 ? (
+                <OnboardingFloatingStepsMobileCardLead
+                  steps={viewProps.steps}
+                  activeStep={viewProps.activeStep}
+                  onOpenStepsSheet={() => setStepsSheetOpen(true)}
+                  stepsSheetOpen={stepsSheetOpen}
+                />
+              ) : undefined
+            }
           >
             <div className="flex flex-col gap-micro">
               <H1>{`${registrationChrome.title} (${step})`}</H1>
               <P className="text-base leading-[1.6] text-muted-foreground">
-                {`${registrationChrome.description} Storybook-demo: gebruik het stappen-paneel rechts (smal scherm via knop rechts onder).`}
+                {`${registrationChrome.description} Storybook-demo: op een smal scherm staan stap-voortgang en “Stappen” bovenaan de kaart; het volledige overzicht opent in een paneel.`}
               </P>
             </div>
             <StepBodies
@@ -129,6 +143,8 @@ function RegistrationChromeComposer({ initialStep }: { initialStep: OnboardingSt
           activeStep={viewProps.activeStep}
           interactive
           onStepChange={handleStepChange}
+          sheetOpen={stepsSheetOpen}
+          onSheetOpenChange={setStepsSheetOpen}
         />
       </div>
     </OnboardingShell>
@@ -189,7 +205,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Composes onboarding shell with the step rail beside the main card on wide viewports or a compact sheet trigger on narrow viewports.",
+          "Composes onboarding shell with the step rail beside the main card on wide viewports; on narrow viewports the step summary and sheet trigger sit in the card header while the full list opens in a side sheet.",
       },
     },
   },

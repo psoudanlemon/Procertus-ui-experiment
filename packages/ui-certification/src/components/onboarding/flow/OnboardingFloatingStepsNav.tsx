@@ -16,6 +16,68 @@ import {
   type StepLayoutStep,
 } from "@procertus-ui/ui";
 
+export type OnboardingFloatingStepsMobileCardLeadProps = {
+  steps: StepLayoutStep[];
+  activeStep: number;
+  /** Opens the sheet that lists every step (wired to {@link OnboardingFloatingStepsNav}). */
+  onOpenStepsSheet: () => void;
+  /** Mirrors controlled sheet state for `aria-expanded`. */
+  stepsSheetOpen?: boolean;
+  className?: string;
+};
+
+/**
+ * Compact step summary + sheet trigger for **narrow viewports only** — render via
+ * {@link StepLayout} `mobileCardLead`; the wrapper header is `md:hidden`.
+ */
+export function OnboardingFloatingStepsMobileCardLead({
+  steps,
+  activeStep,
+  onOpenStepsSheet,
+  stepsSheetOpen = false,
+  className,
+}: OnboardingFloatingStepsMobileCardLeadProps) {
+  const total = steps.length;
+  const current = total === 0 ? 0 : Math.min(activeStep + 1, total);
+
+  if (total === 0) {
+    return null;
+  }
+
+  return (
+    <div
+      className={cn(
+        "flex min-w-0 flex-1 flex-row flex-wrap items-center justify-between gap-component",
+        className,
+      )}
+    >
+      <p className="min-w-0 text-sm leading-snug">
+        <span className="text-muted-foreground">Stap </span>
+        <span className="font-semibold tabular-nums text-foreground">{current}</span>
+        <span className="text-muted-foreground"> van {total}</span>
+      </p>
+      <Button
+        type="button"
+        variant="secondary"
+        size="sm"
+        className="h-9 shrink-0 gap-2 px-3"
+        onClick={onOpenStepsSheet}
+        aria-expanded={stepsSheetOpen}
+        aria-haspopup="dialog"
+        aria-label={`Alle stappen tonen. Huidige stap ${current} van ${total}.`}
+      >
+        <HugeiconsIcon
+          icon={LeftToRightListBulletIcon}
+          className="size-4 shrink-0 text-muted-foreground"
+          strokeWidth={2}
+          aria-hidden
+        />
+        Stappen
+      </Button>
+    </div>
+  );
+}
+
 export type OnboardingFloatingStepsNavProps = {
   steps: StepLayoutStep[];
   activeStep: number;
@@ -28,14 +90,28 @@ export type OnboardingFloatingStepsNavProps = {
   showDescriptions?: boolean;
   /** Optional Tailwind overrides for the desktop step rail `<aside>`. */
   className?: string;
-};
+} & (
+  | {
+      /**
+       * Controlled sheet visibility — pair with {@link OnboardingFloatingStepsMobileCardLead}
+       * inside {@link StepLayout} `mobileCardLead`.
+       */
+      sheetOpen: boolean;
+      onSheetOpenChange: (open: boolean) => void;
+    }
+  | {
+      sheetOpen?: undefined;
+      onSheetOpenChange?: undefined;
+    }
+);
 
 /**
- * Desktop: vertical {@link StepLayoutStepper} in an inline `<aside>` (place after the main
- * column inside a horizontal flex row — see onboarding flow shell).
+ * Desktop (`md+`): vertical {@link StepLayoutStepper} in an inline `<aside>` (place after the main
+ * column — see onboarding flow shell).
  *
- * Narrow viewports: hide the aside; expose a trailing control (icon + current / total) that opens
- * a sheet with the step list.
+ * Narrow viewports: hide the aside; use {@link OnboardingFloatingStepsMobileCardLead} in
+ * {@link StepLayout} `mobileCardLead` plus controlled `sheetOpen` / `onSheetOpenChange` here so the
+ * full step list opens in a sheet (no floating FAB).
  */
 export function OnboardingFloatingStepsNav({
   steps,
@@ -44,11 +120,23 @@ export function OnboardingFloatingStepsNav({
   interactive = true,
   showDescriptions = true,
   className,
+  sheetOpen: sheetOpenProp,
+  onSheetOpenChange,
 }: OnboardingFloatingStepsNavProps) {
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const controlled =
+    sheetOpenProp !== undefined && onSheetOpenChange !== undefined;
+  const sheetOpen = controlled ? sheetOpenProp : internalOpen;
+
+  const setSheetOpen = (next: boolean) => {
+    if (controlled) {
+      onSheetOpenChange(next);
+    } else {
+      setInternalOpen(next);
+    }
+  };
 
   const total = steps.length;
-  const current = total === 0 ? 0 : Math.min(activeStep + 1, total);
 
   if (total === 0) {
     return null;
@@ -80,35 +168,6 @@ export function OnboardingFloatingStepsNav({
           onStepChange={onStepChange}
         />
       </aside>
-
-      <div className="pointer-events-none fixed end-4 bottom-28 z-40 md:hidden">
-        <Button
-          type="button"
-          variant="secondary"
-          size="sm"
-          className="pointer-events-auto h-11 gap-2 rounded-full border border-border bg-card/95 pr-4 pl-3 shadow-proc-xs backdrop-blur-sm min-[420px]:h-10"
-          onClick={() => setSheetOpen(true)}
-          aria-expanded={sheetOpen}
-          aria-haspopup="dialog"
-        >
-          <HugeiconsIcon
-            icon={LeftToRightListBulletIcon}
-            className="size-4 shrink-0 text-muted-foreground"
-            strokeWidth={2}
-            aria-hidden
-          />
-          <span
-            aria-hidden
-            className="tabular-nums text-sm font-medium tracking-tight text-foreground"
-          >
-            {current}
-            <span className="text-muted-foreground">/{total}</span>
-          </span>
-          <span className="sr-only">
-            Open step list. Step {current} of {total}.
-          </span>
-        </Button>
-      </div>
 
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetContent

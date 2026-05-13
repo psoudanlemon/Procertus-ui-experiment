@@ -1,8 +1,13 @@
+import { useState } from "react";
+
 import { OnboardingCompanyLegalEntitiesStep } from "../components/onboarding/company-step/OnboardingCompanyLegalEntitiesStep";
 import { OnboardingCompanyZetelStep } from "../components/onboarding/company-step/OnboardingCompanyZetelStep";
 import { OnboardingCustomerStep } from "../components/onboarding/customer-step/OnboardingCustomerStep";
 import { OnboardingExtrasStep } from "../components/onboarding/extras-step/OnboardingExtrasStep";
-import { OnboardingFloatingStepsNav } from "../components/onboarding/flow/OnboardingFloatingStepsNav";
+import {
+  OnboardingFloatingStepsMobileCardLead,
+  OnboardingFloatingStepsNav,
+} from "../components/onboarding/flow/OnboardingFloatingStepsNav";
 import { OnboardingInnovationAttestStep } from "../components/onboarding/innovation-attest-step/OnboardingInnovationAttestStep";
 import { OnboardingInvoicingStep } from "../components/onboarding/invoicing-step/OnboardingInvoicingStep";
 import { OnboardingOriginStep } from "../components/onboarding/origin-step/OnboardingOriginStep";
@@ -56,6 +61,8 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
     props.registrationChromeOverrides?.[step],
   );
 
+  const [stepsSheetOpen, setStepsSheetOpen] = useState(false);
+
   const onStepChange = (index: number) => {
     const seq = registrationStepsSequence(drafts, effectiveSummaryIncludedDraftIds);
     const nextStep = seq[index];
@@ -93,6 +100,16 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
               backAction={backAction}
               primaryAction={primaryAction}
               cancelAction={cancelAction}
+              mobileCardLead={
+                steps.length > 0 ? (
+                  <OnboardingFloatingStepsMobileCardLead
+                    steps={steps}
+                    activeStep={activeStep}
+                    onOpenStepsSheet={() => setStepsSheetOpen(true)}
+                    stepsSheetOpen={stepsSheetOpen}
+                  />
+                ) : undefined
+              }
             >
               <div className="flex flex-col gap-micro">
                 <H1>{registrationChrome.title}</H1>
@@ -126,6 +143,8 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
             activeStep={activeStep}
             interactive
             onStepChange={onStepChange}
+            sheetOpen={stepsSheetOpen}
+            onSheetOpenChange={setStepsSheetOpen}
           />
         </div>
       </OnboardingShell>

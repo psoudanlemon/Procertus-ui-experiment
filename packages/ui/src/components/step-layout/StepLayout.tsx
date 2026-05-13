@@ -85,6 +85,12 @@ export type StepLayoutProps = {
    * but keeps footer actions and optional top step rail.
    */
   hideHeader?: boolean;
+  /**
+   * Renders inside a {@link CardHeader} **only below `md`** (`md:hidden` on the wrapper). Wider
+   * viewports hide this region entirely — use with an off-canvas step list so phones still get a
+   * compact summary row on the step card (e.g. current/total + sheet trigger).
+   */
+  mobileCardLead?: ReactNode;
   title: ReactNode;
   description?: ReactNode;
   /** e.g. “Step 2 of 6” — not a second heading. */
@@ -239,6 +245,7 @@ export function StepLayout({
   stepperPosition = "top",
   chromeStyle = "card",
   hideHeader = false,
+  mobileCardLead,
   title,
   description,
   stepLabel,
@@ -301,7 +308,9 @@ export function StepLayout({
     "w-full overflow-hidden",
     !bare && "shadow-proc-xs",
     banded ? "gap-0 pt-0" : cardGapClass[variant],
-    !rail && !banded && !bare && cardTopPadClass[variant],
+    // hideHeader: title lives in CardContent (`!pt-region`); drop Card `py-section` top + `sm:pt-boundary`.
+    !rail && !banded && !bare && !hideHeader && cardTopPadClass[variant],
+    hideHeader && !bare && !rail && "!pt-0",
     bare && "!p-0",
     isFill ? "flex min-h-0 flex-col" : cn("mx-auto", variantClass[variant]),
     rail && "!py-0",
@@ -322,6 +331,25 @@ export function StepLayout({
       <div className="mx-auto w-[90%]">{resolvedStepper}</div>
     </CardHeader>
   ) : null;
+
+  const mobileCardLeadNode =
+    mobileCardLead != null ? (
+      <CardHeader
+        className={cn(
+          "flex flex-row flex-wrap items-center justify-between gap-component md:hidden",
+          rail
+            ? "!px-0"
+            : bare
+              ? "!gap-0 border-0 bg-transparent !p-0"
+              : banded
+                ? cn("border-b bg-muted/40 !px-region !py-section")
+                : cn("border-b bg-muted/40 py-section sm:px-boundary"),
+          isFill && "shrink-0",
+        )}
+      >
+        {mobileCardLead}
+      </CardHeader>
+    ) : null;
 
   const titleHeaderNode = hideHeader ? null : (
     <CardHeader
@@ -453,6 +481,7 @@ export function StepLayout({
               hideHeader && !bare && "!pt-region",
             )}
           >
+            {mobileCardLeadNode}
             {titleHeaderNode}
             {contentNode}
           </div>
@@ -475,6 +504,7 @@ export function StepLayout({
       {hasStepper && stepperPosition === "top" && !banded ? (
         <div className="mx-auto w-[90%]">{resolvedStepper}</div>
       ) : null}
+      {mobileCardLeadNode}
       {titleHeaderNode}
       {contentNode}
       {footerNode}
