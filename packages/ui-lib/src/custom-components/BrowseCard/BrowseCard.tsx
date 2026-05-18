@@ -67,6 +67,11 @@ export type BrowseCardProps = Omit<ComponentProps<"div">, "title" | "children"> 
   /** Small uppercase label above the title (e.g. "Externe verwijzing"). */
   eyebrow?: ReactNode;
   /**
+   * Compact label in the top-right (e.g. same abbreviation as a catalogue pill).
+   * Renders above the fold without replacing the main title.
+   */
+  cornerCaption?: ReactNode;
+  /**
    * @default "default" — same vocabulary as `ChoiceCard`. `elevated` adds
    * a static branded glow (quiet-promotion tier), `standout` swaps to a muted
    * background tint, `faded` is dashed and de-emphasized, `ghost` drops
@@ -103,6 +108,7 @@ export function BrowseCard({
   title,
   description,
   eyebrow,
+  cornerCaption,
   variant = "default",
   cta,
   asChild = false,
@@ -130,30 +136,42 @@ export function BrowseCard({
       </span>
     ) : undefined);
 
+  const showCorner = cornerCaption != null && cornerCaption !== "";
+
   const inner = (
-    <ItemContent className="gap-component">
-      {resolvedEyebrow ? (
-        <span className="text-xs font-medium tracking-wide uppercase text-muted-foreground">
-          {resolvedEyebrow}
+    <div className="relative w-full min-w-0">
+      {showCorner ? (
+        <span
+          className="pointer-events-none absolute right-0 top-0 z-1 max-w-[min(40%,12rem)] truncate text-end text-xs font-semibold leading-none tracking-wide text-muted-foreground"
+          aria-hidden
+        >
+          {cornerCaption}
         </span>
       ) : null}
-      <ItemTitle className="text-base leading-snug">{title}</ItemTitle>
-      {description ? <ItemDescription>{description}</ItemDescription> : null}
-      {ctaNode ? (
-        <Button
-          asChild
-          variant="ghost"
-          size="sm"
-          tabIndex={-1}
-          className="-ml-3 self-start pointer-events-none"
-        >
-          <span>
-            {ctaNode.label}
-            {ctaIcon}
+      <ItemContent className={cn("gap-component", showCorner && "pr-[min(42%,13rem)]")}>
+        {resolvedEyebrow ? (
+          <span className="text-xs font-medium tracking-wide uppercase text-muted-foreground">
+            {resolvedEyebrow}
           </span>
-        </Button>
-      ) : null}
-    </ItemContent>
+        ) : null}
+        <ItemTitle className="text-base leading-snug">{title}</ItemTitle>
+        {description ? <ItemDescription>{description}</ItemDescription> : null}
+        {ctaNode ? (
+          <Button
+            asChild
+            variant="ghost"
+            size="sm"
+            tabIndex={-1}
+            className="-ml-3 self-start pointer-events-none"
+          >
+            <span>
+              {ctaNode.label}
+              {ctaIcon}
+            </span>
+          </Button>
+        ) : null}
+      </ItemContent>
+    </div>
   );
 
   const itemClassName = cn(

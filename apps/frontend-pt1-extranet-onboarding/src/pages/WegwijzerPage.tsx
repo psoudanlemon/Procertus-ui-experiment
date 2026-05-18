@@ -216,6 +216,7 @@ function AllCertificatesGrid({
           <BrowseCard
             key={service.entry.id}
             title={service.entry.label}
+            cornerCaption={service.entry.shortLabel}
             description={summary(service.entry.id)}
             variant="elevated"
             className="col-span-4"
@@ -233,6 +234,7 @@ function AllCertificatesGrid({
           <BrowseCard
             key={service.entry.id}
             title={service.entry.label}
+            cornerCaption={service.entry.shortLabel}
             description={summary(service.entry.id)}
             variant="default"
             className="col-span-4 md:col-span-2"
