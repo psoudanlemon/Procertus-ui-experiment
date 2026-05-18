@@ -1,0 +1,51 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "00d9b99b0492",
+  "session_id": "254120f8-e99f-4810-8594-795f958c2eff",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-18T07:56:00.682489Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/pages/ExpertCallPlaceholderPage.tsx",
+    "packages/ui-certification/src/components/traject/ExpertCallBooking.stories.tsx",
+    "packages/ui-certification/src/components/traject/ExpertCallBookingView.tsx"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "cdaf0ea08bf1",
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-18T07:56:00.679725Z",
+    "agent_lines": 21,
+    "agent_removed": 159,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 21,
+    "total_lines_changed": 180,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 141,
+      "user_lines_removed": 152,
+      "agent_lines_added": 3,
+      "agent_lines_removed": 3,
+      "user_added_per_file": {
+        "packages/ui-certification/src/components/traject/ExpertCallBookingView.tsx": 141
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 164,
+      "agent_lines_removed": 162
+    }
+  ]
+}
