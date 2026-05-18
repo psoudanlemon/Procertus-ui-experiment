@@ -1,0 +1,9 @@
+After confirming the product selection, the user should confirm this selection and have the possibility to add more certification requests or inquiries to this request, just like after selecting CE and Benor or SSD products.
+
+Please look at how this was set up for Benor and CE and do this accordingly.
+
+---
+
+After confirming the product selection, the user should confirm this selection and have the possibility to add more certification requests or inquiries to this request, just like after selecting CE and Benor or SSD products.
+
+Please look at how this was set up for Benor and CE and do this accordingly.

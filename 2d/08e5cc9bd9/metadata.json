@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "2d08e5cc9bd9",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx",
+    "packages/ui-certification/src/bundle-product-certs.ts",
+    "packages/ui-certification/src/certification-request/product-tree.ts",
+    "packages/ui-certification/src/certification-request/types.ts",
+    "packages/ui-certification/src/components/traject/BundleAssemble.stories.tsx",
+    "packages/ui-certification/src/components/traject/BundleProductCard.stories.tsx",
+    "packages/ui-certification/src/components/traject/BundleProductCard.tsx",
+    "packages/ui-certification/src/components/traject/ProductInquiryMatrix.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/2d/08e5cc9bd9/0/metadata.json",
+      "transcript": "/2d/08e5cc9bd9/0/full.jsonl",
+      "content_hash": "/2d/08e5cc9bd9/0/content_hash.txt",
+      "prompt": "/2d/08e5cc9bd9/0/prompt.txt"
+    }
+  ]
+}
