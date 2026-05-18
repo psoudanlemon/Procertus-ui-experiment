@@ -1,0 +1,32 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "cd02d249c2c7",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx",
+    "docs/feedback_prototype.md",
+    "packages/ui-certification/src/index.ts",
+    "packages/ui-certification/src/onboarding/index.ts",
+    "packages/ui-certification/src/onboarding/lib/registration-identifier-for-origin.ts",
+    "packages/ui-certification/src/onboarding/onboarding-default-flow-state.ts",
+    "packages/ui-certification/src/onboarding/onboarding-request-origin-flag.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-request-origin.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/cd/02d249c2c7/0/metadata.json",
+      "transcript": "/cd/02d249c2c7/0/full.jsonl",
+      "content_hash": "/cd/02d249c2c7/0/content_hash.txt",
+      "prompt": "/cd/02d249c2c7/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}

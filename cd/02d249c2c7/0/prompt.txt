@@ -1,0 +1,5 @@
+@packages/ui-certification/src/components/onboarding/origin-step/OnboardingOriginStep.tsx:70-85 when displaying the origin options, we no longer want to display the United States as an option. We want to display Belgium, Netherlands, other European countries, or non-European countries as the five possible origin options.
+
+---
+
+@packages/ui-certification/src/components/onboarding/origin-step/OnboardingOriginStep.tsx:70-85 when displaying the origin options, we no longer want to display the United States as an option. We want to display Belgium, Netherlands, other European countries, or non-European countries as the five possible origin options.
