@@ -29,7 +29,7 @@ const DEFAULTS: Record<OnboardingStep, RegistrationStepChromeCopy> = {
   companyLegalEntities: {
     title: "Certificatie en juridische entiteit",
     description:
-      "Geeft aan of uw maatschappelijke zetel juridisch optreedt voor de geselecteerde certificaties in dit dossier — zo niet, vult u per aanvraag een vestiging in (naam en adres, zonder apart btw-nummer).",
+      "Geeft aan of uw maatschappelijke zetel juridisch optreedt voor de productgebonden certificaties in dit dossier — zo niet, vult u per product een vestiging in (naam en adres, zonder apart btw-nummer). Meerdere certificatielijnen op hetzelfde product delen één vestiging.",
   },
   invoicing: {
     title: "Facturatie",

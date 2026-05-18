@@ -172,9 +172,14 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   const companyLegalEntitiesOk = isOnboardingCompanyLegalEntitiesStepValid(
     context,
     certificationInquiryDraftIds,
+    drafts,
   );
   /** Strict: facturatie‑opties (e‑mail, afwijkend adres/contact) moeten echt kloppen voor “Verder”. */
-  const invoicingStepOk = isOnboardingInvoicingStepValid(context, certificationInquiryDraftIds);
+  const invoicingStepOk = isOnboardingInvoicingStepValid(
+    context,
+    certificationInquiryDraftIds,
+    drafts,
+  );
   /** Strict: toggles op de extra's-stap verplichten volledige invoer vóór “Verder” / nazicht. */
   const optionalContactsOk = isOnboardingOptionalContactsStepValid(context);
   const extrasStepOk = optionalContactsOk;

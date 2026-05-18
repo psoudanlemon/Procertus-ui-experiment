@@ -9,7 +9,7 @@ import {
   isRegistrantCaptureValidForContext,
 } from "./onboarding-flow-helpers";
 import { isInnovationAttestInquiryResumeOk } from "./onboarding-innovation-attest";
-import { registrationDraftsIncludeInnovationAttest } from "./onboarding-registration-steps";
+import { registrationDraftsIncludeInnovationAttest, registrationStepsSequence } from "./onboarding-registration-steps";
 import type { CustomerContext, OnboardingFlowState, OnboardingStep } from "./onboarding-types";
 import { isRegistrationIdentifierValidForOrigin } from "./lib/registration-identifier-for-origin";
 import { isVatIdentifierPlausible } from "./lib/vatPrototypePresets";
@@ -49,6 +49,8 @@ export function deriveFormalOnboardingResumeStep(
     flowState.drafts,
     flowState.summaryIncludedDraftIds,
   );
+  const registrationSeq = registrationStepsSequence(flowState.drafts, certificationInquiryDraftIds);
+  const includesCompanyLegalEntitiesStep = registrationSeq.includes("companyLegalEntities");
   const hasCustomerContext =
     isRegistrantCaptureValidForContext(context) &&
     isLegalRepresentativeCaptureComplete(context) &&
@@ -69,10 +71,15 @@ export function deriveFormalOnboardingResumeStep(
   );
 
   const companyLegalEntitiesOk =
-    isOnboardingCompanyLegalEntitiesStepValid(context, certificationInquiryDraftIds) &&
-    flowState.companyLegalEntitiesStepCompleted;
+    !includesCompanyLegalEntitiesStep ||
+    (isOnboardingCompanyLegalEntitiesStepValid(
+      context,
+      certificationInquiryDraftIds,
+      flowState.drafts,
+    ) &&
+      flowState.companyLegalEntitiesStepCompleted);
   const invoicingStepOk =
-    isOnboardingInvoicingStepValid(context, certificationInquiryDraftIds) &&
+    isOnboardingInvoicingStepValid(context, certificationInquiryDraftIds, flowState.drafts) &&
     flowState.invoicingStepCompleted;
   const optionalContactsOk =
     isOnboardingOptionalContactsStepValid(context) && flowState.extrasStepCompleted;

@@ -35,6 +35,8 @@ export { deriveFormalOnboardingResumeStep } from "./derive-formal-onboarding-res
 export {
   registrationDraftsIncludeInnovationAttest,
   registrationDraftsIncludeInnovationAttestForFlowState,
+  registrationDraftsIncludeProductBoundCertification,
+  registrationDraftsIncludeProductBoundCertificationForFlowState,
   registrationStepsSequence,
   registrationStepsSequenceForFlowState,
   registrationStepIndex,

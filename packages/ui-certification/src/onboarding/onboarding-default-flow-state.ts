@@ -132,10 +132,12 @@ export function hydrateOnboardingFlowStateFromStored(
   const legalEntitiesContextValid = isOnboardingCompanyLegalEntitiesStepValid(
     contextMerged,
     certificationDraftIds,
+    migratedDrafts,
   );
   const invoicingContextValid = isOnboardingInvoicingStepValid(
     contextMerged,
     certificationDraftIds,
+    migratedDrafts,
   );
   const optionalContactsContextValid = isOnboardingOptionalContactsStepValid(contextMerged);
 

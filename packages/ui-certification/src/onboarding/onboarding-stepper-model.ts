@@ -20,6 +20,7 @@ import {
 import { isInnovationAttestInquiryResumeOk } from "./onboarding-innovation-attest";
 import {
   registrationDraftsIncludeInnovationAttest,
+  registrationDraftsIncludeProductBoundCertification,
   registrationStepsSequence,
 } from "./onboarding-registration-steps";
 import { isRegistrationIdentifierValidForOrigin } from "./lib/registration-identifier-for-origin";
@@ -83,9 +84,10 @@ export function deriveOnboardingPhaseValidityForFlow(
   const companyLegalEntitiesOk = isOnboardingCompanyLegalEntitiesStepValid(
     context,
     certificationInquiryDraftIds,
+    drafts,
   );
-  const companyCoreOk = isOnboardingCompanyCoreStepValid(context, certificationInquiryDraftIds);
-  const invoicingStepOk = isOnboardingInvoicingStepValid(context, certificationInquiryDraftIds);
+  const companyCoreOk = isOnboardingCompanyCoreStepValid(context, certificationInquiryDraftIds, drafts);
+  const invoicingStepOk = isOnboardingInvoicingStepValid(context, certificationInquiryDraftIds, drafts);
   /** Strict: gelijk aan {@link deriveFormalOnboardingResumeStep} — geen prototype‑relax. */
   const optionalContactsOk = isOnboardingOptionalContactsStepValid(context);
 
@@ -168,12 +170,18 @@ export function buildOnboardingStepperSteps(
     companyZetelOk &&
     needsInnovationAttest;
 
+  const needsProductBoundCertification = registrationDraftsIncludeProductBoundCertification(
+    drafts,
+    certificationInquiryDraftIds,
+  );
+
   const legalEntitiesAvailable =
     hasDrafts &&
     requestOrigin !== "" &&
     legalRepChoiceOk &&
     registrationStepOk &&
     companyZetelOk &&
+    needsProductBoundCertification &&
     (!needsInnovationAttest || innovationAttestInquiry.stepCompleted);
 
   const stepLayouts: Record<OnboardingStep, StepLayoutStep> = {
@@ -216,10 +224,10 @@ export function buildOnboardingStepperSteps(
       title: "Certificatie (entiteit)",
       description:
         context.headOfficeIsCertificationLegalEntity === ""
-          ? "Zetel of vestigingen per aanvraag"
+          ? "Zetel of vestigingen per product"
           : context.headOfficeIsCertificationLegalEntity === "yes"
-            ? "Zetel voor alle aanvragen in dit dossier"
-            : "Vestiging per aanvraag",
+            ? "Zetel voor alle productgebonden aanvragen in dit dossier"
+            : "Vestiging per geselecteerd product",
       available: legalEntitiesAvailable,
     },
     invoicing: {

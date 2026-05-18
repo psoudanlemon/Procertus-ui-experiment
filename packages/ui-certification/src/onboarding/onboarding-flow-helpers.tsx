@@ -4,6 +4,10 @@ import type {
 } from "../components/request-package-review";
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
 import {
+  isProductBoundCertificationInquiryDraft,
+  productBoundCertificationDedupKey,
+} from "./lib/product-bound-certification-inquiry";
+import {
   coercePersonPreferredLanguage,
   customerContextToFirmaAddressCapture,
   identificatiePersonCaptureSchema,
@@ -88,11 +92,12 @@ export function emptyOnboardingVestiging(id?: string): OnboardingVestiging {
 }
 
 /**
- * Maintains exactly one vestigING per certification draft in registration scope (order matches
- * {@code scopeDrafts}). Keeps captured fields when draft→vestiging mapping is still valid.
+ * After wizard drafts change: one provisional vestiging slot per **distinct product** among
+ * product-bound inquiries (CE+BENOR+… on the same catalog node share one slot). Non‑product-bound
+ * drafts are omitted from {@link CustomerContext.certificationInquiryVestigingId}.
  */
 export function syncOnboardingVestigingenOnePerRegistrationDraft(
-  scopeDrafts: readonly { id: string }[],
+  drafts: readonly CertificationRequestDraft[],
   prevVestigingen: readonly OnboardingVestiging[],
   prevMap: Readonly<Record<string, string>>,
 ): {
@@ -100,15 +105,41 @@ export function syncOnboardingVestigingenOnePerRegistrationDraft(
   certificationInquiryVestigingId: Record<string, string>;
 } {
   const prevById = new Map(prevVestigingen.map((v) => [v.id, v]));
+
+  type ProductGroup = { productKey: string; draftIds: string[] };
+  const groups: ProductGroup[] = [];
+  const keyToGroupIdx = new Map<string, number>();
+
+  for (const d of drafts) {
+    const productKey = productBoundCertificationDedupKey(d);
+    if (!productKey) continue;
+    let idx = keyToGroupIdx.get(productKey);
+    if (idx === undefined) {
+      idx = groups.length;
+      keyToGroupIdx.set(productKey, idx);
+      groups.push({ productKey, draftIds: [] });
+    }
+    groups[idx]!.draftIds.push(d.id);
+  }
+
   const onboardingVestigingen: OnboardingVestiging[] = [];
   const certificationInquiryVestigingId: Record<string, string> = {};
 
-  for (const d of scopeDrafts) {
-    const prevVid = (prevMap[d.id] ?? "").trim();
+  for (const g of groups) {
+    let prevVid = "";
+    for (const did of g.draftIds) {
+      const v = (prevMap[did] ?? "").trim();
+      if (v && v !== CERT_INQUIRY_LEGAL_ENTITY_ZETEL) {
+        prevVid = v;
+        break;
+      }
+    }
     const preserved = prevVid ? prevById.get(prevVid) : undefined;
     const ve = preserved !== undefined ? { ...preserved } : emptyOnboardingVestiging();
     onboardingVestigingen.push(ve);
-    certificationInquiryVestigingId[d.id] = ve.id;
+    for (const did of g.draftIds) {
+      certificationInquiryVestigingId[did] = ve.id;
+    }
   }
 
   return { onboardingVestigingen, certificationInquiryVestigingId };
@@ -195,8 +226,15 @@ export function isCertificationVestigingMappingComplete(
 export function certificationLegalEntityAssignmentRaw(
   context: CustomerContext,
   draftId: string,
+  draft?: CertificationRequestDraft,
 ): string {
   if (context.headOfficeIsCertificationLegalEntity === "yes") {
+    return CERT_INQUIRY_LEGAL_ENTITY_ZETEL;
+  }
+  if (
+    draft !== undefined &&
+    (!isProductBoundCertificationInquiryDraft(draft) || productBoundCertificationDedupKey(draft) === null)
+  ) {
     return CERT_INQUIRY_LEGAL_ENTITY_ZETEL;
   }
   return (context.certificationInquiryVestigingId[draftId] ?? "").trim();
@@ -206,12 +244,10 @@ export function certificationLegalEntityAssignmentRaw(
 export function invoicingLegalEntityAssignmentRaw(
   context: CustomerContext,
   draftId: string,
+  draft?: CertificationRequestDraft,
 ): string {
   if (context.invoicingMirrorCertificationLegalEntities) {
-    if (context.headOfficeIsCertificationLegalEntity === "yes") {
-      return CERT_INQUIRY_LEGAL_ENTITY_ZETEL;
-    }
-    return (context.certificationInquiryVestigingId[draftId] ?? "").trim();
+    return certificationLegalEntityAssignmentRaw(context, draftId, draft);
   }
   return (context.invoicingInquiryVestigingId[draftId] ?? "").trim();
 }
@@ -219,12 +255,22 @@ export function invoicingLegalEntityAssignmentRaw(
 export function seedInvoicingInquiryMapFromCertification(
   context: CustomerContext,
   draftIds: readonly string[],
+  drafts: readonly CertificationRequestDraft[],
 ): Record<string, string> {
+  const byId = new Map(drafts.map((d) => [d.id, d]));
   const out: Record<string, string> = {};
   for (const did of draftIds) {
+    const d = byId.get(did);
     if (context.headOfficeIsCertificationLegalEntity === "yes") {
       out[did] = CERT_INQUIRY_LEGAL_ENTITY_ZETEL;
     } else {
+      if (
+        d !== undefined &&
+        (!isProductBoundCertificationInquiryDraft(d) || productBoundCertificationDedupKey(d) === null)
+      ) {
+        out[did] = CERT_INQUIRY_LEGAL_ENTITY_ZETEL;
+        continue;
+      }
       const v = (context.certificationInquiryVestigingId[did] ?? "").trim();
       if (v) {
         out[did] = v;
@@ -292,10 +338,12 @@ export function legalEntityAssignmentDisplayParts(
 export function isInvoicingLegalEntitySelectionsComplete(
   context: CustomerContext,
   inquiryDraftIds: readonly string[],
+  drafts: readonly CertificationRequestDraft[],
 ): boolean {
   if (inquiryDraftIds.length === 0) return true;
+  const byId = new Map(drafts.map((d) => [d.id, d]));
   return inquiryDraftIds.every((did) => {
-    const raw = invoicingLegalEntityAssignmentRaw(context, did).trim();
+    const raw = invoicingLegalEntityAssignmentRaw(context, did, byId.get(did)).trim();
     if (!raw) return false;
     if (raw === CERT_INQUIRY_LEGAL_ENTITY_ZETEL) return true;
     const ve = context.onboardingVestigingen.find((x) => x.id === raw);
@@ -307,12 +355,16 @@ export function isInvoicingLegalEntitySelectionsComplete(
 export function summaryInvoicingLegalEntityOverviewLine(
   context: CustomerContext,
   inquiryDraftIds: readonly string[],
+  drafts: readonly CertificationRequestDraft[],
 ): string {
   if (inquiryDraftIds.length === 0) return "—";
   if (context.invoicingMirrorCertificationLegalEntities) {
     return "Zelfde rechts‑persoon per aanvraag als bij certificatie";
   }
-  const keys = inquiryDraftIds.map((id) => invoicingLegalEntityAssignmentRaw(context, id).trim());
+  const byId = new Map(drafts.map((d) => [d.id, d]));
+  const keys = inquiryDraftIds.map((id) =>
+    invoicingLegalEntityAssignmentRaw(context, id, byId.get(id)).trim(),
+  );
   const uniq = new Set(keys.filter(Boolean));
   if (uniq.size === 0) return "—";
   if (uniq.size === 1) {
@@ -862,6 +914,7 @@ export function buildFullOnboardingPackageEntityRecords(
       summaryInvoicingLegalEntityOverviewLine(
         context,
         included.map((d) => d.id),
+        drafts,
       ),
     ),
     summaryLine("E-mail facturatie", context.invoicingEmail),
@@ -1002,7 +1055,7 @@ export function buildFullOnboardingPackageEntityRecords(
               "Vestiging (rechtspersoon certificatie)",
               summaryLegalEntityFromAssignmentRaw(
                 context,
-                (context.certificationInquiryVestigingId[draft.id] ?? "").trim(),
+                certificationLegalEntityAssignmentRaw(context, draft.id, draft),
               ),
             )
           : context.headOfficeIsCertificationLegalEntity === "yes"
@@ -1012,7 +1065,7 @@ export function buildFullOnboardingPackageEntityRecords(
           "Facturatie (rechtspersoon op factuur)",
           summaryLegalEntityFromAssignmentRaw(
             context,
-            invoicingLegalEntityAssignmentRaw(context, draft.id),
+            invoicingLegalEntityAssignmentRaw(context, draft.id, draft),
           ),
         ),
       ]),
@@ -1298,25 +1351,33 @@ export function isOnboardingCompanyZetelStepValid(context: CustomerContext): boo
 export function isOnboardingCompanyLegalEntitiesStepValid(
   context: CustomerContext,
   certificationInquiryDraftIds: readonly string[],
+  drafts: readonly CertificationRequestDraft[],
 ): boolean {
+  const allow = new Set(certificationInquiryDraftIds);
+  const productBoundIds = drafts
+    .filter((d) => allow.has(d.id) && productBoundCertificationDedupKey(d) !== null)
+    .map((d) => d.id);
+
+  if (productBoundIds.length === 0) {
+    return true;
+  }
+
   const rel = context.headOfficeIsCertificationLegalEntity;
   if (rel !== "yes" && rel !== "no") {
     return false;
   }
-  if (certificationInquiryDraftIds.length === 0) {
-    return true;
-  }
-  return isCertificationVestigingMappingComplete(context, certificationInquiryDraftIds);
+  return isCertificationVestigingMappingComplete(context, productBoundIds);
 }
 
 /** Organisation name, firma address, certification legal entity / vestigingen (beide bedrijfs-substappen samen). */
 export function isOnboardingCompanyCoreStepValid(
   context: CustomerContext,
   certificationInquiryDraftIds: readonly string[],
+  drafts: readonly CertificationRequestDraft[],
 ): boolean {
   return (
     isOnboardingCompanyZetelStepValid(context) &&
-    isOnboardingCompanyLegalEntitiesStepValid(context, certificationInquiryDraftIds)
+    isOnboardingCompanyLegalEntitiesStepValid(context, certificationInquiryDraftIds, drafts)
   );
 }
 
@@ -1324,11 +1385,12 @@ export function isOnboardingCompanyCoreStepValid(
 export function isOnboardingInvoicingStepValid(
   context: CustomerContext,
   certificationInquiryDraftIds: readonly string[],
+  drafts: readonly CertificationRequestDraft[],
 ): boolean {
   if (!isOnboardingInvoicingCaptureValid({ invoicingEmail: context.invoicingEmail })) {
     return false;
   }
-  if (!isInvoicingLegalEntitySelectionsComplete(context, certificationInquiryDraftIds)) {
+  if (!isInvoicingLegalEntitySelectionsComplete(context, certificationInquiryDraftIds, drafts)) {
     return false;
   }
   if (
@@ -1435,10 +1497,11 @@ export function certificationSecondaryContactDisabledHint(context: CustomerConte
 export function isOnboardingCompanyStepValid(
   context: CustomerContext,
   certificationInquiryDraftIds: readonly string[],
+  drafts: readonly CertificationRequestDraft[],
 ): boolean {
   return (
-    isOnboardingCompanyCoreStepValid(context, certificationInquiryDraftIds) &&
-    isOnboardingInvoicingStepValid(context, certificationInquiryDraftIds) &&
+    isOnboardingCompanyCoreStepValid(context, certificationInquiryDraftIds, drafts) &&
+    isOnboardingInvoicingStepValid(context, certificationInquiryDraftIds, drafts) &&
     isOnboardingOptionalContactsStepValid(context)
   );
 }
@@ -1930,6 +1993,7 @@ export function buildRows(
   const invoicingLegalEntityValue = summaryInvoicingLegalEntityOverviewLine(
     context,
     includedDraftIds,
+    drafts,
   );
   rows.push({
     id: "invoicing-legal-entity",
@@ -1995,7 +2059,7 @@ export function buildRows(
         value: draft.productLabel ? `${draft.label} · ${draft.productLabel}` : draft.label,
       });
       if (context.headOfficeIsCertificationLegalEntity === "no") {
-        const rawCert = (context.certificationInquiryVestigingId[draft.id] ?? "").trim();
+        const rawCert = certificationLegalEntityAssignmentRaw(context, draft.id, draft).trim();
         rows.push({
           id: `${draft.id}-vestiging`,
           label: `Vestiging (aanvraag ${index + 1})`,
@@ -2007,7 +2071,7 @@ export function buildRows(
         label: `Factuur rechtspersoon (aanvraag ${index + 1})`,
         value: summaryLegalEntityFromAssignmentRaw(
           context,
-          invoicingLegalEntityAssignmentRaw(context, draft.id),
+          invoicingLegalEntityAssignmentRaw(context, draft.id, draft),
         ),
       });
     });

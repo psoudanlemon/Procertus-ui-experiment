@@ -55,6 +55,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
     context,
     updateContext,
     patchContext,
+    drafts,
     draftsInRegistrationScope,
     countrySelectOptions,
     invoicingFieldBase,
@@ -113,6 +114,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
       invoicingInquiryVestigingId: seedInvoicingInquiryMapFromCertification(
         context,
         overviewRows.map((d) => d.id),
+        drafts,
       ),
     });
   }
@@ -206,7 +208,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
       ) : (
         <ul className="space-y-2">
           {overviewRows.map((draft) => {
-            const certRaw = certificationLegalEntityAssignmentRaw(context, draft.id);
+            const certRaw = certificationLegalEntityAssignmentRaw(context, draft.id, draft);
             const parts = legalEntityAssignmentDisplayParts(context, certRaw);
             return (
               <OnboardingInquiryLegalEntityLinkCard
@@ -330,6 +332,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
                         invoicingInquiryVestigingId: seedInvoicingInquiryMapFromCertification(
                           context,
                           overviewRows.map((d) => d.id),
+                          drafts,
                         ),
                       })
                     }

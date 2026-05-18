@@ -8,8 +8,8 @@
 - [ ] remove login from appbar when in traject request
 - [x] regions: skip US. Outside Europe as remainder
 - [x] person form: all fields required + add language
-- [ ] legal entities (vestigingen) toevoegen: enkel per product
-- [ ] skip legal entity step, when no product-bound certification inquries (only innovation/metrology)
+- [x] legal entities (vestigingen) toevoegen: enkel per product
+- [x] skip legal entity step, when no product-bound certification inquries (only innovation/metrology)
 - [ ] metrologie = analoog aan innovatie-attest, met extra step: aan te leveren
 - [ ] alle niet product gebonden inquiries: enkel aan maatschappelijke zetel
 - [ ] facturatie: extra adres voor herinneringen

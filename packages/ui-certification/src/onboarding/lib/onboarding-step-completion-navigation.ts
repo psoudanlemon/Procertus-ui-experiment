@@ -32,6 +32,7 @@ export function stepCompletionStateAfterNavigation(
   const legalIdx = seq.indexOf("companyLegalEntities");
   const invoicingIdx = seq.indexOf("invoicing");
   const extrasIdx = seq.indexOf("extras");
+  const skippedLegalEntitiesStep = legalIdx < 0;
 
   let companyZetelStepCompleted = prev.companyZetelStepCompleted;
   let innovationAttestStepCompleted = prev.innovationAttestInquiry.stepCompleted;
@@ -52,10 +53,12 @@ export function stepCompletionStateAfterNavigation(
   } else if (backward) {
     if (innovationIdx >= 0 && toIdx <= innovationIdx) {
       innovationAttestStepCompleted = false;
-      companyLegalEntitiesStepCompleted = false;
+      if (!skippedLegalEntitiesStep) {
+        companyLegalEntitiesStepCompleted = false;
+      }
       invoicingStepCompleted = false;
       extrasStepCompleted = false;
-    } else if (toIdx <= legalIdx) {
+    } else if (legalIdx >= 0 && toIdx <= legalIdx) {
       companyLegalEntitiesStepCompleted = false;
       invoicingStepCompleted = false;
       extrasStepCompleted = false;
@@ -69,12 +72,21 @@ export function stepCompletionStateAfterNavigation(
 
   if (
     activeStep === "company" &&
-    (nextStep === "innovationAttest" || nextStep === "companyLegalEntities")
+    (nextStep === "innovationAttest" ||
+      nextStep === "companyLegalEntities" ||
+      nextStep === "invoicing")
   ) {
     companyZetelStepCompleted = true;
+    if (nextStep === "invoicing" && skippedLegalEntitiesStep) {
+      companyLegalEntitiesStepCompleted = true;
+    }
   }
   if (activeStep === "innovationAttest" && nextStep === "companyLegalEntities") {
     innovationAttestStepCompleted = true;
+  }
+  if (activeStep === "innovationAttest" && nextStep === "invoicing" && skippedLegalEntitiesStep) {
+    innovationAttestStepCompleted = true;
+    companyLegalEntitiesStepCompleted = true;
   }
   if (activeStep === "companyLegalEntities" && nextStep === "invoicing") {
     companyLegalEntitiesStepCompleted = true;
