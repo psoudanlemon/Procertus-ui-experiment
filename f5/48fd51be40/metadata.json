@@ -13,6 +13,12 @@
       "transcript": "/f5/48fd51be40/0/full.jsonl",
       "content_hash": "/f5/48fd51be40/0/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/f5/48fd51be40/1/metadata.json",
+      "transcript": "/f5/48fd51be40/1/full.jsonl",
+      "content_hash": "/f5/48fd51be40/1/content_hash.txt",
+      "prompt": ""
     }
   ],
   "token_usage": {
