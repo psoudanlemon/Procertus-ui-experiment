@@ -1,0 +1,25 @@
+@packages/ui-certification/src/onboarding/identificatie-person-title-role-capture.tsx @packages/ui-certification/src/onboarding/identificatie-subforms.tsx @packages/ui-certification/src/onboarding/identificatie-person-registry-picker.tsx  When registering persons during onboarding, always capture the person's language.
+
+Please always select from the three possible language choices: English, French, Dutch. Use Dutch as the default.  it's not possible to leave this field empty. It is an unrequired field.
+
+---
+
+@packages/ui-certification/src/onboarding/identificatie-person-title-role-capture.tsx @packages/ui-certification/src/onboarding/identificatie-subforms.tsx @packages/ui-certification/src/onboarding/identificatie-person-registry-picker.tsx  When registering persons during onboarding, always capture the person's language.
+
+Please always select from the three possible language choices: English, French, Dutch. Use Dutch as the default.  it's not possible to leave this field empty. It is an unrequired field.
+
+---
+
+Remove the helper text from the email field as well.
+
+---
+
+When a person's subform is not valid, you can't continue the step. Currently I'm in the registration step, and I shouldn't be able to continue as long as I haven't entered a legal representative as a valid person.
+
+---
+
+When a person's subform is not valid, you can't continue the step. Currently I'm in the registration step, and I shouldn't be able to continue as long as I haven't entered a legal representative as a valid person.
+
+---
+
+Only indicate this asterisk as erroneous, marking it red, when the field itself was not correctly filled in, marking it as invalid.

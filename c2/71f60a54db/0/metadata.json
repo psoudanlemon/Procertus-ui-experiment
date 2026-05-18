@@ -1,0 +1,99 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "c271f60a54db",
+  "session_id": "59d4dd58-4c79-4456-81d2-a207b63c70a7",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-18T09:58:23.702972Z",
+  "branch": "main",
+  "checkpoints_count": 4,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/profile-change-requests/apply-organization-profile-change.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/profile-change-requests/apply-user-profile-change.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/profile-change-requests/field-labels.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/profile-change-requests/flatten.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/profile-change-requests/org-profile-change.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/profile-change-requests/profile-change-lifecycle-events.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/profile-change-requests/profile-change-request-queries.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/profile-change-requests/storage.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/profile-change-requests/types.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/profile-change-requests/use-profile-change-requests.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/profile-change-requests/user-profile-baseline.ts",
+    "docs/feedback_prototype.md",
+    "packages/_certification-domain-certification/src/identificatiefiche-form-schemas.ts",
+    "packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx",
+    "packages/ui-certification/src/components/onboarding/extras-step/OnboardingExtrasStep.tsx",
+    "packages/ui-certification/src/components/onboarding/invoicing-step/OnboardingInvoicingStep.tsx",
+    "packages/ui-certification/src/index.ts",
+    "packages/ui-certification/src/onboarding/identificatie-person-title-role-capture.tsx",
+    "packages/ui-certification/src/onboarding/identificatie-subforms.tsx",
+    "packages/ui-certification/src/onboarding/index.ts",
+    "packages/ui-certification/src/onboarding/lib/onboardingPersonLanguage.ts",
+    "packages/ui-certification/src/onboarding/lib/registrationPersonOptions.ts",
+    "packages/ui-certification/src/onboarding/lib/vatPrototypePresets.ts",
+    "packages/ui-certification/src/onboarding/onboarding-constants.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-helpers.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-stepper-model.ts",
+    "packages/ui-certification/src/onboarding/onboarding-types.ts",
+    "packages/ui-certification/src/onboarding/use-onboarding-flow.tsx"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "b9480e32c844",
+  "session_metrics": {
+    "turn_count": 8,
+    "context_tokens": 184755,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-18T09:58:23.698217Z",
+    "agent_lines": 640,
+    "agent_removed": 255,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 640,
+    "total_lines_changed": 895,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 2,
+      "user_lines_removed": 2,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "docs/feedback_prototype.md": 2
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 261,
+      "agent_lines_removed": 97
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 419,
+      "agent_lines_removed": 155
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 528,
+      "agent_lines_removed": 257
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 642,
+      "agent_lines_removed": 255
+    }
+  ]
+}
