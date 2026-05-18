@@ -3,7 +3,12 @@
  * Persisted in localStorage (see storage.ts).
  */
 
-export type ProfileChangeRequestStatus = "submitted" | "validated" | "accepted" | "rejected" | "canceled";
+export type ProfileChangeRequestStatus =
+  | "submitted"
+  | "validated"
+  | "accepted"
+  | "rejected"
+  | "canceled";
 
 export type ProfileChangeRequestKind = "user" | "organization";
 

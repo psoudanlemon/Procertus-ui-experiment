@@ -10,8 +10,9 @@ export const STABLE_STEP_MIN_HEIGHT = "min-h-stable-step";
 export const COUNTRY_SELECT_NONE = "__registration_country_none__";
 
 /**
- * Prototype onboarding: allow advancing registration/company steps without full validation, and
- * merge {@link prototypeOptionalDemoContextPatch} after mock company enrich.
+ * Prototype onboarding: allow advancing the **maatschappelijke zetel** step without full validation;
+ * registratie always requires complete legal representative (and VAT id). Also used when merging
+ * {@link prototypeOptionalDemoContextPatch} after mock company enrich.
  */
 export const ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION = true;
 

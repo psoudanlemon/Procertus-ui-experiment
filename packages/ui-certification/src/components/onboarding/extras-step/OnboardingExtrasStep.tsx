@@ -1,6 +1,8 @@
 import {
   certificationSecondaryContactDisabledHint,
   emptyIdentificatiePersonState,
+  emphasizeInvalidMarkersCertificationPrimaryPerson,
+  emphasizeInvalidMarkersCertificationSecondaryPerson,
   ONBOARDING_PERSON_NEW_ID,
 } from "../../../onboarding/onboarding-flow-helpers";
 import { IdentificatieOptionalBlock } from "../../../onboarding/identificatie-subforms";
@@ -70,13 +72,7 @@ export function OnboardingExtrasStep({ model }: OnboardingExtrasStepProps) {
                 const certAanhef = p.title?.trim() ?? "";
                 patchContext({
                   certificationContactPersonRegistryId: rid,
-                  certificationContact: {
-                    firstName: p.firstName,
-                    lastName: p.lastName,
-                    title: p.title,
-                    telephone: p.telephone,
-                    email: p.email,
-                  },
+                  certificationContact: { ...p },
                   certificationContactTitlePreset: certAanhef ? "other" : "none",
                   certificationContactTitle: certAanhef,
                   certificationContactRolePreset: "none",
@@ -96,10 +92,12 @@ export function OnboardingExtrasStep({ model }: OnboardingExtrasStepProps) {
             branch="certificationContact"
             context={context}
             patchContext={patchContext}
+            emphasizeInvalidRequiredMarkers={emphasizeInvalidMarkersCertificationPrimaryPerson(
+              context,
+            )}
             copy={{
               titleLabel: "Title",
               roleLabel: "Role",
-              emailHint: "Naam en e-mail zijn verplicht; aanhef en functie zijn optioneel.",
             }}
           />
         ) : null}
@@ -155,13 +153,7 @@ export function OnboardingExtrasStep({ model }: OnboardingExtrasStepProps) {
                 const cert2Aanhef = p.title?.trim() ?? "";
                 patchContext({
                   certificationSecondaryPersonRegistryId: rid,
-                  certificationSecondary: {
-                    firstName: p.firstName,
-                    lastName: p.lastName,
-                    title: p.title,
-                    telephone: p.telephone,
-                    email: p.email,
-                  },
+                  certificationSecondary: { ...p },
                   certificationSecondaryTitlePreset: cert2Aanhef ? "other" : "none",
                   certificationSecondaryTitle: cert2Aanhef,
                   certificationSecondaryRolePreset: "none",
@@ -181,10 +173,12 @@ export function OnboardingExtrasStep({ model }: OnboardingExtrasStepProps) {
             branch="certificationSecondary"
             context={context}
             patchContext={patchContext}
+            emphasizeInvalidRequiredMarkers={emphasizeInvalidMarkersCertificationSecondaryPerson(
+              context,
+            )}
             copy={{
               titleLabel: "Title",
               roleLabel: "Role",
-              emailHint: "Naam en e-mail zijn verplicht; aanhef en functie zijn optioneel.",
             }}
           />
         ) : null}

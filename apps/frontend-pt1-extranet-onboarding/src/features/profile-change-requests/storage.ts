@@ -46,7 +46,11 @@ export function readProfileChangeRequestStore(): ProfileChangeRequestStore {
     const raw = localStorage.getItem(PROFILE_CHANGE_REQUESTS_STORAGE_KEY);
     if (!raw) return emptyStore();
     const parsed = JSON.parse(raw) as unknown;
-    if (!parsed || typeof parsed !== "object" || !Array.isArray((parsed as ProfileChangeRequestStore).requests)) {
+    if (
+      !parsed ||
+      typeof parsed !== "object" ||
+      !Array.isArray((parsed as ProfileChangeRequestStore).requests)
+    ) {
       return emptyStore();
     }
     return parsed as ProfileChangeRequestStore;

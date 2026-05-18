@@ -1,3 +1,4 @@
+import { coercePersonPreferredLanguage } from "@procertus-ui/ui-certification";
 import type { MockPrototypeProfilePatch } from "@procertus-ui/ui-pt1-prototype";
 
 import { mergeStoredOnboardingCustomerContext } from "../profile/mergeStoredOnboardingCustomerContext";
@@ -46,6 +47,7 @@ export function applyUserProfileChange(
     representativeTitlePreset: g("representativeTitlePreset"),
     representativeTitle: g("representativeTitle"),
     representativeEmail: g("representativeEmail"),
+    representativeLanguage: coercePersonPreferredLanguage(g("representativeLanguage")),
     representativeRolePreset: g("representativeRolePreset"),
     representativeRole: g("representativeRole"),
   });

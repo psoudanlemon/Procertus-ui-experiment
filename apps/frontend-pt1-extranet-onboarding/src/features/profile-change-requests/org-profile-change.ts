@@ -71,7 +71,9 @@ export function recordToOrgProfileForm(r: Record<string, string>): OrgProfileCha
   };
 }
 
-export function companySlice(ctx: Partial<CustomerContext> | null | undefined): Pick<
+export function companySlice(
+  ctx: Partial<CustomerContext> | null | undefined,
+): Pick<
   OrgProfileChangeForm,
   | "organizationName"
   | "vatNumber"
@@ -92,7 +94,9 @@ export function companySlice(ctx: Partial<CustomerContext> | null | undefined): 
   };
 }
 
-export function referenceSliceFromProfile(p: PrototypeOrganizationProfile | undefined): Pick<
+export function referenceSliceFromProfile(
+  p: PrototypeOrganizationProfile | undefined,
+): Pick<
   OrgProfileChangeForm,
   | "tradeName"
   | "legalName"
@@ -187,7 +191,9 @@ function partialPostalFromForm(
   return out;
 }
 
-export function buildOrganizationProfileOverlay(form: OrgProfileChangeForm): MockPrototypeOrganizationProfilePatch {
+export function buildOrganizationProfileOverlay(
+  form: OrgProfileChangeForm,
+): MockPrototypeOrganizationProfilePatch {
   const reg = partialPostalFromForm(
     form.regStreet,
     form.regHouse,

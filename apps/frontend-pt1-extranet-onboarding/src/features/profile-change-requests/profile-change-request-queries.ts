@@ -7,7 +7,8 @@ export function findPendingProfileChangeRequestForUser(
   userId: string,
 ): ProfileChangeRequest | undefined {
   return requests.find(
-    (r) => r.kind === "user" && r.subjectUserId === userId && isPendingProfileChangeStatus(r.status),
+    (r) =>
+      r.kind === "user" && r.subjectUserId === userId && isPendingProfileChangeStatus(r.status),
   );
 }
 

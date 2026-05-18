@@ -1,4 +1,5 @@
 /** Preset list for demos only — in production the user enters their own identifier. */
+import type { PersonPreferredLanguage } from "@procertus-ui/domain-certification";
 import { roleLabelForPresetId, titleLabelForPresetId } from "./registrationPersonOptions";
 
 export type VatLookupMockOutcome = "registry_auto" | "prefix_only" | "manual";
@@ -336,6 +337,7 @@ export function getPersonContextFieldsForPrototypePreset(preset: VatPrototypePre
   representativeTitlePreset: string;
   representativeTitle: string;
   representativeEmail: string;
+  representativeLanguage: PersonPreferredLanguage;
   representativeRolePreset: string;
   representativeRole: string;
 } {
@@ -360,6 +362,7 @@ export function getPersonContextFieldsForPrototypePreset(preset: VatPrototypePre
     representativeTitlePreset: titlePreset,
     representativeTitle,
     representativeEmail: p.representativeEmail,
+    representativeLanguage: "nl",
     representativeRolePreset: rolePreset,
     representativeRole,
   };
@@ -375,6 +378,7 @@ export function getRegistrantContextFieldsForPrototypePreset(preset: VatPrototyp
     title: string;
     telephone: string;
     email: string;
+    language: PersonPreferredLanguage;
   };
   registrantTitlePreset: string;
   registrantTitle: string;
@@ -403,6 +407,7 @@ export function getRegistrantContextFieldsForPrototypePreset(preset: VatPrototyp
       title: registrantTitle,
       telephone: r.telephone,
       email: r.email,
+      language: "nl",
     },
     registrantTitlePreset: titlePreset,
     registrantTitle,

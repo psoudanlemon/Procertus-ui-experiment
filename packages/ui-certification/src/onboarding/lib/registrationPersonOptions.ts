@@ -29,3 +29,16 @@ export function titleLabelForPresetId(id: string): string {
 export function roleLabelForPresetId(id: string): string {
   return REPRESENTATIVE_ROLE_PRESETS.find((p) => p.id === id)?.label ?? "";
 }
+
+/** Title/role presets: neither `none` nor empty “other…” free text allowed. */
+export function representativePresetSelectionComplete(
+  presetIdRaw: string,
+  freeText: string,
+  presets: readonly { readonly id: string }[],
+): boolean {
+  const presetIdTrim = presetIdRaw?.trim() ?? "";
+  const presetId = presets.some((p) => p.id === presetIdTrim) ? presetIdTrim : "none";
+  if (presetId === "none") return false;
+  if (presetId === "other") return Boolean(freeText.trim());
+  return true;
+}

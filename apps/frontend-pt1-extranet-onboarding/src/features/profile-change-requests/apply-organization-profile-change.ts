@@ -1,4 +1,7 @@
-import { getPrototypeOrganizationProfile, type MockPrototypeProfilePatch } from "@procertus-ui/ui-pt1-prototype";
+import {
+  getPrototypeOrganizationProfile,
+  type MockPrototypeProfilePatch,
+} from "@procertus-ui/ui-pt1-prototype";
 
 import { mergeStoredOnboardingCustomerContext } from "../profile/mergeStoredOnboardingCustomerContext";
 import { buildOrganizationProfileOverlay, recordToOrgProfileForm } from "./org-profile-change";

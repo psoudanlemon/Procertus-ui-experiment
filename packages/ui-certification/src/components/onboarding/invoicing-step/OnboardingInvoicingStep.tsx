@@ -22,6 +22,7 @@ import { registrationIsoCodeFromDutchCountryLabel } from "../../../onboarding/li
 import {
   certificationLegalEntityAssignmentRaw,
   emptyIdentificatiePersonState,
+  emphasizeInvalidMarkersInvoicingContactPerson,
   formatPostalAddressDisplay,
   formatVestigingRegistryOptionLabel,
   invoicingAddressSubformValue,
@@ -37,6 +38,7 @@ import {
   IdentificatieOptionalBlock,
   IdentificatiePersonRegistrySummary,
   IdentificatiePersonSubform,
+  RequiredFieldSuffix,
 } from "../../../onboarding/identificatie-subforms";
 import { IdentificatiePersonRegistryPicker } from "../../../onboarding/identificatie-person-registry-picker";
 import type { OnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
@@ -78,9 +80,8 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
   }
 
   function setInvoicingDraftAssignment(draftId: string, value: string): void {
-    const next =
-      value.trim() ?
-        { ...invoicingMap, [draftId]: value }
+    const next = value.trim()
+      ? { ...invoicingMap, [draftId]: value }
       : (() => {
           const clone = { ...invoicingMap };
           delete clone[draftId];
@@ -131,7 +132,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
 
       <Field data-invalid={invoicingEmailIssue ? true : undefined}>
         <FieldLabel htmlFor={`${invoicingFieldBase}-email`}>
-          E-mail voor facturatie <span className="text-destructive">*</span>
+          E-mail voor facturatie <RequiredFieldSuffix erroneous={invoicingEmailIssue != null} />
         </FieldLabel>
         <FieldContent className="w-full min-w-0">
           <div className="flex w-full min-w-0 items-center gap-1.5">
@@ -155,7 +156,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
               title="Facturatie-e-mail ingevuld"
             />
           </div>
-          {invoicingEmailIssue ?
+          {invoicingEmailIssue ? (
             <p
               id={`${invoicingFieldBase}-email-error`}
               className="text-left text-sm font-medium text-destructive"
@@ -163,7 +164,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
             >
               {invoicingEmailIssue}
             </p>
-          : null}
+          ) : null}
           <FieldDescription id={`${invoicingFieldBase}-email-hint`}>
             Dit adres ontvangt facturen en herinneringen — vul dit als eerste in.
           </FieldDescription>
@@ -173,14 +174,16 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-base">Maatschappelijke zetel (referentie)</CardTitle>
-          <CardDescription>Naam en adres van uw hoofdkantoor zoals eerder vastgelegd.</CardDescription>
+          <CardDescription>
+            Naam en adres van uw hoofdkantoor zoals eerder vastgelegd.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
           <p className="font-medium text-foreground">{context.organizationName.trim() || "—"}</p>
           <p className="text-muted-foreground">{formatPostalAddressDisplay(context)}</p>
-          {context.country.trim() ?
+          {context.country.trim() ? (
             <p className="text-muted-foreground">{context.country.trim()}</p>
-          : null}
+          ) : null}
         </CardContent>
       </Card>
 
@@ -189,17 +192,19 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
           Certificatie-aanvragen in dit dossier
         </h4>
         <p className="text-xs leading-relaxed text-muted-foreground">
-          Per aanvraag de rechts‑persoon die u in de stap <span className="font-medium text-foreground">Certificatie (entiteit)</span>{" "}
-          gekoppeld heeft. Zolang u hieronder geen afwijkende facturatie inschakelt, gebruiken we
-          deze ook op de factuur.
+          Per aanvraag de rechts‑persoon die u in de stap{" "}
+          <span className="font-medium text-foreground">Certificatie (entiteit)</span> gekoppeld
+          heeft. Zolang u hieronder geen afwijkende facturatie inschakelt, gebruiken we deze ook op
+          de factuur.
         </p>
       </div>
 
-      {overviewRows.length === 0 ?
+      {overviewRows.length === 0 ? (
         <p className="rounded-md border border-dashed border-border bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
           Geen gekozen aanvragen in dit dossier.
         </p>
-      : <ul className="space-y-2">
+      ) : (
+        <ul className="space-y-2">
           {overviewRows.map((draft) => {
             const certRaw = certificationLegalEntityAssignmentRaw(context, draft.id);
             const parts = legalEntityAssignmentDisplayParts(context, certRaw);
@@ -228,7 +233,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
             );
           })}
         </ul>
-      }
+      )}
 
       <IdentificatieOptionalBlock
         switchId={`${invoicingFieldBase}-alt-invoice-per-inquiry`}
@@ -289,10 +294,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
                           }
                         }}
                       >
-                        <SelectTrigger
-                          size="sm"
-                          className="h-auto min-h-9 w-full max-w-lg py-2"
-                        >
+                        <SelectTrigger size="sm" className="h-auto min-h-9 w-full max-w-lg py-2">
                           <SelectValue placeholder="Kies rechts‑persoon voor factuur" />
                         </SelectTrigger>
                         <SelectContent position="popper">
@@ -314,7 +316,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
                 ))}
               </ul>
 
-              {overviewRows.length > 0 ?
+              {overviewRows.length > 0 ? (
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                     Snel invoeren voor alle aanvragen
@@ -356,7 +358,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
                     </Button>
                   ))}
                 </div>
-              : null}
+              ) : null}
             </div>
           )}
         </div>
@@ -399,19 +401,19 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
           </h4>
           <p className="text-xs leading-relaxed text-muted-foreground">
             Standaard is dat de{" "}
-            <span className="font-medium text-foreground">wettelijke vertegenwoordiger</span>. Schakel
-            hieronder alleen in wanneer iemand anders uw aanspreekpunt voor facturatie en financiële
-            opvolging moet zijn.
+            <span className="font-medium text-foreground">wettelijke vertegenwoordiger</span>.
+            Schakel hieronder alleen in wanneer iemand anders uw aanspreekpunt voor facturatie en
+            financiële opvolging moet zijn.
           </p>
         </div>
-        {!context.invoicingUseContactPerson ?
+        {!context.invoicingUseContactPerson ? (
           <div className="rounded-lg border border-border bg-card px-4 py-3">
             <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
               Wettelijke vertegenwoordiger — factuurcontact
             </p>
             <IdentificatiePersonRegistrySummary person={legalRepresentativePersonValue(context)} />
           </div>
-        : null}
+        ) : null}
       </div>
 
       <IdentificatieOptionalBlock
@@ -426,7 +428,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
           })
         }
         headerTrailing={
-          context.invoicingUseContactPerson ?
+          context.invoicingUseContactPerson ? (
             <IdentificatiePersonRegistryPicker
               cardHeader
               id={`${invoicingFieldBase}-inv-registry`}
@@ -452,16 +454,19 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
                 });
               }}
             />
-          : null
+          ) : null
         }
       >
-        {context.invoicingContactPersonRegistryId === ONBOARDING_PERSON_NEW_ID ?
+        {context.invoicingContactPersonRegistryId === ONBOARDING_PERSON_NEW_ID ? (
           <IdentificatiePersonSubform
             idPrefix="invoicing-person"
             value={context.invoicingContactPerson}
             onChange={(v) => patchContext({ invoicingContactPerson: v })}
+            emphasizeInvalidRequiredMarkers={emphasizeInvalidMarkersInvoicingContactPerson(context)}
           />
-        : <IdentificatiePersonRegistrySummary person={context.invoicingContactPerson} />}
+        ) : (
+          <IdentificatiePersonRegistrySummary person={context.invoicingContactPerson} />
+        )}
       </IdentificatieOptionalBlock>
     </div>
   );

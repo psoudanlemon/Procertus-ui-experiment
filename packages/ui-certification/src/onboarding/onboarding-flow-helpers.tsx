@@ -4,11 +4,13 @@ import type {
 } from "../components/request-package-review";
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
 import {
+  coercePersonPreferredLanguage,
   customerContextToFirmaAddressCapture,
   identificatiePersonCaptureSchema,
   identificatieStreetAddressCaptureSchema,
   isFirmaAddressCaptureComplete,
   isOnboardingInvoicingCaptureValid,
+  isPersonSubformCompleteForOnboarding,
   personSubformValueToCapture,
 } from "@procertus-ui/domain-certification";
 import { ONBOARDING_FLOW_STORAGE_KEY } from "./lib/onboardingRegistrationCompleteSession";
@@ -26,7 +28,13 @@ import {
   ONBOARDING_REQUEST_ORIGIN_OPTIONS,
   type OnboardingRequestOrigin,
 } from "./onboarding-request-origin";
-import { roleLabelForPresetId, titleLabelForPresetId } from "./lib/registrationPersonOptions";
+import {
+  REPRESENTATIVE_ROLE_PRESETS,
+  REPRESENTATIVE_TITLE_PRESETS,
+  representativePresetSelectionComplete,
+  roleLabelForPresetId,
+  titleLabelForPresetId,
+} from "./lib/registrationPersonOptions";
 import {
   DEFAULT_VAT_PROTOTYPE_PRESET_ID,
   deriveCountryFromVat,
@@ -37,9 +45,23 @@ import {
   VAT_PROTOTYPE_PRESETS,
   type VatPrototypePreset,
 } from "./lib/vatPrototypePresets";
+import { onboardingPersonLanguageLabel } from "./lib/onboardingPersonLanguage";
 
 export function emptyIdentificatiePersonState(): IdentificatiePersonCaptureState {
-  return { firstName: "", lastName: "", title: "", telephone: "", email: "" };
+  return {
+    firstName: "",
+    lastName: "",
+    title: "",
+    telephone: "",
+    email: "",
+    language: "nl",
+  };
+}
+
+function withCoercedPersonLanguage(
+  person: IdentificatiePersonCaptureState,
+): IdentificatiePersonCaptureState {
+  return { ...person, language: coercePersonPreferredLanguage(person.language) };
 }
 
 /** Picker value: choose “new person”; existing rows use their registry UUID. */
@@ -73,7 +95,10 @@ export function syncOnboardingVestigingenOnePerRegistrationDraft(
   scopeDrafts: readonly { id: string }[],
   prevVestigingen: readonly OnboardingVestiging[],
   prevMap: Readonly<Record<string, string>>,
-): { onboardingVestigingen: OnboardingVestiging[]; certificationInquiryVestigingId: Record<string, string> } {
+): {
+  onboardingVestigingen: OnboardingVestiging[];
+  certificationInquiryVestigingId: Record<string, string>;
+} {
   const prevById = new Map(prevVestigingen.map((v) => [v.id, v]));
   const onboardingVestigingen: OnboardingVestiging[] = [];
   const certificationInquiryVestigingId: Record<string, string> = {};
@@ -105,7 +130,9 @@ export function isOnboardingVestigingCaptureComplete(v: OnboardingVestiging): bo
   return isFirmaAddressCaptureComplete(onboardingVestigingAddressCapture(v));
 }
 
-export function vestigingAddressSubformValue(v: OnboardingVestiging): IdentificatieAddressSubformValue {
+export function vestigingAddressSubformValue(
+  v: OnboardingVestiging,
+): IdentificatieAddressSubformValue {
   return {
     street: v.addressStreet,
     houseNumber: v.addressHouseNumber,
@@ -132,7 +159,11 @@ export function effectiveIncludedCertificationDraftIds(
 export function formatVestigingRegistryOptionLabel(v: OnboardingVestiging): string {
   const addr = onboardingVestigingAddressCapture(v);
   const n = v.legalName.trim() || "Naam nog niet ingevuld";
-  const line = [addr.addressStreet.trim(), addr.addressPostalCode.trim(), addr.addressCity.trim()].filter(Boolean);
+  const line = [
+    addr.addressStreet.trim(),
+    addr.addressPostalCode.trim(),
+    addr.addressCity.trim(),
+  ].filter(Boolean);
   const tail = line.length ? line.join(", ") : "";
   return tail ? `${n} · ${tail}` : n;
 }
@@ -378,8 +409,12 @@ export function formatPostalAddressDisplay(context: CustomerContext): string {
 
 export function formatOnboardingVestigingPostalLine(v: OnboardingVestiging): string {
   const addr = onboardingVestigingAddressCapture(v);
-  const line1 = [`${addr.addressStreet?.trim()}`, `${addr.addressHouseNumber?.trim()}`].filter(Boolean).join(" ");
-  const line2 = [`${addr.addressPostalCode?.trim()}`, `${addr.addressCity?.trim()}`].filter(Boolean).join(" ");
+  const line1 = [`${addr.addressStreet?.trim()}`, `${addr.addressHouseNumber?.trim()}`]
+    .filter(Boolean)
+    .join(" ");
+  const line2 = [`${addr.addressPostalCode?.trim()}`, `${addr.addressCity?.trim()}`]
+    .filter(Boolean)
+    .join(" ");
   const country = `${addr.country?.trim()}`;
   const parts = [line1, line2, country].filter(Boolean);
   return parts.join(", ") || "—";
@@ -528,6 +563,7 @@ export function legalRepresentativePersonValue(
     title: context.representativeTitle,
     telephone: context.legalRepresentativePhone,
     email: context.representativeEmail,
+    language: coercePersonPreferredLanguage(context.representativeLanguage),
   };
 }
 
@@ -681,6 +717,10 @@ function formatPersonCaptureBlock(person: IdentificatiePersonCaptureState): stri
       : null,
     summaryLine("E-mail", person.email),
     summaryLine("Telefoon", person.telephone),
+    summaryLine(
+      "Taal correspondentie",
+      onboardingPersonLanguageLabel(coercePersonPreferredLanguage(person.language)),
+    ),
   ]);
 }
 
@@ -692,6 +732,10 @@ function formatPersonIdentityLines(person: IdentificatiePersonCaptureState): str
       : null,
     summaryLine("E-mail", person.email),
     summaryLine("Telefoon", person.telephone),
+    summaryLine(
+      "Taal correspondentie",
+      onboardingPersonLanguageLabel(coercePersonPreferredLanguage(person.language)),
+    ),
   ]);
 }
 
@@ -757,14 +801,14 @@ export function buildFullOnboardingPackageEntityRecords(
     id: "certification-legal-entity",
     title: "Certificatie en juridische entiteit",
     summary: composeEntitySummary([
-      summaryLine(
-        "Maatschappelijke zetel volstaat juridisch voor certificatie",
-        certEntityYes,
-      ),
+      summaryLine("Maatschappelijke zetel volstaat juridisch voor certificatie", certEntityYes),
     ]),
   });
 
-  if (context.headOfficeIsCertificationLegalEntity === "no" && context.onboardingVestigingen.length > 0) {
+  if (
+    context.headOfficeIsCertificationLegalEntity === "no" &&
+    context.onboardingVestigingen.length > 0
+  ) {
     context.onboardingVestigingen.forEach((ve, index) => {
       records.push({
         id: `vestiging-${ve.id}`,
@@ -815,7 +859,10 @@ export function buildFullOnboardingPackageEntityRecords(
   const factuurLines: Array<string | null> = [
     summaryLine(
       "Facturatiedrukker (per gekozen aanvraag)",
-      summaryInvoicingLegalEntityOverviewLine(context, included.map((d) => d.id)),
+      summaryInvoicingLegalEntityOverviewLine(
+        context,
+        included.map((d) => d.id),
+      ),
     ),
     summaryLine("E-mail facturatie", context.invoicingEmail),
   ];
@@ -1002,6 +1049,75 @@ export function certificationSecondaryPersonFormValue(
   };
 }
 
+export function isOnboardingPersonCaptureSchemaValid(
+  person: IdentificatiePersonCaptureState,
+): boolean {
+  return (
+    isPersonSubformCompleteForOnboarding(person) &&
+    identificatiePersonCaptureSchema.safeParse(personSubformValueToCapture(person)).success
+  );
+}
+
+function legalRepresentativePresetSlotsFilled(context: CustomerContext): boolean {
+  return (
+    representativePresetSelectionComplete(
+      context.representativeTitlePreset,
+      context.representativeTitle,
+      REPRESENTATIVE_TITLE_PRESETS,
+    ) &&
+    representativePresetSelectionComplete(
+      context.representativeRolePreset,
+      context.representativeRole,
+      REPRESENTATIVE_ROLE_PRESETS,
+    )
+  );
+}
+
+function registrantPresetSlotsFilled(context: CustomerContext): boolean {
+  return (
+    representativePresetSelectionComplete(
+      context.registrantTitlePreset,
+      context.registrantTitle,
+      REPRESENTATIVE_TITLE_PRESETS,
+    ) &&
+    representativePresetSelectionComplete(
+      context.registrantRolePreset,
+      context.registrantRole,
+      REPRESENTATIVE_ROLE_PRESETS,
+    )
+  );
+}
+
+function certificationContactPresetSlotsFilled(context: CustomerContext): boolean {
+  return (
+    representativePresetSelectionComplete(
+      context.certificationContactTitlePreset,
+      context.certificationContactTitle,
+      REPRESENTATIVE_TITLE_PRESETS,
+    ) &&
+    representativePresetSelectionComplete(
+      context.certificationContactRolePreset,
+      context.certificationContactRole,
+      REPRESENTATIVE_ROLE_PRESETS,
+    )
+  );
+}
+
+function certificationSecondaryPresetSlotsFilled(context: CustomerContext): boolean {
+  return (
+    representativePresetSelectionComplete(
+      context.certificationSecondaryTitlePreset,
+      context.certificationSecondaryTitle,
+      REPRESENTATIVE_TITLE_PRESETS,
+    ) &&
+    representativePresetSelectionComplete(
+      context.certificationSecondaryRolePreset,
+      context.certificationSecondaryRole,
+      REPRESENTATIVE_ROLE_PRESETS,
+    )
+  );
+}
+
 function normalizedPersonEmailKey(email: string): string {
   return email.trim().toLowerCase();
 }
@@ -1015,7 +1131,7 @@ function newPersonRegistryRowId(): string {
 }
 
 function personValidForRegistry(person: IdentificatiePersonCaptureState): boolean {
-  return identificatiePersonCaptureSchema.safeParse(personSubformValueToCapture(person)).success;
+  return isOnboardingPersonCaptureSchemaValid(person);
 }
 
 function copyPersonState(person: IdentificatiePersonCaptureState): IdentificatiePersonCaptureState {
@@ -1125,12 +1241,13 @@ export function formatOnboardingPersonRegistryOptionLabel(p: OnboardingRegistere
 }
 
 export function isLegalRepresentativePersonValid(context: CustomerContext): boolean {
-  return identificatiePersonCaptureSchema.safeParse(
-    personSubformValueToCapture(legalRepresentativePersonValue(context)),
-  ).success;
+  return (
+    isOnboardingPersonCaptureSchemaValid(legalRepresentativePersonValue(context)) &&
+    legalRepresentativePresetSlotsFilled(context)
+  );
 }
 
-/** Person + contact for the legal-representative block; title and role presets are optional. */
+/** Legal representative identities + preset aanhef + preset functie are all required once the block applies. */
 export function isLegalRepresentativeCaptureComplete(context: CustomerContext): boolean {
   return isLegalRepresentativePersonValid(context);
 }
@@ -1146,13 +1263,13 @@ export function isApplicantLegalRepresentativeChoiceComplete(context: CustomerCo
   );
 }
 
-/** When the applicant is not the legal representative, their details must be complete. */
+/** When the applicant is not the legal representative, aanhef-/functie-presets plus personeren zijn verplicht. */
 export function isRegistrantCaptureValidForContext(context: CustomerContext): boolean {
   if (context.applicantIsLegalRepresentative !== "no") return true;
-  const personOk = identificatiePersonCaptureSchema.safeParse(
-    personSubformValueToCapture(registrantPersonFormValue(context)),
-  ).success;
-  return personOk;
+  return (
+    isOnboardingPersonCaptureSchemaValid(registrantPersonFormValue(context)) &&
+    registrantPresetSlotsFilled(context)
+  );
 }
 
 function invoicingAddressCapture(context: CustomerContext) {
@@ -1222,9 +1339,7 @@ export function isOnboardingInvoicingStepValid(
   }
   if (
     context.invoicingUseContactPerson &&
-    !identificatiePersonCaptureSchema.safeParse(
-      personSubformValueToCapture(context.invoicingContactPerson),
-    ).success
+    !isOnboardingPersonCaptureSchemaValid(context.invoicingContactPerson)
   ) {
     return false;
   }
@@ -1234,19 +1349,19 @@ export function isOnboardingInvoicingStepValid(
 /** Optionele certificatie/inspectiecontacten (extras-stap). */
 export function isOnboardingOptionalContactsStepValid(context: CustomerContext): boolean {
   if (context.addCertificationContactOverride) {
-    const personOk = identificatiePersonCaptureSchema.safeParse(
-      personSubformValueToCapture(certificationContactPersonFormValue(context)),
-    ).success;
-    if (!personOk) {
+    const slotOk =
+      isOnboardingPersonCaptureSchemaValid(certificationContactPersonFormValue(context)) &&
+      certificationContactPresetSlotsFilled(context);
+    if (!slotOk) {
       return false;
     }
   }
 
   if (context.addCertificationSecondaryContact) {
-    const personOk = identificatiePersonCaptureSchema.safeParse(
-      personSubformValueToCapture(certificationSecondaryPersonFormValue(context)),
-    ).success;
-    if (!personOk) {
+    const slotOk =
+      isOnboardingPersonCaptureSchemaValid(certificationSecondaryPersonFormValue(context)) &&
+      certificationSecondaryPresetSlotsFilled(context);
+    if (!slotOk) {
       return false;
     }
   }
@@ -1261,14 +1376,51 @@ export function isOnboardingOptionalContactsStepValid(context: CustomerContext):
   return true;
 }
 
-/** Tweede certificatie-/inspectiecontact alleen na een volledig hoofdcontact certificatie/inspectie. */
+/** Accent red required-marker on factuur-contact person subform when new person is incomplete. */
+export function emphasizeInvalidMarkersInvoicingContactPerson(context: CustomerContext): boolean {
+  return (
+    context.invoicingUseContactPerson &&
+    context.invoicingContactPersonRegistryId === ONBOARDING_PERSON_NEW_ID &&
+    !isOnboardingPersonCaptureSchemaValid(context.invoicingContactPerson)
+  );
+}
+
+/** Accent incomplete required markers on primary cert contact when “nieuwe persoon” is selected. */
+export function emphasizeInvalidMarkersCertificationPrimaryPerson(
+  context: CustomerContext,
+): boolean {
+  if (!context.addCertificationContactOverride) return false;
+  if (context.certificationContactPersonRegistryId !== ONBOARDING_PERSON_NEW_ID) return false;
+  return !(
+    isOnboardingPersonCaptureSchemaValid(certificationContactPersonFormValue(context)) &&
+    certificationContactPresetSlotsFilled(context)
+  );
+}
+
+/**
+ * Same for reserve cert contact; only when prerequisites allow editing and registry slot is nieuw.
+ */
+export function emphasizeInvalidMarkersCertificationSecondaryPerson(
+  context: CustomerContext,
+): boolean {
+  if (!context.addCertificationSecondaryContact) return false;
+  if (!canEnableCertificationSecondaryContact(context)) return false;
+  if (context.certificationSecondaryPersonRegistryId !== ONBOARDING_PERSON_NEW_ID) return false;
+  return !(
+    isOnboardingPersonCaptureSchemaValid(certificationSecondaryPersonFormValue(context)) &&
+    certificationSecondaryPresetSlotsFilled(context)
+  );
+}
+
+/** Tweede certificatie-/inspectiecontact alleen na een volledig hoofdcontact certificatie/inspectie (inclusief presets). */
 export function canEnableCertificationSecondaryContact(context: CustomerContext): boolean {
   if (!context.addCertificationContactOverride) {
     return false;
   }
-  return identificatiePersonCaptureSchema.safeParse(
-    personSubformValueToCapture(certificationContactPersonFormValue(context)),
-  ).success;
+  return (
+    isOnboardingPersonCaptureSchemaValid(certificationContactPersonFormValue(context)) &&
+    certificationContactPresetSlotsFilled(context)
+  );
 }
 
 /** Shown under the second cert contact optional block when {@link canEnableCertificationSecondaryContact} is false. */
@@ -1276,7 +1428,7 @@ export function certificationSecondaryContactDisabledHint(context: CustomerConte
   if (!context.addCertificationContactOverride) {
     return "Schakel eerst ‘Contactpersoon voor certificatie en inspectie’ in.";
   }
-  return "Vul eerst de contactpersoon voor certificatie en inspectie volledig in (naam en geldig e-mailadres).";
+  return "Vul eerst het hoofdcontact volledig in (naam, titel/aanhef, functie, taal en e-mail).";
 }
 
 /** Bedrijfs-, facturatie- en optionele certificatiecontacten samen (voor samenvatting / guards). */
@@ -1352,22 +1504,23 @@ export const DEFAULT_CONTEXT: CustomerContext = {
 function mergeNestedDefaults(out: CustomerContext): CustomerContext {
   return {
     ...out,
-    certificationContact: {
+    representativeLanguage: coercePersonPreferredLanguage(out.representativeLanguage),
+    certificationContact: withCoercedPersonLanguage({
       ...DEFAULT_CONTEXT.certificationContact,
       ...out.certificationContact,
-    },
-    certificationSecondary: {
+    }),
+    certificationSecondary: withCoercedPersonLanguage({
       ...DEFAULT_CONTEXT.certificationSecondary,
       ...out.certificationSecondary,
-    },
-    invoicingContactPerson: {
+    }),
+    invoicingContactPerson: withCoercedPersonLanguage({
       ...DEFAULT_CONTEXT.invoicingContactPerson,
       ...out.invoicingContactPerson,
-    },
-    registrantPerson: {
+    }),
+    registrantPerson: withCoercedPersonLanguage({
       ...DEFAULT_CONTEXT.registrantPerson,
       ...out.registrantPerson,
-    },
+    }),
   };
 }
 
@@ -1553,7 +1706,13 @@ export function normalizeCustomerContext(
   if (out.invoicingAddressCountryCode == null) out.invoicingAddressCountryCode = "";
 
   out.onboardingRegisteredPersons = Array.isArray(out.onboardingRegisteredPersons)
-    ? out.onboardingRegisteredPersons
+    ? out.onboardingRegisteredPersons.map((row) => ({
+        ...row,
+        person: withCoercedPersonLanguage({
+          ...emptyIdentificatiePersonState(),
+          ...row.person,
+        }),
+      }))
     : DEFAULT_CONTEXT.onboardingRegisteredPersons;
 
   out.headOfficeIsCertificationLegalEntity =
@@ -1768,7 +1927,10 @@ export function buildRows(
     });
   }
 
-  const invoicingLegalEntityValue = summaryInvoicingLegalEntityOverviewLine(context, includedDraftIds);
+  const invoicingLegalEntityValue = summaryInvoicingLegalEntityOverviewLine(
+    context,
+    includedDraftIds,
+  );
   rows.push({
     id: "invoicing-legal-entity",
     label: "Facturatie (rechtspersoon)",

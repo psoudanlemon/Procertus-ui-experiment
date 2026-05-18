@@ -1,7 +1,6 @@
 import {
   Field,
   FieldContent,
-  FieldDescription,
   FieldLabel,
   Input,
   Select,
@@ -10,10 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@procertus-ui/ui";
-import type {
-  CustomerContext,
-  IdentificatiePersonCaptureState,
-} from "./onboarding-types";
+import type { CustomerContext, IdentificatiePersonCaptureState } from "./onboarding-types";
+import { coercePersonPreferredLanguage } from "@procertus-ui/domain-certification";
 import {
   certificationContactPersonFormValue,
   certificationSecondaryPersonFormValue,
@@ -23,10 +20,12 @@ import {
 import {
   IdentificatiePersonRegistrySummary,
   IdentificatiePersonSubform,
+  RequiredFieldSuffix,
 } from "./identificatie-subforms";
 import {
   REPRESENTATIVE_ROLE_PRESETS,
   REPRESENTATIVE_TITLE_PRESETS,
+  representativePresetSelectionComplete,
   roleLabelForPresetId,
   titleLabelForPresetId,
 } from "./lib/registrationPersonOptions";
@@ -35,7 +34,6 @@ import {
 export type IdentificatiePersonTitleRoleCopy = {
   titleLabel: string;
   roleLabel: string;
-  emailHint: string;
   /** Optional footer text under the person grid (full width). */
   formDescription?: string;
 };
@@ -54,6 +52,7 @@ export function IdentificatiePersonTitleRoleCapture({
   patchContext,
   registryPersonSelected = false,
   disabled = false,
+  emphasizeInvalidRequiredMarkers = false,
 }: {
   idPrefix: string;
   branch: IdentificatiePersonTitleRoleBranch;
@@ -67,6 +66,8 @@ export function IdentificatiePersonTitleRoleCapture({
   registryPersonSelected?: boolean;
   /** When true, person grid and preset controls do not accept input (e.g. pending prerequisite answers). */
   disabled?: boolean;
+  /** When this person slice is still incomplete, accent invalid required markers (see person subform). */
+  emphasizeInvalidRequiredMarkers?: boolean;
 }) {
   const personValue: IdentificatiePersonCaptureState = (() => {
     switch (branch) {
@@ -321,6 +322,7 @@ export function IdentificatiePersonTitleRoleCapture({
   };
 
   const onPersonChange = (v: IdentificatiePersonCaptureState) => {
+    const lang = coercePersonPreferredLanguage(v.language);
     switch (branch) {
       case "legalRepresentative":
         patchContext({
@@ -329,6 +331,7 @@ export function IdentificatiePersonTitleRoleCapture({
           representativeTitle: v.title,
           legalRepresentativePhone: v.telephone,
           representativeEmail: v.email,
+          representativeLanguage: lang,
         });
         return;
       case "registrant":
@@ -341,6 +344,7 @@ export function IdentificatiePersonTitleRoleCapture({
             title: v.title,
             telephone: v.telephone,
             email: v.email,
+            language: lang,
           },
         });
         return;
@@ -354,6 +358,7 @@ export function IdentificatiePersonTitleRoleCapture({
             title: v.title,
             telephone: v.telephone,
             email: v.email,
+            language: lang,
           },
         });
         return;
@@ -367,6 +372,7 @@ export function IdentificatiePersonTitleRoleCapture({
             title: v.title,
             telephone: v.telephone,
             email: v.email,
+            language: lang,
           },
         });
         return;
@@ -451,16 +457,34 @@ export function IdentificatiePersonTitleRoleCapture({
     }
   })();
 
+  const titlePresetMarkerErroneous =
+    emphasizeInvalidRequiredMarkers &&
+    !representativePresetSelectionComplete(
+      titlePresetValue,
+      titleOtherValue,
+      REPRESENTATIVE_TITLE_PRESETS,
+    );
+  const rolePresetMarkerErroneous =
+    emphasizeInvalidRequiredMarkers &&
+    !representativePresetSelectionComplete(
+      rolePresetValue,
+      roleOtherValue,
+      REPRESENTATIVE_ROLE_PRESETS,
+    );
+
   const titlePresetField = (
     <Field className="min-w-0 md:col-span-1">
-      <FieldLabel htmlFor={titleTriggerId}>{copy.titleLabel}</FieldLabel>
+      <FieldLabel htmlFor={titleTriggerId}>
+        {copy.titleLabel} <RequiredFieldSuffix erroneous={titlePresetMarkerErroneous} />
+      </FieldLabel>
       <FieldContent className="w-full min-w-0">
-        <Select
-          disabled={disabled}
-          value={titlePresetValue}
-          onValueChange={onTitlePresetChange}
-        >
-          <SelectTrigger id={titleTriggerId} size="sm" className="h-8 w-full min-w-0" disabled={disabled}>
+        <Select disabled={disabled} value={titlePresetValue} onValueChange={onTitlePresetChange}>
+          <SelectTrigger
+            id={titleTriggerId}
+            size="sm"
+            className="h-8 w-full min-w-0"
+            disabled={disabled}
+          >
             <SelectValue placeholder="Geen selectie" />
           </SelectTrigger>
           <SelectContent>
@@ -490,14 +514,17 @@ export function IdentificatiePersonTitleRoleCapture({
 
   const rolePresetField = (
     <Field className="min-w-0 md:col-span-1">
-      <FieldLabel htmlFor={roleTriggerId}>{copy.roleLabel}</FieldLabel>
+      <FieldLabel htmlFor={roleTriggerId}>
+        {copy.roleLabel} <RequiredFieldSuffix erroneous={rolePresetMarkerErroneous} />
+      </FieldLabel>
       <FieldContent className="w-full min-w-0">
-        <Select
-          disabled={disabled}
-          value={rolePresetValue}
-          onValueChange={onRolePresetChange}
-        >
-          <SelectTrigger id={roleTriggerId} size="sm" className="h-8 w-full min-w-0" disabled={disabled}>
+        <Select disabled={disabled} value={rolePresetValue} onValueChange={onRolePresetChange}>
+          <SelectTrigger
+            id={roleTriggerId}
+            size="sm"
+            className="h-8 w-full min-w-0"
+            disabled={disabled}
+          >
             <SelectValue placeholder="Geen selectie" />
           </SelectTrigger>
           <SelectContent>
@@ -519,7 +546,6 @@ export function IdentificatiePersonTitleRoleCapture({
               placeholder="Bv. projectleider extern"
               aria-label="Functieomschrijving"
             />
-            <FieldDescription>Verplicht: beschrijf uw rol.</FieldDescription>
           </div>
         ) : null}
       </FieldContent>
@@ -542,10 +568,10 @@ export function IdentificatiePersonTitleRoleCapture({
           onChange={onPersonChange}
           titleDisabled={titleDisabled}
           description={copy.formDescription}
-          emailHint={copy.emailHint}
           startExtra={titlePresetField}
           contactRowExtra={rolePresetField}
           disabled={disabled}
+          emphasizeInvalidRequiredMarkers={emphasizeInvalidRequiredMarkers}
         />
       )}
     </div>

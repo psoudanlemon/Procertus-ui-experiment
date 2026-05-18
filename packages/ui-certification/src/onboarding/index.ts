@@ -1,10 +1,10 @@
 export { personFormCardClassName, type PersonFormCardVariant } from "./person-form-card-variants";
-export { CatalogueExplorer, type CatalogueExplorerProps } from "../components/onboarding/catalogue-explorer";
-export { OnboardingFlowView } from "./onboarding-flow-view";
 export {
-  OnboardingCompanyPrefillSkeleton,
-  OnboardingContextField,
-} from "./onboarding-flow-view";
+  CatalogueExplorer,
+  type CatalogueExplorerProps,
+} from "../components/onboarding/catalogue-explorer";
+export { OnboardingFlowView } from "./onboarding-flow-view";
+export { OnboardingCompanyPrefillSkeleton, OnboardingContextField } from "./onboarding-flow-view";
 export type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
 export {
   OnboardingFlowProvider,
@@ -31,9 +31,7 @@ export {
 export { useOnboardingFlow } from "./use-onboarding-flow";
 export { useOnboardingCompanyLookupPrototypeEffects } from "./use-onboarding-company-lookup-prototype-effects";
 export type { UseOnboardingFlowOptions } from "./use-onboarding-flow";
-export {
-  deriveFormalOnboardingResumeStep,
-} from "./derive-formal-onboarding-resume-step";
+export { deriveFormalOnboardingResumeStep } from "./derive-formal-onboarding-resume-step";
 export {
   registrationDraftsIncludeInnovationAttest,
   registrationDraftsIncludeInnovationAttestForFlowState,
@@ -41,10 +39,7 @@ export {
   registrationStepsSequenceForFlowState,
   registrationStepIndex,
 } from "./onboarding-registration-steps";
-export {
-  draftBelongsToTrajectRoot,
-  formalPackageSummaryDraftIds,
-} from "./traject-draft-belongs";
+export { draftBelongsToTrajectRoot, formalPackageSummaryDraftIds } from "./traject-draft-belongs";
 export * from "./onboarding-constants";
 export type {
   CustomerContext,
@@ -61,9 +56,7 @@ export type {
   InnovationAttestInquiryState,
   InnovationAttestMockAttachment,
 } from "./onboarding-types";
-export {
-  GUEST_INTAKE_CHANNELS,
-} from "./onboarding-types";
+export { GUEST_INTAKE_CHANNELS } from "./onboarding-types";
 export {
   IdentificatiePersonTitleRoleCapture,
   type IdentificatiePersonTitleRoleBranch,
@@ -105,3 +98,7 @@ export {
   ONBOARDING_REGISTRATION_COMPLETE_STORAGE_KEY,
 } from "./lib/onboardingRegistrationCompleteSession";
 export type { OnboardingRegistrationCompletePayload } from "./lib/onboardingRegistrationCompleteSession";
+export {
+  coercePersonPreferredLanguage,
+  type PersonPreferredLanguage,
+} from "@procertus-ui/domain-certification";

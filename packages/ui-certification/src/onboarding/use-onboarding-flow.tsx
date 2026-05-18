@@ -3,7 +3,6 @@ import {
   companyFormFieldsPrefilledByMockLookup,
   companyFormFieldsResolvedThroughLookupStep,
   findVatPrototypePreset,
-  isVatIdentifierPlausible,
   VAT_PROTOTYPE_PRESETS,
   vatLookupSimulationStepsForPreset,
 } from "./lib/vatPrototypePresets";
@@ -21,13 +20,11 @@ import {
 import {
   buildRows,
   effectiveIncludedCertificationDraftIds,
-  isLegalRepresentativeCaptureComplete,
+  isApplicantLegalRepresentativeChoiceComplete,
   isOnboardingCompanyLegalEntitiesStepValid,
   isOnboardingCompanyZetelStepValid,
   isOnboardingInvoicingStepValid,
   isOnboardingOptionalContactsStepValid,
-  isApplicantLegalRepresentativeChoiceComplete,
-  isRegistrantCaptureValidForContext,
 } from "./onboarding-flow-helpers";
 import { stepCompletionStateAfterNavigation } from "./lib/onboarding-step-completion-navigation";
 import type { OnboardingStep } from "./onboarding-types";
@@ -39,13 +36,15 @@ import type { StepLayoutStep } from "@procertus-ui/ui";
 import { useCallback, useMemo, type ReactNode } from "react";
 import { flushSync } from "react-dom";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
-import { buildOnboardingStepperSteps } from "./onboarding-stepper-model";
+import {
+  buildOnboardingStepperSteps,
+  isOnboardingRegistrationBodyCompleteForFlow,
+} from "./onboarding-stepper-model";
 import {
   registrationStepIndex as registrationStepOrdinalInSequence,
   registrationStepsSequence,
 } from "./onboarding-registration-steps";
 import { useOnboardingFlowContext } from "./onboarding-flow-provider";
-import { isRegistrationIdentifierValidForOrigin } from "./lib/registration-identifier-for-origin";
 import { isInnovationAttestCaptureComplete } from "./onboarding-innovation-attest";
 
 export type UseOnboardingFlowOptions = {
@@ -162,14 +161,12 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   const hasDrafts = drafts.length > 0;
   const certificationInquiryDraftIds = effectiveSummaryIncludedDraftIds;
   const legalRepChoiceOk = isApplicantLegalRepresentativeChoiceComplete(context);
-  const registrationBodyComplete =
-    isRegistrantCaptureValidForContext(context) &&
-    isLegalRepresentativeCaptureComplete(context) &&
-    (requestOrigin
-      ? isRegistrationIdentifierValidForOrigin(context.vatNumber ?? "", requestOrigin)
-      : isVatIdentifierPlausible(context.vatNumber ?? ""));
-  const registrationStepOk =
-    legalRepChoiceOk && (registrationBodyComplete || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION);
+  const registrationBodyComplete = isOnboardingRegistrationBodyCompleteForFlow(
+    requestOrigin,
+    context,
+  );
+  /** Registration step always requires complete legal rep (+ registrant when applicable) and VAT id; prototype relax does not bypass this. */
+  const registrationStepOk = legalRepChoiceOk && registrationBodyComplete;
   const companyZetelOk =
     isOnboardingCompanyZetelStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   const companyLegalEntitiesOk = isOnboardingCompanyLegalEntitiesStepValid(
@@ -196,13 +193,7 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
         certificationInquiryDraftIds,
         innovationAttestInquiry,
       }),
-    [
-      certificationInquiryDraftIds,
-      context,
-      drafts,
-      innovationAttestInquiry,
-      requestOrigin,
-    ],
+    [certificationInquiryDraftIds, context, drafts, innovationAttestInquiry, requestOrigin],
   );
 
   const goToOnboardingStep = useCallback(
@@ -216,6 +207,15 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
       const toIdx = seq.indexOf(nextStep);
       /** Next step in the canonical sequence — allowed even if availability still depends on flags set by this navigation (e.g. innovation attest → certificatie). */
       const isSequentialForward = fromIdx >= 0 && toIdx === fromIdx + 1;
+
+      if (
+        activeStep === "customer" &&
+        nextStep === "company" &&
+        (!isApplicantLegalRepresentativeChoiceComplete(context) ||
+          !isOnboardingRegistrationBodyCompleteForFlow(flowState.requestOrigin, context))
+      ) {
+        return;
+      }
 
       const stepperModel = buildOnboardingStepperSteps({
         drafts: flowState.drafts,
@@ -353,31 +353,31 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
                       onClick: () => goNextFrom("extras"),
                       disabled: !extrasStepOk,
                     }
-                : activeStep === "summary"
-                  ? {
-                      label: "Indienen",
-                      onClick: () => {
-                        const certificationStoreRaw =
-                          typeof localStorage !== "undefined"
-                            ? localStorage.getItem(ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY)
-                            : null;
-                        writeOnboardingRegistrationCompletePayload({
-                          representativeEmail: context.representativeEmail.trim(),
-                          organizationName: context.organizationName.trim(),
-                          includedInquiryCount: effectiveSummaryIncludedDraftIds.length,
-                          flowStateSnapshot: flowState,
-                          certificationStoreRaw,
-                        });
-                        setRegistrationProgress(0);
-                        setRegistrationStepIndex(-1);
-                        setRegistrationSubmitOpen(true);
-                      },
-                      disabled:
-                        !hasDrafts ||
-                        effectiveSummaryIncludedDraftIds.length === 0 ||
-                        registrationSubmitOpen,
-                    }
-                  : { label: "Doorgaan", onClick: () => {}, disabled: true };
+                  : activeStep === "summary"
+                    ? {
+                        label: "Indienen",
+                        onClick: () => {
+                          const certificationStoreRaw =
+                            typeof localStorage !== "undefined"
+                              ? localStorage.getItem(ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY)
+                              : null;
+                          writeOnboardingRegistrationCompletePayload({
+                            representativeEmail: context.representativeEmail.trim(),
+                            organizationName: context.organizationName.trim(),
+                            includedInquiryCount: effectiveSummaryIncludedDraftIds.length,
+                            flowStateSnapshot: flowState,
+                            certificationStoreRaw,
+                          });
+                          setRegistrationProgress(0);
+                          setRegistrationStepIndex(-1);
+                          setRegistrationSubmitOpen(true);
+                        },
+                        disabled:
+                          !hasDrafts ||
+                          effectiveSummaryIncludedDraftIds.length === 0 ||
+                          registrationSubmitOpen,
+                      }
+                    : { label: "Doorgaan", onClick: () => {}, disabled: true };
 
   const viewProps: OnboardingFlowViewProps = {
     step: activeStep,

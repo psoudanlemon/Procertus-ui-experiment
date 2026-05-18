@@ -273,11 +273,10 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
             branch="registrant"
             context={context}
             patchContext={patchContext}
+            emphasizeInvalidRequiredMarkers={!isRegistrantCaptureValidForContext(context)}
             copy={{
               titleLabel: "Title",
               roleLabel: "Role",
-              emailHint:
-                "Uw werk-e-mail is verplicht. Aanhef en functie zijn optioneel. Wij gebruiken uw e-mail om u te bereiken over deze registratie en uw account.",
             }}
           />
         </section>
@@ -321,15 +320,13 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
             context={context}
             patchContext={patchContext}
             disabled={applicantLegalRepPersonFieldsLocked}
+            emphasizeInvalidRequiredMarkers={
+              context.applicantIsLegalRepresentative !== "" &&
+              !isLegalRepresentativeCaptureComplete(context)
+            }
             copy={{
               titleLabel: "Title",
               roleLabel: "Role",
-              emailHint:
-                context.applicantIsLegalRepresentative === "no"
-                  ? "Het professionele e-mailadres van de wettelijke vertegenwoordiger is verplicht; aanhef en functie zijn optioneel."
-                  : context.applicantIsLegalRepresentative === "yes"
-                    ? "Dit e-mailadres is verplicht voor uw account; aanhef en functie zijn optioneel. Wij gebruiken het voor berichten over uw aanvraag, tenzij u straks een ander contact opgeeft."
-                    : "Maak hierboven eerst een keuze; daarna worden deze velden actief.",
             }}
           />
         </fieldset>

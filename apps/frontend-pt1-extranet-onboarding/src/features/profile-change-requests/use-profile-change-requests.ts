@@ -14,7 +14,11 @@ import {
   subscribeProfileChangeRequestStore,
   writeProfileChangeRequestStore,
 } from "./storage";
-import type { ProfileChangeNoteAuthor, ProfileChangeRequest, ProfileChangeRequestStatus } from "./types";
+import type {
+  ProfileChangeNoteAuthor,
+  ProfileChangeRequest,
+  ProfileChangeRequestStatus,
+} from "./types";
 
 export type CreateProfileChangeRequestInput = Omit<
   ProfileChangeRequest,
@@ -136,11 +140,14 @@ export function useProfileChangeRequests() {
           representedOrganizationId: deps.representedOrganizationId,
         });
       } else if (req.kind === "organization" && deps.kind === "organization") {
-        applyOrganizationProfileChange(req.proposed as import("./types").OrganizationProfileChangePayload, {
-          organizationId: deps.organizationId,
-          patchProfile: deps.patchProfile,
-          setOrgDemoAddressOverride: deps.setOrgDemoAddressOverride,
-        });
+        applyOrganizationProfileChange(
+          req.proposed as import("./types").OrganizationProfileChangePayload,
+          {
+            organizationId: deps.organizationId,
+            patchProfile: deps.patchProfile,
+            setOrgDemoAddressOverride: deps.setOrgDemoAddressOverride,
+          },
+        );
       } else {
         return;
       }

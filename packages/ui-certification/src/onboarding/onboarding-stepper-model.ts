@@ -18,7 +18,10 @@ import {
   isRegistrantCaptureValidForContext,
 } from "./onboarding-flow-helpers";
 import { isInnovationAttestInquiryResumeOk } from "./onboarding-innovation-attest";
-import { registrationDraftsIncludeInnovationAttest, registrationStepsSequence } from "./onboarding-registration-steps";
+import {
+  registrationDraftsIncludeInnovationAttest,
+  registrationStepsSequence,
+} from "./onboarding-registration-steps";
 import { isRegistrationIdentifierValidForOrigin } from "./lib/registration-identifier-for-origin";
 import { isVatIdentifierPlausible } from "./lib/vatPrototypePresets";
 import { ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION } from "./onboarding-constants";
@@ -45,29 +48,35 @@ export type DeriveOnboardingPhaseValidityInput = {
   innovationAttestInquiry: InnovationAttestInquiryState;
 };
 
-/** @param requestOrigin Flow `requestOrigin`; `""` treated as unset. */
-export function deriveOnboardingPhaseValidityForFlow(
-  input: DeriveOnboardingPhaseValidityInput,
-): OnboardingPhaseValidity & { hasCustomerContext: boolean } {
-  const {
-    requestOrigin,
-    context,
-    drafts,
-    certificationInquiryDraftIds,
-    innovationAttestInquiry,
-  } = input;
-
-  const legalRepChoiceOk = isApplicantLegalRepresentativeChoiceComplete(context);
-  const registrationBodyComplete =
+/** Legal representative (+ registrant when “Nee”), VAT plausible or valid-for-origin — not affected by prototype relax. */
+export function isOnboardingRegistrationBodyCompleteForFlow(
+  requestOrigin: OnboardingFlowState["requestOrigin"],
+  context: CustomerContext,
+): boolean {
+  return (
     isRegistrantCaptureValidForContext(context) &&
     isLegalRepresentativeCaptureComplete(context) &&
     (requestOrigin
       ? isRegistrationIdentifierValidForOrigin(context.vatNumber ?? "", requestOrigin)
-      : isVatIdentifierPlausible(context.vatNumber ?? ""));
+      : isVatIdentifierPlausible(context.vatNumber ?? ""))
+  );
+}
+
+/** @param requestOrigin Flow `requestOrigin`; `""` treated as unset. */
+export function deriveOnboardingPhaseValidityForFlow(
+  input: DeriveOnboardingPhaseValidityInput,
+): OnboardingPhaseValidity & { hasCustomerContext: boolean } {
+  const { requestOrigin, context, drafts, certificationInquiryDraftIds, innovationAttestInquiry } =
+    input;
+
+  const legalRepChoiceOk = isApplicantLegalRepresentativeChoiceComplete(context);
+  const registrationBodyComplete = isOnboardingRegistrationBodyCompleteForFlow(
+    requestOrigin,
+    context,
+  );
   const hasCustomerContext = legalRepChoiceOk && registrationBodyComplete;
-  const registrationStepOk =
-    legalRepChoiceOk &&
-    (registrationBodyComplete || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION);
+  /** Same as primary "Verder" on registratie — prototype relax does not skip person/VAT completeness. */
+  const registrationStepOk = legalRepChoiceOk && registrationBodyComplete;
   const companyZetelOk =
     isOnboardingCompanyZetelStepValid(context) || ONBOARDING_PROTOTYPE_RELAX_STEP_VALIDATION;
   /** Strict: alle aanvragen moeten gekoppeld zijn voor verder naar facturatie. */
@@ -116,13 +125,8 @@ export type BuildOnboardingStepperStepsInput = {
 export function buildOnboardingStepperSteps(
   input: BuildOnboardingStepperStepsInput,
 ): StepLayoutStep[] {
-  const {
-    drafts,
-    requestOrigin,
-    context,
-    certificationInquiryDraftIds,
-    innovationAttestInquiry,
-  } = input;
+  const { drafts, requestOrigin, context, certificationInquiryDraftIds, innovationAttestInquiry } =
+    input;
 
   const hasDrafts = drafts.length > 0;
   const legalRepChoiceOk = isApplicantLegalRepresentativeChoiceComplete(context);

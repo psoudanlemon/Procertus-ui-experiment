@@ -12,6 +12,7 @@ function onboardingSlice(ctx: Partial<CustomerContext> | null | undefined) {
     representativeTitlePreset: ctx?.representativeTitlePreset ?? "",
     representativeTitle: ctx?.representativeTitle ?? "",
     representativeEmail: ctx?.representativeEmail ?? "",
+    representativeLanguage: ctx?.representativeLanguage ?? "nl",
     representativeRolePreset: ctx?.representativeRolePreset ?? "",
     representativeRole: ctx?.representativeRole ?? "",
   };
@@ -23,7 +24,13 @@ export function buildUserProfileChangeBaseline(
   stored: StoredOnboardingContexts,
 ): UserProfileChangePayload {
   const flowCtx = stored.flowContext ?? stored.completedSnapshotContext ?? {};
-  const { id: _id, homeOrganization, representedOrganization, organizations: _orgs, ...profile } = user;
+  const {
+    id: _id,
+    homeOrganization,
+    representedOrganization,
+    organizations: _orgs,
+    ...profile
+  } = user;
   void _id;
   void _orgs;
   const form = {

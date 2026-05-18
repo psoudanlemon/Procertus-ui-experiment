@@ -13,11 +13,28 @@ import {
   cn,
 } from "@procertus-ui/ui";
 import {
+  coercePersonPreferredLanguage,
   personSubformEmailStructuralIssue,
   type IdentificatiePersonSubformValue,
 } from "@procertus-ui/domain-certification";
 import type { ReactNode } from "react";
 import { COUNTRY_SELECT_NONE } from "./onboarding-constants";
+import {
+  ONBOARDING_PERSON_LANGUAGE_OPTIONS,
+  onboardingPersonLanguageLabel,
+} from "./lib/onboardingPersonLanguage";
+
+/** Required field marker: muted until the field is invalid / incomplete (then accent). */
+export function RequiredFieldSuffix({ erroneous }: { erroneous: boolean }) {
+  return (
+    <span
+      aria-hidden
+      className={erroneous ? "text-destructive-foreground" : "text-muted-foreground"}
+    >
+      *
+    </span>
+  );
+}
 
 export type IdentificatieAddressSubformValue = {
   street: string;
@@ -99,18 +116,17 @@ export function IdentificatiePersonSubform({
   idPrefix,
   value,
   onChange,
-  emailHint,
   description,
   requireEmail = true,
   titleDisabled = false,
   startExtra,
   contactRowExtra,
   disabled = false,
+  emphasizeInvalidRequiredMarkers = false,
 }: {
   idPrefix: string;
   value: IdentificatiePersonSubformValue;
   onChange: (next: IdentificatiePersonSubformValue) => void;
-  emailHint?: string;
   description?: string;
   requireEmail?: boolean;
   /**
@@ -120,19 +136,35 @@ export function IdentificatiePersonSubform({
   titleDisabled?: boolean;
   /** Renders before voornaam (e.g. aanhef select) in the same grid row on md+. */
   startExtra?: ReactNode;
-  /** Renders before telefoon on the same row as telefoon en e-mail on md+ (e.g. rol dropdown). */
+  /** Renders after naamrij; on md+ same row as taal, telefoon en e-mail (e.g. rol vóór taal). */
   contactRowExtra?: ReactNode;
   /** When true, all inputs in this subform are non-interactive. */
   disabled?: boolean;
+  /**
+   * When true, required markers use the error accent for fields that are empty or structurally
+   * invalid (e.g. bad e-mail) while this slice is still incomplete relative to onboarding rules.
+   */
+  emphasizeInvalidRequiredMarkers?: boolean;
 }) {
   const patch = (partial: Partial<IdentificatiePersonSubformValue>) =>
     onChange({ ...value, ...partial });
+
+  const emphasize = emphasizeInvalidRequiredMarkers;
 
   const baseMdColCount = startExtra ? (titleDisabled ? 3 : 4) : titleDisabled ? 2 : 3;
   const narrowNameRowWithContactExtra = Boolean(contactRowExtra) && baseMdColCount === 2;
   const mdColCount = narrowNameRowWithContactExtra ? 3 : baseMdColCount;
   const hasNarrowLeadingColumn = Boolean(startExtra);
+  /** Role row is rol · taal · telefoon · e-mail; expand to four columns and let achternaam span two. */
+  const secondRowNeedsFourCols =
+    Boolean(contactRowExtra) && Boolean(hasNarrowLeadingColumn) && mdColCount === 3;
+  const lastNameMdSpanTwo =
+    narrowNameRowWithContactExtra ||
+    (Boolean(contactRowExtra) && Boolean(hasNarrowLeadingColumn) && mdColCount === 3);
   const gridColsClass = (() => {
+    if (secondRowNeedsFourCols) {
+      return "md:grid-cols-[0.62fr_1fr_1fr_1fr]";
+    }
     if (hasNarrowLeadingColumn && mdColCount === 4) {
       return "md:grid-cols-[0.62fr_1fr_1fr_1fr]";
     }
@@ -148,30 +180,40 @@ export function IdentificatiePersonSubform({
     return "md:grid-cols-2";
   })();
   const emailSpanClass = contactRowExtra
-    ? mdColCount === 4
-      ? "md:col-span-2"
-      : "md:col-span-1"
+    ? "md:col-span-1"
     : mdColCount === 4
-      ? "md:col-span-3"
+      ? "md:col-span-2"
       : mdColCount === 3
-        ? "md:col-span-2"
+        ? "md:col-span-3"
         : "md:col-span-1";
   const descriptionSpanClass =
     mdColCount === 4 ? "md:col-span-4" : mdColCount === 3 ? "md:col-span-3" : "md:col-span-2";
 
   const emailStructuralError = personSubformEmailStructuralIssue(value.email);
-  const emailHintId = `${idPrefix}-email-hint`;
+  const languageSelectValue = coercePersonPreferredLanguage(value.language);
   const emailStructuralErrorId = `${idPrefix}-email-structural-error`;
-  const emailDescribedBy =
-    [emailStructuralError ? emailStructuralErrorId : null, emailHint ? emailHintId : null]
-      .filter(Boolean)
-      .join(" ") || undefined;
+  const emailDescribedBy = emailStructuralError != null ? emailStructuralErrorId : undefined;
+
+  const fn = value.firstName?.trim() ?? "";
+  const ln = value.lastName?.trim() ?? "";
+  const titleTrim = value.title?.trim() ?? "";
+  const emailTrim = value.email?.trim() ?? "";
+  const requireEmailEffective = requireEmail !== false;
+
+  const firstNameErroneousMarker = emphasize && !fn.length;
+  const lastNameErroneousMarker = emphasize && !ln.length;
+  const titleErroneousMarker = !titleDisabled && emphasize && !titleTrim.length;
+  const languageErroneousMarker = emphasize && !(value.language ?? "").trim();
+  const emailErroneousMarker =
+    emailStructuralError != null || (emphasize && requireEmailEffective && emailTrim.length === 0);
 
   return (
     <div className={cn("grid gap-4", gridColsClass)}>
       {startExtra}
       <Field className="md:col-span-1">
-        <FieldLabel htmlFor={`${idPrefix}-firstName`}>Voornaam</FieldLabel>
+        <FieldLabel htmlFor={`${idPrefix}-firstName`}>
+          Voornaam <RequiredFieldSuffix erroneous={firstNameErroneousMarker} />
+        </FieldLabel>
         <FieldContent>
           <Input
             id={`${idPrefix}-firstName`}
@@ -182,8 +224,10 @@ export function IdentificatiePersonSubform({
           />
         </FieldContent>
       </Field>
-      <Field className={cn("md:col-span-1", narrowNameRowWithContactExtra && "md:col-span-2")}>
-        <FieldLabel htmlFor={`${idPrefix}-lastName`}>Achternaam</FieldLabel>
+      <Field className={cn("md:col-span-1", lastNameMdSpanTwo && "md:col-span-2")}>
+        <FieldLabel htmlFor={`${idPrefix}-lastName`}>
+          Achternaam <RequiredFieldSuffix erroneous={lastNameErroneousMarker} />
+        </FieldLabel>
         <FieldContent>
           <Input
             id={`${idPrefix}-lastName`}
@@ -196,19 +240,44 @@ export function IdentificatiePersonSubform({
       </Field>
       {titleDisabled ? null : (
         <Field className="md:col-span-1">
-          <FieldLabel htmlFor={`${idPrefix}-title`}>Titel</FieldLabel>
+          <FieldLabel htmlFor={`${idPrefix}-title`}>
+            Titel <RequiredFieldSuffix erroneous={titleErroneousMarker} />
+          </FieldLabel>
           <FieldContent>
             <Input
               id={`${idPrefix}-title`}
               value={value.title}
               disabled={disabled}
               onChange={(e) => patch({ title: e.target.value })}
-              placeholder="Bv. zaakvoerder, CEO (optioneel bij aanhef “geen”)"
+              placeholder="Bv. Zaakvoerder, hoofd financiën"
             />
           </FieldContent>
         </Field>
       )}
       {contactRowExtra}
+      <Field className="min-w-0 md:col-span-1">
+        <FieldLabel htmlFor={`${idPrefix}-language`}>
+          Taal correspondentie <RequiredFieldSuffix erroneous={languageErroneousMarker} />
+        </FieldLabel>
+        <FieldContent>
+          <Select
+            disabled={disabled}
+            value={languageSelectValue}
+            onValueChange={(code) => patch({ language: coercePersonPreferredLanguage(code) })}
+          >
+            <SelectTrigger id={`${idPrefix}-language`} className="h-8 w-full min-w-0" size="sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {ONBOARDING_PERSON_LANGUAGE_OPTIONS.map((opt) => (
+                <SelectItem key={opt.code} value={opt.code}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </FieldContent>
+      </Field>
       <Field className="md:col-span-1">
         <FieldLabel htmlFor={`${idPrefix}-telephone`}>Telefoon / GSM</FieldLabel>
         <FieldContent>
@@ -224,7 +293,8 @@ export function IdentificatiePersonSubform({
       </Field>
       <Field className={emailSpanClass} data-invalid={emailStructuralError ? true : undefined}>
         <FieldLabel htmlFor={`${idPrefix}-email`}>
-          E-mail {requireEmail ? <span className="text-destructive">*</span> : null}
+          E-mail{" "}
+          {requireEmailEffective ? <RequiredFieldSuffix erroneous={emailErroneousMarker} /> : null}
         </FieldLabel>
         <FieldContent>
           <Input
@@ -246,7 +316,6 @@ export function IdentificatiePersonSubform({
               {emailStructuralError}
             </p>
           ) : null}
-          {emailHint ? <FieldDescription id={emailHintId}>{emailHint}</FieldDescription> : null}
         </FieldContent>
       </Field>
       {description ? (
@@ -408,6 +477,7 @@ export function IdentificatiePersonRegistrySummary({
   const displayName = [honorific, nameCore].filter(Boolean).join(" ").trim() || "—";
   const email = person.email?.trim() || "—";
   const tel = person.telephone?.trim();
+  const lang = onboardingPersonLanguageLabel(coercePersonPreferredLanguage(person.language));
 
   return (
     <div className={cn("text-sm", className)}>
@@ -426,6 +496,10 @@ export function IdentificatiePersonRegistrySummary({
             <dd className="text-foreground">{tel}</dd>
           </div>
         ) : null}
+        <div className="min-w-0">
+          <dt className="text-xs text-muted-foreground">Taal correspondentie</dt>
+          <dd className="text-foreground">{lang}</dd>
+        </div>
       </dl>
     </div>
   );

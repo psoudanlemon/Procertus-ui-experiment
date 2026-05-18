@@ -16,7 +16,9 @@ export function diffStringRecords(
   before: Record<string, string>,
   after: Record<string, string>,
 ): FieldDiffRow[] {
-  const keys = [...Object.keys(before), ...Object.keys(after)].filter((k, i, arr) => arr.indexOf(k) === i);
+  const keys = [...Object.keys(before), ...Object.keys(after)].filter(
+    (k, i, arr) => arr.indexOf(k) === i,
+  );
   const rows: FieldDiffRow[] = [];
   for (const key of keys) {
     const b = before[key] ?? "";

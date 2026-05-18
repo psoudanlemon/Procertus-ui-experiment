@@ -23,6 +23,7 @@ export const PROFILE_CHANGE_FIELD_LABEL: Record<string, string> = {
   representativeTitlePreset: "Vertegenwoordiger — aanhef (preset-id)",
   representativeTitle: "Vertegenwoordiger — aanhef (tekst)",
   representativeEmail: "Vertegenwoordiger — e-mail",
+  representativeLanguage: "Vertegenwoordiger — correspondentietaal (en/fr/nl)",
   representativeRolePreset: "Vertegenwoordiger — functie (preset-id)",
   representativeRole: "Vertegenwoordiger — functie (label)",
   orgName: "Organisatienaam (sessie)",

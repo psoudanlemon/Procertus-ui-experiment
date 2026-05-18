@@ -6,6 +6,15 @@ import { z } from "zod";
 
 import { addressSchema, personSchema } from "./identificatiefiche-zod";
 
+/** Correspondence language for onboarding-registered contacts (subset of EN/FR/NL). */
+export const personPreferredLanguageSchema = z.enum(["nl", "en", "fr"]);
+export type PersonPreferredLanguage = z.infer<typeof personPreferredLanguageSchema>;
+
+export function coercePersonPreferredLanguage(value: unknown): PersonPreferredLanguage {
+  const parsed = personPreferredLanguageSchema.safeParse(value);
+  return parsed.success ? parsed.data : "nl";
+}
+
 /** Natural person as typed in UI (split naam) before merging to `Person.name`. */
 export const identificatiePersonSubformValueSchema = z.object({
   firstName: z.string(),
@@ -13,6 +22,8 @@ export const identificatiePersonSubformValueSchema = z.object({
   title: z.string(),
   telephone: z.string(),
   email: z.string(),
+  /** Default Dutch — always exactly one of English, French, or Dutch in onboarding. */
+  language: personPreferredLanguageSchema.default("nl"),
 });
 export type IdentificatiePersonSubformValue = z.infer<typeof identificatiePersonSubformValueSchema>;
 
@@ -39,6 +50,35 @@ export function personSubformEmailStructuralIssue(email: string): string | null 
 }
 
 /**
+ * Onboarding: person slice is complete only when required subform controls are filled
+ * ({@link IdentificatiePersonSubformValue.firstName}/{@link IdentificatiePersonSubformValue.lastName},
+ * titel—aangevuld of vanuit preset-sync—, geldige e‑mail; taal heeft altijd een waarde na coercie).
+ * {@link IdentificatiePersonSubformValue.telephone} is not required here.
+ */
+export function isPersonSubformCompleteForOnboarding(
+  v: IdentificatiePersonSubformValue,
+  options: {
+    /** Defaults to true when omitted. */
+    requireEmail?: boolean;
+  } = {},
+): boolean {
+  const requireEmail = options.requireEmail !== false;
+  const fn = v.firstName?.trim() ?? "";
+  const ln = v.lastName?.trim() ?? "";
+  if (!fn.length || !ln.length) return false;
+
+  if (!(v.title?.trim() ?? "").length) {
+    return false;
+  }
+
+  const em = v.email.trim();
+  if (requireEmail) {
+    return em.length > 0 && looseEmailStructuralSchema.safeParse(em).success;
+  }
+  return em.length === 0 || looseEmailStructuralSchema.safeParse(em).success;
+}
+
+/**
  * Validates person lines used on the identificatiefiche (wettelijke vertegenwoordiger,
  * PROCERTUS-contacten, …). Maps to {@link personSchema} after assigning an `id`.
  */
@@ -47,6 +87,7 @@ export const identificatiePersonCaptureSchema = z.object({
   title: z.string().optional(),
   telephone: z.string().optional(),
   email: z.string().email(),
+  language: personPreferredLanguageSchema,
 });
 export type IdentificatiePersonCapture = z.infer<typeof identificatiePersonCaptureSchema>;
 
@@ -54,10 +95,14 @@ export function personSubformValueToCapture(
   v: IdentificatiePersonSubformValue,
 ): IdentificatiePersonCapture {
   return {
-    name: [v.firstName, v.lastName].filter((x) => x.trim().length > 0).join(" ").trim(),
+    name: [v.firstName, v.lastName]
+      .filter((x) => x.trim().length > 0)
+      .join(" ")
+      .trim(),
     title: v.title.trim() || undefined,
     telephone: v.telephone.trim() || undefined,
     email: v.email.trim(),
+    language: coercePersonPreferredLanguage(v.language),
   };
 }
 
@@ -136,9 +181,7 @@ const invoicingEmailRequiredSchema = z.object({
   invoicingEmail: z.string().email(),
 });
 
-export function isOnboardingInvoicingCaptureValid(input: {
-  invoicingEmail: string;
-}): boolean {
+export function isOnboardingInvoicingCaptureValid(input: { invoicingEmail: string }): boolean {
   return invoicingEmailRequiredSchema.safeParse({ invoicingEmail: input.invoicingEmail.trim() })
     .success;
 }

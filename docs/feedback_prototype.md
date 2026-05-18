@@ -7,12 +7,12 @@
 - [x] schrappen: Prijsopgave en advies op maat
 - [ ] remove login from appbar when in traject request
 - [x] regions: skip US. Outside Europe as remainder
+- [x] person form: all fields required + add language
+- [ ] legal entities (vestigingen) toevoegen: enkel per product
 - [ ] skip legal entity step, when no product-bound certification inquries (only innovation/metrology)
 - [ ] metrologie = analoog aan innovatie-attest, met extra step: aan te leveren
 - [ ] alle niet product gebonden inquiries: enkel aan maatschappelijke zetel
 - [ ] facturatie: extra adres voor herinneringen
 - [ ] facturatie: by default aan MZ. allow to override address. Not per vestiging/product
-- [ ] legal entities (vestigingen) toevoegen: enkel per product
 - [ ] extra contacts: resp per vestiging
-- [ ] person form: all fields required + add language
 - [ ] after registration: full overview + next steps

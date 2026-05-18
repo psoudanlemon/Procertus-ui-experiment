@@ -1,5 +1,8 @@
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
-import type { IdentificatiePersonSubformValue } from "@procertus-ui/domain-certification";
+import type {
+  IdentificatiePersonSubformValue,
+  PersonPreferredLanguage,
+} from "@procertus-ui/domain-certification";
 import type { RegistrationEnrichmentHints } from "./lib/vatPrototypePresets";
 import type { OnboardingRequestOrigin } from "./onboarding-request-origin";
 
@@ -41,6 +44,11 @@ export type CustomerContext = {
   /** Effective title (from preset or free text / override) */
   representativeTitle: string;
   representativeEmail: string;
+  /**
+   * Correspondence language for the legal representative (English, French, or Dutch — default Dutch).
+   * Separate from {@link IdentificatiePersonSubformValue.language} because rep name fields live on the flat context.
+   */
+  representativeLanguage: PersonPreferredLanguage;
   /** Preset id for role; `none` = geen selectie; `other` = vrije tekst in `representativeRole`. */
   representativeRolePreset: string;
   /** Label from preset, custom text when preset is `other`, or empty when `none`. */

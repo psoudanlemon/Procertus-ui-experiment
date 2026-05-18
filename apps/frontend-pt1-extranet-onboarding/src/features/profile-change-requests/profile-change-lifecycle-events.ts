@@ -11,7 +11,9 @@ const formatWhen = (iso: string) =>
     minute: "2-digit",
   }).format(new Date(iso));
 
-export function profileChangeDetailLifecycleEvents(request: ProfileChangeRequest): CertificationRequestLifecycleEvent[] {
+export function profileChangeDetailLifecycleEvents(
+  request: ProfileChangeRequest,
+): CertificationRequestLifecycleEvent[] {
   const events: CertificationRequestLifecycleEvent[] = [
     {
       id: "submitted",
