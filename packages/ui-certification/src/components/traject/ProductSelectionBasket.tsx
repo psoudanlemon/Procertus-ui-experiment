@@ -201,12 +201,34 @@ function firstChildIsProduct(node: TreeNode): boolean {
   return node.children?.[0]?.kind === "product";
 }
 
-function describeChildCount(node: TreeNode, count: number): string {
-  if (firstChildIsProduct(node)) {
-    return count === 1 ? "1 product" : `${count} producten`;
-  }
-  return count === 1 ? "1 categorie" : `${count} categorieën`;
+/** Aantal catalogus-producten onder `root` dat voor de route in aanmerking komt en nog niet geselecteerd is. */
+function countEligibleVisibleProductsInSubtree(
+  root: TreeNode,
+  routeEntry: AvailableEntry | undefined,
+  selectedSet: ReadonlySet<string>,
+): number {
+  let count = 0;
+  const walk = (n: TreeNode) => {
+    if (n.kind === "product") {
+      if (productEligibleForCatalogEntry(n, routeEntry) && !selectedSet.has(n.id)) {
+        count++;
+      }
+      return;
+    }
+    for (const c of n.children ?? []) walk(c);
+  };
+  walk(root);
+  return count;
 }
+
+function describeFilteredProductCount(count: number): string {
+  return count === 1 ? "1 product" : `${count} producten`;
+}
+
+export type CategoryBrowseItem = {
+  node: TreeNode;
+  visibleProductCount: number;
+};
 
 type ContextValue = {
   isRoot: boolean;
@@ -215,7 +237,7 @@ type ContextValue = {
   trail: Trail;
   searchValue: string;
   setSearchValue: (next: string) => void;
-  categories: readonly TreeNode[];
+  categories: readonly CategoryBrowseItem[];
   visibleProducts: readonly VisibleProduct[];
   searchQuery: string;
   searchResultsTotal: number;
@@ -336,20 +358,37 @@ export function ProductSelectionBasketProvider({
   const isRoot = path.length === 0;
   const isSearching = searchValue.trim().length > 0;
 
-  const categories = useMemo(() => {
+  const categories = useMemo((): readonly CategoryBrowseItem[] => {
     const groups = nodes.filter((n) => n.kind === "group");
     const entry = routeAvailabilityEntry;
-    if (!entry?.productAvailabilityKey) return groups;
-    return groups.filter((g) => subtreeHasProductEligibleForCatalogEntry(g, entry));
-  }, [nodes, routeAvailabilityEntry]);
+    const routeFiltered = entry?.productAvailabilityKey
+      ? groups.filter((g) => subtreeHasProductEligibleForCatalogEntry(g, entry))
+      : groups;
 
-  const visibleProducts = useMemo<readonly VisibleProduct[]>(
-    () =>
-      collectDescendantProducts(nodes, routeAvailabilityEntry).filter(
-        (p) => !selectedSet.has(p.id),
+    const withCounts = routeFiltered.map((node) => ({
+      node,
+      visibleProductCount: countEligibleVisibleProductsInSubtree(
+        node,
+        routeAvailabilityEntry,
+        selectedSet,
       ),
-    [nodes, selectedSet, routeAvailabilityEntry],
-  );
+    }));
+
+    return withCounts
+      .filter((x) => x.visibleProductCount > 0)
+      .sort((a, b) => byLabel(a.node, b.node));
+  }, [nodes, routeAvailabilityEntry, selectedSet]);
+
+  const visibleProducts = useMemo<readonly VisibleProduct[]>(() => {
+    const visibleCategoryIds = new Set(categories.map((c) => c.node.id));
+    const browseNodes = nodes.filter((n) => {
+      if (n.kind === "product") return true;
+      return visibleCategoryIds.has(n.id);
+    });
+    return collectDescendantProducts(browseNodes, routeAvailabilityEntry).filter(
+      (p) => !selectedSet.has(p.id),
+    );
+  }, [nodes, categories, routeAvailabilityEntry, selectedSet]);
 
   const searchResults = useMemo(
     () => searchProducts(searchValue, doc.clusters, routeAvailabilityEntry),
@@ -914,25 +953,24 @@ function CategoriesGrid({
   isAtClusterLevel,
   onSelect,
 }: {
-  items: readonly TreeNode[];
+  items: readonly CategoryBrowseItem[];
   isAtClusterLevel: boolean;
   onSelect: (id: string) => void;
 }) {
   return (
     <div className="grid grid-cols-1 gap-component sm:grid-cols-2">
-      {items.map((node) => {
+      {items.map(({ node, visibleProductCount }) => {
         const icon = isAtClusterLevel
           ? (CLUSTER_ICONS[node.id] ?? Layers01Icon)
           : firstChildIsProduct(node)
             ? PackageIcon
             : Layers01Icon;
-        const childCount = node.children?.length ?? 0;
         return (
           <CategoryPicker
             key={node.id}
             label={node.label}
             icon={icon}
-            description={describeChildCount(node, childCount)}
+            description={describeFilteredProductCount(visibleProductCount)}
             onSelect={() => onSelect(node.id)}
           />
         );
