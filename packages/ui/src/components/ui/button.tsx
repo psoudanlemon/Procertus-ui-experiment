@@ -32,6 +32,9 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground hover:rounded-tr-[var(--cmd-deep)] hover:rounded-bl-[var(--cmd-deep)] hover:rounded-tl-[4px] hover:rounded-br-[4px]",
         ghost:
           "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 hover:rounded-tr-[var(--cmd-deep)] hover:rounded-bl-[var(--cmd-deep)] hover:rounded-tl-[4px] hover:rounded-br-[4px]",
+        /** Ghost control on `bg-sidebar` chrome (registry header, sidebar rail): matches menu/toggle row. */
+        ghostSidebar:
+          "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground aria-expanded:bg-sidebar-accent aria-expanded:text-sidebar-accent-foreground hover:rounded-tr-[var(--cmd-deep)] hover:rounded-bl-[var(--cmd-deep)] hover:rounded-tl-[4px] hover:rounded-br-[4px]",
         link: "!h-auto !rounded-none border-0 !px-0 font-medium normal-case tracking-normal text-accent-foreground underline-offset-4 hover:!rounded-none hover:underline hover:text-accent-foreground/80 active:!rounded-none",
       },
       size: {
@@ -85,6 +88,12 @@ const buttonVariants = cva(
           "text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground aria-expanded:bg-primary-foreground/10 aria-expanded:text-primary-foreground",
       },
       {
+        variant: "ghostSidebar",
+        inverse: true,
+        className:
+          "text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground aria-expanded:bg-primary-foreground/10 aria-expanded:text-primary-foreground",
+      },
+      {
         variant: "link",
         inverse: true,
         className: "text-primary-foreground hover:text-primary-foreground/80",
@@ -92,7 +101,7 @@ const buttonVariants = cva(
       // Icon buttons keep the corner-shift only on the primary variant.
       // For destructive/outline/secondary/ghost in any icon size, neutralize hover corners.
       {
-        variant: ["destructive", "outline", "secondary", "ghost"],
+        variant: ["destructive", "outline", "secondary", "ghost", "ghostSidebar"],
         size: ["icon", "icon-xs", "icon-sm", "icon-lg"],
         className: "hover:rounded-[8px]",
       },

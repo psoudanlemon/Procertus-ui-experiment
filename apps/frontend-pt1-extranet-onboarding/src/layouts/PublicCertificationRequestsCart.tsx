@@ -12,6 +12,9 @@ import {
   SheetScrollFadeBottom,
   SheetTitle,
   SheetTrigger,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
   useConfirm,
 } from "@procertus-ui/ui";
 import {
@@ -181,34 +184,41 @@ export function PublicCertificationRequestsCart() {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          className={cn(
-            "relative shrink-0 bg-background/80 shadow-sm backdrop-blur-sm",
-            mode === "enter" && ICON_ENTER_CLASSES,
-            mode === "leave" && ICON_LEAVE_CLASSES,
-          )}
-          aria-label={label}
-          onAnimationEnd={handleTriggerAnimationEnd}
-        >
-          <HugeiconsIcon icon={ShoppingBasket01Icon} className="size-5" aria-hidden />
-          {count > 0 ? (
-            <span
-              key={badgePulse}
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <SheetTrigger asChild>
+            <Button
+              type="button"
+              variant="secondary"
+              size="icon"
               className={cn(
-                "absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold leading-none text-primary-foreground shadow-sm",
-                badgePulse > 0 && BADGE_COUNT_CHANGE_CLASSES,
+                "relative shrink-0",
+                mode === "enter" && ICON_ENTER_CLASSES,
+                mode === "leave" && ICON_LEAVE_CLASSES,
               )}
-              aria-hidden
+              aria-label={label}
+              onAnimationEnd={handleTriggerAnimationEnd}
             >
-              {count > 99 ? "99+" : count}
-            </span>
-          ) : null}
-        </Button>
-      </SheetTrigger>
+              <HugeiconsIcon icon={ShoppingBasket01Icon} className="size-5" aria-hidden />
+              {count > 0 ? (
+                <span
+                  key={badgePulse}
+                  className={cn(
+                    "absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold leading-none text-primary-foreground shadow-sm",
+                    badgePulse > 0 && BADGE_COUNT_CHANGE_CLASSES,
+                  )}
+                  aria-hidden
+                >
+                  {count > 99 ? "99+" : count}
+                </span>
+              ) : null}
+            </Button>
+          </SheetTrigger>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" sideOffset={4}>
+          Gekozen certificaten
+        </TooltipContent>
+      </Tooltip>
       <SheetContent
         side="right"
         className="flex flex-col [--sheet-side-width:min(42rem,calc(100vw-2rem))]"

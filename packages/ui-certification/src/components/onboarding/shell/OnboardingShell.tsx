@@ -17,9 +17,9 @@ export type OnboardingShellProps = {
   pageTitle: string;
   pageDescription: string;
   onSignInClick: () => void;
-  /** Leading registry header slot (e.g. color mode). */
+  /** Start of the end toolbar (e.g. color mode) — see {@link PublicRegistryHeaderProps.leadingActions}. */
   headerLeadingActions?: React.ReactNode;
-  /** Trailing registry header slot before language (e.g. inquiry cart). */
+  /** After leading slot, before sign-in (e.g. inquiry cart). */
   headerTrailingActions?: React.ReactNode;
   /** Guest language switcher (prototype / i18n hook-up). */
   languages?: RegistryHeaderLanguageProps["languages"];
@@ -27,7 +27,7 @@ export type OnboardingShellProps = {
   onLanguageChange?: RegistryHeaderLanguageProps["onLanguageChange"];
   /** `<a href>` for the guest login control (used with SPA `onSignInClick`). */
   loginUrl?: string;
-  /** When host renders language in {@link headerLeadingActions}, set `"leading"`. */
+  /** When host embeds the guest language control in {@link headerLeadingActions}, set `"leading"`. */
   guestLanguagePlacement?: RegistryGuestLanguagePlacement;
   /** Rendered after {@link PageHeader}, before main content (e.g. session notices). */
   sessionBanner?: ReactNode;
