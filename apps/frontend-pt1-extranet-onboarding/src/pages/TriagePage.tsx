@@ -71,7 +71,6 @@ export function TriagePage() {
             title="Aanvraag meer informatie"
             description="Voor wie eerst wil afstemmen."
             bullets={[
-              "Prijsopgave en advies op maat",
               "Geen verplichting tot opstart",
               "Reactie binnen enkele werkdagen",
               "Live sessie mogelijk tijdens het invullen",

@@ -157,6 +157,7 @@ export {
   formalPackageSummaryDraftIds,
   formatOnboardingPersonRegistryOptionLabel,
   hydrateOnboardingFlowStateFromStored,
+  normalizeRequestOriginFromStored,
   ONBOARDING_CERTIFICATION_STORE_STORAGE_KEY,
   ONBOARDING_FLOW_STORAGE_KEY,
   ONBOARDING_PERSON_NEW_ID,

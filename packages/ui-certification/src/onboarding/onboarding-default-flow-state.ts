@@ -17,6 +17,7 @@ import {
   isOnboardingInvoicingStepValid,
   isOnboardingOptionalContactsStepValid,
 } from "./onboarding-flow-helpers";
+import { normalizeRequestOriginFromStored } from "./onboarding-request-origin";
 
 function coerceGuestIntakeChannel(raw: unknown): GuestIntakeChannel {
   return typeof raw === "string" && (GUEST_INTAKE_CHANNELS as readonly string[]).includes(raw)
@@ -156,6 +157,7 @@ export function hydrateOnboardingFlowStateFromStored(
   return {
     ...DEFAULT_ONBOARDING_FLOW_STATE,
     ...restStored,
+    requestOrigin: normalizeRequestOriginFromStored(restStored.requestOrigin),
     drafts: migratedDrafts,
     formalRequestPackageCommitted,
     guestIntakeChannel: coerceGuestIntakeChannel(stored.guestIntakeChannel),

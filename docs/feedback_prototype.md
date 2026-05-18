@@ -3,10 +3,10 @@
 - [x] EPD = productgebonden, voor alle producten
 - [x] expert-call: geen self-service slots te boeken
 - [x] volgorde product categories
-- [ ] Voor zoekfunctie: synoniemen, normen (ed).. PS voorziet file (statisch)
-- [ ] schrappen: Prijsopgave en advies op maat
+- [x] Voor zoekfunctie: synoniemen, normen (ed).. PS voorziet file (statisch)
+- [x] schrappen: Prijsopgave en advies op maat
 - [ ] remove login from appbar when in traject request
-- [ ] regions: skip US. Outside Europe as remainder
+- [x] regions: skip US. Outside Europe as remainder
 - [ ] skip legal entity step, when no product-bound certification inquries (only innovation/metrology)
 - [ ] metrologie = analoog aan innovatie-attest, met extra step: aan te leveren
 - [ ] alle niet product gebonden inquiries: enkel aan maatschappelijke zetel

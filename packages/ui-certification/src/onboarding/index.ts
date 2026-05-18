@@ -90,6 +90,7 @@ export {
   ONBOARDING_REQUEST_ORIGIN_OPTIONS,
   ONBOARDING_REQUEST_ORIGIN_SECONDARY_OPTIONS,
   defaultPrototypePresetIdForRequestOrigin,
+  normalizeRequestOriginFromStored,
   registrationCountryOptionsForRequestOrigin,
   vatPrototypePresetIdsForOrigin,
 } from "./onboarding-request-origin";

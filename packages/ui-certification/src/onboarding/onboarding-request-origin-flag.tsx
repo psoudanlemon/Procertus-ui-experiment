@@ -42,27 +42,6 @@ function NlFlag({ className }: { className?: string }) {
   );
 }
 
-/** Simplified US banner (stripes + union); readable at small sizes. */
-function UsFlag({ className }: { className?: string }) {
-  const stripes = 13;
-  const h = 100 / stripes;
-  return (
-    <svg viewBox="0 0 190 100" className={cn(frame, className)} aria-hidden>
-      {Array.from({ length: stripes }, (_, i) => (
-        <rect
-          key={i}
-          x="0"
-          y={(i * 100) / stripes}
-          width="190"
-          height={h + 0.01}
-          fill={i % 2 === 0 ? "#B22234" : "#FFFFFF"}
-        />
-      ))}
-      <rect x="0" y="0" width="76" height={7 * h} fill="#3C3B6E" />
-    </svg>
-  );
-}
-
 /** EU circle of stars — simplified as dots for clarity at small size. */
 function EuFlag({ className }: { className?: string }) {
   const r = 22;
@@ -98,10 +77,8 @@ export function RequestOriginFlag({
   compact?: boolean;
 }) {
   const heroBeNl = "h-6 w-9";
-  const heroUs = "h-6 w-[2.85rem]";
   const heroEu = "h-6 w-6";
   const leadBeNl = "!h-5 !w-[2.1rem]";
-  const leadUs = "!h-5 !w-[2.4rem]";
   const leadEu = "!h-5 !w-5";
 
   switch (origin) {
@@ -109,8 +86,6 @@ export function RequestOriginFlag({
       return <BeFlag className={cn(compact ? leadBeNl : heroBeNl, className)} />;
     case "nl":
       return <NlFlag className={cn(compact ? leadBeNl : heroBeNl, className)} />;
-    case "us":
-      return <UsFlag className={cn(compact ? leadUs : heroUs, className)} />;
     case "eu":
       return <EuFlag className={cn(compact ? leadEu : heroEu, className)} />;
     case "other":

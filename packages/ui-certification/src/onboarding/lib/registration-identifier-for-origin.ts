@@ -33,13 +33,6 @@ export function registrationIdentifierFieldMeta(
           "Officieel nummer van uw lidstaat, meestal het nationaal btw-nummer inclusief landcode (bijv. DE…, FR…, IT…).",
         placeholder: "DE123456789",
       };
-    case "us":
-      return {
-        label: "EIN (fiscaal nummer)",
-        description:
-          "US Employer Identification Number: negen cijfers, gebruikelijk genoteerd als 12-3456789. Een prefix zoals US EIN mag u weglaten of laten staan.",
-        placeholder: "12-3456789",
-      };
     case "other":
       return {
         label: "Btw- of ondernemingsnummer",
@@ -77,13 +70,6 @@ function isValidEuMemberVat(raw: string): boolean {
   return tail.length >= 6 && /^[A-Z0-9]+$/.test(tail);
 }
 
-function isValidUsEin(raw: string): boolean {
-  const t = raw.trim().toUpperCase();
-  const stripped = t.replace(/^US[\s.-]*EIN[\s.-]*/i, "").trim();
-  const digits = stripped.replace(/\D/g, "");
-  return digits.length === 9 && /^\d{9}$/.test(digits);
-}
-
 /**
  * Structural check for the organisation identifier before company lookup, aligned with
  * {@link registrationIdentifierFieldMeta} per {@link OnboardingRequestOrigin}.
@@ -99,8 +85,6 @@ export function isRegistrationIdentifierValidForOrigin(
       return isValidNetherlandsIdentifier(raw);
     case "eu":
       return isValidEuMemberVat(raw);
-    case "us":
-      return isValidUsEin(raw);
     case "other":
       return isVatIdentifierPlausible(raw) && normalizeLoose(raw).length >= 6;
   }
@@ -123,8 +107,6 @@ export function registrationIdentifierStructuralIssue(
       return "Gebruik acht cijfers voor het KVK-nummer, of een NL-btw-nummer (NL, negen cijfers, B en twee cijfers).";
     case "eu":
       return "Begin met een tweeletterige landcode en een geldig nationaal nummer (vaak uw btw-nummer).";
-    case "us":
-      return "Gebruik een EIN van negen cijfers, eventueel als 12-3456789.";
     case "other":
       return "Het nummer is te kort of heeft een ongeldig formaat; controleer uw registratie- of btw-nummer.";
   }

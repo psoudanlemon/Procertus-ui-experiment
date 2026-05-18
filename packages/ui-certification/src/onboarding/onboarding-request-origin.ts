@@ -1,14 +1,23 @@
 import { REGISTRATION_COUNTRY_OPTIONS } from "./lib/vatPrototypePresets";
 
-export type OnboardingRequestOrigin = "be" | "nl" | "eu" | "us" | "other";
+export type OnboardingRequestOrigin = "be" | "nl" | "eu" | "other";
 
 export const ONBOARDING_REQUEST_ORIGIN_IDS: readonly OnboardingRequestOrigin[] = [
   "be",
   "nl",
   "eu",
-  "us",
   "other",
 ] as const;
+
+/** Maps persisted legacy values into the current origin union (e.g. removed options). */
+export function normalizeRequestOriginFromStored(raw: unknown): OnboardingRequestOrigin | "" {
+  if (raw == null || raw === "") return "";
+  if (typeof raw !== "string") return "";
+  if (raw === "us") return "other";
+  return ONBOARDING_REQUEST_ORIGIN_IDS.includes(raw as OnboardingRequestOrigin)
+    ? (raw as OnboardingRequestOrigin)
+    : "";
+}
 
 export type OnboardingRequestOriginOption = {
   id: OnboardingRequestOrigin;
@@ -31,17 +40,12 @@ export const ONBOARDING_REQUEST_ORIGIN_OPTIONS: readonly OnboardingRequestOrigin
   {
     id: "eu",
     title: "Een ander Europees land",
-    description: "Binnen de Europese Unie, maar niet in België of Nederland.",
-  },
-  {
-    id: "us",
-    title: "Verenigde Staten",
-    description: "Uw organisatie is in de Verenigde Staten gevestigd.",
+    description: "Uw organisatie is gevestigd in een ander Europees land dan België of Nederland.",
   },
   {
     id: "other",
-    title: "Anders",
-    description: "Buiten de Europese Unie en de Verenigde Staten.",
+    title: "Buiten Europa",
+    description: "Uw organisatie is gevestigd buiten Europa.",
   },
 ];
 
@@ -68,8 +72,6 @@ export function defaultPrototypePresetIdForRequestOrigin(origin: OnboardingReque
       return "nl-kvk";
     case "eu":
       return "de-partial";
-    case "us":
-      return "us-international";
     case "other":
       return "fr-manual";
   }
@@ -84,8 +86,6 @@ export function vatPrototypePresetIdsForOrigin(origin: OnboardingRequestOrigin):
       return ["nl-kvk"];
     case "eu":
       return ["de-partial", "fr-manual"];
-    case "us":
-      return ["us-international"];
     case "other":
       return ["fr-manual", "us-international", "de-partial"];
   }
@@ -117,9 +117,6 @@ export function registrationCountryOptionsForRequestOrigin(
     case "eu":
       base = sortedUniqueCountries([...euWithoutBenlus, "België", "Nederland"]);
       break;
-    case "us":
-      base = [US_LABEL];
-      break;
     case "other":
       base = REGISTRATION_COUNTRY_OPTIONS;
       break;
@@ -134,10 +131,10 @@ export function registrationCountryOptionsForRequestOrigin(
 
 /** When true, organisatie‑land is fixed by de keuze in stap “Land of regio” (één land). */
 export function isFirmaCountryLockedToRequestOrigin(origin: OnboardingRequestOrigin | ""): boolean {
-  return origin === "be" || origin === "nl" || origin === "us";
+  return origin === "be" || origin === "nl";
 }
 
-/** Vast land voor BE/NL/US-flows; `null` voor EU/anders (gebruiker kiest land in het formulier). */
+/** Vast land voor BE/NL-flows; `null` voor EU/buiten Europa (gebruiker kiest land in het formulier). */
 export function firmaCountryLabelLockedForOrigin(
   origin: OnboardingRequestOrigin | "",
 ): string | null {
@@ -146,15 +143,13 @@ export function firmaCountryLabelLockedForOrigin(
       return "België";
     case "nl":
       return "Nederland";
-    case "us":
-      return "Verenigde Staten";
     default:
       return null;
   }
 }
 
 /**
- * Label voor de registratie‑bronkaart (stap Bedrijf): vaste landnaam voor BE/NL/US, anders gekozen
+ * Label voor de registratie‑bronkaart (stap Bedrijf): vaste landnaam voor BE/NL, anders gekozen
  * `country` uit het adresformulier.
  */
 export function companyRegistrationSourceCountryLabel(
