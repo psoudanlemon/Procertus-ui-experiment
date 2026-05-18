@@ -148,6 +148,7 @@ function ExpertCallStoryBody({
           onCanSubmitChange={setCanSubmit}
           idPrefix={isExpertCall ? "story-expert-call" : "story-info-request"}
           alwaysShowSchedule={isExpertCall}
+          showSelfServiceScheduling
         />
       </div>
     </TrajectLayout>

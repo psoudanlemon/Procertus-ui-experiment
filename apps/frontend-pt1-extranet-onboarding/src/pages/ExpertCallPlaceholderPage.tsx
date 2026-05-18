@@ -93,6 +93,7 @@ export function ExpertCallPlaceholderPage() {
       <DensityProvider density="spacious">
         <ExpertCallBookingView
           alwaysShowSchedule
+          showSelfServiceScheduling
           idPrefix="expert-call"
           storageKey={`procertus.expert-call.${entry?.id ?? "hero"}`}
           onCanSubmitChange={setCanSubmit}

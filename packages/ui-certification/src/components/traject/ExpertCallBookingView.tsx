@@ -132,13 +132,19 @@ export type ExpertCallBookingViewProps = {
    * variant, waar de keuze voor een call al impliciet is.
    */
   alwaysShowSchedule?: boolean;
+  /**
+   * Wanneer `true` wordt de kaart met kalender en tijdslots getoond zodat de gebruiker
+   * zelf een moment kiest. Standaard `false`: alleen contactgegevens (en eventueel de
+   * checkbox om interesse in een expert call te tonen wanneer `alwaysShowSchedule` uit staat).
+   */
+  showSelfServiceScheduling?: boolean;
   /** Elke wijziging aan formulier-state wordt hier geserialiseerd doorgegeven (bv. onboarding snapshot). */
   onPersistedSnapshotChange?: (snapshot: ExpertCallBookingPersistedSnapshot) => void;
 };
 
 /**
  * Gedeelde view voor het informatieve-aanvraag / expert-call boekflow scherm:
- * highlights, kalender + tijdslots, contactgegevens. Wordt gebruikt door zowel
+ * highlights, optioneel kalender + tijdslots (`showSelfServiceScheduling`), contactgegevens. Wordt gebruikt door zowel
  * de Storybook-story als de live `/welcome/info-request` en `/welcome/expert-call`
  * routes.
  *
@@ -152,12 +158,14 @@ export function ExpertCallBookingView({
   idPrefix = "expert-call",
   storageKey,
   alwaysShowSchedule = false,
+  showSelfServiceScheduling = false,
   onPersistedSnapshotChange,
 }: ExpertCallBookingViewProps) {
   const initial = useMemo<FormState>(() => {
     const persisted = readPersistedState(storageKey);
+    const expertFlowActive = alwaysShowSchedule && showSelfServiceScheduling;
     if (persisted) {
-      return alwaysShowSchedule ? { ...persisted, wantsExpertCall: true } : persisted;
+      return expertFlowActive ? { ...persisted, wantsExpertCall: true } : persisted;
     }
     return {
       selectedDate: new Date(),
@@ -168,12 +176,12 @@ export function ExpertCallBookingView({
       jobTitle: prefill?.jobTitle ?? "",
       phone: prefill?.phone ?? "",
       company: prefill?.company ?? "",
-      wantsExpertCall: alwaysShowSchedule,
+      wantsExpertCall: expertFlowActive,
     };
     // We bewust geen prefill in deps: prefill is een nieuw object per render bij
     // parent re-renders, en de initial-snapshot mag maar één keer berekend worden.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storageKey, alwaysShowSchedule]);
+  }, [storageKey, alwaysShowSchedule, showSelfServiceScheduling]);
 
   const [state, setState] = useState<FormState>(initial);
 
@@ -190,17 +198,17 @@ export function ExpertCallBookingView({
   };
 
   const hasRequiredContact =
-    state.firstName.trim() !== "" &&
-    state.lastName.trim() !== "" &&
-    state.email.trim() !== "";
+    state.firstName.trim() !== "" && state.lastName.trim() !== "" && state.email.trim() !== "";
 
   const hasMoment = state.selectedDate != null && state.selectedSlot != null;
 
+  const canSubmit = showSelfServiceScheduling
+    ? hasRequiredContact && (!state.wantsExpertCall || hasMoment)
+    : hasRequiredContact;
+
   useEffect(() => {
-    onCanSubmitChange?.(
-      hasRequiredContact && (!state.wantsExpertCall || hasMoment),
-    );
-  }, [hasRequiredContact, state.wantsExpertCall, hasMoment, onCanSubmitChange]);
+    onCanSubmitChange?.(canSubmit);
+  }, [canSubmit, onCanSubmitChange]);
 
   const slotScrollRef = useRef<HTMLDivElement>(null);
   const [slotFadeMask, setSlotFadeMask] = useState<string | undefined>(undefined);
@@ -237,165 +245,158 @@ export function ExpertCallBookingView({
 
   const contactCard = (
     <Card>
-        <CardContent>
-          <section className="flex flex-col gap-section">
-            <div className="flex flex-col gap-micro">
-              <H3>Uw gegevens</H3>
-              <p className="text-sm text-muted-foreground">
-                Vul uw contactgegevens in zodat wij u kunnen bereiken.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 gap-section sm:grid-cols-2">
-              <Field>
-                <FieldLabel htmlFor={`${idPrefix}-firstname`}>Voornaam</FieldLabel>
-                <Input
-                  id={`${idPrefix}-firstname`}
-                  autoComplete="given-name"
-                  required
-                  aria-required="true"
-                  value={state.firstName}
-                  onChange={(e) => update({ firstName: e.target.value })}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor={`${idPrefix}-lastname`}>Achternaam</FieldLabel>
-                <Input
-                  id={`${idPrefix}-lastname`}
-                  autoComplete="family-name"
-                  required
-                  aria-required="true"
-                  value={state.lastName}
-                  onChange={(e) => update({ lastName: e.target.value })}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor={`${idPrefix}-email`}>E-mailadres</FieldLabel>
-                <Input
-                  id={`${idPrefix}-email`}
-                  type="email"
-                  autoComplete="email"
-                  required
-                  aria-required="true"
-                  value={state.email}
-                  onChange={(e) => update({ email: e.target.value })}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor={`${idPrefix}-phone`}>Telefoonnummer</FieldLabel>
-                <Input
-                  id={`${idPrefix}-phone`}
-                  type="tel"
-                  autoComplete="tel"
-                  placeholder="Optioneel"
-                  value={state.phone}
-                  onChange={(e) => update({ phone: e.target.value })}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor={`${idPrefix}-jobtitle`}>Functie</FieldLabel>
-                <Input
-                  id={`${idPrefix}-jobtitle`}
-                  autoComplete="organization-title"
-                  placeholder="Optioneel"
-                  value={state.jobTitle}
-                  onChange={(e) => update({ jobTitle: e.target.value })}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor={`${idPrefix}-company`}>Bedrijfsnaam</FieldLabel>
-                <Input
-                  id={`${idPrefix}-company`}
-                  autoComplete="organization"
-                  placeholder="Optioneel"
-                  value={state.company}
-                  onChange={(e) => update({ company: e.target.value })}
-                />
-              </Field>
-            </div>
-            {alwaysShowSchedule ? null : (
-              <Field orientation="horizontal" className="mt-component">
-                <Checkbox
-                  id={`${idPrefix}-wants-call`}
-                  checked={state.wantsExpertCall}
-                  onCheckedChange={(checked) =>
-                    update({ wantsExpertCall: checked === true })
-                  }
-                />
-                <FieldLabel
-                  htmlFor={`${idPrefix}-wants-call`}
-                  className="text-sm font-normal"
-                >
-                  Wenst u een call met een van onze experts?
-                </FieldLabel>
-              </Field>
-            )}
-          </section>
-        </CardContent>
-      </Card>
+      <CardContent>
+        <section className="flex flex-col gap-section">
+          <div className="flex flex-col gap-micro">
+            <H3>Uw gegevens</H3>
+            <p className="text-sm text-muted-foreground">
+              Vul uw contactgegevens in zodat wij u kunnen bereiken.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-section sm:grid-cols-2">
+            <Field>
+              <FieldLabel htmlFor={`${idPrefix}-firstname`}>Voornaam</FieldLabel>
+              <Input
+                id={`${idPrefix}-firstname`}
+                autoComplete="given-name"
+                required
+                aria-required="true"
+                value={state.firstName}
+                onChange={(e) => update({ firstName: e.target.value })}
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor={`${idPrefix}-lastname`}>Achternaam</FieldLabel>
+              <Input
+                id={`${idPrefix}-lastname`}
+                autoComplete="family-name"
+                required
+                aria-required="true"
+                value={state.lastName}
+                onChange={(e) => update({ lastName: e.target.value })}
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor={`${idPrefix}-email`}>E-mailadres</FieldLabel>
+              <Input
+                id={`${idPrefix}-email`}
+                type="email"
+                autoComplete="email"
+                required
+                aria-required="true"
+                value={state.email}
+                onChange={(e) => update({ email: e.target.value })}
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor={`${idPrefix}-phone`}>Telefoonnummer</FieldLabel>
+              <Input
+                id={`${idPrefix}-phone`}
+                type="tel"
+                autoComplete="tel"
+                placeholder="Optioneel"
+                value={state.phone}
+                onChange={(e) => update({ phone: e.target.value })}
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor={`${idPrefix}-jobtitle`}>Functie</FieldLabel>
+              <Input
+                id={`${idPrefix}-jobtitle`}
+                autoComplete="organization-title"
+                placeholder="Optioneel"
+                value={state.jobTitle}
+                onChange={(e) => update({ jobTitle: e.target.value })}
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor={`${idPrefix}-company`}>Bedrijfsnaam</FieldLabel>
+              <Input
+                id={`${idPrefix}-company`}
+                autoComplete="organization"
+                placeholder="Optioneel"
+                value={state.company}
+                onChange={(e) => update({ company: e.target.value })}
+              />
+            </Field>
+          </div>
+          {alwaysShowSchedule || !showSelfServiceScheduling ? null : (
+            <Field orientation="horizontal" className="mt-component">
+              <Checkbox
+                id={`${idPrefix}-wants-call`}
+                checked={state.wantsExpertCall}
+                onCheckedChange={(checked) => update({ wantsExpertCall: checked === true })}
+              />
+              <FieldLabel htmlFor={`${idPrefix}-wants-call`} className="text-sm font-normal">
+                Wenst u een call met een van onze experts?
+              </FieldLabel>
+            </Field>
+          )}
+        </section>
+      </CardContent>
+    </Card>
   );
 
   const scheduleCard = (
     <Card>
-        <CardContent>
-          <section className="flex flex-col gap-section">
-            <div className="flex flex-col gap-micro">
-              <H3>Kies een moment</H3>
-              <p className="text-sm text-muted-foreground">
-                Tijdslots zijn beschikbaar elk kwartier tussen 09:00 en 17:00.
-              </p>
-            </div>
-            <div className="flex flex-col gap-section sm:grid sm:grid-cols-[auto_1fr] sm:items-stretch sm:gap-section">
-              <Calendar
-                mode="single"
-                selected={state.selectedDate}
-                onSelect={(date) => update({ selectedDate: date })}
-                className="!w-full rounded-lg border border-border p-section [--cell-size:--spacing(9)] sm:!w-fit"
-                classNames={{
-                  week: "mt-micro flex w-full gap-micro",
-                  weekdays: "flex gap-micro",
-                }}
-              />
-              <div className="@container sm:relative">
-                <div
-                  ref={slotScrollRef}
-                  className="max-h-72 overflow-y-auto pr-micro sm:absolute sm:inset-0 sm:max-h-none"
-                  style={
-                    slotFadeMask
-                      ? { maskImage: slotFadeMask, WebkitMaskImage: slotFadeMask }
-                      : undefined
-                  }
-                >
-                  <div className="grid grid-cols-2 gap-component @xs:grid-cols-3 @sm:grid-cols-4">
-                    {TIME_SLOTS.map((slot) => {
-                      const isSelected = state.selectedSlot === slot;
-                      return (
-                        <Button
-                          key={slot}
-                          type="button"
-                          variant={isSelected ? "default" : "secondary"}
-                          onClick={() =>
-                            update({ selectedSlot: isSelected ? undefined : slot })
-                          }
-                          className="w-full cursor-pointer justify-center transition-none hover:!rounded-md"
-                          disabled={!state.selectedDate}
-                        >
-                          {slot}
-                        </Button>
-                      );
-                    })}
-                  </div>
+      <CardContent>
+        <section className="flex flex-col gap-section">
+          <div className="flex flex-col gap-micro">
+            <H3>Kies een moment</H3>
+            <p className="text-sm text-muted-foreground">
+              Tijdslots zijn beschikbaar elk kwartier tussen 09:00 en 17:00.
+            </p>
+          </div>
+          <div className="flex flex-col gap-section sm:grid sm:grid-cols-[auto_1fr] sm:items-stretch sm:gap-section">
+            <Calendar
+              mode="single"
+              selected={state.selectedDate}
+              onSelect={(date) => update({ selectedDate: date })}
+              className="!w-full rounded-lg border border-border p-section [--cell-size:--spacing(9)] sm:!w-fit"
+              classNames={{
+                week: "mt-micro flex w-full gap-micro",
+                weekdays: "flex gap-micro",
+              }}
+            />
+            <div className="@container sm:relative">
+              <div
+                ref={slotScrollRef}
+                className="max-h-72 overflow-y-auto pr-micro sm:absolute sm:inset-0 sm:max-h-none"
+                style={
+                  slotFadeMask
+                    ? { maskImage: slotFadeMask, WebkitMaskImage: slotFadeMask }
+                    : undefined
+                }
+              >
+                <div className="grid grid-cols-2 gap-component @xs:grid-cols-3 @sm:grid-cols-4">
+                  {TIME_SLOTS.map((slot) => {
+                    const isSelected = state.selectedSlot === slot;
+                    return (
+                      <Button
+                        key={slot}
+                        type="button"
+                        variant={isSelected ? "default" : "secondary"}
+                        onClick={() => update({ selectedSlot: isSelected ? undefined : slot })}
+                        className="w-full cursor-pointer justify-center transition-none hover:!rounded-md"
+                        disabled={!state.selectedDate}
+                      >
+                        {slot}
+                      </Button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
-          </section>
-        </CardContent>
-      </Card>
+          </div>
+        </section>
+      </CardContent>
+    </Card>
   );
 
   if (alwaysShowSchedule) {
     return (
       <div className="flex flex-col gap-component">
-        {scheduleCard}
+        {showSelfServiceScheduling ? scheduleCard : null}
         {contactCard}
       </div>
     );
@@ -405,7 +406,7 @@ export function ExpertCallBookingView({
     <div className="flex flex-col gap-component">
       {contactCard}
       <AnimatePresence initial={false}>
-        {state.wantsExpertCall ? (
+        {showSelfServiceScheduling && state.wantsExpertCall ? (
           <motion.div
             key="moment"
             initial={{ height: 0, opacity: 0 }}
