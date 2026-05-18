@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "d5a0923f3185",
+  "session_id": "e0903495-ccbc-4d75-89c4-6420fd3706dd",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-18T07:46:51.422176Z",
+  "branch": "main",
+  "checkpoints_count": 0,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx",
+    "packages/ui-lib/src/custom-components/BrowseCard/BrowseCard.tsx"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "f697f1724387",
+  "checkpoint_transcript_start": 24,
+  "transcript_lines_at_start": 24,
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-18T07:46:51.419946Z",
+    "agent_lines": 40,
+    "agent_removed": 20,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 40,
+    "total_lines_changed": 60,
+    "agent_percentage": 100,
+    "metric_version": 2
+  }
+}
