@@ -1,0 +1,29 @@
+@apps/frontend-pt1-extranet-onboarding/src/panels/conversation_detail_panel.tsx:133-136 sort the messages displayed in the email thread window by date of creation, showing the most recent messages first.
+
+Also ensure the container displaying the thread does not automatically scroll downward like it used to, unless automatic scrolling is required for chat messages. @packages/ui-lib/src/custom-components/Chat/PortalEmailThreadWindow.tsx:514  I don't think we need this chat list container.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/panels/conversation_detail_panel.tsx:133-136 sort the messages displayed in the email thread window by date of creation, showing the most recent messages first.
+
+Also ensure the container displaying the thread does not automatically scroll downward like it used to, unless automatic scrolling is required for chat messages. @packages/ui-lib/src/custom-components/Chat/PortalEmailThreadWindow.tsx:514  I don't think we need this chat list container.
+
+---
+
+When displaying the email body in the card list, use a max height and add a call-to-action to view the full message. Also add a visual indication, like a fade-out, to show that more content is hidden in the maxed card view.
+
+When viewing the full message, open an extra side or detail panel to display the individual message detail. This will show the entire markdown body without any extra UI surrounding it, including all attachments and metadata information like sender, time, and subject.
+
+Also add call-to-action buttons to go to the previous and next message in the thread.
+
+---
+
+When displaying the email body in the card list, use a max height and add a call-to-action to view the full message. Also add a visual indication, like a fade-out, to show that more content is hidden in the maxed card view.
+
+When viewing the full message, open an extra side or detail panel to display the individual message detail. This will show the entire markdown body without any extra UI surrounding it, including all attachments and metadata information like sender, time, and subject.
+
+Also add call-to-action buttons to go to the previous and next message in the thread.
+
+---
+
+Please commit all changes in this session or in this thread. Use your Git commit skill.

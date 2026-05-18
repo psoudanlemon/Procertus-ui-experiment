@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "d5a0923f3185",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx",
+    "packages/ui-lib/src/custom-components/BrowseCard/BrowseCard.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/d5/a0923f3185/0/metadata.json",
+      "transcript": "/d5/a0923f3185/0/full.jsonl",
+      "content_hash": "/d5/a0923f3185/0/content_hash.txt",
+      "prompt": "/d5/a0923f3185/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}
