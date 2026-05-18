@@ -1,0 +1,49 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "94cf4cd875e4",
+  "session_id": "a9a41dca-a540-457c-a63b-f729c51e6e7d",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-18T07:46:45.351929Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/panels/conversation-panel-config.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/conversation_detail_panel.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/index.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/panelRegistry.ts",
+    "packages/ui-lib/src/components/portal-chat/index.ts",
+    "packages/ui-lib/src/components/portal-chat/portal-email-thread-types.ts",
+    "packages/ui-lib/src/custom-components/Chat/PortalEmailThreadWindow.stories.tsx",
+    "packages/ui-lib/src/custom-components/Chat/PortalEmailThreadWindow.tsx"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "efc52d0c373a",
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-18T07:46:45.349885Z",
+    "agent_lines": 226,
+    "agent_removed": 38,
+    "human_added": 265,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 491,
+    "total_lines_changed": 529,
+    "agent_percentage": 49.9054820415879,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 1,
+      "user_lines_removed": 1,
+      "agent_lines_added": 578,
+      "agent_lines_removed": 58,
+      "user_added_per_file": {
+        "packages/ui-certification/src/data/procertus-categorization.json": 1
+      }
+    }
+  ]
+}
