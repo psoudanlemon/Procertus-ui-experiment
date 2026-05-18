@@ -1,0 +1,83 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "b3195b78f116",
+  "session_id": "cab33b2d-e40d-47bb-86c4-854d2c83044e",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-18T08:31:48.202009Z",
+  "branch": "main",
+  "checkpoints_count": 5,
+  "files_touched": [
+    "packages/ui-certification/src/components/traject/ProductRow.stories.tsx",
+    "packages/ui-certification/src/components/traject/ProductRow.tsx",
+    "packages/ui-certification/src/components/traject/ProductSelectionBasket.tsx",
+    "packages/ui-certification/src/data/procertus-categorization.json",
+    "packages/ui-certification/src/types.ts"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "028d8d18c146",
+  "checkpoint_transcript_start": 17,
+  "transcript_lines_at_start": 17,
+  "session_metrics": {
+    "turn_count": 18
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-18T08:31:48.19782Z",
+    "agent_lines": 157,
+    "agent_removed": 9,
+    "human_added": 1,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 158,
+    "total_lines_changed": 167,
+    "agent_percentage": 99.40119760479041,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 71,
+      "agent_lines_removed": 12
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 68,
+      "agent_lines_removed": 9
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 68,
+      "agent_lines_removed": 9
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 77,
+      "agent_lines_removed": 9,
+      "user_added_per_file": {
+        "packages/ui-certification/src/data/procertus-categorization.json": 1
+      }
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 158,
+      "agent_lines_removed": 9
+    }
+  ]
+}

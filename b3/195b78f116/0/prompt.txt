@@ -1,0 +1,71 @@
+Currently, when using the search function in the product selection basket, only the label property is being used to search.
+
+Can you point me to the code where filtering based on search queries is implemented?
+
+---
+
+Currently, when using the search function in the product selection basket, only the label property is being used to search.
+
+Can you point me to the code where filtering based on search queries is implemented?
+
+---
+
+Also, the search query itself is being visualized in the search results. Can you point me to the code where this is implemented?
+
+---
+
+Also, the search query itself is being visualized in the search results. Can you point me to the code where this is implemented?
+
+---
+
+I now want to extend the implementation to search not only on the label field but also on the productTypeStreamLabel. @packages/ui-certification/src/data/procertus-categorization.json:252 @packages/ui-certification/src/data/procertus-categorization.json:236 
+
+ of course. When matching on this other property, we should see a visual correlation between the search result and the actual search query.
+
+So the product-type stream label should also be included in the rendered and highlighted search result.
+
+---
+
+I now want to extend the implementation to search not only on the label field but also on the productTypeStreamLabel. @packages/ui-certification/src/data/procertus-categorization.json:252 @packages/ui-certification/src/data/procertus-categorization.json:236 
+
+ of course. When matching on this other property, we should see a visual correlation between the search result and the actual search query.
+
+So the product-type stream label should also be included in the rendered and highlighted search result.
+
+---
+
+Don't display this productstreamlabel in the browsed end result, only use it when matches have been found using the search query.
+
+Also make sure this stream label is displayed as an extra item, without changing the current layout of the product room.
+
+---
+
+Don't display this productstreamlabel in the browsed end result, only use it when matches have been found using the search query.
+
+Also make sure this stream label is displayed as an extra item, without changing the current layout of the product room.
+
+---
+
+Don't display the "extra per type stream" label in the end-result product row if the search query did not match this property. Only display it when the property is completely or partially matched.
+
+---
+
+Don't display the "extra per type stream" label in the end-result product row if the search query did not match this property. Only display it when the property is completely or partially matched.
+
+---
+
+Don't display the "producttypestreamlabel" in the end-result product row if the search query did not match this property. Only display it when the property is completely or partially matched.
+
+---
+
+Don't display the "producttypestreamlabel" in the end-result product row if the search query did not match this property. Only display it when the property is completely or partially matched.
+
+---
+
+Now do the same for an extra property that can be added optionally to products to allow searching by alternative fields. @packages/ui-certification/src/data/procertus-categorization.json:510 
+
+ Only display these extra search fields if they match the current query, similar to how the product type stream label is shown when matched in the product rows.
+
+ don't show these search fields in the normal product row when not currently searching, or when searching but no results are matched. 
+
+ Since this property is an array of strings, allow matching with multiple search fields. Only show the search fields that are currently matched by the current search query.
