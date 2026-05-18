@@ -1,0 +1,5 @@
+@apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx @apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-services.ts:57-59  benor, CE and SSD are all product bound. @packages/ui-certification/src/data/procertus-categorization.json:90 I have now changed it so APD is also product-related, and the user is required to list one of the possible products. In comparison to BENOR, CE, and SSD, the product catalog does not need to be tagged for EPD. EPD is just available for every product in the catalog.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx @apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-services.ts:57-59  benor, CE and SSD are all product bound. @packages/ui-certification/src/data/procertus-categorization.json:90 I have now changed it so APD is also product-related, and the user is required to list one of the possible products. In comparison to BENOR, CE, and SSD, the product catalog does not need to be tagged for EPD. EPD is just available for every product in the catalog.
