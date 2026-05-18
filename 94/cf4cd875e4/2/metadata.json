@@ -1,0 +1,62 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "94cf4cd875e4",
+  "session_id": "e0903495-ccbc-4d75-89c4-6420fd3706dd",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-18T07:46:45.4013Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/panels/conversation-panel-config.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/conversation_detail_panel.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/conversation_message_detail_panel.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/index.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/panelRegistry.ts",
+    "packages/ui-lib/src/components/portal-chat/index.ts",
+    "packages/ui-lib/src/components/portal-chat/portal-email-thread-types.ts",
+    "packages/ui-lib/src/custom-components/Chat/PortalEmailThreadWindow.tsx"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "f697f1724387",
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-18T07:46:45.398721Z",
+    "agent_lines": 332,
+    "agent_removed": 33,
+    "human_added": 49,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 381,
+    "total_lines_changed": 419,
+    "agent_percentage": 87.11217183770883,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 139,
+      "user_lines_removed": 1,
+      "agent_lines_added": 33,
+      "agent_lines_removed": 13,
+      "user_added_per_file": {
+        "apps/frontend-pt1-extranet-onboarding/src/features/conversations/conversation-portal-email-messages.ts": 29,
+        "apps/frontend-pt1-extranet-onboarding/src/panels/conversation-panel-config.ts": 3,
+        "apps/frontend-pt1-extranet-onboarding/src/panels/conversation-thread-messages-cache.ts": 27,
+        "packages/ui-lib/src/components/portal-chat/index.ts": 3,
+        "packages/ui-lib/src/components/portal-chat/portal-email-thread-types.ts": 11,
+        "packages/ui-lib/src/custom-components/Chat/PortalEmailThreadWindow.tsx": 9,
+        "packages/ui-lib/src/custom-components/Chat/portal-email-message-detail-body.tsx": 57
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 591,
+      "agent_lines_removed": 64
+    }
+  ]
+}

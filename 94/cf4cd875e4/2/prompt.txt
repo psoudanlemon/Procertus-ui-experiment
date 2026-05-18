@@ -1,0 +1,9 @@
+@apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx we list these cards with all the possible options. Above the cards, we provide a navigational menu for the same options. In the navigation menu, we add the short name and the short label, but we never repeat this short label in the cards.
+
+To maintain visual and textual coherence between the navigation and the cards, I want to repeat the short label somewhere in each card. Preferably, include a small sign or caption text in the top-right corner of the cards to display the short label.
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx we list these cards with all the possible options. Above the cards, we provide a navigational menu for the same options. In the navigation menu, we add the short name and the short label, but we never repeat this short label in the cards.
+
+To maintain visual and textual coherence between the navigation and the cards, I want to repeat the short label somewhere in each card. Preferably, include a small sign or caption text in the top-right corner of the cards to display the short label.
