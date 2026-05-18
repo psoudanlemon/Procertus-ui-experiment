@@ -1,0 +1,51 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "6057025289c1",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/customer-onboarding/CustomerOnboardingFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-service-content.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-services.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/routes/formal-request-routing.ts",
+    "packages/_certification-domain-certification/src/entities.ts",
+    "packages/ui-certification/src/certification-request/context.tsx",
+    "packages/ui-certification/src/certification-request/drafts.ts",
+    "packages/ui-certification/src/components/onboarding/flow/onboarding-flow-compositions.stories.tsx",
+    "packages/ui-certification/src/components/onboarding/index.ts",
+    "packages/ui-certification/src/components/onboarding/metrology-step/OnboardingMetrologyStep.tsx",
+    "packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx",
+    "packages/ui-certification/src/components/traject/ProductDocumentationLibrary.tsx",
+    "packages/ui-certification/src/components/traject/ProductRequestNoteField.tsx",
+    "packages/ui-certification/src/components/traject/build-validation-documents.ts",
+    "packages/ui-certification/src/data/procertus-categorization.json",
+    "packages/ui-certification/src/onboarding/derive-formal-onboarding-resume-step.ts",
+    "packages/ui-certification/src/onboarding/index.ts",
+    "packages/ui-certification/src/onboarding/lib/onboarding-step-completion-navigation.ts",
+    "packages/ui-certification/src/onboarding/onboarding-default-flow-state.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-api.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-helpers.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-flow-provider.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-flow-view-props.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-view.stories.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-flow-view.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-metrology.ts",
+    "packages/ui-certification/src/onboarding/onboarding-registration-chrome-copy.ts",
+    "packages/ui-certification/src/onboarding/onboarding-registration-steps.ts",
+    "packages/ui-certification/src/onboarding/onboarding-stepper-model.ts",
+    "packages/ui-certification/src/onboarding/onboarding-story-fixtures.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-types.ts",
+    "packages/ui-certification/src/onboarding/use-onboarding-flow.tsx",
+    "packages/ui-certification/src/types.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/60/57025289c1/0/metadata.json",
+      "transcript": "/60/57025289c1/0/full.jsonl",
+      "content_hash": "/60/57025289c1/0/content_hash.txt",
+      "prompt": "/60/57025289c1/0/prompt.txt"
+    }
+  ]
+}

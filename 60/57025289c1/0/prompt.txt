@@ -1,0 +1,31 @@
+@packages/ui-certification/src/data/procertus-categorization.json:65-73 I want to add an extra inquiry option when creating a request.
+
+When going through the WEGWIJZER to start a formal or informal request for certification inquiries. @apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx @apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-services.ts:60 
+
+ it is a non-product-bound entry called "metrology" (Metrologie in dutch) that acts just like an innovation-attest.
+
+Just like for innovation-attests, incorporate an extra subform specifically for metrology during the formal requests onboarding flow.  but of course, only include this step if the request contains a metrology inquiry.
+
+ to provide all of the information for this service, I refer you to this page on the Procertus website. @apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-service-content.ts 
+
+https://www.procertus.be/nl/diensten/metrologie/
+
+---
+
+@packages/ui-certification/src/data/procertus-categorization.json:65-73 I want to add an extra inquiry option when creating a request.
+
+When going through the WEGWIJZER to start a formal or informal request for certification inquiries. @apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx @apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-services.ts:60 
+
+ it is a non-product-bound entry called "metrology" (Metrologie in dutch) that acts just like an innovation-attest.
+
+Just like for innovation-attests, incorporate an extra subform specifically for metrology during the formal requests onboarding flow.  but of course, only include this step if the request contains a metrology inquiry.
+
+ to provide all of the information for this service, I refer you to this page on the Procertus website. @apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-service-content.ts 
+
+https://www.procertus.be/nl/diensten/metrologie/
+
+---
+
+I currently don't see innovation, attest, and metrology steps being added to the onboarding flow. This was the case before the changes about metrology. Please check what's going wrong.
+
+I want separate steps to be added, but only if innovation, attest, and metrology inquiries have been added to the request.

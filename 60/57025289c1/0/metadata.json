@@ -1,0 +1,91 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "6057025289c1",
+  "session_id": "46a38750-7447-4a2c-a8c8-c3d4d13e1ded",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-18T10:52:51.401931Z",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/customer-onboarding/CustomerOnboardingFlow.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-service-content.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/features/wegwijzer/wegwijzer-services.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/routes/formal-request-routing.ts",
+    "packages/_certification-domain-certification/src/entities.ts",
+    "packages/ui-certification/src/certification-request/context.tsx",
+    "packages/ui-certification/src/certification-request/drafts.ts",
+    "packages/ui-certification/src/components/onboarding/flow/onboarding-flow-compositions.stories.tsx",
+    "packages/ui-certification/src/components/onboarding/index.ts",
+    "packages/ui-certification/src/components/onboarding/metrology-step/OnboardingMetrologyStep.tsx",
+    "packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx",
+    "packages/ui-certification/src/components/traject/ProductDocumentationLibrary.tsx",
+    "packages/ui-certification/src/components/traject/ProductRequestNoteField.tsx",
+    "packages/ui-certification/src/components/traject/build-validation-documents.ts",
+    "packages/ui-certification/src/data/procertus-categorization.json",
+    "packages/ui-certification/src/onboarding/derive-formal-onboarding-resume-step.ts",
+    "packages/ui-certification/src/onboarding/index.ts",
+    "packages/ui-certification/src/onboarding/lib/onboarding-step-completion-navigation.ts",
+    "packages/ui-certification/src/onboarding/onboarding-default-flow-state.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-api.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-helpers.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-flow-provider.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-flow-view-props.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-view.stories.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-flow-view.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-metrology.ts",
+    "packages/ui-certification/src/onboarding/onboarding-registration-chrome-copy.ts",
+    "packages/ui-certification/src/onboarding/onboarding-registration-steps.ts",
+    "packages/ui-certification/src/onboarding/onboarding-stepper-model.ts",
+    "packages/ui-certification/src/onboarding/onboarding-story-fixtures.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-types.ts",
+    "packages/ui-certification/src/onboarding/use-onboarding-flow.tsx",
+    "packages/ui-certification/src/types.ts"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "8136ba31fb92",
+  "session_metrics": {
+    "turn_count": 4,
+    "context_tokens": 185543,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-18T10:52:51.39663Z",
+    "agent_lines": 1083,
+    "agent_removed": 115,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 1083,
+    "total_lines_changed": 1198,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1046,
+      "agent_lines_removed": 30
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 2,
+      "user_lines_removed": 2,
+      "agent_lines_added": 1083,
+      "agent_lines_removed": 115,
+      "user_added_per_file": {
+        "docs/feedback_prototype.md": 2
+      }
+    }
+  ]
+}
