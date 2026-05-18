@@ -1,8 +1,8 @@
 - [x] email-thread: volgorde recentste bovenaan
 - [x] add shortname to wegwijzer cards
 - [x] EPD = productgebonden, voor alle producten
-- [ ] expert-call: geen self-service slots te boeken
-- [ ] volgorde product categories
+- [x] expert-call: geen self-service slots te boeken
+- [x] volgorde product categories
 - [ ] Voor zoekfunctie: synoniemen, normen (ed).. PS voorziet file (statisch)
 - [ ] schrappen: Prijsopgave en advies op maat
 - [ ] remove login from appbar when in traject request
