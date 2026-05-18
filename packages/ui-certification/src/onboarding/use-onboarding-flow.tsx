@@ -63,8 +63,10 @@ export type UseOnboardingFlowOptions = {
   /** Guest login route (header `loginUrl` + `onSignInClick` target). Default `/login`. */
   signInUrl?: string;
   /**
-   * Guest language chip placement. Default `"leading"` for extranet onboarding (language in
-   * {@link registryHeaderLeadingActions}). Use `"trailing"` for Storybook / legacy layouts.
+   * Guest language chip placement. Default `"trailing"` keeps order
+   * `[leadingActions][cart][login][language]` in {@link PublicRegistryHeader}.
+   * Use `"leading"` when the host embeds {@link PublicRegistryGuestLanguageDropdown} inside
+   * {@link registryHeaderLeadingActions} to avoid a duplicate chip.
    */
   guestLanguagePlacement?: OnboardingFlowViewProps["guestLanguagePlacement"];
 };
@@ -81,7 +83,7 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     registryHeaderLeadingActions,
     registryHeaderTrailingActions,
     signInUrl = "/login",
-    guestLanguagePlacement = "leading",
+    guestLanguagePlacement = "trailing",
     flowStorageKey: _flowStorageKey,
   } = options;
 

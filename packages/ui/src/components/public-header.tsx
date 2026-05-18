@@ -43,6 +43,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -116,18 +117,18 @@ export type PublicRegistryHeaderProps = {
   /** Visual variant — "default" uses sidebar tokens, "transparent" uses background. */
   variant?: "default" | "transparent";
   /**
-   * Leading app bar controls (e.g. color mode). Rendered after the logo, before nav or breadcrumbs.
+   * Toolbar controls shown at the start of the end-aligned cluster (e.g. color mode), before
+   * {@link trailingActions}, login, and guest language.
    */
   leadingActions?: React.ReactNode;
   /**
-   * Trailing cluster (e.g. inquiry cart). Guest language sits here only when
-   * {@link guestLanguagePlacement} is `"trailing"` and multiple languages are set.
+   * Slot after {@link leadingActions} (e.g. inquiry cart), before login / user menu.
    */
   trailingActions?: React.ReactNode;
   /**
    * Where to render the guest language control when `!user` and `languages.length > 1`.
    * Use `"leading"` when the host places {@link PublicRegistryGuestLanguageDropdown} inside
-   * {@link leadingActions} (e.g. next to the theme toggle). The mobile sheet still lists languages.
+   * {@link leadingActions} so it is not duplicated here. The mobile sheet still lists languages.
    * @default "trailing"
    */
   guestLanguagePlacement?: "trailing" | "leading";
@@ -179,18 +180,11 @@ export function PublicRegistryGuestLanguageDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className={cn(
-            "inline-flex gap-1 text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-            className,
-          )}
-        >
-          <span className="text-xs font-medium uppercase">
+        <Button variant="ghostSidebar" size="xs" className={cn("inline-flex gap-1", className)}>
+          <span className="font-medium uppercase tabular-nums">
             {activeLanguageObj?.code ?? languages[0]?.code}
           </span>
-          <HugeiconsIcon icon={ArrowDown01Icon} className="size-3" />
+          <HugeiconsIcon icon={ArrowDown01Icon} className="size-3 shrink-0" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align} className="w-auto">
@@ -266,15 +260,22 @@ export function PublicRegistryHeader({
     >
       <div className="flex h-16 items-center gap-component px-section">
         {hasMobileMenuContent && (
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            className="sm:hidden min-h-11 min-w-11 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-            onClick={() => setMobileMenuOpen(true)}
-          >
-            <HugeiconsIcon icon={Menu01Icon} />
-            <span className="sr-only">Menu</span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="sm:hidden min-h-11 min-w-11 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                onClick={() => setMobileMenuOpen(true)}
+              >
+                <HugeiconsIcon icon={Menu01Icon} />
+                <span className="sr-only">Menu</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={4}>
+              Menu
+            </TooltipContent>
+          </Tooltip>
         )}
 
         {logo && (
@@ -291,17 +292,6 @@ export function PublicRegistryHeader({
             {logo}
           </a>
         )}
-
-        {leadingActions ? (
-          <div
-            className={cn(
-              "flex shrink-0 items-center gap-2 border-l pl-component sm:pl-section",
-              variant === "transparent" ? "border-border" : "border-sidebar-border",
-            )}
-          >
-            {leadingActions}
-          </div>
-        ) : null}
 
         {breadcrumbs && breadcrumbs.length > 0 ? (
           <Breadcrumb className="hidden sm:flex">
@@ -362,22 +352,37 @@ export function PublicRegistryHeader({
           </div>
         )}
 
-        <div className="ml-auto flex shrink-0 items-center gap-section">
+        <div className="ml-auto flex shrink-0 items-center gap-component">
+          {leadingActions ? (
+            <div className="flex shrink-0 items-center gap-component">{leadingActions}</div>
+          ) : null}
+
+          {trailingActions ? (
+            <div className="flex shrink-0 items-center gap-component">{trailingActions}</div>
+          ) : null}
+
           {user ? (
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="relative size-11 rounded-full p-0 lg:size-9 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                >
-                  <Avatar className="size-8 after:border-0">
-                    {user.avatar && <AvatarImage src={user.avatar} alt={user.name ?? user.email} />}
-                    <AvatarFallback className="bg-background">
-                      {user.avatarFallback ?? initials}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="relative size-11 rounded-full p-0 lg:size-9 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                    >
+                      <Avatar className="size-8 after:border-0">
+                        {user.avatar && <AvatarImage src={user.avatar} alt={user.name ?? user.email} />}
+                        <AvatarFallback className="bg-background">
+                          {user.avatarFallback ?? initials}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" sideOffset={4}>
+                  Account
+                </TooltipContent>
+              </Tooltip>
               <DropdownMenuContent className="w-64" align="end" sideOffset={8}>
                 <div className="flex items-center gap-component px-component py-component">
                   <Avatar className="size-9">
@@ -430,31 +435,22 @@ export function PublicRegistryHeader({
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <div className="flex items-center gap-section">
-              <span className="hidden text-sm text-sidebar-foreground sm:inline">
-                Reeds een account?
-              </span>
-              <Button variant="secondary" size="sm" className="min-h-11 lg:min-h-0" asChild>
-                <a
-                  href={loginUrl}
-                  onClick={(e) => {
-                    if (onLogin) {
-                      e.preventDefault();
-                      onLogin();
-                    }
-                  }}
-                >
-                  <HugeiconsIcon icon={Login01Icon} className="size-4 sm:hidden" />
-                  <span className="hidden sm:inline">Log in</span>
-                  <span className="sr-only sm:hidden">Log in</span>
-                </a>
-              </Button>
-            </div>
+            <Button variant="default" size="sm" className="min-h-11 lg:min-h-0" asChild>
+              <a
+                href={loginUrl}
+                onClick={(e) => {
+                  if (onLogin) {
+                    e.preventDefault();
+                    onLogin();
+                  }
+                }}
+              >
+                <HugeiconsIcon icon={Login01Icon} className="size-4 sm:hidden" />
+                <span className="hidden sm:inline">Log in</span>
+                <span className="sr-only sm:hidden">Log in</span>
+              </a>
+            </Button>
           )}
-
-          {trailingActions ? (
-            <div className="flex shrink-0 items-center gap-2">{trailingActions}</div>
-          ) : null}
 
           {!user && guestLanguagePlacement === "trailing" && languages.length > 1 && (
             <PublicRegistryGuestLanguageDropdown
@@ -488,15 +484,22 @@ export function PublicRegistryHeader({
             <div className="flex h-full flex-col">
               <div className="flex items-center justify-between px-component py-component">
                 <span className="text-sm font-semibold">Menu</span>
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  className="min-h-11 min-w-11 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <HugeiconsIcon icon={Cancel01Icon} />
-                  <span className="sr-only">Sluiten</span>
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      className="min-h-11 min-w-11 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <HugeiconsIcon icon={Cancel01Icon} />
+                      <span className="sr-only">Sluiten</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={4}>
+                    Sluiten
+                  </TooltipContent>
+                </Tooltip>
               </div>
               <Separator className="bg-sidebar-border" />
 

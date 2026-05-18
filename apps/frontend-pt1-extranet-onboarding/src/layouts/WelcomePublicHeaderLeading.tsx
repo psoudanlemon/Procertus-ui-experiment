@@ -1,22 +1,9 @@
-import { ModeToggle, PublicRegistryGuestLanguageDropdown } from "@procertus-ui/ui";
-
-import { usePublicPrototypeLanguage } from "./PublicPrototypeLanguageContext";
+import { ModeToggle } from "@procertus-ui/ui";
 
 /**
- * Leading registry app bar: prototype language (left) + color mode — guest welcome flows.
+ * Registry header toolbar: color mode for guest welcome flows. Language is rendered by the shell
+ * header after login when using `guestLanguagePlacement: "trailing"`.
  */
 export function WelcomePublicHeaderLeading() {
-  const { languages, activeLanguage, setActiveLanguage } = usePublicPrototypeLanguage();
-
-  return (
-    <div className="flex shrink-0 items-center gap-2">
-      <PublicRegistryGuestLanguageDropdown
-        languages={languages}
-        activeLanguage={activeLanguage}
-        onLanguageChange={setActiveLanguage}
-        align="start"
-      />
-      <ModeToggle />
-    </div>
-  );
+  return <ModeToggle />;
 }

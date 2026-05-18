@@ -55,7 +55,7 @@ function PublicGuestRegistryChrome() {
           onLogin: () => navigate(PUBLIC_GUEST_LOGIN_PATH),
           leadingActions: <WelcomePublicHeaderLeading />,
           trailingActions: <PublicCertificationRequestsCart />,
-          guestLanguagePlacement: "leading",
+          guestLanguagePlacement: "trailing",
           ...registryLang,
         }}
         footer={APP_FOOTER}
