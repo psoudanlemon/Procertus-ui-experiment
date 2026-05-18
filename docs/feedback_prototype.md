@@ -1,0 +1,18 @@
+- [ ] email-thread: volgorde recentste bovenaan
+- [ ] add shortname to wegwijzer cards
+- [ ] EPD = productgebonden, voor alle producten
+- [ ] expert-call: geen self-service slots te boeken
+- [ ] volgorde product categories
+- [ ] Voor zoekfunctie: synoniemen, normen (ed).. PS voorziet file (statisch)
+- [ ] schrappen: Prijsopgave en advies op maat
+- [ ] remove login from appbar when in traject request
+- [ ] regions: skip US. Outside Europe as remainder
+- [ ] skip legal entity step, when no product-bound certification inquries (only innovation/metrology)
+- [ ] metrologie = analoog aan innovatie-attest, met extra step: aan te leveren
+- [ ] alle niet product gebonden inquiries: enkel aan maatschappelijke zetel
+- [ ] facturatie: extra adres voor herinneringen
+- [ ] facturatie: by default aan MZ. allow to override address. Not per vestiging/product
+- [ ] legal entities (vestigingen) toevoegen: enkel per product
+- [ ] extra contacts: resp per vestiging
+- [ ] person form: all fields required + add language
+- [ ] after registration: full overview + next steps
