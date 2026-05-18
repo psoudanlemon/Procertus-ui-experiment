@@ -1,0 +1,67 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "567837f13cf3",
+  "session_id": "9e9b705c-d069-4bd5-b81a-1b6b90cea292",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-18T10:36:06.370789Z",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyLegalEntitiesStep.tsx",
+    "packages/ui-certification/src/components/onboarding/invoicing-step/OnboardingInvoicingStep.tsx",
+    "packages/ui-certification/src/onboarding/derive-formal-onboarding-resume-step.ts",
+    "packages/ui-certification/src/onboarding/index.ts",
+    "packages/ui-certification/src/onboarding/lib/onboarding-step-completion-navigation.ts",
+    "packages/ui-certification/src/onboarding/lib/product-bound-certification-inquiry.ts",
+    "packages/ui-certification/src/onboarding/onboarding-default-flow-state.ts",
+    "packages/ui-certification/src/onboarding/onboarding-flow-helpers.tsx",
+    "packages/ui-certification/src/onboarding/onboarding-registration-chrome-copy.ts",
+    "packages/ui-certification/src/onboarding/onboarding-registration-steps.ts",
+    "packages/ui-certification/src/onboarding/onboarding-stepper-model.ts",
+    "packages/ui-certification/src/onboarding/use-onboarding-flow.tsx"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2",
+  "turn_id": "987c1339c5c1",
+  "session_metrics": {
+    "turn_count": 4
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-18T10:36:06.365927Z",
+    "agent_lines": 352,
+    "agent_removed": 139,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 352,
+    "total_lines_changed": 491,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 278,
+      "agent_lines_removed": 80
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 2,
+      "user_lines_removed": 2,
+      "agent_lines_added": 352,
+      "agent_lines_removed": 139,
+      "user_added_per_file": {
+        "docs/feedback_prototype.md": 2
+      }
+    }
+  ]
+}

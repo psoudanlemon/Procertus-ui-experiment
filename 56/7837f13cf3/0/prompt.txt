@@ -1,0 +1,17 @@
+@packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyLegalEntitiesStep.tsx when registering extra legal entities during onboarding for an already registered company as "maatschappelijke zetel", I want these legal entities to be added only per product that was added as an inquiry for product bound certification inquiries. 
+
+ currently, a legal entity can be added for every inquiry, but it should now be limited on a product basis. It should not be possible to register multiple legal entities for multiple inquiries for the same product. 
+
+ also, this as impact of course: we cannot add legal entities if we don't have any product-bound inquiries within the recurrent request. This step can be skipped altogether if no inquiry was added to the basket for a product-bound certification. @packages/ui-certification/src/data/procertus-categorization.json:31 @packages/ui-certification/src/data/procertus-categorization.json:41 @packages/ui-certification/src/data/procertus-categorization.json:51 @packages/ui-certification/src/data/procertus-categorization.json:80
+
+---
+
+@packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyLegalEntitiesStep.tsx when registering extra legal entities during onboarding for an already registered company as "maatschappelijke zetel", I want these legal entities to be added only per product that was added as an inquiry for product bound certification inquiries. 
+
+ currently, a legal entity can be added for every inquiry, but it should now be limited on a product basis. It should not be possible to register multiple legal entities for multiple inquiries for the same product. 
+
+ also, this as impact of course: we cannot add legal entities if we don't have any product-bound inquiries within the recurrent request. This step can be skipped altogether if no inquiry was added to the basket for a product-bound certification. @packages/ui-certification/src/data/procertus-categorization.json:31 @packages/ui-certification/src/data/procertus-categorization.json:41 @packages/ui-certification/src/data/procertus-categorization.json:51 @packages/ui-certification/src/data/procertus-categorization.json:80
+
+---
+
+Instead of using separate tables for each product, please set up one consolidated table with a new record for each product. In each record, sufficient information about the product is displayed together with the mapped or selected maatschappelijke zetel or legal entity that was just created.
