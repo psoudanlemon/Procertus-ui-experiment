@@ -1,6 +1,6 @@
-- [ ] email-thread: volgorde recentste bovenaan
-- [ ] add shortname to wegwijzer cards
-- [ ] EPD = productgebonden, voor alle producten
+- [x] email-thread: volgorde recentste bovenaan
+- [x] add shortname to wegwijzer cards
+- [x] EPD = productgebonden, voor alle producten
 - [ ] expert-call: geen self-service slots te boeken
 - [ ] volgorde product categories
 - [ ] Voor zoekfunctie: synoniemen, normen (ed).. PS voorziet file (statisch)
