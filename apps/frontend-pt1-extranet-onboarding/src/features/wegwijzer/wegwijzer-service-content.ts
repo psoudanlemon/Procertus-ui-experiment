@@ -139,6 +139,38 @@ export const WEGWIJZER_SERVICE_CONTENT: Partial<Record<AvailableEntryKey, Servic
       "PROCERTUS beoordeelt de ontvankelijkheid binnen 20 werkdagen na indiening van een volledig dossier.",
   },
 
+  metrology: {
+    what: [
+      "De PROCERTUS-divisie Metrologie ondersteunt uw laboratorium bij het beheer van meetuitrusting: periodieke of eenmalige inspectiebezoeken om apparatuur te controleren en te kalibreren, met als doel een nauwkeurig en traceerbaar beeld van prestaties.",
+      "Vanuit het 510‑CAL‑certificaat biedt PROCERTUS o.a. kalibratie in situ van proefmachines in druk, kalibratie van dynamometrische ringen, weegschalen en zeven, en verificatie van droogovens — met interventies ter plaatse in België en in het buitenland. Zie ook de openbare dienstpagina op procertus.be.",
+    ],
+    whenToApply: [
+      "U heeft een laboratorium of proefopstelling en wilt de meetketen laten controleren of kalibreren.",
+      "Uw lastenboek of contract vraagt rapportering over nauwkeurigheid en precisie van meetuitrusting.",
+      "U plant periodiek onderhoud of nieuwe investeringen en heeft een onafhankelijke metrologische tussenkomst nodig.",
+    ],
+    requirements: [
+      {
+        title: "Inventaris meetuitrusting",
+        content: "Welke toestellen, meetbereiken en normen van toepassing zijn (bv. kracht, massa, temperatuur, zeven).",
+      },
+      {
+        title: "Locatie en planning",
+        content: "Waar de interventie plaatsvindt en of het om eenmalige of recurrente controles gaat.",
+      },
+      {
+        title: "Technisch aanspreekpunt",
+        content: "Naam en bereikbaarheid van de persoon die PROCERTUS tijdens de werfbezoeken begeleidt.",
+      },
+      {
+        title: "Historiek en documenten",
+        content: "Voorgaande kalibratieverslagen of interne controleplannen indien beschikbaar.",
+      },
+    ],
+    timeline:
+      "Na intake en planning coördineren onze techniekers de interventie; doorlooptijd hangt af van locatie, apparatuursoort en scope — PROCERTUS bevestigt een planning na ontvangst van uw volledige dossier.",
+  },
+
   procertus: {
     what: "Het PROCERTUS-attest is een PROCERTUS-eigen attestering, beperkt tot een nauwkeurig afgebakende productenlijst waarvoor geen BENOR- of ATG-traject beschikbaar is. Het bevestigt dat het product voldoet aan de prestatie-eisen vastgelegd in een PROCERTUS-eigen technisch dossier.",
     whenToApply: [

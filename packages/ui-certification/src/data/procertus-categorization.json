@@ -16,6 +16,7 @@
         "product-certification",
         "atg",
         "innovation-attest",
+        "metrology",
         "procertus",
         "epd",
         "partijkeuring"
@@ -70,6 +71,15 @@
         "primaryInput": "freeform-context",
         "productRelation": "optional",
         "description": "Ad hoc attest voor een concreet project of werk; niet gekoppeld aan de productcatalogus."
+      },
+      {
+        "id": "metrology",
+        "category": "attest",
+        "shortLabel": "Metrologie",
+        "label": "Metrologie",
+        "primaryInput": "freeform-context",
+        "productRelation": "optional",
+        "description": "Controle en kalibratie van meetuitrusting (labo/proefbank); niet gekoppeld aan de productcatalogus."
       },
       {
         "id": "procertus",

@@ -214,15 +214,44 @@ export type InnovationAttestInquiryState = {
   stepCompleted: boolean;
 };
 
+/** Metrologie-intake tijdens formele registratie — parallel aan innovatie‑attest, alleen bij metrology‑inquiry in het dossier. */
+export type MetrologyCapture = {
+  /** Context laboratorium / afdeling waar de apparatuur staat. */
+  laboratoryContext: string;
+  /** Apparatuur en meettaken waar PROCERTUS voor gevraagd wordt (bv. krachtmeetketen, weegschalen, zeven). */
+  equipmentAndCalibrationNeeds: string;
+  /** Optioneel: normen of certificaat-scope (bv. 510‑CAL‑certificaat, NBN-, ISO‑verwijzingen). */
+  standardsReferenced: string;
+  /** Adres of locatie van de tussenkomst ter plaatse. */
+  interventionSiteAddress: string;
+  /** België, buitenland of specifieke regio’s; verduidelijking voor planning. */
+  interventionRegionNotes: string;
+  /** Bijvoorbeeld eenmalige of periodieke tussenkomsten; tijdsvenster als gekend. */
+  visitPreferenceNotes: string;
+  technicalContactName: string;
+  technicalContactPhone: string;
+  technicalContactEmail: string;
+  supplementaryNotes: string;
+  /** Aanvrager bevestigt dat technische inhoud voor het dossier mag worden gebruikt. */
+  requesterConsentAccepted: boolean;
+  attachments: InnovationAttestMockAttachment[];
+};
+
+export type MetrologyInquiryState = {
+  capture: MetrologyCapture;
+  stepCompleted: boolean;
+};
+
 /**
- * Canonical registration step ids (URL‑segmenten). Het innovatie‑attest wordt dynamisch uit de stepper
- * weggelaten wanneer het pakket geen innovatie‑aanvraag bevat (`registrationStepsSequence` in onboarding-registration-steps.ts).
+ * Canonical registration step ids (URL‑segmenten). Innovatie- en metrologie-stappen worden dynamisch uit de stepper
+ * gelaten zolang het pakket geen bijbehorende vrijstaande inquiries bevat (zie onboarding-registration-steps).
  */
 export const ONBOARDING_STEPS = [
   "origin",
   "customer",
   "company",
   "innovationAttest",
+  "metrologyAttest",
   "companyLegalEntities",
   "invoicing",
   "extras",
@@ -310,6 +339,8 @@ export type OnboardingFlowState = {
   companyZetelStepCompleted: boolean;
   /** Innovatie-attest inquiry: inhoud plus stap-afgerond vlag (resume/stepper zoals andere registratiestappen). */
   innovationAttestInquiry: InnovationAttestInquiryState;
+  /** Metrologie-inquiry dossiergegevens; alleen verplicht wanneer het pakket een metrology-draft bevat. */
+  metrologyInquiry: MetrologyInquiryState;
   /**
    * Na **Verder** van certificatie‑/juridische entiteit (zetel vs vestigingen per aanvraag).
    * Een keuze zoals “zetel voor alle aanvragen” kan `context` meteen valide maken zonder deze stap te verlaten.

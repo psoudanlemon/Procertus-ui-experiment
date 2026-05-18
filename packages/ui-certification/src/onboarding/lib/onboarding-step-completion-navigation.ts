@@ -11,6 +11,7 @@ export type StepCompletionNavigationFields = Pick<
   | "extrasStepCompleted"
   | "companyFieldHints"
   | "innovationAttestInquiry"
+  | "metrologyInquiry"
 >;
 
 /**
@@ -29,6 +30,7 @@ export function stepCompletionStateAfterNavigation(
 
   const companyIdx = seq.indexOf("company");
   const innovationIdx = seq.indexOf("innovationAttest");
+  const metrologyIdx = seq.indexOf("metrologyAttest");
   const legalIdx = seq.indexOf("companyLegalEntities");
   const invoicingIdx = seq.indexOf("invoicing");
   const extrasIdx = seq.indexOf("extras");
@@ -36,6 +38,7 @@ export function stepCompletionStateAfterNavigation(
 
   let companyZetelStepCompleted = prev.companyZetelStepCompleted;
   let innovationAttestStepCompleted = prev.innovationAttestInquiry.stepCompleted;
+  let metrologyStepCompleted = prev.metrologyInquiry.stepCompleted;
   let companyLegalEntitiesStepCompleted = prev.companyLegalEntitiesStepCompleted;
   let invoicingStepCompleted = prev.invoicingStepCompleted;
   let extrasStepCompleted = prev.extrasStepCompleted;
@@ -44,6 +47,7 @@ export function stepCompletionStateAfterNavigation(
   if (toIdx <= companyIdx) {
     companyZetelStepCompleted = false;
     innovationAttestStepCompleted = false;
+    metrologyStepCompleted = false;
     companyLegalEntitiesStepCompleted = false;
     invoicingStepCompleted = false;
     extrasStepCompleted = false;
@@ -51,8 +55,19 @@ export function stepCompletionStateAfterNavigation(
       companyFieldHints = {};
     }
   } else if (backward) {
+    if (metrologyIdx >= 0 && toIdx <= metrologyIdx) {
+      metrologyStepCompleted = false;
+      if (!skippedLegalEntitiesStep) {
+        companyLegalEntitiesStepCompleted = false;
+      }
+      invoicingStepCompleted = false;
+      extrasStepCompleted = false;
+    }
     if (innovationIdx >= 0 && toIdx <= innovationIdx) {
       innovationAttestStepCompleted = false;
+      if (metrologyIdx >= 0 && metrologyIdx > innovationIdx) {
+        metrologyStepCompleted = false;
+      }
       if (!skippedLegalEntitiesStep) {
         companyLegalEntitiesStepCompleted = false;
       }
@@ -73,6 +88,7 @@ export function stepCompletionStateAfterNavigation(
   if (
     activeStep === "company" &&
     (nextStep === "innovationAttest" ||
+      nextStep === "metrologyAttest" ||
       nextStep === "companyLegalEntities" ||
       nextStep === "invoicing")
   ) {
@@ -81,11 +97,21 @@ export function stepCompletionStateAfterNavigation(
       companyLegalEntitiesStepCompleted = true;
     }
   }
+  if (activeStep === "innovationAttest" && nextStep === "metrologyAttest") {
+    innovationAttestStepCompleted = true;
+  }
   if (activeStep === "innovationAttest" && nextStep === "companyLegalEntities") {
     innovationAttestStepCompleted = true;
   }
   if (activeStep === "innovationAttest" && nextStep === "invoicing" && skippedLegalEntitiesStep) {
     innovationAttestStepCompleted = true;
+    companyLegalEntitiesStepCompleted = true;
+  }
+  if (activeStep === "metrologyAttest" && nextStep === "companyLegalEntities") {
+    metrologyStepCompleted = true;
+  }
+  if (activeStep === "metrologyAttest" && nextStep === "invoicing" && skippedLegalEntitiesStep) {
+    metrologyStepCompleted = true;
     companyLegalEntitiesStepCompleted = true;
   }
   if (activeStep === "companyLegalEntities" && nextStep === "invoicing") {
@@ -107,6 +133,10 @@ export function stepCompletionStateAfterNavigation(
     innovationAttestInquiry: {
       ...prev.innovationAttestInquiry,
       stepCompleted: innovationAttestStepCompleted,
+    },
+    metrologyInquiry: {
+      ...prev.metrologyInquiry,
+      stepCompleted: metrologyStepCompleted,
     },
     companyLegalEntitiesStepCompleted,
     invoicingStepCompleted,

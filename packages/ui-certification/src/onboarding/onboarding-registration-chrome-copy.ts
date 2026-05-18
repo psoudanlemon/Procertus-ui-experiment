@@ -26,6 +26,11 @@ const DEFAULTS: Record<OnboardingStep, RegistrationStepChromeCopy> = {
     description:
       "Vul het innovatief product, de bewijsvoering en het project waarin het wordt toegepast in. Dit vervangt de productselectie uit het traject‑wizard voor deze aanvraag.",
   },
+  metrologyAttest: {
+    title: "Metrologie dossiergegevens",
+    description:
+      "Beschrijf uw laboratorium-/meetuitrusting en waar PROCERTUS moet interveniëren. Zo sluit deze intake aan op de metrologie-dienst zoals beschreven op procertus.be.",
+  },
   companyLegalEntities: {
     title: "Certificatie en juridische entiteit",
     description:

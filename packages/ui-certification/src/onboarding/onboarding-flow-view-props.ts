@@ -8,6 +8,7 @@ import type { RequestPackageRow } from "../components/request-package-review";
 import type {
   CustomerContext,
   InnovationAttestInquiryState,
+  MetrologyInquiryState,
   OnboardingFlowState,
   OnboardingStep,
 } from "./onboarding-types";
@@ -71,6 +72,8 @@ export type OnboardingFlowViewProps = {
   submissionNoteUnlocked: boolean;
   /** Innovatie-attest inhoud voor nazicht (los van `drafts`). */
   innovationAttestInquiry: InnovationAttestInquiryState;
+  /** Metrologie-intake voor nazicht wanneer het pakket een metrology-inquiry bevat. */
+  metrologyInquiry: MetrologyInquiryState;
   /** Leading public registry header slot (e.g. color mode). */
   registryHeaderLeadingActions?: ReactNode;
   /** Trailing header slot (e.g. inquiry cart). */

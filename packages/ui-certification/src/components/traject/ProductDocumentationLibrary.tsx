@@ -14,6 +14,7 @@ const CERT_RELEVANCE_LABEL: Record<string, string> = {
   procertus: "PROCERTUS-attest",
   atg: "ATG technische goedkeuring",
   "innovation-attest": "Innovation attest",
+  metrology: "Metrologie",
   epd: "EPD-milieuverklaring",
   partijkeuring: "Partijkeuring",
   "product-certification": "Productcertificatie",

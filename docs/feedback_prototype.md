@@ -10,8 +10,8 @@
 - [x] person form: all fields required + add language
 - [x] legal entities (vestigingen) toevoegen: enkel per product
 - [x] skip legal entity step, when no product-bound certification inquries (only innovation/metrology)
-- [ ] metrologie = analoog aan innovatie-attest, met extra step: aan te leveren
-- [ ] alle niet product gebonden inquiries: enkel aan maatschappelijke zetel
+- [x] metrologie = analoog aan innovatie-attest, met extra step: aan te leveren
+- [x] alle niet product gebonden inquiries: enkel aan maatschappelijke zetel
 - [ ] facturatie: extra adres voor herinneringen
 - [ ] facturatie: by default aan MZ. allow to override address. Not per vestiging/product
 - [ ] extra contacts: resp per vestiging

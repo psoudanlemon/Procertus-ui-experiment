@@ -26,6 +26,7 @@ import type {
   OnboardingFlowState,
   CustomerContext,
   InnovationAttestInquiryState,
+  MetrologyInquiryState,
 } from "./onboarding-types";
 import { vatPrototypePresetIdsForOrigin } from "./onboarding-request-origin";
 import { ONBOARDING_REGISTRATION_COMPLETE_PATH } from "./onboarding-constants";
@@ -34,6 +35,10 @@ import {
   createEmptyInnovationAttestInquiry,
   normalizeInnovationAttestInquiry,
 } from "./onboarding-innovation-attest";
+import {
+  createEmptyMetrologyInquiry,
+  normalizeMetrologyInquiry,
+} from "./onboarding-metrology";
 import type { OnboardingFlowPersistencePort } from "./persistence/onboarding-flow-persistence-port";
 import {
   createOnboardingFlowApi,
@@ -137,6 +142,15 @@ export function OnboardingFlowProvider({
           prev.innovationAttestInquiry as Partial<InnovationAttestInquiryState>,
         );
       }
+      if (
+        !prev.metrologyInquiry ||
+        typeof prev.metrologyInquiry.stepCompleted !== "boolean" ||
+        !prev.metrologyInquiry.capture
+      ) {
+        fixes.metrologyInquiry = normalizeMetrologyInquiry(
+          prev.metrologyInquiry as Partial<MetrologyInquiryState>,
+        );
+      }
       if (!prev.prototypeVatPresetId) {
         fixes.prototypeVatPresetId = DEFAULT_VAT_PROTOTYPE_PRESET_ID;
       }
@@ -173,6 +187,7 @@ export function OnboardingFlowProvider({
       companyFieldHints: {},
       companyZetelStepCompleted: false,
       innovationAttestInquiry: createEmptyInnovationAttestInquiry(),
+      metrologyInquiry: createEmptyMetrologyInquiry(),
       companyLegalEntitiesStepCompleted: false,
       invoicingStepCompleted: false,
       extrasStepCompleted: false,

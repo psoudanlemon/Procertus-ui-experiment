@@ -45,6 +45,10 @@ import {
   innovationAttestAttachmentsAsDownloadableItems,
   innovationAttestCaptureSummaryRows,
 } from "../../../onboarding/onboarding-innovation-attest";
+import {
+  metrologyAttachmentsAsDownloadableItems,
+  metrologyCaptureSummaryRows,
+} from "../../../onboarding/onboarding-metrology";
 import type { OnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
 
 export type OnboardingSummaryStepProps = { model: OnboardingRegistrationLayoutModel };
@@ -64,6 +68,7 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
     submissionNote,
     submissionNoteUnlocked,
     innovationAttestInquiry,
+    metrologyInquiry,
     onSummaryEditInquiriesClick,
   } = model;
 
@@ -105,6 +110,20 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
     () =>
       innovationAttestAttachmentsAsDownloadableItems(innovationAttestInquiry.capture.attachments),
     [innovationAttestInquiry.capture.attachments],
+  );
+
+  const showMetrologySummary = useMemo(
+    () =>
+      drafts.some((d) => d.entryId === "metrology" && effectiveSummaryIncludedDraftIds.includes(d.id)),
+    [drafts, effectiveSummaryIncludedDraftIds],
+  );
+  const metrologySummaryRows = useMemo(
+    () => metrologyCaptureSummaryRows(metrologyInquiry.capture),
+    [metrologyInquiry.capture],
+  );
+  const metrologyAttachmentItems = useMemo(
+    () => metrologyAttachmentsAsDownloadableItems(metrologyInquiry.capture.attachments),
+    [metrologyInquiry.capture.attachments],
   );
 
   return (
@@ -368,6 +387,62 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
               {innovationSummaryRows.length === 0 && innovationAttachmentItems.length === 0 ? (
                 <p className="m-0 text-sm text-muted-foreground" role="status">
                   Geen ingevulde velden of bijlagen voor het innovatie-attest.
+                </p>
+              ) : null}
+            </CardContent>
+          </Card>
+        ) : null}
+
+        {showMetrologySummary ? (
+          <Card className="w-full min-w-0 overflow-hidden">
+            <CardHeader>
+              <CardTitle>In metrologie ingevulde gegevens</CardTitle>
+              <CardDescription>
+                Alleen ingevulde velden en tijdelijk toegevoegde documenten uit de stap Metrologie (voor
+                zover opgenomen in deze indiening).
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-component px-0 sm:px-6">
+              {metrologySummaryRows.length > 0 ? (
+                <div className="w-full min-w-0 px-0 sm:px-0">
+                  <Table
+                    containerClassName="min-w-0 overflow-x-hidden"
+                    className="w-full table-fixed text-xs leading-snug"
+                  >
+                    <TableHeader>
+                      <TableRow className="hover:bg-transparent">
+                        <TableHead className="w-[32%] min-w-0 whitespace-normal font-semibold">
+                          Veld
+                        </TableHead>
+                        <TableHead className="min-w-0 whitespace-normal font-semibold">Inhoud</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {metrologySummaryRows.map((row) => (
+                        <TableRow key={row.id} className="align-top">
+                          <TableCell className="min-w-0 whitespace-normal wrap-break-word font-medium text-foreground">
+                            {row.label}
+                          </TableCell>
+                          <TableCell className="min-w-0 whitespace-pre-line wrap-break-word text-muted-foreground">
+                            {row.value}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              ) : null}
+              {metrologyAttachmentItems.length > 0 ? (
+                <div className="flex w-full min-w-0 flex-col gap-2">
+                  <p className="m-0 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Bijlagen tijdens deze sessie
+                  </p>
+                  <DownloadableItemGrid items={metrologyAttachmentItems} />
+                </div>
+              ) : null}
+              {metrologySummaryRows.length === 0 && metrologyAttachmentItems.length === 0 ? (
+                <p className="m-0 text-sm text-muted-foreground" role="status">
+                  Geen ingevulde velden of bijlagen voor metrologie.
                 </p>
               ) : null}
             </CardContent>

@@ -55,6 +55,12 @@ const CERT_EXTRA_DOC: Record<string, CertExtraDoc> = {
     description:
       "Beschrijving van het innovatieproject en de prestaties die voor {productLabel} af te testen zijn.",
   },
+  metrology: {
+    idSuffix: "metrologie-dossier",
+    title: "Metrologie-intake — dossierkader",
+    description:
+      "Overzicht van meetuitrusting, interventie-adres en gevraagde kalibratie-/verificatiecontext voor {productLabel}.",
+  },
   partijkeuring: {
     idSuffix: "steekproefprotocol",
     title: "Steekproefprotocol partijkeuring",

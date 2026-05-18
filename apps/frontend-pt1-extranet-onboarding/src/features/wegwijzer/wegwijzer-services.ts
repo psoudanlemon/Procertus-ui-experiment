@@ -1,5 +1,6 @@
 import {
   CheckmarkCircle02Icon,
+  Compass01Icon,
   File01Icon,
   FilePlusIcon,
   Search01Icon,
@@ -15,7 +16,7 @@ import {
 /**
  * Visual hierarchy:
  *  - 1 = focus (BENOR, CE) — prominent 2-koloms grid
- *  - 2 = bijkomende PROCERTUS-diensten (SSD, Innovation, PROCERTUS-attest, EPD)
+ *  - 2 = bijkomende PROCERTUS-diensten (SSD, Innovation, Metrology, PROCERTUS-attest, EPD)
  *  - 3 = externe verwijzing (ATG → BUtgb, Partijkeuring → COPRO) — gebundeld onder de
  *        "Andere"-pill (ghost variant) en getoond als 2-koloms verwijspaneel.
  */
@@ -58,6 +59,7 @@ export const WEGWIJZER_SERVICES: readonly WegwijzerService[] = [
   { entry: entry("ce"), tier: 1, icon: CheckmarkCircle02Icon },
   { entry: entry("ssd"), tier: 2, icon: CheckmarkCircle02Icon, pillLabel: "SSD" },
   { entry: entry("innovation-attest"), tier: 2, icon: FilePlusIcon },
+  { entry: entry("metrology"), tier: 2, icon: Compass01Icon },
   { entry: entry("procertus"), tier: 2, icon: File01Icon },
   { entry: entry("epd"), tier: 2, icon: Search01Icon, pillLabel: "EPD" },
   {

@@ -2119,7 +2119,7 @@ export function readInitialCompanyLookupPhase(): "idle" | "loading" | "ready" {
     const s = parsed.step;
     return s === "company" || s === "kyc"
       ? "loading"
-      : s === "companyLegalEntities" || s === "innovationAttest"
+      : s === "companyLegalEntities" || s === "innovationAttest" || s === "metrologyAttest"
         ? "ready"
         : "idle";
   } catch {

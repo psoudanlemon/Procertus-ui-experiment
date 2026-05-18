@@ -362,7 +362,7 @@ function MasterCard({
     const placeholder: CertificationRequestDraft = {
       id: `standalone-${entry.id}`,
       entryId: entry.id as CertificationEntryId,
-      label: entry.id === "innovation-attest" ? "Innovation attest" : entry.label,
+      label: entry.label,
       shortLabel: entry.shortLabel,
       trajectRootServiceId: entry.id,
     };

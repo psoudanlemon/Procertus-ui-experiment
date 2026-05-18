@@ -1,70 +1,68 @@
 import type { CertificationRequestDraft } from "../certification-request/types";
-import { effectiveIncludedCertificationDraftIds } from "./onboarding-flow-helpers";
 import { productBoundCertificationDedupKey } from "./lib/product-bound-certification-inquiry";
 import type { OnboardingFlowState, OnboardingStep } from "./onboarding-types";
 
+/**
+ * Whether the **concept-aanvraag** (mandje / `drafts`) bevat een innovatie-attestregel.
+ *
+ * Gebruikt **alleen** `drafts`, niet {@link OnboardingFlowState.summaryIncludedDraftIds}:
+ * een lege selection-array `[]` uit default state zou anders {@link effectiveIncludedCertificationDraftIds}
+ * leeg maken en deze substappen onterecht uit de registratiereeks houden — terwijl de inquiry wél in het
+ * dossier zit. De nazicht-toggles bepalen nog steeds wat meetelt voor indiening via
+ * `effectiveIncludedCertificationDraftIds` elders.
+ */
 export function registrationDraftsIncludeInnovationAttest(
   drafts: readonly CertificationRequestDraft[],
-  effectiveIncludedDraftIds: readonly string[],
 ): boolean {
-  const allow = new Set(effectiveIncludedDraftIds);
-  return drafts.some((d) => allow.has(d.id) && d.entryId === "innovation-attest");
+  return drafts.some((d) => d.entryId === "innovation-attest");
 }
 
 export function registrationDraftsIncludeInnovationAttestForFlowState(
-  flowState: Pick<OnboardingFlowState, "drafts" | "summaryIncludedDraftIds">,
+  flowState: Pick<OnboardingFlowState, "drafts">,
 ): boolean {
-  const ids = effectiveIncludedCertificationDraftIds(flowState.drafts, flowState.summaryIncludedDraftIds);
-  return registrationDraftsIncludeInnovationAttest(flowState.drafts, ids);
+  return registrationDraftsIncludeInnovationAttest(flowState.drafts);
+}
+
+/** Zie {@link registrationDraftsIncludeInnovationAttest} — zelfde semantics voor metrologie. */
+export function registrationDraftsIncludeMetrology(drafts: readonly CertificationRequestDraft[]): boolean {
+  return drafts.some((d) => d.entryId === "metrology");
+}
+
+export function registrationDraftsIncludeMetrologyForFlowState(
+  flowState: Pick<OnboardingFlowState, "drafts">,
+): boolean {
+  return registrationDraftsIncludeMetrology(flowState.drafts);
 }
 
 /** True when the dossier includes at least one product-bound inquiry with a resolvable product key. */
 export function registrationDraftsIncludeProductBoundCertification(
   drafts: readonly CertificationRequestDraft[],
-  effectiveIncludedDraftIds: readonly string[],
 ): boolean {
-  const allow = new Set(effectiveIncludedDraftIds);
-  return drafts.some((d) => allow.has(d.id) && productBoundCertificationDedupKey(d) !== null);
+  return drafts.some((d) => productBoundCertificationDedupKey(d) !== null);
 }
 
 export function registrationDraftsIncludeProductBoundCertificationForFlowState(
-  flowState: Pick<OnboardingFlowState, "drafts" | "summaryIncludedDraftIds">,
+  flowState: Pick<OnboardingFlowState, "drafts">,
 ): boolean {
-  const ids = effectiveIncludedCertificationDraftIds(flowState.drafts, flowState.summaryIncludedDraftIds);
-  return registrationDraftsIncludeProductBoundCertification(flowState.drafts, ids);
+  return registrationDraftsIncludeProductBoundCertification(flowState.drafts);
 }
 
 /**
  * Ordered steps for the guest formal-registration stepper and navigation (Verder / Terug).
- * Omits {@link innovationAttest} when no innovation-attest inquiry is in the submission package.
- * Omits {@link companyLegalEntities} when there is no product-bound certification inquiry in the package.
+ * Omits innovatie-/metrologie-stappen when het mandje geen bijbehorende inquiry bevat.
+ * Omits {@link companyLegalEntities} when there is no product-bound certification inquiry in `drafts`.
  */
-export function registrationStepsSequence(
-  drafts: readonly CertificationRequestDraft[],
-  effectiveIncludedDraftIds: readonly string[],
-): readonly OnboardingStep[] {
-  const needsLegalEntities = registrationDraftsIncludeProductBoundCertification(
-    drafts,
-    effectiveIncludedDraftIds,
-  );
+export function registrationStepsSequence(drafts: readonly CertificationRequestDraft[]): readonly OnboardingStep[] {
+  const needsLegalEntities = registrationDraftsIncludeProductBoundCertification(drafts);
+  const needsInnovationAttest = registrationDraftsIncludeInnovationAttest(drafts);
+  const needsMetrology = registrationDraftsIncludeMetrology(drafts);
 
-  if (registrationDraftsIncludeInnovationAttest(drafts, effectiveIncludedDraftIds)) {
-    const core: OnboardingStep[] = [
-      "origin",
-      "customer",
-      "company",
-      "innovationAttest",
-      ...(needsLegalEntities ? (["companyLegalEntities"] as const) : []),
-      "invoicing",
-      "extras",
-      "summary",
-    ];
-    return core;
-  }
   const core: OnboardingStep[] = [
     "origin",
     "customer",
     "company",
+    ...(needsInnovationAttest ? (["innovationAttest"] as const) : []),
+    ...(needsMetrology ? (["metrologyAttest"] as const) : []),
     ...(needsLegalEntities ? (["companyLegalEntities"] as const) : []),
     "invoicing",
     "extras",
@@ -74,16 +72,14 @@ export function registrationStepsSequence(
 }
 
 export function registrationStepsSequenceForFlowState(
-  flowState: Pick<OnboardingFlowState, "drafts" | "summaryIncludedDraftIds">,
+  flowState: Pick<OnboardingFlowState, "drafts">,
 ): readonly OnboardingStep[] {
-  const ids = effectiveIncludedCertificationDraftIds(flowState.drafts, flowState.summaryIncludedDraftIds);
-  return registrationStepsSequence(flowState.drafts, ids);
+  return registrationStepsSequence(flowState.drafts);
 }
 
 export function registrationStepIndex(
   step: OnboardingStep,
   drafts: readonly CertificationRequestDraft[],
-  effectiveIncludedDraftIds: readonly string[],
 ): number {
-  return registrationStepsSequence(drafts, effectiveIncludedDraftIds).indexOf(step);
+  return registrationStepsSequence(drafts).indexOf(step);
 }

@@ -55,8 +55,6 @@ function RegistrationChromeComposer({ initialStep }: { initialStep: OnboardingSt
     storyRequestOrigin,
   );
 
-  const includedDraftIds = useMemo(() => storyOnboardingDrafts.map((d) => d.id), []);
-
   const viewProps = useMemo(
     () =>
       baseOnboardingFlowViewProps({
@@ -70,7 +68,7 @@ function RegistrationChromeComposer({ initialStep }: { initialStep: OnboardingSt
           drafts: storyOnboardingDrafts,
           requestOrigin,
         }),
-        activeStep: registrationStepIndex(step, storyOnboardingDrafts, includedDraftIds),
+        activeStep: registrationStepIndex(step, storyOnboardingDrafts),
         goToOnboardingStep: (next: OnboardingStep) => {
           setStep(next);
         },
@@ -78,7 +76,7 @@ function RegistrationChromeComposer({ initialStep }: { initialStep: OnboardingSt
         primaryAction: { label: "Verder (demo)", onClick: noop, disabled: false },
         backAction: { label: "Terug", onClick: noop },
       }),
-    [step, requestOrigin, includedDraftIds],
+    [step, requestOrigin],
   );
 
   const model = useOnboardingRegistrationLayoutModel(viewProps);
@@ -86,7 +84,7 @@ function RegistrationChromeComposer({ initialStep }: { initialStep: OnboardingSt
   const registrationChrome = mergeRegistrationChromeCopy(chromeStep);
 
   const handleStepChange = (index: number) => {
-    const seq = registrationStepsSequence(storyOnboardingDrafts, includedDraftIds);
+    const seq = registrationStepsSequence(storyOnboardingDrafts);
     const nextStep = seq[index];
     if (nextStep) {
       setStep(nextStep);
@@ -179,6 +177,13 @@ function StepBodies({
       return (
         <p className="max-w-prose text-sm text-muted-foreground">
           Het innovatie‑attest formulier wordt getoond in de volledige flow met{" "}
+          <code className="rounded bg-muted px-1 py-0.5 text-xs">OnboardingFlowProvider</code>.
+        </p>
+      );
+    case "metrologyAttest":
+      return (
+        <p className="max-w-prose text-sm text-muted-foreground">
+          De metrologie-intake wordt getoond in de volledige flow met{" "}
           <code className="rounded bg-muted px-1 py-0.5 text-xs">OnboardingFlowProvider</code>.
         </p>
       );

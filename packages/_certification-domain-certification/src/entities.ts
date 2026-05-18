@@ -10,6 +10,7 @@ export const CertificationRequestIntentId = Schema.Literals([
   "product-certification",
   "atg",
   "innovation-attest",
+  "metrology",
   "procertus",
   "epd",
   "partijkeuring",

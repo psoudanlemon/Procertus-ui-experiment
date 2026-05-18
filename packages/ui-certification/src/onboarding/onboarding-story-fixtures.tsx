@@ -17,6 +17,7 @@ import {
   createEmptyInnovationAttestCapture,
   createEmptyInnovationAttestInquiry,
 } from "./onboarding-innovation-attest";
+import { createEmptyMetrologyInquiry, normalizeMetrologyInquiry } from "./onboarding-metrology";
 import { buildOnboardingStepperSteps } from "./onboarding-stepper-model";
 import type {
   OnboardingFlowState,
@@ -102,6 +103,7 @@ export function storyOnboardingStepperSteps(input: {
   drafts: CertificationRequestDraft[];
   requestOrigin?: OnboardingRequestOrigin | "";
   innovationAttestStepCompleted?: boolean;
+  metrologyAttestStepCompleted?: boolean;
 }): StepLayoutStep[] {
   const ids = effectiveIncludedCertificationDraftIds(input.drafts, undefined);
   return buildOnboardingStepperSteps({
@@ -113,6 +115,9 @@ export function storyOnboardingStepperSteps(input: {
       capture: createEmptyInnovationAttestCapture(),
       stepCompleted: input.innovationAttestStepCompleted ?? false,
     },
+    metrologyInquiry: normalizeMetrologyInquiry({
+      stepCompleted: input.metrologyAttestStepCompleted ?? false,
+    }),
   });
 }
 
@@ -177,7 +182,7 @@ export function baseOnboardingFlowViewProps(
     effectiveSummaryIncludedDraftIds: includedIds,
     rows: buildRows(context, drafts, includedIds, { includeDraftRows: false }),
     steps: storyOnboardingStepperSteps({ step, context, drafts, requestOrigin }),
-    activeStep: registrationStepIndex(step, drafts, includedIds),
+    activeStep: registrationStepIndex(step, drafts),
     goToOnboardingStep: noop as OnboardingFlowViewProps["goToOnboardingStep"],
     primaryAction: { label: "Indienen", onClick: noop, disabled: false },
     backAction: {
@@ -208,6 +213,7 @@ export function baseOnboardingFlowViewProps(
     submissionNote: "",
     submissionNoteUnlocked: false,
     innovationAttestInquiry: createEmptyInnovationAttestInquiry(),
+    metrologyInquiry: createEmptyMetrologyInquiry(),
     onSummaryEditInquiriesClick: noop,
   };
 
@@ -219,13 +225,10 @@ export function flowStateSeedFromOnboardingFlowViewProps(
   props: OnboardingFlowViewProps,
 ): OnboardingFlowState {
   const summaryIds = props.effectiveSummaryIncludedDraftIds;
-  const ids =
-    summaryIds !== undefined && summaryIds.length > 0
-      ? [...summaryIds]
-      : props.drafts.map((d) => d.id);
-  const seq = registrationStepsSequence(props.drafts, ids);
+  const seq = registrationStepsSequence(props.drafts);
   const stepIdx = seq.indexOf(props.step);
   const innoIdx = seq.indexOf("innovationAttest");
+  const metroIdx = seq.indexOf("metrologyAttest");
 
   return hydrateOnboardingFlowStateFromStored({
     trajectServiceId: "",
@@ -244,6 +247,10 @@ export function flowStateSeedFromOnboardingFlowViewProps(
     innovationAttestInquiry: props.innovationAttestInquiry ?? {
       capture: createEmptyInnovationAttestCapture(),
       stepCompleted: innoIdx >= 0 ? stepIdx > innoIdx : false,
+    },
+    metrologyInquiry: props.metrologyInquiry ?? {
+      ...createEmptyMetrologyInquiry(),
+      stepCompleted: metroIdx >= 0 ? stepIdx > metroIdx : false,
     },
     companyZetelStepCompleted: stepIdx > seq.indexOf("company"),
     companyLegalEntitiesStepCompleted: stepIdx > seq.indexOf("companyLegalEntities"),

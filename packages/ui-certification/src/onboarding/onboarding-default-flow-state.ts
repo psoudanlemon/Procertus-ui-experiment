@@ -2,6 +2,8 @@ import { DEFAULT_VAT_PROTOTYPE_PRESET_ID } from "./lib/vatPrototypePresets";
 import type {
   InnovationAttestCapture,
   InnovationAttestInquiryState,
+  MetrologyCapture,
+  MetrologyInquiryState,
   OnboardingFlowState,
 } from "./onboarding-types";
 import { GUEST_INTAKE_CHANNELS, type GuestIntakeChannel } from "./onboarding-types";
@@ -10,6 +12,11 @@ import {
   normalizeInnovationAttestCapture,
   normalizeInnovationAttestInquiry,
 } from "./onboarding-innovation-attest";
+import {
+  createEmptyMetrologyInquiry,
+  normalizeMetrologyCapture,
+  normalizeMetrologyInquiry,
+} from "./onboarding-metrology";
 import {
   DEFAULT_CONTEXT,
   effectiveIncludedCertificationDraftIds,
@@ -52,6 +59,33 @@ function migrateInnovationAttestInquiryFromStored(stored: {
   });
 }
 
+/** Migrates legacy top-level keys into {@link OnboardingFlowState.metrologyInquiry}. */
+function migrateMetrologyInquiryFromStored(stored: {
+  metrologyInquiry?: Partial<MetrologyInquiryState>;
+  metrologyCapture?: MetrologyCapture;
+  metrologyStepCompleted?: boolean;
+}): MetrologyInquiryState {
+  const nested = stored.metrologyInquiry;
+  if (nested && typeof nested === "object") {
+    return normalizeMetrologyInquiry({
+      capture: normalizeMetrologyCapture(nested.capture),
+      stepCompleted:
+        typeof nested.stepCompleted === "boolean"
+          ? nested.stepCompleted
+          : typeof stored.metrologyStepCompleted === "boolean"
+            ? stored.metrologyStepCompleted
+            : false,
+    });
+  }
+  return normalizeMetrologyInquiry({
+    capture: normalizeMetrologyCapture(stored.metrologyCapture),
+    stepCompleted:
+      typeof stored.metrologyStepCompleted === "boolean"
+        ? stored.metrologyStepCompleted
+        : false,
+  });
+}
+
 export const DEFAULT_ONBOARDING_FLOW_STATE: OnboardingFlowState = {
   trajectServiceId: "",
   guestIntakeChannel: "",
@@ -66,6 +100,7 @@ export const DEFAULT_ONBOARDING_FLOW_STATE: OnboardingFlowState = {
   summaryKlantenportaalByPersonId: {},
   companyZetelStepCompleted: false,
   innovationAttestInquiry: createEmptyInnovationAttestInquiry(),
+  metrologyInquiry: createEmptyMetrologyInquiry(),
   companyLegalEntitiesStepCompleted: false,
   invoicingStepCompleted: false,
   extrasStepCompleted: false,
@@ -80,6 +115,8 @@ export function hydrateOnboardingFlowStateFromStored(
     step?: unknown;
     innovationAttestCapture?: InnovationAttestCapture;
     innovationAttestStepCompleted?: boolean;
+    metrologyCapture?: MetrologyCapture;
+    metrologyStepCompleted?: boolean;
   };
 
   const {
@@ -88,6 +125,9 @@ export function hydrateOnboardingFlowStateFromStored(
     innovationAttestCapture: legacyInnovCapture,
     innovationAttestStepCompleted: legacyInnovStepDone,
     innovationAttestInquiry: legacyInnovInquiry,
+    metrologyCapture: legacyMetrologyCapture,
+    metrologyStepCompleted: legacyMetrologyStepDone,
+    metrologyInquiry: legacyMetrologyInquiry,
     ...restStored
   } = compat;
 
@@ -95,6 +135,12 @@ export function hydrateOnboardingFlowStateFromStored(
     innovationAttestInquiry: legacyInnovInquiry,
     innovationAttestCapture: legacyInnovCapture,
     innovationAttestStepCompleted: legacyInnovStepDone,
+  });
+
+  const metrologyInquiry = migrateMetrologyInquiryFromStored({
+    metrologyInquiry: legacyMetrologyInquiry,
+    metrologyCapture: legacyMetrologyCapture,
+    metrologyStepCompleted: legacyMetrologyStepDone,
   });
 
   const trimmedLabel = rawEntryLabel?.trim();
@@ -169,6 +215,7 @@ export function hydrateOnboardingFlowStateFromStored(
     summaryKlantenportaalByPersonId: stored.summaryKlantenportaalByPersonId ?? {},
     companyZetelStepCompleted,
     innovationAttestInquiry,
+    metrologyInquiry,
     companyLegalEntitiesStepCompleted,
     invoicingStepCompleted,
     extrasStepCompleted,

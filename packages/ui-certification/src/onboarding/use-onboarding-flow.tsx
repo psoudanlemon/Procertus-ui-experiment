@@ -46,6 +46,7 @@ import {
 } from "./onboarding-registration-steps";
 import { useOnboardingFlowContext } from "./onboarding-flow-provider";
 import { isInnovationAttestCaptureComplete } from "./onboarding-innovation-attest";
+import { isMetrologyCaptureComplete } from "./onboarding-metrology";
 
 export type UseOnboardingFlowOptions = {
   navigate: (to: string, options?: { replace?: boolean }) => void;
@@ -117,8 +118,10 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     companyFieldHints,
     summaryIncludedDraftIds,
     innovationAttestInquiry,
+    metrologyInquiry,
   } = flowState;
   const innovationAttestCapture = innovationAttestInquiry.capture;
+  const metrologyCapture = metrologyInquiry.capture;
   const companyHints = companyFieldHints ?? {};
 
   const effectiveSummaryIncludedDraftIds = useMemo(
@@ -156,7 +159,6 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   const stepperActiveIndex = registrationStepOrdinalInSequence(
     activeStep,
     drafts,
-    effectiveSummaryIncludedDraftIds,
   );
   const hasDrafts = drafts.length > 0;
   const certificationInquiryDraftIds = effectiveSummaryIncludedDraftIds;
@@ -185,8 +187,8 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   const extrasStepOk = optionalContactsOk;
 
   const registrationSeq = useMemo(
-    () => registrationStepsSequence(drafts, effectiveSummaryIncludedDraftIds),
-    [drafts, effectiveSummaryIncludedDraftIds],
+    () => registrationStepsSequence(drafts),
+    [drafts],
   );
 
   const steps: StepLayoutStep[] = useMemo(
@@ -197,8 +199,9 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
         context,
         certificationInquiryDraftIds,
         innovationAttestInquiry,
+        metrologyInquiry,
       }),
-    [certificationInquiryDraftIds, context, drafts, innovationAttestInquiry, requestOrigin],
+    [certificationInquiryDraftIds, context, drafts, innovationAttestInquiry, metrologyInquiry, requestOrigin],
   );
 
   const goToOnboardingStep = useCallback(
@@ -207,7 +210,7 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
         flowState.drafts,
         flowState.summaryIncludedDraftIds,
       );
-      const seq = registrationStepsSequence(flowState.drafts, certificationInquiryDraftIdsInner);
+      const seq = registrationStepsSequence(flowState.drafts);
       const fromIdx = seq.indexOf(activeStep);
       const toIdx = seq.indexOf(nextStep);
       /** Next step in the canonical sequence — allowed even if availability still depends on flags set by this navigation (e.g. innovation attest → certificatie). */
@@ -228,11 +231,11 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
         context,
         certificationInquiryDraftIds: certificationInquiryDraftIdsInner,
         innovationAttestInquiry: flowState.innovationAttestInquiry,
+        metrologyInquiry: flowState.metrologyInquiry,
       });
       const targetIndex = registrationStepOrdinalInSequence(
         nextStep,
         flowState.drafts,
-        certificationInquiryDraftIdsInner,
       );
       if (!isSequentialForward && stepperModel[targetIndex]?.available === false) {
         return;
@@ -252,6 +255,7 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
       flowState.requestOrigin,
       flowState.summaryIncludedDraftIds,
       flowState.innovationAttestInquiry,
+      flowState.metrologyInquiry,
       onRegistrationStepChange,
       setFlowState,
     ],
@@ -340,7 +344,13 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
                 onClick: () => goNextFrom("innovationAttest"),
                 disabled: !isInnovationAttestCaptureComplete(innovationAttestCapture),
               }
-            : activeStep === "companyLegalEntities"
+            : activeStep === "metrologyAttest"
+              ? {
+                  label: "Verder",
+                  onClick: () => goNextFrom("metrologyAttest"),
+                  disabled: !isMetrologyCaptureComplete(metrologyCapture),
+                }
+              : activeStep === "companyLegalEntities"
               ? {
                   label: "Verder",
                   onClick: () => goNextFrom("companyLegalEntities"),
@@ -442,6 +452,7 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     submissionNote: flowState.submissionNote ?? "",
     submissionNoteUnlocked: flowState.submissionNoteUnlocked === true,
     innovationAttestInquiry: flowState.innovationAttestInquiry,
+    metrologyInquiry: flowState.metrologyInquiry,
     onSummaryEditInquiriesClick,
     registryHeaderLeadingActions,
     registryHeaderTrailingActions,

@@ -16,6 +16,7 @@ import {
 import {
   createEmptyInnovationAttestInquiry,
 } from "./onboarding-innovation-attest";
+import { createEmptyMetrologyInquiry } from "./onboarding-metrology";
 import {
   findVatPrototypePreset,
   VAT_PROTOTYPE_PRESETS,
@@ -141,6 +142,7 @@ export function createOnboardingFlowApi(
         companyFieldHints: {},
         companyZetelStepCompleted: false,
         innovationAttestInquiry: createEmptyInnovationAttestInquiry(),
+        metrologyInquiry: createEmptyMetrologyInquiry(),
         companyLegalEntitiesStepCompleted: false,
         invoicingStepCompleted: false,
         extrasStepCompleted: false,
@@ -161,6 +163,7 @@ export function createOnboardingFlowApi(
           companyFieldHints: {},
           companyZetelStepCompleted: false,
           innovationAttestInquiry: createEmptyInnovationAttestInquiry(),
+          metrologyInquiry: createEmptyMetrologyInquiry(),
           companyLegalEntitiesStepCompleted: false,
           invoicingStepCompleted: false,
           extrasStepCompleted: false,

@@ -35,6 +35,8 @@ export { deriveFormalOnboardingResumeStep } from "./derive-formal-onboarding-res
 export {
   registrationDraftsIncludeInnovationAttest,
   registrationDraftsIncludeInnovationAttestForFlowState,
+  registrationDraftsIncludeMetrology,
+  registrationDraftsIncludeMetrologyForFlowState,
   registrationDraftsIncludeProductBoundCertification,
   registrationDraftsIncludeProductBoundCertificationForFlowState,
   registrationStepsSequence,
@@ -57,6 +59,8 @@ export type {
   InnovationAttestCapture,
   InnovationAttestInquiryState,
   InnovationAttestMockAttachment,
+  MetrologyCapture,
+  MetrologyInquiryState,
 } from "./onboarding-types";
 export { GUEST_INTAKE_CHANNELS } from "./onboarding-types";
 export {

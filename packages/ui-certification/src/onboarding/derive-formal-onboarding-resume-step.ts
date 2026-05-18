@@ -9,7 +9,12 @@ import {
   isRegistrantCaptureValidForContext,
 } from "./onboarding-flow-helpers";
 import { isInnovationAttestInquiryResumeOk } from "./onboarding-innovation-attest";
-import { registrationDraftsIncludeInnovationAttest, registrationStepsSequence } from "./onboarding-registration-steps";
+import { isMetrologyInquiryResumeOk } from "./onboarding-metrology";
+import {
+  registrationDraftsIncludeInnovationAttest,
+  registrationDraftsIncludeMetrology,
+  registrationStepsSequence,
+} from "./onboarding-registration-steps";
 import type { CustomerContext, OnboardingFlowState, OnboardingStep } from "./onboarding-types";
 import { isRegistrationIdentifierValidForOrigin } from "./lib/registration-identifier-for-origin";
 import { isVatIdentifierPlausible } from "./lib/vatPrototypePresets";
@@ -26,7 +31,7 @@ import { isVatIdentifierPlausible } from "./lib/vatPrototypePresets";
  * De maatschappelijke‑zetelstap telt pas als afgerond als {@link OnboardingFlowState.companyZetelStepCompleted}
  * `true` is (na **Verder**); alléén een geldige lookup vult `context` al in.
  * Hetzelfde patroon geldt voor latere stappen waar validatie `true` kan zijn vóór **Verder**
- * (o.a. innovatie‑attest, certificatie‑entiteit, facturatie, optionele contacten).
+ * (o.a. innovatie‑attest, metrologie, certificatie‑entiteit, facturatie, optionele contacten).
  */
 export function deriveFormalOnboardingResumeStep(
   flowState: Pick<
@@ -39,6 +44,7 @@ export function deriveFormalOnboardingResumeStep(
     | "invoicingStepCompleted"
     | "extrasStepCompleted"
     | "innovationAttestInquiry"
+    | "metrologyInquiry"
   >,
   context: CustomerContext,
 ): OnboardingStep {
@@ -49,7 +55,7 @@ export function deriveFormalOnboardingResumeStep(
     flowState.drafts,
     flowState.summaryIncludedDraftIds,
   );
-  const registrationSeq = registrationStepsSequence(flowState.drafts, certificationInquiryDraftIds);
+  const registrationSeq = registrationStepsSequence(flowState.drafts);
   const includesCompanyLegalEntitiesStep = registrationSeq.includes("companyLegalEntities");
   const hasCustomerContext =
     isRegistrantCaptureValidForContext(context) &&
@@ -61,13 +67,16 @@ export function deriveFormalOnboardingResumeStep(
   const companyZetelOk =
     isOnboardingCompanyZetelStepValid(context) && flowState.companyZetelStepCompleted;
 
-  const needsInnovationAttest = registrationDraftsIncludeInnovationAttest(
-    flowState.drafts,
-    certificationInquiryDraftIds,
-  );
+  const needsInnovationAttest = registrationDraftsIncludeInnovationAttest(flowState.drafts);
   const innovationResumeOk = isInnovationAttestInquiryResumeOk(
     flowState.innovationAttestInquiry,
     needsInnovationAttest,
+  );
+
+  const needsMetrology = registrationDraftsIncludeMetrology(flowState.drafts);
+  const metrologyResumeOk = isMetrologyInquiryResumeOk(
+    flowState.metrologyInquiry,
+    needsMetrology,
   );
 
   const companyLegalEntitiesOk =
@@ -88,6 +97,7 @@ export function deriveFormalOnboardingResumeStep(
   if (!registrationStepOk) step = "customer";
   else if (!companyZetelOk) step = "company";
   else if (!innovationResumeOk) step = "innovationAttest";
+  else if (!metrologyResumeOk) step = "metrologyAttest";
   else if (!companyLegalEntitiesOk) step = "companyLegalEntities";
   else if (!invoicingStepOk) step = "invoicing";
   else if (!optionalContactsOk) step = "extras";

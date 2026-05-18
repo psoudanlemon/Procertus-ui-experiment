@@ -2,6 +2,7 @@ import type { StepLayoutStep } from "@procertus-ui/ui";
 
 import type {
   InnovationAttestInquiryState,
+  MetrologyInquiryState,
   OnboardingFlowState,
   CustomerContext,
   OnboardingStep,
@@ -18,8 +19,10 @@ import {
   isRegistrantCaptureValidForContext,
 } from "./onboarding-flow-helpers";
 import { isInnovationAttestInquiryResumeOk } from "./onboarding-innovation-attest";
+import { isMetrologyInquiryResumeOk } from "./onboarding-metrology";
 import {
   registrationDraftsIncludeInnovationAttest,
+  registrationDraftsIncludeMetrology,
   registrationDraftsIncludeProductBoundCertification,
   registrationStepsSequence,
 } from "./onboarding-registration-steps";
@@ -38,6 +41,8 @@ export type OnboardingPhaseValidity = {
   optionalContactsOk: boolean;
   /** Innovatie‑attest blok afgerond (of niet van toepassing). */
   innovationAttestOk: boolean;
+  /** Metrologie-intake afgerond (of niet van toepassing). */
+  metrologyAttestOk: boolean;
   summaryStepOk: boolean;
 };
 
@@ -47,6 +52,7 @@ export type DeriveOnboardingPhaseValidityInput = {
   drafts: OnboardingFlowState["drafts"];
   certificationInquiryDraftIds: readonly string[];
   innovationAttestInquiry: InnovationAttestInquiryState;
+  metrologyInquiry: MetrologyInquiryState;
 };
 
 /** Legal representative (+ registrant when “Nee”), VAT plausible or valid-for-origin — not affected by prototype relax. */
@@ -67,7 +73,7 @@ export function isOnboardingRegistrationBodyCompleteForFlow(
 export function deriveOnboardingPhaseValidityForFlow(
   input: DeriveOnboardingPhaseValidityInput,
 ): OnboardingPhaseValidity & { hasCustomerContext: boolean } {
-  const { requestOrigin, context, drafts, certificationInquiryDraftIds, innovationAttestInquiry } =
+  const { requestOrigin, context, drafts, certificationInquiryDraftIds, innovationAttestInquiry, metrologyInquiry } =
     input;
 
   const legalRepChoiceOk = isApplicantLegalRepresentativeChoiceComplete(context);
@@ -91,17 +97,21 @@ export function deriveOnboardingPhaseValidityForFlow(
   /** Strict: gelijk aan {@link deriveFormalOnboardingResumeStep} — geen prototype‑relax. */
   const optionalContactsOk = isOnboardingOptionalContactsStepValid(context);
 
-  const needsInnovationAttest = registrationDraftsIncludeInnovationAttest(
-    drafts,
-    certificationInquiryDraftIds,
-  );
+  const needsInnovationAttest = registrationDraftsIncludeInnovationAttest(drafts);
   const innovationAttestOk = isInnovationAttestInquiryResumeOk(
     innovationAttestInquiry,
     needsInnovationAttest,
   );
 
+  const needsMetrologyAttest = registrationDraftsIncludeMetrology(drafts);
+  const metrologyAttestOk = isMetrologyInquiryResumeOk(metrologyInquiry, needsMetrologyAttest);
+
   const summaryStepOk =
-    companyCoreOk && invoicingStepOk && optionalContactsOk && innovationAttestOk;
+    companyCoreOk &&
+    invoicingStepOk &&
+    optionalContactsOk &&
+    innovationAttestOk &&
+    metrologyAttestOk;
 
   return {
     hasCustomerContext,
@@ -112,6 +122,7 @@ export function deriveOnboardingPhaseValidityForFlow(
     invoicingStepOk,
     optionalContactsOk,
     innovationAttestOk,
+    metrologyAttestOk,
     summaryStepOk,
   };
 }
@@ -122,20 +133,19 @@ export type BuildOnboardingStepperStepsInput = {
   context: CustomerContext;
   certificationInquiryDraftIds: readonly string[];
   innovationAttestInquiry: InnovationAttestInquiryState;
+  metrologyInquiry: MetrologyInquiryState;
 };
 
 export function buildOnboardingStepperSteps(
   input: BuildOnboardingStepperStepsInput,
 ): StepLayoutStep[] {
-  const { drafts, requestOrigin, context, certificationInquiryDraftIds, innovationAttestInquiry } =
+  const { drafts, requestOrigin, context, certificationInquiryDraftIds, innovationAttestInquiry, metrologyInquiry } =
     input;
 
   const hasDrafts = drafts.length > 0;
   const legalRepChoiceOk = isApplicantLegalRepresentativeChoiceComplete(context);
-  const needsInnovationAttest = registrationDraftsIncludeInnovationAttest(
-    drafts,
-    certificationInquiryDraftIds,
-  );
+  const needsInnovationAttest = registrationDraftsIncludeInnovationAttest(drafts);
+  const needsMetrologyAttest = registrationDraftsIncludeMetrology(drafts);
 
   const {
     registrationStepOk,
@@ -144,12 +154,14 @@ export function buildOnboardingStepperSteps(
     invoicingStepOk,
     summaryStepOk,
     innovationAttestOk,
+    metrologyAttestOk,
   } = deriveOnboardingPhaseValidityForFlow({
     requestOrigin,
     context,
     drafts,
     certificationInquiryDraftIds,
     innovationAttestInquiry,
+    metrologyInquiry,
   });
 
   const companyStepOk = companyCoreOk;
@@ -158,9 +170,10 @@ export function buildOnboardingStepperSteps(
     registrationStepOk &&
     companyCoreOk &&
     invoicingStepOk &&
-    innovationAttestOk;
+    innovationAttestOk &&
+    metrologyAttestOk;
 
-  const seq = registrationStepsSequence(drafts, certificationInquiryDraftIds);
+  const seq = registrationStepsSequence(drafts);
 
   const innovationStepAvailable =
     hasDrafts &&
@@ -170,10 +183,16 @@ export function buildOnboardingStepperSteps(
     companyZetelOk &&
     needsInnovationAttest;
 
-  const needsProductBoundCertification = registrationDraftsIncludeProductBoundCertification(
-    drafts,
-    certificationInquiryDraftIds,
-  );
+  const metrologyStepAvailable =
+    hasDrafts &&
+    requestOrigin !== "" &&
+    legalRepChoiceOk &&
+    registrationStepOk &&
+    companyZetelOk &&
+    needsMetrologyAttest &&
+    (!needsInnovationAttest || innovationAttestInquiry.stepCompleted);
+
+  const needsProductBoundCertification = registrationDraftsIncludeProductBoundCertification(drafts);
 
   const legalEntitiesAvailable =
     hasDrafts &&
@@ -182,7 +201,8 @@ export function buildOnboardingStepperSteps(
     registrationStepOk &&
     companyZetelOk &&
     needsProductBoundCertification &&
-    (!needsInnovationAttest || innovationAttestInquiry.stepCompleted);
+    (!needsInnovationAttest || innovationAttestInquiry.stepCompleted) &&
+    (!needsMetrologyAttest || metrologyInquiry.stepCompleted);
 
   const stepLayouts: Record<OnboardingStep, StepLayoutStep> = {
     origin: {
@@ -218,6 +238,12 @@ export function buildOnboardingStepperSteps(
       title: "Innovatie-attest",
       description: "Innovatief product en project",
       available: innovationStepAvailable,
+    },
+    metrologyAttest: {
+      id: "metrologyAttest",
+      title: "Metrologie",
+      description: "Meetuitrusting en tussenkomsten",
+      available: metrologyStepAvailable,
     },
     companyLegalEntities: {
       id: "companyLegalEntities",

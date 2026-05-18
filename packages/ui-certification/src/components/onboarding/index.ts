@@ -16,6 +16,7 @@ export { OnboardingExtrasStep, type OnboardingExtrasStepProps } from "./extras-s
 export {
   OnboardingInnovationAttestStep,
 } from "./innovation-attest-step/OnboardingInnovationAttestStep";
+export { OnboardingMetrologyStep } from "./metrology-step/OnboardingMetrologyStep";
 export { OnboardingSummaryStep, type OnboardingSummaryStepProps } from "./summary-step/OnboardingSummaryStep";
 export {
   CertificationInquiriesOverviewCard,

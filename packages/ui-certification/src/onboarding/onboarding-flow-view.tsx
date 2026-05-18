@@ -9,6 +9,7 @@ import {
   OnboardingFloatingStepsNav,
 } from "../components/onboarding/flow/OnboardingFloatingStepsNav";
 import { OnboardingInnovationAttestStep } from "../components/onboarding/innovation-attest-step/OnboardingInnovationAttestStep";
+import { OnboardingMetrologyStep } from "../components/onboarding/metrology-step/OnboardingMetrologyStep";
 import { OnboardingInvoicingStep } from "../components/onboarding/invoicing-step/OnboardingInvoicingStep";
 import { OnboardingOriginStep } from "../components/onboarding/origin-step/OnboardingOriginStep";
 import { OnboardingShell } from "../components/onboarding/shell/OnboardingShell";
@@ -53,7 +54,6 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
     guestLanguagePlacement,
     embeddedRegistryShell,
     drafts,
-    effectiveSummaryIncludedDraftIds,
   } = props;
 
   const registrationChrome = mergeRegistrationChromeCopy(
@@ -64,7 +64,7 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
   const [stepsSheetOpen, setStepsSheetOpen] = useState(false);
 
   const onStepChange = (index: number) => {
-    const seq = registrationStepsSequence(drafts, effectiveSummaryIncludedDraftIds);
+    const seq = registrationStepsSequence(drafts);
     const nextStep = seq[index];
     if (nextStep) {
       goToOnboardingStep(nextStep);
@@ -129,6 +129,7 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
               {step === "customer" ? <OnboardingCustomerStep model={rb} /> : null}
               {step === "company" ? <OnboardingCompanyZetelStep model={rb} /> : null}
               {step === "innovationAttest" ? <OnboardingInnovationAttestStep /> : null}
+              {step === "metrologyAttest" ? <OnboardingMetrologyStep /> : null}
               {step === "companyLegalEntities" ? (
                 <OnboardingCompanyLegalEntitiesStep model={rb} />
               ) : null}

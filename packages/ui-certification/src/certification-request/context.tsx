@@ -195,7 +195,8 @@ export function CertificationRequestProvider({
   const selectedIntentLabel = entryLabelForIntent(intent, availableEntries);
   const productRequired = intent ? PRODUCT_REQUIRED_INTENTS.has(intent) : false;
   const detailsUseProductTree =
-    productRequired || (intent ? intent !== "innovation-attest" : false);
+    productRequired ||
+    (intent ? intent !== "innovation-attest" && intent !== "metrology" : false);
   const productEntries = getAvailableProductEntries(selectedProduct?.node, availableEntries);
   const canUseFreeform = intent ? !productRequired : false;
   const canContinueDetails = productRequired

@@ -45,6 +45,7 @@ export type WizardEntryPoint =
   | "product-certification"
   | "atg"
   | "innovation-attest"
+  | "metrology"
   | "procertus"
   | "epd"
   | "partijkeuring"
@@ -58,6 +59,7 @@ export type AvailableEntryKey =
   | CertificationLabelKey
   | ProductAttestationKey
   | "innovation-attest"
+  | "metrology"
   | "partijkeuring"
   | (string & {});
 

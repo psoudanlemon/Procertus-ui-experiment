@@ -19,6 +19,7 @@ const CERTIFICATION_INTENT_ENTRY_IDS = new Set<CertificationRequestIntentId>([
   "product-certification",
   "atg",
   "innovation-attest",
+  "metrology",
   "procertus",
   "epd",
   "partijkeuring",
@@ -139,6 +140,9 @@ export function intentForDraft(
   }
   if (draft.entryId === "innovation-attest") {
     return "innovation-attest";
+  }
+  if (draft.entryId === "metrology") {
+    return "metrology";
   }
   return undefined;
 }
