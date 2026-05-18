@@ -1,8 +1,8 @@
 /**
- * Product-bound certification types offered in traject bundle assembly (wegwijzer + pakket).
- * Order matches matrix column preference for stable layouts.
+ * Product-bound traject types offered in bundle assembly (wegwijzer + pakket): certifications,
+ * PROCERTUS-attest, and catalog-wide EPD. Order matches matrix column preference.
  */
-export const BUNDLE_CERT_ORDER = ["benor", "ce", "ssd", "procertus"] as const;
+export const BUNDLE_CERT_ORDER = ["benor", "ce", "ssd", "procertus", "epd"] as const;
 export type BundleCertKey = (typeof BUNDLE_CERT_ORDER)[number];
 
 /**

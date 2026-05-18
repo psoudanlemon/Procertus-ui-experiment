@@ -75,8 +75,14 @@ export function getCertificationProductAvailability(
   node: TreeNode,
   entry: AvailableEntry,
 ): ProductAvailability {
+  if (node.kind !== "product") {
+    return { available: false, reason: "Deze aanvraagroute is niet productgebonden." };
+  }
   const key = entry.productAvailabilityKey;
-  if (node.kind !== "product" || !key) {
+  if (!key) {
+    if (entry.productRelation === "required" && entry.primaryInput === "product-selection") {
+      return { available: true };
+    }
     return { available: false, reason: "Deze aanvraagroute is niet productgebonden." };
   }
   if (isCertificationKey(key) && node.certification) {
@@ -121,8 +127,9 @@ export function subtreeHasProductEligibleForCatalogEntry(
 }
 
 /**
- * Bundle assembly: which of {@link BUNDLE_CERT_ORDER} the categorization dataset marks as
- * available for this product (via {@link getCertificationProductAvailability}).
+ * Bundle assembly: which of {@link BUNDLE_CERT_ORDER} apply to this product
+ * ({@link getCertificationProductAvailability}). EPD has no spreadsheet column but is included
+ * when the entry is product-required with product selection (catalog-wide).
  */
 export function getAvailableBundleProductCertKeys(
   node: TreeNode | undefined,

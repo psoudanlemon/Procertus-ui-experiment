@@ -33,11 +33,11 @@ export const PRODUCT_CERTIFICATION_ENTRY_IDS = new Set<AvailableEntryKey>(["ce",
 export const PRODUCT_REQUIRED_INTENTS = new Set<CertificationRequestIntentId>([
   "product-certification",
   "procertus",
+  "epd",
 ]);
 
 export const OPTIONAL_PRODUCT_INTENTS = new Set<CertificationRequestIntentId>([
   "atg",
-  "epd",
   "partijkeuring",
 ]);
 

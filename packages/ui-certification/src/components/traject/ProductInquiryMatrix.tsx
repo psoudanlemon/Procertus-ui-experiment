@@ -32,7 +32,7 @@ function categoryTrailWithoutLeaf(path: string | undefined, label: string): stri
  * voorkomen in de pakketdrafts). Niet-primary entryIds (atg, epd, ...) volgen
  * daarna in de volgorde waarin ze voor het eerst opduiken.
  */
-const PRIMARY_CERT_ORDER = ["benor", "ce", "ssd", "procertus"] as const;
+const PRIMARY_CERT_ORDER = ["benor", "ce", "ssd", "procertus", "epd"] as const;
 
 function deriveCertOrder(
   groups: ProductSummaryGroup[],

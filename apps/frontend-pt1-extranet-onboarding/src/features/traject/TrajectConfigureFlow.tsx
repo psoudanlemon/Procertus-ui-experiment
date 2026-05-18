@@ -28,9 +28,9 @@ const BUNDLE_ASSEMBLE_PATH = (serviceId: string) =>
 const REQUEST_REVIEW_PATH = (serviceId: string) =>
   `/welcome/aanvraag/${serviceId}/controleren`;
 
-// Alleen wegwijzer-services die als hoofdcertificatie binnen het bundle-pakket vallen
-// (BENOR/CE/SSD/PROCERTUS) krijgen de extra "Voeg trajecten toe"-stap. Andere services
-// (ATG, Partijkeuring, …) hebben geen bundle-extras en gaan rechtstreeks naar Triage.
+// Wegwijzer-routes in {@link BUNDLE_CERT_ORDER} krijgen na productselectie de stap
+// "Voeg per product certificaten toe" (zelfde als BENOR/CE/SSD/… ). Overige services
+// gaan rechtstreeks naar Triage.
 function isBundleCertService(value: string): value is BundleCertKey {
   return (BUNDLE_CERT_ORDER as readonly string[]).includes(value);
 }

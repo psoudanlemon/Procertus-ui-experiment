@@ -36,7 +36,7 @@ const SAMPLE_PRODUCT: BundleProduct = {
   id: "stortklaar-beton",
   label: "Stortklaar beton",
   categoryTrail: "Beton en mortel",
-  availableBundleCerts: ["benor", "ce", "ssd", "procertus"],
+  availableBundleCerts: ["benor", "ce", "ssd", "procertus", "epd"],
   rowPrimaryCert: "benor",
   ceAvailabilityRaw: "2+",
 };
@@ -45,7 +45,7 @@ const SECONDARY_PRODUCT: BundleProduct = {
   id: "granulaten-voor-beton",
   label: "Granulaten voor beton",
   categoryTrail: "Bestanddelen voor beton > Granulaten",
-  availableBundleCerts: ["benor", "ce"],
+  availableBundleCerts: ["benor", "ce", "epd"],
   rowPrimaryCert: "benor",
   ceAvailabilityRaw: "1",
 };
@@ -54,7 +54,7 @@ const TERTIARY_PRODUCT: BundleProduct = {
   id: "betonstaal",
   label: "Betonstaal",
   categoryTrail: "Staal > Wapeningsstaal",
-  availableBundleCerts: ["benor", "ce", "procertus"],
+  availableBundleCerts: ["benor", "ce", "procertus", "epd"],
   rowPrimaryCert: "benor",
   ceAvailabilityRaw: "4",
 };

@@ -35,7 +35,7 @@ export type BundleCertMeta = {
 /**
  * Presentational copy per certification. Geëxporteerd zodat pages het pakket-brede
  * "Hoofdcertificatie" pillen en eventuele andere headers consistent kunnen labelen.
- * Producten kunnen alleen aan deze vier certificatie-trajecten gekoppeld worden.
+ * Producten kunnen aan deze certificatie- en document-trajecten gekoppeld worden (bundelpakket).
  */
 export const BUNDLE_CERT_META: Record<BundleCertKey, BundleCertMeta> = {
   benor: {
@@ -57,6 +57,12 @@ export const BUNDLE_CERT_META: Record<BundleCertKey, BundleCertMeta> = {
     title: "PROCERTUS-attest",
     shortTitle: "PROCERTUS",
     description: "Eigen attest van PROCERTUS, strikt gekoppeld aan een beperkt aantal producten.",
+  },
+  epd: {
+    title: "Environmental Product Declaration",
+    shortTitle: "EPD",
+    description:
+      "Milieuproductverklaring (EPD); via PROCERTUS voor elk producttype in de catalogus aan te vragen.",
   },
 };
 
