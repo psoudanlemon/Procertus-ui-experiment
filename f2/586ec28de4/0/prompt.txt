@@ -1,0 +1,13 @@
+@packages/ui-certification/src/components/traject/ExpertCallBookingView.tsx:149 only show the schedule card to schedule a time slot yourself if a property for the expert call booking view is enabled. Please introduce a new property that, by default, is set to false.
+
+---
+
+@packages/ui-certification/src/components/traject/ExpertCallBookingView.tsx:149 only show the schedule card to schedule a time slot yourself if a property for the expert call booking view is enabled. Please introduce a new property that, by default, is set to false.
+
+---
+
+Please commit all changes. In this session, use your Git commit skill.
+
+---
+
+Please commit all changes. In this session, use your Git commit skill.
