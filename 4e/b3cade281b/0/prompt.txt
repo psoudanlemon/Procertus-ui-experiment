@@ -1,0 +1,17 @@
+When showing categories in the product browser, the categories are currently using a natural sorting order, but I want them sorted alphabetically.
+
+Also, the product count shown on a category card does not match the actual filtered set of products in that category when using the current filtering state.
+
+Also, categories without any filtered parts should not be listed. Only relevant categories should be listed, resulting in a subset of parts shown underneath. @packages/ui-certification/src/components/traject/ProductSelectionBasket.tsx:636
+
+---
+
+When showing categories in the product browser, the categories are currently using a natural sorting order, but I want them sorted alphabetically.
+
+Also, the product count shown on a category card does not match the actual filtered set of products in that category when using the current filtering state.
+
+Also, categories without any filtered parts should not be listed. Only relevant categories should be listed, resulting in a subset of parts shown underneath. @packages/ui-certification/src/components/traject/ProductSelectionBasket.tsx:636
+
+---
+
+Please commit all changes. Use git commit skill
