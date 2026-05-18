@@ -1,4 +1,12 @@
-import { useCallback, useEffect, useId, useRef, useState, type ChangeEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+} from "react";
 import {
   FileAttachmentIcon,
   FullscreenIcon,
@@ -21,7 +29,6 @@ import {
   cn,
 } from "@procertus-ui/ui";
 
-import { ChatList } from "../../components/portal-chat/chat-list";
 import type {
   PortalEmailComposerProps,
   PortalEmailMessage,
@@ -40,6 +47,67 @@ const defaultFormatTimestamp = (iso: string) =>
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(iso));
+
+const DEFAULT_MESSAGE_BODY_PREVIEW_MAX_REM = 12;
+
+function MessageBodyPreview({
+  markdown,
+  maxHeightRem,
+  onClampChange,
+}: {
+  markdown: string;
+  maxHeightRem: number;
+  onClampChange?: (clamped: boolean) => void;
+}) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const [clamped, setClamped] = useState(false);
+
+  const measure = useCallback(() => {
+    const wrap = wrapRef.current;
+    const inner = innerRef.current;
+    if (!wrap || !inner) return;
+    const next = inner.scrollHeight > wrap.clientHeight + 1;
+    setClamped((was) => {
+      if (was !== next) {
+        onClampChange?.(next);
+      }
+      return next;
+    });
+  }, [onClampChange]);
+
+  useLayoutEffect(() => {
+    measure();
+  }, [markdown, measure, maxHeightRem]);
+
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    const inner = innerRef.current;
+    if (!wrap || !inner) return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(wrap);
+    ro.observe(inner);
+    return () => ro.disconnect();
+  }, [measure]);
+
+  return (
+    <div
+      ref={wrapRef}
+      className="relative min-h-0 overflow-hidden"
+      style={{ maxHeight: `${maxHeightRem}rem` }}
+    >
+      <div ref={innerRef}>
+        <EmailThreadMarkdownBody markdown={markdown} className="-mx-px" />
+      </div>
+      {clamped ? (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-card from-55% via-card/85 to-transparent"
+        />
+      ) : null}
+    </div>
+  );
+}
 
 function normalizeToolbarOptions(
   toolbar: PortalEmailComposerProps["toolbar"],
@@ -423,11 +491,16 @@ function EmailThreadComposer({
 function MessageCard({
   m,
   formatTimestamp,
+  previewMaxHeightRem,
+  onOpenFull,
 }: {
   m: PortalEmailMessage;
   formatTimestamp: (iso: string) => string;
+  previewMaxHeightRem: number;
+  onOpenFull?: () => void;
 }) {
   const isRequester = m.placement === "requester";
+  const [bodyClamped, setBodyClamped] = useState(false);
 
   return (
     <article
@@ -452,7 +525,22 @@ function MessageCard({
       </div>
 
       <div className="px-4 py-3">
-        <EmailThreadMarkdownBody markdown={m.body} className="-mx-px" />
+        <MessageBodyPreview
+          markdown={m.body}
+          maxHeightRem={previewMaxHeightRem}
+          onClampChange={onOpenFull ? setBodyClamped : undefined}
+        />
+
+        {onOpenFull && bodyClamped ? (
+          <Button
+            type="button"
+            variant="link"
+            className="mt-2 h-auto px-0 text-sm font-medium"
+            onClick={onOpenFull}
+          >
+            Volledig bericht bekijken
+          </Button>
+        ) : null}
 
         {m.attachments && m.attachments.length > 0 ? (
           <div
@@ -485,6 +573,8 @@ export function PortalEmailThreadWindow({
   composer,
   emptyContent,
   threadSummary,
+  onOpenMessageDetail,
+  messageBodyPreviewMaxRem = DEFAULT_MESSAGE_BODY_PREVIEW_MAX_REM,
 }: PortalEmailThreadWindowProps) {
   const showComposer = composer?.show !== false;
 
@@ -511,18 +601,31 @@ export function PortalEmailThreadWindow({
           {emptyContent ?? "Nog geen berichten in dit gesprek."}
         </div>
       ) : (
-        <ChatList
-          className={cn("gap-4 pb-2 pt-1", scrollAreaClassName)}
-          role="log"
-          aria-live="polite"
-          aria-label={ariaLabel}
-        >
-          <div className="flex flex-col gap-4">
-            {messages.map((m) => (
-              <MessageCard key={m.id} m={m} formatTimestamp={formatTimestamp} />
+        <div className="relative flex min-h-0 flex-1 flex-col">
+          <div
+            className={cn(
+              "flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto overflow-x-hidden p-section pb-2 pt-1",
+              scrollAreaClassName,
+            )}
+            role="log"
+            aria-live="polite"
+            aria-label={ariaLabel}
+          >
+            {messages.map((m, idx) => (
+              <MessageCard
+                key={m.id}
+                m={m}
+                formatTimestamp={formatTimestamp}
+                previewMaxHeightRem={messageBodyPreviewMaxRem}
+                onOpenFull={
+                  onOpenMessageDetail
+                    ? () => onOpenMessageDetail({ message: m, index: idx, messages })
+                    : undefined
+                }
+              />
             ))}
           </div>
-        </ChatList>
+        </div>
       )}
 
       {showComposer ? (

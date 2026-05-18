@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "@storybook/test";
 import { useCallback, useState } from "react";
 
 import type {
@@ -6,6 +7,24 @@ import type {
   PortalEmailMessage,
 } from "../../components/portal-chat/portal-email-thread-types";
 import { PortalEmailThreadWindow } from "./PortalEmailThreadWindow";
+
+const longPortalReplyBody = `
+Dag,
+
+Dit is **akkoord** op voorwaarde dat het \`BTW-nummer\` overeenstemt met de KBO-gegevens.
+
+## Controlelijst vóór verzending
+
+- Controleer of alle geüploade documenten nog geldig zijn vóór de technische review.
+- Verifieer dat uw contactpersoon nog steeds bevoegd is om het dossier te ondertekenen.
+- Stuur bij twijfel een korte e-mail naar het backoffice adres dat u hierboven ziet vermeld.
+
+### Bijlagen en referenties
+
+Tot slot willen we u er nog op wijzen dat verlopen attesten het proces kunnen vertragen — plan daarom uw documentatie ruim tijdig.
+
+Groeten uit het PROCERTUS backoffice-team.
+`.trim();
 
 const threadMessages = [
   {
@@ -19,7 +38,7 @@ const threadMessages = [
         id: "a1",
         title: "ingevuld_profielsjabloon.pdf",
         formatHint: "PDF",
-        href: "https://www.w3.org/WAI/WCAG21/Techniques/pdf/img/table-word.pdf",
+        href: "https://www.w3.org/WAI/WCAG21/Techniques/pdf/table-word.pdf",
       },
     ],
     body: "Beste,\n\nHierbij de **aangevulde gegevens**. Zien jullie nog iets ontbreekt?\n\nMet vriendelijke groet",
@@ -30,6 +49,15 @@ const threadMessages = [
     authorLabel: "PROCERTUS — backoffice",
     atIso: "2026-04-28T14:05:00.000Z",
     subject: "Re: Profielwijziging — validatie gevraagd",
+    body: longPortalReplyBody,
+  },
+] satisfies PortalEmailMessage[];
+
+/** Shorter transcript when truncation is not relevant. */
+const compactThreadMessages = [
+  threadMessages[0]!,
+  {
+    ...threadMessages[1]!,
     body: "Dag,\n\nDit is **akkoord** op voorwaarde dat het `BTW-nummer` overeenstemt met de KBO-gegevens.\n\nGroeten",
   },
 ] satisfies PortalEmailMessage[];
@@ -42,7 +70,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Single-thread dossier correspondence with **Markdown** bodies (react-markdown + GFM for read, TipTap Markdown for compose): optional subjects, `DownloadableItem` attachments, and TipTap markdown composer with staged attachments.",
+          "Single-thread dossier correspondence with Markdown bodies (read: react-markdown + GFM; compose: TipTap). Long card bodies clamp with a bottom fade + **Volledig bericht bekijken** when `onOpenMessageDetail` is wired (extranet stacks `conversationMessageDetail`).",
       },
     },
   },
@@ -53,7 +81,7 @@ export default meta;
 
 export const Default: StoryObj<typeof meta> = {
   args: {
-    messages: threadMessages,
+    messages: compactThreadMessages,
     threadSummary: {
       title: "Profielwijziging",
       subtitle: "Eén thread voor dit dossier",
@@ -66,9 +94,25 @@ export const Default: StoryObj<typeof meta> = {
   },
 };
 
-export const EditableComposer: StoryObj<typeof meta> = {
+export const BodyPreviewAndDetailCta: StoryObj<typeof meta> = {
   args: {
     messages: threadMessages,
+    threadSummary: {
+      title: "Profielwijziging",
+      subtitle: "Lange inhoud: verloop naar leesbare CTA",
+    },
+    onOpenMessageDetail: fn(),
+    composer: {
+      readOnly: true,
+      placeholder: "Antwoord naar PROCERTUS…",
+      "aria-label": "Bericht naar PROCERTUS",
+    },
+  },
+};
+
+export const EditableComposer: StoryObj<typeof meta> = {
+  args: {
+    messages: compactThreadMessages,
     threadSummary: { title: "Profielwijziging" },
   },
   render: () => {
@@ -99,7 +143,7 @@ export const EditableComposer: StoryObj<typeof meta> = {
     return (
       <div className="mx-auto flex w-full max-w-2xl flex-col overflow-hidden rounded-lg border border-border bg-card shadow-sm">
         <PortalEmailThreadWindow
-          messages={threadMessages}
+          messages={compactThreadMessages}
           threadSummary={{ title: "Profielwijziging" }}
           scrollAreaClassName="max-h-96"
           composer={{

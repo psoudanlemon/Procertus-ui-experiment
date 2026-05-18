@@ -5,6 +5,7 @@ import {
   PortalEmailThreadWindow,
   type PortalEmailAttachment,
   type PortalEmailMessage,
+  type PortalEmailThreadMessageDetailOpen,
 } from "@procertus-ui/ui-lib";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -15,9 +16,17 @@ import {
   normalizeConversationScenario,
   type ConversationScenario,
   type ConversationSuite,
-  type MockPortalChatLine,
 } from "../features/conversations/conversation-detail-panel-mocks";
-import { CONVERSATION_DETAIL_PANEL_TYPE } from "./conversation-panel-config";
+import { mapMockLinesToPortalEmailMessages } from "../features/conversations/conversation-portal-email-messages";
+import {
+  CONVERSATION_DETAIL_PANEL_TYPE,
+  CONVERSATION_MESSAGE_DETAIL_PANEL_TYPE,
+} from "./conversation-panel-config";
+import {
+  publishConversationThreadMessages,
+  conversationThreadMessagesCacheKey,
+} from "./conversation-thread-messages-cache";
+import { useAppPanels } from "./useAppPanels";
 
 export type ConversationDetailPanelProps = {
   panelType?: string;
@@ -45,18 +54,6 @@ function ClosePanelButton({ panelType = CONVERSATION_DETAIL_PANEL_TYPE }: { pane
       <HugeiconsIcon icon={Cancel01Icon} />
     </Button>
   );
-}
-
-function mapLinesToEmailMessages(lines: readonly MockPortalChatLine[]): PortalEmailMessage[] {
-  return lines.map((m) => ({
-    id: m.id,
-    placement: m.side === "requester" ? "requester" : "portal",
-    authorLabel: m.authorLabel,
-    atIso: m.atIso,
-    body: m.body,
-    subject: m.subject,
-    attachments: m.attachments?.length ? m.attachments : undefined,
-  }));
 }
 
 function formatFileByteSize(bytes: number): string {
@@ -126,13 +123,31 @@ function ConversationCoverBody({ panelType, suite, scenario }: ConversationCover
   }, [scenario, suite]);
 
   const baseMessages = useMemo(
-    () => mapLinesToEmailMessages(getRawConversationThread(suite, scenario)),
+    () => mapMockLinesToPortalEmailMessages(getRawConversationThread(suite, scenario)),
     [suite, scenario],
   );
 
-  const messages = useMemo(
-    () => [...baseMessages, ...optimisticMessages],
-    [baseMessages, optimisticMessages],
+  const messages = useMemo(() => {
+    const combined = [...baseMessages, ...optimisticMessages];
+    return combined.toSorted((a, b) => b.atIso.localeCompare(a.atIso));
+  }, [baseMessages, optimisticMessages]);
+
+  const { openPanel } = useAppPanels();
+
+  useEffect(() => {
+    publishConversationThreadMessages(conversationThreadMessagesCacheKey(suite, scenario), messages);
+  }, [scenario, suite, messages]);
+
+  const handleOpenMessageDetail = useCallback(
+    (detail: PortalEmailThreadMessageDetailOpen) => {
+      publishConversationThreadMessages(conversationThreadMessagesCacheKey(suite, scenario), messages);
+      openPanel(CONVERSATION_MESSAGE_DETAIL_PANEL_TYPE, {
+        suite,
+        scenario,
+        messageId: detail.message.id,
+      });
+    },
+    [messages, openPanel, scenario, suite],
   );
 
   const handlePickFiles = useCallback((files: readonly File[]) => {
@@ -188,6 +203,7 @@ function ConversationCoverBody({ panelType, suite, scenario }: ConversationCover
         messages={messages}
         className="flex min-h-0 min-w-0 flex-1 flex-col rounded-none border-0 bg-transparent shadow-none"
         scrollAreaClassName="max-h-none min-h-0 flex-1"
+        onOpenMessageDetail={handleOpenMessageDetail}
         threadSummary={{
           title: conversationSuiteTitle(suite),
           subtitle:

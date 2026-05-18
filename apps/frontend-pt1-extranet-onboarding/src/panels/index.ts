@@ -1,6 +1,9 @@
 export * from "./panelRegistry";
 export * from "./useAppPanels";
-export { CONVERSATION_DETAIL_PANEL_TYPE } from "./conversation-panel-config";
+export {
+  CONVERSATION_DETAIL_PANEL_TYPE,
+  CONVERSATION_MESSAGE_DETAIL_PANEL_TYPE,
+} from "./conversation-panel-config";
 export {
   CONVERSATION_SUITE_CERTIFICATION,
   CONVERSATION_SUITE_PROFILE_CHANGE,

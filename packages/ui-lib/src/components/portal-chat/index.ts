@@ -26,10 +26,13 @@ export type {
   PortalChatWindowProps,
 } from "./portal-chat-types";
 export { PortalEmailThreadWindow } from "../../custom-components/Chat/PortalEmailThreadWindow";
+export { PortalEmailMessageDetailBody } from "../../custom-components/Chat/portal-email-message-detail-body";
+export type { PortalEmailMessageDetailBodyProps } from "../../custom-components/Chat/portal-email-message-detail-body";
 export type {
   PortalEmailAttachment,
   PortalEmailComposerProps,
   PortalEmailMessage,
+  PortalEmailThreadMessageDetailOpen,
   PortalEmailThreadSummary,
   PortalEmailThreadWindowProps,
 } from "./portal-email-thread-types";

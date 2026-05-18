@@ -9,12 +9,17 @@ import {
   ProfileChangeDetailPanel,
 } from "./profile_change_detail_panel";
 import { ConversationDetailPanel } from "./conversation_detail_panel";
-import { CONVERSATION_DETAIL_PANEL_TYPE } from "./conversation-panel-config";
+import { ConversationMessageDetailPanel } from "./conversation_message_detail_panel";
+import {
+  CONVERSATION_DETAIL_PANEL_TYPE,
+  CONVERSATION_MESSAGE_DETAIL_PANEL_TYPE,
+} from "./conversation-panel-config";
 
 export const panelRegistry = {
   [REQUEST_DETAIL_PANEL_TYPE]: RequestDetailPanel,
   [PROFILE_CHANGE_DETAIL_PANEL_TYPE]: ProfileChangeDetailPanel,
   [CONVERSATION_DETAIL_PANEL_TYPE]: ConversationDetailPanel,
+  [CONVERSATION_MESSAGE_DETAIL_PANEL_TYPE]: ConversationMessageDetailPanel,
 } satisfies Record<string, ComponentType<any>>;
 
 export type AppPanelRegistry = typeof panelRegistry;

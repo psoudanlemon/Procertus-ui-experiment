@@ -61,6 +61,13 @@ export type PortalEmailThreadSummary = {
   subtitle?: string;
 };
 
+/** Passed to `PortalEmailThreadWindow` when the user opens full message view (e.g. stacked detail panel). */
+export type PortalEmailThreadMessageDetailOpen = {
+  readonly message: PortalEmailMessage;
+  readonly index: number;
+  readonly messages: readonly PortalEmailMessage[];
+};
+
 export type PortalEmailThreadWindowProps = {
   messages: readonly PortalEmailMessage[];
   "aria-label"?: string;
@@ -71,4 +78,8 @@ export type PortalEmailThreadWindowProps = {
   emptyContent?: ReactNode;
   /** Optional banner above the scroll area (conversation context). */
   threadSummary?: PortalEmailThreadSummary;
+  /** When set, card bodies clip with a fade and show a CTA to open the full message. */
+  onOpenMessageDetail?: (target: PortalEmailThreadMessageDetailOpen) => void;
+  /** Max height of the markdown preview in each card (`rem`). Default 12. */
+  messageBodyPreviewMaxRem?: number;
 };
