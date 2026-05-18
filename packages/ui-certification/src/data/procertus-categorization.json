@@ -260,6 +260,7 @@
                   "id": "beton-en-mortel--prefab--infrastructuur--buizen-en-hulpstukken-van-ongewapend-beton-van-staalvezelbeton-en-van-gewapend-b--106",
                   "kind": "product",
                   "label": "Buizen en hulpstukken van ongewapend beton, van staalvezelbeton en van gewapend beton",
+                  "searchFields": ["doorpersbuis", "pendelbuis", "ovale buis"],
                   "certification": {
                     "ce": "4",
                     "benor": "x",
@@ -507,6 +508,7 @@
                   "id": "beton-en-mortel--prefab--bouwelementen--betonnen-potten-voor-combinatievloeren--006",
                   "kind": "product",
                   "label": "Betonnen potten voor combinatievloeren",
+                  "searchFields": ["vulelementen"],
                   "certification": {
                     "ce": "2+",
                     "benor": "x",

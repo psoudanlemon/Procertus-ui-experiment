@@ -24,6 +24,8 @@ export type TreeNode = {
   id: string;
   kind: TreeNodeKind;
   label: string;
+  /** Optionele synoniemen / zoektermen (catalogus-JSON); alleen gebruikt in productzoekfunctie. */
+  searchFields?: readonly string[];
   productTypeStreamLabel?: string;
   children?: TreeNode[];
   certification?: Certification;

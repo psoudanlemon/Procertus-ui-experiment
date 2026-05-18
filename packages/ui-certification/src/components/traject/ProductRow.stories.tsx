@@ -138,3 +138,45 @@ export const SearchResult: StoryObj<typeof meta> = {
     </ul>
   ),
 };
+
+/**
+ * Zoeken op producttype-stroomcode: de code staat op een eigen regel en krijgt
+ * dezelfde `<mark>`-highlight als het label wanneer de query matcht.
+ */
+export const SearchResultByStreamLabel: StoryObj<typeof meta> = {
+  args: {
+    id: "beton-bakken-105",
+    label: "Geprefabriceerde betonnen bakken voor waterafvoer en -infiltratie",
+    productTypeStreamLabel: "105",
+    categoryTrail: "Beton en mortel > Prefab > Infrastructuur",
+    highlight: "105",
+  },
+  render: (args) => (
+    <ul className="flex max-w-2xl flex-col gap-component">
+      <AnimatePresence>
+        <ProductRow {...args} />
+      </AnimatePresence>
+    </ul>
+  ),
+};
+
+/**
+ * Zoeken op optionele `searchFields` uit de catalogus: alleen de matchende
+ * waarden worden als extra regels getoond (met highlight), niet het volledige array.
+ */
+export const SearchResultBySearchFields: StoryObj<typeof meta> = {
+  args: {
+    id: "beton-pot-combi",
+    label: "Betonnen potten voor combinatievloeren",
+    matchedSearchFields: ["vulelementen"],
+    categoryTrail: "Beton en mortel > Bouwelementen",
+    highlight: "vule",
+  },
+  render: (args) => (
+    <ul className="flex max-w-2xl flex-col gap-component">
+      <AnimatePresence>
+        <ProductRow {...args} />
+      </AnimatePresence>
+    </ul>
+  ),
+};

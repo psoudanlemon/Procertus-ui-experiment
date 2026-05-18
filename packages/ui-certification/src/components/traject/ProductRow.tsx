@@ -4,6 +4,7 @@ import {
   Item,
   ItemActions,
   ItemContent,
+  ItemDescription,
   ItemTitle,
   cn,
 } from "@procertus-ui/ui";
@@ -57,11 +58,22 @@ export type ProductRowProps = {
    */
   categoryTrail?: string;
   /**
-   * Wanneer aanwezig wordt het eerste voorkomen van deze substring in
-   * `label` (case-insensitief) gemarkeerd met `<mark>`-styling in
-   * accent-kleur. Alleen actief als `label` een string is.
+   * Wanneer aanwezig worden voorkomens van deze substring (case-insensitief)
+   * in `label`, {@link productTypeStreamLabel} en {@link matchedSearchFields}
+   * gemarkeerd met `<mark>` in accentkleur. Alleen actief voor stringvelden.
    */
   highlight?: string;
+  /**
+   * Alleen gezet in zoekmodus (catalogus doorzoeken). Toont de
+   * `productTypeStreamLabel` als aparte regel; browse gebruikt deze prop niet,
+   * zodat de productrij identiek blijft aan vroeger.
+   */
+  productTypeStreamLabel?: string;
+  /**
+   * Alleen gezet in zoekmodus: `searchFields`-waarden die op de huidige query
+   * matchten; elk als aparte regel, zelfde stijl als producttype.
+   */
+  matchedSearchFields?: readonly string[];
   onAdd: () => void;
   className?: string;
 };
@@ -78,9 +90,23 @@ export function ProductRow({
   label,
   categoryTrail,
   highlight,
+  productTypeStreamLabel,
+  matchedSearchFields,
   onAdd,
   className,
 }: ProductRowProps) {
+  const addAriaLabel =
+    typeof label === "string"
+      ? (() => {
+          const bits: string[] = [label];
+          if (productTypeStreamLabel) bits.push(`producttype ${productTypeStreamLabel}`);
+          if (matchedSearchFields?.length) {
+            bits.push(`zoektermen ${matchedSearchFields.join(", ")}`);
+          }
+          return `Voeg ${bits.join(", ")} toe aan selectie`;
+        })()
+      : undefined;
+
   return (
     <motion.li
       key={id}
@@ -104,11 +130,26 @@ export function ProductRow({
         <button
           type="button"
           onClick={onAdd}
-          aria-label={
-            typeof label === "string" ? `Voeg ${label} toe aan selectie` : undefined
-          }
+          aria-label={addAriaLabel}
         >
           <ItemContent className="min-w-0">
+            {productTypeStreamLabel ? (
+              <ItemDescription
+                className="line-clamp-1 text-xs font-medium tabular-nums tracking-tight text-muted-foreground"
+                translate="no"
+              >
+                {renderHighlightedLabel(productTypeStreamLabel, highlight)}
+              </ItemDescription>
+            ) : null}
+            {matchedSearchFields?.map((field, idx) => (
+              <ItemDescription
+                key={`sf-${idx}-${field}`}
+                className="line-clamp-2 text-xs font-medium leading-snug text-muted-foreground"
+                translate="no"
+              >
+                {renderHighlightedLabel(field, highlight)}
+              </ItemDescription>
+            ))}
             <ItemTitle className="line-clamp-2 w-full text-sm font-medium leading-snug">
               {renderHighlightedLabel(label, highlight)}
               {categoryTrail ? <ProductCategoryTrail trail={categoryTrail} /> : null}

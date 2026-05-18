@@ -79,7 +79,56 @@ type SearchHit = {
    * van het basketrij-pad in `ProductBasket`.
    */
   categoryTrail: string;
+  /** Alleen gezet wanneer de zoekterm (gedeeltelijk) matcht op `productTypeStreamLabel`. */
+  productTypeStreamLabel?: string;
+  /**
+   * Subset van `searchFields` op het product waar de huidige query op matcht;
+   * alleen gezet in zoekmodus wanneer niet leeg.
+   */
+  matchedSearchFields?: readonly string[];
 };
+
+function productTypeStreamLabelMatchedByQuery(
+  n: TreeNode,
+  qLower: string,
+): string | undefined {
+  if (n.kind !== "product" || !qLower) return undefined;
+  const stream = n.productTypeStreamLabel?.trim();
+  if (stream == null || stream === "") return undefined;
+  return stream.toLowerCase().includes(qLower) ? stream : undefined;
+}
+
+/**
+ * `searchFields`-items waar `qLower` in matcht (case-insensitief), volgorde uit de JSON,
+ * duplicaten op dezelfde waarde (na trim, casefold) weggelaten.
+ */
+function searchFieldsMatchedByQuery(
+  n: TreeNode,
+  qLower: string,
+): readonly string[] {
+  if (n.kind !== "product" || !qLower) return [];
+  const fields = n.searchFields;
+  if (fields == null || fields.length === 0) return [];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of fields) {
+    const s = raw.trim();
+    if (s === "") continue;
+    if (!s.toLowerCase().includes(qLower)) continue;
+    const dedupeKey = s.toLowerCase();
+    if (seen.has(dedupeKey)) continue;
+    seen.add(dedupeKey);
+    out.push(s);
+  }
+  return out;
+}
+
+function productMatchesSearchQuery(n: TreeNode, qLower: string): boolean {
+  if (n.kind !== "product" || !qLower) return false;
+  if (n.label.toLowerCase().includes(qLower)) return true;
+  if (productTypeStreamLabelMatchedByQuery(n, qLower) != null) return true;
+  return searchFieldsMatchedByQuery(n, qLower).length > 0;
+}
 
 function resolveLevel(
   path: readonly string[],
@@ -177,11 +226,22 @@ function searchProducts(
   const walk = (input: readonly TreeNode[], trail: readonly string[]) => {
     for (const n of input) {
       if (
-        n.kind === "product" &&
-        n.label.toLowerCase().includes(q) &&
+        productMatchesSearchQuery(n, q) &&
         productEligibleForCatalogEntry(n, routeEntry)
       ) {
-        out.push({ id: n.id, label: n.label, categoryTrail: trail.join(" > ") });
+        const streamForDisplay = productTypeStreamLabelMatchedByQuery(n, q);
+        const matchedFields = searchFieldsMatchedByQuery(n, q);
+        out.push({
+          id: n.id,
+          label: n.label,
+          categoryTrail: trail.join(" > "),
+          ...(streamForDisplay != null
+            ? { productTypeStreamLabel: streamForDisplay }
+            : {}),
+          ...(matchedFields.length > 0
+            ? { matchedSearchFields: matchedFields }
+            : {}),
+        });
       }
       if (n.children?.length) {
         walk(n.children, [...trail, n.label]);
@@ -761,6 +821,8 @@ function DiscoveryArea({
                         id={hit.id}
                         label={hit.label}
                         categoryTrail={hit.categoryTrail}
+                        productTypeStreamLabel={hit.productTypeStreamLabel}
+                        matchedSearchFields={hit.matchedSearchFields}
                         highlight={searchQuery}
                         onAdd={() => addProduct(hit.id)}
                       />
