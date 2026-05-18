@@ -1,0 +1,36 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "94cf4cd875e4",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "apps/frontend-pt1-extranet-onboarding/src/features/conversations/conversation-portal-email-messages.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/conversation-panel-config.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/conversation-thread-messages-cache.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/conversation_detail_panel.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/conversation_message_detail_panel.tsx",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/index.ts",
+    "apps/frontend-pt1-extranet-onboarding/src/panels/panelRegistry.ts",
+    "packages/ui-lib/src/components/portal-chat/index.ts",
+    "packages/ui-lib/src/components/portal-chat/portal-email-thread-types.ts",
+    "packages/ui-lib/src/custom-components/Chat/PortalEmailThreadWindow.stories.tsx",
+    "packages/ui-lib/src/custom-components/Chat/PortalEmailThreadWindow.tsx",
+    "packages/ui-lib/src/custom-components/Chat/portal-email-message-detail-body.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/94/cf4cd875e4/0/metadata.json",
+      "transcript": "/94/cf4cd875e4/0/full.jsonl",
+      "content_hash": "/94/cf4cd875e4/0/content_hash.txt",
+      "prompt": "/94/cf4cd875e4/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}
