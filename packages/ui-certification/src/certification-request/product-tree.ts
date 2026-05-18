@@ -167,7 +167,13 @@ export function primaryIntentAvailability(
   }
   const selectedEntry = entries.find((entry) => entry.id === intent);
   if (!selectedEntry?.productAvailabilityKey) {
-    return { available: true, label: "Contextaanvraag" };
+    return {
+      available: true,
+      label:
+        selectedEntry?.productRelation === "required"
+          ? `${selectedEntry.shortLabel} — alle producttypes`
+          : "Contextaanvraag",
+    };
   }
   const availability = getCertificationProductAvailability(node, selectedEntry);
   return availability.available

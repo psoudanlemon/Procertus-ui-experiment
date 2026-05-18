@@ -3,7 +3,7 @@ import { useEffect, useId, useRef } from "react";
 
 export const PRODUCT_REQUEST_NOTE_MAX_LENGTH = 2500;
 /**
- * Verhoogde tekenlimiet voor het non-product-bound flow (bv. ATG, EPD,
+ * Verhoogde tekenlimiet voor het non-product-bound flow (bv. ATG, innovation-attest,
  * partijkeuring) waar de begeleidende brief het volledige dossier vormt.
  */
 export const PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG = 10_000;

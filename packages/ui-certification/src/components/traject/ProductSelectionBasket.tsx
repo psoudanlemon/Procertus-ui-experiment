@@ -292,6 +292,8 @@ export type ProductSelectionBasketProviderProps = {
    * Traject: id van de gekozen wegwijzer-route (bv. `ce`). Indien gezet en de entry heeft
    * een {@link AvailableEntry.productAvailabilityKey}, worden browse, zoekresultaten en
    * categorieën beperkt tot producten die in de dataset voor die route beschikbaar zijn.
+   * Routes zonder sleutel (bv. EPD: verplicht product kiezen, wel volledige catalogus) geven
+   * deze prop doorgaans niet door zodat geen filtering wordt toegepast.
    */
   productRouteEntryId?: AvailableEntryKey;
   children: ReactNode;

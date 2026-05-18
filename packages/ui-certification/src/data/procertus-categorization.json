@@ -86,10 +86,9 @@
         "category": "document",
         "shortLabel": "EPD",
         "label": "Environmental Product Declaration",
-        "primaryInput": "freeform-context",
-        "productRelation": "optional",
-        "productAvailabilityKey": "epd",
-        "description": "Document rond milieuprestaties; kan ook zonder BENOR- of CE-markering worden aangevraagd."
+        "primaryInput": "product-selection",
+        "productRelation": "required",
+        "description": "Document rond milieuprestaties; kan ook zonder BENOR- of CE-markering worden aangevraagd. Elk producttype in de catalogus kan worden gekozen — er is geen aparte EPD-kolom in de dataset nodig."
       },
       {
         "id": "partijkeuring",
