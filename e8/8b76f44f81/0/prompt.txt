@@ -1,0 +1,27 @@
+After finishing the entire onboarding flow, the user is directed to a separate page with a different layout. The page instructs the user how to use their email to start onboarding on the client's extranet portal.
+
+I want to use this page to give a proper overview of everything that was added to the request and to show a clear overview of which users have been onboarded; they should all have received an email.
+
+Also add a section about the next steps: they can find their requests and company information in their profile on the portal website, and every user was onboarded with the proper roles. @apps/frontend-pt1-extranet-onboarding/src/App.tsx:49-52
+
+---
+
+After finishing the entire onboarding flow, the user is directed to a separate page with a different layout. The page instructs the user how to use their email to start onboarding on the client's extranet portal.
+
+I want to use this page to give a proper overview of everything that was added to the request and to show a clear overview of which users have been onboarded; they should all have received an email.
+
+Also add a section about the next steps: they can find their requests and company information in their profile on the portal website, and every user was onboarded with the proper roles. @apps/frontend-pt1-extranet-onboarding/src/App.tsx:49-52
+
+---
+
+@apps/frontend-pt1-extranet-onboarding/src/App.tsx:48 I was talking about onboarding completion or the onboarding registration complete page. 
+
+ please add a complete summary to this page, including the next steps about digital onboarding and digital follow-up for all of the included requests or inquiries in the request.
+
+---
+
+Turn this overview into a simple table, more minimal. Maybe reuse a table from other steps as a summary for the certification inquiries that have just been sent out.
+
+---
+
+Please apply proper semantic spacing to all of the components in this overview.@packages/ui/src/components/spacing-guidelines.mdx
