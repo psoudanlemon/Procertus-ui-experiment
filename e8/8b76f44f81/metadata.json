@@ -3,13 +3,15 @@
   "checkpoint_id": "e88b76f44f81",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 5,
+  "checkpoints_count": 6,
   "files_touched": [
     "apps/frontend-pt1-extranet-onboarding/src/components/PublicOverviewSection.tsx",
     "apps/frontend-pt1-extranet-onboarding/src/features/info-request/info-request-submitted-snapshot.ts",
     "apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx",
     "apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx",
     "apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingRegistrationCompletePage.tsx",
+    "bun.lock",
+    "packages/ui-certification/package.json",
     "packages/ui-certification/src/index.ts",
     "packages/ui-certification/src/onboarding/index.ts",
     "packages/ui-certification/src/onboarding/registration-complete-summary.ts",
@@ -22,6 +24,12 @@
       "transcript": "/e8/8b76f44f81/0/full.jsonl",
       "content_hash": "/e8/8b76f44f81/0/content_hash.txt",
       "prompt": "/e8/8b76f44f81/0/prompt.txt"
+    },
+    {
+      "metadata": "/e8/8b76f44f81/1/metadata.json",
+      "transcript": "/e8/8b76f44f81/1/full.jsonl",
+      "content_hash": "/e8/8b76f44f81/1/content_hash.txt",
+      "prompt": "/e8/8b76f44f81/1/prompt.txt"
     }
   ]
 }

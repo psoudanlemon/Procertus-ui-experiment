@@ -1,0 +1,65 @@
+>  …/Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding bun run build
+$ tsc -b && vite build
+src/pages/OnboardingRegistrationCompletePage.tsx:25:8 - error TS2724: '"@procertus-ui/ui-certification"' has no exported member named 'RegistrationCompleteSummary'. Did you mean 'deriveRegistrationCompleteSummary'?
+
+25   type RegistrationCompleteSummary,
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+src/pages/OnboardingRegistrationCompletePage.tsx:136:41 - error TS7006: Parameter 'line' implicitly has an 'any' type.
+
+136                 {summary.inquiries.map((line) => (
+                                            ~~~~
+
+src/pages/OnboardingRegistrationCompletePage.tsx:175:39 - error TS7006: Parameter 'p' implicitly has an 'any' type.
+
+175           {summary.portalPersons.map((p) => (
+                                          ~
+
+../../packages/ui-certification/src/onboarding/registration-complete-summary.ts:113:5 - error TS2322: Type 'readonly string[] | undefined' is not assignable to type 'string[] | undefined'.
+  The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+
+113     summaryIncludedDraftIds,
+        ~~~~~~~~~~~~~~~~~~~~~~~
+
+../../packages/ui-certification/src/onboarding/use-onboarding-flow.tsx:37:27 - error TS7016: Could not find a declaration file for module 'react-dom'. '/Users/psoudan/workspace/05-Procertus/Procertus-ui-experiment/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/index.js' implicitly has an 'any' type.
+  If the 'react-dom' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-dom'
+
+37 import { flushSync } from "react-dom";
+                             ~~~~~~~~~~~
+
+
+Found 5 errors.
+
+---
+
+>  …/Procertus-ui-experiment/apps/frontend-pt1-extranet-onboarding bun run build
+$ tsc -b && vite build
+src/pages/OnboardingRegistrationCompletePage.tsx:25:8 - error TS2724: '"@procertus-ui/ui-certification"' has no exported member named 'RegistrationCompleteSummary'. Did you mean 'deriveRegistrationCompleteSummary'?
+
+25   type RegistrationCompleteSummary,
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+src/pages/OnboardingRegistrationCompletePage.tsx:136:41 - error TS7006: Parameter 'line' implicitly has an 'any' type.
+
+136                 {summary.inquiries.map((line) => (
+                                            ~~~~
+
+src/pages/OnboardingRegistrationCompletePage.tsx:175:39 - error TS7006: Parameter 'p' implicitly has an 'any' type.
+
+175           {summary.portalPersons.map((p) => (
+                                          ~
+
+../../packages/ui-certification/src/onboarding/registration-complete-summary.ts:113:5 - error TS2322: Type 'readonly string[] | undefined' is not assignable to type 'string[] | undefined'.
+  The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+
+113     summaryIncludedDraftIds,
+        ~~~~~~~~~~~~~~~~~~~~~~~
+
+../../packages/ui-certification/src/onboarding/use-onboarding-flow.tsx:37:27 - error TS7016: Could not find a declaration file for module 'react-dom'. '/Users/psoudan/workspace/05-Procertus/Procertus-ui-experiment/node_modules/.bun/react-dom@19.2.5+3f10a4be4e334a9b/node_modules/react-dom/index.js' implicitly has an 'any' type.
+  If the 'react-dom' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-dom'
+
+37 import { flushSync } from "react-dom";
+                             ~~~~~~~~~~~
+
+
+Found 5 errors.
