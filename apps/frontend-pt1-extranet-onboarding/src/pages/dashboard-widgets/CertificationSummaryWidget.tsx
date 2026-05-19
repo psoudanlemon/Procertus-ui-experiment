@@ -72,7 +72,11 @@ export function CertificationSummaryWidget({ className }: CertificationSummaryWi
   const certificatesNav = navItemByKey("certificates-attestations")!;
 
   return (
-    <Card className={dashboardFlatCardClassName(cn("h-full", className))}>
+    <Card
+      className={dashboardFlatCardClassName(
+        cn("@container/cert-summary min-w-0 w-full", "h-full", className),
+      )}
+    >
       <CardHeader
         className={cn(
           "flex flex-row items-start gap-component pb-0",
@@ -152,7 +156,7 @@ export function CertificationSummaryWidget({ className }: CertificationSummaryWi
           </span>
         </div>
 
-        <div className="flex flex-col gap-micro pt-micro sm:flex-row sm:flex-wrap sm:gap-component">
+        <div className="flex flex-col gap-micro pt-micro @min-[22rem]/cert-summary:flex-row @min-[22rem]/cert-summary:flex-wrap @min-[22rem]/cert-summary:gap-component">
           <Button variant="link" className="h-auto justify-start p-0 text-sm" asChild>
             <Link to={requestsNav.url}>Toon alle aanvragen</Link>
           </Button>

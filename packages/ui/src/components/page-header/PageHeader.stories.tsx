@@ -19,7 +19,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Presentational masthead. Kicker, title, and description share one text column. `media` floats top-right of that column on `sm`+; `icon` (mutually exclusive with media) and `actions` float bottom-right. All trailing slots stack underneath on mobile. `children` render full-width below the entire header row. Pass plain strings for kicker/description/title to get default typography, or pass custom nodes for full control.",
+          "Presentational masthead. Kicker, title, and description share one text column. `media` floats top-right when the header is at least 48rem wide (container query). `icon` (mutually exclusive with media) is always absolute top-right. `actions` float bottom-right on wide headers. Below 48rem, media and actions stack underneath the text column. `children` render full-width below the entire header row. Pass plain strings for kicker/description/title to get default typography, or pass custom nodes for full control.",
       },
     },
   },
@@ -80,7 +80,7 @@ export const WithIcon: StoryObj<typeof meta> = {
   args: {
     kicker: "Mijn account",
     title: "Mijn profiel",
-    description: "Icon shares the trailing column with media; it aligns with the kicker + title row only.",
+    description: "Icon is always pinned to the top-right corner; the kicker and title reserve space via padding.",
     icon: (
       <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/8 text-xs font-semibold text-primary">
         Me
@@ -130,8 +130,8 @@ export const CompositionSlots: StoryObj<typeof meta> = {
     title: "Slot composition demo",
   },
   render: () => (
-    <header>
-      <div className="flex flex-col gap-region sm:flex-row sm:justify-between sm:gap-region">
+    <header className="@container/page-header w-full min-w-0">
+      <div className="flex flex-col gap-region @min-[48rem]/page-header:flex-row @min-[48rem]/page-header:justify-between @min-[48rem]/page-header:gap-region">
         <div className="flex min-w-0 max-w-3xl flex-1 flex-col [&_[data-slot=page-header-description]]:[text-box:trim-start_text]">
           <div className="flex min-w-0 flex-col gap-component text-left [&_[data-slot=heading]]:[text-box:trim-end_text] [&_[data-slot=page-header-kicker]]:[text-box:trim-both_cap_alphabetic]">
             <PageHeaderKicker>Custom kicker node</PageHeaderKicker>
@@ -142,7 +142,7 @@ export const CompositionSlots: StoryObj<typeof meta> = {
             <code className="rounded bg-muted px-1 py-0.5 text-xs">PageHeader</code>).
           </PageHeaderDescription>
         </div>
-        <PageHeaderMedia className="sm:self-start">
+        <PageHeaderMedia className="@min-[48rem]/page-header:self-start">
           <div className="flex size-16 items-center justify-center rounded-lg bg-muted text-xs font-medium text-muted-foreground">
             Logo
           </div>

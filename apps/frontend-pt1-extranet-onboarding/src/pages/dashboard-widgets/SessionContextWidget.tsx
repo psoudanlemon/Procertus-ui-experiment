@@ -55,7 +55,9 @@ export function SessionContextWidget({
   const organizationAddress = mockOrganizationAddress(contextOrganization.id);
 
   return (
-    <Card className={dashboardFlatCardClassName(cn("text-sm", className))}>
+    <Card
+      className={dashboardFlatCardClassName(cn("@container/session-context min-w-0 w-full text-sm", className))}
+    >
       <CardContent
         className={cn("flex flex-col gap-component pt-0", DASHBOARD_FLAT_CARD_CHROME_CLASS)}
       >
@@ -116,7 +118,10 @@ export function SessionContextWidget({
                   {organizationUserCount}
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right" className="max-w-[240px] text-center sm:text-left">
+              <TooltipContent
+                side="right"
+                className="max-w-[240px] text-center @min-[18rem]/session-context:text-left"
+              >
                 Aantal Gebruikers
               </TooltipContent>
             </Tooltip>

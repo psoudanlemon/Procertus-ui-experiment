@@ -32,7 +32,7 @@ export function PageHeaderDescription({ className, ...props }: ComponentProps<"p
   );
 }
 
-/** Trailing column for optional {@link PageHeaderProps.icon} or {@link PageHeaderProps.media} (mutually exclusive). */
+/** Trailing column for {@link PageHeaderProps.media} (row layout at wide header widths). */
 export function PageHeaderMedia({ className, ...props }: ComponentProps<"div">) {
   return (
     <div
@@ -88,7 +88,7 @@ type PageHeaderSharedProps = Omit<ComponentProps<"header">, "title"> & {
   actions?: ReactNode;
 };
 
-/** Trailing slot: either a compact icon (same column as media) or hero media — never both. */
+/** Trailing slot: either a compact icon (top-right) or hero media — never both. */
 export type PageHeaderProps = PageHeaderSharedProps &
   (
     | { media?: ReactNode; icon?: never }
@@ -114,9 +114,9 @@ function renderTitle(title: ReactNode) {
 
 /**
  * Presentational page masthead. Kicker, title, and description share one text column.
- * {@link PageHeaderProps.media} floats top-right of that column on `sm`+;
- * {@link PageHeaderProps.icon} (mutually exclusive with media) and `actions` float bottom-right.
- * All trailing slots stack underneath the text column on mobile.
+ * {@link PageHeaderProps.media} floats top-right from 48rem header width upward (container query).
+ * {@link PageHeaderProps.icon} is always pinned to the top-right corner (absolute).
+ * `actions` align bottom-right on wide headers; otherwise they follow the text column.
  * `children` render full-width below the entire header row.
  */
 export function PageHeader({
@@ -131,27 +131,47 @@ export function PageHeader({
   ...props
 }: PageHeaderProps) {
   const descriptionNode = renderDescription(description);
+  const hasIcon = icon != null;
 
   return (
-    <header className={cn(className)} {...props}>
+    <header className={cn("@container/page-header w-full min-w-0", className)} {...props}>
       <div className="flex flex-col gap-region">
-        <div className="flex flex-col gap-region sm:flex-row sm:justify-between sm:gap-region">
-          <div className="flex min-w-0 max-w-3xl flex-1 flex-col gap-micro [&_[data-slot=page-header-description]]:[text-box:trim-start_text]">
-            <div className="flex min-w-0 flex-col gap-component text-left [&_[data-slot=heading]]:[text-box:trim-end_text] [&_[data-slot=page-header-kicker]]:[text-box:trim-both_cap_alphabetic]">
-              {renderKicker(kicker)}
-              {renderTitle(title)}
+        <div className="relative">
+          {hasIcon ? (
+            <div
+              data-slot="page-header-icon"
+              className="absolute top-0 right-0 z-10 flex shrink-0 items-start justify-end"
+            >
+              {icon}
             </div>
-            {descriptionNode}
+          ) : null}
+          <div className="flex flex-col gap-region @min-[48rem]/page-header:flex-row @min-[48rem]/page-header:justify-between @min-[48rem]/page-header:gap-region">
+            <div className="flex min-w-0 max-w-3xl flex-1 flex-col gap-micro [&_[data-slot=page-header-description]]:[text-box:trim-start_text]">
+              <div
+                className={cn(
+                  "flex min-w-0 flex-col gap-component text-left [&_[data-slot=heading]]:[text-box:trim-end_text] [&_[data-slot=page-header-kicker]]:[text-box:trim-both_cap_alphabetic]",
+                  hasIcon && "pe-12",
+                )}
+              >
+                {renderKicker(kicker)}
+                {renderTitle(title)}
+              </div>
+              {descriptionNode}
+            </div>
+            {media != null ? (
+              <PageHeaderMedia className="@min-[48rem]/page-header:self-start">{media}</PageHeaderMedia>
+            ) : null}
+            {actions != null ? (
+              <PageHeaderActions
+                className={cn(
+                  "shrink-0 pt-0 @min-[48rem]/page-header:self-end",
+                  hasIcon && "@min-[48rem]/page-header:pt-12",
+                )}
+              >
+                {actions}
+              </PageHeaderActions>
+            ) : null}
           </div>
-          {media != null ? (
-            <PageHeaderMedia className="sm:self-start">{media}</PageHeaderMedia>
-          ) : null}
-          {icon != null ? (
-            <PageHeaderMedia className="sm:self-end">{icon}</PageHeaderMedia>
-          ) : null}
-          {actions != null ? (
-            <PageHeaderActions className="shrink-0 pt-0 sm:self-end">{actions}</PageHeaderActions>
-          ) : null}
         </div>
         {children != null ? (
           <PageHeaderBelow className="pt-0">{children}</PageHeaderBelow>

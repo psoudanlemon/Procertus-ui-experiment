@@ -35,7 +35,7 @@ export function LatestInvoicesWidget({ className }: LatestInvoicesWidgetProps) {
   const invoicesNav = navItemByKey("invoices")!;
 
   return (
-    <Card className={dashboardFlatCardClassName(cn("h-full", className))}>
+    <Card className={dashboardFlatCardClassName(cn("@container/invoices min-w-0 w-full", "h-full", className))}>
       <CardHeader
         className={cn(
           "flex flex-row items-start gap-component pb-0",

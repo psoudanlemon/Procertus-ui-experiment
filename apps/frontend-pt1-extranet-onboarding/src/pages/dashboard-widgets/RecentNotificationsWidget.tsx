@@ -45,7 +45,7 @@ export function RecentNotificationsWidget({ className }: RecentNotificationsWidg
   return (
     <Card
       className={dashboardFlatCardClassName(
-        cn("flex min-h-0 flex-col text-sm lg:h-full", className),
+        cn("@container/notifications min-w-0 w-full", "flex min-h-0 flex-col text-sm", className),
       )}
     >
       <CardHeader
