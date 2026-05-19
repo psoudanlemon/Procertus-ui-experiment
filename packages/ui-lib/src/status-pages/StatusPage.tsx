@@ -2,6 +2,8 @@ import * as React from "react";
 import type { IconSvgElement } from "@hugeicons/react";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 
+import { cn } from "@procertus-ui/ui";
+
 import { StatusContent } from "./StatusContent";
 
 // ---------------------------------------------------------------------------
@@ -36,6 +38,15 @@ export type StatusPageProps = {
   children?: React.ReactNode;
   /** Additional className on the outer container. */
   className?: string;
+  /**
+   * Width and layout of the centered column containing the card and optional children.
+   * Default stays narrow ({@link StatusPage} confirmations); widen for dense summaries.
+   */
+  innerColumnClassName?: string;
+  /** ClassNames for the block below the primary status card (default centered text). */
+  belowCardClassName?: string;
+  /** Optional className merged into the primary {@link StatusContent} card (e.g. `max-w-full`). */
+  statusContentClassName?: string;
 };
 
 // ---------------------------------------------------------------------------
@@ -91,6 +102,9 @@ function StatusPage({
   actions,
   children,
   className,
+  innerColumnClassName,
+  belowCardClassName,
+  statusContentClassName,
 }: StatusPageProps) {
   return (
     <div
@@ -104,16 +118,27 @@ function StatusPage({
         <div className="absolute top-boundary left-1/2 -translate-x-1/2">{logo}</div>
       )}
 
-      <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-region">
+      <div
+        className={cn(
+          "relative z-10 flex w-full flex-col items-center gap-region",
+          innerColumnClassName ?? "max-w-md",
+        )}
+      >
         <StatusContent
           icon={icon}
           illustration={illustration}
           heading={heading}
           description={description}
           actions={actions}
+          className={statusContentClassName}
         />
         {children != null ? (
-          <div className="flex w-full flex-col items-center gap-section text-center">
+          <div
+            className={cn(
+              "flex w-full flex-col gap-section",
+              belowCardClassName ?? "items-center text-center",
+            )}
+          >
             {children}
           </div>
         ) : null}

@@ -167,6 +167,7 @@ export {
   ONBOARDING_REGISTRATION_COMPLETE_STORAGE_KEY,
   ONBOARDING_STEPS,
   readOnboardingRegistrationCompletePayload,
+  deriveRegistrationCompleteSummary,
   registrationStepIndex,
   registrationStepsSequence,
   useActiveFormalInquiryContinueBanner,
@@ -224,6 +225,9 @@ export type {
   OnboardingRegistrationCompletePayload,
   OnboardingRequestOrigin,
   OnboardingStep,
+  RegistrationCompleteInquiryLine,
+  RegistrationCompletePortalPerson,
+  RegistrationCompleteSummary,
   UseOnboardingFlowOptions,
 } from "./onboarding";
 export {

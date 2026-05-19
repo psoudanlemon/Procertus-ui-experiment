@@ -105,6 +105,15 @@ export {
 } from "./lib/onboardingRegistrationCompleteSession";
 export type { OnboardingRegistrationCompletePayload } from "./lib/onboardingRegistrationCompleteSession";
 export {
+  deriveRegistrationCompleteSummary,
+  registrationCompleteFormalSnapshotSubset,
+} from "./registration-complete-summary";
+export type {
+  RegistrationCompleteInquiryLine,
+  RegistrationCompletePortalPerson,
+  RegistrationCompleteSummary,
+} from "./registration-complete-summary";
+export {
   coercePersonPreferredLanguage,
   type PersonPreferredLanguage,
 } from "@procertus-ui/domain-certification";

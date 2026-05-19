@@ -17,6 +17,10 @@ import {
 } from "@procertus-ui/ui-certification";
 
 import { useSyncOnboardingTrajectFromServiceId } from "../features/onboarding/use-sync-onboarding-traject-from-service-id";
+import {
+  buildInfoRequestSubmittedSnapshot,
+  persistInfoRequestSubmittedSnapshot,
+} from "../features/info-request/info-request-submitted-snapshot";
 import { resetTrajectFlow } from "../features/traject/traject-submission-context";
 import { findWegwijzerService } from "../features/wegwijzer/wegwijzer-services";
 
@@ -69,8 +73,16 @@ export function InfoRequestPlaceholderPage() {
   };
 
   const handleSubmit = () => {
+    const bookingKey = `procertus.info-request.${entry.id}`;
+    const snapshot = buildInfoRequestSubmittedSnapshot({
+      flowState,
+      serviceId: entry.id,
+      serviceLabel: entry.label,
+      bookingSessionStorageKey: bookingKey,
+    });
+    persistInfoRequestSubmittedSnapshot(snapshot);
     try {
-      window.sessionStorage.removeItem(`procertus.info-request.${entry.id}`);
+      window.sessionStorage.removeItem(bookingKey);
     } catch {
       // sessionStorage may be unavailable — ignore.
     }

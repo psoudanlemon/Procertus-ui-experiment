@@ -1,7 +1,7 @@
 import * as React from "react";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 
-import { Button, Card, CardContent, H1 } from "@procertus-ui/ui";
+import { Button, Card, CardContent, cn, H1 } from "@procertus-ui/ui";
 
 import type { StatusPageAction } from "./StatusPage";
 
@@ -38,7 +38,10 @@ function StatusContent({
 }: StatusContentProps) {
   return (
     <Card
-      className={`relative z-10 w-full max-w-md shadow-[var(--shadow-proc-md)] ring-0 ${className ?? ""}`}
+      className={cn(
+        "relative z-10 w-full max-w-md shadow-[var(--shadow-proc-md)] ring-0",
+        className,
+      )}
     >
       <CardContent className="flex flex-col items-center gap-section px-section py-section text-center">
         {/* Visual */}
