@@ -186,7 +186,7 @@ function TriageOptionCard({
             <li key={b} className="flex items-start gap-micro text-sm leading-normal">
               <HugeiconsIcon
                 icon={CheckmarkCircle02Icon}
-                className="mt-0.5 size-4 shrink-0 text-success"
+                className="mt-0.5 size-4 shrink-0 text-accent-foreground"
               />
               <span>{b}</span>
             </li>

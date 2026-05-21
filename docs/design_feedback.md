@@ -426,6 +426,12 @@ _Feedback origineel gezien op:_ **Triage** ("Liever eerst een expert spreken?" a
 
 > Raakt aan de expert-card copy-actie in [4.2 Triage](#42-triage-triagepage): als de kaart op Triage vervalt, vervallen ook de geplande copy-aanpassingen daar.
 
+#### Check-bullets op TriageOptionCard stonden op text-success
+
+_Feedback origineel gezien op:_ **Triage** ([`/welcome/triage/:serviceId`](http://localhost:5173/welcome/triage/origin)). De zes check-bullets op `TriageOptionCard` gebruikten `text-success`, terwijl het hier niet om een succes- of validatie-status gaat. Het anchor-blauw register (`accent-foreground`) sluit beter aan bij de icon-tile in de card-header, houdt success-groen vrij voor échte status-signalen, en geeft de vinkjes op de "Traject opstarten"-kaart de visuele rust die past bij een keuzemoment.
+
+- [x] Vervang `text-success` door `text-accent-foreground` op [TriagePage.tsx:189](apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx#L189).
+
 #### Vier gestapelde bordered cards op InfoRequestSubmittedPage beslaan dezelfde temporele fase
 
 _Feedback origineel gezien op:_ **Aanvraag verzonden** [InfoRequestSubmittedPage.tsx:39-199](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L39). De pagina toont vier `PublicOverviewSection`-kaarten onder elkaar: "Wat maakte deel uit van uw aanvraag", "Organisatie en context", "Onboarding naar het Klantenportaal", "Uw volgende stappen op het Klantenportaal". Drie ervan beschrijven hetzelfde toekomstige moment (wat er na het verzenden gebeurt), en "Organisatie en context" herhaalt waardes die al in de lead-paragraaf staan.
