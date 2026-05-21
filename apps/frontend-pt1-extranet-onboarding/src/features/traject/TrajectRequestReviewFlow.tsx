@@ -73,12 +73,10 @@ export function TrajectRequestReviewFlow() {
       }
       actionBar={
         <TrajectStoryFooter
+          mode="in-flow"
           onCancel={handleCancel}
           onBack={handleBack}
           onContinue={handleContinue}
-          cancelLabel="Annuleren"
-          backLabel="Terug"
-          continueLabel="Bevestig"
         />
       }
     >

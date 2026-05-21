@@ -464,8 +464,8 @@ _Feedback origineel gezien op:_ [BrandGradientHero.tsx:6-28](apps/frontend-pt1-e
 
 _Feedback origineel gezien op:_ [TrajectStoryFooter.tsx:19-30](packages/ui-certification/src/components/traject/TrajectStoryFooter.tsx#L19) (props) en [TrajectStoryFooter.tsx:44-90](packages/ui-certification/src/components/traject/TrajectStoryFooter.tsx#L44) (render). De component accepteert vier onafhankelijke callbacks (`onCancel`, `onBack`, `onContinue`, `onAddMore`) plus vier label-overrides. Theoretisch geeft dat 16+ combinaties; in de praktijk zijn er drie scenarios: eerste stap (alleen "Terug"), tussenstap (cancel + back + continue) en review-stap (cancel + back + add-more + continue).
 
-- [ ] Vervang de vier optionele callbacks door één `mode`-prop met de drie reële waardes ("first-step" / "in-flow" / "review"). De callbacks die in die mode niet bestaan, hoeven niet meer doorgegeven te worden. Voordeel: één lezing van de prop-signature volstaat om te zien welke knoppen verschijnen.
-- [ ] Schrap de label-overrides. Labels horen in i18n of in een lokale `messages`-object te zitten, niet als prop-by-prop optie op de footer zelf.
+- [x] Vervang de vier optionele callbacks door één `mode`-prop met de drie reële waardes ("first-step" / "in-flow" / "review"). De callbacks die in die mode niet bestaan, hoeven niet meer doorgegeven te worden. Voordeel: één lezing van de prop-signature volstaat om te zien welke knoppen verschijnen.
+- [x] Schrap de label-overrides. Labels horen in i18n of in een lokale `messages`-object te zitten, niet als prop-by-prop optie op de footer zelf.
 
 #### TriageOptionCard zit lokaal in TriagePage, terwijl de shape generiek voelt
 

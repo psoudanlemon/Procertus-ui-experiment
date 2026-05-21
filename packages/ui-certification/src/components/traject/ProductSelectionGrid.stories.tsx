@@ -102,14 +102,15 @@ export const ProductSelection: StoryObj<typeof meta> = {
 /**
  * Verbindt {@link TrajectStoryFooter} met de basket-context: leest `selectedIds` voor de
  * disabled-staat van "Bevestig selectie" en bedraadt `onBack`/`onContinue` op de provider.
- * Eerste stap van de flow, dus `onCancel` wordt bewust weggelaten — `onBack` brengt de
- * gebruiker terug naar de wegwijzer.
+ * In-flow stap met de standaard escape-acties.
  */
 function ProductSelectionStoryFooter() {
   const { selectedIds, onBack, onContinue } = useProductSelectionBasket();
   return (
     <TrajectStoryFooter
-      onBack={onBack}
+      mode="in-flow"
+      onCancel={() => {}}
+      onBack={onBack ?? (() => {})}
       onContinue={() => onContinue(selectedIds)}
       continueLabel="Bevestig selectie"
       continueDisabled={selectedIds.length === 0}

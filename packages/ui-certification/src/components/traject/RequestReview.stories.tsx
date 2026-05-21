@@ -147,12 +147,10 @@ function RequestReviewStory() {
       description="Lees de onderstaande samenvatting van je geselecteerde producten en de bijbehorende documentatie aandachtig na ter validatie voordat je de aanvraag indient."
       actionBar={
         <TrajectStoryFooter
+          mode="in-flow"
           onCancel={noop}
           onBack={noop}
           onContinue={noop}
-          cancelLabel="Annuleren"
-          backLabel="Terug"
-          continueLabel="Bevestig"
           continueDisabled={!isProductRequestNoteComplete(note, STORY_NOTE_REQUIRED)}
         />
       }
@@ -240,12 +238,10 @@ function RequestReviewNonProductBoundStory() {
       description="Geef in onderstaande brief de context en details van je ATG-aanvraag mee. Een PROCERTUS-expert neemt je dossier op basis daarvan op."
       actionBar={
         <TrajectStoryFooter
+          mode="in-flow"
           onCancel={noop}
           onBack={noop}
           onContinue={noop}
-          cancelLabel="Annuleren"
-          backLabel="Terug"
-          continueLabel="Bevestig"
           continueDisabled={!isProductRequestNoteComplete(note, noteRequired)}
         />
       }

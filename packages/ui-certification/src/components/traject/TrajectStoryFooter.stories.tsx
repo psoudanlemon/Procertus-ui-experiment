@@ -36,7 +36,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Gedeeld footer-template voor traject-stories. Vaste vorm: ghost 'Annuleren' helemaal links (consumenten bedraden dit op de wegwijzer-route), en rechts de outline 'Terug' + primary 'Verder' als stap-navigatie. Op de eerste stap van een flow laat de consument `onCancel` weg: de ghost-knop verdwijnt en `onBack` neemt de rol 'terug naar het vorige scherm' over.",
+          "Gedeeld footer-template voor traject-stappen. De `mode`-prop bepaalt welke knoppen verschijnen: `in-flow` voor een typische wizard-stap met expliciete primaire CTA, of `decision` voor een keuze-scherm zoals Triage waar de forward-actie in het body zit en de footer alleen escape-acties heeft. Labels gebruiken canonieke defaults; per call-site kan een specifiek label de actie scherper beschrijven (bv. \"Aanvraag verzenden\" ipv \"Bevestig\").",
       },
     },
   },
@@ -46,40 +46,18 @@ const meta = {
 
 export default meta;
 
-export const Default: StoryObj<typeof meta> = {
+export const InFlow: StoryObj<typeof meta> = {
   args: {
+    mode: "in-flow",
     onCancel: noop,
     onBack: noop,
     onContinue: noop,
-    cancelLabel: "Annuleren",
-    backLabel: "Terug",
-    continueLabel: "Bevestig selectie",
-  },
-  render: (args) => (
-    <TrajectLayout
-      onSignInClick={noop}
-      footer={STORY_FOOTER}
-      title="Voorbeeldscherm met gedeelde footer"
-      description="Deze pagina toont enkel de baseline footer. De inhoud erboven is leeg zodat de visuele standaard duidelijk is."
-      actionBar={<TrajectStoryFooter {...args} />}
-    >
-      <div />
-    </TrajectLayout>
-  ),
-};
-
-export const FirstStep: StoryObj<typeof meta> = {
-  args: {
-    onBack: noop,
-    onContinue: noop,
-    backLabel: "Terug",
-    continueLabel: "Verder",
   },
   parameters: {
     docs: {
       description: {
         story:
-          "Eerste stap van een flow: `onCancel` wordt bewust weggelaten waardoor de ghost-knop verdwijnt. 'Terug' brengt de gebruiker dan naar het scherm dat aan de flow voorafging (typisch de wegwijzer).",
+          "Typische wizard-stap met Annuleren links, en Terug + primaire Bevestig rechts. Gebruik `continueLabel` om de primaire actie scherper te omschrijven (bv. \"Aanvraag verzenden\").",
       },
     },
   },
@@ -87,8 +65,35 @@ export const FirstStep: StoryObj<typeof meta> = {
     <TrajectLayout
       onSignInClick={noop}
       footer={STORY_FOOTER}
-      title="Voorbeeldscherm: eerste stap"
-      description="Op de eerste stap is er nog niets om te annuleren. De ghost-knop is afwezig en 'Terug' brengt de gebruiker terug naar het voorgaande scherm."
+      title="Voorbeeldscherm met in-flow footer"
+      description="Een typische tussenstap in een traject: footer toont Annuleren, Terug en de primaire CTA rechts."
+      actionBar={<TrajectStoryFooter {...args} />}
+    >
+      <div />
+    </TrajectLayout>
+  ),
+};
+
+export const Decision: StoryObj<typeof meta> = {
+  args: {
+    mode: "decision",
+    onCancel: noop,
+    onBack: noop,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Keuze-scherm zoals Triage. Het body draagt de forward-actie via kaarten of vergelijkbare keuze-UI; de footer heeft alleen escape-acties (Annuleren + Terug).",
+      },
+    },
+  },
+  render: (args) => (
+    <TrajectLayout
+      onSignInClick={noop}
+      footer={STORY_FOOTER}
+      title="Voorbeeldscherm met decision footer"
+      description="Een keuze-scherm waar de forward-actie in het body zit. Footer heeft alleen Annuleren en Terug."
       actionBar={<TrajectStoryFooter {...args} />}
     >
       <div />

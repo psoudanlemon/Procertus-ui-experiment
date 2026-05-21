@@ -98,6 +98,7 @@ export function InfoRequestPlaceholderPage() {
       bodyGap="section"
       actionBar={
         <TrajectStoryFooter
+          mode="in-flow"
           onCancel={handleCancel}
           onBack={handleBack}
           onContinue={handleSubmit}

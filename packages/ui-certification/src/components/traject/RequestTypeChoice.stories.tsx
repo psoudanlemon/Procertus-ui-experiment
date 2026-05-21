@@ -85,7 +85,7 @@ export const Default: StoryObj<typeof meta> = {
   render: (args) => (
     <TrajectLayout
       {...args}
-      actionBar={<TrajectStoryFooter onCancel={noop} onBack={noop} />}
+      actionBar={<TrajectStoryFooter mode="decision" onCancel={noop} onBack={noop} />}
     >
       <div className="flex flex-col gap-region">
         <div className="grid grid-cols-1 gap-region md:grid-cols-2">

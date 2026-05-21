@@ -368,11 +368,11 @@ export function BundleAssembleActionBar() {
   const { onBack, onCancel, backLabel, emitContinue } = useBundleAssemble();
   return (
     <TrajectStoryFooter
-      onCancel={onCancel}
-      onBack={onBack}
+      mode="in-flow"
+      onCancel={onCancel ?? (() => {})}
+      onBack={onBack ?? (() => {})}
       onContinue={emitContinue}
-      cancelLabel="Annuleren"
-      backLabel={backLabel ?? "Terug"}
+      backLabel={backLabel}
       continueLabel="Bevestig selectie"
     />
   );

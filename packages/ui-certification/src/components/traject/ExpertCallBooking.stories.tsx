@@ -135,6 +135,8 @@ function ExpertCallStoryBody({
       {...args}
       actionBar={
         <TrajectStoryFooter
+          mode="in-flow"
+          onCancel={noop}
           onBack={noop}
           onContinue={noop}
           continueLabel="Aanvraag verzenden"

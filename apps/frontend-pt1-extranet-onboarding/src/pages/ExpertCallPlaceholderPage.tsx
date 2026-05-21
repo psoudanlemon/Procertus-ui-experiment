@@ -82,6 +82,7 @@ export function ExpertCallPlaceholderPage() {
       bodyGap="section"
       actionBar={
         <TrajectStoryFooter
+          mode="in-flow"
           onCancel={handleCancel}
           onBack={handleBack}
           onContinue={() => {}}

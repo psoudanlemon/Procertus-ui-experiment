@@ -58,6 +58,7 @@ export function TriagePage() {
       bodyGap="section"
       actionBar={
         <TrajectStoryFooter
+          mode="decision"
           onCancel={() => navigate(`${WEGWIJZER_PATH}?service=${entry.id}`)}
           onBack={handleBack}
         />
