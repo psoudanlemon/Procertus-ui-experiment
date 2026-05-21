@@ -365,3 +365,62 @@ _Route:_ [`/registratie-voltooid`](http://localhost:5173/registratie-voltooid) (
 - [ ] Voetkop `"Stappen rechts-onder in uw mailbox nu"` naar `"Volgende stap: check uw mailbox"`. Onderliggende paragraaf herschrijven in actieve, doorlopende zinnen.
 - [ ] Statuspil `"Uitnodiging onderweg"` naar `"Uitnodiging verzonden"`; `"Geen portal‑uitnodiging"` naar `"Geen uitnodiging"`.
 - [ ] `digitalFollowBrief()` per case: volledige zinnen, geen puntkomma als korte-zin-vervanger, geen lower-case startwoord.
+
+---
+
+## 5. Distill audit (2026-05-21)
+
+_Audit gedaan met de `/distill` skill om visuele en structurele overcomplexiteit op te sporen in de app en in de gelinkte primitives. Items die elders in dit document al worden aangepakt (kaart-verwijderingen op de bevestigingspagina, copy-density passes, choice-card vs checkbox, enz.) zijn hier overgeslagen._
+
+### 5.1 App-level
+
+#### Expert-call kaart staat dubbel op Triage en Wegwijzer
+
+_Feedback origineel gezien op:_ **Triage** ("Liever eerst een expert spreken?" als derde kaart onder de twee TriageOptionCards) én **Wegwijzer / Alle certificaten** (`ExpertCallFooterCard` als laatste cel in `AllCertificatesGrid`). Beide kaarten hebben dezelfde titel, dezelfde body en dezelfde gradient. Als de gebruiker eerst via de wegwijzer komt en dan een traject opent, ziet hij de identieke CTA twee schermen na elkaar.
+
+- [ ] Beperk de expert-call CTA tot één visuele ankerplek. Voorstel: behoud de inline kaart op [WegwijzerPage.tsx:276](apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx#L276) als eerste ontdekpunt, en vervang de derde kaart op [TriagePage.tsx:105](apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx#L105) door een tekstlink of een inline note onder de twee TriageOptionCards.
+- [ ] Of, omgekeerd: behoud de prominentie op Triage (dat is het beslismoment) en zet de `ExpertCallFooterCard` op de wegwijzer terug naar een minder dominante variant (item-row in plaats van gradient-card).
+
+#### Vier gestapelde bordered cards op InfoRequestSubmittedPage beslaan dezelfde temporele fase
+
+_Feedback origineel gezien op:_ **Aanvraag verzonden** [InfoRequestSubmittedPage.tsx:39-199](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L39). De pagina toont vier `PublicOverviewSection`-kaarten onder elkaar: "Wat maakte deel uit van uw aanvraag", "Organisatie en context", "Onboarding naar het Klantenportaal", "Uw volgende stappen op het Klantenportaal". Drie ervan beschrijven hetzelfde toekomstige moment (wat er na het verzenden gebeurt), en "Organisatie en context" herhaalt waardes die al in de lead-paragraaf staan.
+
+- [ ] Vouw "Organisatie en context" [InfoRequestSubmittedPage.tsx:77](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L77) in de lead-beschrijving in. Kanaal en organisatie zijn al in de heading-paragraaf vermeld; alleen het tijdstip "Ontvangen" mag eventueel als compacte regel onder de lead blijven.
+- [ ] Voeg "Onboarding naar het Klantenportaal" [InfoRequestSubmittedPage.tsx:125](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L125) en "Uw volgende stappen op het Klantenportaal" [InfoRequestSubmittedPage.tsx:173](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L173) samen tot één sectie "Volgende stappen". Behoud de personenlijst, plaats de twee tot drie kerninstructies eronder. De vijf bullets van "Volgende stappen" zijn portal-onboarding en horen daar inhoudelijk thuis, niet op de bevestigingspagina (cf. analoge keuze in [3.12](#312-bevestigingspagina-na-indiening-uw-account-is-klaar) voor de registratie-bevestiging).
+
+#### BrandGradientHero is demo-restant met Engelse copy
+
+_Feedback origineel gezien op:_ [BrandGradientHero.tsx:6-28](apps/frontend-pt1-extranet-onboarding/src/components/BrandGradientHero.tsx#L6). Component met Engelse copy ("Onboarding prototype", "This route composes …") en literale verwijzingen naar `--gradient-primary` en `@procertus-ui/ui-lib`. Wordt nu enkel gebruikt vanuit `DesignSystemPage.tsx` (showcase).
+
+- [ ] Verplaats `BrandGradientHero` naar een Storybook-story of `packages/_certification-domain-certification/playground`, weg uit de app-source. Op die manier blijft de demo-rol expliciet en kan de component niet per ongeluk in een andere route landen.
+- [ ] Indien gewenst als geldige Procertus-hero op een toekomstige publieke pagina: herschrijf de copy in Nederlands en haal de codetoken-references uit de tekst.
+
+### 5.2 Primitives en libraries
+
+#### TrajectStoryFooter: vier optionele callbacks, drie reële scenarios
+
+_Feedback origineel gezien op:_ [TrajectStoryFooter.tsx:19-30](packages/ui-certification/src/components/traject/TrajectStoryFooter.tsx#L19) (props) en [TrajectStoryFooter.tsx:44-90](packages/ui-certification/src/components/traject/TrajectStoryFooter.tsx#L44) (render). De component accepteert vier onafhankelijke callbacks (`onCancel`, `onBack`, `onContinue`, `onAddMore`) plus vier label-overrides. Theoretisch geeft dat 16+ combinaties; in de praktijk zijn er drie scenarios: eerste stap (alleen "Terug"), tussenstap (cancel + back + continue) en review-stap (cancel + back + add-more + continue).
+
+- [ ] Vervang de vier optionele callbacks door één `mode`-prop met de drie reële waardes ("first-step" / "in-flow" / "review"). De callbacks die in die mode niet bestaan, hoeven niet meer doorgegeven te worden. Voordeel: één lezing van de prop-signature volstaat om te zien welke knoppen verschijnen.
+- [ ] Schrap de label-overrides. Labels horen in i18n of in een lokale `messages`-object te zitten, niet als prop-by-prop optie op de footer zelf.
+
+#### TriageOptionCard zit lokaal in TriagePage, terwijl de shape generiek voelt
+
+_Feedback origineel gezien op:_ [TriagePage.tsx:138-208](apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx#L138). De lokaal gedefinieerde `TriageOptionCard` heeft een generiek shape (icon-tile + titel + korte beschrijving + check-bullets + tone "primary" of "muted" + CTA met arrow). Dezelfde shape duikt al op in `MasterCard`-subsecties en is een logische kandidaat voor BENOR/ATG-keuzeschermen later.
+
+- [ ] Hef de lokale definitie op en breng een algemene "DecisionCard" (of vergelijkbare naam) in `packages/ui-lib` als generieke twee-tone keuzekaart. Naam mag niet "Triage" bevatten omdat de inhoud niet domeingebonden is (cf. memory "Name by content, not consumer"). Eerste consument: TriagePage; tweede potentiële consument: het beslismoment "formele aanvraag vs informatieve aanvraag" in andere flows.
+- [ ] Alternatief, als extractie te zwaar voelt: laat de component lokaal, maar dun hem af. De zes bullets aan de primary-kant kunnen naar drie (zie ook [4.2 Triage](#42-triage-triagepage)), de `shadow-proc-md` + `ring-2 ring-primary/30` voelen samen overdone op een muted-vs-primary paar. Eén van beide volstaat als visueel signaal.
+
+#### BrowseCard `variant="faded"` wordt in productie één keer gebruikt
+
+_Feedback origineel gezien op:_ `grep -r 'variant="faded"'` toont één gebruik buiten Storybook: [WegwijzerPage.tsx:254](apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx#L254) op de externe-verwijzing tegels in `AllCertificatesGrid`. Daarnaast bestaat een tweede pad voor exact dezelfde inhoud: `ExternalReferralGrid` [WegwijzerPage.tsx:313-339](apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx#L313) gebruikt `<Item>` in plaats van een faded BrowseCard.
+
+- [ ] Kies één presentatie voor externe verwijzingen. Voorstel: behoud de `<Item>`-rij (compacter, past in de "Overige" tab) en gebruik die ook in `AllCertificatesGrid`. Dat maakt `variant="faded"` overbodig en zorgt voor één lees-pattern voor "dit dossier loopt elders".
+- [ ] Als de faded-variant toch waarde heeft op een andere plek, documenteer dan in `BrowseCard.stories.tsx` voor welk inhoudtype hij bedoeld is. Anders verwijderen uit de `variant`-set.
+
+#### `data-density="spacious"` heeft geen meetbare adoptie
+
+_Feedback origineel gezien op:_ `grep -r 'data-density="spacious"'` levert één gebruik op tegenover tien voor `operational`. De density-laag onderscheidt impliciet "public/onboarding (spacious)" en "portal/dashboard (operational)", maar in praktijk wordt spacious bijna nergens expliciet gezet, terwijl de publieke pagina's wel ruimer ogen door hun layout.
+
+- [ ] Audit waar de publieke pagina's hun ruime ritme vandaan halen. Als dat via padding/gap-tokens komt en niet via de density-wrapper, dan is `data-density="spacious"` dode laag en kan hij uit het primitives-systeem.
+- [ ] Indien spacious wel ingezet hoort te zijn op publieke routes: zet hem expliciet op één centraal punt (bv. `PublicLayout` of de `data-public-layout`-root) zodat de density-laag overal hetzelfde gedrag heeft.
