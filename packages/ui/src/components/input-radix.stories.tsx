@@ -44,6 +44,24 @@ export const Disabled: Story = {
 };
 
 /**
+ * Use `state="valid"` to surface field-level validation success. A trailing
+ * checkmark is rendered inside the input. The border stays neutral so the
+ * indicator is informative without competing with focus or hover signals.
+ */
+export const Valid: Story = {
+  args: { state: "valid", defaultValue: "matthias@procertus.be" },
+};
+
+/**
+ * Use `state="invalid"` to surface field-level validation failure. The
+ * destructive border (driven by `aria-invalid`) combines with a trailing
+ * alert icon. Pair with a `FieldError` underneath for the actual message.
+ */
+export const Invalid: Story = {
+  args: { state: "invalid", defaultValue: "not-an-email" },
+};
+
+/**
  * Use the `Label` component to includes a clear, descriptive label above or
  * alongside the input area to guide users.
  */
