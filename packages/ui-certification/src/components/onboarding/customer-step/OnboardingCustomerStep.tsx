@@ -26,7 +26,6 @@ import {
   isRegistrantCaptureValidForContext,
   resolveFlowContext,
 } from "../../../onboarding/onboarding-flow-helpers";
-import { SubformCompletionBadge } from "../../../onboarding/subform-completion-badge";
 import { IdentificatiePersonTitleRoleCapture } from "../../../onboarding/identificatie-person-title-role-capture";
 import type { OnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
 import { personFormCardClassName } from "../../../onboarding/person-form-card-variants";
@@ -128,27 +127,27 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
             {registrationIdFieldMeta.label}
           </FieldLabel>
           <FieldContent>
-            <div className="flex min-w-0 items-center gap-1.5">
-              <Input
-                id="customer-registration-identifier"
-                className="min-w-0 flex-1"
-                value={context.vatNumber}
-                placeholder={registrationIdFieldMeta.placeholder}
-                onChange={(event) => updateContext("vatNumber", event.target.value)}
-                autoComplete="off"
-                spellCheck={false}
-                aria-invalid={registrationIdentifierIssue != null}
-                aria-describedby={
-                  registrationIdentifierIssue
-                    ? "customer-registration-identifier-error customer-registration-identifier-hint"
-                    : "customer-registration-identifier-hint"
-                }
-              />
-              <SubformCompletionBadge
-                complete={registrationIdentifierStructurallyValid}
-                title="Geldig formaat"
-              />
-            </div>
+            <Input
+              id="customer-registration-identifier"
+              className="min-w-0"
+              value={context.vatNumber}
+              placeholder={registrationIdFieldMeta.placeholder}
+              onChange={(event) => updateContext("vatNumber", event.target.value)}
+              autoComplete="off"
+              spellCheck={false}
+              state={
+                registrationIdentifierIssue != null
+                  ? "invalid"
+                  : registrationIdentifierStructurallyValid
+                    ? "valid"
+                    : undefined
+              }
+              aria-describedby={
+                registrationIdentifierIssue
+                  ? "customer-registration-identifier-error customer-registration-identifier-hint"
+                  : "customer-registration-identifier-hint"
+              }
+            />
             {registrationIdentifierIssue ? (
               <p
                 id="customer-registration-identifier-error"
@@ -249,24 +248,17 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
           className={personFormCardClassName("emphasized")}
           aria-labelledby={`${applicantLegalRepFieldBase}-registrant-heading`}
         >
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0 space-y-1">
-              <h3
-                id={`${applicantLegalRepFieldBase}-registrant-heading`}
-                className="text-sm font-semibold tracking-tight text-foreground"
-              >
-                Uw gegevens als indiener
-              </h3>
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                Deze velden gaan over uzelf — degene die het formulier nu invult. Daarna vult u de
-                wettelijke vertegenwoordiger in.
-              </p>
-            </div>
-            <SubformCompletionBadge
-              complete={isRegistrantCaptureValidForContext(context)}
-              showIncompletePlaceholder
-              className="shrink-0"
-            />
+          <div className="min-w-0 space-y-1">
+            <h3
+              id={`${applicantLegalRepFieldBase}-registrant-heading`}
+              className="text-sm font-semibold tracking-tight text-foreground"
+            >
+              Uw gegevens als indiener
+            </h3>
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              Deze velden gaan over uzelf — degene die het formulier nu invult. Daarna vult u de
+              wettelijke vertegenwoordiger in.
+            </p>
           </div>
           <IdentificatiePersonTitleRoleCapture
             idPrefix="registrant-applicant"
@@ -292,27 +284,20 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
             applicantLegalRepPersonFieldsLocked && "opacity-55",
           )}
         >
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0 space-y-1">
-              <h3
-                id={`${applicantLegalRepFieldBase}-legal-rep-heading`}
-                className="text-sm font-semibold tracking-tight text-foreground"
-              >
-                Gegevens wettelijke vertegenwoordiger
-              </h3>
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                {context.applicantIsLegalRepresentative === "no"
-                  ? "Vul hier de persoon in die uw organisatie wettelijk mag vertegenwoordigen en de registratie mag ondertekenen."
-                  : context.applicantIsLegalRepresentative === "yes"
-                    ? "Dit adres gebruiken we voor uw account en berichten over uw aanvraag, tenzij u straks een ander contact opgeeft."
-                    : "Kies hierboven of u de wettelijke vertegenwoordiger bent; vul daarna deze gegevens in."}
-              </p>
-            </div>
-            <SubformCompletionBadge
-              complete={isLegalRepresentativeCaptureComplete(context)}
-              showIncompletePlaceholder
-              className="shrink-0"
-            />
+          <div className="min-w-0 space-y-1">
+            <h3
+              id={`${applicantLegalRepFieldBase}-legal-rep-heading`}
+              className="text-sm font-semibold tracking-tight text-foreground"
+            >
+              Gegevens wettelijke vertegenwoordiger
+            </h3>
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              {context.applicantIsLegalRepresentative === "no"
+                ? "Vul hier de persoon in die uw organisatie wettelijk mag vertegenwoordigen en de registratie mag ondertekenen."
+                : context.applicantIsLegalRepresentative === "yes"
+                  ? "Dit adres gebruiken we voor uw account en berichten over uw aanvraag, tenzij u straks een ander contact opgeeft."
+                  : "Kies hierboven of u de wettelijke vertegenwoordiger bent; vul daarna deze gegevens in."}
+            </p>
           </div>
           <IdentificatiePersonTitleRoleCapture
             idPrefix="legal-rep"
