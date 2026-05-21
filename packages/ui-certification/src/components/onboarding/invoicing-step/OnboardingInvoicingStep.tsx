@@ -32,7 +32,6 @@ import {
   seedInvoicingInquiryMapFromCertification,
 } from "../../../onboarding/onboarding-flow-helpers";
 import { COUNTRY_SELECT_NONE } from "../../../onboarding/onboarding-constants";
-import { SubformCompletionBadge } from "../../../onboarding/subform-completion-badge";
 import {
   IdentificatieAddressSubform,
   IdentificatieOptionalBlock,
@@ -137,27 +136,27 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
           E-mail voor facturatie <RequiredFieldSuffix erroneous={invoicingEmailIssue != null} />
         </FieldLabel>
         <FieldContent className="w-full min-w-0">
-          <div className="flex w-full min-w-0 items-center gap-1.5">
-            <Input
-              id={`${invoicingFieldBase}-email`}
-              type="email"
-              className="min-w-0 w-full flex-1"
-              value={context.invoicingEmail}
-              onChange={(e) => updateContext("invoicingEmail", e.target.value)}
-              autoComplete="email"
-              aria-required
-              aria-invalid={invoicingEmailIssue != null}
-              aria-describedby={
-                invoicingEmailIssue
-                  ? `${invoicingFieldBase}-email-error ${invoicingFieldBase}-email-hint`
-                  : `${invoicingFieldBase}-email-hint`
-              }
-            />
-            <SubformCompletionBadge
-              complete={invoicingEmailIssue == null}
-              title="Facturatie-e-mail ingevuld"
-            />
-          </div>
+          <Input
+            id={`${invoicingFieldBase}-email`}
+            type="email"
+            className="w-full min-w-0"
+            value={context.invoicingEmail}
+            onChange={(e) => updateContext("invoicingEmail", e.target.value)}
+            autoComplete="email"
+            aria-required
+            state={
+              invoicingEmailIssue != null
+                ? "invalid"
+                : context.invoicingEmail.trim().length > 0
+                  ? "valid"
+                  : undefined
+            }
+            aria-describedby={
+              invoicingEmailIssue
+                ? `${invoicingFieldBase}-email-error ${invoicingFieldBase}-email-hint`
+                : `${invoicingFieldBase}-email-hint`
+            }
+          />
           {invoicingEmailIssue ? (
             <p
               id={`${invoicingFieldBase}-email-error`}
