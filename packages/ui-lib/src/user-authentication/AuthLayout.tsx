@@ -154,13 +154,15 @@ function AuthLayout({
     ));
 
   return (
-    <div className={`flex min-h-svh w-full bg-background ${className ?? ""}`}>
+    <div
+      className={`mx-auto flex min-h-svh w-full max-w-proc-auth-shell bg-background ${className ?? ""}`}
+    >
       {/* Left panel — form */}
-      <div className="flex min-h-svh w-full flex-col items-center p-boundary lg:w-3/5">
-        {/* Logo */}
-        <div className="flex w-full max-w-sm justify-center">{resolvedLogo}</div>
+      <div className="flex min-h-svh w-full flex-col items-center justify-center p-boundary lg:w-3/5">
+        <div className="flex w-full max-w-sm flex-col gap-region">
+          {/* Logo */}
+          <div className="flex w-full justify-center">{resolvedLogo}</div>
 
-        <div className="flex w-full max-w-sm flex-1 flex-col justify-center gap-section">
           {showCard ? (
             <>
               <Card className="gap-section py-section shadow-[var(--shadow-proc-md)] ring-0">

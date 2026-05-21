@@ -440,6 +440,10 @@
   --max-width-proc-modal-md: 28rem;
   --max-width-proc-modal-lg: 32rem;
   --max-width-proc-modal-xl: 36rem;
+  /* Page shell ceiling for split-screen public layouts (e.g. AuthLayout).
+     Stops the form panel and brand panel from drifting apart on ultrawide
+     displays — content keeps the proportions of a standard widescreen. */
+  --max-width-proc-auth-shell: 120rem;
 
   /* ── Stage-fill sizing (viewport minus traject / wizard chrome) ──────────
    * 12rem reserves room for the registry header, outer page padding and the
