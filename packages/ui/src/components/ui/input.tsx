@@ -3,11 +3,12 @@ import { Tick02Icon, AlertCircleIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import { cn } from "@/lib/utils";
+import { Spinner } from "@/components/ui/spinner";
 
 const inputClasses =
-  "h-9 w-full min-w-0 rounded-lg border border-input bg-transparent px-3 py-1.5 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground hover:not-disabled:not-focus-visible:not-aria-invalid:border-ring focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive-foreground aria-invalid:ring-3 aria-invalid:ring-destructive-foreground/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive-foreground/50 dark:aria-invalid:ring-destructive-foreground/40";
+  "h-9 w-full min-w-0 rounded-lg border border-input bg-transparent px-3 py-1.5 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground hover:not-disabled:not-focus-visible:not-aria-invalid:not-data-[state=valid]:border-ring focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive-foreground aria-invalid:ring-3 aria-invalid:ring-destructive-foreground/20 data-[state=valid]:border-sys-success-500 data-[state=valid]:focus-visible:border-sys-success-500 data-[state=valid]:focus-visible:ring-sys-success-500/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive-foreground/50 dark:aria-invalid:ring-destructive-foreground/40 dark:data-[state=valid]:border-sys-success-400 dark:data-[state=valid]:focus-visible:border-sys-success-400 dark:data-[state=valid]:focus-visible:ring-sys-success-400/40";
 
-type InputState = "valid" | "invalid";
+type InputState = "valid" | "invalid" | "checking";
 
 type InputProps = React.ComponentProps<"input"> & {
   state?: InputState;
@@ -35,6 +36,7 @@ function Input({ className, type, state, "aria-invalid": ariaInvalid, ...props }
       <input
         type={type}
         data-slot="input"
+        data-state={state}
         aria-invalid={state === "invalid" ? true : ariaInvalid}
         className={cn(inputClasses, "pr-9")}
         {...props}
@@ -49,11 +51,13 @@ function Input({ className, type, state, "aria-invalid": ariaInvalid, ...props }
             className="size-4 text-sys-success-700 dark:text-sys-success-300"
             strokeWidth={2.5}
           />
-        ) : (
+        ) : state === "invalid" ? (
           <HugeiconsIcon
             icon={AlertCircleIcon}
             className="size-4 text-destructive-foreground"
           />
+        ) : (
+          <Spinner size="sm" />
         )}
       </span>
     </div>

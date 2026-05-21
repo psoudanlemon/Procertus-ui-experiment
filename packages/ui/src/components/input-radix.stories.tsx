@@ -62,6 +62,16 @@ export const Invalid: Story = {
 };
 
 /**
+ * Use `state="checking"` while an async validation is in flight (e.g. a
+ * BTW number being verified against an external service). The border
+ * stays neutral so the field is not yet committed to a verdict; a
+ * spinning loader replaces the trailing indicator.
+ */
+export const Checking: Story = {
+  args: { state: "checking", defaultValue: "BE0123456789" },
+};
+
+/**
  * Use the `Label` component to includes a clear, descriptive label above or
  * alongside the input area to guide users.
  */
