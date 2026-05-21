@@ -304,7 +304,13 @@ export function IdentificatiePersonSubform({
             disabled={disabled}
             onChange={(e) => patch({ email: e.target.value })}
             autoComplete="email"
-            aria-invalid={emailStructuralError != null}
+            state={
+              emailStructuralError != null
+                ? "invalid"
+                : value.email.trim().length > 0
+                  ? "valid"
+                  : undefined
+            }
             aria-describedby={emailDescribedBy}
           />
           {emailStructuralError ? (

@@ -22,7 +22,7 @@ _Feedback origineel gezien op:_ **Registratie** (groen vinkje naast BTW-/onderne
 - [x] Bouw één herbruikbare "verified" input field component met consistent succes/error pattern (inline message, eventueel een samenvattende staat per sectie). Vervangt de huidige losse status-iconen naast velden.
 - [x] Toepassen op Registratie — BTW-/ondernemingsnummer en "Gegevens wettelijke vertegenwoordiger".
 - [x] Toepassen op Facturatie — e-mail voor facturatie.
-- [ ] Audit overige invulvelden met validatie in het traject en pas toe.
+- [x] Audit overige invulvelden met validatie in het traject en pas toe.
 
 ### Choice card componenten
 

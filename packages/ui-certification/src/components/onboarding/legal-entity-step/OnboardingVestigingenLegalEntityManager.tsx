@@ -16,12 +16,10 @@ import { registrationIsoCodeFromDutchCountryLabel } from "../../../onboarding/li
 import {
   emptyOnboardingVestiging,
   formatVestigingRegistryOptionLabel,
-  isOnboardingVestigingCaptureComplete,
   vestigingAddressSubformValue,
 } from "../../../onboarding/onboarding-flow-helpers";
 import { COUNTRY_SELECT_NONE } from "../../../onboarding/onboarding-constants";
 import { IdentificatieAddressSubform } from "../../../onboarding/identificatie-subforms";
-import { SubformCompletionBadge } from "../../../onboarding/subform-completion-badge";
 import { personFormCardClassName } from "../../../onboarding/person-form-card-variants";
 
 type ComposerState =
@@ -297,12 +295,6 @@ export function OnboardingVestigingenLegalEntityManager({
                     <p className="text-xs text-muted-foreground">
                       {formatVestigingRegistryOptionLabel(ve)}
                     </p>
-                    <div className="pt-1">
-                      <SubformCompletionBadge
-                        complete={isOnboardingVestigingCaptureComplete(ve)}
-                        showIncompletePlaceholder
-                      />
-                    </div>
                   </div>
                   <div className="flex shrink-0 flex-wrap gap-2">
                     <Button
