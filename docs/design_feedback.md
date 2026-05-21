@@ -242,3 +242,126 @@ Doel van deze pagina is enkel (1) bevestigen dat de indiening gelukt is, en (2) 
 - [ ] Verwijder of integreer voettekst "Stappen rechts-onder in uw mailbox nu" als één korte zin.
 - [ ] Consolideer alle behouden info in één bevestigingskaart met succesmelding, dossiernummer/contact-e-mail en de korte onboarding-zin.
 - [ ] Toon twee gewogen CTA's: "Ga naar Klantenportaal" (primary) en "Open mijn mailbox" (secondary).
+
+---
+
+## 4. Copy en taalregister
+
+_Origineel gezien tijdens een copy-clarity pass over de publieke pagina's van [`apps/frontend-pt1-extranet-onboarding`](../apps/frontend-pt1-extranet-onboarding/). De wijzigingen zijn gerevert; deze sectie houdt de afspraken vast zodat ze in één gerichte ronde uitgevoerd kunnen worden. De voorgestelde teksten zijn concreet bedoeld als startpunt, niet als verplichte eindtekst._
+
+### Cross-cutting regels
+
+- [ ] **Vorm "u" overal aanhouden.** Vervang resterende "je"/"jij"-vormen door "u" in alle B2B-pagina's. Geconstateerd op:
+  - [SignupPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/SignupPage.tsx): `"Meld je aan…"`, `"Start je aanvraag hier"`.
+  - [TrajectConfigureFlow.tsx](../apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx): `"…die je wil certificeren"`.
+  - [TrajectBundleAssembleFlow.tsx](../apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx): `"…zodat je meteen alle benodigdheden…"`.
+  - [WegwijzerPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx): `"Wanneer vraag je dit het beste aan?"`.
+- [ ] **Geen em dashes (—) in user-facing copy.** Vervang door komma, dubbele punt of een nieuwe zin. Geconstateerd op InfoRequestSubmittedPage en OnboardingRegistrationCompletePage (zowel in sectie-titels als in body-paragrafen).
+- [ ] **Geen "Gelieve" of bureaucratische passieve constructies.** Gebruik directe, actieve zinnen. Geconstateerd op [InfoRequestPlaceholderPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx) (`"Gelieve uw gegevens achter te laten…"`).
+- [ ] **Geen prototype-meta-commentaar in user-facing copy.** Verwijder verwijzingen naar "deze demo", "in deze demo beschikbaar", "alvast opgenomen in de navigatiestructuur". Geconstateerd op DashboardPage en AppPlaceholderPage.
+- [ ] **Geen Engelse strings in de NL-UI.** Vertaal:
+  - [footerConfig.ts](../apps/frontend-pt1-extranet-onboarding/src/layouts/footerConfig.ts): `"Privacy policy"` → `"Privacybeleid"`.
+  - [OnboardingEntryPlaceholderPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingEntryPlaceholderPage.tsx): volledige Engelse panel + empty state (title, subtitle, AuthLayout-description, EmptyTitle, EmptyDescription, knop-label) naar Nederlands.
+- [ ] **Vakjargon vermijden waar plain Dutch volstaat.** Specifiek: `"snapshot"`, `"dossierspoor"`, `"onboarding"` als zelfstandig naamwoord in koppen. Vervang door uitleg ("eigen dossier", "uw teamleden in het Klantenportaal").
+
+### Per-pagina copy-actie
+
+#### 4.1 Login [`SignupPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/SignupPage.tsx)
+
+_Route:_ [`/login`](http://localhost:5173/login) (cf. [3.11](#311-klantenportaal-login-pagina))
+
+- [ ] `description`: `"Meld u aan met het e-mailadres waarmee u bij PROCERTUS geregistreerd staat."`
+- [ ] Below-card link: `"Start hier uw aanvraag"`.
+
+#### 4.2 Triage [`TriagePage`](../apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx)
+
+_Route:_ `/welcome/triage/:serviceId` (open via "Aanvraag starten" vanuit een detail-card op `/welcome`)
+
+- [ ] Titel verkorten: `"Wilt u meer informatie of uw traject opstarten?"` (dubbele "wilt u" weghalen).
+- [ ] Beschrijving: `"Vraag eerst vrijblijvend advies en een prijsopgave, of start meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen."`
+- [ ] Bullets "Aanvraag meer informatie": `"Geen verplichting om op te starten"`, `"Antwoord binnen enkele werkdagen"`, `"Live sessie met een expert mogelijk"`.
+- [ ] Bullets "Traject opstarten" herordenen naar 3 voorwaarden + 3 gevolgen: `"U hebt voldoende informatie over het traject"`, `"U hebt uw bedrijfsgegevens bij de hand"`, `"U wilt nu indienen"`, `"De ontvankelijkheidsbeoordeling start meteen"`, `"PROCERTUS volgt uw dossier actief op"`, `"Uw account wordt aangemaakt bij indiening"`.
+- [ ] Expert-card heading van `"Liever eerst een expert spreken?"` naar `"Wilt u eerst een expert spreken?"`.
+- [ ] Expert-card copy: `"Reserveer een live online sessie van één uur en overloop de vereisten samen met een PROCERTUS-expert."`
+
+#### 4.3 Vrijblijvende informatieaanvraag [`InfoRequestPlaceholderPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx)
+
+_Route:_ `/welcome/info-request/:serviceId` (vanuit triage links-kaart)
+
+- [ ] Beschrijving: `"Laat uw gegevens hieronder achter. We bekijken uw vraag en nemen snel contact met u op."` (drop "Gelieve").
+- [ ] Sectie-titel `"Overzicht informatieaanvragen"` naar `"Waarover wilt u informatie?"`.
+- [ ] Placeholder note-veld: `"Beschrijf hier de context van uw vraag of een concreet aandachtspunt."`.
+
+#### 4.4 Aanvraag verzonden [`InfoRequestSubmittedPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx)
+
+_Route:_ `/welcome/info-request/:serviceId/verzonden`
+
+- [ ] Sectie-titel `"Wat maakte deel uit van uw aanvraag"` naar `"Dit stuurde u in"`. Beschrijving: `"De certificaten uit uw mandje, samen met de toelichting die u hebt toegevoegd."`.
+- [ ] Lege-mandje fallback: `"Uw mandje was leeg bij verzending. PROCERTUS leest uw vraag toch door en komt op basis daarvan bij u terug."`.
+- [ ] Sectie-titel `"Onboarding naar het Klantenportaal"` naar `"Uw teamleden in het Klantenportaal"`. Beschrijving inkorten tot: `"Iedereen met een e-mailadres hieronder krijgt een uitnodiging om zich aan te melden. De juiste PROCERTUS-rol wordt automatisch gekoppeld."`.
+- [ ] Bullets "Uw volgende stappen op het Klantenportaal" verkorten: één onderwerp per bullet, actieve zinnen, dossier-ID kort vermelden zonder lange tussenzin.
+- [ ] Fallback zonder snapshot (geen `serviceId`): em dash verwijderen, splitsen in 2 zinnen. Voorstel: `"Bedankt voor uw aanvraag. We bekijken uw gegevens en nemen snel contact met u op. Herlaadt u deze pagina, dan zijn de gekoppelde details niet meer zichtbaar. Uw aanvraag is wel ontvangen."`.
+- [ ] Expertgesprek-fallback (geen `preferenceLabel`): puntkomma vervangen door punt.
+
+#### 4.5 Lopende-aanvraag banner [`ActiveInquiryContinueAlert`](../apps/frontend-pt1-extranet-onboarding/src/layouts/ActiveInquiryContinueAlert.tsx)
+
+_Zichtbaar op:_ publieke pagina's onder `/welcome` wanneer er een formele aanvraag in progress is.
+
+- [ ] Titel `"Actieve certificatie aanvraag"` naar `"Lopende certificatieaanvraag"` (één woord, geen spatie).
+- [ ] Body: `"U hebt een formele aanvraag met X certificatieonderzoek(en). U kunt op elk moment verder waar u gestopt was."`
+
+#### 4.6 Productkeuze [`TrajectConfigureFlow`](../apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx)
+
+_Route:_ `/welcome/aanvraag/:serviceId/start`
+
+- [ ] Titel: `"Selecteer de producten die u wilt certificeren"` (formele vorm).
+- [ ] Beschrijving: `"Doorzoek de catalogus of blader stap voor stap door de categorieën."`
+
+#### 4.7 Per-product certificaten [`TrajectBundleAssembleFlow`](../apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx)
+
+_Route:_ `/welcome/aanvraag/:serviceId/pakket` (cf. [3.3](#33-onboarding-stap-voeg-per-product-certificaten-toe))
+
+- [ ] Beschrijving: `"Loop uw geselecteerde producten door en voeg de certificaten toe die u nog nodig hebt. Zo dient u meteen alles samen in."` (huidige versie mengt "uw" en "je" en eindigt zonder punt).
+
+#### 4.8 Wegwijzer [`WegwijzerPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx)
+
+_Route:_ [`/welcome`](http://localhost:5173/welcome)
+
+- [ ] Sectie-titel `"Wanneer vraag je dit het beste aan?"` naar `"Wanneer vraagt u dit het beste aan?"`.
+
+#### 4.9 Dashboard [`DashboardPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/DashboardPage.tsx)
+
+_Route:_ `/` (na login)
+
+- [ ] Beschrijving: `"Overzicht van uw sessie, organisatie en certificatieaanvragen."` (drop `"zoals in deze demo beschikbaar zijn"`).
+
+#### 4.10 Placeholder-secties [`AppPlaceholderPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/AppPlaceholderPage.tsx)
+
+_Gebruikt door:_ alle nog niet geïmplementeerde secties in de authenticated app.
+
+- [ ] Fallback-zin korter: `"Deze sectie is binnenkort beschikbaar."` (drop `"alvast opgenomen in de navigatiestructuur"`).
+
+#### 4.11 Onboarding-entry placeholder [`OnboardingEntryPlaceholderPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingEntryPlaceholderPage.tsx)
+
+_Route:_ `/welcome/onboarding` (placeholder)
+
+- [ ] Volledige pagina vertalen naar Nederlands: `PANEL.title` + `PANEL.subtitle`, `AuthLayout` title en description, `EmptyTitle`, `EmptyDescription`, knop-label (`"Back to sign in"` naar `"Terug naar aanmelden"`).
+
+#### 4.12 Footer [`footerConfig.ts`](../apps/frontend-pt1-extranet-onboarding/src/layouts/footerConfig.ts)
+
+- [ ] `"Privacy policy"` naar `"Privacybeleid"`.
+
+#### 4.13 Bevestigingspagina na indiening [`OnboardingRegistrationCompletePage`](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingRegistrationCompletePage.tsx)
+
+_Route:_ [`/registratie-voltooid`](http://localhost:5173/registratie-voltooid) (cf. [3.12](#312-bevestigingspagina-na-indiening-uw-account-is-klaar) voor de structurele wijzigingen. Onderstaande copy-actie blijft zinvol zolang de pagina in haar huidige vorm staat.)
+
+- [ ] Lead-paragraaf: em dash weghalen, vervangen door punt. Voorstel: `"We bevestigen het dossier van X. Uw hoofdcontact is Y. U registreerde in totaal N conceptaanvraag/-aanvragen bij PROCERTUS. Onderaan dit scherm vindt u de volledige uitsplitsing en wat er digitaal op volgt."`.
+- [ ] Activatie-callout in actieve vorm: `"Activeer uw portaaltoegang via e-mail. Elk dossier krijgt een dossier-ID in uw Klantenportaal. Zonder activering hebt u daar nog geen zicht op, maar uw dossier is wel bij PROCERTUS geregistreerd."`.
+- [ ] Sectie-titel `"Uw ingediende aanvragen — wat volgt eerst digitaal"` naar `"Uw ingediende aanvragen en wat eerst volgt"`.
+- [ ] Cache-miss fallback: drop `"snapshot"` en `"lokale opslag"`. Voorstel: `"Het overzicht is hier niet meer beschikbaar (bijvoorbeeld na een herlading van de pagina). U diende N conceptaanvraag/-aanvragen in. Zodra u de uitnodigingsmail opent, vindt u elk traject terug onder uw aanvragen in het Klantenportaal."`.
+- [ ] Tabel-voetnoot: vervang `"dossierspoor"` door `"eigen dossier"`. Voorstel: `"Elke aanvraag krijgt een eigen dossier in het portaal. PROCERTUS verwittigt u zodra er actie nodig is, bijvoorbeeld bij bewijsstukken die u moet aanleveren of bij goedkeuringsmijlpalen."`.
+- [ ] Sectie-titel `"Onboarding van gebruikers naar het Klantenportaal"` naar `"Uw teamleden in het Klantenportaal"`. Beschrijving inkorten tot: `"Iedereen hieronder krijgt een uitnodiging om zich aan te melden. Bij activatie wordt automatisch de juiste rol toegekend (kwaliteit, facturatie, certificatie, enz.). Collega's die hier nog niet vermeld staan, kunt u later vanuit uw beheer uitnodigen."`.
+- [ ] Sectie-titel `"Volgende digitale onboarding — direct na deze melding"` naar `"Volgende stappen, meteen na deze melding"`. Bullets korter, één actie per bullet. Let op: deze sectie wordt volgens [3.12](#312-bevestigingspagina-na-indiening-uw-account-is-klaar) mogelijk volledig verwijderd.
+- [ ] Voetkop `"Stappen rechts-onder in uw mailbox nu"` naar `"Volgende stap: check uw mailbox"`. Onderliggende paragraaf herschrijven in actieve, doorlopende zinnen.
+- [ ] Statuspil `"Uitnodiging onderweg"` naar `"Uitnodiging verzonden"`; `"Geen portal‑uitnodiging"` naar `"Geen uitnodiging"`.
+- [ ] `digitalFollowBrief()` per case: volledige zinnen, geen puntkomma als korte-zin-vervanger, geen lower-case startwoord.
