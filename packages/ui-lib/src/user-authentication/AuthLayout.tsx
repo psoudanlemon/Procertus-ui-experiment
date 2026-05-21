@@ -49,6 +49,11 @@ export type AuthLayoutProps = {
   belowCard?: React.ReactNode;
   /** Logo element. Defaults to the full PROCERTUS wordmark. */
   logo?: React.ReactNode;
+  /**
+   * Destination for the default logo. Set to `null` to render the logo as a non-interactive image.
+   * Ignored when `logo` is provided explicitly. Defaults to `/`.
+   */
+  logoHref?: string | null;
   /** Right panel configuration. Pass `false` to hide entirely. */
   panel?: AuthLayoutPanelConfig | false;
   /** Additional className on the outer container. */
@@ -110,6 +115,7 @@ function AuthLayout({
   card: showCard = true,
   belowCard,
   logo,
+  logoHref = "/",
   panel,
   className,
 }: AuthLayoutProps) {
@@ -118,27 +124,41 @@ function AuthLayout({
   const hasImages = panelConfig.images && panelConfig.images.length > 0;
   const useGradient = panelConfig.gradient ?? (!panelConfig.image && !hasImages);
 
+  const defaultLogo = (
+    <>
+      <img
+        src={procertusLogo}
+        alt="PROCERTUS, certification that builds trust"
+        className="h-16 w-auto dark:hidden"
+      />
+      <img
+        src={procertusLogo}
+        alt="PROCERTUS, certification that builds trust"
+        className="hidden h-16 w-auto brightness-0 invert dark:block"
+      />
+    </>
+  );
+
+  const resolvedLogo =
+    logo ??
+    (logoHref ? (
+      <a
+        href={logoHref}
+        aria-label="Naar de startpagina"
+        className="rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      >
+        {defaultLogo}
+      </a>
+    ) : (
+      defaultLogo
+    ));
+
   return (
     <div className={`flex min-h-svh w-full bg-background ${className ?? ""}`}>
       {/* Left panel — form */}
       <div className="flex min-h-svh w-full flex-col items-center p-boundary lg:w-3/5">
         {/* Logo */}
-        <div className="flex w-full max-w-sm justify-center">
-          {logo ?? (
-            <>
-              <img
-                src={procertusLogo}
-                alt="PROCERTUS, certification that builds trust"
-                className="h-16 w-auto dark:hidden"
-              />
-              <img
-                src={procertusLogo}
-                alt="PROCERTUS, certification that builds trust"
-                className="hidden h-16 w-auto brightness-0 invert dark:block"
-              />
-            </>
-          )}
-        </div>
+        <div className="flex w-full max-w-sm justify-center">{resolvedLogo}</div>
 
         <div className="flex w-full max-w-sm flex-1 flex-col justify-center gap-section">
           {showCard ? (
