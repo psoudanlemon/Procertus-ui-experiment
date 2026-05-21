@@ -1,10 +1,15 @@
 # Design feedback — todo
 
-Checklist op basis van de design review. Onderverdeeld in:
+Checklist op basis van de design review en daaropvolgende audits. Onderverdeeld in:
 
-1. **Cross-cutting patronen / componenten** — één keer bouwen, op meerdere plekken toepassen.
-2. **Flow- en gedrags-architectuur** — bredere beslissingen over winkelmandje, drafts en navigatie.
-3. **Page-specifieke wijzigingen** — per scherm, met verwijzing naar cross-cutting items waar van toepassing.
+1. [**Cross-cutting patronen / componenten**](#1-cross-cutting-patronen--componenten): herbruikbare componenten en token-beslissingen die op meerdere plekken landen.
+2. [**Flow- en gedrags-architectuur**](#2-flow--en-gedrags-architectuur): bredere beslissingen over winkelmandje, drafts en navigatie.
+3. [**Page-specifieke wijzigingen**](#3-page-specifieke-wijzigingen): per scherm (3.1 t/m 3.12), met cross-refs naar cross-cutting items.
+4. [**Copy en taalregister**](#4-copy-en-taalregister): cross-cutting copy-regels en per-pagina micro-copy (4.1 t/m 4.13).
+5. [**Distill audit (2026-05-21)**](#5-distill-audit-2026-05-21): app-level en primitives-findings uit de meest recente audit-ronde.
+
+**Onderdelen in sectie 1, in alfabetische scan-volgorde:**
+[Cart-status visibility](#cart-status-visibility) · [Choice card componenten](#choice-card-componenten) · [Combobox met create-new](#combobox-met-create-new) · [Copy density](#copy-density) · [Desktop-breedte van page-level componenten](#desktop-breedte-van-page-level-componenten) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Primitives polish — states en token-hygiëne](#primitives-polish--states-en-token-hygiëne) · [Stepper](#stepper) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox) · [Typografie-token: `leading-[1.6]` op body-copy](#typografie-token-leading-16-op-body-copy) · [Verified input field](#verified-input-field).
 
 ---
 
@@ -370,7 +375,7 @@ _Route:_ [`/registratie-voltooid`](http://localhost:5173/registratie-voltooid) (
 
 ## 5. Distill audit (2026-05-21)
 
-_Audit gedaan met de `/distill` skill om visuele en structurele overcomplexiteit op te sporen in de app en in de gelinkte primitives. Items die elders in dit document al worden aangepakt (kaart-verwijderingen op de bevestigingspagina, copy-density passes, choice-card vs checkbox, enz.) zijn hier overgeslagen._
+_Audit gedaan met de `/distill` skill om visuele en structurele overcomplexiteit op te sporen in de app en in de gelinkte primitives. Items die elders in dit document al worden aangepakt (kaart-verwijderingen op de bevestigingspagina, copy-density passes, choice-card vs checkbox, enz.) zijn hier overgeslagen. Als een audit-finding doorwerkt op een page- of copy-item, staat dat als kruisverwijzing onder de bevinding zodat geen van beide kanten uit zicht raakt._
 
 ### 5.1 App-level
 
@@ -381,12 +386,16 @@ _Feedback origineel gezien op:_ **Triage** ("Liever eerst een expert spreken?" a
 - [ ] Beperk de expert-call CTA tot één visuele ankerplek. Voorstel: behoud de inline kaart op [WegwijzerPage.tsx:276](apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx#L276) als eerste ontdekpunt, en vervang de derde kaart op [TriagePage.tsx:105](apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx#L105) door een tekstlink of een inline note onder de twee TriageOptionCards.
 - [ ] Of, omgekeerd: behoud de prominentie op Triage (dat is het beslismoment) en zet de `ExpertCallFooterCard` op de wegwijzer terug naar een minder dominante variant (item-row in plaats van gradient-card).
 
+> Raakt aan de expert-card copy-actie in [4.2 Triage](#42-triage-triagepage): als de kaart op Triage vervalt, vervallen ook de geplande copy-aanpassingen daar.
+
 #### Vier gestapelde bordered cards op InfoRequestSubmittedPage beslaan dezelfde temporele fase
 
 _Feedback origineel gezien op:_ **Aanvraag verzonden** [InfoRequestSubmittedPage.tsx:39-199](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L39). De pagina toont vier `PublicOverviewSection`-kaarten onder elkaar: "Wat maakte deel uit van uw aanvraag", "Organisatie en context", "Onboarding naar het Klantenportaal", "Uw volgende stappen op het Klantenportaal". Drie ervan beschrijven hetzelfde toekomstige moment (wat er na het verzenden gebeurt), en "Organisatie en context" herhaalt waardes die al in de lead-paragraaf staan.
 
 - [ ] Vouw "Organisatie en context" [InfoRequestSubmittedPage.tsx:77](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L77) in de lead-beschrijving in. Kanaal en organisatie zijn al in de heading-paragraaf vermeld; alleen het tijdstip "Ontvangen" mag eventueel als compacte regel onder de lead blijven.
 - [ ] Voeg "Onboarding naar het Klantenportaal" [InfoRequestSubmittedPage.tsx:125](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L125) en "Uw volgende stappen op het Klantenportaal" [InfoRequestSubmittedPage.tsx:173](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L173) samen tot één sectie "Volgende stappen". Behoud de personenlijst, plaats de twee tot drie kerninstructies eronder. De vijf bullets van "Volgende stappen" zijn portal-onboarding en horen daar inhoudelijk thuis, niet op de bevestigingspagina (cf. analoge keuze in [3.12](#312-bevestigingspagina-na-indiening-uw-account-is-klaar) voor de registratie-bevestiging).
+
+> Raakt aan de copy-acties in [4.4 Aanvraag verzonden](#44-aanvraag-verzonden-inforequestsubmittedpage): meerdere geplande tekst-aanpassingen verhuizen mee als de secties samengevoegd of geschrapt worden.
 
 #### BrandGradientHero is demo-restant met Engelse copy
 
@@ -411,12 +420,16 @@ _Feedback origineel gezien op:_ [TriagePage.tsx:138-208](apps/frontend-pt1-extra
 - [ ] Hef de lokale definitie op en breng een algemene "DecisionCard" (of vergelijkbare naam) in `packages/ui-lib` als generieke twee-tone keuzekaart. Naam mag niet "Triage" bevatten omdat de inhoud niet domeingebonden is (cf. memory "Name by content, not consumer"). Eerste consument: TriagePage; tweede potentiële consument: het beslismoment "formele aanvraag vs informatieve aanvraag" in andere flows.
 - [ ] Alternatief, als extractie te zwaar voelt: laat de component lokaal, maar dun hem af. De zes bullets aan de primary-kant kunnen naar drie (zie ook [4.2 Triage](#42-triage-triagepage)), de `shadow-proc-md` + `ring-2 ring-primary/30` voelen samen overdone op een muted-vs-primary paar. Eén van beide volstaat als visueel signaal.
 
+> Raakt aan [Choice card componenten](#choice-card-componenten) in sectie 1: een nieuwe `DecisionCard` is mogelijk de juiste plek om die optimalisatieslag te bundelen.
+
 #### BrowseCard `variant="faded"` wordt in productie één keer gebruikt
 
 _Feedback origineel gezien op:_ `grep -r 'variant="faded"'` toont één gebruik buiten Storybook: [WegwijzerPage.tsx:254](apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx#L254) op de externe-verwijzing tegels in `AllCertificatesGrid`. Daarnaast bestaat een tweede pad voor exact dezelfde inhoud: `ExternalReferralGrid` [WegwijzerPage.tsx:313-339](apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx#L313) gebruikt `<Item>` in plaats van een faded BrowseCard.
 
 - [ ] Kies één presentatie voor externe verwijzingen. Voorstel: behoud de `<Item>`-rij (compacter, past in de "Overige" tab) en gebruik die ook in `AllCertificatesGrid`. Dat maakt `variant="faded"` overbodig en zorgt voor één lees-pattern voor "dit dossier loopt elders".
 - [ ] Als de faded-variant toch waarde heeft op een andere plek, documenteer dan in `BrowseCard.stories.tsx` voor welk inhoudtype hij bedoeld is. Anders verwijderen uit de `variant`-set.
+
+> Raakt aan de externe-verwijzing tegels op [4.8 Wegwijzer](#48-wegwijzer-wegwijzerpage).
 
 #### `data-density="spacious"` heeft geen meetbare adoptie
 
