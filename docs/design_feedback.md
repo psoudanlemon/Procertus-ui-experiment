@@ -70,6 +70,23 @@ _Feedback origineel gezien op:_ **Maatschappelijke zetel** (waar tekst ~50% van 
 - [ ] Specifiek nakijken op Certificatie (entiteit) — uitgebreide uitleg boven de keuze.
 - [ ] Specifiek nakijken op Facturatie — lange paragrafen rond elk sub-blok.
 
+### Desktop-breedte van page-level componenten
+
+_Feedback origineel gezien op:_ verschillende organisms zijn mobile-first opgesteld met een vaste `max-w-*` en groeien niet mee op `lg` en `xl`. Op een breed scherm zit een kleine kolom met veel witruimte ernaast. Container-query-aware componenten (CoverView, ProductInquiryMatrix, ProductSelectionBasket, Snackbar) zijn correct responsive en hoeven niet aangepast.
+
+- [ ] **AuthLayout** [packages/ui-lib/src/user-authentication/AuthLayout.tsx:124,126,143](packages/ui-lib/src/user-authentication/AuthLayout.tsx#L124) — formulier-kolom staat op `lg:w-3/5` met `max-w-sm` binnenin: op desktop is dat een smalle island met veel ongebruikte ruimte. Voorstel: kolom naar `lg:w-1/2 xl:w-2/5` en form-breedte naar `lg:max-w-md`, zodat het brand-paneel rechts ook ademruimte krijgt.
+- [ ] **DraftRequestList** [packages/ui-certification/src/components/draft-request-list/DraftRequestList.tsx:67](packages/ui-certification/src/components/draft-request-list/DraftRequestList.tsx#L67) — capped op `max-w-3xl` (768px). Voor een lijst met titel, subtitle en details kan dat op `xl` ruimer (bv. `xl:max-w-5xl`).
+- [ ] **RequestPackageReview** [packages/ui-certification/src/components/request-package-review/RequestPackageReview.tsx:240](packages/ui-certification/src/components/request-package-review/RequestPackageReview.tsx#L240) — review-document met tabellen capped op `max-w-2xl` (672px). Pijnlijk smal op desktop. Voorstel: `lg:max-w-4xl xl:max-w-5xl`.
+- [ ] **ProcertusCategorizationTreeView side sheet** [packages/ui-certification/src/components/procertus-categorization-tree-view/ProcertusCategorizationTreeView.tsx:670](packages/ui-certification/src/components/procertus-categorization-tree-view/ProcertusCategorizationTreeView.tsx#L670) — sheet stopt bij `sm:max-w-3xl`. Op `lg` en `xl` kan ruimer (bv. `lg:max-w-4xl xl:max-w-5xl`) zodat tree en filterlabels niet onnodig moeten scrollen.
+- [ ] Audit overige page-level organisms op vaste `max-w-2xl` / `max-w-3xl` zonder `lg:` of `xl:` upgrade. Inventaris is beperkt tot ui-lib en ui-certification want primitives in `packages/ui` worden parametrisch gebruikt.
+
+### Typografie-token: `leading-[1.6]` op body-copy
+
+_Feedback origineel gezien op:_ off-token-check hook flagde `leading-[1.6]` bij een edit op [RequestPackageReview.tsx:240](packages/ui-certification/src/components/request-package-review/RequestPackageReview.tsx#L240). Het patroon bestaat 8 keer in ui-certification (review-/summary-/onboarding body copy) en is ook gelogd in [packages/ui/src/off-token-log.md](packages/ui/src/off-token-log.md) voor StepLayout en stepper.
+
+- [ ] Beslis systeem-breed: ofwel snappen naar `--text-base--line-height: 1.4rem` (huidig token, ruimer ritme verdwijnt), ofwel evolueren naar een eigen `--text-base-comfortable--line-height: 1.6rem` token met een `leading-comfortable` utility plus Guidelines.mdx-uitleg, en dan alle 8+ sites refactoren.
+- [ ] Wanneer het token wordt geëvolueerd: ook de bestaande exception in `packages/ui/src/off-token-log.md` opruimen.
+
 ### Cart-status visibility
 
 _Feedback origineel gezien op:_ **Homepage** ("Start uw certificeringstraject") — een blauwe "AL IN UW PAKKET · 2 PRODUCTEN" pill bovenop de BENOR-kaart, en een count-badge "2" op de filtertab "BENOR-certificatie". Beide indicatoren herhalen info die al duidelijk is uit het winkelmandje en de header-cart-indicator.
@@ -77,6 +94,15 @@ _Feedback origineel gezien op:_ **Homepage** ("Start uw certificeringstraject") 
 - [ ] Cart-status alleen tonen in het winkelmandje en de cart-indicator in de header — niet dupliceren elders.
 - [ ] Verwijder "AL IN UW PAKKET · X PRODUCTEN" indicator van homepage certificaatkaarten.
 - [ ] Verwijder count-badges van homepage filtertabs.
+
+### Primitives polish — states en token-hygiëne
+
+_Feedback origineel gezien op:_ audit van [packages/ui/src/components/ui/](packages/ui/src/components/ui/) tijdens een Storybook-polishronde. Vier primitives missen een state of wijken licht af van het token-systeem. Telkens met een voorstel dat binnen de bestaande tokens valt zodat de guidelines niet hoeven uitgebreid te worden.
+
+- [ ] **EmptyIcon — vaste `bg-white` doorbreekt theming.** [packages/ui/src/components/ui/empty.tsx:23](packages/ui/src/components/ui/empty.tsx#L23) — huidige classes `bg-white text-brand-primary-700 dark:bg-white/10 dark:text-brand-primary-200`. In dark mode zakt de cirkel naar "white at 10%" en verliest hij zijn brand-feel. **Voorstel:** vervang door `bg-accent text-accent-foreground`. Light → `brand-accent-50` onder anchor-blauw; dark → `brand-accent-950` onder `brand-accent-300`. Beide al bestaande semantic-token-paren.
+- [ ] **Input — geen hover state.** [packages/ui/src/components/ui/input.tsx:11](packages/ui/src/components/ui/input.tsx#L11) — gaat van idle rechtstreeks naar `focus-visible`, dus de cursor geeft geen signaal dat een veld interactief is. **Voorstel:** voeg `hover:not-disabled:not-focus-visible:not-aria-invalid:border-foreground/30` toe (analoog aan `hover:border-foreground/15` op sortable cards en `/20` op de stacking-sequence story). De `not-*`-modifiers zorgen dat focus en error states blijven winnen.
+- [ ] **Textarea — geen hover state.** [packages/ui/src/components/ui/textarea.tsx:10](packages/ui/src/components/ui/textarea.tsx#L10) — zelfde gat als Input. **Voorstel:** identieke `hover:not-disabled:not-focus-visible:not-aria-invalid:border-foreground/30`, zodat Input en Textarea als paar consistent voelen.
+- [ ] **Alert — `pr-18` valt buiten de gecureerde DS-spacing-schaal.** [packages/ui/src/components/ui/alert.tsx:7](packages/ui/src/components/ui/alert.tsx#L7) — `has-data-[slot=alert-action]:pr-18`. De `--spacing-ds-*`-schaal kent 10 / 11 / 12 / 14 / 16 / 20 / 24, geen 18 — `pr-18` werkt nu enkel via Tailwind v4's default `--spacing: 0.25rem` fallback (4.5rem). In spacious-mobile density (component = 20px, action ≈ 36px) klipt die 4.5rem 4px tegen de actie. **Voorstel:** snap naar `pr-20` (5rem = `--spacing-ds-20`, in de gecureerde schaal en ruim genoeg voor alle density-combo's).
 
 ---
 
