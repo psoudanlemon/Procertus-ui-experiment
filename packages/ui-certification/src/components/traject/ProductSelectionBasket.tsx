@@ -20,6 +20,7 @@ import {
   Button,
   Card,
   CardContent,
+  H2,
   Input,
   cn,
 } from "@procertus-ui/ui";
@@ -944,9 +945,9 @@ function SearchHeader({
   return (
     <header className="flex flex-wrap items-baseline justify-between gap-component">
       <div className="flex flex-wrap items-baseline gap-component">
-        <h2 className="text-xl font-semibold tracking-tight">
+        <H2 className="tracking-tight">
           Zoekresultaten voor &ldquo;{query}&rdquo;
-        </h2>
+        </H2>
         <span className="text-sm text-muted-foreground">
           {visibleResults} van {totalResults}
         </span>

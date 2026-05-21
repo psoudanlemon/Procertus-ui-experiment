@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { DensityProvider, cn } from "@procertus-ui/ui";
+import { DensityProvider, H2, cn } from "@procertus-ui/ui";
 import {
   PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG,
   ExpertCallBookingView,
@@ -93,8 +93,8 @@ export function InfoRequestPlaceholderPage() {
   return (
     <TrajectPageFrame
       kicker={"vrijblijvend"}
-      title="Uw vraag naar meer informatie"
-      description="Gelieve uw gegevens achter te laten. Wij bekijken uw aanvraag en nemen binnenkort met u contact op om deze verder te bespreken."
+      title="Je vraag naar meer informatie"
+      description="Laat je gegevens hieronder achter. We bekijken je vraag en nemen snel contact met je op."
       bodyGap="section"
       actionBar={
         <TrajectStoryFooter
@@ -112,12 +112,9 @@ export function InfoRequestPlaceholderPage() {
           aria-labelledby="info-request-matrix-heading"
         >
           <div className="flex flex-col">
-            <h2
-              id="info-request-matrix-heading"
-              className="m-0 text-heading-lg font-semibold text-heading-foreground"
-            >
-              Overzicht informatieaanvragen
-            </h2>
+            <H2 id="info-request-matrix-heading" className="m-0">
+              Waarover wil je informatie?
+            </H2>
             <p className="m-0 text-sm text-muted-foreground">
               {productGroups.length > 0 && standaloneInquiries.length === 0 ? (
                 <>
@@ -162,12 +159,9 @@ export function InfoRequestPlaceholderPage() {
         )}
         aria-labelledby="info-request-note-heading"
       >
-        <h2
-          id="info-request-note-heading"
-          className="m-0 text-heading-lg font-semibold text-heading-foreground"
-        >
+        <H2 id="info-request-note-heading" className="m-0">
           Begeleidende toelichting
-        </h2>
+        </H2>
         <ProductRequestNoteField
           value={submissionNote}
           onChange={(v) => api.setSubmissionNote(v)}
@@ -177,7 +171,7 @@ export function InfoRequestPlaceholderPage() {
           bordered={false}
           autoFocus={false}
           aria-labelledby="info-request-note-heading"
-          placeholder="Beschrijf hier de context van uw informatieaanvraag of een concrete vraag."
+          placeholder="Beschrijf hier de context van je vraag of een concreet aandachtspunt."
         />
       </section>
 

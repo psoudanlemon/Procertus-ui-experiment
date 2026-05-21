@@ -1,4 +1,4 @@
-import { Badge, Button, useConfirm } from "@procertus-ui/ui";
+import { Badge, Button, H1, useConfirm } from "@procertus-ui/ui";
 import {
   CertificationRequestLifecycleDetailTimeline,
   DraftRequestList,
@@ -60,7 +60,7 @@ export function RequestDetailPage() {
       <div className="flex flex-col gap-4 rounded-xl border border-border/70 bg-card p-5 shadow-proc-xs md:flex-row md:items-start md:justify-between">
         <div>
           <Badge variant="secondary">{requestStatus(request)}</Badge>
-          <h1 className="mt-3 text-2xl font-semibold tracking-tight">{requestTitle(request)}</h1>
+          <H1 className="mt-3">{requestTitle(request)}</H1>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
             {requestSubtitle(request)} · Request ID: <span className="font-mono">{request.id}</span>
           </p>

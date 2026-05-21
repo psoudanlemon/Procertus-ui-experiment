@@ -1,4 +1,4 @@
-import { P } from "@procertus-ui/ui";
+import { H2, P } from "@procertus-ui/ui";
 import { type ReactNode } from "react";
 
 export type PublicOverviewSectionProps = {
@@ -12,9 +12,7 @@ export function PublicOverviewSection(props: PublicOverviewSectionProps) {
   return (
     <section className="flex w-full flex-col gap-section rounded-xl border border-border bg-card p-section text-card-foreground text-left shadow-none">
       <div className="flex flex-col gap-micro">
-        <h2 className="m-0 text-heading-lg font-semibold tracking-tight text-heading-foreground">
-          {props.title}
-        </h2>
+        <H2 className="m-0 tracking-tight">{props.title}</H2>
         {props.description ? (
           <P className="m-0 text-sm leading-relaxed text-muted-foreground">{props.description}</P>
         ) : null}

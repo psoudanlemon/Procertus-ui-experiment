@@ -70,15 +70,15 @@ Tot die beslissing valt, zijn de items hieronder bewust niet "vervang door `H3`"
 
 - [ ] **Beslis welk register de subsection-kop in de wizard krijgt.** Optie A/B/C hierboven afwegen samen met Pieter en de Storybook-guidelines. Daarna in één pass toepassen op alle 20+ sites onder `packages/ui-certification/src/components/onboarding/`.
 - [ ] **Audit en converteer top-level page-titels die nu raw zijn.**
-  - [RequestDetailPage.tsx:63](apps/frontend-pt1-extranet-onboarding/src/pages/RequestDetailPage.tsx#L63) gebruikt `<h1 className="mt-3 text-2xl font-semibold tracking-tight">`. Zet om naar `<H1>` (de page wijkt visueel licht af van de andere detail-pages doordat hij niet via `PageHeader` loopt).
-  - [RequestDetailPage.tsx:95](apps/frontend-pt1-extranet-onboarding/src/pages/RequestDetailPage.tsx#L95) "Levenscyclus" is een raw `<h2 className="text-base ...">`. Zet om naar `<H2>` (of `<H3>` als de sectie ondergeschikt aan de page-titel hoort) zodra de beslissing over het sub-register bekend is.
-  - [CategorizationDemoPage.tsx:13](apps/frontend-pt1-extranet-onboarding/src/pages/CategorizationDemoPage.tsx#L13) gebruikt `<h1 className="text-2xl font-semibold tracking-tight">`. Zet om naar `<H1>` (kan eventueel via `PageHeader`).
-  - [BrandGradientHero.tsx:16](apps/frontend-pt1-extranet-onboarding/src/components/BrandGradientHero.tsx#L16) gebruikt raw `<h2>`. Component staat sowieso al op de verwijderlijst in [5.1 BrandGradientHero](#brandgradienthero-is-demo-restant-met-engelse-copy), dus opvolgen via dat item.
-- [ ] **Audit en converteer raw `<h2>` op publieke vlaktes naar `<H2>`** (of via de bestaande wrapper-componenten):
-  - [PublicOverviewSection.tsx:15](apps/frontend-pt1-extranet-onboarding/src/components/PublicOverviewSection.tsx#L15): vervang raw `<h2>` door `<H2>`. Eén plek refactoren, alle StatusPage-children erven het.
-  - [InfoRequestPlaceholderPage.tsx:115,165](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx#L115): twee raw `<h2 className="m-0 text-heading-lg ...">` voor sectie-koppen. Vervang door `<H2>`.
-  - [TrajectRequestReviewFlow.tsx:91](apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx#L91): raw `<h2 className="m-0 text-heading-lg ...">`. Vervang door `<H2>`.
-  - [ProductSelectionBasket.tsx:947](packages/ui-certification/src/components/traject/ProductSelectionBasket.tsx#L947): raw `<h2 className="text-xl font-semibold tracking-tight">`. Vervang door `<H2>`.
+  - [x] [RequestDetailPage.tsx:63](apps/frontend-pt1-extranet-onboarding/src/pages/RequestDetailPage.tsx#L63) raw `<h1 className="mt-3 text-2xl font-semibold tracking-tight">` omgezet naar `<H1 className="mt-3">` (text-2xl 24px matched de H1-baseline van 24px, tracking-tight valt al binnen de H1-letter-spacing-token).
+  - [ ] [RequestDetailPage.tsx:95](apps/frontend-pt1-extranet-onboarding/src/pages/RequestDetailPage.tsx#L95) "Levenscyclus" is een raw `<h2 className="text-base ...">` (16px). Geen exacte H-component-match (H3 = 18px, H4 = 14px + uppercase). Wacht op de A/B/C-beslissing hierboven.
+  - [x] [CategorizationDemoPage.tsx:13](apps/frontend-pt1-extranet-onboarding/src/pages/CategorizationDemoPage.tsx#L13) raw `<h1>` omgezet naar `<H1>`.
+  - [ ] [BrandGradientHero.tsx:16](apps/frontend-pt1-extranet-onboarding/src/components/BrandGradientHero.tsx#L16) gebruikt raw `<h2>`. Component staat sowieso al op de verwijderlijst in [5.1 BrandGradientHero](#brandgradienthero-is-demo-restant-met-engelse-copy), dus opvolgen via dat item (niet apart converteren).
+- [x] **Audit en converteer raw `<h2>` op publieke vlaktes naar `<H2>`** (of via de bestaande wrapper-componenten):
+  - [x] [PublicOverviewSection.tsx:15](apps/frontend-pt1-extranet-onboarding/src/components/PublicOverviewSection.tsx#L15): raw `<h2>` omgezet naar `<H2>`. Eén plek gerefactored, alle StatusPage-children erven het.
+  - [x] [InfoRequestPlaceholderPage.tsx:115,165](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx#L115): twee raw `<h2 className="m-0 text-heading-lg ...">` omgezet naar `<H2 className="m-0">`.
+  - [x] [TrajectRequestReviewFlow.tsx:91](apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx#L91): raw `<h2 className="m-0 text-heading-lg ...">` omgezet naar `<H2 className="m-0">`.
+  - [x] [ProductSelectionBasket.tsx:947](packages/ui-certification/src/components/traject/ProductSelectionBasket.tsx#L947): raw `<h2 className="text-xl font-semibold tracking-tight">` omgezet naar `<H2 className="tracking-tight">` (text-xl 20px matched de H2-baseline van 20px).
 - [ ] **Dashboard widgets missen geen H1 (die staat op de DashboardPage), maar gebruiken inconsistente sub-koppen.** [LatestInvoicesWidget.tsx:56](apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/LatestInvoicesWidget.tsx#L56) en [RecentNotificationsWidget.tsx:73](apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/RecentNotificationsWidget.tsx#L73) gebruiken raw `<h4 className="text-[11px] font-semibold uppercase ...">`. Dat is visueel dichter bij `H4` (uppercase, klein), maar zit naast een `CardTitle` met `text-base`. Beslis of die widgets één duidelijke hiërarchie krijgen (bv. `CardTitle` als sectiehoofd en de uppercase-rij eronder als label, niet als heading) of of het uppercase-label naar `<H4>` mag.
 - [ ] **Audit de raw `<h3>` cluster in de wizard en bepaal welke écht koppen zijn versus visuele labels.** De inventaris hieronder per stap ([3.6 Registratie](#36-traject--stap-registratie), [3.7 Maatschappelijke zetel](#37-traject--stap-maatschappelijke-zetel), [3.9 Facturatie](#39-traject--stap-facturatie-inclusief-extra-contacten), [3.10 Nazicht](#310-traject--stap-nazicht)) is bewust per stap opgesplitst zodat de refactor in één ronde per stap kan gebeuren. Innovatie- en metrologie-stap zitten momenteel niet in de page-list, maar hebben hetzelfde patroon: zie [OnboardingInnovationAttestStep.tsx:298,360,496](packages/ui-certification/src/components/onboarding/innovation-attest-step/OnboardingInnovationAttestStep.tsx#L298) en [OnboardingMetrologyStep.tsx:279,314,344](packages/ui-certification/src/components/onboarding/metrology-step/OnboardingMetrologyStep.tsx#L279).
 - [ ] **Verifieer de a11y-volgorde na de pass.** Het doel is per pagina één `h1`, en daaronder een logische `h2 → h3` reeks zonder gaten. Niet elk blok hoeft een heading te zijn (knoppenrijen, helper-tekstblokken, choice-cards met legend zijn al geen koppen). Wel: als een sectie visueel als kop wordt gepresenteerd, hoort hij ook een heading-tag te krijgen.
@@ -292,20 +292,22 @@ Doel van deze pagina is enkel (1) bevestigen dat de indiening gelukt is, en (2) 
 
 _Origineel gezien tijdens een copy-clarity pass over de publieke pagina's van [`apps/frontend-pt1-extranet-onboarding`](../apps/frontend-pt1-extranet-onboarding/). De wijzigingen zijn gerevert; deze sectie houdt de afspraken vast zodat ze in één gerichte ronde uitgevoerd kunnen worden. De voorgestelde teksten zijn concreet bedoeld als startpunt, niet als verplichte eindtekst._
 
+> **Registerbeslissing (2026-05-21):** we draaien de oorspronkelijke "u"-keuze om en hanteren overal **"je/jouw"**. Reden: persoonlijker, vriendelijker, service-driven, terwijl de toon professioneel en betrouwbaar blijft. De voorgestelde teksten hieronder zijn bij implementatie hertaald naar je-vorm; oorspronkelijke "u"-formuleringen blijven staan als referentie.
+
 ### Cross-cutting regels
 
-- [ ] **Vorm "u" overal aanhouden.** Vervang resterende "je"/"jij"-vormen door "u" in alle B2B-pagina's. Geconstateerd op:
-  - [SignupPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/SignupPage.tsx): `"Meld je aan…"`, `"Start je aanvraag hier"`.
-  - [TrajectConfigureFlow.tsx](../apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx): `"…die je wil certificeren"`.
-  - [TrajectBundleAssembleFlow.tsx](../apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx): `"…zodat je meteen alle benodigdheden…"`.
-  - [WegwijzerPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx): `"Wanneer vraag je dit het beste aan?"`.
-- [ ] **Geen em dashes (—) in user-facing copy.** Vervang door komma, dubbele punt of een nieuwe zin. Geconstateerd op InfoRequestSubmittedPage en OnboardingRegistrationCompletePage (zowel in sectie-titels als in body-paragrafen).
-- [ ] **Geen "Gelieve" of bureaucratische passieve constructies.** Gebruik directe, actieve zinnen. Geconstateerd op [InfoRequestPlaceholderPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx) (`"Gelieve uw gegevens achter te laten…"`).
-- [ ] **Geen prototype-meta-commentaar in user-facing copy.** Verwijder verwijzingen naar "deze demo", "in deze demo beschikbaar", "alvast opgenomen in de navigatiestructuur". Geconstateerd op DashboardPage en AppPlaceholderPage.
-- [ ] **Geen Engelse strings in de NL-UI.** Vertaal:
+- [x] **Vorm "je" overal aanhouden.** Resterende "u"/"uw"-vormen vervangen door "je"/"jouw" in alle publieke pagina's. Toegepast op:
+  - [SignupPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/SignupPage.tsx): al in je-vorm, behouden.
+  - [TrajectConfigureFlow.tsx](../apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx): titel en beschrijving in je-vorm.
+  - [TrajectBundleAssembleFlow.tsx](../apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx): beschrijving in je-vorm.
+  - [WegwijzerPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx): page-titel, beschrijving, expert-card en hover-card naar je-vorm.
+- [x] **Geen em dashes (—) in user-facing copy.** Vervangen door komma, dubbele punt of een nieuwe zin op InfoRequestSubmittedPage en OnboardingRegistrationCompletePage.
+- [x] **Geen "Gelieve" of bureaucratische passieve constructies.** Vervangen op [InfoRequestPlaceholderPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx).
+- [x] **Geen prototype-meta-commentaar in user-facing copy.** Verwijderd op DashboardPage en AppPlaceholderPage.
+- [x] **Geen Engelse strings in de NL-UI.** Vertaald:
   - [footerConfig.ts](../apps/frontend-pt1-extranet-onboarding/src/layouts/footerConfig.ts): `"Privacy policy"` → `"Privacybeleid"`.
-  - [OnboardingEntryPlaceholderPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingEntryPlaceholderPage.tsx): volledige Engelse panel + empty state (title, subtitle, AuthLayout-description, EmptyTitle, EmptyDescription, knop-label) naar Nederlands.
-- [ ] **Vakjargon vermijden waar plain Dutch volstaat.** Specifiek: `"snapshot"`, `"dossierspoor"`, `"onboarding"` als zelfstandig naamwoord in koppen. Vervang door uitleg ("eigen dossier", "uw teamleden in het Klantenportaal").
+  - [OnboardingEntryPlaceholderPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingEntryPlaceholderPage.tsx): volledige panel + empty state + AuthLayout copy vertaald.
+- [x] **Vakjargon vermeden waar plain Dutch volstaat.** "snapshot", "dossierspoor", "onboarding" (zelfstandig naamwoord) vervangen op OnboardingRegistrationCompletePage.
 
 ### Per-pagina copy-actie
 
@@ -313,76 +315,76 @@ _Origineel gezien tijdens een copy-clarity pass over de publieke pagina's van [`
 
 _Route:_ [`/login`](http://localhost:5173/login) (cf. [3.11](#311-klantenportaal-login-pagina))
 
-- [ ] `description`: `"Meld u aan met het e-mailadres waarmee u bij PROCERTUS geregistreerd staat."`
-- [ ] Below-card link: `"Start hier uw aanvraag"`.
+- [x] `description`: hertaald naar je-vorm. Live: `"Meld je aan met het e-mailadres waarmee je bij PROCERTUS geregistreerd staat."`
+- [x] Below-card link in je-vorm. Live: `"Start je aanvraag hier"`.
 
 #### 4.2 Triage [`TriagePage`](../apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx)
 
 _Route:_ `/welcome/triage/:serviceId` (open via "Aanvraag starten" vanuit een detail-card op `/welcome`)
 
-- [ ] Titel verkorten: `"Wilt u meer informatie of uw traject opstarten?"` (dubbele "wilt u" weghalen).
-- [ ] Beschrijving: `"Vraag eerst vrijblijvend advies en een prijsopgave, of start meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen."`
-- [ ] Bullets "Aanvraag meer informatie": `"Geen verplichting om op te starten"`, `"Antwoord binnen enkele werkdagen"`, `"Live sessie met een expert mogelijk"`.
-- [ ] Bullets "Traject opstarten" herordenen naar 3 voorwaarden + 3 gevolgen: `"U hebt voldoende informatie over het traject"`, `"U hebt uw bedrijfsgegevens bij de hand"`, `"U wilt nu indienen"`, `"De ontvankelijkheidsbeoordeling start meteen"`, `"PROCERTUS volgt uw dossier actief op"`, `"Uw account wordt aangemaakt bij indiening"`.
-- [ ] Expert-card heading van `"Liever eerst een expert spreken?"` naar `"Wilt u eerst een expert spreken?"`.
-- [ ] Expert-card copy: `"Reserveer een live online sessie van één uur en overloop de vereisten samen met een PROCERTUS-expert."`
+- [x] Titel verkort en naar je-vorm. Live: `"Wil je meer informatie of meteen je traject opstarten?"`.
+- [x] Beschrijving herschreven: `"Vraag eerst vrijblijvend advies en een prijsopgave, of start meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen."`
+- [x] Bullets "Aanvraag meer informatie" toegepast: `"Geen verplichting om op te starten"`, `"Antwoord binnen enkele werkdagen"`, `"Live sessie met een expert mogelijk"`.
+- [x] Bullets "Traject opstarten" geherordend naar 3 voorwaarden + 3 gevolgen, in je-vorm: `"Je hebt voldoende informatie over het traject"`, `"Je hebt je bedrijfsgegevens bij de hand"`, `"Je wil nu indienen"`, `"De ontvankelijkheidsbeoordeling start meteen"`, `"PROCERTUS volgt je dossier actief op"`, `"Je account wordt aangemaakt bij indiening"`.
+- [x] Expert-card heading naar `"Wil je eerst een expert spreken?"`.
+- [x] Expert-card copy: `"Reserveer een live online sessie van één uur en overloop de vereisten samen met een PROCERTUS-expert."`
 
 #### 4.3 Vrijblijvende informatieaanvraag [`InfoRequestPlaceholderPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx)
 
 _Route:_ `/welcome/info-request/:serviceId` (vanuit triage links-kaart)
 
-- [ ] Beschrijving: `"Laat uw gegevens hieronder achter. We bekijken uw vraag en nemen snel contact met u op."` (drop "Gelieve").
-- [ ] Sectie-titel `"Overzicht informatieaanvragen"` naar `"Waarover wilt u informatie?"`.
-- [ ] Placeholder note-veld: `"Beschrijf hier de context van uw vraag of een concreet aandachtspunt."`.
+- [x] Beschrijving in je-vorm, "Gelieve" gedropt. Live: `"Laat je gegevens hieronder achter. We bekijken je vraag en nemen snel contact met je op."`.
+- [x] Sectie-titel naar `"Waarover wil je informatie?"`.
+- [x] Placeholder note-veld: `"Beschrijf hier de context van je vraag of een concreet aandachtspunt."`.
 
 #### 4.4 Aanvraag verzonden [`InfoRequestSubmittedPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx)
 
 _Route:_ `/welcome/info-request/:serviceId/verzonden`
 
-- [ ] Sectie-titel `"Wat maakte deel uit van uw aanvraag"` naar `"Dit stuurde u in"`. Beschrijving: `"De certificaten uit uw mandje, samen met de toelichting die u hebt toegevoegd."`.
-- [ ] Lege-mandje fallback: `"Uw mandje was leeg bij verzending. PROCERTUS leest uw vraag toch door en komt op basis daarvan bij u terug."`.
-- [ ] Sectie-titel `"Onboarding naar het Klantenportaal"` naar `"Uw teamleden in het Klantenportaal"`. Beschrijving inkorten tot: `"Iedereen met een e-mailadres hieronder krijgt een uitnodiging om zich aan te melden. De juiste PROCERTUS-rol wordt automatisch gekoppeld."`.
-- [ ] Bullets "Uw volgende stappen op het Klantenportaal" verkorten: één onderwerp per bullet, actieve zinnen, dossier-ID kort vermelden zonder lange tussenzin.
-- [ ] Fallback zonder snapshot (geen `serviceId`): em dash verwijderen, splitsen in 2 zinnen. Voorstel: `"Bedankt voor uw aanvraag. We bekijken uw gegevens en nemen snel contact met u op. Herlaadt u deze pagina, dan zijn de gekoppelde details niet meer zichtbaar. Uw aanvraag is wel ontvangen."`.
-- [ ] Expertgesprek-fallback (geen `preferenceLabel`): puntkomma vervangen door punt.
+- [x] Sectie-titel naar `"Dit stuurde je in"`, beschrijving in je-vorm: `"De certificaten uit je mandje, samen met de toelichting die je hebt toegevoegd."`.
+- [x] Lege-mandje fallback in je-vorm: `"Je mandje was leeg bij verzending. PROCERTUS leest je vraag toch door en komt op basis daarvan bij je terug."`.
+- [x] Sectie-titel `"Onboarding naar het Klantenportaal"` naar `"Je teamleden in het Klantenportaal"`, beschrijving ingekort: `"Iedereen met een e-mailadres hieronder krijgt een uitnodiging om zich aan te melden. De juiste PROCERTUS-rol wordt automatisch gekoppeld."`.
+- [x] Bullets `"Je volgende stappen op het Klantenportaal"` verkort tot één onderwerp per bullet, actieve zinnen, in je-vorm.
+- [x] Fallback zonder snapshot (geen `serviceId`): em dash weg, gesplitst in 4 zinnen, in je-vorm: `"Bedankt voor je aanvraag. We bekijken je gegevens en nemen snel contact met je op. Herlaad je deze pagina, dan zijn de gekoppelde details niet meer zichtbaar. Je aanvraag is wel ontvangen."`.
+- [x] Expertgesprek-fallback (geen `preferenceLabel`): puntkomma → punt, in je-vorm: `"Je wil afstemmen met een expert. PROCERTUS neemt contact op voor een concreet moment."`. Statuspil-labels meegenomen: `"Geen automatische uitnodiging"` → `"Geen uitnodiging"`.
 
 #### 4.5 Lopende-aanvraag banner [`ActiveInquiryContinueAlert`](../apps/frontend-pt1-extranet-onboarding/src/layouts/ActiveInquiryContinueAlert.tsx)
 
 _Zichtbaar op:_ publieke pagina's onder `/welcome` wanneer er een formele aanvraag in progress is.
 
-- [ ] Titel `"Actieve certificatie aanvraag"` naar `"Lopende certificatieaanvraag"` (één woord, geen spatie).
-- [ ] Body: `"U hebt een formele aanvraag met X certificatieonderzoek(en). U kunt op elk moment verder waar u gestopt was."`
+- [x] Titel naar `"Lopende certificatieaanvraag"` (één woord, geen spatie).
+- [x] Body in je-vorm: `"Je hebt een formele aanvraag met X certificatieonderzoek(en). Je kan op elk moment verder waar je gestopt was."`.
 
 #### 4.6 Productkeuze [`TrajectConfigureFlow`](../apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx)
 
 _Route:_ `/welcome/aanvraag/:serviceId/start`
 
-- [ ] Titel: `"Selecteer de producten die u wilt certificeren"` (formele vorm).
-- [ ] Beschrijving: `"Doorzoek de catalogus of blader stap voor stap door de categorieën."`
+- [x] Titel in je-vorm: `"Selecteer de producten die je wil certificeren"`.
+- [x] Beschrijving: `"Doorzoek de catalogus of blader stap voor stap door de categorieën."`
 
 #### 4.7 Per-product certificaten [`TrajectBundleAssembleFlow`](../apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx)
 
 _Route:_ `/welcome/aanvraag/:serviceId/pakket` (cf. [3.3](#33-onboarding-stap-voeg-per-product-certificaten-toe))
 
-- [ ] Beschrijving: `"Loop uw geselecteerde producten door en voeg de certificaten toe die u nog nodig hebt. Zo dient u meteen alles samen in."` (huidige versie mengt "uw" en "je" en eindigt zonder punt).
+- [x] Beschrijving in je-vorm: `"Loop je geselecteerde producten door en voeg de certificaten toe die je nog nodig hebt. Zo dien je meteen alles samen in."`.
 
 #### 4.8 Wegwijzer [`WegwijzerPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx)
 
 _Route:_ [`/welcome`](http://localhost:5173/welcome)
 
-- [ ] Sectie-titel `"Wanneer vraag je dit het beste aan?"` naar `"Wanneer vraagt u dit het beste aan?"`.
+- [x] Sectie-titel blijft `"Wanneer vraag je dit het beste aan?"` (je-vorm gekozen i.p.v. u-vorm conform de omgekeerde registerbeslissing). Page-titel en beschrijving in WegwijzerPage ook in je-vorm gezet.
 
 #### 4.9 Dashboard [`DashboardPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/DashboardPage.tsx)
 
 _Route:_ `/` (na login)
 
-- [ ] Beschrijving: `"Overzicht van uw sessie, organisatie en certificatieaanvragen."` (drop `"zoals in deze demo beschikbaar zijn"`).
+- [x] Beschrijving in je-vorm, demo-meta gedropt. Live: `"Overzicht van je sessie, organisatie en certificatieaanvragen."`.
 
 #### 4.10 Placeholder-secties [`AppPlaceholderPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/AppPlaceholderPage.tsx)
 
 _Gebruikt door:_ alle nog niet geïmplementeerde secties in de authenticated app.
 
-- [ ] Fallback-zin korter: `"Deze sectie is binnenkort beschikbaar."` (drop `"alvast opgenomen in de navigatiestructuur"`).
+- [x] Fallback-zin ingekort: `"Deze sectie is binnenkort beschikbaar."` (navigatiestructuur-meta gedropt).
 
 #### 4.11 Onboarding-entry placeholder [`OnboardingEntryPlaceholderPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingEntryPlaceholderPage.tsx)
 

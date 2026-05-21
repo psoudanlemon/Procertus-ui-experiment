@@ -1,4 +1,4 @@
-import { Button } from "@procertus-ui/ui";
+import { Button, H2 } from "@procertus-ui/ui";
 import {
   ProductDocumentationLibrary,
   ProductInquiryMatrix,
@@ -88,12 +88,9 @@ export function TrajectRequestReviewFlow() {
           aria-labelledby="aanvraag-matrix-heading"
         >
           <div className="flex flex-col">
-            <h2
-              id="aanvraag-matrix-heading"
-              className="m-0 text-heading-lg font-semibold text-heading-foreground"
-            >
+            <H2 id="aanvraag-matrix-heading" className="m-0">
               Overzicht aanvragen
-            </h2>
+            </H2>
             <p className="m-0 text-sm text-muted-foreground">
               {productGroups.length > 0 && standaloneInquiries.length === 0 ? (
                 <>
