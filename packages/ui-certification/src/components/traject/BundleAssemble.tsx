@@ -1,17 +1,14 @@
-import { Button } from "@procertus-ui/ui";
 import { type ReactNode, createContext, useContext, useMemo, useState } from "react";
 
 import { TrajectStoryFooter } from "./TrajectStoryFooter";
 
 import {
-  BUNDLE_CERT_META,
   BUNDLE_CERT_ORDER,
   BundleMatrixHeader,
   BundleMatrixProvider,
   BundleProductCard,
   BundleProductMobileCard,
   bundleAssembleMatrixGridTemplate,
-  bundleMatrixExtraColumnKeys,
   type BundleCertKey,
   type BundleProduct,
 } from "./BundleProductCard";
@@ -43,8 +40,6 @@ type ContextValue = {
   toggleCert: (productId: string, cert: BundleCertKey, checked: boolean) => void;
   onCancel?: () => void;
   onBack?: () => void;
-  onAddMore?: () => void;
-  addMoreLabel?: string;
   backLabel?: string;
   emitContinue: () => void;
 };
@@ -70,12 +65,6 @@ export type BundleAssembleProviderProps = {
   initialSelections?: Record<string, readonly BundleCertKey[]>;
   onCancel?: () => void;
   onBack?: () => void;
-  /**
-   * Spring naar de wegwijzer zodat de gebruiker een **bijkomend certificaattype** kan
-   * kiezen; bestaande traject-drafts blijven via merge in localStorage staan.
-   */
-  onAddMore?: () => void;
-  addMoreLabel?: string;
   /** Label voor `onBack` (productselectie binnen dezelfde route). Default: `Terug`. */
   backLabel?: string;
   onContinue: (selections: Record<string, readonly BundleCertKey[]>) => void;
@@ -95,15 +84,16 @@ export function BundleAssembleProvider({
   initialSelections,
   onCancel,
   onBack,
-  onAddMore,
-  addMoreLabel,
   backLabel,
   onContinue,
   children,
 }: BundleAssembleProviderProps) {
+  // Alle bundel-cert kolommen behalve de hoofdcertificatie zijn altijd zichtbaar; per
+  // product worden niet-beschikbare cellen disabled getoond met een tooltip die uitlegt
+  // waarom (zie {@link MatrixCertCheckboxCell}).
   const matrixExtraCerts = useMemo(
-    () => bundleMatrixExtraColumnKeys(primaryCert, products),
-    [primaryCert, products],
+    () => BUNDLE_CERT_ORDER.filter((c) => c !== primaryCert),
+    [primaryCert],
   );
 
   const [selections, setSelections] = useState<Map<string, Set<BundleCertKey>>>(() => {
@@ -156,23 +146,11 @@ export function BundleAssembleProvider({
       toggleCert,
       onCancel,
       onBack,
-      onAddMore,
-      addMoreLabel,
       backLabel,
       emitContinue,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      products,
-      primaryCert,
-      matrixExtraCerts,
-      selections,
-      onCancel,
-      onBack,
-      onAddMore,
-      addMoreLabel,
-      backLabel,
-    ],
+    [products, primaryCert, matrixExtraCerts, selections, onCancel, onBack, backLabel],
   );
 
   return <BundleAssembleContext.Provider value={value}>{children}</BundleAssembleContext.Provider>;
@@ -186,48 +164,6 @@ export type BundleAssembleBodyProps = {
    */
   withColumnHeader?: boolean;
 };
-
-/**
- * Geselecteerde producten met responsive layout:
- *
- * - **md+:** matrix-view met vaste cert-kolommen, CSS-subgrid voor uitlijning over
- *   rijen heen, en {@link BundleMatrixProvider} voor gesynchroniseerde kolom-hover.
- * - **<md:** verticaal gestapelde {@link BundleProductMobileCard}s met een sticky
- *   product-header per kaart, full-width ChoiceCards, en bovenaan de
- *   hoofdcertificatie als read-only basis-marker.
- */
-function formatDutchEnumeration(items: readonly string[]): string {
-  if (items.length === 0) return "";
-  if (items.length === 1) return items[0] ?? "";
-  if (items.length === 2) return `${items[0]} en ${items[1]}`;
-  const head = items.slice(0, -1);
-  const last = items[items.length - 1];
-  return `${head.join(", ")} en ${last}`;
-}
-
-/**
- * Toelichting wanneer bepaalde bundel-certificaties geen kolom krijgen omdat geen enkel
- * geselecteerd product ze in de dataset heeft.
- */
-function BundleAssembleOmittedCertTypesCallout({ omitted }: { omitted: readonly BundleCertKey[] }) {
-  if (omitted.length === 0) return null;
-  const labels = omitted.map((c) => BUNDLE_CERT_META[c].title);
-  const listPhrase = formatDutchEnumeration(labels);
-  return (
-    <aside
-      className="rounded-lg border border-border/70 bg-muted/40 px-component py-component text-sm leading-normal text-muted-foreground"
-      aria-label="Toelichting bij niet-getoonde certificatietypes"
-    >
-      <p>
-        <span className="font-medium text-foreground">
-          Deze certificatietypes staan niet in de kolommen:{" "}
-        </span>
-        {listPhrase}. Ze zijn voor geen van uw geselecteerde producten beschikbaar in het aanbod en
-        kunnen daarom niet aan dit pakket worden toegevoegd.
-      </p>
-    </aside>
-  );
-}
 
 /**
  * Korte uitleg CE-beoordelingsniveaus wanneer CE ergens in het pakket actief is.
@@ -288,22 +224,21 @@ function bundleAssembleAnyProductHasCeInPlay(
   return false;
 }
 
+/**
+ * Geselecteerde producten met responsive layout:
+ *
+ * - **md+:** matrix-view met vaste cert-kolommen, CSS-subgrid voor uitlijning over
+ *   rijen heen, en {@link BundleMatrixProvider} voor gesynchroniseerde kolom-hover.
+ *   Alle bundel-certificaten krijgen altijd een kolom; cellen waar het certificaat
+ *   niet beschikbaar is voor dat product, tonen een disabled checkbox met een
+ *   hover-tooltip die de reden uitlegt.
+ * - **<md:** verticaal gestapelde {@link BundleProductMobileCard}s met een sticky
+ *   product-header per kaart, full-width ChoiceCards, en bovenaan de
+ *   hoofdcertificatie als read-only basis-marker.
+ */
 export function BundleAssembleBody({ withColumnHeader = true }: BundleAssembleBodyProps = {}) {
-  const {
-    products,
-    primaryCert,
-    matrixExtraCerts,
-    selections,
-    toggleCert,
-    onAddMore,
-    addMoreLabel,
-  } = useBundleAssemble();
+  const { products, primaryCert, matrixExtraCerts, selections, toggleCert } = useBundleAssemble();
   const gridTemplate = bundleAssembleMatrixGridTemplate(matrixExtraCerts.length);
-
-  const omittedExtraCertTypes = useMemo(
-    () => BUNDLE_CERT_ORDER.filter((c) => c !== primaryCert && !matrixExtraCerts.includes(c)),
-    [primaryCert, matrixExtraCerts],
-  );
 
   const showCeLevelsGuide = useMemo(
     () => bundleAssembleAnyProductHasCeInPlay(products, selections),
@@ -342,17 +277,9 @@ export function BundleAssembleBody({ withColumnHeader = true }: BundleAssembleBo
           ))}
         </section>
       </BundleMatrixProvider>
-      {onAddMore ? (
-        <div className="flex flex-wrap items-center gap-component">
-          <Button type="button" variant="outline" size="sm" onClick={onAddMore}>
-            {addMoreLabel ?? "Nog certificatie toevoegen"}
-          </Button>
-        </div>
-      ) : null}
-      {omittedExtraCertTypes.length > 0 || showCeLevelsGuide ? (
+      {showCeLevelsGuide ? (
         <div className="mt-section flex flex-col gap-section">
-          <BundleAssembleOmittedCertTypesCallout omitted={omittedExtraCertTypes} />
-          {showCeLevelsGuide ? <BundleAssembleCeLevelsGuideCallout /> : null}
+          <BundleAssembleCeLevelsGuideCallout />
         </div>
       ) : null}
     </>
@@ -361,8 +288,6 @@ export function BundleAssembleBody({ withColumnHeader = true }: BundleAssembleBo
 
 /**
  * Sticky action bar: Annuleren, Terug naar productselectie, Bevestig selectie.
- * “Nog certificatie toevoegen” staat in de pagina-inhoud via {@link BundleAssembleBody},
- * niet in deze balk.
  */
 export function BundleAssembleActionBar() {
   const { onBack, onCancel, backLabel, emitContinue } = useBundleAssemble();
@@ -373,7 +298,7 @@ export function BundleAssembleActionBar() {
       onBack={onBack ?? (() => {})}
       onContinue={emitContinue}
       backLabel={backLabel}
-      continueLabel="Bevestig selectie"
+      continueLabel="Volgende"
     />
   );
 }

@@ -4,8 +4,8 @@ import { useLayoutEffect, type ComponentType } from "react";
 import { ProcertusCategorizationProvider } from "../ProcertusCategorizationContext";
 import { buildRows } from "./onboarding-flow-helpers";
 import { registrationStepIndex } from "./onboarding-registration-steps";
-import { OnboardingFlowView } from "./onboarding-flow-view";
 import {
+  OnboardingFlowStoryView,
   OnboardingFlowViewWithMemoryProvider,
   baseOnboardingFlowViewProps,
   noop,
@@ -74,7 +74,7 @@ export const OriginStep: StoryObj<typeof meta> = {
       addressCity: "",
     });
     return (
-      <OnboardingFlowView
+      <OnboardingFlowStoryView
         {...baseOnboardingFlowViewProps({
           step: "origin",
           context: ctx,
@@ -109,7 +109,7 @@ export const CustomerStep: StoryObj<typeof meta> = {
       addressCity: "",
     });
     return (
-      <OnboardingFlowView
+      <OnboardingFlowStoryView
         {...baseOnboardingFlowViewProps({
           step: "customer",
           context: ctx,
@@ -145,7 +145,7 @@ export const CompanyLookupLoading: StoryObj<typeof meta> = {
     const activePreset =
       findVatPrototypePreset(DEFAULT_VAT_PROTOTYPE_PRESET_ID) ?? VAT_PROTOTYPE_PRESETS[0]!;
     return (
-      <OnboardingFlowView
+      <OnboardingFlowStoryView
         {...baseOnboardingFlowViewProps({
           step: "company",
           context: ctx,
@@ -184,7 +184,7 @@ export const CompanyLookupReady: StoryObj<typeof meta> = {
     const activePreset =
       findVatPrototypePreset(DEFAULT_VAT_PROTOTYPE_PRESET_ID) ?? VAT_PROTOTYPE_PRESETS[0]!;
     return (
-      <OnboardingFlowView
+      <OnboardingFlowStoryView
         {...baseOnboardingFlowViewProps({
           step: "company",
           context: ctx,
@@ -227,7 +227,7 @@ export const CompanyLegalEntitiesStep: StoryObj<typeof meta> = {
     const activePreset =
       findVatPrototypePreset(DEFAULT_VAT_PROTOTYPE_PRESET_ID) ?? VAT_PROTOTYPE_PRESETS[0]!;
     return (
-      <OnboardingFlowView
+      <OnboardingFlowStoryView
         {...baseOnboardingFlowViewProps({
           step: "companyLegalEntities",
           context: ctx,
@@ -260,7 +260,7 @@ export const InvoicingStep: StoryObj<typeof meta> = {
     const activePreset =
       findVatPrototypePreset(DEFAULT_VAT_PROTOTYPE_PRESET_ID) ?? VAT_PROTOTYPE_PRESETS[0]!;
     return (
-      <OnboardingFlowView
+      <OnboardingFlowStoryView
         {...baseOnboardingFlowViewProps({
           step: "invoicing",
           context: ctx,
@@ -291,7 +291,7 @@ export const ExtrasStep: StoryObj<typeof meta> = {
     const drafts = storyOnboardingDrafts;
     const ctx = storyCustomerContext();
     return (
-      <OnboardingFlowView
+      <OnboardingFlowStoryView
         {...baseOnboardingFlowViewProps({
           step: "extras",
           context: ctx,
@@ -315,13 +315,13 @@ export const ExtrasStep: StoryObj<typeof meta> = {
 
 export const SummaryStep: StoryObj<typeof meta> = {
   name: "09 — Nazicht",
-  render: () => <OnboardingFlowView {...baseOnboardingFlowViewProps()} />,
+  render: () => <OnboardingFlowStoryView {...baseOnboardingFlowViewProps()} />,
 };
 
 export const RegistrationProcessingOpen: StoryObj<typeof meta> = {
   name: "10 — Registration dialog (open)",
   render: () => (
-    <OnboardingFlowView
+    <OnboardingFlowStoryView
       {...baseOnboardingFlowViewProps({
         registrationSubmitOpen: true,
         registrationProgress: 78,

@@ -3,6 +3,11 @@ import type { SetStateAction } from "react";
 import { useCallback, useRef, useState } from "react";
 
 import type { CertificationRequestDraft } from "../CertificationRequestContext";
+import {
+  STORY_SHELL_LANGUAGES,
+  StoryShellCartTrigger,
+  StoryShellModeToggle,
+} from "../components/story-shell-chrome";
 import type { OnboardingFlowViewProps } from "./onboarding-flow-view-props";
 import {
   COUNTRY_SELECT_NONE,
@@ -53,7 +58,7 @@ export function noop(): void {}
 export const storyOnboardingDrafts: CertificationRequestDraft[] = [
   {
     id: "draft-1",
-    entryId: "product-certification",
+    entryId: "benor",
     label: "BENOR, Rainscreen (fixture)",
     shortLabel: "BENOR",
     productId: "p-rain",
@@ -273,7 +278,36 @@ function OnboardingFlowStoryHookBody({
     activeStep,
     onRegistrationStepChange,
   });
-  return <OnboardingFlowView {...viewProps} />;
+  return <OnboardingFlowStoryView {...viewProps} />;
+}
+
+/**
+ * Story-only wrapper rond {@link OnboardingFlowView} die de standalone registry-chrome
+ * (color mode, winkelmandje, NL/FR taal-switch) injecteert wanneer de host geen slots
+ * meegeeft, en de login-knop standaard verbergt (`hideLogin: true`). Reflecteert de
+ * werkelijke navbar van `PublicAppShell` in de app, waar inloggen mid-flow geen
+ * zinvolle actie is. Productiecode gebruikt `OnboardingFlowView` rechtstreeks.
+ */
+export function OnboardingFlowStoryView(props: OnboardingFlowViewProps) {
+  const [activeLanguage, setActiveLanguage] = useState<string>(
+    props.activeLanguage ?? "nl",
+  );
+  return (
+    <OnboardingFlowView
+      {...props}
+      registryHeaderLeadingActions={
+        props.registryHeaderLeadingActions ?? <StoryShellModeToggle />
+      }
+      registryHeaderTrailingActions={
+        props.registryHeaderTrailingActions ?? <StoryShellCartTrigger />
+      }
+      languages={props.languages ?? [...STORY_SHELL_LANGUAGES]}
+      activeLanguage={props.activeLanguage ?? activeLanguage}
+      onLanguageChange={props.onLanguageChange ?? setActiveLanguage}
+      guestLanguagePlacement={props.guestLanguagePlacement ?? "trailing"}
+      hideLogin={props.hideLogin ?? true}
+    />
+  );
 }
 
 /**

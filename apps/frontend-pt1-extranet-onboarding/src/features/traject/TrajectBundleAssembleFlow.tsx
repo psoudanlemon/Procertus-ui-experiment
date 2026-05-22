@@ -116,10 +116,6 @@ export function TrajectBundleAssembleFlow() {
     navigate(PRODUCT_SELECTION_PATH(serviceId));
   }, [navigate, serviceId]);
 
-  const handleAddMore = useCallback(() => {
-    navigate(WEGWIJZER_PATH);
-  }, [navigate]);
-
   const handleCancel = useCallback(() => {
     navigate(WEGWIJZER_PATH);
   }, [navigate]);
@@ -194,10 +190,8 @@ export function TrajectBundleAssembleFlow() {
       primaryCert={primaryCert}
       initialSelections={initialSelections}
       onBack={handleBack}
-      backLabel="Meer producten"
+      backLabel="Producten wijzigen"
       onCancel={handleCancel}
-      onAddMore={handleAddMore}
-      addMoreLabel="Nog certificatie toevoegen"
       onContinue={handleContinue}
     >
       <TrajectPageFrame

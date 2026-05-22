@@ -132,6 +132,12 @@ export type PublicRegistryHeaderProps = {
    * @default "trailing"
    */
   guestLanguagePlacement?: "trailing" | "leading";
+  /**
+   * Verberg de login-knop in guest-modus (geen `user`). Andere chrome (taal-switch,
+   * color mode, cart) blijft zichtbaar. Bruikbaar voor mid-flow guest-stappen waar
+   * inloggen geen zinvolle actie is.
+   */
+  hideLogin?: boolean;
 };
 
 // ---------------------------------------------------------------------------
@@ -228,6 +234,7 @@ export function PublicRegistryHeader({
   leadingActions,
   trailingActions,
   guestLanguagePlacement = "trailing",
+  hideLogin = false,
 }: PublicRegistryHeaderProps) {
   const searchRef = React.useRef<HTMLInputElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -434,7 +441,7 @@ export function PublicRegistryHeader({
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
-          ) : (
+          ) : hideLogin ? null : (
             <Button variant="default" size="sm" className="min-h-11 lg:min-h-0" asChild>
               <a
                 href={loginUrl}

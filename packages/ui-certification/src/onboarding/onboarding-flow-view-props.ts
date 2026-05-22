@@ -84,6 +84,11 @@ export type OnboardingFlowViewProps = {
   onLanguageChange?: RegistryHeaderLanguageProps["onLanguageChange"];
   /** Guest language control placement for {@link PublicRegistryHeaderProps}. */
   guestLanguagePlacement?: PublicRegistryHeaderProps["guestLanguagePlacement"];
+  /**
+   * Verberg de login-knop in de registry-header (guest-modus). Andere chrome
+   * (taal-switch, color mode, cart) blijft zichtbaar.
+   */
+  hideLogin?: boolean;
   /** Host-provided registry shell — omit duplicate {@link PublicRegistryAppShell} wrapper. */
   embeddedRegistryShell?: boolean;
   /** Optional StepLayout title/description overrides per registration step (i18n). */

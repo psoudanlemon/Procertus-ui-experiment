@@ -1,4 +1,5 @@
 import {
+  Card,
   Checkbox,
   ChoiceCard,
   Tooltip,
@@ -206,9 +207,40 @@ function ProductLabelLine({
 }
 
 /**
+ * Eén kolomheader met short-label + hover-tooltip die de volledige naam en
+ * beschrijving van het certificaat toont. Tooltip-provider wordt per cel
+ * geïnstantieerd zodat hovers op verschillende kolommen elk hun eigen delay
+ * volgen.
+ */
+function MatrixHeaderCell({ cert }: { cert: BundleCertKey }) {
+  const meta = BUNDLE_CERT_META[cert];
+  return (
+    <TooltipProvider delayDuration={300}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span
+            tabIndex={0}
+            className="cursor-help py-micro text-center text-xs font-medium tracking-wide text-muted-foreground uppercase underline decoration-dotted underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            {meta.shortTitle}
+          </span>
+        </TooltipTrigger>
+        <TooltipContent side="top" align="center" className="max-w-xs">
+          <div className="flex flex-col gap-micro">
+            <span className="font-medium">{meta.title}</span>
+            <span className="text-xs opacity-80">{meta.description}</span>
+          </div>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
+/**
  * Kolom-headerrij voor de matrix: korte cert-labels boven elke ChoiceCard-kolom,
  * zodat de cards zelf compact kunnen blijven. Plaats binnen hetzelfde grid als
- * de {@link BundleProductCard}s.
+ * de {@link BundleProductCard}s. Elke header-cel toont op hover een tooltip met
+ * de volledige naam en beschrijving van dat certificaat.
  */
 export function BundleMatrixHeader() {
   const matrix = useContext(BundleMatrixContext);
@@ -216,7 +248,6 @@ export function BundleMatrixHeader() {
     throw new Error("BundleMatrixHeader must be used within BundleMatrixProvider");
   }
   const { primaryCert, matrixExtraCerts } = matrix;
-  const primaryMeta = BUNDLE_CERT_META[primaryCert];
   return (
     <div
       role="row"
@@ -225,19 +256,9 @@ export function BundleMatrixHeader() {
       <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
         Gekozen product
       </span>
-      <span
-        className="py-micro text-center text-xs font-medium tracking-wide text-muted-foreground uppercase"
-        title={primaryMeta.title}
-      >
-        {primaryMeta.shortTitle}
-      </span>
+      <MatrixHeaderCell cert={primaryCert} />
       {matrixExtraCerts.map((cert) => (
-        <span
-          key={cert}
-          className="py-micro text-center text-xs font-medium tracking-wide text-muted-foreground uppercase"
-        >
-          {BUNDLE_CERT_META[cert].shortTitle}
-        </span>
+        <MatrixHeaderCell key={cert} cert={cert} />
       ))}
     </div>
   );
@@ -278,9 +299,11 @@ export function BundleProductMobileCard({
     .filter((cert) => product.availableBundleCerts.includes(cert));
 
   return (
-    <article
+    <Card
+      variant="outlined"
+      role="article"
       aria-label={`Aanvraagpakket voor ${product.label}`}
-      className="overflow-hidden rounded-lg border bg-card"
+      className="gap-0 rounded-lg py-0"
     >
       <header className="sticky top-0 z-10 bg-card/95 px-section py-component backdrop-blur-sm">
         <ProductLabelLine label={product.label} trail={product.categoryTrail} />
@@ -326,23 +349,18 @@ export function BundleProductMobileCard({
           })
         )}
       </div>
-    </article>
+    </Card>
   );
 }
 
 type MatrixCertCheckboxMode = "primary-readonly" | "extra-locked" | "unavailable" | "editable";
 
 /**
- * Read-only maar aangevinkt: zelfde primary filled box + tick als bij interactieve checkboxes
- * (default `disabled:opacity-50` zou de tick anders doen verbleken). Radix-checkbox gebruikt
- * `data-checked` op de root (zie `@procertus-ui/ui`).
- */
-const MATRIX_CERT_CHECKBOX_READONLY_CHECKED_CLASS =
-  "disabled:data-checked:border-primary disabled:data-checked:bg-primary disabled:data-checked:text-primary-foreground disabled:data-checked:opacity-100 dark:disabled:data-checked:bg-primary";
-
-/**
  * Één cert-cel in de desktop-matrix: overal dezelfde checkbox + hover-rand als de
  * bevestigde kolommen (geen afwijkende “kaal” checkboxen of extra sublabels).
+ * Read-only ingevulde cellen (`primary-readonly`, `extra-locked`) gebruiken de
+ * standaard `disabled:opacity-50` styling van de Checkbox primitive zodat ze
+ * visueel als "niet wijzigbaar" leesbaar zijn.
  */
 function MatrixCertCheckboxCell({
   productId,
@@ -389,7 +407,7 @@ function MatrixCertCheckboxCell({
     mode === "editable" &&
       "cursor-pointer transition-colors hover:bg-accent hover:text-accent-foreground",
     mode !== "editable" && mode !== "unavailable" && "cursor-not-allowed",
-    mode === "unavailable" && "cursor-default opacity-60",
+    mode === "unavailable" && "cursor-default",
   );
 
   const control = (
@@ -405,9 +423,10 @@ function MatrixCertCheckboxCell({
       }
       className={cn(
         mode !== "editable" && "cursor-not-allowed",
-        (mode === "primary-readonly" || mode === "extra-locked") &&
-          checked &&
-          MATRIX_CERT_CHECKBOX_READONLY_CHECKED_CLASS,
+        // Niet-beschikbare cellen: subtiele muted fill zodat de lege checkbox zichtbaar
+        // blijft op het kaart-oppervlak (`disabled:opacity-50` alleen geeft een te
+        // zwakke rand om als "lege placeholder" leesbaar te zijn).
+        mode === "unavailable" && "bg-muted",
       )}
     />
   );
@@ -435,6 +454,29 @@ function MatrixCertCheckboxCell({
         <span className="sr-only">{editableLabel}</span>
         {body}
       </label>
+    );
+  }
+
+  if (mode === "unavailable") {
+    return (
+      <TooltipProvider delayDuration={300}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div tabIndex={0} className={shellClass} aria-label={naLabel}>
+              {body}
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top" align="center" className="max-w-xs">
+            <div className="flex flex-col gap-micro">
+              <span className="font-medium">{meta.title} niet beschikbaar</span>
+              <span className="text-xs opacity-80">
+                {meta.title} is voor {productLabel} niet voorzien in ons aanbod en kan daarom niet
+                aan dit pakket worden toegevoegd.
+              </span>
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     );
   }
 

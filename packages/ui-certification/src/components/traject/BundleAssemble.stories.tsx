@@ -104,6 +104,7 @@ export const Default: StoryObj<typeof meta> = {
       primaryCert={STORY_BUNDLE_PRIMARY_CERT}
       onCancel={noop}
       onBack={noop}
+      backLabel="Producten wijzigen"
       onContinue={noop}
     >
       <TrajectLayout

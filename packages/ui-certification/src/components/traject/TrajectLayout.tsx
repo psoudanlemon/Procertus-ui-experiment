@@ -1,8 +1,20 @@
-import { Button, PageHeader, PublicRegistryAppShell, cn, type FooterProps } from "@procertus-ui/ui";
+import {
+  Button,
+  PageHeader,
+  PublicRegistryAppShell,
+  cn,
+  type FooterProps,
+} from "@procertus-ui/ui";
 import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
 import { ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+
+import {
+  STORY_SHELL_LANGUAGES,
+  StoryShellCartTrigger,
+  StoryShellModeToggle,
+} from "../story-shell-chrome";
 
 export type TrajectLayoutAction = {
   label: string;
@@ -41,11 +53,15 @@ export type TrajectPageFrameProps = {
 };
 
 export type TrajectLayoutProps = TrajectPageFrameProps & {
-  /** Header sign-in callback (standalone shell — omitted when using {@link TrajectPageFrame} inside a host shell). */
-  onSignInClick: () => void;
+  /**
+   * Header sign-in callback. Behouden voor back-compat; de standalone story-chrome verbergt
+   * standaard de login-knop (`hideLogin: true`) omdat inloggen mid-flow geen zinvolle actie is.
+   */
+  onSignInClick?: () => void;
   /** Footer config for {@link PublicRegistryAppShell}. Omit for pages that should not show the public footer. */
   footer?: FooterProps;
 };
+
 
 /**
  * Traject page chrome inside an existing {@link PublicRegistryAppShell} (or Storybook wrapper).
@@ -179,8 +195,13 @@ export function TrajectPageFrame({
 /**
  * Storybook / standalone: full {@link PublicRegistryAppShell} plus {@link TrajectPageFrame}.
  * Host apps that already render the registry shell should use {@link TrajectPageFrame} only.
+ *
+ * De header bakt mock chrome in (color-mode toggle, winkelmandje, NL/FR taal-switch) en
+ * verbergt de login-knop. Zo reflecteren story-pagina's de werkelijke navbar van de app
+ * tijdens de mid-flow guest-stappen, zonder dat elke story dit apart hoeft te bedraden.
  */
 export function TrajectLayout({ onSignInClick, footer, ...frame }: TrajectLayoutProps) {
+  const [activeLanguage, setActiveLanguage] = useState<string>("nl");
   return (
     <PublicRegistryAppShell
       hideFab
@@ -193,6 +214,13 @@ export function TrajectLayout({ onSignInClick, footer, ...frame }: TrajectLayout
           />
         ),
         onLogin: onSignInClick,
+        hideLogin: true,
+        leadingActions: <StoryShellModeToggle />,
+        trailingActions: <StoryShellCartTrigger />,
+        languages: [...STORY_SHELL_LANGUAGES],
+        activeLanguage,
+        onLanguageChange: setActiveLanguage,
+        guestLanguagePlacement: "trailing",
       }}
       footer={footer}
     >

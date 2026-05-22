@@ -52,6 +52,7 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
     activeLanguage,
     onLanguageChange,
     guestLanguagePlacement,
+    hideLogin,
     embeddedRegistryShell,
     drafts,
   } = props;
@@ -85,13 +86,23 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
         onLanguageChange={onLanguageChange}
         loginUrl={signInUrl}
         guestLanguagePlacement={guestLanguagePlacement}
+        hideLogin={hideLogin}
       >
-        <div className="flex w-full flex-col gap-region md:flex-row md:items-start md:gap-region">
-          <div className="min-w-0 flex-1">
+        <div className="flex w-full flex-col gap-section md:flex-row md:gap-section">
+          <OnboardingFloatingStepsNav
+            steps={steps}
+            activeStep={activeStep}
+            interactive
+            onStepChange={onStepChange}
+            sheetOpen={stepsSheetOpen}
+            onSheetOpenChange={setStepsSheetOpen}
+          />
+
+          <div className="min-w-0 flex-1 md:flex md:flex-col">
             <StepLayout
               hideHeader
               chromeStyle="card"
-              className={cn("ms-auto me-0 w-full")}
+              className={cn("ms-0 me-auto w-full md:flex-1")}
               minHeight={STABLE_STEP_MIN_HEIGHT}
               stepKey={activeStep}
               variant="onboarding"
@@ -138,15 +149,6 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
               {step === "summary" ? <OnboardingSummaryStep model={rb} /> : null}
             </StepLayout>
           </div>
-
-          <OnboardingFloatingStepsNav
-            steps={steps}
-            activeStep={activeStep}
-            interactive
-            onStepChange={onStepChange}
-            sheetOpen={stepsSheetOpen}
-            onSheetOpenChange={setStepsSheetOpen}
-          />
         </div>
       </OnboardingShell>
 

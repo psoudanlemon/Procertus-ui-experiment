@@ -29,6 +29,8 @@ export type OnboardingShellProps = {
   loginUrl?: string;
   /** When host embeds the guest language control in {@link headerLeadingActions}, set `"leading"`. */
   guestLanguagePlacement?: RegistryGuestLanguagePlacement;
+  /** Verberg de login-knop (guest-modus). Andere chrome blijft zichtbaar. */
+  hideLogin?: boolean;
   /** Rendered after {@link PageHeader}, before main content (e.g. session notices). */
   sessionBanner?: ReactNode;
   /** When true, skip {@link PublicRegistryAppShell} — host supplies outer registry chrome + footer. */
@@ -48,6 +50,7 @@ export function OnboardingShell({
   onLanguageChange,
   loginUrl,
   guestLanguagePlacement,
+  hideLogin,
   sessionBanner,
   embedded = false,
   children,
@@ -82,6 +85,7 @@ export function OnboardingShell({
         activeLanguage,
         onLanguageChange,
         guestLanguagePlacement,
+        hideLogin,
       }}
       hideFab
     >
