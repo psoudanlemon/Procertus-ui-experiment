@@ -66,6 +66,7 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Copy taalregister 4.13 (OnboardingRegistrationCompletePage): alle copy-items doorgevoerd (je-vorm, titels, statuspillen, digitalFollowBrief, voetnoten, callouts); off-token `text-[1.0625rem]` en `leading-[1.65]` gesnapt naar `text-base`.
 - [x] Heading a11y-volgorde verificatie (één `h1` per pagina, logische `h2 → h3`-keten): wordt meegenomen in de page-specifieke aanpassingen — apart validatiepunt vervalt.
 - [x] Distill 5.2 — TriageOptionCard geëxtraheerd naar `DecisionCard` + `DecisionCardCallout` in `packages/ui-lib` (stories per tone/variant, geen "Triage"-naam zodat de shape app-agnostisch blijft). TriagePage en `ExpertCallFooterCard` op Wegwijzer consumeren de nieuwe primitives; story-only `CalloutBanner`-placeholder verwijderd want hij leeft nu als `DecisionCardCallout`.
+- [x] Distill 5.1 — BrandGradientHero verplaatst naar Storybook story `design tokens/Gradient/Hero` in `gradient-radix.stories.tsx` (Nederlandse copy, geen code-token-references in de zichtbare tekst). App-component verwijderd uit `apps/.../components/`, import + render uit `DesignSystemPage` weg; pre-existing `max-w-[1400px]` op die pagina gesnapt naar `max-w-7xl`.
 
 ---
 
@@ -300,13 +301,6 @@ _Feedback origineel gezien op:_ **Aanvraag verzonden** [InfoRequestSubmittedPage
 - [ ] Voeg "Onboarding naar het Klantenportaal" [InfoRequestSubmittedPage.tsx:125](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L125) en "Uw volgende stappen op het Klantenportaal" [InfoRequestSubmittedPage.tsx:173](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L173) samen tot één sectie "Volgende stappen". Behoud de personenlijst, plaats de twee tot drie kerninstructies eronder. De vijf bullets van "Volgende stappen" zijn portal-onboarding en horen daar inhoudelijk thuis, niet op de bevestigingspagina (cf. analoge keuze in [3.12](#312-bevestigingspagina-na-indiening-uw-account-is-klaar) voor de registratie-bevestiging).
 
 > De copy-acties voor deze pagina zijn al doorgevoerd (zie [Afgewerkt](#afgewerkt)). Een deel van die tekst-aanpassingen verhuist of vervalt als de secties samengevoegd of geschrapt worden.
-
-#### BrandGradientHero is demo-restant met Engelse copy
-
-_Feedback origineel gezien op:_ [BrandGradientHero.tsx:6-28](apps/frontend-pt1-extranet-onboarding/src/components/BrandGradientHero.tsx#L6). Component met Engelse copy ("Onboarding prototype", "This route composes …") en literale verwijzingen naar `--gradient-primary` en `@procertus-ui/ui-lib`. Wordt nu enkel gebruikt vanuit `DesignSystemPage.tsx` (showcase).
-
-- [ ] Verplaats `BrandGradientHero` naar een Storybook-story of `packages/_certification-domain-certification/playground`, weg uit de app-source. Op die manier blijft de demo-rol expliciet en kan de component niet per ongeluk in een andere route landen.
-- [ ] Indien gewenst als geldige Procertus-hero op een toekomstige publieke pagina: herschrijf de copy in Nederlands en haal de codetoken-references uit de tekst.
 
 ### 5.2 Primitives en libraries
 

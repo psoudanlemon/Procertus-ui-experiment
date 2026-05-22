@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Card, CardContent } from "@/components/ui/card";
 import { H2 } from "@/components/ui/heading";
 import { Muted, Small } from "@/components/ui/typography";
 
@@ -70,6 +71,38 @@ function GradientTokens() {
   );
 }
 
+function GradientHeroExample() {
+  return (
+    <div className="flex flex-col gap-section">
+      <header>
+        <H2>Hero</H2>
+        <Muted className="mt-2 text-base">
+          Marketing-strip gebruik van een gradient-token in combinatie met de heading-laag.
+          Gradient als ondergrond, headingtokens voor het kopje, muted-foreground voor de
+          ondersteunende tekst. Wissel licht/donker om de adaptatie te zien.
+        </Muted>
+      </header>
+      <Card className="overflow-hidden border-border/80 shadow-[var(--shadow-proc-md)]">
+        <CardContent
+          className="relative space-y-2 px-8 py-12 text-center sm:px-12"
+          style={{ background: "var(--gradient-primary)" }}
+        >
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+            PROCERTUS · certification platform
+          </p>
+          <h2 className="text-balance text-3xl font-semibold text-heading-foreground sm:text-4xl">
+            Eén platform voor elk certificeringsdossier
+          </h2>
+          <Muted className="mx-auto max-w-xl text-pretty">
+            Van aanvraag tot opvolging, alles op één plek. Volg de status van je dossier,
+            beheer je team en houd documenten up-to-date.
+          </Muted>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 const meta: Meta<typeof GradientTokens> = {
   title: "design tokens/Gradient",
   component: GradientTokens,
@@ -79,3 +112,12 @@ export default meta;
 type Story = StoryObj<typeof GradientTokens>;
 
 export const Default: Story = {};
+
+/**
+ * Marketing-strip toepassing van `--gradient-primary` met heading-foreground en
+ * muted-foreground. Het patroon dat eerder leefde als `BrandGradientHero` in
+ * de app-source.
+ */
+export const Hero: StoryObj<typeof GradientHeroExample> = {
+  render: () => <GradientHeroExample />,
+};
