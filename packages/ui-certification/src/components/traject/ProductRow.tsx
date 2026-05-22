@@ -7,44 +7,12 @@ import {
   ItemDescription,
   ItemTitle,
   cn,
+  highlightMatch,
 } from "@procertus-ui/ui";
 import { motion } from "framer-motion";
-import { Fragment, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import { ProductCategoryTrail } from "./ProductCategoryTrail";
-
-function renderHighlightedLabel(label: ReactNode, query: string | undefined): ReactNode {
-  if (!query || typeof label !== "string") return label;
-  const needle = query.trim();
-  if (!needle) return label;
-  const haystack = label.toLowerCase();
-  const lower = needle.toLowerCase();
-  const out: ReactNode[] = [];
-  let cursor = 0;
-  let idx = haystack.indexOf(lower, cursor);
-  let key = 0;
-  while (idx !== -1) {
-    if (idx > cursor) out.push(label.slice(cursor, idx));
-    out.push(
-      <mark
-        key={key++}
-        className="rounded-sm bg-accent px-0.5 text-accent-foreground"
-      >
-        {label.slice(idx, idx + lower.length)}
-      </mark>,
-    );
-    cursor = idx + lower.length;
-    idx = haystack.indexOf(lower, cursor);
-  }
-  if (cursor < label.length) out.push(label.slice(cursor));
-  return (
-    <>
-      {out.map((part, i) => (
-        <Fragment key={i}>{part}</Fragment>
-      ))}
-    </>
-  );
-}
 
 export type ProductRowProps = {
   /** Stable id for AnimatePresence keying — required so the exit animation can play. */
@@ -138,7 +106,7 @@ export function ProductRow({
                 className="line-clamp-1 text-xs font-medium tabular-nums tracking-tight text-muted-foreground"
                 translate="no"
               >
-                {renderHighlightedLabel(productTypeStreamLabel, highlight)}
+                {highlightMatch(productTypeStreamLabel, highlight)}
               </ItemDescription>
             ) : null}
             {matchedSearchFields?.map((field, idx) => (
@@ -147,11 +115,11 @@ export function ProductRow({
                 className="line-clamp-2 text-xs font-medium leading-snug text-muted-foreground"
                 translate="no"
               >
-                {renderHighlightedLabel(field, highlight)}
+                {highlightMatch(field, highlight)}
               </ItemDescription>
             ))}
             <ItemTitle className="line-clamp-2 w-full text-sm font-medium leading-snug">
-              {renderHighlightedLabel(label, highlight)}
+              {highlightMatch(label, highlight)}
               {categoryTrail ? <ProductCategoryTrail trail={categoryTrail} /> : null}
             </ItemTitle>
           </ItemContent>
