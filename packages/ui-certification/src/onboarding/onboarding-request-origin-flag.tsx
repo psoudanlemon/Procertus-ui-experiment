@@ -20,7 +20,7 @@ function GlobeGlyph({ className }: { className?: string }) {
   );
 }
 
-const frame = "shrink-0 overflow-hidden rounded-[3px] shadow-sm ring-1 ring-border/60";
+const frame = "shrink-0 overflow-hidden";
 
 function BeFlag({ className }: { className?: string }) {
   return (
@@ -42,14 +42,18 @@ function NlFlag({ className }: { className?: string }) {
   );
 }
 
-/** EU circle of stars — simplified as dots for clarity at small size. */
+/**
+ * EU vlag op de officiële 3:2 ratio (zoals BE/NL). Stars als dots: cirkel-straal
+ * = hoogte/3, dot-radius ≈ hoogte/18 — volgt de officiële spec voor de
+ * twaalf-sterren cirkel centraal op de blauwe vlag.
+ */
 function EuFlag({ className }: { className?: string }) {
-  const r = 22;
-  const cx = 30;
+  const r = 20;
+  const cx = 45;
   const cy = 30;
   return (
-    <svg viewBox="0 0 60 60" className={cn(frame, className)} aria-hidden>
-      <rect width="60" height="60" fill="#003399" rx="3" />
+    <svg viewBox="0 0 90 60" className={cn(frame, className)} aria-hidden>
+      <rect width="90" height="60" fill="#003399" />
       {Array.from({ length: 12 }, (_, i) => {
         const angle = (i * Math.PI * 2) / 12 - Math.PI / 2;
         return (
@@ -57,7 +61,7 @@ function EuFlag({ className }: { className?: string }) {
             key={i}
             cx={cx + r * Math.cos(angle)}
             cy={cy + r * Math.sin(angle)}
-            r={2.6}
+            r={3.3}
             fill="#FFCC00"
           />
         );
@@ -76,29 +80,32 @@ export function RequestOriginFlag({
   className?: string;
   compact?: boolean;
 }) {
-  const heroBeNl = "h-6 w-9";
-  const heroEu = "h-6 w-6";
-  const leadBeNl = "!h-5 !w-[2.1rem]";
-  const leadEu = "!h-5 !w-5";
+  // Identieke afmetingen voor alle vier origin-glyphs (vlaggen + globe) zodat
+  // ze in lijst-layouts en als `leading`-icoon strak uitlijnen. Hero gebruikt
+  // standaard tokens (h-6 × w-9); compact gebruikt een exacte 38.85px hoogte
+  // om gelijk te lopen met de gecombineerde titel + description-hoogte in de
+  // ChoiceCard. Zie off-token-log.md — bewuste exception.
+  const heroSize = "h-6 w-9";
+  const leadSize = "h-[38.85px]! w-16!";
 
   switch (origin) {
     case "be":
-      return <BeFlag className={cn(compact ? leadBeNl : heroBeNl, className)} />;
+      return <BeFlag className={cn(compact ? leadSize : heroSize, className)} />;
     case "nl":
-      return <NlFlag className={cn(compact ? leadBeNl : heroBeNl, className)} />;
+      return <NlFlag className={cn(compact ? leadSize : heroSize, className)} />;
     case "eu":
-      return <EuFlag className={cn(compact ? leadEu : heroEu, className)} />;
+      return <EuFlag className={cn(compact ? leadSize : heroSize, className)} />;
     case "other":
       return (
         <span
           className={cn(
-            "flex shrink-0 items-center justify-center rounded-[3px] bg-muted/40 ring-1 ring-border/60",
-            compact ? "size-5" : "size-6",
+            "flex shrink-0 items-center justify-center bg-muted/40",
+            compact ? "h-[38.85px]! w-16!" : "h-6 w-9",
             className,
           )}
           aria-hidden
         >
-          <GlobeGlyph className={cn(compact ? "!h-3.5 !w-3.5" : "size-4 !h-4 !w-4")} />
+          <GlobeGlyph className={cn(compact ? "size-6!" : "size-4!")} />
         </span>
       );
   }
