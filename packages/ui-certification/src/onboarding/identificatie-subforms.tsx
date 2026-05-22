@@ -1,4 +1,5 @@
 import {
+  Combobox,
   Field,
   FieldContent,
   FieldDescription,
@@ -429,19 +430,16 @@ export function IdentificatieAddressSubform({
               <span className="min-w-0 break-words">{value.country.trim() || "—"}</span>
             </div>
           ) : (
-            <Select value={countrySelectValue} onValueChange={onCountryChange}>
-              <SelectTrigger id={`${idPrefix}-country`} className="w-full">
-                <SelectValue placeholder="Kies een land" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={COUNTRY_SELECT_NONE}>Kies een land</SelectItem>
-                {countryOptions.map((name) => (
-                  <SelectItem key={name} value={name}>
-                    {name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Combobox
+              id={`${idPrefix}-country`}
+              options={countryOptions.map((name) => ({ value: name, label: name }))}
+              value={countrySelectValue === COUNTRY_SELECT_NONE ? "" : countrySelectValue}
+              onValueChange={(v) => onCountryChange(v || COUNTRY_SELECT_NONE)}
+              placeholder="Kies een land"
+              searchPlaceholder="Zoek land"
+              emptyMessage="Geen land gevonden."
+              className="w-full"
+            />
           )}
           {fieldHints?.country ? <FieldDescription>{fieldHints.country}</FieldDescription> : null}
         </FieldContent>

@@ -3,12 +3,6 @@ import {
   Field,
   FieldContent,
   FieldLabel,
-  Input,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
 } from "@procertus-ui/ui";
 import type { CustomerContext, IdentificatiePersonCaptureState } from "./onboarding-types";
 import { coercePersonPreferredLanguage } from "@procertus-ui/domain-certification";
@@ -32,6 +26,10 @@ import {
 } from "./lib/registrationPersonOptions";
 
 const ROLE_COMBOBOX_OPTIONS = REPRESENTATIVE_ROLE_PRESETS.filter(
+  (p) => p.id !== "none" && p.id !== "other",
+).map((p) => ({ value: p.id, label: p.label }));
+
+const TITLE_COMBOBOX_OPTIONS = REPRESENTATIVE_TITLE_PRESETS.filter(
   (p) => p.id !== "none" && p.id !== "other",
 ).map((p) => ({ value: p.id, label: p.label }));
 
@@ -283,32 +281,6 @@ export function IdentificatiePersonTitleRoleCapture({
     }
   };
 
-  const patchTitleOther = (text: string) => {
-    switch (branch) {
-      case "legalRepresentative":
-        patchContext({ representativeTitle: text });
-        return;
-      case "registrant":
-        patchContext({
-          registrantTitle: text,
-          registrantPerson: { ...context.registrantPerson, title: text },
-        });
-        return;
-      case "certificationContact":
-        patchContext({
-          certificationContactTitle: text,
-          certificationContact: { ...context.certificationContact, title: text },
-        });
-        return;
-      case "certificationSecondary":
-        patchContext({
-          certificationSecondaryTitle: text,
-          certificationSecondary: { ...context.certificationSecondary, title: text },
-        });
-        return;
-    }
-  };
-
   const onPersonChange = (v: IdentificatiePersonCaptureState) => {
     const lang = coercePersonPreferredLanguage(v.language);
     switch (branch) {
@@ -367,19 +339,6 @@ export function IdentificatiePersonTitleRoleCapture({
     }
   };
 
-  const titleOtherSelected = (() => {
-    switch (branch) {
-      case "legalRepresentative":
-        return context.representativeTitlePreset === "other";
-      case "registrant":
-        return context.registrantTitlePreset === "other";
-      case "certificationContact":
-        return context.certificationContactTitlePreset === "other";
-      case "certificationSecondary":
-        return context.certificationSecondaryTitlePreset === "other";
-    }
-  })();
-
   const titleOtherValue = (() => {
     switch (branch) {
       case "legalRepresentative":
@@ -406,19 +365,6 @@ export function IdentificatiePersonTitleRoleCapture({
     }
   })();
 
-  const titleOtherInputId = (() => {
-    switch (branch) {
-      case "legalRepresentative":
-        return "representativeTitleOther";
-      case "registrant":
-        return "registrantTitleOther";
-      case "certificationContact":
-        return `${idPrefix}-title-other`;
-      case "certificationSecondary":
-        return `${idPrefix}-title2-other`;
-    }
-  })();
-
   const titlePresetMarkerErroneous =
     emphasizeInvalidRequiredMarkers &&
     !representativePresetSelectionComplete(
@@ -434,42 +380,66 @@ export function IdentificatiePersonTitleRoleCapture({
       REPRESENTATIVE_ROLE_PRESETS,
     );
 
+  const titleComboboxValue =
+    titlePresetValue === "none"
+      ? ""
+      : titlePresetValue === "other"
+        ? titleOtherValue
+        : titlePresetValue;
+
+  const handleTitleCreate = (label: string) => {
+    switch (branch) {
+      case "legalRepresentative":
+        patchContext({ representativeTitlePreset: "other", representativeTitle: label });
+        return;
+      case "registrant":
+        patchContext({
+          registrantTitlePreset: "other",
+          registrantTitle: label,
+          registrantPerson: { ...context.registrantPerson, title: label },
+        });
+        return;
+      case "certificationContact":
+        patchContext({
+          certificationContactTitlePreset: "other",
+          certificationContactTitle: label,
+          certificationContact: { ...context.certificationContact, title: label },
+        });
+        return;
+      case "certificationSecondary":
+        patchContext({
+          certificationSecondaryTitlePreset: "other",
+          certificationSecondaryTitle: label,
+          certificationSecondary: { ...context.certificationSecondary, title: label },
+        });
+        return;
+    }
+  };
+
   const titlePresetField = (
     <Field className="min-w-0 md:col-span-1">
       <FieldLabel htmlFor={titleTriggerId}>
         {copy.titleLabel} <RequiredFieldSuffix erroneous={titlePresetMarkerErroneous} />
       </FieldLabel>
       <FieldContent className="w-full min-w-0">
-        <Select disabled={disabled} value={titlePresetValue} onValueChange={onTitlePresetChange}>
-          <SelectTrigger
-            id={titleTriggerId}
-            size="sm"
-            className="h-8 w-full min-w-0"
-            disabled={disabled}
-          >
-            <SelectValue placeholder="Geen selectie" />
-          </SelectTrigger>
-          <SelectContent>
-            {REPRESENTATIVE_TITLE_PRESETS.map((p) => (
-              <SelectItem key={p.id} value={p.id}>
-                {p.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {titleOtherSelected ? (
-          <div className="mt-2 w-full min-w-0 space-y-1">
-            <Input
-              id={titleOtherInputId}
-              className="h-8"
-              value={titleOtherValue}
-              disabled={disabled}
-              onChange={(event) => patchTitleOther(event.target.value)}
-              placeholder="Bv. professor, ingenieur"
-              autoComplete="honorific-prefix"
-            />
-          </div>
-        ) : null}
+        <CreatableCombobox
+          id={titleTriggerId}
+          options={TITLE_COMBOBOX_OPTIONS}
+          value={titleComboboxValue}
+          onValueChange={(v) => onTitlePresetChange(v || "none")}
+          onCreate={handleTitleCreate}
+          placeholder="Geen selectie"
+          searchPlaceholder="Zoek aanhef"
+          createLabel={(s) => (
+            <>
+              Voeg &quot;<span className="font-medium">{s}</span>&quot; toe
+            </>
+          )}
+          createTooltip={(s) => `Voeg "${s}" toe als nieuwe aanhef`}
+          clearAriaLabel="Wis aanhefkeuze"
+          disabled={disabled}
+          className="h-8"
+        />
       </FieldContent>
     </Field>
   );

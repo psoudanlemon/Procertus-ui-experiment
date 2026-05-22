@@ -323,10 +323,10 @@ export function OnboardingMetrologyStep() {
             onChange={(v) => patchCapture({ interventionSiteAddress: v })}
             required
           />
-          <FormTextarea
+          <FormInput
             id={pid("region")}
-            label="Regio / Land"
-            description="Bv. Belgische site, Nederlandse depot of buitenlands labo — verkort de aanvraagplanning voor interventies ver buiten uw zetel."
+            label="Regio of land"
+            description="Bv. Belgische site, Nederlandse depot of buitenlands labo. Verkort de aanvraagplanning voor interventies ver buiten je zetel."
             value={capture.interventionRegionNotes}
             onChange={(v) => patchCapture({ interventionRegionNotes: v })}
           />

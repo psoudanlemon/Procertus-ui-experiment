@@ -60,6 +60,9 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] CreatableCombobox primitive gebouwd in packages/ui (searchable select met inline create-new actie, input-like states, X-clear, tooltip-on-truncate).
 - [x] Role-veld op Registratie van "select + Anders + losstaand input field"-pattern naar CreatableCombobox.
 - [x] Veldtype-audit gedaan over het volledige onboarding-traject (alle stappen, alle invulvelden).
+- [x] Aanhef-veld op Registratie en Extra contacten van Select+"Anders" naar CreatableCombobox.
+- [x] Land-veld in adressubform (Maatschappelijke zetel + Facturatie incl. afwijkend facturatieadres) van Select naar Combobox (zoekbaar); Combobox-primitive opgewerkt naar w-full default en popover-width-matches-trigger.
+- [x] Regio/land-veld op Metrologie-attest van Textarea naar Input (single-line). Multi-select Combobox blijft een follow-up wanneer een dedicated multi-country-picker primitive er is.
 - [x] Copy taalregister 4.13 (OnboardingRegistrationCompletePage): alle copy-items doorgevoerd (je-vorm, titels, statuspillen, digitalFollowBrief, voetnoten, callouts); off-token `text-[1.0625rem]` en `leading-[1.65]` gesnapt naar `text-base`.
 - [x] Heading a11y-volgorde verificatie (één `h1` per pagina, logische `h2 → h3`-keten): wordt meegenomen in de page-specifieke aanpassingen — apart validatiepunt vervalt.
 
@@ -107,11 +110,7 @@ _Pattern uitgewerkt als [CreatableCombobox](packages/ui/src/components/ui/creata
 
 _Veldtype-audit (2026-05-22) over alle stappen van het onboarding-traject is afgerond (zie [Afgewerkt](#afgewerkt)). De concrete wijzigingen die eruit volgen staan hieronder; ze worden in de page-specifieke secties niet apart herhaald._
 
-**Snelle wins (bestaande primitives, alleen swap):**
-
-- [ ] Aanhef op Registratie en Extra contacten: `Select` met "Andere" optie omzetten naar `CreatableCombobox` (zelfde pattern als role-veld).
-- [ ] Land op Maatschappelijke zetel en Facturatie (incl. afwijkend facturatieadres): `Select` met de volledige landenlijst omzetten naar `Combobox` zodat de gebruiker kan typen om te filteren.
-- [ ] Regio/Land op Metrologie-attest: `Textarea` is hier het verkeerde veldtype, omzetten naar `Combobox` (landenlijst) of multi-select varianten daarvan.
+**Snelle wins (bestaande primitives, alleen swap): allemaal afgewerkt (zie [Afgewerkt](#afgewerkt)).**
 
 **Vereisen nieuwe primitive of externe integratie:**
 

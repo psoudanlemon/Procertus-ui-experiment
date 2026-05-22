@@ -43,6 +43,7 @@ export const Default: Story = {
         placeholder="Select framework..."
         searchPlaceholder="Search framework..."
         emptyMessage="No framework found."
+        className="w-[240px]"
       />
     );
   },
@@ -61,6 +62,7 @@ export const WithValue: Story = {
         onValueChange={setValue}
         placeholder="Select framework..."
         searchPlaceholder="Search framework..."
+        className="w-[240px]"
       />
     );
   },
@@ -74,6 +76,7 @@ export const Disabled: Story = {
     options: frameworks,
     disabled: true,
     placeholder: "Select framework...",
+    className: "w-[240px]",
   },
 };
 
