@@ -8,7 +8,7 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 2. [**Flow- en gedrags-architectuur**](#2-flow--en-gedrags-architectuur): bredere beslissingen over winkelmandje, drafts en navigatie.
 3. [**Page-specifieke wijzigingen**](#3-page-specifieke-wijzigingen): per scherm (3.1 t/m 3.12), met cross-refs naar cross-cutting items.
 4. [**Copy en taalregister**](#4-copy-en-taalregister): afgewerkt (4.11 en 4.13 doorgevoerd).
-5. [**Distill audit (2026-05-21)**](#5-distill-audit-2026-05-21): openstaande app-level en primitives-findings.
+5. [**Distill audit (2026-05-21)**](#5-distill-audit-2026-05-21): één resterende app-level finding (InfoRequestSubmittedPage); overige findings afgewerkt of bewust niet doorgevoerd (zie Afgewerkt).
 
 **Onderdelen in sectie 1, in alfabetische scan-volgorde:**
 [Cart-status visibility](#cart-status-visibility) · [Choice card componenten](#choice-card-componenten) · [Copy density](#copy-density) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Stepper](#stepper) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox) · [Veldtype per invulveld](#veldtype-per-invulveld).
@@ -68,6 +68,8 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Distill 5.2 — TriageOptionCard geëxtraheerd naar `DecisionCard` + `DecisionCardCallout` in `packages/ui-lib` (stories per tone/variant, geen "Triage"-naam zodat de shape app-agnostisch blijft). TriagePage en `ExpertCallFooterCard` op Wegwijzer consumeren de nieuwe primitives; story-only `CalloutBanner`-placeholder verwijderd want hij leeft nu als `DecisionCardCallout`.
 - [x] Distill 5.1 — BrandGradientHero verplaatst naar Storybook story `design tokens/Gradient/Hero` in `gradient-radix.stories.tsx` (Nederlandse copy, geen code-token-references in de zichtbare tekst). App-component verwijderd uit `apps/.../components/`, import + render uit `DesignSystemPage` weg; pre-existing `max-w-[1400px]` op die pagina gesnapt naar `max-w-7xl`.
 - [x] Distill 5.2 — `data-density="spacious"` correct geïmplementeerd volgens de regel publiek = spacious, ingelogd = operational. `PublicAppShell` zet density="spacious" centraal; `InfoRequestSubmittedPage` en `OnboardingRegistrationCompletePage` (top-level publieke routes buiten de shell) gebruiken `data-density="spacious"`; redundante lokale `<DensityProvider density="spacious">`-wrappers op `InfoRequestPlaceholderPage` en `ExpertCallPlaceholderPage` zijn verwijderd want de shell levert spacious nu al.
+- [x] Distill 5.1 — Expert-call dedup-aanbeveling: bewust niet doorgevoerd. De gradient-callout staat op zowel Triage als Wegwijzer in dezelfde visuele vorm omdat de consistente ankering belangrijker is dan de duplicatie. Eventuele "kort na elkaar zien" kan op contextniveau opgelost worden zonder de symmetrie op te geven.
+- [x] Distill 5.2 — BrowseCard `variant="faded"` blijft bewust in de variant-set: de app staat nog in een vroege fase en toekomstige opportuniteiten voor de faded-vorm worden verwacht. Eventuele documentatie voor welk inhoudtype hij bedoeld is, volgt wanneer een tweede gebruiksgeval landt.
 
 ---
 
@@ -285,15 +287,6 @@ _Audit gedaan met de `/distill` skill om visuele en structurele overcomplexiteit
 
 ### 5.1 App-level
 
-#### Expert-call kaart staat dubbel op Triage en Wegwijzer
-
-_Feedback origineel gezien op:_ **Triage** ("Liever eerst een expert spreken?" als derde kaart onder de twee TriageOptionCards) én **Wegwijzer / Alle certificaten** (`ExpertCallFooterCard` als laatste cel in `AllCertificatesGrid`). Beide kaarten hebben dezelfde titel, dezelfde body en dezelfde gradient. Als de gebruiker eerst via de wegwijzer komt en dan een traject opent, ziet hij de identieke CTA twee schermen na elkaar.
-
-- [ ] Beperk de expert-call CTA tot één visuele ankerplek. Voorstel: behoud de inline kaart op [WegwijzerPage.tsx:276](apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx#L276) als eerste ontdekpunt, en vervang de derde kaart op [TriagePage.tsx:105](apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx#L105) door een tekstlink of een inline note onder de twee TriageOptionCards.
-- [ ] Of, omgekeerd: behoud de prominentie op Triage (dat is het beslismoment) en zet de `ExpertCallFooterCard` op de wegwijzer terug naar een minder dominante variant (item-row in plaats van gradient-card).
-
-> De expert-card copy op Triage is al herwerkt (zie [Afgewerkt](#afgewerkt)). Als de kaart op Triage vervalt, vervalt dat copy-werk achteraf alsnog.
-
 #### Vier gestapelde bordered cards op InfoRequestSubmittedPage beslaan dezelfde temporele fase
 
 _Feedback origineel gezien op:_ **Aanvraag verzonden** [InfoRequestSubmittedPage.tsx:39-199](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L39). De pagina toont vier `PublicOverviewSection`-kaarten onder elkaar: "Wat maakte deel uit van uw aanvraag", "Organisatie en context", "Onboarding naar het Klantenportaal", "Uw volgende stappen op het Klantenportaal". Drie ervan beschrijven hetzelfde toekomstige moment (wat er na het verzenden gebeurt), en "Organisatie en context" herhaalt waardes die al in de lead-paragraaf staan.
@@ -304,13 +297,4 @@ _Feedback origineel gezien op:_ **Aanvraag verzonden** [InfoRequestSubmittedPage
 > De copy-acties voor deze pagina zijn al doorgevoerd (zie [Afgewerkt](#afgewerkt)). Een deel van die tekst-aanpassingen verhuist of vervalt als de secties samengevoegd of geschrapt worden.
 
 > _Voortgang:_ vergelijkingscomponent `InfoRequestSubmittedPanel` toegevoegd in `packages/ui-certification/src/components/info-request-submitted/` met stories `Current`, `Proposed` en `ProposedMinimal`. Hierdoor kunnen de huidige en voorgestelde composities zij-aan-zij geëvalueerd worden in Storybook voor de definitieve keuze gemaakt en op `InfoRequestSubmittedPage` toegepast wordt.
-
-### 5.2 Primitives en libraries
-
-#### BrowseCard `variant="faded"` wordt in productie één keer gebruikt
-
-_Feedback origineel gezien op:_ `grep -r 'variant="faded"'` toont één gebruik buiten Storybook: [WegwijzerPage.tsx:254](apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx#L254) op de externe-verwijzing tegels in `AllCertificatesGrid`. Daarnaast bestaat een tweede pad voor exact dezelfde inhoud: `ExternalReferralGrid` [WegwijzerPage.tsx:313-339](apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx#L313) gebruikt `<Item>` in plaats van een faded BrowseCard.
-
-- [ ] Kies één presentatie voor externe verwijzingen. Voorstel: behoud de `<Item>`-rij (compacter, past in de "Overige" tab) en gebruik die ook in `AllCertificatesGrid`. Dat maakt `variant="faded"` overbodig en zorgt voor één lees-pattern voor "dit dossier loopt elders".
-- [ ] Als de faded-variant toch waarde heeft op een andere plek, documenteer dan in `BrowseCard.stories.tsx` voor welk inhoudtype hij bedoeld is. Anders verwijderen uit de `variant`-set.
 
