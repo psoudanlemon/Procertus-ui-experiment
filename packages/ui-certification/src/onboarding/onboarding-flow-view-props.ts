@@ -19,6 +19,20 @@ import type {
   VatPrototypePreset,
 } from "./lib/vatPrototypePresets";
 import type { OnboardingRequestOrigin } from "./onboarding-request-origin";
+import type { OnboardingRegistrationLayoutModel } from "./use-onboarding-registration-layout-model";
+
+/**
+ * Optionele override voor de step-body inside {@link OnboardingFlowView}. Wanneer aanwezig,
+ * vervangt deze callback de standaard switch op `step`; weglaten valt terug op de originele
+ * step-componenten. Gebruikt door redesign-stories en A/B-experimenten om alternatieve
+ * step-bodies in de echte flow-shell te tonen zonder de originelen aan te raken.
+ */
+export type OnboardingFlowViewRenderStepBody = (args: {
+  step: OnboardingStep;
+  model: OnboardingRegistrationLayoutModel;
+  requestOrigin: OnboardingRequestOrigin | "";
+  setRequestOrigin: (origin: OnboardingRequestOrigin) => void;
+}) => ReactNode;
 
 type RegistryHeaderLanguageProps = Pick<
   PublicRegistryHeaderProps,
@@ -97,4 +111,10 @@ export type OnboardingFlowViewProps = {
   >;
   /** Summary step: go to welcome / wegwijzer to change which certification inquiries are in the dossier. */
   onSummaryEditInquiriesClick?: () => void;
+  /**
+   * Optional override voor de step-body. Default: switch op `step` met de originele
+   * step-componenten. Pass dit om redesign-varianten in de echte flow-shell te tonen
+   * (stepper + footer-actiebar) zonder de originele componenten aan te raken.
+   */
+  renderStepBody?: OnboardingFlowViewRenderStepBody;
 };

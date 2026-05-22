@@ -130,23 +130,34 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
                   </P>
                 ) : null}
               </div>
-              {step === "origin" ? (
-                <OnboardingOriginStep
-                  originFieldBase={rb.originFieldBase}
-                  requestOrigin={requestOrigin}
-                  setRequestOrigin={setRequestOrigin}
-                />
-              ) : null}
-              {step === "customer" ? <OnboardingCustomerStep model={rb} /> : null}
-              {step === "company" ? <OnboardingCompanyZetelStep model={rb} /> : null}
-              {step === "innovationAttest" ? <OnboardingInnovationAttestStep /> : null}
-              {step === "metrologyAttest" ? <OnboardingMetrologyStep /> : null}
-              {step === "companyLegalEntities" ? (
-                <OnboardingCompanyLegalEntitiesStep model={rb} />
-              ) : null}
-              {step === "invoicing" ? <OnboardingInvoicingStep model={rb} /> : null}
-              {step === "extras" ? <OnboardingExtrasStep model={rb} /> : null}
-              {step === "summary" ? <OnboardingSummaryStep model={rb} /> : null}
+              {props.renderStepBody ? (
+                props.renderStepBody({
+                  step,
+                  model: rb,
+                  requestOrigin,
+                  setRequestOrigin,
+                })
+              ) : (
+                <>
+                  {step === "origin" ? (
+                    <OnboardingOriginStep
+                      originFieldBase={rb.originFieldBase}
+                      requestOrigin={requestOrigin}
+                      setRequestOrigin={setRequestOrigin}
+                    />
+                  ) : null}
+                  {step === "customer" ? <OnboardingCustomerStep model={rb} /> : null}
+                  {step === "company" ? <OnboardingCompanyZetelStep model={rb} /> : null}
+                  {step === "innovationAttest" ? <OnboardingInnovationAttestStep /> : null}
+                  {step === "metrologyAttest" ? <OnboardingMetrologyStep /> : null}
+                  {step === "companyLegalEntities" ? (
+                    <OnboardingCompanyLegalEntitiesStep model={rb} />
+                  ) : null}
+                  {step === "invoicing" ? <OnboardingInvoicingStep model={rb} /> : null}
+                  {step === "extras" ? <OnboardingExtrasStep model={rb} /> : null}
+                  {step === "summary" ? <OnboardingSummaryStep model={rb} /> : null}
+                </>
+              )}
             </StepLayout>
           </div>
         </div>
