@@ -105,11 +105,11 @@ function MaybeTruncated({
 
 const defaultCreateLabel = (search: string) => (
   <>
-    Add &quot;<span className="font-medium">{search}</span>&quot;
+    Voeg &quot;<span className="font-medium">{search}</span>&quot; toe
   </>
 );
 
-const defaultCreateTooltip = (search: string) => `Add "${search}"`;
+const defaultCreateTooltip = (search: string) => `Voeg "${search}" toe`;
 
 function CreatableCombobox({
   options,
@@ -117,11 +117,11 @@ function CreatableCombobox({
   onValueChange,
   onCreate,
   selectedLabel: selectedLabelProp,
-  placeholder = "Select option...",
-  searchPlaceholder = "Search...",
+  placeholder = "Kies een optie...",
+  searchPlaceholder = "Zoeken...",
   createLabel = defaultCreateLabel,
   createTooltip = defaultCreateTooltip,
-  clearAriaLabel = "Clear selection",
+  clearAriaLabel = "Wis selectie",
   className,
   contentClassName,
   id,
