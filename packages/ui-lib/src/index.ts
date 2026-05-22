@@ -17,5 +17,5 @@ export type {
   DecisionCardCalloutProps,
   DecisionCardCta,
   DecisionCardProps,
-  DecisionCardTone,
+  DecisionCardVariant,
 } from "./custom-components/DecisionCard";

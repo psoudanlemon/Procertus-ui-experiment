@@ -3,5 +3,5 @@ export type {
   DecisionCardCalloutProps,
   DecisionCardCta,
   DecisionCardProps,
-  DecisionCardTone,
+  DecisionCardVariant,
 } from "./DecisionCard";

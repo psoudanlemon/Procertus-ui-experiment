@@ -2,9 +2,11 @@
  * Two card shapes that present a route forward in a flow:
  *
  *   • `DecisionCard` (default) — vertical card with icon tile, title,
- *     description, optional check-bullets, and a trailing-icon CTA. Two tones:
- *     `primary` (raised, command surface) and `muted` (quiet, secondary
- *     surface). Used as a pair on decision moments like Triage.
+ *     description, optional check-bullets, and a trailing-icon CTA. Two
+ *     variants: `elevated` (raised, command surface with branded halo) and
+ *     `faded` (quiet, dashed-border secondary surface). Both pass through
+ *     to the `Card` primitive's variants of the same name. Used as a pair
+ *     on decision moments like Triage.
  *
  *   • `DecisionCardCallout` — gradient side-route nudge with a title,
  *     description, and a CTA button. Horizontal on tablet+, vertical on
@@ -23,7 +25,7 @@ import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import { cn } from "@/lib/utils";
 import { Button, Card, CardContent, CardDescription, CardHeader, H2, H3 } from "@procertus-ui/ui";
 
-export type DecisionCardTone = "primary" | "muted";
+export type DecisionCardVariant = "elevated" | "faded";
 
 export type DecisionCardCta = {
   label: ReactNode;
@@ -35,8 +37,11 @@ export type DecisionCardCta = {
   children?: ReactNode;
 };
 
-export type DecisionCardProps = Omit<ComponentProps<typeof Card>, "title" | "children"> & {
-  tone?: DecisionCardTone;
+export type DecisionCardProps = Omit<
+  ComponentProps<typeof Card>,
+  "title" | "children" | "variant"
+> & {
+  variant?: DecisionCardVariant;
   icon?: IconSvgElement;
   title: ReactNode;
   description?: ReactNode;
@@ -111,7 +116,7 @@ function CtaSlot({
 }
 
 export function DecisionCard({
-  tone = "muted",
+  variant = "faded",
   icon,
   title,
   description,
@@ -120,15 +125,12 @@ export function DecisionCard({
   className,
   ...props
 }: DecisionCardProps) {
-  const isPrimary = tone === "primary";
+  const isElevated = variant === "elevated";
   return (
     <Card
-      className={cn(
-        "flex h-full flex-col gap-section py-section",
-        isPrimary ? "shadow-proc-md ring-2 ring-primary/30" : "shadow-proc-xs",
-        className,
-      )}
-      data-decision-card-tone={tone}
+      variant={variant}
+      className={cn("h-full", className)}
+      data-decision-card-variant={variant}
       {...props}
     >
       <CardHeader className="!flex flex-row items-start gap-section px-section">
@@ -136,7 +138,7 @@ export function DecisionCard({
           <div
             className={cn(
               "flex size-11 shrink-0 items-center justify-center rounded-md",
-              isPrimary
+              isElevated
                 ? "bg-primary text-primary-foreground"
                 : "bg-secondary text-secondary-foreground",
             )}
@@ -174,7 +176,7 @@ export function DecisionCard({
           cta={cta}
           fallbackIcon={ArrowRight02Icon}
           iconPosition="trailing"
-          variant={isPrimary ? "default" : "outline"}
+          variant={isElevated ? "default" : "outline"}
           className="w-full justify-between"
         />
       </CardContent>

@@ -42,11 +42,12 @@ const formalBullets = [
 ] as const;
 
 /**
- * Quiet, secondary card. Lower-stakes route or fallback option.
+ * Quiet, secondary card. Lower-stakes route or fallback option. Wraps the
+ * `Card` primitive's `faded` variant (dashed border + lowered opacity).
  */
-export const Muted: Story = {
+export const Faded: Story = {
   args: {
-    tone: "muted",
+    variant: "faded",
     icon: Mail01Icon,
     title: "Aanvraag meer informatie",
     description: "Voor wie eerst wil afstemmen.",
@@ -60,12 +61,12 @@ export const Muted: Story = {
 };
 
 /**
- * Raised, command-surface card. Recommended route or primary action.
- * Uses `ring-2 ring-primary/30` + `shadow-proc-md` to lift it above the muted twin.
+ * Raised, command-surface card. Recommended route or primary action. Wraps the
+ * `Card` primitive's `elevated` variant (branded `shadow-proc-glow-tactile` halo).
  */
-export const Primary: Story = {
+export const Elevated: Story = {
   args: {
-    tone: "primary",
+    variant: "elevated",
     icon: FilePlusIcon,
     title: "Traject opstarten",
     description: "Voor wie klaar is om in te dienen.",
@@ -79,7 +80,7 @@ export const Primary: Story = {
 };
 
 /**
- * Decision moment: muted + primary side by side. Reproduces the Triage choice
+ * Decision moment: faded + elevated side by side. Reproduces the Triage choice
  * between an informative request and a formal traject.
  */
 export const Pair: Story = {
@@ -90,7 +91,7 @@ export const Pair: Story = {
   render: () => (
     <div className="grid grid-cols-1 gap-region md:grid-cols-2">
       <DecisionCard
-        tone="muted"
+        variant="faded"
         icon={Mail01Icon}
         title="Aanvraag meer informatie"
         description="Voor wie eerst wil afstemmen."
@@ -102,7 +103,7 @@ export const Pair: Story = {
         }}
       />
       <DecisionCard
-        tone="primary"
+        variant="elevated"
         icon={FilePlusIcon}
         title="Traject opstarten"
         description="Voor wie klaar is om in te dienen."
@@ -123,7 +124,7 @@ export const Pair: Story = {
  */
 export const NoBullets: Story = {
   args: {
-    tone: "muted",
+    variant: "faded",
     icon: Mail01Icon,
     title: "Aanvraag meer informatie",
     description: "Voor wie eerst wil afstemmen.",
@@ -141,7 +142,7 @@ export const NoBullets: Story = {
  */
 export const NoIcon: Story = {
   args: {
-    tone: "muted",
+    variant: "faded",
     title: "Aanvraag meer informatie",
     description: "Voor wie eerst wil afstemmen.",
     bullets: [...informalBullets],

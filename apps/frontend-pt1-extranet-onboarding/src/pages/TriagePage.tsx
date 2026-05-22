@@ -60,7 +60,7 @@ export function TriagePage() {
       <div className="flex flex-col gap-region">
         <div className="grid grid-cols-1 gap-region md:grid-cols-2">
           <DecisionCard
-            tone="muted"
+            variant="faded"
             icon={Mail01Icon}
             title="Aanvraag meer informatie"
             description="Voor wie eerst wil afstemmen."
@@ -81,7 +81,7 @@ export function TriagePage() {
             }}
           />
           <DecisionCard
-            tone="primary"
+            variant="elevated"
             icon={FilePlusIcon}
             title="Traject opstarten"
             description="Voor wie klaar is om in te dienen."
