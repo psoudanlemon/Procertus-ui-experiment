@@ -50,10 +50,10 @@ export function registrationDraftsIncludeProductBoundCertificationForFlowState(
 /**
  * Ordered steps for the guest formal-registration stepper and navigation (Verder / Terug).
  * Omits innovatie-/metrologie-stappen when het mandje geen bijbehorende inquiry bevat.
- * Omits {@link companyLegalEntities} when there is no product-bound certification inquiry in `drafts`.
+ * {@link companyLegalEntities} blijft voorlopig altijd in de reeks zichtbaar; de feedback
+ * onder 3.8 vraagt om hem later volledig te verwijderen, maar tot dan willen we geen oversight.
  */
 export function registrationStepsSequence(drafts: readonly CertificationRequestDraft[]): readonly OnboardingStep[] {
-  const needsLegalEntities = registrationDraftsIncludeProductBoundCertification(drafts);
   const needsInnovationAttest = registrationDraftsIncludeInnovationAttest(drafts);
   const needsMetrology = registrationDraftsIncludeMetrology(drafts);
 
@@ -63,7 +63,7 @@ export function registrationStepsSequence(drafts: readonly CertificationRequestD
     "company",
     ...(needsInnovationAttest ? (["innovationAttest"] as const) : []),
     ...(needsMetrology ? (["metrologyAttest"] as const) : []),
-    ...(needsLegalEntities ? (["companyLegalEntities"] as const) : []),
+    "companyLegalEntities",
     "invoicing",
     "extras",
     "summary",
