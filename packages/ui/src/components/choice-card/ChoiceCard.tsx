@@ -80,7 +80,7 @@ const descVariants = cva("text-sm", {
     variant: {
       elevated: "",
       default: "",
-      faded: "text-xs",
+      faded: "",
       ghost: "",
       "no-border": "",
     },
@@ -242,10 +242,13 @@ export function ChoiceCard({
           <>
             {controlPosition === "leading" ? control : null}
             <FieldContent
-              className={cn(showLeading && "flex min-w-0 flex-row items-start gap-component")}
+              className={cn(
+                showLeading && "flex min-w-0 flex-row gap-component",
+                showLeading && (description ? "items-start" : "items-center"),
+              )}
             >
               {showLeading ? (
-                <div className="shrink-0 self-start pt-micro text-muted-foreground [&_svg]:size-5">
+                <div className="shrink-0 text-muted-foreground [&_svg]:size-5">
                   {leading}
                 </div>
               ) : null}
