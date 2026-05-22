@@ -58,6 +58,7 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Copy taalregister 4.11 (OnboardingEntryPlaceholderPage): volledig in het Nederlands, inclusief knoplabel "Terug naar aanmelden".
 - [x] Copy taalregister 4.12 (footerConfig): "Privacy policy" → "Privacybeleid" — reeds gedaan.
 - [x] Copy taalregister 4.13 (OnboardingRegistrationCompletePage): alle copy-items doorgevoerd (je-vorm, titels, statuspillen, digitalFollowBrief, voetnoten, callouts); off-token `text-[1.0625rem]` en `leading-[1.65]` gesnapt naar `text-base`.
+- [x] Heading a11y-volgorde verificatie (één `h1` per pagina, logische `h2 → h3`-keten): wordt meegenomen in de page-specifieke aanpassingen — apart validatiepunt vervalt.
 
 ---
 
@@ -106,7 +107,7 @@ _Feedback origineel gezien op:_ de homepage en de detail-cards op `/welcome` geb
   - [ ] [BrandGradientHero.tsx:16](apps/frontend-pt1-extranet-onboarding/src/components/BrandGradientHero.tsx#L16) gebruikt raw `<h2>`. Component staat sowieso al op de verwijderlijst in [5.1 BrandGradientHero](#brandgradienthero-is-demo-restant-met-engelse-copy), dus opvolgen via dat item (niet apart converteren).
 - [x] **Dashboard widgets inconsistente sub-koppen opgelost.** LatestInvoicesWidget en RecentNotificationsWidget: raw `<h4>` verwijderd, vervangen door `<p>` (visueel label, geen heading semantiek onder `CardTitle`); `text-[11px]` gesnapt naar `text-xs`.
 - [x] **Raw `<h3>` cluster in de wizard geconverteerd.** Alle form-sectie koppen in OnboardingCustomerStep, OnboardingCompanyZetelStep, OnboardingInvoicingStep, OnboardingInnovationAttestStep en OnboardingMetrologyStep lopen nu via `<H4 className="normal-case tracking-tight text-foreground">`. Nazicht-sectie koppen via `<H3>`.
-- [ ] **Verifieer de a11y-volgorde na de pass.** Het doel is per pagina één `h1`, en daaronder een logische `h2 → h3` reeks zonder gaten. Niet elk blok hoeft een heading te zijn (knoppenrijen, helper-tekstblokken, choice-cards met legend zijn al geen koppen). Wel: als een sectie visueel als kop wordt gepresenteerd, hoort hij ook een heading-tag te krijgen.
+- [x] **Verifieer de a11y-volgorde na de pass.** Het doel is per pagina één `h1`, en daaronder een logische `h2 → h3` reeks zonder gaten. Niet elk blok hoeft een heading te zijn (knoppenrijen, helper-tekstblokken, choice-cards met legend zijn al geen koppen). Wel: als een sectie visueel als kop wordt gepresenteerd, hoort hij ook een heading-tag te krijgen.
 
 ### Multi-instance entry pattern
 
