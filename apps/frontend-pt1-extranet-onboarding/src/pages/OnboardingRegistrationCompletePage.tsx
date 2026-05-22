@@ -367,7 +367,7 @@ export function OnboardingRegistrationCompletePage() {
   if (!payload || summary == null) return <Navigate to={FORMAL_ONBOARDING_PATH} replace />;
 
   return (
-    <div data-density="operational" className="contents">
+    <div data-density="spacious" className="contents">
       <RegistrationCompleteLeadCard summary={summary}>
         <RegistrationCompleteSections summary={summary} payloadPresent={payload} />
       </RegistrationCompleteLeadCard>

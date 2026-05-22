@@ -218,7 +218,7 @@ export function InfoRequestSubmittedPage() {
   }, [serviceId]);
 
   return (
-    <div data-density="operational" className="contents">
+    <div data-density="spacious" className="contents">
       {snapshot ? (
         <StatusPage
           innerColumnClassName="max-w-2xl"

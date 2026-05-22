@@ -67,6 +67,7 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Heading a11y-volgorde verificatie (één `h1` per pagina, logische `h2 → h3`-keten): wordt meegenomen in de page-specifieke aanpassingen — apart validatiepunt vervalt.
 - [x] Distill 5.2 — TriageOptionCard geëxtraheerd naar `DecisionCard` + `DecisionCardCallout` in `packages/ui-lib` (stories per tone/variant, geen "Triage"-naam zodat de shape app-agnostisch blijft). TriagePage en `ExpertCallFooterCard` op Wegwijzer consumeren de nieuwe primitives; story-only `CalloutBanner`-placeholder verwijderd want hij leeft nu als `DecisionCardCallout`.
 - [x] Distill 5.1 — BrandGradientHero verplaatst naar Storybook story `design tokens/Gradient/Hero` in `gradient-radix.stories.tsx` (Nederlandse copy, geen code-token-references in de zichtbare tekst). App-component verwijderd uit `apps/.../components/`, import + render uit `DesignSystemPage` weg; pre-existing `max-w-[1400px]` op die pagina gesnapt naar `max-w-7xl`.
+- [x] Distill 5.2 — `data-density="spacious"` correct geïmplementeerd volgens de regel publiek = spacious, ingelogd = operational. `PublicAppShell` zet density="spacious" centraal; `InfoRequestSubmittedPage` en `OnboardingRegistrationCompletePage` (top-level publieke routes buiten de shell) gebruiken `data-density="spacious"`; redundante lokale `<DensityProvider density="spacious">`-wrappers op `InfoRequestPlaceholderPage` en `ExpertCallPlaceholderPage` zijn verwijderd want de shell levert spacious nu al.
 
 ---
 
@@ -311,9 +312,3 @@ _Feedback origineel gezien op:_ `grep -r 'variant="faded"'` toont één gebruik 
 - [ ] Kies één presentatie voor externe verwijzingen. Voorstel: behoud de `<Item>`-rij (compacter, past in de "Overige" tab) en gebruik die ook in `AllCertificatesGrid`. Dat maakt `variant="faded"` overbodig en zorgt voor één lees-pattern voor "dit dossier loopt elders".
 - [ ] Als de faded-variant toch waarde heeft op een andere plek, documenteer dan in `BrowseCard.stories.tsx` voor welk inhoudtype hij bedoeld is. Anders verwijderen uit de `variant`-set.
 
-#### `data-density="spacious"` heeft geen meetbare adoptie
-
-_Feedback origineel gezien op:_ `grep -r 'data-density="spacious"'` levert één gebruik op tegenover tien voor `operational`. De density-laag onderscheidt impliciet "public/onboarding (spacious)" en "portal/dashboard (operational)", maar in praktijk wordt spacious bijna nergens expliciet gezet, terwijl de publieke pagina's wel ruimer ogen door hun layout.
-
-- [ ] Audit waar de publieke pagina's hun ruime ritme vandaan halen. Als dat via padding/gap-tokens komt en niet via de density-wrapper, dan is `data-density="spacious"` dode laag en kan hij uit het primitives-systeem.
-- [ ] Indien spacious wel ingezet hoort te zijn op publieke routes: zet hem expliciet op één centraal punt (bv. `PublicLayout` of de `data-public-layout`-root) zodat de density-laag overal hetzelfde gedrag heeft.

@@ -38,7 +38,7 @@ function PublicGuestRegistryChrome() {
   );
 
   return (
-    <DensityProvider density="operational">
+    <DensityProvider density="spacious">
       <PublicRegistryAppShell
         hideFab
         header={{

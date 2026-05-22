@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { DensityProvider } from "@procertus-ui/ui";
 import {
   ExpertCallBookingView,
   TrajectPageFrame,
@@ -91,22 +90,20 @@ export function ExpertCallPlaceholderPage() {
         />
       }
     >
-      <DensityProvider density="spacious">
-        <ExpertCallBookingView
-          alwaysShowSchedule
-          showSelfServiceScheduling
-          idPrefix="expert-call"
-          storageKey={`procertus.expert-call.${entry?.id ?? "hero"}`}
-          onCanSubmitChange={setCanSubmit}
-          onPersistedSnapshotChange={api.patchInformalIntakeCapture}
-          prefill={{
-            firstName: resolvedContext.representativeFirstName || undefined,
-            lastName: resolvedContext.representativeLastName || undefined,
-            email: resolvedContext.representativeEmail || undefined,
-            company: resolvedContext.organizationName || undefined,
-          }}
-        />
-      </DensityProvider>
+      <ExpertCallBookingView
+        alwaysShowSchedule
+        showSelfServiceScheduling
+        idPrefix="expert-call"
+        storageKey={`procertus.expert-call.${entry?.id ?? "hero"}`}
+        onCanSubmitChange={setCanSubmit}
+        onPersistedSnapshotChange={api.patchInformalIntakeCapture}
+        prefill={{
+          firstName: resolvedContext.representativeFirstName || undefined,
+          lastName: resolvedContext.representativeLastName || undefined,
+          email: resolvedContext.representativeEmail || undefined,
+          company: resolvedContext.organizationName || undefined,
+        }}
+      />
     </TrajectPageFrame>
   );
 }

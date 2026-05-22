@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { DensityProvider, H2, cn } from "@procertus-ui/ui";
+import { H2, cn } from "@procertus-ui/ui";
 import {
   PRODUCT_REQUEST_NOTE_MAX_LENGTH_LONG,
   ExpertCallBookingView,
@@ -176,20 +176,18 @@ export function InfoRequestPlaceholderPage() {
         />
       </section>
 
-      <DensityProvider density="spacious">
-        <ExpertCallBookingView
-          idPrefix="info-request"
-          storageKey={`procertus.info-request.${entry.id}`}
-          onCanSubmitChange={setCanSubmit}
-          onPersistedSnapshotChange={api.patchInformalIntakeCapture}
-          prefill={{
-            firstName: resolvedContext.representativeFirstName || undefined,
-            lastName: resolvedContext.representativeLastName || undefined,
-            email: resolvedContext.representativeEmail || undefined,
-            company: resolvedContext.organizationName || undefined,
-          }}
-        />
-      </DensityProvider>
+      <ExpertCallBookingView
+        idPrefix="info-request"
+        storageKey={`procertus.info-request.${entry.id}`}
+        onCanSubmitChange={setCanSubmit}
+        onPersistedSnapshotChange={api.patchInformalIntakeCapture}
+        prefill={{
+          firstName: resolvedContext.representativeFirstName || undefined,
+          lastName: resolvedContext.representativeLastName || undefined,
+          email: resolvedContext.representativeEmail || undefined,
+          company: resolvedContext.organizationName || undefined,
+        }}
+      />
     </TrajectPageFrame>
   );
 }
