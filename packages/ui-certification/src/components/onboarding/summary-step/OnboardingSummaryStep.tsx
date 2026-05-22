@@ -10,6 +10,7 @@ import {
   ChoiceCard,
   ChoiceCardGroup,
   DownloadableItemGrid,
+  H3,
   Label,
   Switch,
   Table,
@@ -129,12 +130,12 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
   return (
     <div className="flex w-full min-w-0 flex-col gap-8">
       <section className="space-y-4" aria-labelledby="summary-aanvrager-heading">
-        <h3
+        <H3
           id="summary-aanvrager-heading"
-          className="m-0 text-base font-semibold leading-snug tracking-tight text-foreground"
+          className="m-0"
         >
           {summarySectionTitle}
-        </h3>
+        </H3>
         <div className="grid gap-section sm:grid-cols-2">
           <div className="flex min-w-0 flex-col gap-section">
             <div className="flex flex-col gap-micro">
@@ -180,12 +181,12 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
       </section>
 
       <section className="space-y-3" aria-labelledby="summary-legal-entities-heading">
-        <h3
+        <H3
           id="summary-legal-entities-heading"
-          className="m-0 text-base font-semibold leading-snug tracking-tight text-foreground"
+          className="m-0"
         >
           Geregistreerde juridische entiteiten
-        </h3>
+        </H3>
         <p className="m-0 text-sm text-muted-foreground">
           De maatschappelijke zetel en eventuele vestigingen die u tijdens registratie heeft
           vastgelegd.
@@ -237,12 +238,12 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
       </section>
 
       <section className="space-y-3" aria-labelledby="summary-persons-heading">
-        <h3
+        <H3
           id="summary-persons-heading"
-          className="m-0 text-base font-semibold leading-snug tracking-tight text-foreground"
+          className="m-0"
         >
           Geregistreerde personen
-        </h3>
+        </H3>
         <p className="m-0 text-sm text-muted-foreground">
           Kies wie we onboarden op het Klantenportaal.
         </p>
@@ -506,12 +507,12 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
           )}
           aria-labelledby="summary-submission-note-heading"
         >
-          <h3
+          <H3
             id="summary-submission-note-heading"
-            className="m-0 text-base font-semibold leading-snug tracking-tight text-foreground"
+            className="m-0"
           >
             Begeleidende toelichting
-          </h3>
+          </H3>
           <ProductRequestNoteField
             value={submissionNoteDraft}
             onChange={(v) =>

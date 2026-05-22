@@ -8,6 +8,7 @@ import {
   FieldContent,
   FieldDescription,
   FieldLabel,
+  H4,
   Input,
   Item,
   ItemActions,
@@ -295,9 +296,9 @@ export function OnboardingInnovationAttestStep() {
 
       <div className="space-y-4">
         <div className="space-y-1">
-          <h3 className="text-sm font-semibold tracking-tight text-foreground">
+          <H4 className="normal-case tracking-tight text-foreground">
             Innovatief product
-          </h3>
+          </H4>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <FormTextarea
@@ -357,7 +358,7 @@ export function OnboardingInnovationAttestStep() {
 
       <div className="space-y-4">
         <div className="space-y-1">
-          <h3 className="text-sm font-semibold tracking-tight text-foreground">Bewijsvoering</h3>
+          <H4 className="normal-case tracking-tight text-foreground">Bewijsvoering</H4>
           <p id={uploadRequirementsId} className="text-xs leading-relaxed text-muted-foreground">
             Voeg bestaande bewijsvoering toe: een samenvattende overzichtstabel van (lopende)
             proeven met uitvoerder, methode en resultaten die de technische beschrijving
@@ -493,9 +494,9 @@ export function OnboardingInnovationAttestStep() {
 
       <div className="space-y-4">
         <div className="space-y-1">
-          <h3 className="text-sm font-semibold tracking-tight text-foreground">
+          <H4 className="normal-case tracking-tight text-foreground">
             Project en bouwheer
-          </h3>
+          </H4>
           <p className="text-xs leading-relaxed text-muted-foreground">
             Gegevens over het project waarin het innovatieve product wordt toegepast.
           </p>

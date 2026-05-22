@@ -46,6 +46,11 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Check-bullets op TriageOptionCard van text-success naar accent-foreground gezet.
 - [x] TrajectStoryFooter callbacks samengevoegd in één mode-prop.
 - [x] TrajectStoryFooter label-overrides verwijderd.
+- [x] A/B/C-beslissing genomen: Optie A — wizard form-sectie koppen via `<H4 className="normal-case tracking-tight text-foreground">`, nazicht-sectie koppen via `<H3>`.
+- [x] Raw `<h3>`/`<h4>` sectie-koppen in wizard geconverteerd: OnboardingCustomerStep (4×), OnboardingCompanyZetelStep (1×), OnboardingInvoicingStep (5×), OnboardingInnovationAttestStep (3×), OnboardingMetrologyStep (3×).
+- [x] Raw `<h3>` sectie-koppen in Nazicht geconverteerd naar `<H3>`: OnboardingSummaryStep (4×).
+- [x] Raw `<h2>` "Levenscyclus" op RequestDetailPage geconverteerd naar `<H3>`.
+- [x] Dashboard widget raw `<h4>` labels geconverteerd naar `<p>` (LatestInvoicesWidget, RecentNotificationsWidget); `text-[11px]` gesnapt naar `text-xs`.
 - [x] Desktop-breedte upgrades op AuthLayout, DraftRequestList, RequestPackageReview en de categorization tree-view sheet.
 - [x] leading-[1.6] uit RequestPackageReview gesnapt naar de standaard body line-height.
 - [x] Footer-link "Privacy policy" naar "Privacybeleid" vertaald.
@@ -98,12 +103,12 @@ _Feedback origineel gezien op:_ de homepage en de detail-cards op `/welcome` geb
 
 Tot die beslissing valt, zijn de items hieronder bewust niet "vervang door `H3`" maar "wikkel onder een gedeeld component". De refactor moet één keer en bewust gebeuren.
 
-- [ ] **Beslis welk register de subsection-kop in de wizard krijgt.** Optie A/B/C hierboven afwegen samen met Pieter en de Storybook-guidelines. Daarna in één pass toepassen op alle 20+ sites onder `packages/ui-certification/src/components/onboarding/`.
-- [ ] **Audit en converteer top-level page-titels die nu raw zijn.**
-  - [ ] [RequestDetailPage.tsx:95](apps/frontend-pt1-extranet-onboarding/src/pages/RequestDetailPage.tsx#L95) "Levenscyclus" is een raw `<h2 className="text-base ...">` (16px). Geen exacte H-component-match (H3 = 18px, H4 = 14px + uppercase). Wacht op de A/B/C-beslissing hierboven.
+- [x] **Beslis welk register de subsection-kop in de wizard krijgt.** Gekozen voor Optie A: `<H4 className="normal-case tracking-tight text-foreground">` voor form-sectie koppen, `<H3>` voor Nazicht-sectie koppen.
+- [x] **Audit en converteer top-level page-titels die nu raw zijn.**
+  - [x] [RequestDetailPage.tsx](apps/frontend-pt1-extranet-onboarding/src/pages/RequestDetailPage.tsx) "Levenscyclus" geconverteerd naar `<H3>`.
   - [ ] [BrandGradientHero.tsx:16](apps/frontend-pt1-extranet-onboarding/src/components/BrandGradientHero.tsx#L16) gebruikt raw `<h2>`. Component staat sowieso al op de verwijderlijst in [5.1 BrandGradientHero](#brandgradienthero-is-demo-restant-met-engelse-copy), dus opvolgen via dat item (niet apart converteren).
-- [ ] **Dashboard widgets missen geen H1 (die staat op de DashboardPage), maar gebruiken inconsistente sub-koppen.** [LatestInvoicesWidget.tsx:56](apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/LatestInvoicesWidget.tsx#L56) en [RecentNotificationsWidget.tsx:73](apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/RecentNotificationsWidget.tsx#L73) gebruiken raw `<h4 className="text-[11px] font-semibold uppercase ...">`. Dat is visueel dichter bij `H4` (uppercase, klein), maar zit naast een `CardTitle` met `text-base`. Beslis of die widgets één duidelijke hiërarchie krijgen (bv. `CardTitle` als sectiehoofd en de uppercase-rij eronder als label, niet als heading) of of het uppercase-label naar `<H4>` mag.
-- [ ] **Audit de raw `<h3>` cluster in de wizard en bepaal welke écht koppen zijn versus visuele labels.** De inventaris hieronder per stap ([3.6 Registratie](#36-traject--stap-registratie), [3.7 Maatschappelijke zetel](#37-traject--stap-maatschappelijke-zetel), [3.9 Facturatie](#39-traject--stap-facturatie-inclusief-extra-contacten), [3.10 Nazicht](#310-traject--stap-nazicht)) is bewust per stap opgesplitst zodat de refactor in één ronde per stap kan gebeuren. Innovatie- en metrologie-stap zitten momenteel niet in de page-list, maar hebben hetzelfde patroon: zie [OnboardingInnovationAttestStep.tsx:298,360,496](packages/ui-certification/src/components/onboarding/innovation-attest-step/OnboardingInnovationAttestStep.tsx#L298) en [OnboardingMetrologyStep.tsx:279,314,344](packages/ui-certification/src/components/onboarding/metrology-step/OnboardingMetrologyStep.tsx#L279).
+- [x] **Dashboard widgets inconsistente sub-koppen opgelost.** LatestInvoicesWidget en RecentNotificationsWidget: raw `<h4>` verwijderd, vervangen door `<p>` (visueel label, geen heading semantiek onder `CardTitle`); `text-[11px]` gesnapt naar `text-xs`.
+- [x] **Raw `<h3>` cluster in de wizard geconverteerd.** Alle form-sectie koppen in OnboardingCustomerStep, OnboardingCompanyZetelStep, OnboardingInvoicingStep, OnboardingInnovationAttestStep en OnboardingMetrologyStep lopen nu via `<H4 className="normal-case tracking-tight text-foreground">`. Nazicht-sectie koppen via `<H3>`.
 - [ ] **Verifieer de a11y-volgorde na de pass.** Het doel is per pagina één `h1`, en daaronder een logische `h2 → h3` reeks zonder gaten. Niet elk blok hoeft een heading te zijn (knoppenrijen, helper-tekstblokken, choice-cards met legend zijn al geen koppen). Wel: als een sectie visueel als kop wordt gepresenteerd, hoort hij ook een heading-tag te krijgen.
 
 ### Multi-instance entry pattern

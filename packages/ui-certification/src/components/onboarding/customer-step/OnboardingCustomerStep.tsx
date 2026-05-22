@@ -5,6 +5,7 @@ import {
   FieldContent,
   FieldDescription,
   FieldLabel,
+  H4,
   Input,
   Select,
   SelectContent,
@@ -114,9 +115,9 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
       </PrototypeCard>
       <div className="space-y-4">
         <div className="space-y-1">
-          <h3 className="text-sm font-semibold tracking-tight text-foreground">
+          <H4 className="normal-case tracking-tight text-foreground">
             Organisatie-identificatie
-          </h3>
+          </H4>
           <p className="text-xs leading-relaxed text-muted-foreground">
             Het formaat hangt af van uw eerder gekozen land of regio. Zodra het nummer klopt, kunt u
             verder naar bedrijfsgegevens.
@@ -164,9 +165,9 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
         </Field>
       </div>
       <div className="space-y-1">
-        <h3 className="text-sm font-semibold tracking-tight text-foreground">
+        <H4 className="normal-case tracking-tight text-foreground">
           Wettelijke vertegenwoordiger
-        </h3>
+        </H4>
         <p className="text-xs leading-relaxed text-muted-foreground">
           We registreren de persoon die uw organisatie wettelijk mag vertegenwoordigen. Het is deze
           persoon die handtekenbevoegdheid heeft.
@@ -249,12 +250,12 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
           aria-labelledby={`${applicantLegalRepFieldBase}-registrant-heading`}
         >
           <div className="min-w-0 space-y-1">
-            <h3
+            <H4
               id={`${applicantLegalRepFieldBase}-registrant-heading`}
-              className="text-sm font-semibold tracking-tight text-foreground"
+              className="normal-case tracking-tight text-foreground"
             >
               Uw gegevens als indiener
-            </h3>
+            </H4>
             <p className="text-xs leading-relaxed text-muted-foreground">
               Deze velden gaan over uzelf — degene die het formulier nu invult. Daarna vult u de
               wettelijke vertegenwoordiger in.
@@ -285,12 +286,12 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
           )}
         >
           <div className="min-w-0 space-y-1">
-            <h3
+            <H4
               id={`${applicantLegalRepFieldBase}-legal-rep-heading`}
-              className="text-sm font-semibold tracking-tight text-foreground"
+              className="normal-case tracking-tight text-foreground"
             >
               Gegevens wettelijke vertegenwoordiger
-            </h3>
+            </H4>
             <p className="text-xs leading-relaxed text-muted-foreground">
               {context.applicantIsLegalRepresentative === "no"
                 ? "Vul hier de persoon in die uw organisatie wettelijk mag vertegenwoordigen en de registratie mag ondertekenen."

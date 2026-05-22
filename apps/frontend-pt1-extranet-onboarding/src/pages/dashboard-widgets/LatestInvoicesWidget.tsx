@@ -53,9 +53,9 @@ export function LatestInvoicesWidget({ className }: LatestInvoicesWidgetProps) {
       <CardContent
         className={cn("flex flex-col gap-section pt-0 text-sm", DASHBOARD_FLAT_CARD_CHROME_CLASS)}
       >
-        <h4 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           Recente Facturen
-        </h4>
+        </p>
         <ItemGroup className="gap-component">
           {latestInvoices.map((invoice) => (
             <Item

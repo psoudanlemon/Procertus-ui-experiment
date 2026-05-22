@@ -8,6 +8,7 @@ import {
   Field,
   FieldContent,
   FieldLabel,
+  H4,
   Input,
   Progress,
   cn,
@@ -175,9 +176,9 @@ export function OnboardingCompanyZetelStep({ model }: OnboardingCompanyZetelStep
             </PrototypeCard>
           ) : null}
           <div className="space-y-1">
-            <h3 className="text-sm font-semibold tracking-tight text-foreground">
+            <H4 className="normal-case tracking-tight text-foreground">
               Maatschappelijke zetel
-            </h3>
+            </H4>
             <p className="text-xs leading-relaxed text-muted-foreground">
               Dit zijn de officiële gegevens van uw hoofdrechtspersoon, zoals die aan uw
               identificatienummer gekoppeld zijn. Ze kunnen afwijkend zijn van waar productie of

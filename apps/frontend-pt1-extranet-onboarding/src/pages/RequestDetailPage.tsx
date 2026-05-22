@@ -1,4 +1,4 @@
-import { Badge, Button, H1, useConfirm } from "@procertus-ui/ui";
+import { Badge, Button, H1, H3, useConfirm } from "@procertus-ui/ui";
 import {
   CertificationRequestLifecycleDetailTimeline,
   DraftRequestList,
@@ -92,7 +92,7 @@ export function RequestDetailPage() {
       />
 
       <div className="rounded-xl border bg-card p-section">
-        <h2 className="text-base font-semibold text-foreground">Levenscyclus</h2>
+        <H3>Levenscyclus</H3>
         <p className="mt-micro text-sm text-muted-foreground">
           Historiek van acties op dit aanvraagpakket.
         </p>

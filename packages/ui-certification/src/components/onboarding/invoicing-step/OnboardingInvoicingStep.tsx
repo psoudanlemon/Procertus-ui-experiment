@@ -10,6 +10,7 @@ import {
   FieldContent,
   FieldDescription,
   FieldLabel,
+  H4,
   Input,
   Select,
   SelectContent,
@@ -121,9 +122,9 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h3 className="text-sm font-semibold tracking-tight text-foreground">
+        <H4 className="normal-case tracking-tight text-foreground">
           Factuur‑gegevens en rechts‑persoon op de factuur
-        </h3>
+        </H4>
         <p className="text-xs leading-relaxed text-muted-foreground">
           Begin met het verplichte factuur‑e‑mailadres. Daarna ziet u per aanvraag welke
           rechts‑persoon bij certificatie hoort. Schakel onderaan alleen in wanneer u voor
@@ -189,9 +190,9 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
       </Card>
 
       <div className="space-y-2">
-        <h4 className="text-sm font-semibold tracking-tight text-foreground">
+        <H4 className="normal-case tracking-tight text-foreground">
           Certificatie-aanvragen in dit dossier
-        </h4>
+        </H4>
         <p className="text-xs leading-relaxed text-muted-foreground">
           Per aanvraag de rechts‑persoon die u in de stap{" "}
           <span className="font-medium text-foreground">Certificatie (entiteit)</span> gekoppeld
@@ -252,9 +253,9 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
             vestigingBlockAssignmentMaps={assignmentMapsBlockingDelete}
             heading={
               <div className="space-y-1 pb-6">
-                <h3 className="text-sm font-semibold tracking-tight text-foreground">
+                <H4 className="normal-case tracking-tight text-foreground">
                   Vestigingen en juridische entiteiten voor facturatie
-                </h3>
+                </H4>
                 <p className="text-xs leading-relaxed text-muted-foreground">
                   Voeg desgewenst entiteiten toe en wijs hieronder toe welke op welke factuur komt —
                   gelijk aan de werking bij certificatie (Add / Save).
@@ -265,9 +266,9 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
 
           {overviewRows.length === 0 ? null : (
             <div className="space-y-4">
-              <h4 className="text-sm font-semibold tracking-tight text-foreground">
+              <H4 className="normal-case tracking-tight text-foreground">
                 Factuur rechts‑persoon per aanvraag
-              </h4>
+              </H4>
               <ul className="space-y-2">
                 {overviewRows.map((draft) => (
                   <OnboardingInquiryLegalEntityLinkCard
@@ -398,9 +399,9 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
 
       <div className="space-y-3">
         <div className="space-y-1">
-          <h4 className="text-sm font-semibold tracking-tight text-foreground">
+          <H4 className="normal-case tracking-tight text-foreground">
             Contact voor facturatie
-          </h4>
+          </H4>
           <p className="text-xs leading-relaxed text-muted-foreground">
             Standaard is dat de{" "}
             <span className="font-medium text-foreground">wettelijke vertegenwoordiger</span>.

@@ -8,6 +8,7 @@ import {
   FieldContent,
   FieldDescription,
   FieldLabel,
+  H4,
   Input,
   Item,
   ItemActions,
@@ -276,7 +277,7 @@ export function OnboardingMetrologyStep() {
 
       <div className="space-y-4">
         <div className="space-y-1">
-          <h3 className="text-sm font-semibold tracking-tight text-foreground">Laboratorium en opdracht</h3>
+          <H4 className="normal-case tracking-tight text-foreground">Laboratorium en opdracht</H4>
           <p className="text-xs leading-relaxed text-muted-foreground">
             Gebaseerd op de publieke beschrijving van de metrologie-dienst PROCERTUS: controle en kalibratie van
             meetuitrusting, rapportage over nauwkeurigheid en precisie, en tussenkomsten ter plaatse in België of het
@@ -311,7 +312,7 @@ export function OnboardingMetrologyStep() {
 
       <div className="space-y-4">
         <div className="space-y-1">
-          <h3 className="text-sm font-semibold tracking-tight text-foreground">Planning en tussenkomsten</h3>
+          <H4 className="normal-case tracking-tight text-foreground">Planning en tussenkomsten</H4>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <FormTextarea
@@ -341,7 +342,7 @@ export function OnboardingMetrologyStep() {
 
       <div className="space-y-4">
         <div className="space-y-1">
-          <h3 className="text-sm font-semibold tracking-tight text-foreground">Technisch aanspreekpunt</h3>
+          <H4 className="normal-case tracking-tight text-foreground">Technisch aanspreekpunt</H4>
           <p id={uploadRequirementsId} className="text-xs leading-relaxed text-muted-foreground">
             Voeg overzichtslijsten, kalibratiehistoriek of foto’s bij — deze stap blijft mock; echte dossierupload kan later worden gekoppeld.
           </p>

@@ -70,9 +70,9 @@ export function RecentNotificationsWidget({ className }: RecentNotificationsWidg
           DASHBOARD_FLAT_CARD_CHROME_CLASS,
         )}
       >
-        <h4 className="shrink-0 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        <p className="shrink-0 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           Recente meldingen
-        </h4>
+        </p>
         <div className="min-h-0 flex-1 overflow-y-auto">
           <ItemGroup className="gap-component">
             {notifications.map((notification) => (
