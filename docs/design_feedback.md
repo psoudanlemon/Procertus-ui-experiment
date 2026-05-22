@@ -53,7 +53,8 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 _Feedback origineel gezien op:_ **Land of regio** (vier kaarten België / Nederland / Een ander Europees land / Buiten Europa, met vlag rechtsboven) en **Registratie** (twee kaarten "Ja, ik ben de wettelijke vertegenwoordiger" / "Nee, ik vul namens de wettelijke vertegenwoordiger in"). Vanuit die twee cases moeten we begrijpen welke bestaande varianten herwerkt moeten worden en welke we mogelijk extra moeten aanmaken (bv. een variant met grotere illustratie/vlag, of een minimaal "yes/no"-pattern dat eigenlijk een checkbox is).
 
 - [ ] Bekijk de bestaande choice card-varianten met deze twee cases in de hand en optimaliseer voor verschillende inhouden.
-- [ ] Pas optimalisatie toe op Land/regio — vlag of layout anders gebruiken om de keuzes visueel beter te onderscheiden (de huidige vlag rechtsboven is te subtiel en de twee niet-vlag opties wijken visueel af).
+  - Deelresultaat via §3.5: [ChoiceCard.tsx](packages/ui/src/components/choice-card/ChoiceCard.tsx) primitive aangepast — leading-icon centreert tegen de titel als er geen description is (vroeger altijd top-aligned), `faded` variant gebruikt nu dezelfde description text-size als de andere varianten, en de `pt-micro` line-height-offset op de leading-wrapper is verwijderd (was zichtbaar als 4px offset op grotere icons). De Registratie-case (zie item hieronder en §3.6) is nog niet meegenomen.
+- [x] Pas optimalisatie toe op Land/regio — vlag of layout anders gebruiken om de keuzes visueel beter te onderscheiden (de huidige vlag rechtsboven is te subtiel en de twee niet-vlag opties wijken visueel af). Zie §3.5.
 - [ ] Vervang choice cards door een lichtere oplossing (checkbox) wanneer de keuze in essentie "ik wil extra info opgeven" of "ik ben dit / ik ben dit niet" is.
 - [ ] Concreet: vervang "Bent u de wettelijke vertegenwoordiger?" op Registratie door een checkbox die de extra velden toont/verbergt.
 
