@@ -2,6 +2,7 @@ export * from "./accordion";
 export * from "./alert";
 export * from "./alert-dialog";
 export * from "./alert-dialog-provider";
+export * from "./autocomplete";
 export * from "./avatar";
 export * from "./badge";
 export * from "./breadcrumb";
