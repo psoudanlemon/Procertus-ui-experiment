@@ -1,4 +1,5 @@
 export { cn, iconStroke } from "./lib/utils";
+export { highlightMatch } from "./lib/highlight-match";
 export { THEMES, DEFAULT_THEME_ID, isThemeId, type ThemeId } from "./lib/themes";
 export { ThemeProvider, useTheme } from "./components/theme-provider";
 export { ModeProvider, useMode, type Mode } from "./components/mode-provider";

@@ -11,7 +11,7 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 5. [**Distill audit (2026-05-21)**](#5-distill-audit-2026-05-21): één resterende app-level finding (InfoRequestSubmittedPage); overige findings afgewerkt of bewust niet doorgevoerd (zie Afgewerkt).
 
 **Onderdelen in sectie 1, in alfabetische scan-volgorde:**
-[Cart-status visibility](#cart-status-visibility) · [Choice card componenten](#choice-card-componenten) · [Copy density](#copy-density) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Stepper](#stepper) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox) · [Veldtype per invulveld](#veldtype-per-invulveld).
+[Choice card componenten](#choice-card-componenten) · [Copy density](#copy-density) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Stepper](#stepper) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox) · [Veldtype per invulveld](#veldtype-per-invulveld).
 
 ---
 
@@ -70,6 +70,9 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Distill 5.2: TriageOptionCard geëxtraheerd naar `DecisionCard` + `DecisionCardCallout` in `packages/ui-lib`; TriagePage en de Wegwijzer-callout consumeren de primitives.
 - [x] Distill 5.2: `data-density` regel publiek=spacious / ingelogd=operational doorgevoerd via `PublicAppShell` en de twee top-level publieke confirmation-pagina's; redundante lokale overrides opgeruimd.
 - [x] Distill 5.2: BrowseCard `variant="faded"` bewust behouden in de set voor toekomstige opportuniteiten.
+- [x] Cart-status alleen nog zichtbaar in het winkelmandje en de header-cart-indicator; pill, count-badge en selected ring op homepage kaarten en filtertabs verwijderd.
+- [x] Autocomplete-primitive gebouwd in packages/ui (input-as-trigger, popover opent enkel bij relevante content, async fetch met abort-signal, loading/empty/results states, results-heading, input-like progressive states).
+- [x] BTW/KBO-veld op Registratie naar Autocomplete voor `origin = be`: kboAutocomplete-adapter met mock-dataset bouwt het Belgische scenario; selectie autovult bedrijfsnaam, zeteladres en land/landcode. Voor andere origins blijft de Input met structurele validatie het gedrag.
 - [x] Header-spacing geoptimaliseerd: consistent ritme en betere groepering tussen icon buttons en de primaire login knop.
 
 ---
@@ -120,9 +123,10 @@ _Veldtype-audit (2026-05-22) over alle stappen van het onboarding-traject is afg
 
 **Vereisen nieuwe primitive of externe integratie:**
 
-- [ ] Organisatie-ID (BTW/KBO-nummer) op Registratie: nu vrije `Input`, zou een `Autocomplete` moeten worden die tijdens het typen het BTW/KBO-register aanspreekt en de bedrijfsnaam plus zeteladres autovult. Bouw eerst een generieke `Autocomplete`-primitive in `packages/ui` (debounced async fetch, loading state, no-results state) voordat de integratie volgt.
-- [ ] Stad in adresvelden (Maatschappelijke zetel, facturatieadres, bouwheeradres, projectadres): kan profiteren van een `Autocomplete` met gemeentelijst per land. Afhankelijk van de Autocomplete-primitive hierboven; lagere prioriteit dan het VAT/KBO-veld.
-- [ ] Bouwheer- en projectadres op Innovatie-attest: nu losse `Input`-velden, kandidaat voor een geïntegreerd adres-autocomplete (postale lookup) zodra de Autocomplete-primitive er is.
+- [ ] Organisatie-ID op Registratie voor `origin = nl`: bouw een `kvkAutocomplete`-adapter (analoog aan [`kboAutocomplete`](packages/ui-certification/src/onboarding/lib/kbo-autocomplete.ts)) en breidt de conditionele swap in [OnboardingCustomerStep.tsx](packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx) uit naar Nederland. KvK is publiek doorzoekbaar; integratie is parallel.
+- [ ] Organisatie-ID op Registratie voor andere origins (FR, DE, overig EU): registers zijn ofwel niet publiek doorzoekbaar ofwel pay-walled. Voorlopig blijft de plain `Input` met structurele validatie het juiste pattern. Heroverwegen als Procertus een commerciële register-API integreert.
+- [ ] Stad in adresvelden (Maatschappelijke zetel, facturatieadres, bouwheeradres, projectadres): kan profiteren van een `Autocomplete` met gemeentelijst per land. Lagere prioriteit dan de origin-uitbreidingen hierboven.
+- [ ] Bouwheer- en projectadres op Innovatie-attest: nu losse `Input`-velden, kandidaat voor een geïntegreerd adres-autocomplete (postale lookup).
 
 ### Copy density
 
@@ -130,15 +134,6 @@ _Feedback origineel gezien op:_ **Maatschappelijke zetel** (waar tekst ~50% van 
 
 - [ ] Verdere copy-density pas (info-icons + tooltips voor "nice to know"-content) uitgesteld tot de keuze-card en multi-instance pattern afgerond zijn.
 - [ ] Certificatie (entiteit) — vervalt zodra de stap verwijderd is (zie 3.8).
-
-### Cart-status visibility
-
-_Feedback origineel gezien op:_ **Homepage** ("Start uw certificeringstraject") — een blauwe "AL IN UW PAKKET · 2 PRODUCTEN" pill bovenop de BENOR-kaart, en een count-badge "2" op de filtertab "BENOR-certificatie". Beide indicatoren herhalen info die al duidelijk is uit het winkelmandje en de header-cart-indicator.
-
-- [x] Cart-status alleen tonen in het winkelmandje en de cart-indicator in de header, niet dupliceren elders.
-- [x] Verwijder "AL IN UW PAKKET · X PRODUCTEN" indicator van homepage certificaatkaarten.
-- [x] Verwijder count-badges van homepage filtertabs.
-- [x] Verwijder ook de blauwe `selected` ring op homepage certificaatkaarten en filtertabs. Catalogue-componenten checken het winkelmandje niet meer; cart-state leeft enkel in het winkelmandje en de header-cart-indicator.
 
 ---
 
@@ -176,12 +171,6 @@ _Hoe openen:_ klik op de **"Aanvragen"**-knop in de header (PublicRegistryHeader
 ## 3. Page-specifieke wijzigingen
 
 > **Dev server:** `http://localhost:5173`. Plak het pad achter de base-URL om de pagina lokaal te openen. Routes met `:serviceId` verwachten een service-id uit de catalogus (bv. een BENOR-service uit de homepage).
-
-### 3.2 Homepage ("Start uw certificeringstraject")
-
-_Route:_ [`/welcome`](http://localhost:5173/welcome)
-
-- [ ] Verwijder cart-status van kaarten en filtertabs (zie [Cart-status visibility](#cart-status-visibility)).
 
 ### 3.3 Onboarding stap "Voeg per product certificaten toe"
 

@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   ChoiceCard,
   ChoiceCardGroup,
   Field,
@@ -13,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
   cn,
+  highlightMatch,
 } from "@procertus-ui/ui";
 import { PrototypeCard } from "@procertus-ui/ui-pt1-prototype";
 import {
@@ -20,6 +22,11 @@ import {
   getRegistrantContextFieldsForPrototypePreset,
   VAT_PROTOTYPE_PRESETS,
 } from "../../../onboarding/lib/vatPrototypePresets";
+import {
+  findKboCompanyByVatNumber,
+  kboAutocomplete,
+  type KboCompany,
+} from "../../../onboarding/lib/kbo-autocomplete";
 import {
   customerContextAfterPrototypePresetChange,
   emptyIdentificatiePersonState,
@@ -42,12 +49,49 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
     prototypeVatPresetId,
     vatPrototypePresetChoices,
     activeVatPreset,
+    registrationIdOrigin,
     registrationIdFieldMeta,
     registrationIdentifierIssue,
     registrationIdentifierStructurallyValid,
     applicantLegalRepFieldBase,
     applicantLegalRepPersonFieldsLocked,
   } = model;
+
+  // Alleen voor Belgische registratie: de Autocomplete bevraagt het KBO-mock-
+  // register en vult bedrijfsnaam + zeteladres bij selectie. Voor andere
+  // origins blijft de plain Input + structurele validatie het juiste pattern;
+  // die registers zijn ofwel niet publiek doorzoekbaar ofwel pay-walled, dus
+  // een autocomplete-belofte daar zou misleidend zijn.
+  const useKboLookup = registrationIdOrigin === "be";
+  const selectedKboCompany = useKboLookup
+    ? findKboCompanyByVatNumber(context.vatNumber)
+    : null;
+
+  const handleKboCompanyChange = (company: KboCompany | null) => {
+    if (company) {
+      patchContext({
+        vatNumber: company.vatNumber,
+        organizationName: company.name,
+        country: company.country,
+        addressCountryCode: company.countryCode,
+        addressStreet: company.street,
+        addressHouseNumber: company.houseNumber,
+        addressPostalCode: company.postalCode,
+        addressCity: company.city,
+      });
+    } else {
+      patchContext({
+        vatNumber: "",
+        organizationName: "",
+        country: "",
+        addressCountryCode: "",
+        addressStreet: "",
+        addressHouseNumber: "",
+        addressPostalCode: "",
+        addressCity: "",
+      });
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -128,27 +172,67 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
             {registrationIdFieldMeta.label}
           </FieldLabel>
           <FieldContent>
-            <Input
-              id="customer-registration-identifier"
-              className="min-w-0"
-              value={context.vatNumber}
-              placeholder={registrationIdFieldMeta.placeholder}
-              onChange={(event) => updateContext("vatNumber", event.target.value)}
-              autoComplete="off"
-              spellCheck={false}
-              state={
-                registrationIdentifierIssue != null
-                  ? "invalid"
-                  : registrationIdentifierStructurallyValid
-                    ? "valid"
-                    : undefined
-              }
-              aria-describedby={
-                registrationIdentifierIssue
-                  ? "customer-registration-identifier-error customer-registration-identifier-hint"
-                  : "customer-registration-identifier-hint"
-              }
-            />
+            {useKboLookup ? (
+              <Autocomplete<KboCompany>
+                id="customer-registration-identifier"
+                className="min-w-0"
+                value={selectedKboCompany}
+                onChange={handleKboCompanyChange}
+                fetchSuggestions={kboAutocomplete}
+                itemKey={(c) => c.vatNumber}
+                itemLabel={(c) => `${c.name} (${c.vatNumber})`}
+                renderItem={(c, q) => (
+                  <span className="flex min-w-0 flex-col">
+                    <span className="truncate font-medium text-foreground">
+                      {highlightMatch(c.name, q)}
+                    </span>
+                    <span className="truncate text-xs text-muted-foreground">
+                      {highlightMatch(c.vatNumber, q)} &middot; {highlightMatch(c.city, q)}
+                    </span>
+                  </span>
+                )}
+                resultsHeading={() => "Zoekresultaten"}
+                emptyMessage={(q) => (
+                  <>
+                    Geen bedrijf gevonden voor &quot;
+                    <span className="font-medium text-foreground">{q}</span>&quot;.
+                  </>
+                )}
+                loadingMessage="KBO-register raadplegen…"
+                placeholder="Zoek bedrijf op naam, BTW of stad"
+                clearAriaLabel="Wis bedrijfskeuze"
+                state={
+                  registrationIdentifierIssue != null
+                    ? "invalid"
+                    : selectedKboCompany != null
+                      ? "valid"
+                      : undefined
+                }
+                aria-invalid={registrationIdentifierIssue != null}
+              />
+            ) : (
+              <Input
+                id="customer-registration-identifier"
+                className="min-w-0"
+                value={context.vatNumber}
+                placeholder={registrationIdFieldMeta.placeholder}
+                onChange={(event) => updateContext("vatNumber", event.target.value)}
+                autoComplete="off"
+                spellCheck={false}
+                state={
+                  registrationIdentifierIssue != null
+                    ? "invalid"
+                    : registrationIdentifierStructurallyValid
+                      ? "valid"
+                      : undefined
+                }
+                aria-describedby={
+                  registrationIdentifierIssue
+                    ? "customer-registration-identifier-error customer-registration-identifier-hint"
+                    : "customer-registration-identifier-hint"
+                }
+              />
+            )}
             {registrationIdentifierIssue ? (
               <p
                 id="customer-registration-identifier-error"
@@ -159,7 +243,9 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
               </p>
             ) : null}
             <FieldDescription id="customer-registration-identifier-hint">
-              {registrationIdFieldMeta.description}
+              {useKboLookup
+                ? "Zoek je bedrijf in het KBO-register. We vullen automatisch je bedrijfsnaam en zeteladres in."
+                : registrationIdFieldMeta.description}
             </FieldDescription>
           </FieldContent>
         </Field>

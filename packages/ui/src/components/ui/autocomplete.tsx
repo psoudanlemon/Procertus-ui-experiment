@@ -21,8 +21,13 @@ type AutocompleteProps<TItem> = {
   itemKey: (item: TItem) => string;
   /** Plain-text label. Shown in the input when an item is selected. */
   itemLabel: (item: TItem) => string;
-  /** Result row rendering — can be richer than `itemLabel`. */
-  renderItem: (item: TItem) => React.ReactNode;
+  /**
+   * Result row rendering, called once per match. The second argument is the
+   * trimmed query the user typed, so callers can highlight matched
+   * substrings with the shared `highlightMatch` helper (or any equivalent
+   * treatment). Ignore it when the row only renders non-textual content.
+   */
+  renderItem: (item: TItem, query: string) => React.ReactNode;
   /** Minimum characters before `fetchSuggestions` is called. Default 2. */
   minQueryLength?: number;
   /** Debounce window in milliseconds before firing `fetchSuggestions`. Default 250. */
@@ -42,6 +47,11 @@ type AutocompleteProps<TItem> = {
    * closed on empty results.
    */
   emptyMessage?: (query: string) => React.ReactNode;
+  /**
+   * Copy shown next to the spinner while a fetch is in-flight or pending.
+   * Defaults to "Zoeken…".
+   */
+  loadingMessage?: React.ReactNode;
   /**
    * Optional subtitle rendered above the result list when there are matches.
    * The function receives the count and the trimmed query so callers can use
@@ -80,6 +90,7 @@ function Autocomplete<TItem>({
   debounceMs = 250,
   onError,
   emptyMessage,
+  loadingMessage = "Zoeken…",
   resultsHeading,
   placeholder = "Typ om te zoeken",
   clearAriaLabel = "Wis selectie",
@@ -104,9 +115,10 @@ function Autocomplete<TItem>({
   const trimmedSearch = search.trim();
   const belowMinQuery = trimmedSearch.length < minQueryLength;
   const hasResults = results.length > 0;
-  const showEmptyState = !hasResults && !!emptyMessage;
+  const isLoading = status === "loading";
+  const showEmptyState = !hasResults && !isLoading && !!emptyMessage;
   const popoverOpen =
-    focused && !hasValue && !belowMinQuery && status === "idle" && (hasResults || showEmptyState);
+    focused && !hasValue && !belowMinQuery && (isLoading || hasResults || showEmptyState);
 
   React.useEffect(() => {
     setHighlighted(0);
@@ -134,12 +146,16 @@ function Autocomplete<TItem>({
       return;
     }
 
+    // Mark loading immediately so the popover shows the loading state during
+    // the debounce window, not the stale results / empty state from the
+    // previous query.
+    setStatus("loading");
+
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       abortRef.current?.abort();
       const controller = new AbortController();
       abortRef.current = controller;
-      setStatus("loading");
       fetchSuggestions(trimmedSearch, controller.signal)
         .then((fetched) => {
           if (controller.signal.aborted) return;
@@ -264,13 +280,22 @@ function Autocomplete<TItem>({
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
-        {hasResults ? (
-          <div className="flex max-h-72 flex-col overflow-hidden">
-            {resultsHeading ? (
-              <div className="px-component pt-component pb-micro text-xs font-medium text-muted-foreground">
-                {resultsHeading(results.length, trimmedSearch)}
-              </div>
-            ) : null}
+        <div className="flex max-h-72 flex-col overflow-hidden">
+          {resultsHeading ? (
+            <div className="px-component pt-component text-xs font-medium text-muted-foreground">
+              {resultsHeading(results.length, trimmedSearch)}
+            </div>
+          ) : null}
+          {isLoading ? (
+            <div
+              role="status"
+              aria-live="polite"
+              className="flex items-center gap-component px-component py-micro text-sm text-muted-foreground"
+            >
+              <Spinner size="sm" />
+              <span>{loadingMessage}</span>
+            </div>
+          ) : hasResults ? (
             <ul
               id={listboxId}
               role="listbox"
@@ -295,21 +320,23 @@ function Autocomplete<TItem>({
                       isHighlighted && "bg-accent text-accent-foreground",
                     )}
                   >
-                    <span className="min-w-0 flex-1 truncate text-left">{renderItem(item)}</span>
+                    <span className="min-w-0 flex-1 truncate text-left">
+                      {renderItem(item, trimmedSearch)}
+                    </span>
                   </li>
                 );
               })}
             </ul>
-          </div>
-        ) : (
-          <div
-            role="status"
-            aria-live="polite"
-            className="px-component py-micro text-sm text-muted-foreground"
-          >
-            {emptyMessage?.(trimmedSearch)}
-          </div>
-        )}
+          ) : (
+            <div
+              role="status"
+              aria-live="polite"
+              className="px-component py-micro text-sm text-muted-foreground"
+            >
+              {emptyMessage?.(trimmedSearch)}
+            </div>
+          )}
+        </div>
       </PopoverContent>
     </Popover>
   );

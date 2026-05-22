@@ -5,6 +5,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Autocomplete } from "@/components/ui/autocomplete";
 import { FieldDescription } from "@/components/ui/field";
+import { highlightMatch } from "@/lib/highlight-match";
 
 /**
  * Async type-as-you-search field. The trigger IS the input — there is no
@@ -146,12 +147,14 @@ function failingFetch(_query: string, signal: AbortSignal): Promise<KboCompany[]
   });
 }
 
-function KboItemRow({ company }: { company: KboCompany }) {
+function KboItemRow({ company, query }: { company: KboCompany; query: string }) {
   return (
     <span className="flex min-w-0 flex-col">
-      <span className="truncate font-medium text-foreground">{company.name}</span>
+      <span className="truncate font-medium text-foreground">
+        {highlightMatch(company.name, query)}
+      </span>
       <span className="truncate text-xs text-muted-foreground">
-        {company.vatNumber} &middot; {company.locality}
+        {highlightMatch(company.vatNumber, query)} &middot; {highlightMatch(company.locality, query)}
       </span>
     </span>
   );
@@ -175,10 +178,8 @@ export const Default: Story = {
           fetchSuggestions={mockKboFetch}
           itemKey={(c) => c.vatNumber}
           itemLabel={(c) => `${c.name} (${c.vatNumber})`}
-          renderItem={(c) => <KboItemRow company={c} />}
-          resultsHeading={(count) =>
-            count === 1 ? "1 bedrijf gevonden" : `${count} bedrijven gevonden`
-          }
+          renderItem={(c, q) => <KboItemRow company={c} query={q} />}
+          resultsHeading={() => "Zoekresultaten"}
           emptyMessage={(q) => (
             <>
               Geen btw-nummer gevonden voor &quot;
@@ -213,7 +214,7 @@ export const WithValue: Story = {
           fetchSuggestions={mockKboFetch}
           itemKey={(c) => c.vatNumber}
           itemLabel={(c) => `${c.name} (${c.vatNumber})`}
-          renderItem={(c) => <KboItemRow company={c} />}
+          renderItem={(c, q) => <KboItemRow company={c} query={q} />}
           placeholder="Zoek bedrijf op naam, BTW of stad"
         />
       </div>
@@ -237,7 +238,7 @@ export const States: Story = {
           fetchSuggestions={mockKboFetch}
           itemKey={(c) => c.vatNumber}
           itemLabel={(c) => `${c.name} (${c.vatNumber})`}
-          renderItem={(c) => <KboItemRow company={c} />}
+          renderItem={(c, q) => <KboItemRow company={c} query={q} />}
           state="valid"
           placeholder="Valid state"
         />
@@ -247,7 +248,7 @@ export const States: Story = {
           fetchSuggestions={mockKboFetch}
           itemKey={(c) => c.vatNumber}
           itemLabel={(c) => `${c.name} (${c.vatNumber})`}
-          renderItem={(c) => <KboItemRow company={c} />}
+          renderItem={(c, q) => <KboItemRow company={c} query={q} />}
           state="invalid"
           placeholder="Invalid state"
         />
@@ -268,7 +269,7 @@ export const Disabled: Story = {
         fetchSuggestions={mockKboFetch}
         itemKey={(c) => c.vatNumber}
         itemLabel={(c) => `${c.name} (${c.vatNumber})`}
-        renderItem={(c) => <KboItemRow company={c} />}
+        renderItem={(c, q) => <KboItemRow company={c} query={q} />}
         disabled
         placeholder="Bedrijf zoeken"
       />
@@ -296,7 +297,7 @@ export const ErrorHandling: Story = {
           fetchSuggestions={failingFetch}
           itemKey={(c) => c.vatNumber}
           itemLabel={(c) => c.name}
-          renderItem={(c) => <KboItemRow company={c} />}
+          renderItem={(c, q) => <KboItemRow company={c} query={q} />}
           onError={() => setError("KBO-register tijdelijk niet bereikbaar. Probeer later opnieuw.")}
           placeholder="Bedrijf zoeken (mock-backend offline)"
           state={error ? "invalid" : undefined}
