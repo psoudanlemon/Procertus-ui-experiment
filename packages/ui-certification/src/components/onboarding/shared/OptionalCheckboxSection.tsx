@@ -1,11 +1,7 @@
 /**
- * Redesign-variant van `IdentificatieOptionalBlock`: zelfde "rij + optionele
- * onderliggende content" patroon, maar gestuurd door een checkbox in plaats
- * van een Switch. Reden: de Switch suggereert een systeeminstelling, terwijl
- * dit conceptueel een "ik wil extra info opgeven"-keuze is.
- *
- * Niet gebruikt in productie — leeft alleen in redesign-stories tot het
- * ontwerp is goedgekeurd.
+ * "Optional block" pattern: a section with a checkbox header that toggles
+ * additional content. Used when the choice is really "I want to provide extra
+ * info" — a Switch would imply a system setting, which this isn't.
  */
 import { Checkbox, cn } from "@procertus-ui/ui";
 import type { ReactNode } from "react";

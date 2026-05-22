@@ -9,12 +9,19 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 3. [**Page-specifieke wijzigingen**](#3-page-specifieke-wijzigingen): per scherm, met cross-refs naar cross-cutting items.
 
 **Onderdelen in sectie 1, in alfabetische scan-volgorde:**
-[Copy density](#copy-density) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox).
+[Copy density](#copy-density).
 
 ---
 
 ## Afgewerkt
 
+- [x] §3.7 Maatschappelijke zetel volledig hertekend en als productiestap uitgerold. [OnboardingCompanyZetelStep](packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyZetelStep.tsx): één enkel KBO/btw-input-veld met info-icon + tooltip naast het label, leading search-icon op de `Autocomplete` primitive (nieuwe `searchIconAlign` prop), max-width 320px op het veld, inline "Zoeken"-knop ernaast (disabled tot structurele validatie groen is, met spinner + "Zoeken…" tijdens loading-fase, blijft staan in ready zodat de gebruiker een ander nummer kan invoeren). Drie fases: **idle** (lege progress balk + "Wachten op btw-nummer 0%" + greyed-out bullets), **loading** (animerende balk + "Bezig met opzoeken" + bullet-progression), **ready** (succes-Alert met `variant="success"` + check-icon óf failure-Alert met `variant="destructive"`). Bullet-labels zijn nu locale-specifiek: VIES, Kruispuntbank van Ondernemingen, bedrijfs- en adresgegevens (3 bullets ipv 5). Chrome-copy van de stap herschreven naar één enkele lead-sentence; sectie-titels en helper-text die de input herhaalden zijn weg. Alle interne gaps op `space-y-section` token. Lookup-simulatie ([use-onboarding-company-lookup-prototype-effects.ts](packages/ui-certification/src/onboarding/use-onboarding-company-lookup-prototype-effects.ts)) is mee aangepast op de nieuwe 3-bullets timing. Spinner-primitive gebruikt nu `text-current` zodat 'm in buttons automatisch primary-foreground erft. Helper-text gebruikt `text-destructive-foreground` (was per ongeluk het background-token).
+- [x] §3.8 Certificatie-stap behouden maar volledig hertekend als "Bedrijfslocaties & certificatie". [OnboardingCompanyLegalEntitiesStep](packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyLegalEntitiesStep.tsx) heeft twee zones: **Locatiebeheer** (grid met de maatschappelijke zetel als locked-card uit de KBO-prefill, eventuele toegevoegde vestigingen, plus een inline composer-card "+ Extra vestiging toevoegen" met Naam + Vestigingsnummer + Adres) en **Allocatie-tabel** (één rij per draft × certificaat-type, radio-cells per locatie-kolom, zetel-kolom default checked, kolommen verschijnen dynamisch bij elke toegevoegde vestiging). Vervangt de oude select-gebaseerde mapping en de gedeelde `OnboardingVestigingenLegalEntityManager` (laatste is verwijderd).
+- [x] §3.9 Facturatie + Extra contacten samengevoegd in één stap. [OnboardingInvoicingStep](packages/ui-certification/src/components/onboarding/invoicing-step/OnboardingInvoicingStep.tsx): drie Switch-accordions (afwijkend facturatieadres, andere contactpersoon facturatie, aparte cert/inspectie-contact) zijn vervangen door [OptionalCheckboxSection](packages/ui-certification/src/components/onboarding/shared/OptionalCheckboxSection.tsx) — zie cross-cutting checkbox-pattern. Blokken "Certificatie-aanvragen in dit dossier" en "Factuur rechtspersoon per aanvraag" zijn volledig verwijderd (mapping leeft nu in de Certificatie-stap). Reservecontact zit binnen het primaire cert-contactblok met inline "+ Reservecontact toevoegen"-actie (multi-instance entry pattern). De voormalige "Extra contacten"-stap is mee weggesneden.
+- [x] §3.10 Nazicht herwerkt en als productiestap uitgerold. [OnboardingSummaryStep](packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx): zware Card-wrappers rond product-matrix, innovation-attest en metrologie zijn vervangen door compacte `SummarySection` met thin border. De ChoiceCardGroup multi-select op te dienen drafts is een compacte Table met inline checkbox-cellen. Knop "Aanvragen wijzigen" is weg — gebruiker navigeert terug via "Terug" of de klikbare stepper.
+- [x] Cross-cutting checkbox-pattern: [OptionalCheckboxSection](packages/ui-certification/src/components/onboarding/shared/OptionalCheckboxSection.tsx) primitive in de gedeelde `shared/` folder, gebruikt op Facturatie voor alle drie de optionele blokken plus het cert/inspectie-contactblok.
+- [x] Multi-instance entry pattern toegepast: extra zetels via composer-card op de Certificatie-stap; reservecontact inline binnen het primaire cert-contactblok op Facturatie.
+- [x] Cancel-knop in [CustomerOnboardingFlow](apps/frontend-pt1-extranet-onboarding/src/features/customer-onboarding/CustomerOnboardingFlow.tsx) + [certification-request/model.ts](packages/ui-certification/src/certification-request/model.ts) hernoemd naar "Aanvraag annuleren" zodat het label de actie expliciet beschrijft.
 - [x] §1 Choice card componenten: cross-cutting pattern afgerond. Beide originele cases (Land/regio en Registratie) zijn opgelost via verschillende routes: Land/regio via primitive-tweaks aan [ChoiceCard.tsx](packages/ui/src/components/choice-card/ChoiceCard.tsx) (gecentreerde leading-icon zonder description, `faded` description-size aligned, `pt-micro` offset weg) — zie §3.5 entry hieronder; Registratie via overstap naar een lichtere checkbox-oplossing — zie §3.6 entry hieronder. Het cross-cutting principe (kies een checkbox wanneer de essentie "ik wil extra info opgeven" of "ik ben dit / ik ben dit niet" is) is daarmee gedemonstreerd en kan op nieuwe cases toegepast worden.
 - [x] §3.6 Identificatie (voorheen Registratie) volledig herwerkt en doorgeduwd naar productie. Stap is herframed als *"Identificatie van de wettelijke vertegenwoordiger"* via chrome-copy en stepper-label updates ([onboarding-registration-chrome-copy.ts](packages/ui-certification/src/onboarding/onboarding-registration-chrome-copy.ts), [onboarding-stepper-model.ts](packages/ui-certification/src/onboarding/onboarding-stepper-model.ts)). [OnboardingCustomerStep](packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx): primair formulier vraagt nu de gegevens van de wettelijke vertegenwoordiger (bindt aan `legalRepresentative`), met daaronder een standaard-aangevinkte checkbox *"Ik (de aanvrager) ben de wettelijke vertegenwoordiger van dit bedrijf."* en een InformationCircleIcon-trigger met HoverCard die het belang ervan uitlegt. Bij uitvinken verschijnt een tweede sectie *Uw eigen contactgegevens* (bindt aan `registrant`) via een Radix Collapsible met `animate-collapsible-down` / `animate-collapsible-up` voor beide richtingen. De checkbox wordt automatisch uitgevinkt zodra de functie van de rep een rol is die geen handtekenbevoegdheid impliceert (anders dan zaakvoerder/bestuurder of wettelijk vertegenwoordiger). Dubbele/driedubbele titels rond "Wettelijke vertegenwoordiger" zijn opgeruimd: één paginakop, geen geneste H4-koppen meer. Subform [IdentificatiePersonSubform](packages/ui-certification/src/onboarding/identificatie-subforms.tsx) kreeg een `layout="twoColumn"` prop voor de 2-koloms grid (aanhef alleen op rij 1, voornaam + achternaam, e-mail + telefoon, functie + taal), waarbij `*`-markers verdwijnen en het telefoon-veld een "Optioneel" placeholder krijgt. Inter-sectie spacing zit op het `space-y-region` token.
 - [x] Stepper-volgorde gewijzigd van `origin → customer → company → ...` naar `origin → company → customer → ...` zodat de organisatie-identificatie eerst gebeurt op de zetel-stap, voordat de gebruiker de wettelijke vertegenwoordiger identificeert. Sequence, availability-gating, navigatie en resume-logica aangepast in [onboarding-registration-steps.ts](packages/ui-certification/src/onboarding/onboarding-registration-steps.ts), [onboarding-stepper-model.ts](packages/ui-certification/src/onboarding/onboarding-stepper-model.ts), [use-onboarding-flow.tsx](packages/ui-certification/src/onboarding/use-onboarding-flow.tsx) en [derive-formal-onboarding-resume-step.ts](packages/ui-certification/src/onboarding/derive-formal-onboarding-resume-step.ts).
@@ -51,29 +58,11 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 
 ## 1. Cross-cutting patronen / componenten
 
-### Toggle/switch accordion → checkbox
-
-_Feedback origineel gezien op:_ **Facturatie** (drie toggles: "Afwijkende facturatiedrukker per certificaat-aanvraag", "Afwijkend facturatieadres", "Andere contactpersoon voor facturatie") en **Extra contacten** (twee toggles voor primaire en reserve cert/inspectie-contact). De toggles staan steeds vóór een verborgen sectie en suggereren een aan/uit-systeeminstelling, terwijl het feitelijk een "ik wil extra info opgeven"-keuze is.
-
-- [ ] Vervang switches die een sectie open/dicht klappen door een checkbox (of inline action) die bij aanvinken de extra invoervelden toont.
-- [ ] Toepassen op Facturatie — drie toggles hierboven vermeld.
-- [ ] Toepassen binnen het samengevoegde cert/inspectie-contactblok op Facturatie (zie [3.9](#39-traject--facturatie-inclusief-extra-contacten)).
-
-### Multi-instance entry pattern
-
-_Feedback origineel gezien op:_ **Maatschappelijke zetel** (nu één zetel mogelijk, terwijl een gebruiker meerdere zetels in één traject moet kunnen ingeven) en **Extra contacten** (de tweede/reserve contactpersoon zit nu achter een aparte switch-sectie, maar zou inline vanuit de eerste contactpersoon moeten kunnen worden toegevoegd).
-
-- [ ] Definieer één pattern voor het toevoegen van meerdere instanties binnen één stap (bv. lijst van kaarten + "+ Item toevoegen"-actie).
-- [ ] Toepassen op Maatschappelijke zetel — meerdere zetels in dezelfde stap.
-- [ ] Toepassen op tweede (reserve) contactpersoon — inline toevoegbaar vanuit het primaire contactblok op Facturatie.
-
-
 ### Copy density
 
 _Feedback origineel gezien op:_ **Maatschappelijke zetel** (waar tekst ~50% van het scherm besloeg — twee callouts, herhaalde helper text onder elk veld). Vanuit die pagina werd duidelijk dat het een patroon is dat over de hele flow speelt — vandaar de bredere pass.
 
-- [ ] Verdere copy-density pas (info-icons + tooltips voor "nice to know"-content) uitgesteld tot de keuze-card en multi-instance pattern afgerond zijn.
-- [ ] Certificatie (entiteit) — vervalt zodra de stap verwijderd is (zie 3.8).
+- [x] Info-icons + tooltips voor "nice to know"-content toegepast op de KBO/btw-input (label-icon met tooltip op de Maatschappelijke zetel-stap). Pattern beschikbaar via gedeelde `Tooltip` primitive — kan op nieuwe velden gehergebruikt worden.
 
 ---
 
@@ -123,46 +112,6 @@ _Route:_ `/welcome/aanvraag/:serviceId/controleren`
 _Route:_ [`/welcome/formal-request/origin`](http://localhost:5173/welcome/formal-request/origin)
 
 - [x] Choice cards geoptimaliseerd: één gestackte lijst met vier `ChoiceCard`s (trailing radio + vlag in `leading`), BE/NL/EU op `elevated`-variant, Wereldwijd op `faded`. Title-as-step-prompt ("Kies uw land of regio") + consequence-gerichte page-description ("Uw keuze bepaalt welke gegevens we in de volgende stappen vragen."). Option-titles ingekort naar "België / Nederland / Europa / Wereldwijd"; descriptions herschreven naar "Het bedrijf waarvoor u de certificaten wil aanvragen is gevestigd in..". Vlag in 38.85px-leading-slot, gelijk aan de gecombineerde title+description hoogte. EU-vlag in officiële 3:2 ratio, alle vier glyphs even breed. Productie: [OnboardingOriginStep](packages/ui-certification/src/components/onboarding/origin-step/OnboardingOriginStep.tsx) + [onboarding-registration-chrome-copy](packages/ui-certification/src/onboarding/onboarding-registration-chrome-copy.ts) + [onboarding-request-origin](packages/ui-certification/src/onboarding/onboarding-request-origin.ts). ChoiceCard-primitive: leading-icon centreert nu tegen de titel als er geen description is en heeft geen padding-top meer voor de description-case ([ChoiceCard.tsx](packages/ui/src/components/choice-card/ChoiceCard.tsx)).
-
-### 3.7 Traject — stap "Maatschappelijke zetel"
-
-_Route:_ [`/welcome/formal-request/company`](http://localhost:5173/welcome/formal-request/company)
-
-- [ ] Maak meerdere zetels mogelijk in dezelfde stap (zie [Multi-instance entry pattern](#multi-instance-entry-pattern)).
-- [ ] Bouw de koppeling product → zetel hier in (zodat stap "Certificatie (entiteit)" kan verdwijnen, zie 3.8).
-- [ ] Voer copy-density pass uit (zie [Copy density](#copy-density)).
-
-### 3.8 Traject — stap "Certificatie (entiteit)" verwijderen
-
-_Route (huidige stap, te verwijderen):_ [`/welcome/formal-request/companyLegalEntities`](http://localhost:5173/welcome/formal-request/companyLegalEntities)
-
-_Tussenstand:_ stap staat voorlopig altijd in de registratie-reeks (drafts-afhankelijke conditie vervangen) zodat we hem niet uit het oog verliezen tot de definitieve verwijdering rond is. Zie commit `8d0107e`.
-
-- [ ] Verwijder de stap volledig uit het traject.
-- [ ] Verplaats de koppeling product → zetel naar stap "Maatschappelijke zetel" (zie 3.7).
-- [ ] Update stepper-volgorde en navigatie zodat deze stap niet meer verschijnt.
-- [ ] Bij verplaatsing naar 3.7: hergebruik géén raw `<h3>`/`<h4>` uit [OnboardingCompanyLegalEntitiesStep.tsx:85,148,243](packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyLegalEntitiesStep.tsx#L85) of uit [OnboardingVestigingenLegalEntityManager.tsx:181](packages/ui-certification/src/components/onboarding/legal-entity-step/OnboardingVestigingenLegalEntityManager.tsx#L181). Gebruik het `<H4>`/`<H3>` heading-register.
-
-### 3.9 Traject — stap "Facturatie" (inclusief Extra contacten)
-
-_Route:_ [`/welcome/formal-request/invoicing`](http://localhost:5173/welcome/formal-request/invoicing)
-_Route (huidige stap "Extra contacten", samen te voegen):_ [`/welcome/formal-request/extras`](http://localhost:5173/welcome/formal-request/extras)
-
-De voormalige stap "Extra contacten" wordt samengevoegd met "Facturatie".
-
-- [ ] Vervang switch-accordions door checkbox (zie [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox)).
-- [ ] Verwijder blokken "Certificatie-aanvragen in dit dossier" + "Factuur rechts-persoon per aanvraag" volledig (niet verplaatsen naar Nazicht).
-- [ ] Voeg cert/inspectie-contact inline toe op deze stap (overgenomen van de voormalige stap "Extra contacten").
-- [ ] Maak de tweede (reserve) contactpersoon inline toevoegbaar vanuit het primaire contactblok (zie [Multi-instance entry pattern](#multi-instance-entry-pattern)).
-- [ ] Update stepper: "Extra contacten" verdwijnt als aparte stap.
-- [ ] Raw `<h3>` op de over te nemen blokken in [OnboardingExtrasStep.tsx:21](packages/ui-certification/src/components/onboarding/extras-step/OnboardingExtrasStep.tsx#L21) nog converteren na samenvoeging met Facturatie-stap.
-
-### 3.10 Traject — stap "Nazicht"
-
-_Route:_ [`/welcome/formal-request/summary`](http://localhost:5173/welcome/formal-request/summary)
-
-- [ ] Kort de samenvatting sterk in, vervang zware kaarten door compacte tabellen zodat de hele pagina in één oogopslag scanbaar is.
-- [ ] Verwijder knop "Aanvragen wijzigen". De gebruiker navigeert terug via "Terug" en via de klikbare stepper.
 
 ### 3.11 Klantenportaal login pagina
 

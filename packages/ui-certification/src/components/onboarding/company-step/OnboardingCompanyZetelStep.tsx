@@ -1,44 +1,46 @@
-import { Alert01Icon } from "@hugeicons/core-free-icons";
+import {
+  Alert01Icon,
+  CheckmarkCircle01Icon,
+  InformationCircleIcon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Alert,
-  AlertDescription,
   AlertTitle,
-  Badge,
+  Button,
   Field,
   FieldContent,
   FieldLabel,
-  H4,
   Input,
   Progress,
+  Spinner,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
   cn,
 } from "@procertus-ui/ui";
-import { PrototypeCard } from "@procertus-ui/ui-pt1-prototype";
+
 import type { OnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
 import { COUNTRY_SELECT_NONE } from "../../../onboarding/onboarding-constants";
 import { firmaAddressSubformValue } from "../../../onboarding/onboarding-flow-helpers";
-import type { OnboardingRequestOrigin } from "../../../onboarding/onboarding-request-origin";
 import {
-  ONBOARDING_REQUEST_ORIGIN_IDS,
-} from "../../../onboarding/onboarding-request-origin";
-import { RequestOriginFlag } from "../../../onboarding/onboarding-request-origin-flag";
-import {
-  VAT_LOOKUP_OUTCOME_LABELS,
   VAT_PROTOTYPE_PRESETS,
   registrationIsoCodeFromDutchCountryLabel,
-  type VatLookupMockOutcome,
 } from "../../../onboarding/lib/vatPrototypePresets";
-import {
-  IdentificatieAddressSubform,
-} from "../../../onboarding/identificatie-subforms";
-import {
-  OnboardingCompanyPrefillSkeleton,
-  OnboardingContextField,
-} from "../shared/onboarding-shared-fields";
+import { IdentificatieAddressSubform } from "../../../onboarding/identificatie-subforms";
+import { OnboardingContextField } from "../shared/onboarding-shared-fields";
 
-export type OnboardingCompanyZetelStepProps = { model: OnboardingRegistrationLayoutModel };
+export type OnboardingCompanyZetelStepProps = {
+  model: OnboardingRegistrationLayoutModel;
+  /** Triggered when the user confirms the registration number to start the lookup. */
+  onStartLookup?: () => void;
+};
 
-export function OnboardingCompanyZetelStep({ model }: OnboardingCompanyZetelStepProps) {
+export function OnboardingCompanyZetelStep({
+  model,
+  onStartLookup,
+}: OnboardingCompanyZetelStepProps) {
   const {
     context,
     updateContext,
@@ -47,70 +49,121 @@ export function OnboardingCompanyZetelStep({ model }: OnboardingCompanyZetelStep
     lookupProgress,
     lookupStepIndex,
     vatLookupStepLabels,
-    companyPrefillFieldKeys,
-    companyFieldsResolvedInSimulation,
-    vatNumberForDisplay,
-    emailForDisplay,
     activeVatPreset,
     prototypeVatPresetId,
-    requestOrigin,
     countrySelectOptions,
     countrySelectValue,
     companyHints,
-    companySourceCountryLabel,
     firmaCountryLocked,
+    registrationIdFieldMeta,
+    registrationIdentifierIssue,
+    registrationIdentifierStructurallyValid,
   } = model;
 
   const activePreset =
     activeVatPreset ??
-    (prototypeVatPresetId ? VAT_PROTOTYPE_PRESETS.find((p) => p.id === prototypeVatPresetId) : undefined);
+    (prototypeVatPresetId
+      ? VAT_PROTOTYPE_PRESETS.find((p) => p.id === prototypeVatPresetId)
+      : undefined);
 
   return (
-    <>
-      <div className="rounded-lg border border-border bg-muted/30 px-4 py-3">
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div>
-            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-              Btw-nummer
-            </p>
-            <p className="mt-1 font-mono text-sm text-foreground">{vatNumberForDisplay || "—"}</p>
-          </div>
-          <div>
-            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-              E-mail
-            </p>
-            <p className="mt-1 break-all text-sm text-foreground">{emailForDisplay || "—"}</p>
-          </div>
-          <div>
-            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-              Land
-            </p>
-            <div className="mt-1 flex min-w-0 items-center gap-2 text-sm text-foreground">
-              {requestOrigin !== "" &&
-              ONBOARDING_REQUEST_ORIGIN_IDS.includes(requestOrigin as OnboardingRequestOrigin) ? (
-                <RequestOriginFlag
-                  origin={requestOrigin as OnboardingRequestOrigin}
-                  compact
-                  className="shrink-0"
+    <div className="space-y-section">
+      <section className="space-y-4">
+        <Field data-invalid={registrationIdentifierIssue ? true : undefined}>
+          <FieldLabel
+            htmlFor="zetel-registration-identifier"
+            className="inline-flex items-center gap-1.5"
+          >
+            <span>{registrationIdFieldMeta.label}</span>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    aria-label="Meer informatie over dit veld"
+                    className="inline-flex shrink-0 cursor-help text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
+                  >
+                    <HugeiconsIcon
+                      icon={InformationCircleIcon}
+                      className="size-4"
+                      aria-hidden
+                    />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  {registrationIdFieldMeta.description}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </FieldLabel>
+          <FieldContent>
+            <div className="flex items-start gap-2">
+              <div className="w-full max-w-80 min-w-0">
+                <Input
+                  id="zetel-registration-identifier"
+                  className="min-w-0"
+                  value={context.vatNumber}
+                  placeholder={registrationIdFieldMeta.placeholder}
+                  onChange={(event) => updateContext("vatNumber", event.target.value)}
+                  autoComplete="off"
+                  spellCheck={false}
+                  state={
+                    registrationIdentifierIssue != null
+                      ? "invalid"
+                      : registrationIdentifierStructurallyValid
+                        ? "valid"
+                        : undefined
+                  }
                 />
+              </div>
+              {onStartLookup ? (
+                <Button
+                  type="button"
+                  onClick={onStartLookup}
+                  disabled={
+                    companyLookupPhase === "loading" ||
+                    !registrationIdentifierStructurallyValid
+                  }
+                  aria-busy={companyLookupPhase === "loading"}
+                >
+                  {companyLookupPhase === "loading" ? (
+                    <>
+                      <Spinner size="sm" />
+                      <span>Zoeken…</span>
+                    </>
+                  ) : (
+                    "Zoeken"
+                  )}
+                </Button>
               ) : null}
-              <span className="min-w-0 break-words">{companySourceCountryLabel}</span>
             </div>
-          </div>
-        </div>
-      </div>
+            {registrationIdentifierIssue ? (
+              <p
+                className="text-left text-sm font-medium text-destructive-foreground"
+                role="alert"
+              >
+                {registrationIdentifierIssue}
+              </p>
+            ) : null}
+          </FieldContent>
+        </Field>
+      </section>
 
-      {companyLookupPhase === "loading" ? (
+      {companyLookupPhase !== "ready" ? (
         <div className="space-y-5">
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-2 text-sm">
-              <span className="font-medium text-foreground">Bezig met opzoeken</span>
-              <span className="tabular-nums text-muted-foreground">{Math.round(lookupProgress)}%</span>
+              <span className="font-medium text-foreground">
+                {companyLookupPhase === "loading" ? "Bezig met opzoeken" : "Wachten op btw-nummer"}
+              </span>
+              <span className="tabular-nums text-muted-foreground">
+                {companyLookupPhase === "loading" ? Math.round(lookupProgress) : 0}%
+              </span>
             </div>
             <Progress
-              value={lookupProgress}
+              value={companyLookupPhase === "loading" ? lookupProgress : 0}
               className="h-2"
-              aria-label="Voortgang opzoeken bedrijfsgegevens"
+              aria-label="Voortgang opzoeken"
             />
           </div>
           <ul className="space-y-2.5" aria-live="polite">
@@ -141,52 +194,34 @@ export function OnboardingCompanyZetelStep({ model }: OnboardingCompanyZetelStep
               );
             })}
           </ul>
-          <OnboardingCompanyPrefillSkeleton
-            prefilledKeys={companyPrefillFieldKeys}
-            resolvedKeys={companyFieldsResolvedInSimulation}
-          />
         </div>
+      ) : null}
+      {companyLookupPhase === "ready" && activePreset ? (
+        activePreset.mock.outcome === "manual" ? (
+          <Alert variant="destructive">
+            <HugeiconsIcon icon={Alert01Icon} aria-hidden className="size-4 shrink-0" />
+            <AlertTitle>
+              Geen gegevens gevonden, vul de velden handmatig in of probeer opnieuw.
+            </AlertTitle>
+          </Alert>
+        ) : (
+          <Alert variant="success">
+            <HugeiconsIcon
+              icon={CheckmarkCircle01Icon}
+              aria-hidden
+              className="size-4 shrink-0"
+            />
+            <AlertTitle>Gegevens gevonden, controleer of alle gegevens actueel zijn.</AlertTitle>
+          </Alert>
+        )
       ) : null}
 
       {companyLookupPhase === "ready" && activePreset ? (
-        <>
-          <Alert variant="warning">
-            <HugeiconsIcon icon={Alert01Icon} aria-hidden className="size-4 shrink-0" />
-            <AlertTitle className="flex flex-wrap items-center gap-2">
-              <span>{activePreset.outcomeLabel}</span>
-              <Badge variant="warning">
-                {VAT_LOOKUP_OUTCOME_LABELS[activePreset.mock.outcome as VatLookupMockOutcome]}
-              </Badge>
-            </AlertTitle>
-            <AlertDescription>{activePreset.outcomeMessage}</AlertDescription>
-          </Alert>
-          {activePreset.demoSupplementsOrgAddressFromEmailDomain ? (
-            <PrototypeCard
-              title="Aanvulling vanuit je e-mail"
-              description={
-                <>
-                  Voor dit voorbeeld ontvangen we geen bedrijfsnaam en volledig adres bij alleen je
-                  nummer. Waar mogelijk vullen we ze aan met het e-mailadres dat je opgaf. Controleer
-                  alles; bij een algemeen mailboxadres vul je zelf aan.
-                </>
-              }
-              cardContentClassName="hidden"
-            >
-              {null}
-            </PrototypeCard>
-          ) : null}
-          <div className="space-y-1">
-            <H4 className="normal-case tracking-tight text-foreground">
-              Maatschappelijke zetel
-            </H4>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Officiële gegevens gekoppeld aan je btw-nummer. Productie- of certificatielocatie mag afwijken.
-            </p>
-          </div>
+        <section className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <OnboardingContextField
               id="organizationName"
-              label="Juridische naam van de onderneming (zetel)"
+              label="Juridische naam (zetel)"
               value={context.organizationName}
               onChange={updateContext}
               placeholder="Officiële bedrijfsnaam"
@@ -200,7 +235,7 @@ export function OnboardingCompanyZetelStep({ model }: OnboardingCompanyZetelStep
                   type="tel"
                   value={context.firmaPhone}
                   onChange={(e) => updateContext("firmaPhone", e.target.value)}
-                  placeholder="Hoofdnummer organisatie"
+                  placeholder="Hoofdnummer"
                 />
               </FieldContent>
             </Field>
@@ -221,7 +256,9 @@ export function OnboardingCompanyZetelStep({ model }: OnboardingCompanyZetelStep
             }}
             countryOptions={countrySelectOptions}
             countrySelectValue={countrySelectValue}
-            onCountryChange={(v) => updateContext("country", v === COUNTRY_SELECT_NONE ? "" : v)}
+            onCountryChange={(v) =>
+              updateContext("country", v === COUNTRY_SELECT_NONE ? "" : v)
+            }
             countrySelectMode={firmaCountryLocked ? "locked" : "editable"}
             showCountryCodeField={false}
             fieldHints={{
@@ -229,8 +266,8 @@ export function OnboardingCompanyZetelStep({ model }: OnboardingCompanyZetelStep
               country: companyHints.country,
             }}
           />
-        </>
+        </section>
       ) : null}
-    </>
+    </div>
   );
 }

@@ -5,7 +5,7 @@ import { Loading03Icon } from "@hugeicons/core-free-icons";
 
 import { cn } from "@/lib/utils";
 
-const spinnerVariants = cva("animate-spin [animation-duration:2s] text-muted-foreground", {
+const spinnerVariants = cva("animate-spin [animation-duration:2s] text-current", {
   variants: {
     size: {
       sm: "size-4",

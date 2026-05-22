@@ -1,4 +1,20 @@
-/** Facturatiestap — eerst factuur‑e‑mail; overzicht certificatie‑entiteiten; optioneel andere facturatiedrukker per aanvraag. */
+/**
+ * "Facturatie" step (3.9 — inclusief samenvoeging met voormalige "Extra contacten" stap):
+ *
+ * - Switches die een sectie open/dicht klappen zijn vervangen door checkboxes
+ *   ({@link OptionalCheckboxSection}). Het zijn keuzes ("ik wil extra info
+ *   opgeven"), geen systeeminstellingen.
+ * - Blokken "Certificatie-aanvragen in dit dossier" en "Factuur rechtspersoon
+ *   per aanvraag" zijn weg. De koppeling product → zetel zit nu in de
+ *   Certificatie-step en wordt niet meer per factuur herhaald.
+ * - Cert/inspectie-contact (uit voormalige stap "Extra contacten") staat inline
+ *   op deze stap als één extra checkbox-sectie.
+ * - Reserve contactpersoon staat binnen het primaire cert-contactblok en wordt
+ *   toegevoegd met een inline "+ Reservecontact toevoegen"-actie — geen aparte
+ *   checkbox/switch meer (multi-instance entry pattern).
+ */
+import { Cancel01Icon, PlusSignIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Button,
   Card,
@@ -12,174 +28,109 @@ import {
   FieldLabel,
   H4,
   Input,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
 } from "@procertus-ui/ui";
-import { DraftCardDescription } from "../../../certification-request/draft-selection-presentation";
-import { registrationIsoCodeFromDutchCountryLabel } from "../../../onboarding/lib/vatPrototypePresets";
+
 import {
-  certificationLegalEntityAssignmentRaw,
-  emptyIdentificatiePersonState,
+  certificationSecondaryContactDisabledHint,
+  emphasizeInvalidMarkersCertificationPrimaryPerson,
+  emphasizeInvalidMarkersCertificationSecondaryPerson,
   emphasizeInvalidMarkersInvoicingContactPerson,
+  emptyIdentificatiePersonState,
   formatPostalAddressDisplay,
-  formatVestigingRegistryOptionLabel,
   invoicingAddressSubformValue,
   legalRepresentativePersonValue,
-  legalEntityAssignmentDisplayParts,
   ONBOARDING_PERSON_NEW_ID,
-  seedInvoicingInquiryMapFromCertification,
 } from "../../../onboarding/onboarding-flow-helpers";
+import { registrationIsoCodeFromDutchCountryLabel } from "../../../onboarding/lib/vatPrototypePresets";
 import { COUNTRY_SELECT_NONE } from "../../../onboarding/onboarding-constants";
 import {
   IdentificatieAddressSubform,
-  IdentificatieOptionalBlock,
   IdentificatiePersonRegistrySummary,
   IdentificatiePersonSubform,
   RequiredFieldSuffix,
 } from "../../../onboarding/identificatie-subforms";
+import { IdentificatiePersonTitleRoleCapture } from "../../../onboarding/identificatie-person-title-role-capture";
 import { IdentificatiePersonRegistryPicker } from "../../../onboarding/identificatie-person-registry-picker";
 import type { OnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
-import { OnboardingVestigingenLegalEntityManager } from "../legal-entity-step/OnboardingVestigingenLegalEntityManager";
-import {
-  OnboardingInquiryLegalEntityLinkCard,
-  OnboardingLegalEntityLinkSummaryText,
-} from "../shared/OnboardingInquiryLegalEntityLinkCard";
 
-export type OnboardingInvoicingStepProps = { model: OnboardingRegistrationLayoutModel };
+import { OptionalCheckboxSection } from "../shared/OptionalCheckboxSection";
+
+export type OnboardingInvoicingStepProps = {
+  model: OnboardingRegistrationLayoutModel;
+};
 
 export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps) {
   const {
     context,
     updateContext,
     patchContext,
-    drafts,
-    draftsInRegistrationScope,
-    countrySelectOptions,
     invoicingFieldBase,
-    legalEntityFieldBase,
     invoicingCountryOptions,
     invoicingCountrySelectValue,
     invoicingEmailIssue,
-    CERT_INQUIRY_LEGAL_ENTITY_ZETEL,
-    CERT_INQUIRY_VEST_UNASSIGNED,
+    canAddCertificationSecondary,
   } = model;
-
-  const invoicingMap = context.invoicingInquiryVestigingId;
-  const mirror = context.invoicingMirrorCertificationLegalEntities;
-  const overviewRows = draftsInRegistrationScope;
-
-  const assignmentMapsBlockingDelete = mirror
-    ? [context.certificationInquiryVestigingId]
-    : [context.certificationInquiryVestigingId, context.invoicingInquiryVestigingId];
-
-  function invoicingDraftSelectRadix(draftId: string): string {
-    const raw = (invoicingMap[draftId] ?? "").trim();
-    return raw === "" ? CERT_INQUIRY_VEST_UNASSIGNED : raw;
-  }
-
-  function setInvoicingDraftAssignment(draftId: string, value: string): void {
-    const next = value.trim()
-      ? { ...invoicingMap, [draftId]: value }
-      : (() => {
-          const clone = { ...invoicingMap };
-          delete clone[draftId];
-          return clone;
-        })();
-    patchContext({ invoicingInquiryVestigingId: next });
-  }
-
-  function applyInvoicingToAllVestigung(vestigingIdOrZetel: string): void {
-    const base = vestigingIdOrZetel.trim();
-    const next = { ...invoicingMap };
-    for (const d of overviewRows) {
-      if (base) next[d.id] = base;
-      else delete next[d.id];
-    }
-    patchContext({ invoicingInquiryVestigingId: next });
-  }
-
-  function setAlternativeInvoicingPerInquiry(enabled: boolean): void {
-    if (!enabled) {
-      patchContext({
-        invoicingMirrorCertificationLegalEntities: true,
-        invoicingInquiryVestigingId: {},
-      });
-      return;
-    }
-    patchContext({
-      invoicingMirrorCertificationLegalEntities: false,
-      invoicingInquiryVestigingId: seedInvoicingInquiryMapFromCertification(
-        context,
-        overviewRows.map((d) => d.id),
-        drafts,
-      ),
-    });
-  }
 
   return (
     <div className="space-y-6">
-      <div className="space-y-1">
-        <H4 className="normal-case tracking-tight text-foreground">
-          Factuur‑gegevens en rechts‑persoon op de factuur
-        </H4>
-        <p className="text-xs leading-relaxed text-muted-foreground">
-          Vul het factuur‑e‑mailadres in. Hieronder zie je de gekoppelde rechtspersoon per aanvraag.
-        </p>
-      </div>
+      <section className="space-y-3" aria-labelledby="invoicing-email-heading">
+        <div className="space-y-1">
+          <H4
+            id="invoicing-email-heading"
+            className="normal-case tracking-tight text-foreground"
+          >
+            Facturatie
+          </H4>
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            Standaard sturen we facturen naar het hieronder opgegeven adres. De rechtspersoon op
+            de factuur volgt de koppeling die u in de zetel-stap hebt gemaakt.
+          </p>
+        </div>
+        <Field data-invalid={invoicingEmailIssue ? true : undefined}>
+          <FieldLabel htmlFor={`${invoicingFieldBase}-email`}>
+            E-mail voor facturatie{" "}
+            <RequiredFieldSuffix erroneous={invoicingEmailIssue != null} />
+          </FieldLabel>
+          <FieldContent className="w-full min-w-0">
+            <Input
+              id={`${invoicingFieldBase}-email`}
+              type="email"
+              className="w-full min-w-0"
+              value={context.invoicingEmail}
+              onChange={(e) => updateContext("invoicingEmail", e.target.value)}
+              autoComplete="email"
+              aria-required
+              state={
+                invoicingEmailIssue != null
+                  ? "invalid"
+                  : context.invoicingEmail.trim().length > 0
+                    ? "valid"
+                    : undefined
+              }
+            />
+            {invoicingEmailIssue ? (
+              <p className="text-left text-sm font-medium text-destructive-foreground" role="alert">
+                {invoicingEmailIssue}
+              </p>
+            ) : null}
+            <FieldDescription>
+              Dit adres ontvangt facturen en herinneringen.
+            </FieldDescription>
+          </FieldContent>
+        </Field>
+      </section>
 
-      <Field data-invalid={invoicingEmailIssue ? true : undefined}>
-        <FieldLabel htmlFor={`${invoicingFieldBase}-email`}>
-          E-mail voor facturatie <RequiredFieldSuffix erroneous={invoicingEmailIssue != null} />
-        </FieldLabel>
-        <FieldContent className="w-full min-w-0">
-          <Input
-            id={`${invoicingFieldBase}-email`}
-            type="email"
-            className="w-full min-w-0"
-            value={context.invoicingEmail}
-            onChange={(e) => updateContext("invoicingEmail", e.target.value)}
-            autoComplete="email"
-            aria-required
-            state={
-              invoicingEmailIssue != null
-                ? "invalid"
-                : context.invoicingEmail.trim().length > 0
-                  ? "valid"
-                  : undefined
-            }
-            aria-describedby={
-              invoicingEmailIssue
-                ? `${invoicingFieldBase}-email-error ${invoicingFieldBase}-email-hint`
-                : `${invoicingFieldBase}-email-hint`
-            }
-          />
-          {invoicingEmailIssue ? (
-            <p
-              id={`${invoicingFieldBase}-email-error`}
-              className="text-left text-sm font-medium text-destructive"
-              role="alert"
-            >
-              {invoicingEmailIssue}
-            </p>
-          ) : null}
-          <FieldDescription id={`${invoicingFieldBase}-email-hint`}>
-            Dit adres ontvangt facturen en herinneringen — vul dit als eerste in.
-          </FieldDescription>
-        </FieldContent>
-      </Field>
-
-      <Card>
+      <Card variant="outlined">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">Maatschappelijke zetel (referentie)</CardTitle>
-          <CardDescription>
-            Naam en adres van je hoofdkantoor zoals eerder vastgelegd.
+          <CardTitle className="text-sm font-medium">Standaardadres (referentie)</CardTitle>
+          <CardDescription className="text-xs">
+            Maatschappelijke zetel zoals eerder vastgelegd.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2 text-sm">
-          <p className="font-medium text-foreground">{context.organizationName.trim() || "—"}</p>
+        <CardContent className="space-y-1 text-xs">
+          <p className="font-medium text-foreground">
+            {context.organizationName.trim() || "—"}
+          </p>
           <p className="text-muted-foreground">{formatPostalAddressDisplay(context)}</p>
           {context.country.trim() ? (
             <p className="text-muted-foreground">{context.country.trim()}</p>
@@ -187,185 +138,10 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
         </CardContent>
       </Card>
 
-      <div className="space-y-2">
-        <H4 className="normal-case tracking-tight text-foreground">
-          Certificatie-aanvragen in dit dossier
-        </H4>
-        <p className="text-xs leading-relaxed text-muted-foreground">
-          Gekoppelde rechtspersoon per aanvraag. Standaard gebruiken we deze ook op de factuur.
-        </p>
-      </div>
-
-      {overviewRows.length === 0 ? (
-        <p className="rounded-md border border-dashed border-border bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
-          Geen gekozen aanvragen in dit dossier.
-        </p>
-      ) : (
-        <ul className="space-y-2">
-          {overviewRows.map((draft) => {
-            const certRaw = certificationLegalEntityAssignmentRaw(context, draft.id, draft);
-            const parts = legalEntityAssignmentDisplayParts(context, certRaw);
-            return (
-              <OnboardingInquiryLegalEntityLinkCard
-                key={draft.id}
-                leftColumnLabel="Certificatie / product"
-                rightColumnLabel="Rechts‑persoon bij certificatie"
-                left={
-                  <>
-                    <p className="text-sm font-medium text-foreground">
-                      {draft.shortLabel || draft.label}
-                    </p>
-                    <div className="mt-1 text-xs text-muted-foreground [&_.font-medium]:text-foreground">
-                      <DraftCardDescription draft={draft} />
-                    </div>
-                  </>
-                }
-                right={
-                  <OnboardingLegalEntityLinkSummaryText
-                    primary={parts.primary}
-                    secondary={parts.secondary}
-                  />
-                }
-              />
-            );
-          })}
-        </ul>
-      )}
-
-      <IdentificatieOptionalBlock
-        switchId={`${invoicingFieldBase}-alt-invoice-per-inquiry`}
-        title="Afwijkende facturatiedrukker per certificatie-aanvraag"
-        description="Standaard komt op elke factuur dezelfde rechts‑persoon als hierboven bij certificatie. Schakel dit in als je óók andere vestigingen wilt beheren én per aanvraag een andere rechts‑persoon op de factuur wilt zetten."
-        checked={!mirror}
-        onCheckedChange={setAlternativeInvoicingPerInquiry}
-      >
-        <div className="space-y-8 pt-2">
-          <OnboardingVestigingenLegalEntityManager
-            fieldBaseId={`${legalEntityFieldBase}-inv-vest`}
-            context={context}
-            patchContext={patchContext}
-            countrySelectOptions={countrySelectOptions}
-            vestigingBlockAssignmentMaps={assignmentMapsBlockingDelete}
-            heading={
-              <div className="space-y-1 pb-6">
-                <H4 className="normal-case tracking-tight text-foreground">
-                  Vestigingen en juridische entiteiten voor facturatie
-                </H4>
-                <p className="text-xs leading-relaxed text-muted-foreground">
-                  Voeg desgewenst entiteiten toe en wijs hieronder toe welke op welke factuur komt —
-                  gelijk aan de werking bij certificatie (Add / Save).
-                </p>
-              </div>
-            }
-          />
-
-          {overviewRows.length === 0 ? null : (
-            <div className="space-y-4">
-              <H4 className="normal-case tracking-tight text-foreground">
-                Factuur rechts‑persoon per aanvraag
-              </H4>
-              <ul className="space-y-2">
-                {overviewRows.map((draft) => (
-                  <OnboardingInquiryLegalEntityLinkCard
-                    key={`inv-${draft.id}`}
-                    leftColumnLabel="Certificatie / product"
-                    rightColumnLabel="Rechts‑persoon op factuur"
-                    left={
-                      <>
-                        <p className="text-sm font-medium text-foreground">
-                          {draft.shortLabel || draft.label}
-                        </p>
-                        <div className="mt-1 text-xs text-muted-foreground [&_.font-medium]:text-foreground">
-                          <DraftCardDescription draft={draft} />
-                        </div>
-                      </>
-                    }
-                    right={
-                      <Select
-                        value={invoicingDraftSelectRadix(draft.id)}
-                        onValueChange={(v: string) => {
-                          if (v === CERT_INQUIRY_VEST_UNASSIGNED) {
-                            setInvoicingDraftAssignment(draft.id, "");
-                          } else {
-                            setInvoicingDraftAssignment(draft.id, v);
-                          }
-                        }}
-                      >
-                        <SelectTrigger size="sm" className="h-auto min-h-9 w-full max-w-lg py-2">
-                          <SelectValue placeholder="Kies rechts‑persoon voor factuur" />
-                        </SelectTrigger>
-                        <SelectContent position="popper">
-                          <SelectItem value={CERT_INQUIRY_VEST_UNASSIGNED}>
-                            — Nog niet gekozen —
-                          </SelectItem>
-                          <SelectItem value={CERT_INQUIRY_LEGAL_ENTITY_ZETEL}>
-                            Maatschappelijke zetel
-                          </SelectItem>
-                          {context.onboardingVestigingen.map((ve) => (
-                            <SelectItem key={ve.id} value={ve.id}>
-                              {formatVestigingRegistryOptionLabel(ve)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    }
-                  />
-                ))}
-              </ul>
-
-              {overviewRows.length > 0 ? (
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                    Snel invoeren voor alle aanvragen
-                  </span>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() =>
-                      patchContext({
-                        invoicingInquiryVestigingId: seedInvoicingInquiryMapFromCertification(
-                          context,
-                          overviewRows.map((d) => d.id),
-                          drafts,
-                        ),
-                      })
-                    }
-                  >
-                    Alle aanvragen · zoals bij certificatie
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => applyInvoicingToAllVestigung(CERT_INQUIRY_LEGAL_ENTITY_ZETEL)}
-                  >
-                    Alle aanvragen · maatschappelijke zetel
-                  </Button>
-                  {context.onboardingVestigingen.map((vx) => (
-                    <Button
-                      key={`bulk-${vx.id}`}
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="max-w-xs truncate"
-                      title={formatVestigingRegistryOptionLabel(vx)}
-                      onClick={() => applyInvoicingToAllVestigung(vx.id)}
-                    >
-                      Alle aanvragen · {vx.legalName.trim() || "Vestiging"}
-                    </Button>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          )}
-        </div>
-      </IdentificatieOptionalBlock>
-
-      <IdentificatieOptionalBlock
-        switchId={`${invoicingFieldBase}-inv-alt-address`}
+      <OptionalCheckboxSection
+        checkboxId={`${invoicingFieldBase}-alt-address`}
         title="Afwijkend facturatieadres"
-        description="Postadres op de factuur dat afwijkt van het adres van de zetel of gekozen vestiging (bijv. postbus of afdeling)."
+        description="Postadres op de factuur dat afwijkt van het adres van de zetel (bv. postbus of afdeling)."
         checked={context.addInvoicingAddressOverride}
         onCheckedChange={(on) => patchContext({ addInvoicingAddressOverride: on })}
       >
@@ -390,31 +166,12 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
           }
           showCountryCodeField={false}
         />
-      </IdentificatieOptionalBlock>
+      </OptionalCheckboxSection>
 
-      <div className="space-y-3">
-        <div className="space-y-1">
-          <H4 className="normal-case tracking-tight text-foreground">
-            Contact voor facturatie
-          </H4>
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            Standaard de wettelijke vertegenwoordiger. Schakel in voor een andere contactpersoon.
-          </p>
-        </div>
-        {!context.invoicingUseContactPerson ? (
-          <Card variant="outlined" className="gap-2 rounded-lg px-4 py-3">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Wettelijke vertegenwoordiger, factuurcontact
-            </p>
-            <IdentificatiePersonRegistrySummary person={legalRepresentativePersonValue(context)} />
-          </Card>
-        ) : null}
-      </div>
-
-      <IdentificatieOptionalBlock
-        switchId={`${invoicingFieldBase}-inv-person`}
+      <OptionalCheckboxSection
+        checkboxId={`${invoicingFieldBase}-alt-person`}
         title="Andere contactpersoon voor facturatie"
-        description="Vul een andere persoon in of kies iemand die je al in deze flow opgegeven hebt."
+        description="Standaard de wettelijke vertegenwoordiger. Schakel in voor een andere contactpersoon."
         checked={context.invoicingUseContactPerson}
         onCheckedChange={(on) =>
           patchContext({
@@ -440,9 +197,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
                   return;
                 }
                 const row = context.onboardingRegisteredPersons.find((p) => p.id === rid);
-                if (!row) {
-                  return;
-                }
+                if (!row) return;
                 patchContext({
                   invoicingContactPersonRegistryId: rid,
                   invoicingContactPerson: { ...row.person },
@@ -452,17 +207,176 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
           ) : null
         }
       >
-        {context.invoicingContactPersonRegistryId === ONBOARDING_PERSON_NEW_ID ? (
+        {!context.invoicingUseContactPerson ? (
+          <IdentificatiePersonRegistrySummary person={legalRepresentativePersonValue(context)} />
+        ) : context.invoicingContactPersonRegistryId === ONBOARDING_PERSON_NEW_ID ? (
           <IdentificatiePersonSubform
             idPrefix="invoicing-person"
             value={context.invoicingContactPerson}
             onChange={(v) => patchContext({ invoicingContactPerson: v })}
-            emphasizeInvalidRequiredMarkers={emphasizeInvalidMarkersInvoicingContactPerson(context)}
+            emphasizeInvalidRequiredMarkers={emphasizeInvalidMarkersInvoicingContactPerson(
+              context,
+            )}
           />
         ) : (
           <IdentificatiePersonRegistrySummary person={context.invoicingContactPerson} />
         )}
-      </IdentificatieOptionalBlock>
+      </OptionalCheckboxSection>
+
+      {/* Inline merge: cert/inspectie-contact uit voormalige Extras-stap */}
+      <section className="space-y-3 pt-2" aria-labelledby="cert-contact-heading">
+        <div className="space-y-1">
+          <H4
+            id="cert-contact-heading"
+            className="normal-case tracking-tight text-foreground"
+          >
+            Contact voor certificatie en inspectie
+          </H4>
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            Optioneel: een eigen aanspreekpunt voor alles rond certificatie en inspectie.
+          </p>
+        </div>
+        <OptionalCheckboxSection
+          checkboxId="cert-primary"
+          title="Aparte contactpersoon voor certificatie en inspectie"
+          description="Los van facturatie. Kies een bestaande persoon of voer een nieuwe in."
+          checked={context.addCertificationContactOverride}
+          onCheckedChange={(on) =>
+            patchContext({
+              addCertificationContactOverride: on,
+              ...(!on
+                ? {
+                    certificationContactPersonRegistryId: ONBOARDING_PERSON_NEW_ID,
+                    addCertificationSecondaryContact: false,
+                    certificationSecondaryPersonRegistryId: ONBOARDING_PERSON_NEW_ID,
+                  }
+                : {}),
+            })
+          }
+          headerTrailing={
+            context.addCertificationContactOverride ? (
+              <IdentificatiePersonRegistryPicker
+                cardHeader
+                id={`${invoicingFieldBase}-cert-primary-registry`}
+                label="Persoon kiezen"
+                hint="Kies bestaand of nieuw."
+                registeredPersons={context.onboardingRegisteredPersons}
+                value={context.certificationContactPersonRegistryId}
+                onValueChange={(rid) => {
+                  if (rid === ONBOARDING_PERSON_NEW_ID) {
+                    patchContext({
+                      certificationContactPersonRegistryId: ONBOARDING_PERSON_NEW_ID,
+                      certificationContact: emptyIdentificatiePersonState(),
+                      certificationContactTitlePreset: "none",
+                      certificationContactTitle: "",
+                      certificationContactRolePreset: "none",
+                      certificationContactRole: "",
+                    });
+                    return;
+                  }
+                  const row = context.onboardingRegisteredPersons.find((p) => p.id === rid);
+                  if (!row) return;
+                  const p = row.person;
+                  const certAanhef = p.title?.trim() ?? "";
+                  patchContext({
+                    certificationContactPersonRegistryId: rid,
+                    certificationContact: { ...p },
+                    certificationContactTitlePreset: certAanhef ? "other" : "none",
+                    certificationContactTitle: certAanhef,
+                    certificationContactRolePreset: "none",
+                    certificationContactRole: "",
+                  });
+                }}
+              />
+            ) : null
+          }
+        >
+          <IdentificatiePersonTitleRoleCapture
+            registryPersonSelected={
+              context.certificationContactPersonRegistryId !== ONBOARDING_PERSON_NEW_ID
+            }
+            idPrefix="cert-primary"
+            branch="certificationContact"
+            context={context}
+            patchContext={patchContext}
+            emphasizeInvalidRequiredMarkers={emphasizeInvalidMarkersCertificationPrimaryPerson(
+              context,
+            )}
+            copy={{ titleLabel: "Title", roleLabel: "Role" }}
+          />
+
+          {/* Multi-instance entry: reserve contact inline, niet meer achter eigen switch */}
+          {context.addCertificationSecondaryContact && canAddCertificationSecondary ? (
+            <div className="space-y-3 rounded-md border border-dashed border-border bg-muted/20 p-3">
+              <div className="flex items-start justify-between gap-component">
+                <div className="space-y-0.5">
+                  <p className="text-sm font-medium text-foreground">
+                    Reservecontact (optioneel)
+                  </p>
+                  <p className="text-xs leading-relaxed text-muted-foreground">
+                    Extra geadresseerde naast het hoofdcontact hierboven.
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() =>
+                    patchContext({
+                      addCertificationSecondaryContact: false,
+                      certificationSecondaryPersonRegistryId: ONBOARDING_PERSON_NEW_ID,
+                    })
+                  }
+                  aria-label="Reservecontact verwijderen"
+                >
+                  <HugeiconsIcon icon={Cancel01Icon} aria-hidden className="size-4" />
+                  <span className="sr-only sm:not-sr-only sm:ms-1">Verwijderen</span>
+                </Button>
+              </div>
+              <IdentificatiePersonTitleRoleCapture
+                registryPersonSelected={
+                  context.certificationSecondaryPersonRegistryId !== ONBOARDING_PERSON_NEW_ID
+                }
+                idPrefix="cert-secondary"
+                branch="certificationSecondary"
+                context={context}
+                patchContext={patchContext}
+                emphasizeInvalidRequiredMarkers={emphasizeInvalidMarkersCertificationSecondaryPerson(
+                  context,
+                )}
+                copy={{ titleLabel: "Title", roleLabel: "Role" }}
+              />
+            </div>
+          ) : (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={!canAddCertificationSecondary}
+              onClick={() =>
+                patchContext({
+                  addCertificationSecondaryContact: true,
+                  certificationSecondaryPersonRegistryId: ONBOARDING_PERSON_NEW_ID,
+                  certificationSecondary: emptyIdentificatiePersonState(),
+                  certificationSecondaryTitlePreset: "none",
+                  certificationSecondaryTitle: "",
+                  certificationSecondaryRolePreset: "none",
+                  certificationSecondaryRole: "",
+                })
+              }
+              className="w-fit"
+            >
+              <HugeiconsIcon icon={PlusSignIcon} aria-hidden className="size-4" />
+              <span className="ms-1">Reservecontact toevoegen</span>
+            </Button>
+          )}
+          {!canAddCertificationSecondary ? (
+            <p className="text-xs text-muted-foreground">
+              {certificationSecondaryContactDisabledHint(context)}
+            </p>
+          ) : null}
+        </OptionalCheckboxSection>
+      </section>
     </div>
   );
 }

@@ -31,9 +31,9 @@ const DEFAULTS: Record<OnboardingStep, RegistrationStepChromeCopy> = {
       "Beschrijf uw laboratorium-/meetuitrusting en waar PROCERTUS moet interveniëren. Zo sluit deze intake aan op de metrologie-dienst zoals beschreven op procertus.be.",
   },
   companyLegalEntities: {
-    title: "Certificatie en juridische entiteit",
+    title: "Bedrijfslocaties en certificatie",
     description:
-      "Geeft aan of uw maatschappelijke zetel juridisch optreedt voor de productgebonden certificaties in dit dossier — zo niet, vult u per product een vestiging in (naam en adres, zonder apart btw-nummer). Meerdere certificatielijnen op hetzelfde product delen één vestiging.",
+      "De maatschappelijke zetel komt automatisch uit uw KBO-gegevens. Voeg optioneel extra vestigingen toe en kies per certificaat-aanvraag welke locatie audits en certificering uitvoert.",
   },
   invoicing: {
     title: "Facturatie",

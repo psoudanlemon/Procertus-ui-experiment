@@ -84,7 +84,7 @@ export function CustomerOnboardingFlow() {
     navigate(WEGWIJZER_PATH);
   }, [api, navigate]);
   const cancelAction = useMemo(
-    () => ({ label: "Annuleren", onClick: handleCancel }),
+    () => ({ label: "Aanvraag annuleren", onClick: handleCancel }),
     [handleCancel],
   );
   const isFirstRegistrationStep = viewProps.step === "origin";
