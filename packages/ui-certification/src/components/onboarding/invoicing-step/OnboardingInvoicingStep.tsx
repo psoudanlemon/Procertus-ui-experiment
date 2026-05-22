@@ -126,7 +126,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
           Factuur‑gegevens en rechts‑persoon op de factuur
         </H4>
         <p className="text-xs leading-relaxed text-muted-foreground">
-          Vul het factuur‑e‑mailadres in. Hieronder ziet u de gekoppelde rechtspersoon per aanvraag.
+          Vul het factuur‑e‑mailadres in. Hieronder zie je de gekoppelde rechtspersoon per aanvraag.
         </p>
       </div>
 
@@ -175,7 +175,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
         <CardHeader className="pb-2">
           <CardTitle className="text-base">Maatschappelijke zetel (referentie)</CardTitle>
           <CardDescription>
-            Naam en adres van uw hoofdkantoor zoals eerder vastgelegd.
+            Naam en adres van je hoofdkantoor zoals eerder vastgelegd.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
@@ -235,7 +235,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
       <IdentificatieOptionalBlock
         switchId={`${invoicingFieldBase}-alt-invoice-per-inquiry`}
         title="Afwijkende facturatiedrukker per certificatie-aanvraag"
-        description="Standaard komt op elke factuur dezelfde rechts‑persoon als hierboven bij certificatie. Schakel dit in als u óók andere vestigingen wilt beheren én per aanvraag een andere rechts‑persoon op de factuur wilt zetten."
+        description="Standaard komt op elke factuur dezelfde rechts‑persoon als hierboven bij certificatie. Schakel dit in als je óók andere vestigingen wilt beheren én per aanvraag een andere rechts‑persoon op de factuur wilt zetten."
         checked={!mirror}
         onCheckedChange={setAlternativeInvoicingPerInquiry}
       >
@@ -414,7 +414,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
       <IdentificatieOptionalBlock
         switchId={`${invoicingFieldBase}-inv-person`}
         title="Andere contactpersoon voor facturatie"
-        description="Vul een andere persoon in of kies iemand die u al in deze flow opgegeven heeft."
+        description="Vul een andere persoon in of kies iemand die je al in deze flow opgegeven hebt."
         checked={context.invoicingUseContactPerson}
         onCheckedChange={(on) =>
           patchContext({
@@ -428,7 +428,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
               cardHeader
               id={`${invoicingFieldBase}-inv-registry`}
               label="Persoon kiezen"
-              hint="Kies iemand die u al in deze flow opgegeven heeft, of maak een nieuwe persoon aan."
+              hint="Kies iemand die je al in deze flow opgegeven hebt, of maak een nieuwe persoon aan."
               registeredPersons={context.onboardingRegisteredPersons}
               value={context.invoicingContactPersonRegistryId}
               onValueChange={(rid) => {

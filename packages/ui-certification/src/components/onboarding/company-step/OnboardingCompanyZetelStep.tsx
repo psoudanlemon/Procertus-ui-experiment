@@ -162,12 +162,12 @@ export function OnboardingCompanyZetelStep({ model }: OnboardingCompanyZetelStep
           </Alert>
           {activePreset.demoSupplementsOrgAddressFromEmailDomain ? (
             <PrototypeCard
-              title="Aanvulling vanuit uw e-mail"
+              title="Aanvulling vanuit je e-mail"
               description={
                 <>
-                  Voor dit voorbeeld ontvangen we geen bedrijfsnaam en volledig adres bij alleen uw
-                  nummer. Waar mogelijk vullen we ze aan met het e-mailadres dat u opgaf. Controleer
-                  alles; bij een algemeen mailboxadres vult u zelf aan.
+                  Voor dit voorbeeld ontvangen we geen bedrijfsnaam en volledig adres bij alleen je
+                  nummer. Waar mogelijk vullen we ze aan met het e-mailadres dat je opgaf. Controleer
+                  alles; bij een algemeen mailboxadres vul je zelf aan.
                 </>
               }
               cardContentClassName="hidden"
@@ -180,7 +180,7 @@ export function OnboardingCompanyZetelStep({ model }: OnboardingCompanyZetelStep
               Maatschappelijke zetel
             </H4>
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Officiële gegevens gekoppeld aan uw btw-nummer. Productie- of certificatielocatie mag afwijken.
+              Officiële gegevens gekoppeld aan je btw-nummer. Productie- of certificatielocatie mag afwijken.
             </p>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
