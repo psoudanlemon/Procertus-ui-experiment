@@ -144,7 +144,7 @@ export function TrajectConfigureFlow() {
         bodyGap="section"
         kicker={service.entry.label}
         title="Selecteer de producten die je wil certificeren"
-        description="Doorzoek de hele catalogus of blader stapsgewijs door categorieën."
+        description="Doorzoek de catalogus of blader stap voor stap door de categorieën."
         aboveActionBar={
           <ProductSelectionBasketMobileSummaryBar className="md:hidden" />
         }

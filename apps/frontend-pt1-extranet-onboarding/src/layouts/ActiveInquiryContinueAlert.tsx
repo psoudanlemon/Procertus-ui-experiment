@@ -19,14 +19,14 @@ export function ActiveInquiryContinueAlert({
 
   return (
     <Alert className="border-primary/25 bg-primary/5">
-      <AlertTitle>Actieve certificatie aanvraag</AlertTitle>
+      <AlertTitle>Lopende certificatieaanvraag</AlertTitle>
       <AlertDescription className="flex flex-col gap-component sm:flex-row sm:items-center sm:justify-between">
         <span className="text-sm leading-normal">
-          U hebt een lopende formele aanvraag met{" "}
+          Je hebt een formele aanvraag met{" "}
           {includedCount === 1
-            ? "één geselecteerd certificatieonderzoek"
-            : `${includedCount} geselecteerde certificatieonderzoeken`}
-          . U kunt de aanvraag voor de opstart van dit traject op elk moment verderzetten.
+            ? "één certificatieonderzoek"
+            : `${includedCount} certificatieonderzoeken`}
+          . Je kan op elk moment verder waar je gestopt was.
         </span>
         <Button
           type="button"

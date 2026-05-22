@@ -70,15 +70,15 @@ function formatCompletedWhen(iso: string): string {
 function digitalFollowBrief(entryId: string): string {
   switch (entryId) {
     case "innovation-attest":
-      return "Klantenportaal: inhoudelijke opvolging en documenten onder uw dossier.";
+      return "We volgen je dossier inhoudelijk op. Documenten bewaar je onder je dossier in het Klantenportaal.";
     case "metrology":
-      return "Kalibratie/inspectie: planning vooral digitaal; melding bij openstaande acties.";
+      return "De planning van kalibratie en inspectie verloopt grotendeels digitaal. Je krijgt een melding zodra er actie nodig is.";
     case "atg":
-      return "PRODUCTattestatie: attesten en aanvullen documenten in het dossier.";
+      return "Je productattesten en aanvullende documenten beheer je in het dossier.";
     case "partijkeuring":
-      return "Doorstroom naar gekozen controledienst; status in uw aanvragen.";
+      return "We sturen je aanvraag door naar de gekozen controledienst. De status volg je onder je aanvragen.";
     default:
-      return "Documenten, vragen en statusupdates onder uw aanvragen in Klantenportaal.";
+      return "Documenten, vragen en statusupdates vind je onder je aanvragen in het Klantenportaal.";
   }
 }
 
@@ -92,22 +92,21 @@ function RegistrationCompleteSections(props: {
   return (
     <>
       <PublicOverviewSection
-        title="Uw ingediende aanvragen — wat volgt eerst digitaal"
-        description="Alles wat onderaan de registratie op uw nazicht stond onder “ingesloten bij indiening” zit hier in het overzicht. Elke aanvraag heeft een dossier-ID in uw portaal waar u verdere uploads en correspondentie vindt."
+        title="Je ingediende aanvragen en wat eerst volgt"
+        description="Alles wat op je nazicht stond onder “ingesloten bij indiening”, vind je hier terug. Elke aanvraag krijgt een dossier-ID in je portaal voor uploads en correspondentie."
       >
         {summary.inquiries.length === 0 ? (
           <P className="m-0 text-sm text-muted-foreground">
-            Het overzicht uit uw dossier‑snapshot is hier niet beschikbaar (bijvoorbeeld na een
-            harde refresh of indien de browser geen volledige lokale opslag kon wegschrijven).
-            Verwacht waren{" "}
+            Het overzicht is hier niet meer beschikbaar (bijvoorbeeld na een herlading van de
+            pagina). Je diende{" "}
             <span className="font-medium text-foreground">
               {payloadPresent.includedInquiryCount}{" "}
               {payloadPresent.includedInquiryCount === 1
-                ? "ingediende conceptaanvraag"
-                : "ingediende conceptaanvragen"}
+                ? "conceptaanvraag"
+                : "conceptaanvragen"}
             </span>
-            ; zodra u de uitnodigingsmail opent, vindt u elk traject terug onder uw aanvragen in het
-            Klantenportaal.
+            {" "}in. Zodra je de uitnodigingsmail opent, vind je elk traject terug onder je
+            aanvragen in het Klantenportaal.
           </P>
         ) : (
           <div className="flex w-full min-w-0 flex-col gap-section">
@@ -140,7 +139,7 @@ function RegistrationCompleteSections(props: {
                     </TableCell>
                     <TableCell className="min-w-0 whitespace-normal wrap-break-word text-muted-foreground">
                       {line.productHint ??
-                        "Niet gekoppeld aan een product uit de PROCERTUS-catalogus in dit dossier."}
+                        "Niet gekoppeld aan een product uit de PROCERTUS-catalogus."}
                     </TableCell>
                     <TableCell className="min-w-0 whitespace-normal wrap-break-word text-muted-foreground">
                       {digitalFollowBrief(line.entryId)}
@@ -150,8 +149,8 @@ function RegistrationCompleteSections(props: {
               </TableBody>
             </Table>
             <p className="m-0 text-xs leading-relaxed text-muted-foreground">
-              Elke rij heeft in het portaal een eigen dossierspoor onder uw aanvragen; PROCERTUS
-              meldt u automatisch bij acties zoals bijvoegen van bewijsstukken of
+              Elke aanvraag krijgt een eigen dossier in het portaal. PROCERTUS verwittigt je zodra
+              er actie nodig is, bijvoorbeeld bij bewijsstukken die je moet aanleveren of bij
               goedkeuringsmijlpalen.
             </p>
           </div>
@@ -168,8 +167,8 @@ function RegistrationCompleteSections(props: {
       </PublicOverviewSection>
 
       <PublicOverviewSection
-        title="Onboarding van gebruikers naar het Klantenportaal"
-        description="Alle onderstaande adressen ontvangen een digitale onboarding‑melding voor PROCERTUS. Na activatie heeft iedereen de juiste zichtbare rollen gekoppeld aan uw organisatie (kwaliteit, facturatie, certificatie, enz.). Collega's zonder adres hier hoeven zich niet eerst aan te melden maar kunnen later via uw beheer worden uitgenodigd."
+        title="Je teamleden in het Klantenportaal"
+        description="Iedereen hieronder krijgt een uitnodiging om zich aan te melden. Bij activatie wordt automatisch de juiste rol toegekend (kwaliteit, facturatie, certificatie, enz.). Collega's die hier nog niet vermeld staan, kun je later vanuit je beheer uitnodigen."
       >
         <ul className="m-0 flex list-none flex-col gap-component p-0">
           {summary.portalPersons.map((p) => (
@@ -195,11 +194,11 @@ function RegistrationCompleteSections(props: {
                 {p.invitedToPortal ? (
                   <span className="inline-flex items-center gap-micro rounded-full border border-emerald-500/30 bg-emerald-500/10 px-micro py-micro text-xs font-medium text-emerald-950 dark:border-emerald-400/35 dark:bg-emerald-500/15 dark:text-emerald-100">
                     <HugeiconsIcon icon={Mail01Icon} className="size-3 shrink-0" aria-hidden />
-                    Uitnodiging onderweg
+                    Uitnodiging verzonden
                   </span>
                 ) : (
                   <span className="inline-flex items-center rounded-full border border-muted-foreground/35 bg-muted/50 px-micro py-micro text-xs font-medium text-muted-foreground">
-                    Geen portal‑uitnodiging
+                    Geen uitnodiging
                   </span>
                 )}
               </div>
@@ -208,40 +207,35 @@ function RegistrationCompleteSections(props: {
         </ul>
       </PublicOverviewSection>
 
-      <PublicOverviewSection title="Volgende digitale onboarding — direct na deze melding">
+      <PublicOverviewSection title="Volgende stappen, meteen na deze melding">
         <ul className="m-0 flex list-disc flex-col gap-component ps-6 text-sm leading-relaxed text-muted-foreground">
           <li>
-            <strong className="text-foreground">Directe onboarding:</strong> controleert u nu uw
-            e‑mailbox en volgt u persoonlijke veilige uitnodigingslinks naar het PROCERTUS
-            Klantenportaal&nbsp;• heropen die link niet in privé waar melding‑cookies geblokkeerd
-            zijn.
+            Check je mailbox en volg de persoonlijke uitnodigingslink naar het Klantenportaal. Open
+            die link niet in een privévenster, want daar worden cookies geblokkeerd.
           </li>
           <li>
-            <strong className="text-foreground">Profiel‑overzicht:</strong> daar ziet u straks uw
-            contactgegevens, organisatie‑ en adresgegevens en eventueel open vragenlijsten die
-            PROCERTUS nodig heeft om uw dossier intern te coderen naar de gekozen PRODUCTstreams.
+            In je profiel vind je je contact-, organisatie- en adresgegevens en eventueel open
+            vragenlijsten.
           </li>
           <li>
-            <strong className="text-foreground">Alle ingediende trajecttypes:</strong> onder het
-            “Mijn dossiers / aanvragen”‑paneel staat elk ingediende item afzonderlijk met volgende
-            documentdeadlines&nbsp;• denk hierbij aan foto’s CE‑labelling, SDS‑bewijsstukken,
-            productie‑ of formulering‑schema’s waar applicable.
+            Onder <strong className="text-foreground">Mijn aanvragen</strong> staat elk ingediend
+            traject met de volgende documentdeadlines, bijvoorbeeld CE-labelfoto’s, SDS-bewijsstukken
+            of productieschema’s.
           </li>
           <li>
-            PROCERTUS geeft proactief melding bij statuswijziging (bewijs gevraagd, planning
-            georganiseerde audit, conceptattest vrijgeven). Zonder tussenkomst blijft het dossier
-            zicht‑ read‑only totdat uw actie vereist is.
+            PROCERTUS verwittigt je bij elke statuswijziging, zoals een nieuwe bewijsvraag, een
+            geplande audit of een conceptattest. Tot je actie nodig is, blijft het dossier
+            alleen-lezen.
           </li>
           <li>
-            Heeft u collega's die hetzelfde traject inhoudelijk opvolgen? Die kunt u zelf nog later
-            toevoegen onder het tabblad{" "}
-            <strong className="text-foreground">Gebruikers &amp;&nbsp;Rollen</strong> zodra u zelf
-            succesvol uw eerste login heeft afgerond.
+            Volgen collega’s hetzelfde traject mee? Voeg ze later zelf toe onder{" "}
+            <strong className="text-foreground">Gebruikers &amp; rollen</strong>, zodra je je eerste
+            login hebt afgerond.
           </li>
         </ul>
         {completedLabel ? (
           <P className="m-0 border-t border-border/60 pt-section text-xs text-muted-foreground">
-            Registratie afgesloten op {completedLabel}&nbsp;(server‑tijd, Europe/Brussel).
+            Registratie afgesloten op {completedLabel}&nbsp;(server-tijd, Europe/Brussel).
           </P>
         ) : null}
       </PublicOverviewSection>
@@ -263,27 +257,26 @@ function RegistrationCompleteLeadCard(props: {
         innerColumnClassName="max-w-2xl"
         statusContentClassName="max-w-full"
         belowCardClassName="w-full items-stretch gap-region text-left"
-        heading="Uw account is klaar"
+        heading="Je account is klaar"
         description={
           <div className="flex flex-col gap-section">
             <p className="m-0 text-[1.0625rem] font-normal leading-[1.65] tracking-tight text-foreground/95">
-              Het dossier van{" "}
+              We bevestigen het dossier van{" "}
               <strong className="font-semibold text-foreground">
                 {props.summary.organizationName}
               </strong>
-              wordt nu digitaal bevestigd. Uw hoofdcontact‑adres hier is{" "}
+              . Je hoofdcontact is{" "}
               <strong className="font-semibold text-foreground">
                 {props.summary.representativeEmail}
               </strong>
-              . In totaal heeft u{" "}
+              . Je registreerde in totaal{" "}
               <strong className="font-semibold text-foreground">
                 {props.summary.includedInquiryCount}
               </strong>{" "}
               {props.summary.includedInquiryCount === 1
-                ? "conceptaanvraag tegelijk bij PROCERTUS geregistreerd"
-                : "conceptaanvragen tegelijk bij PROCERTUS geregistreerd"}
-              {" — "}onderaan dit scherm vindt u de volledige uitsplitsing en wat daar digitaal mee
-              verbonden is.
+                ? "conceptaanvraag bij PROCERTUS"
+                : "conceptaanvragen bij PROCERTUS"}
+              . Onderaan dit scherm vind je de volledige uitsplitsing en wat er digitaal op volgt.
             </p>
             <div className="flex flex-wrap items-start gap-micro rounded-xl border border-primary/25 bg-primary/5 px-component py-component text-left">
               <HugeiconsIcon
@@ -293,10 +286,10 @@ function RegistrationCompleteLeadCard(props: {
               />
               <p className="m-0 text-sm leading-relaxed text-muted-foreground">
                 <strong className="font-medium text-foreground">
-                  Activeer uw portaal‑toegang via e‑mail:
+                  Activeer je portaaltoegang via e-mail.
                 </strong>{" "}
-                elk nieuw dossier heeft een dossier-ID in uw Klantenportal — zonder activeringslink
-                heeft u daar nog géén zicht maar het dossier is wél bij ons gekend.
+                Elk dossier krijgt een dossier-ID in je Klantenportaal. Zonder activering heb je
+                daar nog geen zicht op, maar je dossier is wel bij PROCERTUS geregistreerd.
               </p>
             </div>
           </div>
@@ -307,13 +300,14 @@ function RegistrationCompleteLeadCard(props: {
         <>
           <div className="flex flex-col gap-section border-t border-border/60 pt-section">
             <p className="m-0 text-sm font-medium leading-relaxed text-foreground">
-              Stappen rechts‑onder in uw mailbox nu
+              Volgende stap: check je mailbox
             </p>
             <p className="m-0 text-sm leading-relaxed text-muted-foreground">
-              Zoek naar <strong className="text-foreground underline-offset-4">PROCERTUS</strong>
-              ‑bevestigingen in uw hoofdmailbox (en spam/indirecte adres‑aliassen bij
-              bedrijfsfiltering). Nadat uw account klaarstaat kunt u elke dossierstatus online
-              bekijken. Tot uw activatie is er nog géén login.
+              Zoek in je hoofdmailbox (en eventueel in spam of doorgestuurde adressen) naar de
+              bevestigingsmails van{" "}
+              <strong className="text-foreground underline-offset-4">PROCERTUS</strong>. Zodra je
+              account klaarstaat, volg je elke dossierstatus online. Tot je activeert, is er nog
+              geen login.
             </p>
             <ButtonGroup className="flex-wrap items-center gap-component">
               <Button asChild variant="link" className="text-sm text-muted-foreground">

@@ -19,8 +19,7 @@ export function AppPlaceholderPage({
         </EmptyIcon>
         <EmptyTitle>{title}</EmptyTitle>
         <EmptyDescription>
-          {description} Deze sectie is alvast opgenomen in de navigatiestructuur en komt binnenkort
-          beschikbaar.
+          {description} Deze sectie is binnenkort beschikbaar.
         </EmptyDescription>
       </Empty>
     </div>

@@ -28,7 +28,7 @@ export function DashboardPage() {
       <PageHeader
         kicker="Extranet prototype"
         title={<H1>Welkom op het PROCERTUS klantenportaal</H1>}
-        description="Overzicht van uw sessie, organisatie en certificatie-aanvragen zoals in deze demo beschikbaar zijn."
+        description="Overzicht van je sessie, organisatie en certificatieaanvragen."
         media={
           <img
             src="/Procertus Logo with tagline.svg"

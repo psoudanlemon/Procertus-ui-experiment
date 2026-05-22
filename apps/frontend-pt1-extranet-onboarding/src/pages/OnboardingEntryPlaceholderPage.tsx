@@ -5,8 +5,8 @@ import { AuthLayout } from "@procertus-ui/ui-lib";
 
 const PANEL = {
   gradient: true,
-  title: "Get ready to collaborate",
-  subtitle: "Onboarding will guide new members when the flow is implemented.",
+  title: "Klaar om samen te werken",
+  subtitle: "De onboarding loodst nieuwe teamleden door zodra de flow er staat.",
 } as const;
 
 function RouteGlyph() {
@@ -36,22 +36,22 @@ export function OnboardingEntryPlaceholderPage() {
 
   return (
     <AuthLayout
-      title="Onboarding entry"
-      description="This step is reserved for activation or first-run tasks. Nothing runs here yet in the prototype."
+      title="Onboarding"
+      description="Deze stap is voorbehouden voor activatie of een eerste gebruik. Hier draait nog niets in het prototype."
       panel={PANEL}
     >
       <Empty className="min-h-[220px] w-full max-w-full border-0 bg-transparent p-0 shadow-none">
         <EmptyIcon>
           <RouteGlyph />
         </EmptyIcon>
-        <EmptyTitle>No steps to complete</EmptyTitle>
+        <EmptyTitle>Geen stappen om te doorlopen</EmptyTitle>
         <EmptyDescription>
-          When onboarding ships, this card will be replaced by the real wizard. For now, return to sign in
-          or explore the signed-in shell using the demo account path from the welcome screen.
+          Zodra de onboarding live gaat, vervangt de echte wizard deze kaart. Ga voorlopig terug naar
+          aanmelden of verken de ingelogde omgeving via het demo-account vanaf het welkomstscherm.
         </EmptyDescription>
         <EmptyActions>
           <Button type="button" variant="outline" onClick={() => navigate("/welcome")}>
-            Back to sign in
+            Terug naar aanmelden
           </Button>
         </EmptyActions>
       </Empty>

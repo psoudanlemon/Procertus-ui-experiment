@@ -153,8 +153,8 @@ export function WegwijzerPage() {
     <div className="mx-auto w-full max-w-7xl">
       <PageHeader
         className="px-boundary pt-boundary pb-section"
-        title="Start uw certificeringstraject"
-        description="Bij PROCERTUS bieden we verschillende diensten aan. Hieronder vindt u een overzicht van ons aanbod. Selecteer een certificaat om meer informatie te krijgen of direct uw aanvraag te starten."
+        title="Start je certificeringstraject"
+        description="Bij PROCERTUS bieden we verschillende diensten aan. Hieronder vind je een overzicht van ons aanbod. Selecteer een certificaat om meer informatie te krijgen of meteen je aanvraag te starten."
       />
 
       <div ref={explorerRef} className="px-boundary pb-boundary scroll-mt-section">
@@ -287,9 +287,9 @@ function ExpertCallFooterCard() {
       style={{ background: "var(--gradient-neutral)" }}
     >
       <div className="flex flex-col gap-micro">
-        <H3>Liever eerst een expert spreken?</H3>
+        <H3>Wil je eerst een expert spreken?</H3>
         <p className="text-sm leading-normal text-muted-foreground">
-          Plan een live online sessie van één uur en doorloop de vereisten samen met een
+          Reserveer een live online sessie van één uur en overloop de vereisten samen met een
           PROCERTUS-expert.
         </p>
       </div>
@@ -388,10 +388,10 @@ function MasterCard({
             </HoverCardTrigger>
             <HoverCardContent side="top" sideOffset={12} align="start" className="w-80">
               <p className="font-semibold text-heading-foreground">
-                Hulp nodig bij uw {entry.shortLabel}-dossier?
+                Hulp nodig bij je {entry.shortLabel}-dossier?
               </p>
               <p className="text-muted-foreground">
-                Plan een online sessie van één uur en bereid uw {entry.shortLabel}-dossier samen met
+                Plan een online sessie van één uur en bereid je {entry.shortLabel}-dossier samen met
                 een PROCERTUS-expert voor.
               </p>
             </HoverCardContent>
@@ -443,7 +443,7 @@ function MasterCard({
       {!isExternalRequestOnly && (
         <DetailCardSection
           title="Regels en documentatie"
-          description={`Documenten op basis van uw selectie voor ${entry.shortLabel} (prototype, downloadlinks zijn gemockt).`}
+          description={`Documenten op basis van je selectie voor ${entry.shortLabel} (prototype, downloadlinks zijn gemockt).`}
         >
           <DownloadableItemGrid items={buildMockDocuments(service)} />
         </DetailCardSection>

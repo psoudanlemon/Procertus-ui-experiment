@@ -37,13 +37,13 @@ function SubmittedPageBody(props: { snapshot: InfoRequestSubmittedSnapshot }) {
   return (
     <>
       <PublicOverviewSection
-        title="Wat maakte deel uit van uw aanvraag"
-        description="Certificaatinformaties uit uw mandje en eventueel een korte context die u hebt toegevoegd."
+        title="Dit stuurde je in"
+        description="De certificaten uit je mandje, samen met de toelichting die je hebt toegevoegd."
       >
         {snapshot.inquiries.length === 0 ? (
           <P className="m-0 text-sm text-muted-foreground">
-            Bij verzenden stonden er geen lijnen in het mandje. PROCERTUS leest uw vrijblijvende
-            vraag toch door en kan op basis daarvan bij u terugkomen.
+            Je mandje was leeg bij verzending. PROCERTUS leest je vraag toch door en komt op basis
+            daarvan bij je terug.
           </P>
         ) : (
           <ul className="m-0 flex list-none flex-col gap-component p-0">
@@ -66,7 +66,7 @@ function SubmittedPageBody(props: { snapshot: InfoRequestSubmittedSnapshot }) {
         )}
         {snapshot.submissionNote.trim().length > 0 ? (
           <div className="flex flex-col gap-micro border-t border-border/60 pt-section">
-            <p className="m-0 text-sm font-semibold text-foreground">Uw toelichting</p>
+            <p className="m-0 text-sm font-semibold text-foreground">Je toelichting</p>
             <div className="max-h-40 overflow-y-auto rounded-md border border-dashed border-border/80 bg-muted/20 p-component text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
               {snapshot.submissionNote}
             </div>
@@ -76,7 +76,7 @@ function SubmittedPageBody(props: { snapshot: InfoRequestSubmittedSnapshot }) {
 
       <PublicOverviewSection
         title="Organisatie en context"
-        description="PROCERTUS koppelt dit dossier aan de organisatie waarover u zich hier bij ons heeft geïdentificeerd."
+        description="PROCERTUS koppelt dit dossier aan de organisatie waarmee je je hier hebt geïdentificeerd."
       >
         <dl className="m-0 grid gap-section text-sm sm:grid-cols-2">
           <div className="flex flex-col gap-micro">
@@ -106,7 +106,7 @@ function SubmittedPageBody(props: { snapshot: InfoRequestSubmittedSnapshot }) {
                     </span>
                   </>
                 ) : (
-                  "U wilt een afstemming met een expert; PROCERTUS neemt contact op voor een concreet moment."
+                  "Je wil afstemmen met een expert. PROCERTUS neemt contact op voor een concreet moment."
                 )}
               </dd>
             </div>
@@ -123,13 +123,13 @@ function SubmittedPageBody(props: { snapshot: InfoRequestSubmittedSnapshot }) {
       </PublicOverviewSection>
 
       <PublicOverviewSection
-        title="Onboarding naar het Klantenportaal"
-        description="Deze personen verschijnen in uw organisatie in het Klantenportaal. Iedereen met een adres hieronder ontvangt een e‑mail om in te loggen en het account te bevestigen; daarbij wordt de geschikte PROCERTUS‑rol automatisch gekoppeld."
+        title="Je teamleden in het Klantenportaal"
+        description="Iedereen met een e-mailadres hieronder krijgt een uitnodiging om zich aan te melden. De juiste PROCERTUS-rol wordt automatisch gekoppeld."
       >
         {snapshot.portalPersons.length === 0 ? (
           <P className="m-0 text-sm text-muted-foreground">
-            Geen lijst met portalgebruikers opgeslagen in dit prototypescherm — u krijgt alsnog
-            bericht bij het e‑mailadres dat u heeft achtergelaten tijdens uw aanvraag.
+            Er zijn geen portaalgebruikers opgeslagen. Je krijgt alsnog bericht op het e-mailadres
+            dat je hebt achtergelaten tijdens je aanvraag.
           </P>
         ) : (
           <ul className="m-0 flex list-none flex-col gap-component p-0">
@@ -160,7 +160,7 @@ function SubmittedPageBody(props: { snapshot: InfoRequestSubmittedSnapshot }) {
                     </span>
                   ) : (
                     <span className="inline-flex items-center rounded-full border border-muted-foreground/30 bg-muted/50 px-micro py-micro text-xs font-medium text-muted-foreground">
-                      Geen automatische uitnodiging
+                      Geen uitnodiging
                     </span>
                   )}
                 </div>
@@ -170,30 +170,29 @@ function SubmittedPageBody(props: { snapshot: InfoRequestSubmittedSnapshot }) {
         )}
       </PublicOverviewSection>
 
-      <PublicOverviewSection title="Uw volgende stappen op het Klantenportaal">
+      <PublicOverviewSection title="Je volgende stappen op het Klantenportaal">
         <ul className="m-0 flex list-disc flex-col gap-component ps-6 text-sm leading-relaxed text-muted-foreground">
           <li>
-            Alle toegevoegde gebruikers ontvangen een e‑mail; volg daar de veilige link om uw
-            wachtwoord of sterk MFA‑middel samen met PROCERTUS te activeren.
+            Iedereen die je toevoegde, krijgt een e-mail. Via de veilige link activeer je samen met
+            PROCERTUS je wachtwoord of MFA.
           </li>
           <li>
-            Na aanmelden vindt u onder <strong className="text-foreground">Mijn profiel</strong> uw
-            contactgegevens, organisatiegegevens en openstaande wijzigingsverzoeken.
+            Onder <strong className="text-foreground">Mijn profiel</strong> vind je je contact- en
+            organisatiegegevens en openstaande wijzigingsverzoeken.
           </li>
           <li>
-            Alle door u ingediende <strong className="text-foreground">aanvragen</strong>{" "}
-            verschijnen gescheiden onderaan het profiel, zodat u documenten kan aanvullen of de
-            status kan volgen.
+            Alle <strong className="text-foreground">aanvragen</strong> die je indient, vind je
+            onderaan je profiel. Daar vul je documenten aan en volg je de status.
           </li>
           <li>
-            Elk uitgenodigd teamlid krijgt de{" "}
-            <strong className="text-foreground">rechten en zichtbare aanvragen</strong> die bij zijn
-            of haar PROCERTUS‑rol passen. U hoeft daar zelf niet in te grijpen; later kunt u in
-            gebruikersbeheer collega’s met dezelfde rollen toevoegen of intrekken.
+            Elk uitgenodigd teamlid krijgt automatisch de{" "}
+            <strong className="text-foreground">rechten en aanvragen</strong> die bij zijn of haar
+            PROCERTUS-rol passen. Later voeg je in gebruikersbeheer zelf collega’s toe of pas je
+            rechten aan.
           </li>
           <li>
-            Bij vragen gebruikt u bij voorkeur de contactopties uit de kantelinformatie‑mail — daar
-            staat ook welk dossier-ID PROCERTUS intern aan deze aanvraag hangt.
+            Vragen? Gebruik bij voorkeur de contactopties uit de bevestigingsmail. Daarin staat ook
+            het dossier-ID dat PROCERTUS aan deze aanvraag koppelt.
           </li>
         </ul>
       </PublicOverviewSection>
@@ -229,13 +228,13 @@ export function InfoRequestSubmittedPage() {
           heading="Aanvraag verzonden"
           description={
             <span className="text-base leading-relaxed text-muted-foreground">
-              Hartelijk dank. We hebben{" "}
+              Bedankt! We hebben{" "}
               <strong className="font-semibold text-foreground">
-                uw vrijblijvende informatieaanvraag
+                je vrijblijvende informatieaanvraag
               </strong>{" "}
               geregistreerd voor&nbsp;
               <strong className="font-semibold text-foreground">{snapshot.organizationName}</strong>
-              . Hieronder ziet u wat werd meegestuurd en hoe collega’s het portaal in gebruik nemen.
+              . Hieronder zie je wat werd meegestuurd en hoe collega’s het portaal in gebruik nemen.
             </span>
           }
           actions={[
@@ -253,7 +252,7 @@ export function InfoRequestSubmittedPage() {
         <StatusPage
           icon={CheckmarkCircle01Icon}
           heading="Aanvraag verzonden"
-          description="Bedankt voor uw aanvraag. Wij bekijken uw gegevens en nemen binnenkort met u contact op om deze verder te bespreken. Herlaadt u deze pagina, dan tonen we geen gekoppelde details meer — uw aanvraag is wel ontvangen."
+          description="Bedankt voor je aanvraag. We bekijken je gegevens en nemen snel contact met je op. Herlaad je deze pagina, dan zijn de gekoppelde details niet meer zichtbaar. Je aanvraag is wel ontvangen."
           actions={[
             {
               label: "Terug naar startpagina",

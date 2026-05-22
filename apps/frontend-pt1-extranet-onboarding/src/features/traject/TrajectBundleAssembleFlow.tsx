@@ -204,7 +204,7 @@ export function TrajectBundleAssembleFlow() {
         bodyGap="section"
         kicker={service.entry.label}
         title="Voeg per product certificaten toe"
-        description="Bekijk elk van uw geselecteerde producten en voeg waar nodig nog extra certificaten toe, zodat je meteen alle benodigdheden voor elk product kan indienen"
+        description="Loop je geselecteerde producten door en voeg de certificaten toe die je nog nodig hebt. Zo dien je meteen alles samen in."
         actionBar={<BundleAssembleActionBar />}
       >
         <BundleAssembleBody />

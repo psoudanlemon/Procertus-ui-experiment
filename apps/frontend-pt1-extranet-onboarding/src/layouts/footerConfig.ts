@@ -10,7 +10,7 @@ export const APP_FOOTER: FooterProps = {
     { label: "TVA/BTW: BE 1000.472.054" },
   ],
   legalLinks: [
-    { label: "Privacy policy", url: "#" },
+    { label: "Privacybeleid", url: "#" },
     { label: "Contact", url: "#" },
   ],
 };

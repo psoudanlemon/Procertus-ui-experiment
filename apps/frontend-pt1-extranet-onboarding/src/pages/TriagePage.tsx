@@ -52,9 +52,9 @@ export function TriagePage() {
 
   return (
     <TrajectPageFrame
-      kicker={"maak uw keuze"}
-      title="Wilt u meer informatie of wilt u uw traject opstarten?"
-      description="Kies een vrijblijvende informatieaanvraag voor een prijsopgave en advies, of start meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen."
+      kicker={"maak je keuze"}
+      title="Wil je meer informatie of meteen je traject opstarten?"
+      description="Vraag eerst vrijblijvend advies en een prijsopgave, of start meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen."
       bodyGap="section"
       actionBar={
         <TrajectStoryFooter
@@ -72,9 +72,9 @@ export function TriagePage() {
             title="Aanvraag meer informatie"
             description="Voor wie eerst wil afstemmen."
             bullets={[
-              "Geen verplichting tot opstart",
-              "Reactie binnen enkele werkdagen",
-              "Live sessie mogelijk tijdens het invullen",
+              "Geen verplichting om op te starten",
+              "Antwoord binnen enkele werkdagen",
+              "Live sessie met een expert mogelijk",
             ]}
             cta="Vrijblijvende aanvraag"
             to={INFORMATIONAL_REQUEST_PATH(entry.id)}
@@ -88,12 +88,12 @@ export function TriagePage() {
             title="Traject opstarten"
             description="Voor wie klaar is om in te dienen."
             bullets={[
-              "U heeft reeds voldoende informatie over het traject",
-              "U wenst uw traject op te starten",
-              "U heeft al uw bedrijfsgegevens bij de hand",
-              "Ontvankelijkheidsbeoordeling start meteen",
-              "Dossier wordt actief opgevolgd",
-              "Account wordt aangemaakt bij indiening",
+              "Je hebt voldoende informatie over het traject",
+              "Je hebt je bedrijfsgegevens bij de hand",
+              "Je wil nu indienen",
+              "De ontvankelijkheidsbeoordeling start meteen",
+              "PROCERTUS volgt je dossier actief op",
+              "Je account wordt aangemaakt bij indiening",
             ]}
             cta="Start traject"
             to={FORMAL_ONBOARDING_PATH}
@@ -108,9 +108,9 @@ export function TriagePage() {
           style={{ background: "var(--gradient-neutral)" }}
         >
           <div className="flex min-w-0 flex-1 flex-col gap-micro">
-            <H3>Liever eerst een expert spreken?</H3>
+            <H3>Wil je eerst een expert spreken?</H3>
             <p className="text-sm leading-normal text-muted-foreground">
-              Plan een live online sessie van één uur en doorloop de vereisten samen met een
+              Reserveer een live online sessie van één uur en overloop de vereisten samen met een
               PROCERTUS-expert.
             </p>
           </div>
