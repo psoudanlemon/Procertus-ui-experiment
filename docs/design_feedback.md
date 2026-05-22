@@ -11,7 +11,7 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 5. [**Distill audit (2026-05-21)**](#5-distill-audit-2026-05-21): openstaande app-level en primitives-findings.
 
 **Onderdelen in sectie 1, in alfabetische scan-volgorde:**
-[Cart-status visibility](#cart-status-visibility) · [Choice card componenten](#choice-card-componenten) · [Combobox met create-new](#combobox-met-create-new) · [Copy density](#copy-density) · [Heading-hiërarchie en H1–H4 componenten](#heading-hi%C3%ABrarchie-en-h1h4-componenten) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Stepper](#stepper) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox).
+[Cart-status visibility](#cart-status-visibility) · [Choice card componenten](#choice-card-componenten) · [Combobox met create-new](#combobox-met-create-new) · [Copy density](#copy-density) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Stepper](#stepper) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox).
 
 ---
 
@@ -90,25 +90,6 @@ _Feedback origineel gezien op:_ **Land of regio** (eerste keer dat layout opviel
 - [ ] Reeds bezochte stappen klikbaar maken voor directe navigatie.
 - [ ] Vervang dynamische subtitle (samenvatting van ingevoerde waarden, bv. "Camille Bernard" / "PackLine Industry SARL" / "facturatie@…") door statische guidance copy die beschrijft wat in die stap gebeurt.
 
-### Heading-hiërarchie en H1–H4 componenten
-
-_Feedback origineel gezien op:_ de homepage en de detail-cards op `/welcome` gebruiken de [H1–H4 componenten](packages/ui/src/components/ui/heading.tsx) consistent. Daarbuiten is het beeld gemengd: het 7-stappen aanvraag-traject zet wel een `H1` als pagetitel via [OnboardingFlowView](packages/ui-certification/src/onboarding/onboarding-flow-view.tsx#L115), maar binnen de stappen worden sectie-koppen telkens als raw `<h3 className="text-sm font-semibold tracking-tight text-foreground">` geschreven. Op andere pagina's staan raw `<h1>` en `<h2>` met inline classes. De bedoeling is niet dat elk blok een `H1`–`H4` krijgt, maar wel dat de hiërarchie per pagina expliciet en consistent is, en dat herhalende koppen door één component lopen.
-
-**Wat al goed gebeurt (canonische voorbeelden, niet aanpassen):**
-- Authenticated pages zetten `<H1>` via `PageHeader.title`: [DashboardPage.tsx:30](apps/frontend-pt1-extranet-onboarding/src/pages/DashboardPage.tsx#L30), [RequestsOverviewPage.tsx:26](apps/frontend-pt1-extranet-onboarding/src/pages/RequestsOverviewPage.tsx#L26), [ProfileChangeRequestsPage.tsx:42](apps/frontend-pt1-extranet-onboarding/src/pages/ProfileChangeRequestsPage.tsx#L42), [UserProfilePage.tsx:313](apps/frontend-pt1-extranet-onboarding/src/pages/UserProfilePage.tsx#L313), [OrganizationProfilePage.tsx:263](apps/frontend-pt1-extranet-onboarding/src/pages/OrganizationProfilePage.tsx#L263), [DesignSystemPage.tsx:11](apps/frontend-pt1-extranet-onboarding/src/pages/DesignSystemPage.tsx#L11).
-- Triage gebruikt `<H2>` en `<H3>` voor sectie- en card-titel: [TriagePage.tsx:110,179](apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx#L110).
-- Status- en bevestigingspagina's gaan via `StatusContent` met `<H1>` ([StatusContent.tsx:61](packages/ui-lib/src/status-pages/StatusContent.tsx#L61)) en `PublicOverviewSection` met `<H2>` ([PublicOverviewSection.tsx:15](apps/frontend-pt1-extranet-onboarding/src/components/PublicOverviewSection.tsx#L15)).
-- `PanelSection` gebruikt `<H4>` voor zijn titel ([PanelSection.tsx](packages/ui/src/components/panel-section/PanelSection.tsx)), dus alle panels in `apps/frontend-pt1-extranet-onboarding/src/panels/` erven die hiërarchie automatisch.
-- `OnboardingFlowView` zet één `<H1>` per stap als page-titel ([onboarding-flow-view.tsx:115](packages/ui-certification/src/onboarding/onboarding-flow-view.tsx#L115)). Het probleem zit niet in de step-titel, wel in de subsecties eronder.
-
-- [x] **Beslissing genomen (Optie A):** wizard form-sectie koppen via `<H4 className="normal-case tracking-tight text-foreground">`, Nazicht-sectie koppen via `<H3>`.
-- [x] **Audit en converteer top-level page-titels die nu raw zijn.**
-  - [x] [RequestDetailPage.tsx](apps/frontend-pt1-extranet-onboarding/src/pages/RequestDetailPage.tsx) "Levenscyclus" geconverteerd naar `<H3>`.
-  - [ ] [BrandGradientHero.tsx:16](apps/frontend-pt1-extranet-onboarding/src/components/BrandGradientHero.tsx#L16) gebruikt raw `<h2>`. Component staat sowieso al op de verwijderlijst in [5.1 BrandGradientHero](#brandgradienthero-is-demo-restant-met-engelse-copy), dus opvolgen via dat item (niet apart converteren).
-- [x] **Dashboard widgets inconsistente sub-koppen opgelost.** LatestInvoicesWidget en RecentNotificationsWidget: raw `<h4>` verwijderd, vervangen door `<p>` (visueel label, geen heading semantiek onder `CardTitle`); `text-[11px]` gesnapt naar `text-xs`.
-- [x] **Raw `<h3>` cluster in de wizard geconverteerd.** Alle form-sectie koppen in OnboardingCustomerStep, OnboardingCompanyZetelStep, OnboardingInvoicingStep, OnboardingInnovationAttestStep en OnboardingMetrologyStep lopen nu via `<H4 className="normal-case tracking-tight text-foreground">`. Nazicht-sectie koppen via `<H3>`.
-- [x] **Verifieer de a11y-volgorde na de pass.** Het doel is per pagina één `h1`, en daaronder een logische `h2 → h3` reeks zonder gaten. Niet elk blok hoeft een heading te zijn (knoppenrijen, helper-tekstblokken, choice-cards met legend zijn al geen koppen). Wel: als een sectie visueel als kop wordt gepresenteerd, hoort hij ook een heading-tag te krijgen.
-
 ### Multi-instance entry pattern
 
 _Feedback origineel gezien op:_ **Maatschappelijke zetel** (nu één zetel mogelijk, terwijl een gebruiker meerdere zetels in één traject moet kunnen ingeven) en **Extra contacten** (de tweede/reserve contactpersoon zit nu achter een aparte switch-sectie, maar zou inline vanuit de eerste contactpersoon moeten kunnen worden toegevoegd).
@@ -129,21 +110,8 @@ _Feedback origineel gezien op:_ **Registratie** ("Role"-veld is een gewone selec
 
 _Feedback origineel gezien op:_ **Maatschappelijke zetel** (waar tekst ~50% van het scherm besloeg — twee callouts, herhaalde helper text onder elk veld). Vanuit die pagina werd duidelijk dat het een patroon is dat over de hele flow speelt — vandaar de bredere pass.
 
-- [x] Copy-density pass uitgevoerd op Maatschappelijke zetel (zetel-sectie beschrijving ingekort) en Facturatie (3 sectie-omschrijvingen ingekort).
 - [ ] Verdere copy-density pas (info-icons + tooltips voor "nice to know"-content) uitgesteld tot de keuze-card en multi-instance pattern afgerond zijn.
 - [ ] Certificatie (entiteit) — vervalt zodra de stap verwijderd is (zie 3.8).
-
-### Desktop-breedte van page-level componenten
-
-_Feedback origineel gezien op:_ verschillende organisms zijn mobile-first opgesteld met een vaste `max-w-*` en groeien niet mee op `lg` en `xl`. Op een breed scherm zit een kleine kolom met veel witruimte ernaast. Container-query-aware componenten (CoverView, ProductInquiryMatrix, ProductSelectionBasket, Snackbar) zijn correct responsive en hoeven niet aangepast.
-
-- [x] Audit overige page-level organisms: geen resterende `max-w-2xl`/`max-w-3xl` zonder `lg:`/`xl:` upgrade gevonden in ui-lib en ui-certification.
-
-### Typografie-token: `leading-[1.6]` op body-copy
-
-_Feedback origineel gezien op:_ off-token-check hook flagde `leading-[1.6]` bij een edit op RequestPackageReview. Het patroon bestaat nog 7 keer in ui-certification (review-/summary-/onboarding body copy) en is ook gelogd in [packages/ui/src/off-token-log.md](packages/ui/src/off-token-log.md) voor StepLayout en stepper. De RequestPackageReview-site is intussen weggesnapt naar de standaard body line-height (zie [Afgewerkt](#afgewerkt)).
-
-- [x] Beslissing: gesnapt naar standaard (`--text-base--line-height`). Alle `leading-[1.6]` in ui-certification en onboarding-flow-view verwijderd. StepLayout-exception in off-token-log.md blijft geldig (gedocumenteerde component-level keuze).
 
 ### Cart-status visibility
 
@@ -234,7 +202,6 @@ _Route:_ [`/welcome/formal-request/customer`](http://localhost:5173/welcome/form
 - [ ] Vervang "Bent u de wettelijke vertegenwoordiger?" door checkbox (zie [Choice card componenten](#choice-card-componenten)).
 - [ ] Ruim dubbele/driedubbele titels rond "Wettelijke vertegenwoordiger" op. Behoud één duidelijke sectiekop en geef subvragen/veldgroepen een lichter (of geen) extra label.
 - [ ] Vervang "Role"-veld door combobox met create-new (zie [Combobox met create-new](#combobox-met-create-new)).
-- [x] Vier raw `<h3>` sectie-koppen geconverteerd naar `<H4 className="normal-case tracking-tight text-foreground">`: [OnboardingCustomerStep.tsx](packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx) ("Organisatie-identificatie", "Wettelijke vertegenwoordiger", "Uw gegevens als indiener", "Gegevens wettelijke vertegenwoordiger").
 
 ### 3.7 Traject — stap "Maatschappelijke zetel"
 
@@ -243,7 +210,6 @@ _Route:_ [`/welcome/formal-request/company`](http://localhost:5173/welcome/forma
 - [ ] Maak meerdere zetels mogelijk in dezelfde stap (zie [Multi-instance entry pattern](#multi-instance-entry-pattern)).
 - [ ] Bouw de koppeling product → zetel hier in (zodat stap "Certificatie (entiteit)" kan verdwijnen, zie 3.8).
 - [ ] Voer copy-density pass uit (zie [Copy density](#copy-density)).
-- [x] Raw `<h3>` sectie-kop "Maatschappelijke zetel" geconverteerd naar `<H4 className="normal-case tracking-tight text-foreground">` in [OnboardingCompanyZetelStep.tsx](packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyZetelStep.tsx). Bij multi-instance refactor opnieuw evalueren of de kop nodig blijft.
 
 ### 3.8 Traject — stap "Certificatie (entiteit)" verwijderen
 
@@ -252,7 +218,7 @@ _Route (huidige stap, te verwijderen):_ [`/welcome/formal-request/companyLegalEn
 - [ ] Verwijder de stap volledig uit het traject.
 - [ ] Verplaats de koppeling product → zetel naar stap "Maatschappelijke zetel" (zie 3.7).
 - [ ] Update stepper-volgorde en navigatie zodat deze stap niet meer verschijnt.
-- [ ] Bij verplaatsing naar 3.7: hergebruik géén raw `<h3>`/`<h4>` uit [OnboardingCompanyLegalEntitiesStep.tsx:85,148,243](packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyLegalEntitiesStep.tsx#L85) of uit [OnboardingVestigingenLegalEntityManager.tsx:181](packages/ui-certification/src/components/onboarding/legal-entity-step/OnboardingVestigingenLegalEntityManager.tsx#L181). De koppeling moet meereizen onder het register uit [Heading-hiërarchie en H1–H4 componenten](#heading-hi%C3%ABrarchie-en-h1h4-componenten).
+- [ ] Bij verplaatsing naar 3.7: hergebruik géén raw `<h3>`/`<h4>` uit [OnboardingCompanyLegalEntitiesStep.tsx:85,148,243](packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyLegalEntitiesStep.tsx#L85) of uit [OnboardingVestigingenLegalEntityManager.tsx:181](packages/ui-certification/src/components/onboarding/legal-entity-step/OnboardingVestigingenLegalEntityManager.tsx#L181). Gebruik het `<H4>`/`<H3>` heading-register (zie [Afgewerkt](#afgewerkt)).
 
 ### 3.9 Traject — stap "Facturatie" (inclusief Extra contacten)
 
@@ -267,7 +233,6 @@ De voormalige stap "Extra contacten" wordt samengevoegd met "Facturatie".
 - [ ] Voeg cert/inspectie-contact inline toe op deze stap (overgenomen van de voormalige stap "Extra contacten").
 - [ ] Maak de tweede (reserve) contactpersoon inline toevoegbaar vanuit het primaire contactblok (zie [Multi-instance entry pattern](#multi-instance-entry-pattern)).
 - [ ] Update stepper: "Extra contacten" verdwijnt als aparte stap.
-- [x] Vijf raw `<h3>`/`<h4>` sectie-koppen in [OnboardingInvoicingStep.tsx](packages/ui-certification/src/components/onboarding/invoicing-step/OnboardingInvoicingStep.tsx) geconverteerd naar `<H4 className="normal-case tracking-tight text-foreground">`.
 - [ ] Raw `<h3>` op de over te nemen blokken in [OnboardingExtrasStep.tsx:21](packages/ui-certification/src/components/onboarding/extras-step/OnboardingExtrasStep.tsx#L21) nog converteren na samenvoeging met Facturatie-stap.
 
 ### 3.10 Traject — stap "Nazicht"
@@ -276,7 +241,6 @@ _Route:_ [`/welcome/formal-request/summary`](http://localhost:5173/welcome/forma
 
 - [ ] Kort de samenvatting sterk in, vervang zware kaarten door compacte tabellen zodat de hele pagina in één oogopslag scanbaar is.
 - [ ] Verwijder knop "Aanvragen wijzigen". De gebruiker navigeert terug via "Terug" en via de klikbare [Stepper](#stepper).
-- [x] Vier raw `<h3>` sectie-koppen geconverteerd naar `<H3>` in [OnboardingSummaryStep.tsx](packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx): aanvrager, geregistreerde juridische entiteiten, geregistreerde personen, begeleidende toelichting.
 
 ### 3.11 Klantenportaal login pagina
 
@@ -302,22 +266,7 @@ Doel van deze pagina is enkel (1) bevestigen dat de indiening gelukt is, en (2) 
 
 ## 4. Copy en taalregister
 
-_Origineel gezien tijdens een copy-clarity pass over de publieke pagina's van [`apps/frontend-pt1-extranet-onboarding`](../apps/frontend-pt1-extranet-onboarding/). De wijzigingen zijn gerevert; deze sectie houdt de afspraken vast zodat ze in één gerichte ronde uitgevoerd kunnen worden. De voorgestelde teksten zijn concreet bedoeld als startpunt, niet als verplichte eindtekst._
-
-> **Registerbeslissing (2026-05-21):** we draaien de oorspronkelijke "u"-keuze om en hanteren overal **"je/jouw"**. Reden: persoonlijker, vriendelijker, service-driven, terwijl de toon professioneel en betrouwbaar blijft.
-
-### 4.11 Onboarding-entry placeholder [`OnboardingEntryPlaceholderPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingEntryPlaceholderPage.tsx)
-
-_Route:_ `/welcome/onboarding` (placeholder)
-
-- [x] Volledige pagina al in het Nederlands: `PANEL.title`, `PANEL.subtitle`, `AuthLayout` title en description, `EmptyTitle`, `EmptyDescription`, knop-label "Terug naar aanmelden" — reeds aanwezig.
-
-### 4.13 Bevestigingspagina na indiening [`OnboardingRegistrationCompletePage`](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingRegistrationCompletePage.tsx)
-
-_Route:_ [`/registratie-voltooid`](http://localhost:5173/registratie-voltooid) (cf. [3.12](#312-bevestigingspagina-na-indiening-uw-account-is-klaar) voor de structurele wijzigingen. Onderstaande copy-actie blijft zinvol zolang de pagina in haar huidige vorm staat.)
-
-- [x] Alle copy-items doorgevoerd: je-vorm, sectie-titels, statuspillen ("Uitnodiging verzonden" / "Geen uitnodiging"), voetkop, cache-miss fallback, tabel-voetnoot, digitalFollowBrief() in complete zinnen.
-- [x] Off-token `text-[1.0625rem]` en `leading-[1.65]` in lead-paragraaf gesnapt naar `text-base`.
+Volledig afgewerkt, zie [Afgewerkt](#afgewerkt). Registerbeslissing: overal **"je/jouw"**, professioneel maar persoonlijk.
 
 ---
 
@@ -344,14 +293,6 @@ _Feedback origineel gezien op:_ **Aanvraag verzonden** [InfoRequestSubmittedPage
 - [ ] Voeg "Onboarding naar het Klantenportaal" [InfoRequestSubmittedPage.tsx:125](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L125) en "Uw volgende stappen op het Klantenportaal" [InfoRequestSubmittedPage.tsx:173](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L173) samen tot één sectie "Volgende stappen". Behoud de personenlijst, plaats de twee tot drie kerninstructies eronder. De vijf bullets van "Volgende stappen" zijn portal-onboarding en horen daar inhoudelijk thuis, niet op de bevestigingspagina (cf. analoge keuze in [3.12](#312-bevestigingspagina-na-indiening-uw-account-is-klaar) voor de registratie-bevestiging).
 
 > De copy-acties voor deze pagina zijn al doorgevoerd (zie [Afgewerkt](#afgewerkt)). Een deel van die tekst-aanpassingen verhuist of vervalt als de secties samengevoegd of geschrapt worden.
-
-#### Authenticated detail-pages en widget-subkoppen volgen het H-systeem niet
-
-_Feedback origineel gezien op:_ audit naar aanleiding van de cross-cutting [Heading-hiërarchie en H1–H4 componenten](#heading-hi%C3%ABrarchie-en-h1h4-componenten). De publieke `/welcome` flow en de meeste page-shells gebruiken `<H1>` netjes via `PageHeader`, maar drie authenticated/demo-routes wijken af en de twee dashboard-widgets gebruiken een eigen uppercase-mini-kop register.
-
-- [x] [RequestDetailPage.tsx](apps/frontend-pt1-extranet-onboarding/src/pages/RequestDetailPage.tsx): page-titel was al `<H1>`; raw `<h2>` "Levenscyclus" geconverteerd naar `<H3>`.
-- [x] [CategorizationDemoPage.tsx](apps/frontend-pt1-extranet-onboarding/src/pages/CategorizationDemoPage.tsx): reeds `<H1>`, geen aanpassing nodig.
-- [x] [LatestInvoicesWidget.tsx](apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/LatestInvoicesWidget.tsx) en [RecentNotificationsWidget.tsx](apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/RecentNotificationsWidget.tsx): raw `<h4>` vervangen door `<p>` (visueel label, geen heading-semantiek onder `CardTitle`); `text-[11px]` gesnapt naar `text-xs`.
 
 #### BrandGradientHero is demo-restant met Engelse copy
 
