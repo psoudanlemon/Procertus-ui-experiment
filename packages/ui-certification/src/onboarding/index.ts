@@ -84,10 +84,8 @@ export {
 } from "./onboarding-flow-helpers";
 export type { OnboardingRequestOrigin } from "./onboarding-request-origin";
 export {
-  ONBOARDING_REQUEST_ORIGIN_HERO_OPTIONS,
   ONBOARDING_REQUEST_ORIGIN_IDS,
   ONBOARDING_REQUEST_ORIGIN_OPTIONS,
-  ONBOARDING_REQUEST_ORIGIN_SECONDARY_OPTIONS,
   defaultPrototypePresetIdForRequestOrigin,
   normalizeRequestOriginFromStored,
   registrationCountryOptionsForRequestOrigin,

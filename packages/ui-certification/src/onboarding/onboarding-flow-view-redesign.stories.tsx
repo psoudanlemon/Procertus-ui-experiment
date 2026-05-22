@@ -15,7 +15,6 @@ import { useLayoutEffect, type ComponentType } from "react";
 import { OnboardingCompanyZetelStepRedesign } from "../components/onboarding/redesign/OnboardingCompanyZetelStepRedesign";
 import { OnboardingCustomerStepRedesign } from "../components/onboarding/redesign/OnboardingCustomerStepRedesign";
 import { OnboardingInvoicingStepRedesign } from "../components/onboarding/redesign/OnboardingInvoicingStepRedesign";
-import { OnboardingOriginStepRedesign } from "../components/onboarding/redesign/OnboardingOriginStepRedesign";
 import { OnboardingSummaryStepRedesign } from "../components/onboarding/redesign/OnboardingSummaryStepRedesign";
 
 import { registrationStepIndex } from "./onboarding-registration-steps";
@@ -61,21 +60,7 @@ const PublicLayoutDecorator = (Story: ComponentType) => {
  * companyLegalEntities, dat is samengevoegd in de zetel-step) — dat houdt de stepper-volgorde
  * intact terwijl de body leeg blijft. Zie design-doc § 3.8.
  */
-const renderRedesignStepBody: OnboardingFlowViewRenderStepBody = ({
-  step,
-  model,
-  requestOrigin,
-  setRequestOrigin,
-}) => {
-  if (step === "origin") {
-    return (
-      <OnboardingOriginStepRedesign
-        originFieldBase={model.originFieldBase}
-        requestOrigin={requestOrigin}
-        setRequestOrigin={setRequestOrigin}
-      />
-    );
-  }
+const renderRedesignStepBody: OnboardingFlowViewRenderStepBody = ({ step, model }) => {
   if (step === "customer") return <OnboardingCustomerStepRedesign model={model} />;
   if (step === "company") return <OnboardingCompanyZetelStepRedesign model={model} />;
   if (step === "invoicing") return <OnboardingInvoicingStepRedesign model={model} />;
@@ -121,49 +106,6 @@ const meta = {
 } satisfies Meta;
 
 export default meta;
-
-export const OriginStep: StoryObj<typeof meta> = {
-  name: "01 — Land of regio (redesign)",
-  render: () => {
-    const drafts = storyOnboardingDrafts;
-    const ctx = storyCustomerContext({
-      organizationName: "",
-      country: "",
-      addressStreet: "",
-      addressHouseNumber: "",
-      addressPostalCode: "",
-      addressCity: "",
-    });
-    return (
-      <OnboardingFlowStoryView
-        {...baseOnboardingFlowViewProps({
-          step: "origin",
-          context: ctx,
-          drafts,
-          requestOrigin: "be",
-          steps: storyOnboardingStepperSteps({
-            step: "origin",
-            context: ctx,
-            drafts,
-            requestOrigin: "be",
-          }),
-          activeStep: registrationStepIndex("origin", drafts),
-          primaryAction: { label: "Verder", onClick: noop, disabled: false },
-          rows: [],
-          effectiveSummaryIncludedDraftIds: [],
-          registrationChromeOverrides: {
-            origin: {
-              title: "Kies uw land of regio",
-              description:
-                "Uw keuze bepaalt welke gegevens we in de volgende stappen vragen.",
-            },
-          },
-        })}
-        renderStepBody={renderRedesignStepBody}
-      />
-    );
-  },
-};
 
 export const CustomerStep: StoryObj<typeof meta> = {
   name: "03 — Registratie (redesign)",

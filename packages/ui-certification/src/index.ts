@@ -205,7 +205,6 @@ export type {
   OnboardingExtrasStepProps,
   OnboardingInvoicingStepProps,
   OnboardingOriginStepProps,
-  OnboardingOriginStepCopy,
   OnboardingSummaryStepProps,
   OnboardingShellProps,
   CertificationInquiriesOverviewCardProps,

@@ -30,38 +30,26 @@ export const ONBOARDING_REQUEST_ORIGIN_OPTIONS: readonly OnboardingRequestOrigin
   {
     id: "be",
     title: "België",
-    description: "Uw organisatie is in België gevestigd.",
+    description: "Het bedrijf waarvoor u de certificaten wil aanvragen is gevestigd in België.",
   },
   {
     id: "nl",
     title: "Nederland",
-    description: "Uw organisatie is in Nederland gevestigd.",
+    description: "Het bedrijf waarvoor u de certificaten wil aanvragen is gevestigd in Nederland.",
   },
   {
     id: "eu",
-    title: "Een ander Europees land",
-    description: "Uw organisatie is gevestigd in een ander Europees land dan België of Nederland.",
+    title: "Europa",
+    description:
+      "Het bedrijf waarvoor u de certificaten wil aanvragen is gevestigd in een ander Europees land.",
   },
   {
     id: "other",
-    title: "Buiten Europa",
-    description: "Uw organisatie is gevestigd buiten Europa.",
+    title: "Wereldwijd",
+    description:
+      "Het bedrijf waarvoor u de certificaten wil aanvragen is gevestigd buiten Europa.",
   },
 ];
-
-/** Prominent tier cards in the origin step (Belgium & Netherlands only). */
-const ONBOARDING_REQUEST_ORIGIN_HERO_IDS: readonly OnboardingRequestOrigin[] = ["be", "nl"];
-
-export const ONBOARDING_REQUEST_ORIGIN_HERO_OPTIONS: readonly OnboardingRequestOriginOption[] =
-  ONBOARDING_REQUEST_ORIGIN_HERO_IDS.map(
-    (id) => ONBOARDING_REQUEST_ORIGIN_OPTIONS.find((o) => o.id === id)!,
-  );
-
-/** Compact default cards in the origin step (same row as hero options). */
-export const ONBOARDING_REQUEST_ORIGIN_SECONDARY_OPTIONS: readonly OnboardingRequestOriginOption[] =
-  ONBOARDING_REQUEST_ORIGIN_OPTIONS.filter(
-    (o) => !ONBOARDING_REQUEST_ORIGIN_HERO_IDS.includes(o.id),
-  );
 
 /** Default VAT demo preset id per origin (first step of tailored capture). */
 export function defaultPrototypePresetIdForRequestOrigin(origin: OnboardingRequestOrigin): string {

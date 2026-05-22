@@ -7,9 +7,8 @@ export type RegistrationStepChromeCopy = {
 
 const DEFAULTS: Record<OnboardingStep, RegistrationStepChromeCopy> = {
   origin: {
-    title: "Land of regio",
-    description:
-      "Kies waar uw organisatie gevestigd is. De volgende schermen sluiten daarop aan.",
+    title: "Kies uw land of regio",
+    description: "Uw keuze bepaalt welke gegevens we in de volgende stappen vragen.",
   },
   customer: {
     title: "Registratie",

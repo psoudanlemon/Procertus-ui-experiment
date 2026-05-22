@@ -73,11 +73,6 @@ _Feedback origineel gezien op:_ **Maatschappelijke zetel** (nu één zetel mogel
 - [ ] Toepassen op Maatschappelijke zetel — meerdere zetels in dezelfde stap.
 - [ ] Toepassen op tweede (reserve) contactpersoon — inline toevoegbaar vanuit het primaire contactblok op Facturatie.
 
-### Veldtype per invulveld
-
-_De veldtype-audit (2026-05-22) is afgerond. De quick wins op bestaande primitives, de KBO/KvK-Autocomplete-uitbreiding, de gemeente-suggesties in adres-subforms en de postale-suggesties op het Innovatie-attest zijn doorgevoerd (zie [Afgewerkt](#afgewerkt))._
-
-_Bewuste niet-doen: Organisatie-ID op Registratie voor `origin = eu` of `origin = other` (FR, DE, overig EU/wereldwijd). Die registers zijn ofwel niet publiek doorzoekbaar ofwel pay-walled, dus een autocomplete-belofte zou misleidend zijn. De plain `Input` met structurele validatie blijft het juiste pattern; te heroverwegen wanneer Procertus een commerciële register-API integreert._
 
 ### Copy density
 
@@ -133,7 +128,7 @@ _Route:_ `/welcome/aanvraag/:serviceId/controleren`
 
 _Route:_ [`/welcome/formal-request/origin`](http://localhost:5173/welcome/formal-request/origin)
 
-- [ ] Optimaliseer choice cards (zie [Choice card componenten](#choice-card-componenten)).
+- [x] Choice cards geoptimaliseerd: één gestackte lijst met vier `ChoiceCard`s (trailing radio + vlag in `leading`), BE/NL/EU op `elevated`-variant, Wereldwijd op `faded`. Title-as-step-prompt ("Kies uw land of regio") + consequence-gerichte page-description ("Uw keuze bepaalt welke gegevens we in de volgende stappen vragen."). Option-titles ingekort naar "België / Nederland / Europa / Wereldwijd"; descriptions herschreven naar "Het bedrijf waarvoor u de certificaten wil aanvragen is gevestigd in..". Vlag in 38.85px-leading-slot, gelijk aan de gecombineerde title+description hoogte. EU-vlag in officiële 3:2 ratio, alle vier glyphs even breed. Productie: [OnboardingOriginStep](packages/ui-certification/src/components/onboarding/origin-step/OnboardingOriginStep.tsx) + [onboarding-registration-chrome-copy](packages/ui-certification/src/onboarding/onboarding-registration-chrome-copy.ts) + [onboarding-request-origin](packages/ui-certification/src/onboarding/onboarding-request-origin.ts). ChoiceCard-primitive: leading-icon centreert nu tegen de titel als er geen description is en heeft geen padding-top meer voor de description-case ([ChoiceCard.tsx](packages/ui/src/components/choice-card/ChoiceCard.tsx)).
 
 ### 3.6 Traject — stap "Registratie"
 
