@@ -26,7 +26,7 @@ import { Button } from "@procertus-ui/ui";
  *   "Verder") samen rechts.
  */
 const messages = {
-  cancel: "Naar startpagina",
+  cancel: "Alle certificaten",
   back: "Terug",
   continue: "Bevestig",
 } as const;
