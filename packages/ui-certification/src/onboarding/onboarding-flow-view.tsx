@@ -114,7 +114,7 @@ export function OnboardingFlowView(props: OnboardingFlowViewProps) {
               <div className="flex flex-col gap-micro">
                 <H1>{registrationChrome.title}</H1>
                 {registrationChrome.description ? (
-                  <P className="text-base leading-[1.6] text-muted-foreground">
+                  <P className="text-base text-muted-foreground">
                     {registrationChrome.description}
                   </P>
                 ) : null}

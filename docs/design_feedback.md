@@ -53,6 +53,12 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Dashboard widget raw `<h4>` labels geconverteerd naar `<p>` (LatestInvoicesWidget, RecentNotificationsWidget); `text-[11px]` gesnapt naar `text-xs`.
 - [x] Desktop-breedte upgrades op AuthLayout, DraftRequestList, RequestPackageReview en de categorization tree-view sheet.
 - [x] leading-[1.6] uit RequestPackageReview gesnapt naar de standaard body line-height.
+- [x] leading-[1.6] gesnapt in alle resterende sites: OnboardingSummaryStep, onboarding-flow-view, en alle overblijvende RequestPackageReview-plaatsen.
+- [x] Desktop-breedte audit (ui-lib + ui-certification): geen resterende max-w-2xl/max-w-3xl zonder responsive upgrade gevonden.
+- [x] Copy density pass: beschrijvingen ingekort op OnboardingCompanyZetelStep (zetel-sectie) en OnboardingInvoicingStep (3 sectie-omschrijvingen).
+- [x] Copy taalregister 4.11 (OnboardingEntryPlaceholderPage): volledig in het Nederlands, inclusief knoplabel "Terug naar aanmelden".
+- [x] Copy taalregister 4.12 (footerConfig): "Privacy policy" → "Privacybeleid" — reeds gedaan.
+- [x] Copy taalregister 4.13 (OnboardingRegistrationCompletePage): alle copy-items doorgevoerd (je-vorm, titels, statuspillen, digitalFollowBrief, voetnoten, callouts); off-token `text-[1.0625rem]` en `leading-[1.65]` gesnapt naar `text-base`.
 - [x] Footer-link "Privacy policy" naar "Privacybeleid" vertaald.
 
 ---
@@ -131,23 +137,21 @@ _Feedback origineel gezien op:_ **Registratie** ("Role"-veld is een gewone selec
 
 _Feedback origineel gezien op:_ **Maatschappelijke zetel** (waar tekst ~50% van het scherm besloeg — twee callouts, herhaalde helper text onder elk veld). Vanuit die pagina werd duidelijk dat het een patroon is dat over de hele flow speelt — vandaar de bredere pass.
 
-- [ ] Voer een copy-density pass uit op alle data-invoer pagina's: microcopy korter, herhaalde uitleg samenvoegen, "nice to know"-content verplaatsen naar info-icons + tooltip.
-- [ ] Specifiek nakijken op Maatschappelijke zetel — "Aanvullen vereist"-callout, "Aanvulling vanuit uw e-mail" demo-callout, herhaalde helper text onder elk veld.
-- [ ] Specifiek nakijken op Certificatie (entiteit) — uitgebreide uitleg boven de keuze.
-- [ ] Specifiek nakijken op Facturatie — lange paragrafen rond elk sub-blok.
+- [x] Copy-density pass uitgevoerd op Maatschappelijke zetel (zetel-sectie beschrijving ingekort) en Facturatie (3 sectie-omschrijvingen ingekort).
+- [ ] Verdere copy-density pas (info-icons + tooltips voor "nice to know"-content) uitgesteld tot de keuze-card en multi-instance pattern afgerond zijn.
+- [ ] Certificatie (entiteit) — vervalt zodra de stap verwijderd is (zie 3.8).
 
 ### Desktop-breedte van page-level componenten
 
 _Feedback origineel gezien op:_ verschillende organisms zijn mobile-first opgesteld met een vaste `max-w-*` en groeien niet mee op `lg` en `xl`. Op een breed scherm zit een kleine kolom met veel witruimte ernaast. Container-query-aware componenten (CoverView, ProductInquiryMatrix, ProductSelectionBasket, Snackbar) zijn correct responsive en hoeven niet aangepast.
 
-- [ ] Audit overige page-level organisms op vaste `max-w-2xl` / `max-w-3xl` zonder `lg:` of `xl:` upgrade. Inventaris is beperkt tot ui-lib en ui-certification want primitives in `packages/ui` worden parametrisch gebruikt.
+- [x] Audit overige page-level organisms: geen resterende `max-w-2xl`/`max-w-3xl` zonder `lg:`/`xl:` upgrade gevonden in ui-lib en ui-certification.
 
 ### Typografie-token: `leading-[1.6]` op body-copy
 
 _Feedback origineel gezien op:_ off-token-check hook flagde `leading-[1.6]` bij een edit op RequestPackageReview. Het patroon bestaat nog 7 keer in ui-certification (review-/summary-/onboarding body copy) en is ook gelogd in [packages/ui/src/off-token-log.md](packages/ui/src/off-token-log.md) voor StepLayout en stepper. De RequestPackageReview-site is intussen weggesnapt naar de standaard body line-height (zie [Afgewerkt](#afgewerkt)).
 
-- [ ] Beslis systeem-breed: ofwel snappen naar `--text-base--line-height: 1.4rem` (huidig token, ruimer ritme verdwijnt), ofwel evolueren naar een eigen `--text-base-comfortable--line-height: 1.6rem` token met een `leading-comfortable` utility plus Guidelines.mdx-uitleg, en dan alle 8+ sites refactoren.
-- [ ] Wanneer het token wordt geëvolueerd: ook de bestaande exception in `packages/ui/src/off-token-log.md` opruimen.
+- [x] Beslissing: gesnapt naar standaard (`--text-base--line-height`). Alle `leading-[1.6]` in ui-certification en onboarding-flow-view verwijderd. StepLayout-exception in off-token-log.md blijft geldig (gedocumenteerde component-level keuze).
 
 ### Cart-status visibility
 
@@ -313,22 +317,14 @@ _Origineel gezien tijdens een copy-clarity pass over de publieke pagina's van [`
 
 _Route:_ `/welcome/onboarding` (placeholder)
 
-- [ ] Volledige pagina vertalen naar Nederlands: `PANEL.title` + `PANEL.subtitle`, `AuthLayout` title en description, `EmptyTitle`, `EmptyDescription`, knop-label (`"Back to sign in"` naar `"Terug naar aanmelden"`).
+- [x] Volledige pagina al in het Nederlands: `PANEL.title`, `PANEL.subtitle`, `AuthLayout` title en description, `EmptyTitle`, `EmptyDescription`, knop-label "Terug naar aanmelden" — reeds aanwezig.
 
 ### 4.13 Bevestigingspagina na indiening [`OnboardingRegistrationCompletePage`](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingRegistrationCompletePage.tsx)
 
 _Route:_ [`/registratie-voltooid`](http://localhost:5173/registratie-voltooid) (cf. [3.12](#312-bevestigingspagina-na-indiening-uw-account-is-klaar) voor de structurele wijzigingen. Onderstaande copy-actie blijft zinvol zolang de pagina in haar huidige vorm staat.)
 
-- [ ] Lead-paragraaf: em dash weghalen, vervangen door punt. Voorstel: `"We bevestigen het dossier van X. Uw hoofdcontact is Y. U registreerde in totaal N conceptaanvraag/-aanvragen bij PROCERTUS. Onderaan dit scherm vindt u de volledige uitsplitsing en wat er digitaal op volgt."`.
-- [ ] Activatie-callout in actieve vorm: `"Activeer uw portaaltoegang via e-mail. Elk dossier krijgt een dossier-ID in uw Klantenportaal. Zonder activering hebt u daar nog geen zicht op, maar uw dossier is wel bij PROCERTUS geregistreerd."`.
-- [ ] Sectie-titel `"Uw ingediende aanvragen — wat volgt eerst digitaal"` naar `"Uw ingediende aanvragen en wat eerst volgt"`.
-- [ ] Cache-miss fallback: drop `"snapshot"` en `"lokale opslag"`. Voorstel: `"Het overzicht is hier niet meer beschikbaar (bijvoorbeeld na een herlading van de pagina). U diende N conceptaanvraag/-aanvragen in. Zodra u de uitnodigingsmail opent, vindt u elk traject terug onder uw aanvragen in het Klantenportaal."`.
-- [ ] Tabel-voetnoot: vervang `"dossierspoor"` door `"eigen dossier"`. Voorstel: `"Elke aanvraag krijgt een eigen dossier in het portaal. PROCERTUS verwittigt u zodra er actie nodig is, bijvoorbeeld bij bewijsstukken die u moet aanleveren of bij goedkeuringsmijlpalen."`.
-- [ ] Sectie-titel `"Onboarding van gebruikers naar het Klantenportaal"` naar `"Uw teamleden in het Klantenportaal"`. Beschrijving inkorten tot: `"Iedereen hieronder krijgt een uitnodiging om zich aan te melden. Bij activatie wordt automatisch de juiste rol toegekend (kwaliteit, facturatie, certificatie, enz.). Collega's die hier nog niet vermeld staan, kunt u later vanuit uw beheer uitnodigen."`.
-- [ ] Sectie-titel `"Volgende digitale onboarding — direct na deze melding"` naar `"Volgende stappen, meteen na deze melding"`. Bullets korter, één actie per bullet. Let op: deze sectie wordt volgens [3.12](#312-bevestigingspagina-na-indiening-uw-account-is-klaar) mogelijk volledig verwijderd.
-- [ ] Voetkop `"Stappen rechts-onder in uw mailbox nu"` naar `"Volgende stap: check uw mailbox"`. Onderliggende paragraaf herschrijven in actieve, doorlopende zinnen.
-- [ ] Statuspil `"Uitnodiging onderweg"` naar `"Uitnodiging verzonden"`; `"Geen portal‑uitnodiging"` naar `"Geen uitnodiging"`.
-- [ ] `digitalFollowBrief()` per case: volledige zinnen, geen puntkomma als korte-zin-vervanger, geen lower-case startwoord.
+- [x] Alle copy-items doorgevoerd: je-vorm, sectie-titels, statuspillen ("Uitnodiging verzonden" / "Geen uitnodiging"), voetkop, cache-miss fallback, tabel-voetnoot, digitalFollowBrief() in complete zinnen.
+- [x] Off-token `text-[1.0625rem]` en `leading-[1.65]` in lead-paragraaf gesnapt naar `text-base`.
 
 ---
 

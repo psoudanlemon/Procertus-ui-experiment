@@ -172,7 +172,7 @@ export function OnboardingSummaryStep({ model }: OnboardingSummaryStepProps) {
               </p>
             </div>
             {summaryRc.organizationDetails ? (
-              <div className="text-base font-normal leading-[1.6] text-muted-foreground [&_p]:m-0 [&_p+p]:mt-micro">
+              <div className="text-base font-normal text-muted-foreground [&_p]:m-0 [&_p+p]:mt-micro">
                 {summaryRc.organizationDetails}
               </div>
             ) : null}

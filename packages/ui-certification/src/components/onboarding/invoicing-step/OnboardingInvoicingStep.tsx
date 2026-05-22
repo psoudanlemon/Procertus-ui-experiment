@@ -126,9 +126,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
           Factuur‑gegevens en rechts‑persoon op de factuur
         </H4>
         <p className="text-xs leading-relaxed text-muted-foreground">
-          Begin met het verplichte factuur‑e‑mailadres. Daarna ziet u per aanvraag welke
-          rechts‑persoon bij certificatie hoort. Schakel onderaan alleen in wanneer u voor
-          facturatie per aanvraag iets anders wilt dan bij certificatie.
+          Vul het factuur‑e‑mailadres in. Hieronder ziet u de gekoppelde rechtspersoon per aanvraag.
         </p>
       </div>
 
@@ -194,10 +192,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
           Certificatie-aanvragen in dit dossier
         </H4>
         <p className="text-xs leading-relaxed text-muted-foreground">
-          Per aanvraag de rechts‑persoon die u in de stap{" "}
-          <span className="font-medium text-foreground">Certificatie (entiteit)</span> gekoppeld
-          heeft. Zolang u hieronder geen afwijkende facturatie inschakelt, gebruiken we deze ook op
-          de factuur.
+          Gekoppelde rechtspersoon per aanvraag. Standaard gebruiken we deze ook op de factuur.
         </p>
       </div>
 
@@ -403,10 +398,7 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
             Contact voor facturatie
           </H4>
           <p className="text-xs leading-relaxed text-muted-foreground">
-            Standaard is dat de{" "}
-            <span className="font-medium text-foreground">wettelijke vertegenwoordiger</span>.
-            Schakel hieronder alleen in wanneer iemand anders uw aanspreekpunt voor facturatie en
-            financiële opvolging moet zijn.
+            Standaard de wettelijke vertegenwoordiger. Schakel in voor een andere contactpersoon.
           </p>
         </div>
         {!context.invoicingUseContactPerson ? (

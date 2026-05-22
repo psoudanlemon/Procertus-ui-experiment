@@ -180,9 +180,7 @@ export function OnboardingCompanyZetelStep({ model }: OnboardingCompanyZetelStep
               Maatschappelijke zetel
             </H4>
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Dit zijn de officiële gegevens van uw hoofdrechtspersoon, zoals die aan uw
-              identificatienummer gekoppeld zijn. Ze kunnen afwijkend zijn van waar productie of
-              certificatie fysiek plaatsvindt.
+              Officiële gegevens gekoppeld aan uw btw-nummer. Productie- of certificatielocatie mag afwijken.
             </p>
           </div>
           <div className="grid gap-4 md:grid-cols-2">

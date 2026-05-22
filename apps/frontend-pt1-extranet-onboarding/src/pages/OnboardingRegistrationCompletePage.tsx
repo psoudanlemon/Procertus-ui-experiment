@@ -260,7 +260,7 @@ function RegistrationCompleteLeadCard(props: {
         heading="Je account is klaar"
         description={
           <div className="flex flex-col gap-section">
-            <p className="m-0 text-[1.0625rem] font-normal leading-[1.65] tracking-tight text-foreground/95">
+            <p className="m-0 text-base font-normal tracking-tight text-foreground/95">
               We bevestigen het dossier van{" "}
               <strong className="font-semibold text-foreground">
                 {props.summary.organizationName}

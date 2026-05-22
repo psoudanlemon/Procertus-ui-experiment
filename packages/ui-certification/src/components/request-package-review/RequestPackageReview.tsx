@@ -149,7 +149,7 @@ export function RequestPackageReview({
                 </p>
               </div>
               {rc.organizationDetails ? (
-                <div className="text-base font-normal leading-[1.6] text-muted-foreground [&_p]:m-0 [&_p+p]:mt-micro">
+                <div className="text-base font-normal text-muted-foreground [&_p]:m-0 [&_p+p]:mt-micro">
                   {rc.organizationDetails}
                 </div>
               ) : null}
@@ -159,13 +159,13 @@ export function RequestPackageReview({
       ) : null}
 
       {notice ? (
-        <div className="text-base font-normal leading-[1.6] text-muted-foreground">{notice}</div>
+        <div className="text-base font-normal text-muted-foreground">{notice}</div>
       ) : null}
       {beforeRows ? <div className="min-w-0">{beforeRows}</div> : null}
       {rows.length === 0 ? (
         (emptyState ?? (
           <p
-            className="m-0 text-base font-normal leading-[1.6] text-muted-foreground"
+            className="m-0 text-base font-normal text-muted-foreground"
             role="status"
           >
             Nothing to review — add at least one request.
@@ -177,7 +177,7 @@ export function RequestPackageReview({
             className={cn(
               rowsDensity === "compactMono"
                 ? "text-xs leading-snug tabular-nums"
-                : "text-base leading-[1.6]",
+                : "text-base",
             )}
           >
             <TableHeader>
