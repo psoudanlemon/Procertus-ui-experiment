@@ -37,6 +37,13 @@ function PublicGuestRegistryChrome() {
     [formalBanner.resumeStep],
   );
 
+  // Login-knop hoort enkel op de wegwijzer-homepage (`/welcome`). Zodra de gebruiker
+  // dieper in een guest-flow zit (aanvraag, formal-request, …) is inloggen geen
+  // zinvolle volgende stap — de cart, taalkeuze en color-mode blijven wel staan.
+  const isWelcomeHomepage =
+    location.pathname === PUBLIC_GUEST_WELCOME_PATH ||
+    location.pathname === `${PUBLIC_GUEST_WELCOME_PATH}/`;
+
   return (
     <DensityProvider density="spacious">
       <PublicRegistryAppShell
@@ -53,6 +60,7 @@ function PublicGuestRegistryChrome() {
           onLogoClick: () => navigate(PUBLIC_GUEST_WELCOME_PATH),
           loginUrl: PUBLIC_GUEST_LOGIN_PATH,
           onLogin: () => navigate(PUBLIC_GUEST_LOGIN_PATH),
+          hideLogin: !isWelcomeHomepage,
           leadingActions: <WelcomePublicHeaderLeading />,
           trailingActions: <PublicCertificationRequestsCart />,
           guestLanguagePlacement: "trailing",
