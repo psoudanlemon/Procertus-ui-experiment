@@ -11,7 +11,7 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 5. [**Distill audit (2026-05-21)**](#5-distill-audit-2026-05-21): openstaande app-level en primitives-findings.
 
 **Onderdelen in sectie 1, in alfabetische scan-volgorde:**
-[Cart-status visibility](#cart-status-visibility) · [Choice card componenten](#choice-card-componenten) · [Combobox met create-new](#combobox-met-create-new) · [Copy density](#copy-density) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Stepper](#stepper) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox).
+[Cart-status visibility](#cart-status-visibility) · [Choice card componenten](#choice-card-componenten) · [Copy density](#copy-density) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Stepper](#stepper) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox) · [Veldtype per invulveld](#veldtype-per-invulveld).
 
 ---
 
@@ -59,6 +59,7 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Copy taalregister 4.12 (footerConfig): "Privacy policy" → "Privacybeleid" — reeds gedaan.
 - [x] CreatableCombobox primitive gebouwd in packages/ui (searchable select met inline create-new actie, input-like states, X-clear, tooltip-on-truncate).
 - [x] Role-veld op Registratie van "select + Anders + losstaand input field"-pattern naar CreatableCombobox.
+- [x] Veldtype-audit gedaan over het volledige onboarding-traject (alle stappen, alle invulvelden).
 - [x] Copy taalregister 4.13 (OnboardingRegistrationCompletePage): alle copy-items doorgevoerd (je-vorm, titels, statuspillen, digitalFollowBrief, voetnoten, callouts); off-token `text-[1.0625rem]` en `leading-[1.65]` gesnapt naar `text-base`.
 - [x] Heading a11y-volgorde verificatie (één `h1` per pagina, logische `h2 → h3`-keten): wordt meegenomen in de page-specifieke aanpassingen — apart validatiepunt vervalt.
 
@@ -100,11 +101,23 @@ _Feedback origineel gezien op:_ **Maatschappelijke zetel** (nu één zetel mogel
 - [ ] Toepassen op Maatschappelijke zetel — meerdere zetels in dezelfde stap.
 - [ ] Toepassen op tweede (reserve) contactpersoon — inline toevoegbaar vanuit het primaire contactblok op Facturatie.
 
-### Combobox met create-new
+### Veldtype per invulveld
 
-_Pattern uitgewerkt als [CreatableCombobox](packages/ui/src/components/ui/creatable-combobox.tsx) primitive en toegepast op het Registratie role-veld (zie [Afgewerkt](#afgewerkt)). De audit hieronder loopt nog._
+_Pattern uitgewerkt als [CreatableCombobox](packages/ui/src/components/ui/creatable-combobox.tsx) primitive en toegepast op het Registratie role-veld (zie [Afgewerkt](#afgewerkt))._
 
-- [ ] Audit alle invulvelden in het traject en kies het juiste veldtype per geval (select / combobox / autocomplete / vrije tekst).
+_Veldtype-audit (2026-05-22) over alle stappen van het onboarding-traject is afgerond (zie [Afgewerkt](#afgewerkt)). De concrete wijzigingen die eruit volgen staan hieronder; ze worden in de page-specifieke secties niet apart herhaald._
+
+**Snelle wins (bestaande primitives, alleen swap):**
+
+- [ ] Aanhef op Registratie en Extra contacten: `Select` met "Andere" optie omzetten naar `CreatableCombobox` (zelfde pattern als role-veld).
+- [ ] Land op Maatschappelijke zetel en Facturatie (incl. afwijkend facturatieadres): `Select` met de volledige landenlijst omzetten naar `Combobox` zodat de gebruiker kan typen om te filteren.
+- [ ] Regio/Land op Metrologie-attest: `Textarea` is hier het verkeerde veldtype, omzetten naar `Combobox` (landenlijst) of multi-select varianten daarvan.
+
+**Vereisen nieuwe primitive of externe integratie:**
+
+- [ ] Organisatie-ID (BTW/KBO-nummer) op Registratie: nu vrije `Input`, zou een `Autocomplete` moeten worden die tijdens het typen het BTW/KBO-register aanspreekt en de bedrijfsnaam plus zeteladres autovult. Bouw eerst een generieke `Autocomplete`-primitive in `packages/ui` (debounced async fetch, loading state, no-results state) voordat de integratie volgt.
+- [ ] Stad in adresvelden (Maatschappelijke zetel, facturatieadres, bouwheeradres, projectadres): kan profiteren van een `Autocomplete` met gemeentelijst per land. Afhankelijk van de Autocomplete-primitive hierboven; lagere prioriteit dan het VAT/KBO-veld.
+- [ ] Bouwheer- en projectadres op Innovatie-attest: nu losse `Input`-velden, kandidaat voor een geïntegreerd adres-autocomplete (postale lookup) zodra de Autocomplete-primitive er is.
 
 ### Copy density
 
