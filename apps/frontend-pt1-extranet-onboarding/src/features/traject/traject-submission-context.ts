@@ -63,34 +63,6 @@ export function readOnboardingFlowSnapshot(): OnboardingFlowState {
   return hydrateOnboardingFlowStateFromStored(port.load());
 }
 
-/** Aantal unieke product-IDs in het pakket voor de opgegeven wegwijzer-route. */
-export function countDistinctProductsForTrajectService(
-  drafts: readonly CertificationRequestDraft[],
-  serviceId: string,
-): number {
-  const seen = new Set<string>();
-  for (const d of drafts) {
-    if (!d.productId?.trim()) continue;
-    if (draftBelongsToTrajectRoot(d, serviceId)) seen.add(d.productId);
-  }
-  return seen.size;
-}
-
-/**
- * Voor wegwijzer-keuzebalk en -kaarten: is er activiteit voor deze route, en zo ja
- * een weergaveteller (unieke producten, of 1 bij een niet-productgebonden placeholder).
- */
-export function trajectRouteChoiceStats(
-  drafts: readonly CertificationRequestDraft[],
-  serviceId: string,
-): { selected: boolean; amount?: number } {
-  const productCount = countDistinctProductsForTrajectService(drafts, serviceId);
-  const hasAny = drafts.some((d) => draftBelongsToTrajectRoot(d, serviceId));
-  if (!hasAny) return { selected: false };
-  if (productCount > 0) return { selected: true, amount: productCount };
-  return { selected: true, amount: 1 };
-}
-
 /**
  * Wis de traject-breadcrumbs (serviceId, drafts) uit de gepersisteerde state, maar laat klant- en
  * registratiegegevens staan. Aangeroepen wanneer de gebruiker bewust uit een eerder traject stapt en

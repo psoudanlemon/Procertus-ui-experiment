@@ -70,6 +70,7 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Distill 5.2: TriageOptionCard geëxtraheerd naar `DecisionCard` + `DecisionCardCallout` in `packages/ui-lib`; TriagePage en de Wegwijzer-callout consumeren de primitives.
 - [x] Distill 5.2: `data-density` regel publiek=spacious / ingelogd=operational doorgevoerd via `PublicAppShell` en de twee top-level publieke confirmation-pagina's; redundante lokale overrides opgeruimd.
 - [x] Distill 5.2: BrowseCard `variant="faded"` bewust behouden in de set voor toekomstige opportuniteiten.
+- [x] Header-spacing geoptimaliseerd: consistent ritme en betere groepering tussen icon buttons en de primaire login knop.
 
 ---
 
@@ -134,9 +135,10 @@ _Feedback origineel gezien op:_ **Maatschappelijke zetel** (waar tekst ~50% van 
 
 _Feedback origineel gezien op:_ **Homepage** ("Start uw certificeringstraject") — een blauwe "AL IN UW PAKKET · 2 PRODUCTEN" pill bovenop de BENOR-kaart, en een count-badge "2" op de filtertab "BENOR-certificatie". Beide indicatoren herhalen info die al duidelijk is uit het winkelmandje en de header-cart-indicator.
 
-- [ ] Cart-status alleen tonen in het winkelmandje en de cart-indicator in de header — niet dupliceren elders.
-- [ ] Verwijder "AL IN UW PAKKET · X PRODUCTEN" indicator van homepage certificaatkaarten.
-- [ ] Verwijder count-badges van homepage filtertabs.
+- [x] Cart-status alleen tonen in het winkelmandje en de cart-indicator in de header, niet dupliceren elders.
+- [x] Verwijder "AL IN UW PAKKET · X PRODUCTEN" indicator van homepage certificaatkaarten.
+- [x] Verwijder count-badges van homepage filtertabs.
+- [x] Verwijder ook de blauwe `selected` ring op homepage certificaatkaarten en filtertabs. Catalogue-componenten checken het winkelmandje niet meer; cart-state leeft enkel in het winkelmandje en de header-cart-indicator.
 
 ---
 
@@ -174,12 +176,6 @@ _Hoe openen:_ klik op de **"Aanvragen"**-knop in de header (PublicRegistryHeader
 ## 3. Page-specifieke wijzigingen
 
 > **Dev server:** `http://localhost:5173`. Plak het pad achter de base-URL om de pagina lokaal te openen. Routes met `:serviceId` verwachten een service-id uit de catalogus (bv. een BENOR-service uit de homepage).
-
-### 3.1 Header / top navigation
-
-_Route:_ zichtbaar op alle publieke pagina's onder `/welcome/*`.
-
-- [ ] Optimaliseer spacing tussen header-knoppen (theme toggle, draft/inbox icon, login, taalkiezer) — consistent ritme, betere groepering tussen icon buttons en de primaire login knop.
 
 ### 3.2 Homepage ("Start uw certificeringstraject")
 
