@@ -12,3 +12,10 @@ export type {
   BrowseCardProps,
   BrowseCardVariant,
 } from "./custom-components/BrowseCard";
+export { DecisionCard, DecisionCardCallout } from "./custom-components/DecisionCard";
+export type {
+  DecisionCardCalloutProps,
+  DecisionCardCta,
+  DecisionCardProps,
+  DecisionCardTone,
+} from "./custom-components/DecisionCard";

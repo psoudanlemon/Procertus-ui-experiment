@@ -1,13 +1,6 @@
 import { Link, Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
-import {
-  ArrowRight02Icon,
-  Call02Icon,
-  CheckmarkCircle02Icon,
-  FilePlusIcon,
-  Mail01Icon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Button, Card, CardContent, CardDescription, CardHeader, H2, H3 } from "@procertus-ui/ui";
+import { Call02Icon, FilePlusIcon, Mail01Icon } from "@hugeicons/core-free-icons";
+import { DecisionCard, DecisionCardCallout } from "@procertus-ui/ui-lib";
 import {
   TrajectPageFrame,
   TrajectStoryFooter,
@@ -66,7 +59,7 @@ export function TriagePage() {
     >
       <div className="flex flex-col gap-region">
         <div className="grid grid-cols-1 gap-region md:grid-cols-2">
-          <TriageOptionCard
+          <DecisionCard
             tone="muted"
             icon={Mail01Icon}
             title="Aanvraag meer informatie"
@@ -76,13 +69,18 @@ export function TriagePage() {
               "Antwoord binnen enkele werkdagen",
               "Live sessie met een expert mogelijk",
             ]}
-            cta="Vrijblijvende aanvraag"
-            to={INFORMATIONAL_REQUEST_PATH(entry.id)}
-            onBeforeNavigate={() => {
-              api.resetFormalRequestPackageCommit();
+            cta={{
+              label: "Vrijblijvende aanvraag",
+              asChild: true,
+              children: (
+                <Link
+                  to={INFORMATIONAL_REQUEST_PATH(entry.id)}
+                  onClick={() => api.resetFormalRequestPackageCommit()}
+                />
+              ),
             }}
           />
-          <TriageOptionCard
+          <DecisionCard
             tone="primary"
             icon={FilePlusIcon}
             title="Traject opstarten"
@@ -95,115 +93,35 @@ export function TriagePage() {
               "PROCERTUS volgt je dossier actief op",
               "Je account wordt aangemaakt bij indiening",
             ]}
-            cta="Start traject"
-            to={FORMAL_ONBOARDING_PATH}
-            onBeforeNavigate={() => {
-              api.commitFormalRequestPackageFromTriage();
+            cta={{
+              label: "Start traject",
+              asChild: true,
+              children: (
+                <Link
+                  to={FORMAL_ONBOARDING_PATH}
+                  onClick={() => api.commitFormalRequestPackageFromTriage()}
+                />
+              ),
             }}
           />
         </div>
 
-        <Card
-          className="relative flex cursor-pointer flex-col gap-component px-section py-section sm:flex-row sm:items-center sm:justify-between sm:gap-section"
-          style={{ background: "var(--gradient-neutral)" }}
-        >
-          <div className="flex min-w-0 flex-1 flex-col gap-micro">
-            <H3>Wil je eerst een expert spreken?</H3>
-            <p className="text-sm leading-normal text-muted-foreground">
-              Reserveer een live online sessie van één uur en overloop de vereisten samen met een
-              PROCERTUS-expert.
-            </p>
-          </div>
-          <Button
-            asChild
-            variant="outline"
-            className="w-full bg-background group-hover/card:rounded-tl-[4px] group-hover/card:rounded-tr-[var(--cmd-deep)] group-hover/card:rounded-br-[4px] group-hover/card:rounded-bl-[var(--cmd-deep)] group-hover/card:bg-muted group-hover/card:text-foreground sm:w-auto sm:shrink-0"
-          >
-            <Link
-              to={EXPERT_CALL_PATH(entry.id)}
-              className="before:absolute before:inset-0 before:content-['']"
-              onClick={() => {
-                api.resetFormalRequestPackageCommit();
-              }}
-            >
-              <HugeiconsIcon icon={Call02Icon} className="size-4" />
-              Plan een gesprek
-            </Link>
-          </Button>
-        </Card>
+        <DecisionCardCallout
+          title="Wil je eerst een expert spreken?"
+          description="Reserveer een live online sessie van één uur en overloop de vereisten samen met een PROCERTUS-expert."
+          cta={{
+            label: "Plan een gesprek",
+            icon: Call02Icon,
+            asChild: true,
+            children: (
+              <Link
+                to={EXPERT_CALL_PATH(entry.id)}
+                onClick={() => api.resetFormalRequestPackageCommit()}
+              />
+            ),
+          }}
+        />
       </div>
     </TrajectPageFrame>
-  );
-}
-
-type TriageOptionCardProps = {
-  tone: "muted" | "primary";
-  icon: typeof Mail01Icon;
-  title: string;
-  description: string;
-  bullets: readonly string[];
-  cta: string;
-  to: string;
-  onBeforeNavigate?: () => void;
-};
-
-function TriageOptionCard({
-  tone,
-  icon,
-  title,
-  description,
-  bullets,
-  cta,
-  to,
-  onBeforeNavigate,
-}: TriageOptionCardProps) {
-  const isPrimary = tone === "primary";
-  return (
-    <Card
-      className={
-        isPrimary
-          ? "flex h-full flex-col gap-section py-section shadow-proc-md ring-2 ring-primary/30"
-          : "flex h-full flex-col gap-section py-section shadow-proc-xs"
-      }
-    >
-      <CardHeader className="!flex flex-row items-start gap-section px-section">
-        <div
-          className={
-            isPrimary
-              ? "flex size-11 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground"
-              : "flex size-11 shrink-0 items-center justify-center rounded-md bg-secondary text-secondary-foreground"
-          }
-        >
-          <HugeiconsIcon icon={icon} className="size-6" />
-        </div>
-        <div className="flex min-w-0 flex-1 flex-col">
-          <H2>{title}</H2>
-          <CardDescription className="text-sm leading-normal">{description}</CardDescription>
-        </div>
-      </CardHeader>
-      <CardContent className="flex flex-1 flex-col justify-between gap-section px-section">
-        <ul className="flex flex-col gap-micro">
-          {bullets.map((b) => (
-            <li key={b} className="flex items-start gap-micro text-sm leading-normal">
-              <HugeiconsIcon
-                icon={CheckmarkCircle02Icon}
-                className="mt-0.5 size-4 shrink-0 text-accent-foreground"
-              />
-              <span>{b}</span>
-            </li>
-          ))}
-        </ul>
-        <Button
-          asChild
-          variant={isPrimary ? "default" : "outline"}
-          className="w-full justify-between"
-        >
-          <Link to={to} onClick={onBeforeNavigate}>
-            {cta}
-            <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
-          </Link>
-        </Button>
-      </CardContent>
-    </Card>
   );
 }

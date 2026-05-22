@@ -65,6 +65,7 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Regio/land-veld op Metrologie-attest van Textarea naar Input (single-line). Multi-select Combobox blijft een follow-up wanneer een dedicated multi-country-picker primitive er is.
 - [x] Copy taalregister 4.13 (OnboardingRegistrationCompletePage): alle copy-items doorgevoerd (je-vorm, titels, statuspillen, digitalFollowBrief, voetnoten, callouts); off-token `text-[1.0625rem]` en `leading-[1.65]` gesnapt naar `text-base`.
 - [x] Heading a11y-volgorde verificatie (één `h1` per pagina, logische `h2 → h3`-keten): wordt meegenomen in de page-specifieke aanpassingen — apart validatiepunt vervalt.
+- [x] Distill 5.2 — TriageOptionCard geëxtraheerd naar `DecisionCard` + `DecisionCardCallout` in `packages/ui-lib` (stories per tone/variant, geen "Triage"-naam zodat de shape app-agnostisch blijft). TriagePage en `ExpertCallFooterCard` op Wegwijzer consumeren de nieuwe primitives; story-only `CalloutBanner`-placeholder verwijderd want hij leeft nu als `DecisionCardCallout`.
 
 ---
 
@@ -308,15 +309,6 @@ _Feedback origineel gezien op:_ [BrandGradientHero.tsx:6-28](apps/frontend-pt1-e
 - [ ] Indien gewenst als geldige Procertus-hero op een toekomstige publieke pagina: herschrijf de copy in Nederlands en haal de codetoken-references uit de tekst.
 
 ### 5.2 Primitives en libraries
-
-#### TriageOptionCard zit lokaal in TriagePage, terwijl de shape generiek voelt
-
-_Feedback origineel gezien op:_ [TriagePage.tsx:138-208](apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx#L138). De lokaal gedefinieerde `TriageOptionCard` heeft een generiek shape (icon-tile + titel + korte beschrijving + check-bullets + tone "primary" of "muted" + CTA met arrow). Dezelfde shape duikt al op in `MasterCard`-subsecties en is een logische kandidaat voor BENOR/ATG-keuzeschermen later.
-
-- [ ] Hef de lokale definitie op en breng een algemene "DecisionCard" (of vergelijkbare naam) in `packages/ui-lib` als generieke twee-tone keuzekaart. Naam mag niet "Triage" bevatten omdat de inhoud niet domeingebonden is (cf. memory "Name by content, not consumer"). Eerste consument: TriagePage; tweede potentiële consument: het beslismoment "formele aanvraag vs informatieve aanvraag" in andere flows.
-- [ ] Alternatief, als extractie te zwaar voelt: laat de component lokaal, maar dun hem af. De zes bullets aan de primary-kant kunnen naar drie (de bullet-pass voor Triage is al gebeurd, zie [Afgewerkt](#afgewerkt)), de `shadow-proc-md` + `ring-2 ring-primary/30` voelen samen overdone op een muted-vs-primary paar. Eén van beide volstaat als visueel signaal.
-
-> Raakt aan [Choice card componenten](#choice-card-componenten) in sectie 1: een nieuwe `DecisionCard` is mogelijk de juiste plek om die optimalisatieslag te bundelen.
 
 #### BrowseCard `variant="faded"` wordt in productie één keer gebruikt
 

@@ -15,10 +15,8 @@ import {
   AlertDescription,
   AlertTitle,
   Button,
-  Card,
   DownloadableItemGrid,
   type DownloadableItemData,
-  H3,
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
@@ -33,6 +31,7 @@ import {
 } from "@procertus-ui/ui";
 import {
   BrowseCard,
+  DecisionCardCallout,
   DetailCard,
   DetailCardSection,
   type ChoiceBarItem,
@@ -275,34 +274,23 @@ function AllCertificatesGrid({
 
 function ExpertCallFooterCard() {
   const navigate = useNavigate();
-  // Hero-CTA: gebruiker drukt expliciet de reset, eerdere traject-breadcrumbs worden gewist zodat
-  // het expert-call formulier echt context-loos verzonden wordt.
   const handleHeroExpertCall = () => {
     clearTrajectBreadcrumbs();
     navigate(EXPERT_CALL_PATH());
   };
   return (
-    <Card
-      className="relative col-span-4 flex cursor-pointer flex-col gap-section px-section py-section md:col-span-2"
-      style={{ background: "var(--gradient-neutral)" }}
-    >
-      <div className="flex flex-col gap-micro">
-        <H3>Wil je eerst een expert spreken?</H3>
-        <p className="text-sm leading-normal text-muted-foreground">
-          Reserveer een live online sessie van één uur en overloop de vereisten samen met een
-          PROCERTUS-expert.
-        </p>
-      </div>
-      <Button
-        type="button"
-        variant="outline"
-        onClick={handleHeroExpertCall}
-        className="self-start bg-background before:absolute before:inset-0 before:content-[''] group-hover/card:rounded-tl-[4px] group-hover/card:rounded-tr-[var(--cmd-deep)] group-hover/card:rounded-br-[4px] group-hover/card:rounded-bl-[var(--cmd-deep)] group-hover/card:bg-muted group-hover/card:text-foreground"
-      >
-        <HugeiconsIcon icon={Call02Icon} className="size-4" />
-        Plan een gesprek
-      </Button>
-    </Card>
+    <DecisionCardCallout
+      orientation="vertical"
+      className="col-span-4 md:col-span-2"
+      title="Wil je eerst een expert spreken?"
+      description="Reserveer een live online sessie van één uur en overloop de vereisten samen met een PROCERTUS-expert."
+      cta={{
+        label: "Plan een gesprek",
+        icon: Call02Icon,
+        asChild: true,
+        children: <button type="button" onClick={handleHeroExpertCall} />,
+      }}
+    />
   );
 }
 
