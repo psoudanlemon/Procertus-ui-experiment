@@ -56,7 +56,7 @@ import { IdentificatiePersonTitleRoleCapture } from "../../../onboarding/identif
 import { IdentificatiePersonRegistryPicker } from "../../../onboarding/identificatie-person-registry-picker";
 import type { OnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
 
-import { OptionalCheckboxSection } from "./primitives/OptionalCheckboxSection";
+import { OptionalCheckboxSection } from "../shared/OptionalCheckboxSection";
 
 export type OnboardingInvoicingStepRedesignProps = {
   model: OnboardingRegistrationLayoutModel;

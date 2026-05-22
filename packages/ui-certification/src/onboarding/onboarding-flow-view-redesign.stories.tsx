@@ -8,23 +8,25 @@
  *
  * Vergelijk side-by-side met `Onboarding/Flow/Full flow view (composed)` om het effect
  * van het redesign in de daadwerkelijke flow te beoordelen.
+ *
+ * NB: de zetel-stap (3.7) van het redesign-traject is gepromoveerd naar productie en
+ * leeft hier dus niet meer als aparte body-swap. Deze story toont alleen nog de
+ * resterende redesign-experimenten: Certificatie (Accordion-variant), Facturatie en
+ * Nazicht.
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useCallback, useLayoutEffect, useState, type ComponentType } from "react";
+import { useLayoutEffect, type ComponentType } from "react";
 
-import { OnboardingCompanyZetelStepRedesign } from "../components/onboarding/redesign/OnboardingCompanyZetelStepRedesign";
+import { OnboardingCertificatieStepRedesign } from "../components/onboarding/redesign/OnboardingCertificatieStepRedesign";
 import { OnboardingInvoicingStepRedesign } from "../components/onboarding/redesign/OnboardingInvoicingStepRedesign";
 import { OnboardingSummaryStepRedesign } from "../components/onboarding/redesign/OnboardingSummaryStepRedesign";
 
-import { resolveFlowContext } from "./onboarding-flow-helpers";
-import type { CustomerContext } from "./onboarding-types";
 import { registrationStepIndex } from "./onboarding-registration-steps";
 import {
   OnboardingFlowStoryView,
   baseOnboardingFlowViewProps,
   noop,
   storyCustomerContext,
-  storyEmptyCompanyFieldKeySet,
   storyOnboardingDrafts,
   storyOnboardingStepperSteps,
   storyRequestOrigin,
@@ -54,15 +56,13 @@ const PublicLayoutDecorator = (Story: ComponentType) => {
 
 /**
  * Eén renderStepBody-callback voor de hele redesign. Pakt elke step-id en swapt de
- * redesign-component erin. Onbekende steps (innovation, metrology, companyLegalEntities)
- * geven `undefined` terug zodat de flow-view daar de originele body kan blijven gebruiken.
- *
- * NB: we returnen `null` voor steps die in het redesign-traject niet meer bestaan (zoals
- * companyLegalEntities, dat is samengevoegd in de zetel-step) — dat houdt de stepper-volgorde
- * intact terwijl de body leeg blijft. Zie design-doc § 3.8.
+ * redesign-component erin. Onbekende steps (innovation, metrology, …) geven `null`
+ * terug zodat de flow-view daar de originele body kan blijven gebruiken.
  */
 const renderRedesignStepBody: OnboardingFlowViewRenderStepBody = ({ step, model }) => {
-  if (step === "company") return <OnboardingCompanyZetelStepRedesign model={model} />;
+  if (step === "companyLegalEntities") {
+    return <OnboardingCertificatieStepRedesign model={model} />;
+  }
   if (step === "invoicing") return <OnboardingInvoicingStepRedesign model={model} />;
   if (step === "summary") return <OnboardingSummaryStepRedesign model={model} />;
   if (step === "extras") {
@@ -72,17 +72,6 @@ const renderRedesignStepBody: OnboardingFlowViewRenderStepBody = ({ step, model 
         <p>
           In het redesign zit cert/inspectie-contact (en het reservecontact) inline op de
           stap Facturatie. Deze stap kan uit de stepper-volgorde verdwijnen.
-        </p>
-      </div>
-    );
-  }
-  if (step === "companyLegalEntities") {
-    return (
-      <div className="space-y-3 rounded-lg border border-dashed border-border bg-muted/20 p-section text-sm text-muted-foreground">
-        <p className="font-medium text-foreground">Certificatie (entiteit) verdwijnt als aparte stap</p>
-        <p>
-          In het redesign zit de koppeling product → zetel inline op de stap Maatschappelijke
-          zetel. Deze stap kan uit de stepper-volgorde verdwijnen.
         </p>
       </div>
     );
@@ -107,199 +96,36 @@ const meta = {
 
 export default meta;
 
-function InteractiveCompanyLookupStart() {
-  const drafts = storyOnboardingDrafts;
-  const activePreset =
-    findVatPrototypePreset(DEFAULT_VAT_PROTOTYPE_PRESET_ID) ?? VAT_PROTOTYPE_PRESETS[0]!;
-
-  const [ctx, setCtx] = useState<CustomerContext>(() =>
-    storyCustomerContext({
-      vatNumber: "",
-      organizationName: "",
-      country: "",
-      addressStreet: "",
-      addressHouseNumber: "",
-      addressPostalCode: "",
-      addressCity: "",
-    }),
-  );
-  const [phase, setPhase] = useState<"idle" | "loading" | "ready">("idle");
-  const [progress, setProgress] = useState(0);
-  const [stepIdx, setStepIdx] = useState(-1);
-
-  const updateContext = useCallback(
-    (field: keyof CustomerContext, value: CustomerContext[keyof CustomerContext]) => {
-      setCtx((prev) => resolveFlowContext({ ...prev, [field]: value }));
-    },
-    [],
-  );
-  const patchContext = useCallback((patch: Partial<CustomerContext>) => {
-    setCtx((prev) => resolveFlowContext({ ...prev, ...patch }));
-  }, []);
-
-  const onStartLookup = useCallback(() => {
-    setPhase("loading");
-    setProgress(0);
-    setStepIdx(-1);
-    window.setTimeout(() => { setProgress(25); setStepIdx(0); }, 200);
-    window.setTimeout(() => { setProgress(55); setStepIdx(1); }, 900);
-    window.setTimeout(() => { setProgress(85); setStepIdx(2); }, 1700);
-    window.setTimeout(() => {
-      const m = activePreset.mock;
-      setCtx((prev) =>
-        resolveFlowContext({
-          ...prev,
-          organizationName: m.organizationName,
-          country: "België",
-          addressStreet: m.addressStreet,
-          addressHouseNumber: m.addressHouseNumber,
-          addressPostalCode: m.addressPostalCode,
-          addressCity: m.addressCity,
-        }),
-      );
-      setPhase("ready");
-      setProgress(100);
-    }, 2500);
-  }, [activePreset]);
-
-  const renderStepBody: OnboardingFlowViewRenderStepBody = (args) => {
-    if (args.step === "company") {
-      return (
-        <OnboardingCompanyZetelStepRedesign
-          model={args.model}
-          onStartLookup={onStartLookup}
-        />
-      );
-    }
-    return renderRedesignStepBody(args);
-  };
-
-  return (
-    <OnboardingFlowStoryView
-      {...baseOnboardingFlowViewProps({
-        step: "company",
-        context: ctx,
-        drafts,
-        steps: storyOnboardingStepperSteps({
-          step: "company",
-          context: ctx,
-          drafts,
-          requestOrigin: storyRequestOrigin,
-        }),
-        activeStep: registrationStepIndex("company", drafts),
-        companyLookupPhase: phase,
-        lookupProgress: progress,
-        lookupStepIndex: stepIdx,
-        vatLookupStepLabels: vatLookupSimulationStepsForPreset(activePreset),
-        companyPrefillFieldKeys: storyEmptyCompanyFieldKeySet,
-        companyFieldsResolvedInSimulation: storyEmptyCompanyFieldKeySet,
-        vatNumberForDisplay: ctx.vatNumber.trim(),
-        emailForDisplay: ctx.representativeEmail.trim(),
-        activeVatPreset: activePreset,
-        prototypeVatPresetId: activePreset.id,
-        updateContext: updateContext as ReturnType<
-          typeof baseOnboardingFlowViewProps
-        >["updateContext"],
-        patchContext: patchContext as ReturnType<
-          typeof baseOnboardingFlowViewProps
-        >["patchContext"],
-        primaryAction: { label: "Verder", onClick: noop, disabled: phase !== "ready" },
-        rows: [],
-        effectiveSummaryIncludedDraftIds: phase === "ready" ? drafts.map((d) => d.id) : [],
-      })}
-      renderStepBody={renderStepBody}
-    />
-  );
-}
-
-export const CompanyLookupStart: StoryObj<typeof meta> = {
-  name: "01 — Maatschappelijke zetel · start (redesign)",
-  render: () => <InteractiveCompanyLookupStart />,
-};
-
-export const CompanyLookupLoading: StoryObj<typeof meta> = {
-  name: "02 — Maatschappelijke zetel · lookup (redesign)",
+export const CertificatieStep: StoryObj<typeof meta> = {
+  name: "04 — Bedrijfslocaties & certificatie · Accordion (redesign)",
   render: () => {
     const drafts = storyOnboardingDrafts;
-    const ctx = storyCustomerContext({
-      organizationName: "",
-      country: "",
-      addressStreet: "",
-      addressHouseNumber: "",
-      addressPostalCode: "",
-      addressCity: "",
-    });
+    const includedIds = drafts.map((d) => d.id);
+    const ctx = storyCustomerContext({ headOfficeIsCertificationLegalEntity: "yes" });
     const activePreset =
       findVatPrototypePreset(DEFAULT_VAT_PROTOTYPE_PRESET_ID) ?? VAT_PROTOTYPE_PRESETS[0]!;
     return (
       <OnboardingFlowStoryView
         {...baseOnboardingFlowViewProps({
-          step: "company",
+          step: "companyLegalEntities",
           context: ctx,
           drafts,
           steps: storyOnboardingStepperSteps({
-            step: "company",
+            step: "companyLegalEntities",
             context: ctx,
             drafts,
             requestOrigin: storyRequestOrigin,
           }),
-          activeStep: registrationStepIndex("company", drafts),
-          companyLookupPhase: "loading",
-          lookupProgress: 48,
-          lookupStepIndex: 2,
-          vatLookupStepLabels: vatLookupSimulationStepsForPreset(activePreset),
-          companyPrefillFieldKeys: storyEmptyCompanyFieldKeySet,
-          companyFieldsResolvedInSimulation: storyEmptyCompanyFieldKeySet,
-          vatNumberForDisplay: ctx.vatNumber.trim(),
-          emailForDisplay: ctx.representativeEmail.trim(),
-          activeVatPreset: activePreset,
-          prototypeVatPresetId: activePreset.id,
-          primaryAction: { label: "Verder", onClick: noop, disabled: true },
-          rows: [],
-          effectiveSummaryIncludedDraftIds: [],
-        })}
-        renderStepBody={renderRedesignStepBody}
-      />
-    );
-  },
-};
-
-export const CompanyLookupReady: StoryObj<typeof meta> = {
-  name: "03 — Maatschappelijke zetel · klaar + multi-zetel (redesign)",
-  render: () => {
-    const drafts = storyOnboardingDrafts;
-    const ctx = storyCustomerContext();
-    const activePreset =
-      findVatPrototypePreset(DEFAULT_VAT_PROTOTYPE_PRESET_ID) ?? VAT_PROTOTYPE_PRESETS[0]!;
-    return (
-      <OnboardingFlowStoryView
-        {...baseOnboardingFlowViewProps({
-          step: "company",
-          context: ctx,
-          drafts,
-          steps: storyOnboardingStepperSteps({
-            step: "company",
-            context: ctx,
-            drafts,
-            requestOrigin: storyRequestOrigin,
-          }),
-          activeStep: registrationStepIndex("company", drafts),
+          activeStep: registrationStepIndex("companyLegalEntities", drafts),
           companyLookupPhase: "ready",
           lookupProgress: 100,
           lookupStepIndex: 2,
           vatLookupStepLabels: vatLookupSimulationStepsForPreset(activePreset),
-          companyPrefillFieldKeys: new Set([
-            "organizationName",
-            "country",
-            "addressStreet",
-            "addressHouseNumber",
-            "addressPostalCode",
-            "addressCity",
-          ]),
-          companyFieldsResolvedInSimulation: new Set(["organizationName", "country"]),
+          activeVatPreset: activePreset,
+          prototypeVatPresetId: activePreset.id,
           primaryAction: { label: "Verder", onClick: noop, disabled: false },
           rows: [],
-          effectiveSummaryIncludedDraftIds: [],
+          effectiveSummaryIncludedDraftIds: includedIds,
         })}
         renderStepBody={renderRedesignStepBody}
       />
