@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { IconSvgElement } from "@hugeicons/react";
-import procertusLogo from "@procertus-ui/ui/assets/Procertus logo.svg";
+import procertusLogo from "@procertus-ui/ui/assets/Procertus Logo with tagline.svg";
 
 import { cn } from "@procertus-ui/ui";
 
@@ -19,8 +19,19 @@ export type StatusPageAction = {
 };
 
 export type StatusPageProps = {
-  /** Logo element rendered at the very top. Defaults to the PROCERTUS wordmark image. Pass `null` to hide. */
+  /** Logo element rendered at the top of the inner column. Defaults to the PROCERTUS wordmark image. Pass `null` to hide. */
   logo?: React.ReactNode | null;
+  /**
+   * Href for the logo link (middle-click, copy link). When `onLogoClick` is set,
+   * navigation uses that callback instead of a full document load. Default `/`.
+   * Pass an empty string to skip the anchor wrapper (e.g. when the logo node
+   * already contains its own link).
+   */
+  logoHref?: string;
+  /** Client navigation for the logo (e.g. React Router). When set, click does not perform a full document load. */
+  onLogoClick?: () => void;
+  /** Accessible name for the logo link. Defaults to "Naar startpagina". */
+  logoAriaLabel?: string;
   /** Large icon displayed above the heading. */
   icon?: IconSvgElement;
   /** Optional image/illustration element — replaces the icon when provided. */
@@ -95,6 +106,9 @@ const defaultLogo = (
 
 function StatusPage({
   logo = defaultLogo,
+  logoHref = "/",
+  onLogoClick,
+  logoAriaLabel = "Naar startpagina",
   icon,
   illustration,
   heading,
@@ -106,6 +120,27 @@ function StatusPage({
   belowCardClassName,
   statusContentClassName,
 }: StatusPageProps) {
+  const wrappedLogo =
+    logo === null ? null : logoHref ? (
+      <a
+        href={logoHref}
+        onClick={
+          onLogoClick
+            ? (e) => {
+                e.preventDefault();
+                onLogoClick();
+              }
+            : undefined
+        }
+        aria-label={logoAriaLabel}
+        className="inline-flex rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      >
+        {logo}
+      </a>
+    ) : (
+      logo
+    );
+
   return (
     <div
       className={`relative flex min-h-svh w-full flex-col items-center justify-center overflow-hidden bg-background p-boundary ${className ?? ""}`}
@@ -113,17 +148,13 @@ function StatusPage({
       {/* Brand watermark — bottom-right, partially off-screen */}
       <BrandWatermark />
 
-      {/* Logo — top center */}
-      {logo !== null && (
-        <div className="absolute top-boundary left-1/2 -translate-x-1/2">{logo}</div>
-      )}
-
       <div
         className={cn(
           "relative z-10 flex w-full flex-col items-center gap-region",
           innerColumnClassName ?? "max-w-md",
         )}
       >
+        {wrappedLogo}
         <StatusContent
           icon={icon}
           illustration={illustration}

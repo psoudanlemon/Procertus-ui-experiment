@@ -4,7 +4,7 @@ import { useState } from "react";
 import { DraftRequestList, type DraftRequestItem } from "./DraftRequestList";
 
 const meta = {
-  title: "Certification Request/DraftRequestList",
+  title: "Requested Certifications/DraftRequestList",
   component: DraftRequestList,
   parameters: {
     layout: "padded",

@@ -16,7 +16,7 @@ const dateLabels = {
 };
 
 const meta = {
-  title: "Certification Request/CertificationRequestLifecycleTimeline",
+  title: "Requested Certifications/CertificationRequestLifecycleTimeline",
   component: CertificationRequestLifecycleTimeline,
   parameters: {
     layout: "padded",

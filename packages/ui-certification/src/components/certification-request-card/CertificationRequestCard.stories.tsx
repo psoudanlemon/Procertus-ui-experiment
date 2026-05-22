@@ -7,7 +7,7 @@ import {
 } from "./CertificationRequestCard";
 
 const meta = {
-  title: "Certification Request/CertificationRequestCard",
+  title: "Requested Certifications/CertificationRequestCard",
   component: CertificationRequestCard,
   parameters: {
     layout: "padded",

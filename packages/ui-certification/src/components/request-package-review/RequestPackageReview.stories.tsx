@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RequestPackageReview } from "./RequestPackageReview";
 
 const meta = {
-  title: "Certification Request/RequestPackageReview",
+  title: "Requested Certifications/RequestPackageReview",
   component: RequestPackageReview,
   parameters: {
     layout: "padded",

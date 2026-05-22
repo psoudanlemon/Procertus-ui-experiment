@@ -120,18 +120,10 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
+          "Traject configuration",
           "Onboarding",
-          "Custom components",
-          [
-            "Application shell",
-            "Authentication",
-            [
-              "*",
-              "Forms",
-              ["Account details", "Login", "Forgot password", "Verify code", "Set password"],
-            ],
-            "Status pages",
-          ],
+          "Certification submitted",
+          "Requested Certifications",
         ],
       },
     },

@@ -36,7 +36,6 @@ export type {
 } from "./components/registration-processing-dialog";
 export { InfoRequestSubmittedPanel } from "./components/info-request-submitted";
 export type {
-  InfoRequestInquiryLine,
   InfoRequestSubmittedPanelProps,
   InfoRequestSubmittedPortalPerson,
   InfoRequestSubmittedSnapshot,

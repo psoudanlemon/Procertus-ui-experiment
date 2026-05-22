@@ -6,9 +6,10 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 
 1. [**Cross-cutting patronen / componenten**](#1-cross-cutting-patronen--componenten): herbruikbare componenten en token-beslissingen die op meerdere plekken landen.
 2. [**Flow- en gedrags-architectuur**](#2-flow--en-gedrags-architectuur): bredere beslissingen over winkelmandje, drafts en navigatie.
-3. [**Page-specifieke wijzigingen**](#3-page-specifieke-wijzigingen): per scherm (3.1 t/m 3.12), met cross-refs naar cross-cutting items.
+3. [**Page-specifieke wijzigingen**](#3-page-specifieke-wijzigingen): per scherm (3.3 t/m 3.11), met cross-refs naar cross-cutting items.
 4. [**Copy en taalregister**](#4-copy-en-taalregister): afgewerkt (4.11 en 4.13 doorgevoerd).
-5. [**Distill audit (2026-05-21)**](#5-distill-audit-2026-05-21): één resterende app-level finding (InfoRequestSubmittedPage); overige findings afgewerkt of bewust niet doorgevoerd (zie Afgewerkt).
+
+De Distill audit (2026-05-21) is volledig afgewerkt; alle findings staan in [Afgewerkt](#afgewerkt).
 
 **Onderdelen in sectie 1, in alfabetische scan-volgorde:**
 [Choice card componenten](#choice-card-componenten) · [Copy density](#copy-density) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Stepper](#stepper) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox) · [Veldtype per invulveld](#veldtype-per-invulveld).
@@ -67,6 +68,8 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Heading a11y-volgorde verificatie (één `h1` per pagina, logische `h2 → h3`-keten): wordt meegenomen in de page-specifieke aanpassingen — apart validatiepunt vervalt.
 - [x] Distill 5.1: BrandGradientHero verplaatst naar story `design tokens/Gradient/Hero` en uit app-source verwijderd; off-token `max-w-[1400px]` op `DesignSystemPage` gesnapt naar `max-w-7xl`.
 - [x] Distill 5.1: expert-call dedup bewust niet doorgevoerd; de callout staat op Triage en Wegwijzer in identieke vorm voor consistente ankering.
+- [x] Distill 5.1: "Organisatie en context" kaart op InfoRequestSubmittedPage opgevouwen in de lead — organisatie + ontvangen-op timestamp nu in de heading-paragraaf, aparte kaart verdwenen. Heading hernoemd naar "Bedankt voor je aanvraag".
+- [x] Distill 5.1: "Onboarding naar het Klantenportaal" en "Volgende stappen op het Klantenportaal" samengevoegd tot één sectie "Volg je dossier op" met verwijzing naar My PROCERTUS en compacte tabel (e-mailadres + rol) van uitgenodigde contactpersonen. Logica gebundeld in [`InfoRequestSubmittedPanel`](packages/ui-certification/src/components/info-request-submitted/InfoRequestSubmittedPanel.tsx) (`ui-certification`) en geconsumeerd door [InfoRequestSubmittedPage.tsx](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx). De vijf portal-onboarding bullets verhuizen naar de portal-context.
 - [x] Distill 5.2: TriageOptionCard geëxtraheerd naar `DecisionCard` + `DecisionCardCallout` in `packages/ui-lib`; TriagePage en de Wegwijzer-callout consumeren de primitives.
 - [x] Distill 5.2: `data-density` regel publiek=spacious / ingelogd=operational doorgevoerd via `PublicAppShell` en de twee top-level publieke confirmation-pagina's; redundante lokale overrides opgeruimd.
 - [x] Distill 5.2: BrowseCard `variant="faded"` bewust behouden in de set voor toekomstige opportuniteiten.
@@ -74,6 +77,7 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Autocomplete-primitive gebouwd in packages/ui (input-as-trigger, popover opent enkel bij relevante content, async fetch met abort-signal, loading/empty/results states, results-heading, input-like progressive states).
 - [x] BTW/KBO-veld op Registratie naar Autocomplete voor `origin = be`: kboAutocomplete-adapter met mock-dataset bouwt het Belgische scenario; selectie autovult bedrijfsnaam, zeteladres en land/landcode. Voor andere origins blijft de Input met structurele validatie het gedrag.
 - [x] Header-spacing geoptimaliseerd: consistent ritme en betere groepering tussen icon buttons en de primaire login knop.
+- [x] 3.12 OnboardingRegistrationCompletePage geconsolideerd: drie afzonderlijke `PublicOverviewSection`-kaarten ("Je ingediende aanvragen en wat eerst volgt", "Je teamleden in het Klantenportaal", "Volgende stappen, meteen na deze melding") plus de mailbox-voettekst en `Reset sessie-gegevens`-knop verwijderd. Pagina hergebruikt nu `InfoRequestSubmittedPanel` met registratie-specifieke copy en een primary/secondary CTA-paar ("Ga naar Klantenportaal" + "Open mijn mailbox"). Panel uitgebreid met override-props (`heading`, `description`, `sectionTitle`, `sectionDescription`, `actions`) zodat één compositie zowel de informatieaanvraag- als registratie-bevestiging dekt.
 
 ---
 
@@ -249,37 +253,4 @@ _Route:_ [`/login`](http://localhost:5173/login)
 
 - [ ] Bouw afbeelding-rotatie / pool van meerdere visuals op de klantenportaal login pagina (huidige situatie: altijd dezelfde witte bouwvakker).
 - [ ] Stel de pool divers samen — o.a. vrouwen, mensen met andere huidskleur of achtergrond — passend bij de Procertus-context (bouw, productie, certificering).
-
-### 3.12 Bevestigingspagina na indiening ("Uw account is klaar")
-
-_Route:_ [`/registratie-voltooid`](http://localhost:5173/registratie-voltooid)
-
-Doel van deze pagina is enkel (1) bevestigen dat de indiening gelukt is, en (2) de gebruiker aansporen om in te loggen in het portaal.
-
-- [ ] Verwijder kaart "Uw ingediende aanvragen — wat volgt eerst digitaal" (redundant met Nazicht).
-- [ ] Kort kaart "Onboarding van gebruikers naar het Klantenportaal" in tot één regel, bv. "De vermelde personen ontvangen een uitnodiging voor het portaal en kunnen daarna inloggen en de status van de aanvragen opvolgen."
-- [ ] Verwijder kaart "Volgende digitale onboarding — direct na deze melding" (deze instructies horen ín het portaal als first-run hints na login).
-- [ ] Verwijder of integreer voettekst "Stappen rechts-onder in uw mailbox nu" als één korte zin.
-- [ ] Consolideer alle behouden info in één bevestigingskaart met succesmelding, dossiernummer/contact-e-mail en de korte onboarding-zin.
-- [ ] Toon twee gewogen CTA's: "Ga naar Klantenportaal" (primary) en "Open mijn mailbox" (secondary).
-
-
----
-
-## 5. Distill audit (2026-05-21)
-
-_Audit gedaan met de `/distill` skill om visuele en structurele overcomplexiteit op te sporen in de app en in de gelinkte primitives. Items die elders in dit document al worden aangepakt (kaart-verwijderingen op de bevestigingspagina, copy-density passes, choice-card vs checkbox, enz.) zijn hier overgeslagen. Als een audit-finding doorwerkt op een page- of copy-item, staat dat als kruisverwijzing onder de bevinding zodat geen van beide kanten uit zicht raakt._
-
-### 5.1 App-level
-
-#### Vier gestapelde bordered cards op InfoRequestSubmittedPage beslaan dezelfde temporele fase
-
-_Feedback origineel gezien op:_ **Aanvraag verzonden** [InfoRequestSubmittedPage.tsx:39-199](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L39). De pagina toont vier `PublicOverviewSection`-kaarten onder elkaar: "Wat maakte deel uit van uw aanvraag", "Organisatie en context", "Onboarding naar het Klantenportaal", "Uw volgende stappen op het Klantenportaal". Drie ervan beschrijven hetzelfde toekomstige moment (wat er na het verzenden gebeurt), en "Organisatie en context" herhaalt waardes die al in de lead-paragraaf staan.
-
-- [ ] Vouw "Organisatie en context" [InfoRequestSubmittedPage.tsx:77](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L77) in de lead-beschrijving in. Kanaal en organisatie zijn al in de heading-paragraaf vermeld; alleen het tijdstip "Ontvangen" mag eventueel als compacte regel onder de lead blijven.
-- [ ] Voeg "Onboarding naar het Klantenportaal" [InfoRequestSubmittedPage.tsx:125](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L125) en "Uw volgende stappen op het Klantenportaal" [InfoRequestSubmittedPage.tsx:173](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L173) samen tot één sectie "Volgende stappen". Behoud de personenlijst, plaats de twee tot drie kerninstructies eronder. De vijf bullets van "Volgende stappen" zijn portal-onboarding en horen daar inhoudelijk thuis, niet op de bevestigingspagina (cf. analoge keuze in [3.12](#312-bevestigingspagina-na-indiening-uw-account-is-klaar) voor de registratie-bevestiging).
-
-> De copy-acties voor deze pagina zijn al doorgevoerd (zie [Afgewerkt](#afgewerkt)). Een deel van die tekst-aanpassingen verhuist of vervalt als de secties samengevoegd of geschrapt worden.
-
-> _Voortgang:_ vergelijkingscomponent `InfoRequestSubmittedPanel` toegevoegd in `packages/ui-certification/src/components/info-request-submitted/` met stories `Current`, `Proposed` en `ProposedMinimal`. Hierdoor kunnen de huidige en voorgestelde composities zij-aan-zij geëvalueerd worden in Storybook voor de definitieve keuze gemaakt en op `InfoRequestSubmittedPage` toegepast wordt.
 
