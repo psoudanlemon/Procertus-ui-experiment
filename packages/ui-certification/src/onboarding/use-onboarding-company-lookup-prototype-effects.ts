@@ -54,27 +54,19 @@ export function useOnboardingCompanyLookupPrototypeEffects(surfaceStep: Onboardi
       timeoutIds.push(window.setTimeout(fn, delayMs));
     };
 
-    scheduleLookup(150, () => {
-      setLookupProgress(12);
+    scheduleLookup(200, () => {
+      setLookupProgress(25);
       setLookupStepIndex(0);
     });
-    scheduleLookup(700, () => {
-      setLookupProgress(30);
+    scheduleLookup(900, () => {
+      setLookupProgress(55);
       setLookupStepIndex(1);
     });
-    scheduleLookup(1300, () => {
-      setLookupProgress(48);
+    scheduleLookup(1700, () => {
+      setLookupProgress(85);
       setLookupStepIndex(2);
     });
-    scheduleLookup(1900, () => {
-      setLookupProgress(64);
-      setLookupStepIndex(3);
-    });
     scheduleLookup(2500, () => {
-      setLookupProgress(80);
-      setLookupStepIndex(4);
-    });
-    scheduleLookup(3300, () => {
       setFlowState((prev) => {
         const baseContext = resolveFlowContext(
           prev.context as Partial<CustomerContext> & {

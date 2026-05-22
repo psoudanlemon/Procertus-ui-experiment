@@ -326,7 +326,7 @@ export function useCertificationRequestWizardModel({
         activeStep > 0
           ? { label: "Terug", onClick: () => goToStep(Math.max(0, activeStep - 1)) }
           : undefined,
-      cancelAction: onCancel ? { label: "Annuleren", onClick: onCancel } : undefined,
+      cancelAction: onCancel ? { label: "Aanvraag annuleren", onClick: onCancel } : undefined,
       secondaryAction: undefined,
       primaryAction: {
         label:

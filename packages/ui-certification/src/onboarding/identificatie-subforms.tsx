@@ -128,6 +128,7 @@ export function IdentificatiePersonSubform({
   contactRowExtra,
   disabled = false,
   emphasizeInvalidRequiredMarkers = false,
+  layout = "auto",
 }: {
   idPrefix: string;
   value: IdentificatiePersonSubformValue;
@@ -150,23 +151,42 @@ export function IdentificatiePersonSubform({
    * invalid (e.g. bad e-mail) while this slice is still incomplete relative to onboarding rules.
    */
   emphasizeInvalidRequiredMarkers?: boolean;
+  /**
+   * `"auto"` (default) picks 2–4 columns based on which extras are passed.
+   * `"twoColumn"` forces a fixed 2-column md+ grid: each field takes one column,
+   * email spans both, description spans both. Used by the redesign step.
+   */
+  layout?: "auto" | "twoColumn";
 }) {
   const patch = (partial: Partial<IdentificatiePersonSubformValue>) =>
     onChange({ ...value, ...partial });
 
   const emphasize = emphasizeInvalidRequiredMarkers;
 
+  const forceTwoColumn = layout === "twoColumn";
   const baseMdColCount = startExtra ? (titleDisabled ? 3 : 4) : titleDisabled ? 2 : 3;
-  const narrowNameRowWithContactExtra = Boolean(contactRowExtra) && baseMdColCount === 2;
-  const mdColCount = narrowNameRowWithContactExtra ? 3 : baseMdColCount;
-  const hasNarrowLeadingColumn = Boolean(startExtra);
+  const narrowNameRowWithContactExtra =
+    !forceTwoColumn && Boolean(contactRowExtra) && baseMdColCount === 2;
+  const mdColCount = forceTwoColumn
+    ? 2
+    : narrowNameRowWithContactExtra
+      ? 3
+      : baseMdColCount;
+  const hasNarrowLeadingColumn = !forceTwoColumn && Boolean(startExtra);
   /** Role row is rol · taal · telefoon · e-mail; expand to four columns and let achternaam span two. */
   const secondRowNeedsFourCols =
-    Boolean(contactRowExtra) && Boolean(hasNarrowLeadingColumn) && mdColCount === 3;
+    !forceTwoColumn &&
+    Boolean(contactRowExtra) &&
+    Boolean(hasNarrowLeadingColumn) &&
+    mdColCount === 3;
   const lastNameMdSpanTwo =
-    narrowNameRowWithContactExtra ||
-    (Boolean(contactRowExtra) && Boolean(hasNarrowLeadingColumn) && mdColCount === 3);
+    !forceTwoColumn &&
+    (narrowNameRowWithContactExtra ||
+      (Boolean(contactRowExtra) && Boolean(hasNarrowLeadingColumn) && mdColCount === 3));
   const gridColsClass = (() => {
+    if (forceTwoColumn) {
+      return "md:grid-cols-2";
+    }
     if (secondRowNeedsFourCols) {
       return "md:grid-cols-[0.62fr_1fr_1fr_1fr]";
     }
@@ -184,15 +204,22 @@ export function IdentificatiePersonSubform({
     }
     return "md:grid-cols-2";
   })();
-  const emailSpanClass = contactRowExtra
+  const emailSpanClass = forceTwoColumn
     ? "md:col-span-1"
+    : contactRowExtra
+      ? "md:col-span-1"
+      : mdColCount === 4
+        ? "md:col-span-2"
+        : mdColCount === 3
+          ? "md:col-span-3"
+          : "md:col-span-1";
+  const descriptionSpanClass = forceTwoColumn
+    ? "md:col-span-2"
     : mdColCount === 4
-      ? "md:col-span-2"
+      ? "md:col-span-4"
       : mdColCount === 3
         ? "md:col-span-3"
-        : "md:col-span-1";
-  const descriptionSpanClass =
-    mdColCount === 4 ? "md:col-span-4" : mdColCount === 3 ? "md:col-span-3" : "md:col-span-2";
+        : "md:col-span-2";
 
   const emailStructuralError = personSubformEmailStructuralIssue(value.email);
   const languageSelectValue = coercePersonPreferredLanguage(value.language);
@@ -212,123 +239,181 @@ export function IdentificatiePersonSubform({
   const emailErroneousMarker =
     emailStructuralError != null || (emphasize && requireEmailEffective && emailTrim.length === 0);
 
+  const showRequiredSuffix = !forceTwoColumn;
+
+  const firstNameField = (
+    <Field className="md:col-span-1">
+      <FieldLabel htmlFor={`${idPrefix}-firstName`}>
+        Voornaam
+        {showRequiredSuffix ? (
+          <> <RequiredFieldSuffix erroneous={firstNameErroneousMarker} /></>
+        ) : null}
+      </FieldLabel>
+      <FieldContent>
+        <Input
+          id={`${idPrefix}-firstName`}
+          value={value.firstName}
+          disabled={disabled}
+          onChange={(e) => patch({ firstName: e.target.value })}
+          autoComplete="given-name"
+        />
+      </FieldContent>
+    </Field>
+  );
+
+  const lastNameField = (
+    <Field className={cn("md:col-span-1", lastNameMdSpanTwo && "md:col-span-2")}>
+      <FieldLabel htmlFor={`${idPrefix}-lastName`}>
+        Achternaam
+        {showRequiredSuffix ? (
+          <> <RequiredFieldSuffix erroneous={lastNameErroneousMarker} /></>
+        ) : null}
+      </FieldLabel>
+      <FieldContent>
+        <Input
+          id={`${idPrefix}-lastName`}
+          value={value.lastName}
+          disabled={disabled}
+          onChange={(e) => patch({ lastName: e.target.value })}
+          autoComplete="family-name"
+        />
+      </FieldContent>
+    </Field>
+  );
+
+  const titleField = titleDisabled ? null : (
+    <Field className="md:col-span-1">
+      <FieldLabel htmlFor={`${idPrefix}-title`}>
+        Titel
+        {showRequiredSuffix ? (
+          <> <RequiredFieldSuffix erroneous={titleErroneousMarker} /></>
+        ) : null}
+      </FieldLabel>
+      <FieldContent>
+        <Input
+          id={`${idPrefix}-title`}
+          value={value.title}
+          disabled={disabled}
+          onChange={(e) => patch({ title: e.target.value })}
+          placeholder="Bv. Zaakvoerder, hoofd financiën"
+        />
+      </FieldContent>
+    </Field>
+  );
+
+  const languageField = (
+    <Field className="min-w-0 md:col-span-1">
+      <FieldLabel htmlFor={`${idPrefix}-language`}>
+        Taal correspondentie
+        {showRequiredSuffix ? (
+          <> <RequiredFieldSuffix erroneous={languageErroneousMarker} /></>
+        ) : null}
+      </FieldLabel>
+      <FieldContent>
+        <Select
+          disabled={disabled}
+          value={languageSelectValue}
+          onValueChange={(code) => patch({ language: coercePersonPreferredLanguage(code) })}
+        >
+          <SelectTrigger id={`${idPrefix}-language`} className="h-8 w-full min-w-0" size="sm">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {ONBOARDING_PERSON_LANGUAGE_OPTIONS.map((opt) => (
+              <SelectItem key={opt.code} value={opt.code}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </FieldContent>
+    </Field>
+  );
+
+  const telephoneField = (
+    <Field className="md:col-span-1">
+      <FieldLabel htmlFor={`${idPrefix}-telephone`}>Telefoon / GSM</FieldLabel>
+      <FieldContent>
+        <Input
+          id={`${idPrefix}-telephone`}
+          type="tel"
+          value={value.telephone}
+          disabled={disabled}
+          onChange={(e) => patch({ telephone: e.target.value })}
+          autoComplete="tel"
+          placeholder={forceTwoColumn ? "Optioneel" : undefined}
+        />
+      </FieldContent>
+    </Field>
+  );
+
+  const emailField = (
+    <Field className={emailSpanClass} data-invalid={emailStructuralError ? true : undefined}>
+      <FieldLabel htmlFor={`${idPrefix}-email`}>
+        E-mail
+        {showRequiredSuffix && requireEmailEffective ? (
+          <> <RequiredFieldSuffix erroneous={emailErroneousMarker} /></>
+        ) : null}
+      </FieldLabel>
+      <FieldContent>
+        <Input
+          id={`${idPrefix}-email`}
+          type="email"
+          value={value.email}
+          disabled={disabled}
+          onChange={(e) => patch({ email: e.target.value })}
+          autoComplete="email"
+          state={
+            emailStructuralError != null
+              ? "invalid"
+              : value.email.trim().length > 0
+                ? "valid"
+                : undefined
+          }
+          aria-describedby={emailDescribedBy}
+        />
+        {emailStructuralError ? (
+          <p
+            id={emailStructuralErrorId}
+            className="text-left text-sm font-medium text-destructive"
+            role="alert"
+          >
+            {emailStructuralError}
+          </p>
+        ) : null}
+      </FieldContent>
+    </Field>
+  );
+
   return (
     <div className={cn("grid gap-4", gridColsClass)}>
-      {startExtra}
-      <Field className="md:col-span-1">
-        <FieldLabel htmlFor={`${idPrefix}-firstName`}>
-          Voornaam <RequiredFieldSuffix erroneous={firstNameErroneousMarker} />
-        </FieldLabel>
-        <FieldContent>
-          <Input
-            id={`${idPrefix}-firstName`}
-            value={value.firstName}
-            disabled={disabled}
-            onChange={(e) => patch({ firstName: e.target.value })}
-            autoComplete="given-name"
-          />
-        </FieldContent>
-      </Field>
-      <Field className={cn("md:col-span-1", lastNameMdSpanTwo && "md:col-span-2")}>
-        <FieldLabel htmlFor={`${idPrefix}-lastName`}>
-          Achternaam <RequiredFieldSuffix erroneous={lastNameErroneousMarker} />
-        </FieldLabel>
-        <FieldContent>
-          <Input
-            id={`${idPrefix}-lastName`}
-            value={value.lastName}
-            disabled={disabled}
-            onChange={(e) => patch({ lastName: e.target.value })}
-            autoComplete="family-name"
-          />
-        </FieldContent>
-      </Field>
-      {titleDisabled ? null : (
-        <Field className="md:col-span-1">
-          <FieldLabel htmlFor={`${idPrefix}-title`}>
-            Titel <RequiredFieldSuffix erroneous={titleErroneousMarker} />
-          </FieldLabel>
-          <FieldContent>
-            <Input
-              id={`${idPrefix}-title`}
-              value={value.title}
-              disabled={disabled}
-              onChange={(e) => patch({ title: e.target.value })}
-              placeholder="Bv. Zaakvoerder, hoofd financiën"
-            />
-          </FieldContent>
-        </Field>
+      {forceTwoColumn ? (
+        <>
+          {/* Row 1: Aanhef alone */}
+          {startExtra}
+          {startExtra ? <div className="hidden md:block" aria-hidden /> : null}
+          {/* Row 2: Voornaam + Achternaam */}
+          {firstNameField}
+          {lastNameField}
+          {/* Row 3: E-mail + Telefoon */}
+          {emailField}
+          {telephoneField}
+          {/* Row 4: Functie + Taal correspondentie */}
+          {contactRowExtra}
+          {languageField}
+        </>
+      ) : (
+        <>
+          {startExtra}
+          {firstNameField}
+          {lastNameField}
+          {titleField}
+          {contactRowExtra}
+          {languageField}
+          {telephoneField}
+          {emailField}
+        </>
       )}
-      {contactRowExtra}
-      <Field className="min-w-0 md:col-span-1">
-        <FieldLabel htmlFor={`${idPrefix}-language`}>
-          Taal correspondentie <RequiredFieldSuffix erroneous={languageErroneousMarker} />
-        </FieldLabel>
-        <FieldContent>
-          <Select
-            disabled={disabled}
-            value={languageSelectValue}
-            onValueChange={(code) => patch({ language: coercePersonPreferredLanguage(code) })}
-          >
-            <SelectTrigger id={`${idPrefix}-language`} className="h-8 w-full min-w-0" size="sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {ONBOARDING_PERSON_LANGUAGE_OPTIONS.map((opt) => (
-                <SelectItem key={opt.code} value={opt.code}>
-                  {opt.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </FieldContent>
-      </Field>
-      <Field className="md:col-span-1">
-        <FieldLabel htmlFor={`${idPrefix}-telephone`}>Telefoon / GSM</FieldLabel>
-        <FieldContent>
-          <Input
-            id={`${idPrefix}-telephone`}
-            type="tel"
-            value={value.telephone}
-            disabled={disabled}
-            onChange={(e) => patch({ telephone: e.target.value })}
-            autoComplete="tel"
-          />
-        </FieldContent>
-      </Field>
-      <Field className={emailSpanClass} data-invalid={emailStructuralError ? true : undefined}>
-        <FieldLabel htmlFor={`${idPrefix}-email`}>
-          E-mail{" "}
-          {requireEmailEffective ? <RequiredFieldSuffix erroneous={emailErroneousMarker} /> : null}
-        </FieldLabel>
-        <FieldContent>
-          <Input
-            id={`${idPrefix}-email`}
-            type="email"
-            value={value.email}
-            disabled={disabled}
-            onChange={(e) => patch({ email: e.target.value })}
-            autoComplete="email"
-            state={
-              emailStructuralError != null
-                ? "invalid"
-                : value.email.trim().length > 0
-                  ? "valid"
-                  : undefined
-            }
-            aria-describedby={emailDescribedBy}
-          />
-          {emailStructuralError ? (
-            <p
-              id={emailStructuralErrorId}
-              className="text-left text-sm font-medium text-destructive"
-              role="alert"
-            >
-              {emailStructuralError}
-            </p>
-          ) : null}
-        </FieldContent>
-      </Field>
       {description ? (
         <p className={cn("text-xs text-muted-foreground", descriptionSpanClass)}>{description}</p>
       ) : null}

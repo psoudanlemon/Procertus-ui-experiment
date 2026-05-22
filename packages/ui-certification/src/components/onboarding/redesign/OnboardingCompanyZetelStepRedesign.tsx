@@ -18,8 +18,10 @@ import {
   AlertDescription,
   AlertTitle,
   Badge,
+  Button,
   Field,
   FieldContent,
+  FieldDescription,
   FieldLabel,
   H4,
   Input,
@@ -40,9 +42,6 @@ import {
   formatVestigingRegistryOptionLabel,
   legalEntityAssignmentDisplayParts,
 } from "../../../onboarding/onboarding-flow-helpers";
-import type { OnboardingRequestOrigin } from "../../../onboarding/onboarding-request-origin";
-import { ONBOARDING_REQUEST_ORIGIN_IDS } from "../../../onboarding/onboarding-request-origin";
-import { RequestOriginFlag } from "../../../onboarding/onboarding-request-origin-flag";
 import {
   VAT_LOOKUP_OUTCOME_LABELS,
   VAT_PROTOTYPE_PRESETS,
@@ -50,20 +49,20 @@ import {
   type VatLookupMockOutcome,
 } from "../../../onboarding/lib/vatPrototypePresets";
 import { IdentificatieAddressSubform } from "../../../onboarding/identificatie-subforms";
-import {
-  OnboardingCompanyPrefillSkeleton,
-  OnboardingContextField,
-} from "../shared/onboarding-shared-fields";
+import { OnboardingContextField } from "../shared/onboarding-shared-fields";
 import { OnboardingVestigingenLegalEntityManager } from "../legal-entity-step/OnboardingVestigingenLegalEntityManager";
 import { DraftCardDescription } from "../../../certification-request/draft-selection-presentation";
 import { OnboardingInquiryLegalEntityLinkCard } from "../shared/OnboardingInquiryLegalEntityLinkCard";
 
 export type OnboardingCompanyZetelStepRedesignProps = {
   model: OnboardingRegistrationLayoutModel;
+  /** Triggered when the user confirms the registration number to start the lookup. */
+  onStartLookup?: () => void;
 };
 
 export function OnboardingCompanyZetelStepRedesign({
   model,
+  onStartLookup,
 }: OnboardingCompanyZetelStepRedesignProps) {
   const {
     context,
@@ -75,19 +74,17 @@ export function OnboardingCompanyZetelStepRedesign({
     lookupProgress,
     lookupStepIndex,
     vatLookupStepLabels,
-    companyPrefillFieldKeys,
-    companyFieldsResolvedInSimulation,
-    vatNumberForDisplay,
-    emailForDisplay,
     activeVatPreset,
     prototypeVatPresetId,
-    requestOrigin,
     countrySelectOptions,
     countrySelectValue,
     companyHints,
-    companySourceCountryLabel,
     firmaCountryLocked,
     legalEntityFieldBase,
+    registrationIdOrigin,
+    registrationIdFieldMeta,
+    registrationIdentifierIssue,
+    registrationIdentifierStructurallyValid,
     CERT_INQUIRY_LEGAL_ENTITY_ZETEL,
     CERT_INQUIRY_VEST_UNASSIGNED,
   } = model;
@@ -120,50 +117,68 @@ export function OnboardingCompanyZetelStepRedesign({
 
   return (
     <div className="space-y-8">
-      {/* Compact source-context strip — unchanged across original/redesign */}
-      <div className="rounded-lg border border-border bg-muted/30 px-4 py-3">
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div>
-            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-              Btw-nummer
-            </p>
-            <p className="mt-1 font-mono text-sm text-foreground">{vatNumberForDisplay || "—"}</p>
-          </div>
-          <div>
-            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-              E-mail
-            </p>
-            <p className="mt-1 break-all text-sm text-foreground">{emailForDisplay || "—"}</p>
-          </div>
-          <div>
-            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-              Land
-            </p>
-            <div className="mt-1 flex min-w-0 items-center gap-2 text-sm text-foreground">
-              {requestOrigin !== "" &&
-              ONBOARDING_REQUEST_ORIGIN_IDS.includes(requestOrigin as OnboardingRequestOrigin) ? (
-                <RequestOriginFlag
-                  origin={requestOrigin as OnboardingRequestOrigin}
-                  compact
-                  className="shrink-0"
+      <div className="space-y-section">
+      <section className="space-y-4">
+        <Field data-invalid={registrationIdentifierIssue ? true : undefined}>
+          <FieldLabel htmlFor="zetel-registration-identifier-redesign">
+            {registrationIdFieldMeta.label}
+          </FieldLabel>
+          <FieldContent>
+            <div className="flex items-start gap-2">
+              <div className="w-full max-w-80 min-w-0">
+                <Input
+                  id="zetel-registration-identifier-redesign"
+                  className="min-w-0"
+                  value={context.vatNumber}
+                  placeholder={registrationIdFieldMeta.placeholder}
+                  onChange={(event) => updateContext("vatNumber", event.target.value)}
+                  autoComplete="off"
+                  spellCheck={false}
+                  state={
+                    registrationIdentifierIssue != null
+                      ? "invalid"
+                      : registrationIdentifierStructurallyValid
+                        ? "valid"
+                        : undefined
+                  }
                 />
+              </div>
+              {companyLookupPhase === "idle" && onStartLookup ? (
+                <Button
+                  type="button"
+                  onClick={onStartLookup}
+                  disabled={!registrationIdentifierStructurallyValid}
+                >
+                  Zoeken
+                </Button>
               ) : null}
-              <span className="min-w-0 break-words">{companySourceCountryLabel}</span>
             </div>
-          </div>
-        </div>
-      </div>
+            {registrationIdentifierIssue ? (
+              <p className="text-left text-sm font-medium text-destructive" role="alert">
+                {registrationIdentifierIssue}
+              </p>
+            ) : null}
+            <FieldDescription>{registrationIdFieldMeta.description}</FieldDescription>
+          </FieldContent>
+        </Field>
+      </section>
 
-      {companyLookupPhase === "loading" ? (
+      {companyLookupPhase !== "ready" ? (
         <div className="space-y-5">
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-2 text-sm">
-              <span className="font-medium text-foreground">Bezig met opzoeken</span>
+              <span className="font-medium text-foreground">
+                {companyLookupPhase === "loading" ? "Bezig met opzoeken" : "Wachten op btw-nummer"}
+              </span>
               <span className="tabular-nums text-muted-foreground">
-                {Math.round(lookupProgress)}%
+                {companyLookupPhase === "loading" ? Math.round(lookupProgress) : 0}%
               </span>
             </div>
-            <Progress value={lookupProgress} className="h-2" aria-label="Voortgang opzoeken" />
+            <Progress
+              value={companyLookupPhase === "loading" ? lookupProgress : 0}
+              className="h-2"
+              aria-label="Voortgang opzoeken"
+            />
           </div>
           <ul className="space-y-2.5" aria-live="polite">
             {vatLookupStepLabels.map((item, index) => {
@@ -193,12 +208,9 @@ export function OnboardingCompanyZetelStepRedesign({
               );
             })}
           </ul>
-          <OnboardingCompanyPrefillSkeleton
-            prefilledKeys={companyPrefillFieldKeys}
-            resolvedKeys={companyFieldsResolvedInSimulation}
-          />
         </div>
       ) : null}
+      </div>
 
       {companyLookupPhase === "ready" && activePreset ? (
         <>

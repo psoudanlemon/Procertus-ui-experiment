@@ -1,37 +1,49 @@
+/**
+ * Step "Identificatie van de wettelijke vertegenwoordiger" (3.6, voorheen "Registratie").
+ *
+ * Patroon: bevoegde persoon eerst.
+ * - De paginakop framet de stap als het identificeren van de wettelijke vertegenwoordiger.
+ *   Daaronder direct het invulformulier voor die persoon (bindt altijd aan
+ *   `legalRepresentative`).
+ * - Aan het eind van het formulier een Checkbox (standaard aangevinkt):
+ *   *"Ik (de aanvrager) ben de wettelijke vertegenwoordiger van dit bedrijf."*
+ *   met een HoverCard-info-icoon dat het belang ervan uitlegt.
+ * - Vinkt de gebruiker hem uit, dan verschijnt een tweede sectie *Uw eigen
+ *   contactgegevens* zodat we de indiener apart kunnen registreren
+ *   (bindt aan `registrant`).
+ *
+ * Datamodel: elk slot heeft zijn eigen formulier, dus geen veld-migratie nodig.
+ * De lege state (`""`) wordt behandeld als "aangevinkt" (`"yes"`); uitvinken zet
+ * expliciet `"no"`. Wanneer de gebruiker in de functie-dropdown een rol kiest die
+ * geen handtekenbevoegdheid impliceert, wordt de checkbox automatisch uitgevinkt.
+ */
 import {
-  Autocomplete,
-  ChoiceCard,
-  ChoiceCardGroup,
+  Checkbox,
+  Collapsible,
+  CollapsibleContent,
   Field,
   FieldContent,
-  FieldDescription,
   FieldLabel,
-  H4,
-  Input,
+  H3,
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
   cn,
-  highlightMatch,
 } from "@procertus-ui/ui";
 import { PrototypeCard } from "@procertus-ui/ui-pt1-prototype";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { InformationCircleIcon } from "@hugeicons/core-free-icons";
+import { useEffect } from "react";
+
 import {
   findVatPrototypePreset,
-  getRegistrantContextFieldsForPrototypePreset,
   VAT_PROTOTYPE_PRESETS,
 } from "../../../onboarding/lib/vatPrototypePresets";
-import {
-  findKboCompanyByVatNumber,
-  kboAutocomplete,
-  type KboCompany,
-} from "../../../onboarding/lib/kbo-autocomplete";
-import {
-  findKvkCompanyByVatNumber,
-  kvkAutocomplete,
-  type KvkCompany,
-} from "../../../onboarding/lib/kvk-autocomplete";
 import {
   customerContextAfterPrototypePresetChange,
   emptyIdentificatiePersonState,
@@ -43,100 +55,88 @@ import { IdentificatiePersonTitleRoleCapture } from "../../../onboarding/identif
 import type { OnboardingRegistrationLayoutModel } from "../../../onboarding/use-onboarding-registration-layout-model";
 import { personFormCardClassName } from "../../../onboarding/person-form-card-variants";
 
-export type OnboardingCustomerStepProps = { model: OnboardingRegistrationLayoutModel };
+export type OnboardingCustomerStepProps = {
+  model: OnboardingRegistrationLayoutModel;
+};
 
 export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
   const {
     context,
-    updateContext,
     patchContext,
     setFlowState,
     prototypeVatPresetId,
     vatPrototypePresetChoices,
-    activeVatPreset,
-    registrationIdOrigin,
-    registrationIdFieldMeta,
-    registrationIdentifierIssue,
-    registrationIdentifierStructurallyValid,
     applicantLegalRepFieldBase,
-    applicantLegalRepPersonFieldsLocked,
   } = model;
 
-  // Voor BE/NL bevraagt de Autocomplete het KBO- respectievelijk KvK-mock-
-  // register en vult bedrijfsnaam + zeteladres bij selectie. Voor andere
-  // origins blijft de plain Input + structurele validatie het juiste pattern;
-  // die registers zijn ofwel niet publiek doorzoekbaar ofwel pay-walled, dus
-  // een autocomplete-belofte daar zou misleidend zijn.
-  const useKboLookup = registrationIdOrigin === "be";
-  const useKvkLookup = registrationIdOrigin === "nl";
-  const selectedKboCompany = useKboLookup
-    ? findKboCompanyByVatNumber(context.vatNumber)
-    : null;
-  const selectedKvkCompany = useKvkLookup
-    ? findKvkCompanyByVatNumber(context.vatNumber)
-    : null;
+  const choice = context.applicantIsLegalRepresentative; // "" | "yes" | "no"
+  // Default-checked semantics: lege state ("") wordt behandeld als "ja, ik ben de rep".
+  // Uitvinken zet expliciet "no".
+  const filingOnBehalf = choice === "no";
+  const applicantIsRepChecked = !filingOnBehalf;
 
-  const applyRegisterCompany = (
-    company:
-      | Pick<
-          KboCompany,
-          | "vatNumber"
-          | "name"
-          | "country"
-          | "countryCode"
-          | "street"
-          | "houseNumber"
-          | "postalCode"
-          | "city"
-        >
-      | null,
-  ) => {
-    if (company) {
-      patchContext({
-        vatNumber: company.vatNumber,
-        organizationName: company.name,
-        country: company.country,
-        addressCountryCode: company.countryCode,
-        addressStreet: company.street,
-        addressHouseNumber: company.houseNumber,
-        addressPostalCode: company.postalCode,
-        addressCity: company.city,
-      });
-    } else {
-      patchContext({
-        vatNumber: "",
-        organizationName: "",
-        country: "",
-        addressCountryCode: "",
-        addressStreet: "",
-        addressHouseNumber: "",
-        addressPostalCode: "",
-        addressCity: "",
-      });
+  /**
+   * Wisselen van antwoord raakt de typed-in legal-rep gegevens niet aan: die staan in
+   * hun eigen slot. Wel maken we het registrant-slot leeg wanneer iemand terug naar
+   * "Ja" gaat, zodat we geen verweesde indiener-data behouden.
+   */
+  function setLegalRepChoice(next: "yes" | "no"): void {
+    setFlowState((prev) => {
+      const c = prev.context;
+      if (next === c.applicantIsLegalRepresentative) return prev;
+
+      if (next === "yes") {
+        return {
+          ...prev,
+          context: resolveFlowContext({
+            ...c,
+            applicantIsLegalRepresentative: "yes",
+            registrantPerson: emptyIdentificatiePersonState(),
+            registrantTitlePreset: "none",
+            registrantTitle: "",
+            registrantRolePreset: "none",
+            registrantRole: "",
+          }),
+        };
+      }
+      return {
+        ...prev,
+        context: resolveFlowContext({
+          ...c,
+          applicantIsLegalRepresentative: "no",
+        }),
+      };
+    });
+  }
+
+  /**
+   * Auto-uncheck: zodra de functie van de legal rep een definitieve niet-bevoegde rol is
+   * (alles behalve zaakvoerder/bestuurder of wettelijk vertegenwoordiger, en niet de
+   * neutrale "none"/"" placeholder), zet de checkbox uit. De gebruiker kan hem daarna
+   * weer handmatig aanvinken als de rol toch handtekenbevoegdheid heeft.
+   */
+  const rolePreset = context.representativeRolePreset;
+  useEffect(() => {
+    const isRepImplying =
+      rolePreset === "managing_director" || rolePreset === "legal_representative";
+    const isNeutral = rolePreset === "" || rolePreset === "none";
+    if (!isRepImplying && !isNeutral && applicantIsRepChecked) {
+      setLegalRepChoice("no");
     }
-  };
+    // setLegalRepChoice closes over `setFlowState` (stable), dus geen dep nodig.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rolePreset, applicantIsRepChecked]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-region">
       <PrototypeCard
+        collapsible
         title="Voorbeeldmodus"
         description={
           <>
             Kies een voorbeeld om het identificatieveld hieronder automatisch in te vullen en de
-            flow te doorlopen. U kunt het nummer altijd zelf aanpassen. Bij een andere keuze worden
-            naam, aanhef, functie en e-mail bijgewerkt en worden bedrijfsgegevens leeggemaakt tot de
-            opzoeking klaar is.
+            flow te doorlopen. U kunt het nummer altijd zelf aanpassen.
           </>
-        }
-        notice={
-          activeVatPreset?.demoSupplementsOrgAddressFromEmailDomain ? (
-            <>
-              <span className="font-medium text-foreground">Let op bij dit voorbeeld:</span> uw
-              nummer levert hier geen bedrijfsnaam en volledig adres op. Waar mogelijk vullen we die
-              aan op basis van uw professionele e-mailadres. Controleer de velden. Gebruikt u een
-              gratis of algemeen e-mailadres, vult u naam en adres zelf in.
-            </>
-          ) : undefined
         }
       >
         <Field>
@@ -180,293 +180,87 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
           </FieldContent>
         </Field>
       </PrototypeCard>
-      <div className="space-y-4">
-        <div className="space-y-1">
-          <H4 className="normal-case tracking-tight text-foreground">
-            Organisatie-identificatie
-          </H4>
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            Het formaat hangt af van uw eerder gekozen land of regio. Zodra het nummer klopt, kunt u
-            verder naar bedrijfsgegevens.
-          </p>
-        </div>
-        <Field data-invalid={registrationIdentifierIssue ? true : undefined}>
-          <FieldLabel htmlFor="customer-registration-identifier">
-            {registrationIdFieldMeta.label}
-          </FieldLabel>
-          <FieldContent>
-            {useKboLookup ? (
-              <Autocomplete<KboCompany>
-                id="customer-registration-identifier"
-                className="min-w-0"
-                value={selectedKboCompany}
-                onChange={applyRegisterCompany}
-                fetchSuggestions={kboAutocomplete}
-                itemKey={(c) => c.vatNumber}
-                itemLabel={(c) => `${c.name} (${c.vatNumber})`}
-                renderItem={(c, q) => (
-                  <span className="flex min-w-0 flex-col">
-                    <span className="truncate font-medium text-foreground">
-                      {highlightMatch(c.name, q)}
-                    </span>
-                    <span className="truncate text-xs text-muted-foreground">
-                      {highlightMatch(c.vatNumber, q)} &middot; {highlightMatch(c.city, q)}
-                    </span>
-                  </span>
-                )}
-                resultsHeading={() => "Zoekresultaten"}
-                emptyMessage={(q) => (
-                  <>
-                    Geen bedrijf gevonden voor &quot;
-                    <span className="font-medium text-foreground">{q}</span>&quot;.
-                  </>
-                )}
-                loadingMessage="KBO-register raadplegen…"
-                placeholder="Zoek bedrijf op naam, btw of stad"
-                clearAriaLabel="Wis bedrijfskeuze"
-                state={
-                  registrationIdentifierIssue != null
-                    ? "invalid"
-                    : selectedKboCompany != null
-                      ? "valid"
-                      : undefined
-                }
-                aria-invalid={registrationIdentifierIssue != null}
-              />
-            ) : useKvkLookup ? (
-              <Autocomplete<KvkCompany>
-                id="customer-registration-identifier"
-                className="min-w-0"
-                value={selectedKvkCompany}
-                onChange={applyRegisterCompany}
-                fetchSuggestions={kvkAutocomplete}
-                itemKey={(c) => c.vatNumber}
-                itemLabel={(c) => `${c.name} (KvK ${c.kvkNumber})`}
-                renderItem={(c, q) => (
-                  <span className="flex min-w-0 flex-col">
-                    <span className="truncate font-medium text-foreground">
-                      {highlightMatch(c.name, q)}
-                    </span>
-                    <span className="truncate text-xs text-muted-foreground">
-                      KvK {highlightMatch(c.kvkNumber, q)} &middot;{" "}
-                      {highlightMatch(c.vatNumber, q)} &middot; {highlightMatch(c.city, q)}
-                    </span>
-                  </span>
-                )}
-                resultsHeading={() => "Zoekresultaten"}
-                emptyMessage={(q) => (
-                  <>
-                    Geen bedrijf gevonden voor &quot;
-                    <span className="font-medium text-foreground">{q}</span>&quot;.
-                  </>
-                )}
-                loadingMessage="KvK-register raadplegen…"
-                placeholder="Zoek bedrijf op naam, KvK, btw of stad"
-                clearAriaLabel="Wis bedrijfskeuze"
-                state={
-                  registrationIdentifierIssue != null
-                    ? "invalid"
-                    : selectedKvkCompany != null
-                      ? "valid"
-                      : undefined
-                }
-                aria-invalid={registrationIdentifierIssue != null}
-              />
-            ) : (
-              <Input
-                id="customer-registration-identifier"
-                className="min-w-0"
-                value={context.vatNumber}
-                placeholder={registrationIdFieldMeta.placeholder}
-                onChange={(event) => updateContext("vatNumber", event.target.value)}
-                autoComplete="off"
-                spellCheck={false}
-                state={
-                  registrationIdentifierIssue != null
-                    ? "invalid"
-                    : registrationIdentifierStructurallyValid
-                      ? "valid"
-                      : undefined
-                }
-                aria-describedby={
-                  registrationIdentifierIssue
-                    ? "customer-registration-identifier-error customer-registration-identifier-hint"
-                    : "customer-registration-identifier-hint"
-                }
-              />
-            )}
-            {registrationIdentifierIssue ? (
-              <p
-                id="customer-registration-identifier-error"
-                className="text-left text-sm font-medium text-destructive"
-                role="alert"
-              >
-                {registrationIdentifierIssue}
-              </p>
-            ) : null}
-            <FieldDescription id="customer-registration-identifier-hint">
-              {useKboLookup
-                ? "Zoek je bedrijf in het KBO-register. We vullen automatisch je bedrijfsnaam en zeteladres in."
-                : useKvkLookup
-                  ? "Zoek je bedrijf in het KvK-register. We vullen automatisch je bedrijfsnaam en vestigingsadres in."
-                  : registrationIdFieldMeta.description}
-            </FieldDescription>
-          </FieldContent>
-        </Field>
-      </div>
-      <div className="space-y-1">
-        <H4 className="normal-case tracking-tight text-foreground">
-          Wettelijke vertegenwoordiger
-        </H4>
-        <p className="text-xs leading-relaxed text-muted-foreground">
-          We registreren de persoon die uw organisatie wettelijk mag vertegenwoordigen. Het is deze
-          persoon die handtekenbevoegdheid heeft.
-        </p>
-      </div>
-      <ChoiceCardGroup
-        className="p-0"
-        layout="grid"
-        legend="Bent u de wettelijke vertegenwoordiger?"
-        hint="Maak eerst deze keuze; daarna verschijnen de juiste invoervelden voor uzelf en/of de vertegenwoordiger."
-        name={`${applicantLegalRepFieldBase}-legal-rep`}
-        value={
-          context.applicantIsLegalRepresentative === ""
-            ? undefined
-            : context.applicantIsLegalRepresentative
-        }
-        onValueChange={(v: string) => {
-          if (v === "yes") {
-            setFlowState((prev) => ({
-              ...prev,
-              context: resolveFlowContext({
-                ...prev.context,
-                applicantIsLegalRepresentative: "yes",
-                registrantPerson: emptyIdentificatiePersonState(),
-                registrantTitlePreset: "none",
-                registrantTitle: "",
-                registrantRolePreset: "none",
-                registrantRole: "",
-              }),
-            }));
-          } else if (v === "no") {
-            setFlowState((prev) => {
-              const preset =
-                activeVatPreset ??
-                findVatPrototypePreset(prototypeVatPresetId) ??
-                VAT_PROTOTYPE_PRESETS[0];
-              const registrantMock = preset
-                ? getRegistrantContextFieldsForPrototypePreset(preset)
-                : undefined;
-              return {
-                ...prev,
-                context: resolveFlowContext({
-                  ...prev.context,
-                  applicantIsLegalRepresentative: "no",
-                  ...(registrantMock ?? {
-                    registrantPerson: emptyIdentificatiePersonState(),
-                    registrantTitlePreset: "none",
-                    registrantTitle: "",
-                    registrantRolePreset: "none",
-                    registrantRole: "",
-                  }),
-                }),
-              };
-            });
-          }
-        }}
-      >
-        <ChoiceCard
-          value="yes"
-          controlId={`${applicantLegalRepFieldBase}-yes`}
-          title="Ja, ik ben de wettelijke vertegenwoordiger"
-          description="U vult hierna uw eigen bereikbaarheid in als vertegenwoordiger; die gegevens gebruiken we ook voor uw account."
-          variant="elevated"
-          appearance="hero"
-          className="h-full min-h-[8rem]"
-        />
-        <ChoiceCard
-          value="no"
-          controlId={`${applicantLegalRepFieldBase}-no`}
-          title="Nee, ik vul namens de wettelijke vertegenwoordiger in"
-          description="U geeft eerst uzelf door als indiener, daarna de persoon met wettelijke vertegenwoordigingsbevoegdheid."
-          variant="default"
-          appearance="hero"
-          className="h-full min-h-[8rem]"
-        />
-      </ChoiceCardGroup>
-      {context.applicantIsLegalRepresentative === "no" ? (
-        <section
-          className={personFormCardClassName("emphasized")}
-          aria-labelledby={`${applicantLegalRepFieldBase}-registrant-heading`}
-        >
-          <div className="min-w-0 space-y-1">
-            <H4
-              id={`${applicantLegalRepFieldBase}-registrant-heading`}
-              className="normal-case tracking-tight text-foreground"
-            >
-              Uw gegevens als indiener
-            </H4>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Deze velden gaan over uzelf — degene die het formulier nu invult. Daarna vult u de
-              wettelijke vertegenwoordiger in.
-            </p>
-          </div>
-          <IdentificatiePersonTitleRoleCapture
-            idPrefix="registrant-applicant"
-            branch="registrant"
-            context={context}
-            patchContext={patchContext}
-            emphasizeInvalidRequiredMarkers={!isRegistrantCaptureValidForContext(context)}
-            copy={{
-              titleLabel: "Title",
-              roleLabel: "Role",
-            }}
-          />
-        </section>
-      ) : null}
-      <section
-        className={personFormCardClassName("chromeless")}
-        aria-labelledby={`${applicantLegalRepFieldBase}-legal-rep-heading`}
-      >
+
+      <section className="space-y-4">
         <fieldset
-          disabled={applicantLegalRepPersonFieldsLocked}
-          className={cn(
-            "min-w-0 space-y-4 border-0 p-0",
-            applicantLegalRepPersonFieldsLocked && "opacity-55",
-          )}
+          className={cn(personFormCardClassName("chromeless"), "min-w-0 space-y-4 border-0 p-0")}
         >
-          <div className="min-w-0 space-y-1">
-            <H4
-              id={`${applicantLegalRepFieldBase}-legal-rep-heading`}
-              className="normal-case tracking-tight text-foreground"
-            >
-              Gegevens wettelijke vertegenwoordiger
-            </H4>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              {context.applicantIsLegalRepresentative === "no"
-                ? "Vul hier de persoon in die uw organisatie wettelijk mag vertegenwoordigen en de registratie mag ondertekenen."
-                : context.applicantIsLegalRepresentative === "yes"
-                  ? "Dit adres gebruiken we voor uw account en berichten over uw aanvraag, tenzij u straks een ander contact opgeeft."
-                  : "Kies hierboven of u de wettelijke vertegenwoordiger bent; vul daarna deze gegevens in."}
-            </p>
-          </div>
           <IdentificatiePersonTitleRoleCapture
             idPrefix="legal-rep"
             branch="legalRepresentative"
             context={context}
             patchContext={patchContext}
-            disabled={applicantLegalRepPersonFieldsLocked}
-            emphasizeInvalidRequiredMarkers={
-              context.applicantIsLegalRepresentative !== "" &&
-              !isLegalRepresentativeCaptureComplete(context)
-            }
-            copy={{
-              titleLabel: "Title",
-              roleLabel: "Role",
-            }}
+            emphasizeInvalidRequiredMarkers={!isLegalRepresentativeCaptureComplete(context)}
+            copy={{ titleLabel: "Aanhef", roleLabel: "Functie" }}
+            layout="twoColumn"
           />
         </fieldset>
+
+        <HoverCard openDelay={500} closeDelay={150}>
+          <HoverCardTrigger asChild>
+            <div className="flex items-start gap-3">
+              <Checkbox
+                id={`${applicantLegalRepFieldBase}-applicant-is-rep`}
+                checked={applicantIsRepChecked}
+                onCheckedChange={(v) => setLegalRepChoice(v === true ? "yes" : "no")}
+                className="mt-0.5 shrink-0"
+                aria-labelledby={`${applicantLegalRepFieldBase}-applicant-is-rep-label`}
+                aria-describedby={`${applicantLegalRepFieldBase}-applicant-is-rep-info`}
+              />
+              <label
+                htmlFor={`${applicantLegalRepFieldBase}-applicant-is-rep`}
+                className="min-w-0 flex-1 cursor-pointer text-sm leading-snug font-medium text-foreground"
+              >
+                <span id={`${applicantLegalRepFieldBase}-applicant-is-rep-label`}>
+                  Ik (de aanvrager) ben de wettelijke vertegenwoordiger van dit bedrijf.
+                </span>{" "}
+                <HugeiconsIcon
+                  icon={InformationCircleIcon}
+                  className="inline size-4 -translate-y-px align-middle text-info-foreground"
+                  aria-hidden
+                />
+              </label>
+            </div>
+          </HoverCardTrigger>
+          <HoverCardContent
+            id={`${applicantLegalRepFieldBase}-applicant-is-rep-info`}
+            className="w-96 space-y-2 text-xs leading-relaxed"
+          >
+            <p className="text-sm font-medium text-foreground">Waarom dit van belang is</p>
+            <p className="text-muted-foreground">
+              De wettelijke vertegenwoordiger is de persoon met handtekenbevoegdheid voor uw
+              organisatie. Alleen deze persoon kan deze aanvraag rechtsgeldig indienen.
+            </p>
+            <p className="text-muted-foreground">
+              Vul de juiste persoon in om vertragingen in de behandeling van uw dossier te
+              vermijden. Vink uit als u namens iemand anders invult.
+            </p>
+          </HoverCardContent>
+        </HoverCard>
       </section>
+
+      <Collapsible open={filingOnBehalf}>
+        <CollapsibleContent className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
+          <section className="space-y-4" aria-labelledby="registrant-section-heading">
+            <div className="space-y-1">
+              <H3 id="registrant-section-heading">Uw eigen contactgegevens</H3>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Deze velden gaan over uzelf, degene die deze aanvraag invult. We gebruiken
+                ze voor uw account en voor communicatie over de aanvraag.
+              </p>
+            </div>
+            <IdentificatiePersonTitleRoleCapture
+              idPrefix="registrant-applicant"
+              branch="registrant"
+              context={context}
+              patchContext={patchContext}
+              emphasizeInvalidRequiredMarkers={!isRegistrantCaptureValidForContext(context)}
+              copy={{ titleLabel: "Aanhef", roleLabel: "Functie" }}
+              layout="twoColumn"
+            />
+          </section>
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 }

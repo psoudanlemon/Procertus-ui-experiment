@@ -215,16 +215,16 @@ export function buildOnboardingStepperSteps(
     },
     customer: {
       id: "customer",
-      title: "Registratie",
-      description: "Vul uw aanspreekpunt en juridische vertegenwoordiging in.",
-      available: hasDrafts && requestOrigin !== "",
+      title: "Identificatie",
+      description: "De wettelijke vertegenwoordiger en, indien anders, uzelf als indiener.",
+      available: hasDrafts && requestOrigin !== "" && companyZetelOk,
       completed: registrationStepOk,
     },
     company: {
       id: "company",
       title: "Maatschappelijke zetel",
       description: "Bevestig de officiële gegevens van uw hoofdrechtspersoon.",
-      available: hasDrafts && requestOrigin !== "" && legalRepChoiceOk && registrationStepOk,
+      available: hasDrafts && requestOrigin !== "",
       completed: companyZetelOk,
     },
     innovationAttest: {

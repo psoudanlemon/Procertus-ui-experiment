@@ -198,7 +198,7 @@ export const CompanyLookupReady: StoryObj<typeof meta> = {
           activeStep: registrationStepIndex("company", drafts),
           companyLookupPhase: "ready",
           lookupProgress: 100,
-          lookupStepIndex: 4,
+          lookupStepIndex: 2,
           vatLookupStepLabels: vatLookupSimulationStepsForPreset(activePreset),
           companyPrefillFieldKeys: new Set([
             "organizationName",
@@ -243,7 +243,7 @@ export const CompanyLegalEntitiesStep: StoryObj<typeof meta> = {
           activeStep: registrationStepIndex("companyLegalEntities", drafts),
           companyLookupPhase: "ready",
           lookupProgress: 100,
-          lookupStepIndex: 4,
+          lookupStepIndex: 2,
           vatLookupStepLabels: vatLookupSimulationStepsForPreset(activePreset),
           primaryAction: { label: "Verder", onClick: noop, disabled: false },
         })}
@@ -274,7 +274,7 @@ export const InvoicingStep: StoryObj<typeof meta> = {
           activeStep: registrationStepIndex("invoicing", drafts),
           companyLookupPhase: "ready",
           lookupProgress: 100,
-          lookupStepIndex: 4,
+          lookupStepIndex: 2,
           vatLookupStepLabels: vatLookupSimulationStepsForPreset(activePreset),
           primaryAction: { label: "Verder", onClick: noop, disabled: false },
           rows: [],

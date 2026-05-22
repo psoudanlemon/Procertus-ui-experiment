@@ -104,11 +104,9 @@ export type RegistrationEnrichmentResult = {
 
 /** Stages shown while a lookup runs (mirrors real checks at a high level). */
 export const VAT_LOOKUP_SIMULATION_STEPS: readonly { id: string; label: string }[] = [
-  { id: "prefix", label: "Land afgeleid uit uw nummer" },
-  { id: "vies", label: "Europese btw-registratie gecontroleerd" },
-  { id: "registry", label: "Openbare registers doorzocht" },
-  { id: "entity", label: "Bedrijfs- en adresgegevens vastgesteld" },
-  { id: "email", label: "Afstemming met uw professioneel e-mailadres" },
+  { id: "vies", label: "Btw-registratie verifiëren bij VIES" },
+  { id: "registry", label: "Zoeken in de Kruispuntbank van Ondernemingen" },
+  { id: "entity", label: "Bedrijfs- en adresgegevens ophalen" },
 ];
 
 const GENERIC_ORG_EMAIL_DOMAINS = new Set([
@@ -430,12 +428,6 @@ export function vatLookupSimulationStepsForPreset(
     if (step.id === "entity") {
       return {
         ...step,
-        label: "Geen volledige gegevens uit het register — we vullen aan waar mogelijk",
-      };
-    }
-    if (step.id === "email") {
-      return {
-        ...step,
         label: "Bedrijfsnaam en adres ingevuld aan de hand van uw e-mailadres",
       };
     }
@@ -613,7 +605,7 @@ export function companyFormFieldsPrefilledByMockLookup(
 }
 
 /**
- * After each simulated lookup step completes (0 = prefix … 4 = e-mail), which company fields the
+ * After each simulated lookup step completes (0 = vies … 2 = entity), which company fields the
  * narrative treats as resolved for loading UI. Aligns with {@link vatLookupSimulationStepsForPreset}.
  */
 export function companyFormFieldsResolvedThroughLookupStep(
@@ -629,7 +621,7 @@ export function companyFormFieldsResolvedThroughLookupStep(
   for (let i = 0; i <= completedStepIndex && i < steps.length; i++) {
     const id = steps[i].id;
 
-    if (id === "prefix") {
+    if (id === "vies") {
       const c = deriveCountryFromVat(vatNumber) || preset.mock.countryFallback;
       if (c.trim()) resolved.add("country");
     }
@@ -644,10 +636,9 @@ export function companyFormFieldsResolvedThroughLookupStep(
       if (m.addressHouseNumber.trim()) resolved.add("addressHouseNumber");
       if (m.addressPostalCode.trim()) resolved.add("addressPostalCode");
       if (m.addressCity.trim()) resolved.add("addressCity");
-    }
-
-    if (id === "email") {
-      companyFormFieldsPrefilledByMockLookup(input).forEach((k) => resolved.add(k));
+      if (preset.demoSupplementsOrgAddressFromEmailDomain) {
+        companyFormFieldsPrefilledByMockLookup(input).forEach((k) => resolved.add(k));
+      }
     }
   }
 

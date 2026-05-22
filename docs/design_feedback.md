@@ -9,12 +9,15 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 3. [**Page-specifieke wijzigingen**](#3-page-specifieke-wijzigingen): per scherm, met cross-refs naar cross-cutting items.
 
 **Onderdelen in sectie 1, in alfabetische scan-volgorde:**
-[Choice card componenten](#choice-card-componenten) · [Copy density](#copy-density) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox) · [Veldtype per invulveld](#veldtype-per-invulveld).
+[Copy density](#copy-density) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox).
 
 ---
 
 ## Afgewerkt
 
+- [x] §1 Choice card componenten: cross-cutting pattern afgerond. Beide originele cases (Land/regio en Registratie) zijn opgelost via verschillende routes: Land/regio via primitive-tweaks aan [ChoiceCard.tsx](packages/ui/src/components/choice-card/ChoiceCard.tsx) (gecentreerde leading-icon zonder description, `faded` description-size aligned, `pt-micro` offset weg) — zie §3.5 entry hieronder; Registratie via overstap naar een lichtere checkbox-oplossing — zie §3.6 entry hieronder. Het cross-cutting principe (kies een checkbox wanneer de essentie "ik wil extra info opgeven" of "ik ben dit / ik ben dit niet" is) is daarmee gedemonstreerd en kan op nieuwe cases toegepast worden.
+- [x] §3.6 Identificatie (voorheen Registratie) volledig herwerkt en doorgeduwd naar productie. Stap is herframed als *"Identificatie van de wettelijke vertegenwoordiger"* via chrome-copy en stepper-label updates ([onboarding-registration-chrome-copy.ts](packages/ui-certification/src/onboarding/onboarding-registration-chrome-copy.ts), [onboarding-stepper-model.ts](packages/ui-certification/src/onboarding/onboarding-stepper-model.ts)). [OnboardingCustomerStep](packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx): primair formulier vraagt nu de gegevens van de wettelijke vertegenwoordiger (bindt aan `legalRepresentative`), met daaronder een standaard-aangevinkte checkbox *"Ik (de aanvrager) ben de wettelijke vertegenwoordiger van dit bedrijf."* en een InformationCircleIcon-trigger met HoverCard die het belang ervan uitlegt. Bij uitvinken verschijnt een tweede sectie *Uw eigen contactgegevens* (bindt aan `registrant`) via een Radix Collapsible met `animate-collapsible-down` / `animate-collapsible-up` voor beide richtingen. De checkbox wordt automatisch uitgevinkt zodra de functie van de rep een rol is die geen handtekenbevoegdheid impliceert (anders dan zaakvoerder/bestuurder of wettelijk vertegenwoordiger). Dubbele/driedubbele titels rond "Wettelijke vertegenwoordiger" zijn opgeruimd: één paginakop, geen geneste H4-koppen meer. Subform [IdentificatiePersonSubform](packages/ui-certification/src/onboarding/identificatie-subforms.tsx) kreeg een `layout="twoColumn"` prop voor de 2-koloms grid (aanhef alleen op rij 1, voornaam + achternaam, e-mail + telefoon, functie + taal), waarbij `*`-markers verdwijnen en het telefoon-veld een "Optioneel" placeholder krijgt. Inter-sectie spacing zit op het `space-y-region` token.
+- [x] Stepper-volgorde gewijzigd van `origin → customer → company → ...` naar `origin → company → customer → ...` zodat de organisatie-identificatie eerst gebeurt op de zetel-stap, voordat de gebruiker de wettelijke vertegenwoordiger identificeert. Sequence, availability-gating, navigatie en resume-logica aangepast in [onboarding-registration-steps.ts](packages/ui-certification/src/onboarding/onboarding-registration-steps.ts), [onboarding-stepper-model.ts](packages/ui-certification/src/onboarding/onboarding-stepper-model.ts), [use-onboarding-flow.tsx](packages/ui-certification/src/onboarding/use-onboarding-flow.tsx) en [derive-formal-onboarding-resume-step.ts](packages/ui-certification/src/onboarding/derive-formal-onboarding-resume-step.ts).
 - [x] Veldtype follow-ups op de Registratie-stap en het Innovatie-attest doorgevoerd: (1) [kvkAutocomplete](packages/ui-certification/src/onboarding/lib/kvk-autocomplete.ts)-adapter met mock-dataset voor `origin = nl`, geconsumeerd door [OnboardingCustomerStep](packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx) (selectie autovult naam, KvK/btw, adres en land); (2) gemeente-suggesties via `<datalist>` in [IdentificatieAddressSubform](packages/ui-certification/src/onboarding/identificatie-subforms.tsx) — mock-lijsten voor BE/NL/DE/FR via [cityAutocomplete](packages/ui-certification/src/onboarding/lib/city-autocomplete.ts), vrije tekst blijft mogelijk voor onbekende gemeenten; (3) postale-adres-suggesties op bouwheer- en projectadres in [OnboardingInnovationAttestStep](packages/ui-certification/src/components/onboarding/innovation-attest-step/OnboardingInnovationAttestStep.tsx) via een nieuwe `FormAddressInput` met [addressAutocomplete](packages/ui-certification/src/onboarding/lib/address-autocomplete.ts).
 - [x] 3.3 "Voeg per product certificaten toe": "Nog certificatie toevoegen"-knop en "staan niet in de kolommen"-callout verwijderd; elke kolomheader van [BundleMatrixHeader](packages/ui-certification/src/components/traject/BundleAssemble.tsx) toont een tooltip met cert-beschrijving uit `BUNDLE_CERT_META`; niet-beschikbare certificaten tonen een disabled checkbox met hover-tooltip die uitlegt waarom ze niet beschikbaar zijn voor dat product.
 - [x] Annuleren-label in [TrajectStoryFooter](packages/ui-certification/src/components/traject/TrajectStoryFooter.tsx) hernoemd naar "Naar startpagina" zodat het matcht met het feitelijke gedrag (geen draft-behoud op dit moment).
@@ -47,16 +50,6 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 ---
 
 ## 1. Cross-cutting patronen / componenten
-
-### Choice card componenten
-
-_Feedback origineel gezien op:_ **Land of regio** (vier kaarten België / Nederland / Een ander Europees land / Buiten Europa, met vlag rechtsboven) en **Registratie** (twee kaarten "Ja, ik ben de wettelijke vertegenwoordiger" / "Nee, ik vul namens de wettelijke vertegenwoordiger in"). Vanuit die twee cases moeten we begrijpen welke bestaande varianten herwerkt moeten worden en welke we mogelijk extra moeten aanmaken (bv. een variant met grotere illustratie/vlag, of een minimaal "yes/no"-pattern dat eigenlijk een checkbox is).
-
-- [ ] Bekijk de bestaande choice card-varianten met deze twee cases in de hand en optimaliseer voor verschillende inhouden.
-  - Deelresultaat via §3.5: [ChoiceCard.tsx](packages/ui/src/components/choice-card/ChoiceCard.tsx) primitive aangepast — leading-icon centreert tegen de titel als er geen description is (vroeger altijd top-aligned), `faded` variant gebruikt nu dezelfde description text-size als de andere varianten, en de `pt-micro` line-height-offset op de leading-wrapper is verwijderd (was zichtbaar als 4px offset op grotere icons). De Registratie-case (zie item hieronder en §3.6) is nog niet meegenomen.
-- [x] Pas optimalisatie toe op Land/regio — vlag of layout anders gebruiken om de keuzes visueel beter te onderscheiden (de huidige vlag rechtsboven is te subtiel en de twee niet-vlag opties wijken visueel af). Zie §3.5.
-- [ ] Vervang choice cards door een lichtere oplossing (checkbox) wanneer de keuze in essentie "ik wil extra info opgeven" of "ik ben dit / ik ben dit niet" is.
-- [ ] Concreet: vervang "Bent u de wettelijke vertegenwoordiger?" op Registratie door een checkbox die de extra velden toont/verbergt.
 
 ### Toggle/switch accordion → checkbox
 
@@ -130,13 +123,6 @@ _Route:_ `/welcome/aanvraag/:serviceId/controleren`
 _Route:_ [`/welcome/formal-request/origin`](http://localhost:5173/welcome/formal-request/origin)
 
 - [x] Choice cards geoptimaliseerd: één gestackte lijst met vier `ChoiceCard`s (trailing radio + vlag in `leading`), BE/NL/EU op `elevated`-variant, Wereldwijd op `faded`. Title-as-step-prompt ("Kies uw land of regio") + consequence-gerichte page-description ("Uw keuze bepaalt welke gegevens we in de volgende stappen vragen."). Option-titles ingekort naar "België / Nederland / Europa / Wereldwijd"; descriptions herschreven naar "Het bedrijf waarvoor u de certificaten wil aanvragen is gevestigd in..". Vlag in 38.85px-leading-slot, gelijk aan de gecombineerde title+description hoogte. EU-vlag in officiële 3:2 ratio, alle vier glyphs even breed. Productie: [OnboardingOriginStep](packages/ui-certification/src/components/onboarding/origin-step/OnboardingOriginStep.tsx) + [onboarding-registration-chrome-copy](packages/ui-certification/src/onboarding/onboarding-registration-chrome-copy.ts) + [onboarding-request-origin](packages/ui-certification/src/onboarding/onboarding-request-origin.ts). ChoiceCard-primitive: leading-icon centreert nu tegen de titel als er geen description is en heeft geen padding-top meer voor de description-case ([ChoiceCard.tsx](packages/ui/src/components/choice-card/ChoiceCard.tsx)).
-
-### 3.6 Traject — stap "Registratie"
-
-_Route:_ [`/welcome/formal-request/customer`](http://localhost:5173/welcome/formal-request/customer)
-
-- [ ] Vervang "Bent u de wettelijke vertegenwoordiger?" door checkbox (zie [Choice card componenten](#choice-card-componenten)).
-- [ ] Ruim dubbele/driedubbele titels rond "Wettelijke vertegenwoordiger" op. Behoud één duidelijke sectiekop en geef subvragen/veldgroepen een lichter (of geen) extra label.
 
 ### 3.7 Traject — stap "Maatschappelijke zetel"
 

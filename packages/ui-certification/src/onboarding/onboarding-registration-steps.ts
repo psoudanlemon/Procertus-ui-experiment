@@ -59,8 +59,8 @@ export function registrationStepsSequence(drafts: readonly CertificationRequestD
 
   const core: OnboardingStep[] = [
     "origin",
-    "customer",
     "company",
+    "customer",
     ...(needsInnovationAttest ? (["innovationAttest"] as const) : []),
     ...(needsMetrology ? (["metrologyAttest"] as const) : []),
     "companyLegalEntities",

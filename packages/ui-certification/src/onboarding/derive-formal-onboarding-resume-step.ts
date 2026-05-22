@@ -1,6 +1,5 @@
 import {
   effectiveIncludedCertificationDraftIds,
-  isApplicantLegalRepresentativeChoiceComplete,
   isLegalRepresentativeCaptureComplete,
   isOnboardingCompanyLegalEntitiesStepValid,
   isOnboardingCompanyZetelStepValid,
@@ -23,15 +22,14 @@ import { isVatIdentifierPlausible } from "./lib/vatPrototypePresets";
  * First incomplete registration step (origin…summary) for the formal flow when the URL has no step id.
  * Also used by hosts to clamp impossible deep links (compare to URL step outside this package).
  *
- * Uses **strict** completion checks only — unlike the live stepper UI, which may honor the prototype
- * relax-validation flag for faster navigation. Resume must reflect what is actually captured so users
- * who only chose a country (origin) are sent back to **customer** until registratiegegevens are complete.
- * Zolang “Bent u de wettelijke vertegenwoordiger?” onbeantwoord is, blijft resume **altijd** `customer`
- * (tweede stap na origin), nooit een latere stap — ook niet bij een diepe URL of stapper onder prototype‑relax.
+ * Uses **strict** completion checks only. Unlike the live stepper UI, which may honor the prototype
+ * relax-validation flag for faster navigation, resume must reflect what is actually captured.
+ * Volgorde van de checks reflecteert de registratiereeks: origin, company (maatschappelijke zetel),
+ * customer (identificatie), innovatie‑attest, metrologie, certificatie‑entiteit, facturatie, extra
+ * contacten, nazicht. Een latere stap wordt nooit als resume gekozen zolang een eerdere stap nog
+ * onvolledig is, ook niet bij een diepe URL of stapper onder prototype‑relax.
  * De maatschappelijke‑zetelstap telt pas als afgerond als {@link OnboardingFlowState.companyZetelStepCompleted}
  * `true` is (na **Verder**); alléén een geldige lookup vult `context` al in.
- * Hetzelfde patroon geldt voor latere stappen waar validatie `true` kan zijn vóór **Verder**
- * (o.a. innovatie‑attest, metrologie, certificatie‑entiteit, facturatie, optionele contacten).
  */
 export function deriveFormalOnboardingResumeStep(
   flowState: Pick<
@@ -49,7 +47,6 @@ export function deriveFormalOnboardingResumeStep(
   context: CustomerContext,
 ): OnboardingStep {
   if (flowState.requestOrigin === "") return "origin";
-  if (!isApplicantLegalRepresentativeChoiceComplete(context)) return "customer";
 
   const certificationInquiryDraftIds = effectiveIncludedCertificationDraftIds(
     flowState.drafts,
@@ -94,8 +91,8 @@ export function deriveFormalOnboardingResumeStep(
     isOnboardingOptionalContactsStepValid(context) && flowState.extrasStepCompleted;
 
   let step: OnboardingStep;
-  if (!registrationStepOk) step = "customer";
-  else if (!companyZetelOk) step = "company";
+  if (!companyZetelOk) step = "company";
+  else if (!registrationStepOk) step = "customer";
   else if (!innovationResumeOk) step = "innovationAttest";
   else if (!metrologyResumeOk) step = "metrologyAttest";
   else if (!companyLegalEntitiesOk) step = "companyLegalEntities";

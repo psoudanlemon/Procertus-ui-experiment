@@ -11,14 +11,14 @@ const DEFAULTS: Record<OnboardingStep, RegistrationStepChromeCopy> = {
     description: "Uw keuze bepaalt welke gegevens we in de volgende stappen vragen.",
   },
   customer: {
-    title: "Registratie",
+    title: "Identificatie van de wettelijke vertegenwoordiger",
     description:
-      "Vul eerst het identificatienummer van uw organisatie in (afhankelijk van het gekozen land). Daarna vult u de wettelijke vertegenwoordiger en een geldig e-mailadres in.",
+      "Vul de gegevens in van de persoon met handtekenbevoegdheid voor uw organisatie. Alleen deze persoon kan deze aanvraag rechtsgeldig indienen.",
   },
   company: {
     title: "Maatschappelijke zetel",
     description:
-      "Na het opzoeken vult u de officiële gegevens van uw hoofdrechtspersoon in zoals gekoppeld aan uw organisatienummer: juridische naam, telefoon en adres.",
+      "Voer uw KBO- of btw-nummer in. We halen daarmee automatisch de officiële gegevens van uw rechtspersoon op: juridische naam, telefoon en zeteladres.",
   },
   innovationAttest: {
     title: "Innovatie-attest dossiergegevens",

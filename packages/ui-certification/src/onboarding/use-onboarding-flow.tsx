@@ -291,9 +291,9 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
   );
 
   const completedCompanySimulationStepIndex = useMemo(() => {
-    if (companyLookupPhase === "ready" || lookupProgress >= 100) return 4;
+    if (companyLookupPhase === "ready" || lookupProgress >= 100) return 2;
     if (lookupStepIndex <= 0) return -1;
-    return Math.min(lookupStepIndex - 1, 4);
+    return Math.min(lookupStepIndex - 1, 2);
   }, [companyLookupPhase, lookupProgress, lookupStepIndex]);
 
   const companyFieldsResolvedInSimulation = useMemo(
@@ -323,13 +323,13 @@ export function useOnboardingFlow(options: UseOnboardingFlowOptions): {
     activeStep === "origin"
       ? {
           label: "Verder",
-          onClick: () => goToOnboardingStep("customer"),
+          onClick: () => goNextFrom("origin"),
           disabled: requestOrigin === "",
         }
       : activeStep === "customer"
         ? {
             label: "Verder",
-            onClick: () => goToOnboardingStep("company"),
+            onClick: () => goNextFrom("customer"),
             disabled: !registrationStepOk,
           }
         : activeStep === "company"

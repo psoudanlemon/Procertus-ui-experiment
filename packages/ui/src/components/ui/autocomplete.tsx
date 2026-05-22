@@ -74,6 +74,13 @@ type AutocompleteProps<TItem> = {
   /** Apply input-like progressive state styling (mirrors the `Input` primitive). */
   state?: "valid" | "invalid";
   "aria-invalid"?: boolean;
+  /**
+   * Where to render the search-icon affordance. `trailing` (default) keeps it
+   * alongside the clear/spinner affordances on the right; `leading` moves the
+   * static search icon to the start of the input so the field reads as a search
+   * surface, while clear/spinner stay trailing.
+   */
+  searchIconAlign?: "leading" | "trailing";
 };
 
 function Autocomplete<TItem>({
@@ -97,6 +104,7 @@ function Autocomplete<TItem>({
   disabled,
   state,
   "aria-invalid": ariaInvalid,
+  searchIconAlign = "trailing",
 }: AutocompleteProps<TItem>) {
   const [search, setSearch] = React.useState("");
   const [results, setResults] = React.useState<TItem[]>([]);
@@ -224,6 +232,11 @@ function Autocomplete<TItem>({
           data-state={state}
           className={cn("h-9", className)}
         >
+          {searchIconAlign === "leading" ? (
+            <InputGroupAddon align="inline-start">
+              <HugeiconsIcon icon={Search01Icon} className="opacity-50" aria-hidden />
+            </InputGroupAddon>
+          ) : null}
           <InputGroupInput
             ref={inputRef}
             id={id}
@@ -262,9 +275,9 @@ function Autocomplete<TItem>({
               </InputGroupButton>
             ) : status === "loading" ? (
               <Spinner size="sm" />
-            ) : (
+            ) : searchIconAlign === "trailing" ? (
               <HugeiconsIcon icon={Search01Icon} className="opacity-50" aria-hidden />
-            )}
+            ) : null}
           </InputGroupAddon>
         </InputGroup>
       </PopoverAnchor>

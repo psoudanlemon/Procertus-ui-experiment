@@ -56,6 +56,7 @@ export function IdentificatiePersonTitleRoleCapture({
   registryPersonSelected = false,
   disabled = false,
   emphasizeInvalidRequiredMarkers = false,
+  layout = "auto",
 }: {
   idPrefix: string;
   branch: IdentificatiePersonTitleRoleBranch;
@@ -71,6 +72,8 @@ export function IdentificatiePersonTitleRoleCapture({
   disabled?: boolean;
   /** When this person slice is still incomplete, accent invalid required markers (see person subform). */
   emphasizeInvalidRequiredMarkers?: boolean;
+  /** Forwarded to the underlying person subform. `"twoColumn"` locks the grid to a fixed 2-col layout. */
+  layout?: "auto" | "twoColumn";
 }) {
   const personValue: IdentificatiePersonCaptureState = (() => {
     switch (branch) {
@@ -416,10 +419,15 @@ export function IdentificatiePersonTitleRoleCapture({
     }
   };
 
+  const showRequiredSuffix = layout !== "twoColumn";
+
   const titlePresetField = (
     <Field className="min-w-0 md:col-span-1">
       <FieldLabel htmlFor={titleTriggerId}>
-        {copy.titleLabel} <RequiredFieldSuffix erroneous={titlePresetMarkerErroneous} />
+        {copy.titleLabel}
+        {showRequiredSuffix ? (
+          <> <RequiredFieldSuffix erroneous={titlePresetMarkerErroneous} /></>
+        ) : null}
       </FieldLabel>
       <FieldContent className="w-full min-w-0">
         <CreatableCombobox
@@ -477,7 +485,10 @@ export function IdentificatiePersonTitleRoleCapture({
   const rolePresetField = (
     <Field className="min-w-0 md:col-span-1">
       <FieldLabel htmlFor={roleTriggerId}>
-        {copy.roleLabel} <RequiredFieldSuffix erroneous={rolePresetMarkerErroneous} />
+        {copy.roleLabel}
+        {showRequiredSuffix ? (
+          <> <RequiredFieldSuffix erroneous={rolePresetMarkerErroneous} /></>
+        ) : null}
       </FieldLabel>
       <FieldContent className="w-full min-w-0">
         <CreatableCombobox
@@ -522,6 +533,7 @@ export function IdentificatiePersonTitleRoleCapture({
           contactRowExtra={rolePresetField}
           disabled={disabled}
           emphasizeInvalidRequiredMarkers={emphasizeInvalidRequiredMarkers}
+          layout={layout}
         />
       )}
     </div>

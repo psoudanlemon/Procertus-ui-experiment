@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 
-import { stepIndex } from "../../../onboarding/onboarding-flow-helpers";
+import { resolveFlowContext, stepIndex } from "../../../onboarding/onboarding-flow-helpers";
+import type { CustomerContext } from "../../../onboarding/onboarding-types";
 import {
   baseOnboardingFlowViewProps,
   storyCustomerContext,
@@ -50,6 +51,97 @@ const meta = {
 } satisfies Meta<typeof OnboardingCompanyZetelStepRedesign>;
 
 export default meta;
+
+function InteractiveLookupStart() {
+  const drafts = storyOnboardingDrafts;
+  const activePreset =
+    findVatPrototypePreset(DEFAULT_VAT_PROTOTYPE_PRESET_ID) ?? VAT_PROTOTYPE_PRESETS[0]!;
+
+  const [ctx, setCtx] = useState<CustomerContext>(() =>
+    storyCustomerContext({
+      vatNumber: "",
+      organizationName: "",
+      country: "",
+      addressStreet: "",
+      addressHouseNumber: "",
+      addressPostalCode: "",
+      addressCity: "",
+    }),
+  );
+  const [phase, setPhase] = useState<"idle" | "loading" | "ready">("idle");
+  const [progress, setProgress] = useState(0);
+  const [stepIdx, setStepIdx] = useState(-1);
+
+  const updateContext = useCallback(
+    (field: keyof CustomerContext, value: CustomerContext[keyof CustomerContext]) => {
+      setCtx((prev) => resolveFlowContext({ ...prev, [field]: value }));
+    },
+    [],
+  );
+  const patchContext = useCallback((patch: Partial<CustomerContext>) => {
+    setCtx((prev) => resolveFlowContext({ ...prev, ...patch }));
+  }, []);
+
+  const props = baseOnboardingFlowViewProps({
+    step: "company",
+    context: ctx,
+    drafts,
+    steps: storyOnboardingStepperSteps({
+      step: "company",
+      context: ctx,
+      drafts,
+      requestOrigin: storyRequestOrigin,
+    }),
+    activeStep: stepIndex("company"),
+    companyLookupPhase: phase,
+    lookupProgress: progress,
+    lookupStepIndex: stepIdx,
+    vatLookupStepLabels: vatLookupSimulationStepsForPreset(activePreset),
+    activeVatPreset: activePreset,
+    prototypeVatPresetId: activePreset.id,
+    updateContext: updateContext as ReturnType<typeof baseOnboardingFlowViewProps>["updateContext"],
+    patchContext: patchContext as ReturnType<typeof baseOnboardingFlowViewProps>["patchContext"],
+    primaryAction: { label: "Verder", onClick: () => {}, disabled: phase !== "ready" },
+    rows: [],
+    effectiveSummaryIncludedDraftIds: phase === "ready" ? drafts.map((d) => d.id) : [],
+  });
+  const model = useOnboardingRegistrationLayoutModel(props);
+
+  const onStartLookup = useCallback(() => {
+    setPhase("loading");
+    setProgress(0);
+    setStepIdx(-1);
+    const timers: number[] = [];
+    timers.push(window.setTimeout(() => { setProgress(25); setStepIdx(0); }, 200));
+    timers.push(window.setTimeout(() => { setProgress(55); setStepIdx(1); }, 900));
+    timers.push(window.setTimeout(() => { setProgress(85); setStepIdx(2); }, 1700));
+    timers.push(
+      window.setTimeout(() => {
+        const m = activePreset.mock;
+        setCtx((prev) =>
+          resolveFlowContext({
+            ...prev,
+            organizationName: m.organizationName,
+            country: "België",
+            addressStreet: m.addressStreet,
+            addressHouseNumber: m.addressHouseNumber,
+            addressPostalCode: m.addressPostalCode,
+            addressCity: m.addressCity,
+          }),
+        );
+        setPhase("ready");
+        setProgress(100);
+      }, 2500),
+    );
+  }, [activePreset]);
+
+  return <OnboardingCompanyZetelStepRedesign model={model} onStartLookup={onStartLookup} />;
+}
+
+export const LookupStart: StoryObj<typeof meta> = {
+  args: {},
+  render: () => <InteractiveLookupStart />,
+};
 
 export const LookupReady: StoryObj<typeof meta> = {
   args: {},

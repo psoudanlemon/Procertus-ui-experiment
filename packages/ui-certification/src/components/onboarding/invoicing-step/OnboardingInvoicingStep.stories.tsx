@@ -45,7 +45,7 @@ function Layout({
       activeStep: stepIndex("invoicing"),
       companyLookupPhase: "ready",
       lookupProgress: 100,
-      lookupStepIndex: 4,
+      lookupStepIndex: 2,
       vatLookupStepLabels: vatLookupSimulationStepsForPreset(activePreset),
       primaryAction: { label: "Verder", onClick: () => {}, disabled: false },
       rows: [],

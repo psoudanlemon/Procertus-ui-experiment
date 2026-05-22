@@ -195,12 +195,12 @@ export function baseOnboardingFlowViewProps(
       onClick: noop,
     },
     cancelAction: {
-      label: "Annuleren",
+      label: "Aanvraag annuleren",
       onClick: noop,
     },
     companyLookupPhase: "ready",
     lookupProgress: 100,
-    lookupStepIndex: 4,
+    lookupStepIndex: 2,
     vatLookupStepLabels: vatLookupSimulationStepsForPreset(activePreset),
     companyPrefillFieldKeys: prefilledDemoKeys,
     companyFieldsResolvedInSimulation: resolvedDemoKeys,
@@ -267,9 +267,19 @@ export function flowStateSeedFromOnboardingFlowViewProps(
 function OnboardingFlowStoryHookBody({
   activeStep,
   onRegistrationStepChange,
+  renderStepBody,
+  registrationChromeOverrides,
+  stepperLabelOverrides,
 }: {
   activeStep: OnboardingStep;
   onRegistrationStepChange: (next: OnboardingStep) => void;
+  renderStepBody?: OnboardingFlowViewProps["renderStepBody"];
+  /** Per-step StepLayout title/description overrides (e.g. rename Registratie → Identificatie in redesign). */
+  registrationChromeOverrides?: OnboardingFlowViewProps["registrationChromeOverrides"];
+  /** Per-step stepper item title/description overrides, mapped by step id. */
+  stepperLabelOverrides?: Partial<
+    Record<OnboardingStep, { title?: string; description?: string }>
+  >;
 }) {
   const navigate = useCallback(() => {}, []);
   useOnboardingCompanyLookupPrototypeEffects(activeStep);
@@ -278,7 +288,20 @@ function OnboardingFlowStoryHookBody({
     activeStep,
     onRegistrationStepChange,
   });
-  return <OnboardingFlowStoryView {...viewProps} />;
+  const steps = stepperLabelOverrides
+    ? viewProps.steps.map((s) => {
+        const ov = stepperLabelOverrides[s.id as OnboardingStep];
+        return ov ? { ...s, ...ov } : s;
+      })
+    : viewProps.steps;
+  return (
+    <OnboardingFlowStoryView
+      {...viewProps}
+      steps={steps}
+      registrationChromeOverrides={registrationChromeOverrides}
+      renderStepBody={renderStepBody}
+    />
+  );
 }
 
 /**
@@ -316,8 +339,19 @@ export function OnboardingFlowStoryView(props: OnboardingFlowViewProps) {
  */
 export function OnboardingFlowViewWithMemoryProvider({
   fixtureProps,
+  renderStepBody,
+  registrationChromeOverrides,
+  stepperLabelOverrides,
 }: {
   fixtureProps: OnboardingFlowViewProps;
+  /** Optional override for step bodies (e.g. redesign components). */
+  renderStepBody?: OnboardingFlowViewProps["renderStepBody"];
+  /** Per-step StepLayout title/description overrides (e.g. rename Registratie → Identificatie in redesign). */
+  registrationChromeOverrides?: OnboardingFlowViewProps["registrationChromeOverrides"];
+  /** Per-step stepper item title/description overrides, mapped by step id. */
+  stepperLabelOverrides?: Partial<
+    Record<OnboardingStep, { title?: string; description?: string }>
+  >;
 }) {
   const noopNavigate = useCallback(() => {}, []);
   const persistence = useRef(
@@ -333,6 +367,9 @@ export function OnboardingFlowViewWithMemoryProvider({
       <OnboardingFlowStoryHookBody
         activeStep={routedStep}
         onRegistrationStepChange={setRoutedStep}
+        renderStepBody={renderStepBody}
+        registrationChromeOverrides={registrationChromeOverrides}
+        stepperLabelOverrides={stepperLabelOverrides}
       />
     </OnboardingFlowProvider>
   );

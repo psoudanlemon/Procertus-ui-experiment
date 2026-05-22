@@ -17,14 +17,14 @@ export function registrationIdentifierFieldMeta(
         label: "KBO- of btw-nummer",
         description:
           "Belgisch ondernemingsnummer: tien cijfers (vaak genoteerd als 0123.456.789). Btw-nummer: BE gevolgd door tien cijfers. Spaties en punten zijn toegelaten.",
-        placeholder: "BE0403.107.223",
+        placeholder: "BE 0XXX.XXX.XXX",
       };
     case "nl":
       return {
-        label: "KVK- of btw-nummer",
+        label: "KvK- of btw-nummer",
         description:
           "KVK: precies acht cijfers. Nederlands btw-nummer: NL, negen cijfers, de letter B en twee cijfers (bijv. NL123456789B01).",
-        placeholder: "12345678 of NL001234567B01",
+        placeholder: "NLXXXXXXXXXBXX",
       };
     case "eu":
       return {
