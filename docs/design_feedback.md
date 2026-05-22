@@ -7,7 +7,7 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 1. [**Cross-cutting patronen / componenten**](#1-cross-cutting-patronen--componenten): herbruikbare componenten en token-beslissingen die op meerdere plekken landen.
 2. [**Flow- en gedrags-architectuur**](#2-flow--en-gedrags-architectuur): bredere beslissingen over winkelmandje, drafts en navigatie.
 3. [**Page-specifieke wijzigingen**](#3-page-specifieke-wijzigingen): per scherm (3.1 t/m 3.12), met cross-refs naar cross-cutting items.
-4. [**Copy en taalregister**](#4-copy-en-taalregister): openstaande micro-copy (4.11 t/m 4.13).
+4. [**Copy en taalregister**](#4-copy-en-taalregister): openstaande micro-copy (4.11 en 4.13).
 5. [**Distill audit (2026-05-21)**](#5-distill-audit-2026-05-21): openstaande app-level en primitives-findings.
 
 **Onderdelen in sectie 1, in alfabetische scan-volgorde:**
@@ -46,6 +46,9 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Check-bullets op TriageOptionCard van text-success naar accent-foreground gezet.
 - [x] TrajectStoryFooter callbacks samengevoegd in één mode-prop.
 - [x] TrajectStoryFooter label-overrides verwijderd.
+- [x] Desktop-breedte upgrades op AuthLayout, DraftRequestList, RequestPackageReview en de categorization tree-view sheet.
+- [x] leading-[1.6] uit RequestPackageReview gesnapt naar de standaard body line-height.
+- [x] Footer-link "Privacy policy" naar "Privacybeleid" vertaald.
 
 ---
 
@@ -132,15 +135,11 @@ _Feedback origineel gezien op:_ **Maatschappelijke zetel** (waar tekst ~50% van 
 
 _Feedback origineel gezien op:_ verschillende organisms zijn mobile-first opgesteld met een vaste `max-w-*` en groeien niet mee op `lg` en `xl`. Op een breed scherm zit een kleine kolom met veel witruimte ernaast. Container-query-aware componenten (CoverView, ProductInquiryMatrix, ProductSelectionBasket, Snackbar) zijn correct responsive en hoeven niet aangepast.
 
-- [ ] **AuthLayout** [packages/ui-lib/src/user-authentication/AuthLayout.tsx:124,126,143](packages/ui-lib/src/user-authentication/AuthLayout.tsx#L124) — formulier-kolom staat op `lg:w-3/5` met `max-w-sm` binnenin: op desktop is dat een smalle island met veel ongebruikte ruimte. Voorstel: kolom naar `lg:w-1/2 xl:w-2/5` en form-breedte naar `lg:max-w-md`, zodat het brand-paneel rechts ook ademruimte krijgt.
-- [ ] **DraftRequestList** [packages/ui-certification/src/components/draft-request-list/DraftRequestList.tsx:67](packages/ui-certification/src/components/draft-request-list/DraftRequestList.tsx#L67) — capped op `max-w-3xl` (768px). Voor een lijst met titel, subtitle en details kan dat op `xl` ruimer (bv. `xl:max-w-5xl`).
-- [ ] **RequestPackageReview** [packages/ui-certification/src/components/request-package-review/RequestPackageReview.tsx:240](packages/ui-certification/src/components/request-package-review/RequestPackageReview.tsx#L240) — review-document met tabellen capped op `max-w-2xl` (672px). Pijnlijk smal op desktop. Voorstel: `lg:max-w-4xl xl:max-w-5xl`.
-- [ ] **ProcertusCategorizationTreeView side sheet** [packages/ui-certification/src/components/procertus-categorization-tree-view/ProcertusCategorizationTreeView.tsx:670](packages/ui-certification/src/components/procertus-categorization-tree-view/ProcertusCategorizationTreeView.tsx#L670) — sheet stopt bij `sm:max-w-3xl`. Op `lg` en `xl` kan ruimer (bv. `lg:max-w-4xl xl:max-w-5xl`) zodat tree en filterlabels niet onnodig moeten scrollen.
 - [ ] Audit overige page-level organisms op vaste `max-w-2xl` / `max-w-3xl` zonder `lg:` of `xl:` upgrade. Inventaris is beperkt tot ui-lib en ui-certification want primitives in `packages/ui` worden parametrisch gebruikt.
 
 ### Typografie-token: `leading-[1.6]` op body-copy
 
-_Feedback origineel gezien op:_ off-token-check hook flagde `leading-[1.6]` bij een edit op [RequestPackageReview.tsx:240](packages/ui-certification/src/components/request-package-review/RequestPackageReview.tsx#L240). Het patroon bestaat 8 keer in ui-certification (review-/summary-/onboarding body copy) en is ook gelogd in [packages/ui/src/off-token-log.md](packages/ui/src/off-token-log.md) voor StepLayout en stepper.
+_Feedback origineel gezien op:_ off-token-check hook flagde `leading-[1.6]` bij een edit op RequestPackageReview. Het patroon bestaat nog 7 keer in ui-certification (review-/summary-/onboarding body copy) en is ook gelogd in [packages/ui/src/off-token-log.md](packages/ui/src/off-token-log.md) voor StepLayout en stepper. De RequestPackageReview-site is intussen weggesnapt naar de standaard body line-height (zie [Afgewerkt](#afgewerkt)).
 
 - [ ] Beslis systeem-breed: ofwel snappen naar `--text-base--line-height: 1.4rem` (huidig token, ruimer ritme verdwijnt), ofwel evolueren naar een eigen `--text-base-comfortable--line-height: 1.6rem` token met een `leading-comfortable` utility plus Guidelines.mdx-uitleg, en dan alle 8+ sites refactoren.
 - [ ] Wanneer het token wordt geëvolueerd: ook de bestaande exception in `packages/ui/src/off-token-log.md` opruimen.
@@ -310,10 +309,6 @@ _Origineel gezien tijdens een copy-clarity pass over de publieke pagina's van [`
 _Route:_ `/welcome/onboarding` (placeholder)
 
 - [ ] Volledige pagina vertalen naar Nederlands: `PANEL.title` + `PANEL.subtitle`, `AuthLayout` title en description, `EmptyTitle`, `EmptyDescription`, knop-label (`"Back to sign in"` naar `"Terug naar aanmelden"`).
-
-### 4.12 Footer [`footerConfig.ts`](../apps/frontend-pt1-extranet-onboarding/src/layouts/footerConfig.ts)
-
-- [ ] `"Privacy policy"` naar `"Privacybeleid"`.
 
 ### 4.13 Bevestigingspagina na indiening [`OnboardingRegistrationCompletePage`](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingRegistrationCompletePage.tsx)
 

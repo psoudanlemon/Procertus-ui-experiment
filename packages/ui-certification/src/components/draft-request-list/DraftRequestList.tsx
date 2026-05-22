@@ -64,7 +64,7 @@ export function DraftRequestList({
   showRemove = true,
 }: DraftRequestListProps) {
   return (
-    <Card className={cn("w-full max-w-3xl overflow-hidden gap-0 py-0", className)}>
+    <Card className={cn("w-full max-w-3xl overflow-hidden gap-0 py-0 xl:max-w-5xl", className)}>
       <CardHeader className="gap-0 bg-muted/20 px-section pt-section pb-section">
         <CardTitle>{title}</CardTitle>
         {description ? <CardDescription>{description}</CardDescription> : null}

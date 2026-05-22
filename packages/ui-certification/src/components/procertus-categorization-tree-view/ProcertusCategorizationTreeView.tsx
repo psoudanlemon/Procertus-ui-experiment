@@ -667,7 +667,7 @@ export function ProcertusCategorizationTreeView({
       </section>
 
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetContent className="flex h-full max-h-dvh w-full flex-col gap-0 overflow-y-auto overscroll-y-contain border-l p-section sm:max-w-3xl">
+        <SheetContent className="flex h-full max-h-dvh w-full flex-col gap-0 overflow-y-auto overscroll-y-contain border-l p-section sm:max-w-3xl lg:max-w-4xl xl:max-w-5xl">
           <SheetHeader className="space-y-micro p-0 text-left">
             <SheetTitle className="pr-10 text-2xl leading-tight">{title}</SheetTitle>
             <SheetDescription>{sheetDescription}</SheetDescription>

@@ -158,8 +158,8 @@ function AuthLayout({
       className={`mx-auto flex min-h-svh w-full max-w-proc-auth-shell bg-background ${className ?? ""}`}
     >
       {/* Left panel — form */}
-      <div className="flex min-h-svh w-full flex-col items-center justify-center p-boundary lg:w-3/5">
-        <div className="flex w-full max-w-sm flex-col gap-region">
+      <div className="flex min-h-svh w-full flex-col items-center justify-center p-boundary lg:w-1/2 xl:w-2/5">
+        <div className="flex w-full max-w-sm flex-col gap-region lg:max-w-md">
           {/* Logo */}
           <div className="flex w-full justify-center">{resolvedLogo}</div>
 

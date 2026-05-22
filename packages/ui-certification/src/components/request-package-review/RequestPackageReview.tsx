@@ -237,7 +237,7 @@ export function RequestPackageReview({
   }
 
   return (
-    <Card className={cn("w-full max-w-2xl overflow-hidden text-base leading-[1.6]", className)}>
+    <Card className={cn("w-full max-w-2xl overflow-hidden text-base lg:max-w-4xl xl:max-w-5xl", className)}>
       {showHeader ? (
         <CardHeader>
           {title ? <CardTitle>{title}</CardTitle> : null}
