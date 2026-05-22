@@ -16,6 +16,7 @@ export * from "./collapsible";
 export * from "./combobox";
 export * from "./command";
 export * from "./context-menu";
+export * from "./creatable-combobox";
 export * from "./data-table";
 export * from "./date-picker";
 export * from "./dialog";

@@ -57,6 +57,8 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Copy density pass: beschrijvingen ingekort op OnboardingCompanyZetelStep (zetel-sectie) en OnboardingInvoicingStep (3 sectie-omschrijvingen).
 - [x] Copy taalregister 4.11 (OnboardingEntryPlaceholderPage): volledig in het Nederlands, inclusief knoplabel "Terug naar aanmelden".
 - [x] Copy taalregister 4.12 (footerConfig): "Privacy policy" → "Privacybeleid" — reeds gedaan.
+- [x] CreatableCombobox primitive gebouwd in packages/ui (searchable select met inline create-new actie, input-like states, X-clear, tooltip-on-truncate).
+- [x] Role-veld op Registratie van "select + Anders + losstaand input field"-pattern naar CreatableCombobox.
 - [x] Copy taalregister 4.13 (OnboardingRegistrationCompletePage): alle copy-items doorgevoerd (je-vorm, titels, statuspillen, digitalFollowBrief, voetnoten, callouts); off-token `text-[1.0625rem]` en `leading-[1.65]` gesnapt naar `text-base`.
 - [x] Heading a11y-volgorde verificatie (één `h1` per pagina, logische `h2 → h3`-keten): wordt meegenomen in de page-specifieke aanpassingen — apart validatiepunt vervalt.
 
@@ -100,10 +102,8 @@ _Feedback origineel gezien op:_ **Maatschappelijke zetel** (nu één zetel mogel
 
 ### Combobox met create-new
 
-_Feedback origineel gezien op:_ **Registratie** ("Role"-veld is een gewone select met een "Anders"-optie die een extra input field opent). Dat pattern komt vermoedelijk vaker terug — vandaar de audit-actie hieronder.
+_Pattern uitgewerkt als [CreatableCombobox](packages/ui/src/components/ui/creatable-combobox.tsx) primitive en toegepast op het Registratie role-veld (zie [Afgewerkt](#afgewerkt)). De audit hieronder loopt nog._
 
-- [ ] Vervang het pattern "select + Anders + extra losstaand input field" door een combobox (searchable select) met een actie om de getypte waarde toe te voegen (bv. "+ Voeg rol toe: <getypte tekst>").
-- [ ] Toepassen op Registratie — "Role"-veld.
 - [ ] Audit alle invulvelden in het traject en kies het juiste veldtype per geval (select / combobox / autocomplete / vrije tekst).
 
 ### Copy density
@@ -201,7 +201,6 @@ _Route:_ [`/welcome/formal-request/customer`](http://localhost:5173/welcome/form
 - [ ] Pas het verified input field pattern toe (zie [Afgewerkt](#afgewerkt)).
 - [ ] Vervang "Bent u de wettelijke vertegenwoordiger?" door checkbox (zie [Choice card componenten](#choice-card-componenten)).
 - [ ] Ruim dubbele/driedubbele titels rond "Wettelijke vertegenwoordiger" op. Behoud één duidelijke sectiekop en geef subvragen/veldgroepen een lichter (of geen) extra label.
-- [ ] Vervang "Role"-veld door combobox met create-new (zie [Combobox met create-new](#combobox-met-create-new)).
 
 ### 3.7 Traject — stap "Maatschappelijke zetel"
 
@@ -262,11 +261,6 @@ Doel van deze pagina is enkel (1) bevestigen dat de indiening gelukt is, en (2) 
 - [ ] Consolideer alle behouden info in één bevestigingskaart met succesmelding, dossiernummer/contact-e-mail en de korte onboarding-zin.
 - [ ] Toon twee gewogen CTA's: "Ga naar Klantenportaal" (primary) en "Open mijn mailbox" (secondary).
 
----
-
-## 4. Copy en taalregister
-
-Volledig afgewerkt, zie [Afgewerkt](#afgewerkt). Registerbeslissing: overal **"je/jouw"**, professioneel maar persoonlijk.
 
 ---
 

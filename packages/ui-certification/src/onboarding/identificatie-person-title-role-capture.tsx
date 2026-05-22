@@ -1,4 +1,5 @@
 import {
+  CreatableCombobox,
   Field,
   FieldContent,
   FieldLabel,
@@ -29,6 +30,10 @@ import {
   roleLabelForPresetId,
   titleLabelForPresetId,
 } from "./lib/registrationPersonOptions";
+
+const ROLE_COMBOBOX_OPTIONS = REPRESENTATIVE_ROLE_PRESETS.filter(
+  (p) => p.id !== "none" && p.id !== "other",
+).map((p) => ({ value: p.id, label: p.label }));
 
 /** Customizable labels and hints for {@link IdentificatiePersonTitleRoleCapture}. */
 export type IdentificatiePersonTitleRoleCopy = {
@@ -304,23 +309,6 @@ export function IdentificatiePersonTitleRoleCapture({
     }
   };
 
-  const patchRoleOther = (text: string) => {
-    switch (branch) {
-      case "legalRepresentative":
-        patchContext({ representativeRole: text });
-        return;
-      case "registrant":
-        patchContext({ registrantRole: text });
-        return;
-      case "certificationContact":
-        patchContext({ certificationContactRole: text });
-        return;
-      case "certificationSecondary":
-        patchContext({ certificationSecondaryRole: text });
-        return;
-    }
-  };
-
   const onPersonChange = (v: IdentificatiePersonCaptureState) => {
     const lang = coercePersonPreferredLanguage(v.language);
     switch (branch) {
@@ -405,19 +393,6 @@ export function IdentificatiePersonTitleRoleCapture({
     }
   })();
 
-  const roleOtherSelected = (() => {
-    switch (branch) {
-      case "legalRepresentative":
-        return context.representativeRolePreset === "other";
-      case "registrant":
-        return context.registrantRolePreset === "other";
-      case "certificationContact":
-        return context.certificationContactRolePreset === "other";
-      case "certificationSecondary":
-        return context.certificationSecondaryRolePreset === "other";
-    }
-  })();
-
   const roleOtherValue = (() => {
     switch (branch) {
       case "legalRepresentative":
@@ -441,19 +416,6 @@ export function IdentificatiePersonTitleRoleCapture({
         return `${idPrefix}-title-other`;
       case "certificationSecondary":
         return `${idPrefix}-title2-other`;
-    }
-  })();
-
-  const roleOtherInputId = (() => {
-    switch (branch) {
-      case "legalRepresentative":
-        return "representativeRole";
-      case "registrant":
-        return "registrantRole";
-      case "certificationContact":
-        return `${idPrefix}-role-other`;
-      case "certificationSecondary":
-        return `${idPrefix}-role2-other`;
     }
   })();
 
@@ -512,42 +474,60 @@ export function IdentificatiePersonTitleRoleCapture({
     </Field>
   );
 
+  const roleComboboxValue =
+    rolePresetValue === "none"
+      ? ""
+      : rolePresetValue === "other"
+        ? roleOtherValue
+        : rolePresetValue;
+
+  const handleRoleCreate = (label: string) => {
+    switch (branch) {
+      case "legalRepresentative":
+        patchContext({ representativeRolePreset: "other", representativeRole: label });
+        return;
+      case "registrant":
+        patchContext({ registrantRolePreset: "other", registrantRole: label });
+        return;
+      case "certificationContact":
+        patchContext({
+          certificationContactRolePreset: "other",
+          certificationContactRole: label,
+        });
+        return;
+      case "certificationSecondary":
+        patchContext({
+          certificationSecondaryRolePreset: "other",
+          certificationSecondaryRole: label,
+        });
+        return;
+    }
+  };
+
   const rolePresetField = (
     <Field className="min-w-0 md:col-span-1">
       <FieldLabel htmlFor={roleTriggerId}>
         {copy.roleLabel} <RequiredFieldSuffix erroneous={rolePresetMarkerErroneous} />
       </FieldLabel>
       <FieldContent className="w-full min-w-0">
-        <Select disabled={disabled} value={rolePresetValue} onValueChange={onRolePresetChange}>
-          <SelectTrigger
-            id={roleTriggerId}
-            size="sm"
-            className="h-8 w-full min-w-0"
-            disabled={disabled}
-          >
-            <SelectValue placeholder="Geen selectie" />
-          </SelectTrigger>
-          <SelectContent>
-            {REPRESENTATIVE_ROLE_PRESETS.map((p) => (
-              <SelectItem key={p.id} value={p.id}>
-                {p.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {roleOtherSelected ? (
-          <div className="mt-2 w-full min-w-0 space-y-1">
-            <Input
-              id={roleOtherInputId}
-              className="h-8"
-              value={roleOtherValue}
-              disabled={disabled}
-              onChange={(event) => patchRoleOther(event.target.value)}
-              placeholder="Bv. projectleider extern"
-              aria-label="Functieomschrijving"
-            />
-          </div>
-        ) : null}
+        <CreatableCombobox
+          id={roleTriggerId}
+          options={ROLE_COMBOBOX_OPTIONS}
+          value={roleComboboxValue}
+          onValueChange={(v) => onRolePresetChange(v || "none")}
+          onCreate={handleRoleCreate}
+          placeholder="Geen selectie"
+          searchPlaceholder="Zoek functienaam"
+          createLabel={(s) => (
+            <>
+              Voeg &quot;<span className="font-medium">{s}</span>&quot; toe
+            </>
+          )}
+          createTooltip={(s) => `Voeg "${s}" toe als nieuwe functie`}
+          clearAriaLabel="Wis functiekeuze"
+          disabled={disabled}
+          className="h-8"
+        />
       </FieldContent>
     </Field>
   );
