@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { Slot } from "radix-ui";
 
 import { cn } from "@/lib/utils";
 
@@ -12,10 +13,49 @@ const cardVariants = cva(
         outlined: "border border-border bg-card",
         subtle: "border border-border/60 bg-muted/5",
         muted: "border border-border bg-muted/30",
+        elevated: "border border-border bg-card shadow-proc-glow-tactile",
+        faded: "border border-dashed border-muted-foreground/40 bg-card opacity-90",
+      },
+      interactive: {
+        true: "w-full cursor-pointer text-left outline-none transition-[box-shadow,transform,border-color,background-color,opacity,--tw-ring-color] duration-200 ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:translate-y-px disabled:pointer-events-none disabled:opacity-60",
+        false: "",
       },
     },
+    compoundVariants: [
+      {
+        variant: "default",
+        interactive: true,
+        className: "hover:shadow-proc-sm hover:ring-foreground/25",
+      },
+      {
+        variant: "outlined",
+        interactive: true,
+        className: "hover:shadow-proc-sm hover:border-foreground/25",
+      },
+      {
+        variant: "subtle",
+        interactive: true,
+        className: "hover:shadow-proc-sm hover:border-foreground/25 hover:bg-card",
+      },
+      {
+        variant: "muted",
+        interactive: true,
+        className: "hover:shadow-proc-sm hover:border-foreground/25 hover:bg-muted/50",
+      },
+      {
+        variant: "elevated",
+        interactive: true,
+        className: "hover:shadow-proc-glow-xs hover:border-accent-foreground",
+      },
+      {
+        variant: "faded",
+        interactive: true,
+        className: "hover:opacity-100 hover:border-solid hover:border-accent-foreground",
+      },
+    ],
     defaultVariants: {
       variant: "default",
+      interactive: false,
     },
   },
 );
@@ -23,13 +63,20 @@ const cardVariants = cva(
 function Card({
   className,
   variant,
+  interactive,
+  asChild = false,
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof cardVariants>) {
+}: React.ComponentProps<"div"> &
+  VariantProps<typeof cardVariants> & {
+    asChild?: boolean;
+  }) {
+  const Comp = asChild ? Slot.Root : "div";
   return (
-    <div
+    <Comp
       data-slot="card"
       data-variant={variant ?? "default"}
-      className={cn(cardVariants({ variant }), className)}
+      data-interactive={interactive ? "true" : undefined}
+      className={cn(cardVariants({ variant, interactive }), className)}
       {...props}
     />
   );
@@ -92,4 +139,13 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-export { Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent };
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardAction,
+  CardDescription,
+  CardContent,
+  cardVariants,
+};

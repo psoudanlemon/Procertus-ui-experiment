@@ -8,7 +8,6 @@ import type {
   OnboardingStep,
 } from "./onboarding-types";
 import {
-  formatRequesterStepperLabel,
   isApplicantLegalRepresentativeChoiceComplete,
   isLegalRepresentativeCaptureComplete,
   isOnboardingCompanyCoreStepValid,
@@ -150,8 +149,10 @@ export function buildOnboardingStepperSteps(
   const {
     registrationStepOk,
     companyZetelOk,
+    companyLegalEntitiesOk,
     companyCoreOk,
     invoicingStepOk,
+    optionalContactsOk,
     summaryStepOk,
     innovationAttestOk,
     metrologyAttestOk,
@@ -208,85 +209,75 @@ export function buildOnboardingStepperSteps(
     origin: {
       id: "origin",
       title: "Land of regio",
-      description:
-        requestOrigin === ""
-          ? "Waar is uw bedrijf?"
-          : ({
-              be: "België",
-              nl: "Nederland",
-              eu: "Europa (EU)",
-              us: "Verenigde Staten",
-              other: "Anders",
-            }[requestOrigin] ?? ""),
+      description: "Kies waar uw bedrijf gevestigd is.",
       available: hasDrafts,
+      completed: requestOrigin !== "",
     },
     customer: {
       id: "customer",
       title: "Registratie",
-      description: formatRequesterStepperLabel(context),
+      description: "Vul uw aanspreekpunt en juridische vertegenwoordiging in.",
       available: hasDrafts && requestOrigin !== "",
+      completed: registrationStepOk,
     },
     company: {
       id: "company",
       title: "Maatschappelijke zetel",
-      description:
-        context.organizationName.trim() || "Officiële gegevens van de hoofdrechtspersoon",
+      description: "Bevestig de officiële gegevens van uw hoofdrechtspersoon.",
       available: hasDrafts && requestOrigin !== "" && legalRepChoiceOk && registrationStepOk,
+      completed: companyZetelOk,
     },
     innovationAttest: {
       id: "innovationAttest",
       title: "Innovatie-attest",
-      description: "Innovatief product en project",
+      description: "Bezorg ons de context voor uw innovatie-attest.",
       available: innovationStepAvailable,
+      completed: innovationAttestOk,
     },
     metrologyAttest: {
       id: "metrologyAttest",
       title: "Metrologie",
-      description: "Meetuitrusting en tussenkomsten",
+      description: "Geef uw meetuitrusting en tussenkomsten door.",
       available: metrologyStepAvailable,
+      completed: metrologyAttestOk,
     },
     companyLegalEntities: {
       id: "companyLegalEntities",
       title: "Certificatie (entiteit)",
-      description:
-        context.headOfficeIsCertificationLegalEntity === ""
-          ? "Zetel of vestigingen per product"
-          : context.headOfficeIsCertificationLegalEntity === "yes"
-            ? "Zetel voor alle productgebonden aanvragen in dit dossier"
-            : "Vestiging per geselecteerd product",
+      description: "Koppel de juiste rechtspersoon aan elke productaanvraag.",
       available: legalEntitiesAvailable,
+      completed: companyLegalEntitiesOk,
     },
     invoicing: {
       id: "invoicing",
       title: "Facturatie",
-      description:
-        context.invoicingEmail.trim() ||
-        (context.invoicingMirrorCertificationLegalEntities
-          ? "Zelfde rechts‑persoon als bij certificatie"
-          : "Factuur‑rechtspersoon per aanvraag"),
+      description: "Geef door waar de facturen heen moeten.",
       available:
         hasDrafts &&
         requestOrigin !== "" &&
         legalRepChoiceOk &&
         registrationStepOk &&
         companyStepOk,
+      completed: invoicingStepOk,
     },
     extras: {
       id: "extras",
       title: "Extra contacten",
-      description: "Certificatie- en reservecontact (optioneel)",
+      description: "Voeg eventueel extra contactpersonen toe.",
       available: hasDrafts && requestOrigin !== "" && extrasAvailabilityDepsOk,
+      completed: optionalContactsOk,
     },
     summary: {
       id: "summary",
       title: "Nazicht",
-      description: "Gegevens en aanvragen nakijken",
+      description: "Controleer alle gegevens voor u indient.",
       available:
         hasDrafts &&
         requestOrigin !== "" &&
         legalRepChoiceOk &&
         registrationStepOk &&
         summaryStepOk,
+      completed: summaryStepOk,
     },
   };
 

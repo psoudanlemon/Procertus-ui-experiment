@@ -88,6 +88,13 @@ export type OnboardingFloatingStepsNavProps = {
    * @default true for this onboarding navigator.
    */
   showDescriptions?: boolean;
+  /**
+   * Forwarded to {@link StepLayoutStepper}: when false, steps past `activeStep`
+   * are not clickable unless they're marked `completed`. Onboarding gates forward
+   * navigation through the wizard's primary action.
+   * @default false
+   */
+  allowSkipAhead?: boolean;
   /** Optional Tailwind overrides for the desktop step rail `<aside>`. */
   className?: string;
 } & (
@@ -106,7 +113,7 @@ export type OnboardingFloatingStepsNavProps = {
 );
 
 /**
- * Desktop (`md+`): vertical {@link StepLayoutStepper} in an inline `<aside>` (place after the main
+ * Desktop (`md+`): vertical {@link StepLayoutStepper} in an inline `<aside>` (place before the main
  * column — see onboarding flow shell).
  *
  * Narrow viewports: hide the aside; use {@link OnboardingFloatingStepsMobileCardLead} in
@@ -119,6 +126,7 @@ export function OnboardingFloatingStepsNav({
   onStepChange,
   interactive = true,
   showDescriptions = true,
+  allowSkipAhead = false,
   className,
   sheetOpen: sheetOpenProp,
   onSheetOpenChange,
@@ -153,7 +161,7 @@ export function OnboardingFloatingStepsNav({
         className={cn(
           "hidden shrink-0 md:block md:basis-[20rem] md:grow-0 md:overflow-visible xl:basis-[22rem]",
           "rounded-xl border border-border bg-card shadow-proc-xs",
-          "sticky top-36 z-[1] self-start px-section py-region",
+          "p-region md:self-start",
           className,
         )}
         aria-label="Stappen traject"
@@ -165,6 +173,7 @@ export function OnboardingFloatingStepsNav({
           interactive={interactive}
           orientation="vertical"
           showDescriptions={showDescriptions}
+          allowSkipAhead={allowSkipAhead}
           onStepChange={onStepChange}
         />
       </aside>
@@ -186,6 +195,7 @@ export function OnboardingFloatingStepsNav({
               interactive={interactive}
               orientation="vertical"
               showDescriptions={showDescriptions}
+              allowSkipAhead={allowSkipAhead}
               onStepChange={handleMobileNavigate}
             />
           </SheetBody>

@@ -132,3 +132,65 @@ export const HeaderOnly: Story = {
     </Card>
   ),
 };
+
+const styleVariants = ["default", "outlined", "subtle", "muted", "elevated", "faded"] as const;
+
+/**
+ * The full set of chrome variants — same shape, different emphasis.
+ * `default` and `outlined` are the workhorses; `subtle` and `muted` quiet the surface;
+ * `elevated` adds a soft branded halo for quietly-promoted choices; `faded` uses a
+ * dashed border and lowered opacity to mark de-emphasized but valid options.
+ */
+export const Variants: Story = {
+  parameters: { layout: "padded" },
+  render: () => (
+    <div className="grid w-full max-w-md gap-section">
+      <div>
+        <P className="font-semibold">Style variants</P>
+        <Muted>
+          default · outlined · subtle · muted · elevated · faded — same chrome, different emphasis.
+        </Muted>
+      </div>
+      <div className="grid gap-component">
+        {styleVariants.map((variant) => (
+          <Card key={variant} variant={variant}>
+            <CardHeader>
+              <CardTitle>{`${variant[0]!.toUpperCase()}${variant.slice(1)} variant`}</CardTitle>
+              <CardDescription>Optional description that scales with the variant.</CardDescription>
+            </CardHeader>
+          </Card>
+        ))}
+      </div>
+    </div>
+  ),
+};
+
+/**
+ * The same variant set rendered as interactive cards. The whole card is a focusable
+ * click target (`asChild` + `interactive`) with per-variant hover treatment.
+ */
+export const InteractiveVariants: Story = {
+  parameters: { layout: "padded" },
+  render: () => (
+    <div className="grid w-full max-w-md gap-section">
+      <div>
+        <P className="font-semibold">Interactive variants</P>
+        <Muted>
+          Same variants with `interactive` enabled. Hover and focus states layer per variant.
+        </Muted>
+      </div>
+      <div className="grid gap-component">
+        {styleVariants.map((variant) => (
+          <Card key={variant} asChild interactive variant={variant}>
+            <button type="button">
+              <CardHeader>
+                <CardTitle>{`${variant[0]!.toUpperCase()}${variant.slice(1)} variant`}</CardTitle>
+                <CardDescription>Hover or tab to see the variant-specific state.</CardDescription>
+              </CardHeader>
+            </button>
+          </Card>
+        ))}
+      </div>
+    </div>
+  ),
+};

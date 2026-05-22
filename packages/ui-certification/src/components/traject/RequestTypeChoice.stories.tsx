@@ -8,11 +8,12 @@ import {
 import type { IconSvgElement } from "@hugeicons/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Button,
+  buttonVariants,
   Card,
   CardContent,
   CardDescription,
   CardHeader,
+  cn,
   H2,
   H3,
 } from "@procertus-ui/ui";
@@ -90,7 +91,7 @@ export const Default: StoryObj<typeof meta> = {
       <div className="flex flex-col gap-region">
         <div className="grid grid-cols-1 gap-region md:grid-cols-2">
           <TriageOptionCard
-            tone="muted"
+            variant="faded"
             icon={Mail01Icon}
             title="Informatieve aanvraag"
             description="Voor wie eerst wil afstemmen."
@@ -103,7 +104,7 @@ export const Default: StoryObj<typeof meta> = {
             cta="Start aanvraag"
           />
           <TriageOptionCard
-            tone="primary"
+            variant="elevated"
             icon={FilePlusIcon}
             title="Formele aanvraag"
             description="Voor wie klaar is om in te dienen."
@@ -117,20 +118,35 @@ export const Default: StoryObj<typeof meta> = {
           />
         </div>
         <Card
-          className="relative flex flex-col gap-component px-section py-section sm:flex-row sm:items-center sm:justify-between sm:gap-section"
+          asChild
+          interactive
+          className="relative px-section py-section"
           style={{ background: "var(--gradient-neutral)" }}
         >
-          <div className="flex min-w-0 flex-1 flex-col gap-micro">
-            <H3>Liever eerst een expert spreken?</H3>
-            <p className="text-sm leading-normal text-muted-foreground">
-              Plan een live online sessie van één uur en doorloop de vereisten samen met een
-              PROCERTUS-expert.
-            </p>
-          </div>
-          <Button variant="outline" className="w-full bg-background sm:w-auto sm:shrink-0">
-            <HugeiconsIcon icon={Call02Icon} className="size-4" />
-            Plan een gesprek
-          </Button>
+          <button
+            type="button"
+            onClick={noop}
+            className="flex flex-col gap-component sm:flex-row sm:items-center sm:justify-between sm:gap-section"
+          >
+            <div className="flex min-w-0 flex-1 flex-col gap-micro">
+              <H3>Liever eerst een expert spreken?</H3>
+              <p className="text-sm leading-normal text-muted-foreground">
+                Plan een live online sessie van één uur en doorloop de vereisten samen met een
+                PROCERTUS-expert.
+              </p>
+            </div>
+            <span
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "w-full bg-background sm:w-auto sm:shrink-0",
+                "group-hover/card:bg-muted group-hover/card:text-foreground group-hover/card:rounded-tl-[4px] group-hover/card:rounded-tr-[var(--cmd-deep)] group-hover/card:rounded-br-[4px] group-hover/card:rounded-bl-[var(--cmd-deep)]",
+              )}
+              aria-hidden="true"
+            >
+              <HugeiconsIcon icon={Call02Icon} className="size-4" />
+              Plan een gesprek
+            </span>
+          </button>
         </Card>
       </div>
     </TrajectLayout>
@@ -138,56 +154,75 @@ export const Default: StoryObj<typeof meta> = {
 };
 
 type TriageOptionCardProps = {
-  tone: "muted" | "primary";
+  variant: "elevated" | "faded";
   icon: IconSvgElement;
   title: string;
   description: string;
   bullets: readonly string[];
   cta: string;
+  onSelect?: () => void;
 };
 
-function TriageOptionCard({ tone, icon, title, description, bullets, cta }: TriageOptionCardProps) {
-  const isPrimary = tone === "primary";
+function TriageOptionCard({
+  variant,
+  icon,
+  title,
+  description,
+  bullets,
+  cta,
+  onSelect,
+}: TriageOptionCardProps) {
+  const isElevated = variant === "elevated";
   return (
     <Card
-      className={
-        isPrimary
-          ? "flex h-full flex-col gap-section py-section shadow-proc-md ring-2 ring-primary/30"
-          : "flex h-full flex-col gap-section py-section shadow-proc-xs"
-      }
+      asChild
+      interactive
+      variant={variant}
+      className="h-full gap-section py-section"
     >
-      <CardHeader className="!flex flex-row items-start gap-section px-section">
-        <div
-          className={
-            isPrimary
-              ? "flex size-11 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground"
-              : "flex size-11 shrink-0 items-center justify-center rounded-md bg-secondary text-secondary-foreground"
-          }
-        >
-          <HugeiconsIcon icon={icon} className="size-6" />
-        </div>
-        <div className="flex min-w-0 flex-1 flex-col">
-          <H2>{title}</H2>
-          <CardDescription className="text-sm leading-normal">{description}</CardDescription>
-        </div>
-      </CardHeader>
-      <CardContent className="flex flex-1 flex-col justify-between gap-section px-section">
-        <ul className="flex flex-col gap-micro">
-          {bullets.map((b) => (
-            <li key={b} className="flex items-start gap-micro text-sm leading-normal">
-              <HugeiconsIcon
-                icon={CheckmarkCircle02Icon}
-                className="mt-0.5 size-4 shrink-0 text-primary"
-              />
-              <span>{b}</span>
-            </li>
-          ))}
-        </ul>
-        <Button variant={isPrimary ? "default" : "outline"} className="w-full justify-between">
-          {cta}
-          <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
-        </Button>
-      </CardContent>
+      <button type="button" onClick={onSelect}>
+        <CardHeader className="!flex flex-row items-start gap-section px-section">
+          <div
+            className={
+              isElevated
+                ? "flex size-11 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground"
+                : "flex size-11 shrink-0 items-center justify-center rounded-md bg-secondary text-secondary-foreground"
+            }
+          >
+            <HugeiconsIcon icon={icon} className="size-6" />
+          </div>
+          <div className="flex min-w-0 flex-1 flex-col">
+            <H2>{title}</H2>
+            <CardDescription className="text-sm leading-normal">{description}</CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent className="flex flex-1 flex-col justify-between gap-section px-section">
+          <ul className="flex flex-col gap-micro">
+            {bullets.map((b) => (
+              <li key={b} className="flex items-start gap-micro text-sm leading-normal">
+                <HugeiconsIcon
+                  icon={CheckmarkCircle02Icon}
+                  className="mt-0.5 size-4 shrink-0 text-primary"
+                />
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+          <span
+            className={cn(
+              buttonVariants({ variant: isElevated ? "default" : "outline" }),
+              "w-full justify-between",
+              isElevated
+                ? "group-hover/card:bg-primary/80 group-hover/card:rounded-tl-[var(--cmd-deep)] group-hover/card:rounded-tr-[4px] group-hover/card:rounded-br-[var(--cmd-deep)] group-hover/card:rounded-bl-[4px]"
+                : "group-hover/card:bg-muted group-hover/card:text-foreground group-hover/card:rounded-tl-[4px] group-hover/card:rounded-tr-[var(--cmd-deep)] group-hover/card:rounded-br-[4px] group-hover/card:rounded-bl-[var(--cmd-deep)]",
+            )}
+            aria-hidden="true"
+          >
+            {cta}
+            <HugeiconsIcon icon={ArrowRight02Icon} className="size-4" />
+          </span>
+        </CardContent>
+      </button>
     </Card>
   );
 }

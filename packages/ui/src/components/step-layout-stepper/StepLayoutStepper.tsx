@@ -19,6 +19,13 @@ export type StepLayoutStep = {
   description?: string;
   /** When false, the step remains visible but cannot be activated yet. */
   available?: boolean;
+  /**
+   * Force the "completed" visual state (checkmark) regardless of position
+   * relative to `activeStep`. Use for steps that were already filled in by
+   * the user but currently sit ahead of the active step (i.e. user navigated
+   * back). Steps before `activeStep` are completed automatically.
+   */
+  completed?: boolean;
 };
 
 export type StepLayoutStepperProps = {
@@ -51,13 +58,21 @@ export type StepLayoutStepperProps = {
    * @default true
    */
   showDescriptions?: boolean;
+  /**
+   * When false, steps whose index is greater than `activeStep` are not clickable
+   * **unless** they are marked `completed` (already filled in earlier and now sit
+   * ahead because the user navigated back). New forward steps must go through the
+   * wizard's own primary action so that required validation cannot be skipped.
+   * Default: true.
+   */
+  allowSkipAhead?: boolean;
 };
 
 const completedIcon = (
   <HugeiconsIcon
     icon={Tick02Icon}
     strokeWidth={2.5}
-    className="size-3.5 shrink-0 text-primary-foreground"
+    className="size-3.5 shrink-0 text-current"
   />
 );
 
@@ -97,6 +112,7 @@ export function StepLayoutStepper({
   orientation = "horizontal",
   interactive = true,
   showDescriptions = true,
+  allowSkipAhead = true,
 }: StepLayoutStepperProps) {
   const value1 = useMemo(
     () => Math.min(steps.length, Math.max(1, activeStep + 1)),
@@ -121,6 +137,9 @@ export function StepLayoutStepper({
               if (steps[target]?.available === false) {
                 return;
               }
+              if (!allowSkipAhead && target > activeStep && steps[target]?.completed !== true) {
+                return;
+              }
               onStepChange(target);
             }
           : undefined
@@ -136,12 +155,19 @@ export function StepLayoutStepper({
       >
         {steps.map((s, i) => {
           const n = i + 1;
+          const nextStep = steps[i + 1];
+          const nextReached =
+            nextStep !== undefined &&
+            (i + 1 <= activeStep || nextStep.completed === true);
           return (
             <StepLayoutStepperItem
               key={s.id}
               n={n}
               step={s}
               interactive={interactive}
+              inertAhead={!allowSkipAhead && i > activeStep && s.completed !== true}
+              aheadCompleted={i > activeStep && s.completed === true}
+              lineCovered={nextReached}
               isLast={i === steps.length - 1}
               orientation={orientation}
               showDescriptions={showDescriptions}
@@ -157,21 +183,34 @@ type ItemProps = {
   n: number;
   step: StepLayoutStep;
   interactive: boolean;
+  /** Step sits past `activeStep` with skip-ahead disabled — block clicks without dimming. */
+  inertAhead: boolean;
+  /** Step was visited (forced `completed`) but currently sits ahead of `activeStep`. */
+  aheadCompleted: boolean;
+  /** True when the next step in the list has been reached (active or completed). */
+  lineCovered: boolean;
   isLast: boolean;
   orientation: "horizontal" | "vertical";
   showDescriptions: boolean;
 };
 
+const aheadCompletedIndicatorClass =
+  "!bg-card !text-primary !border-primary !ring-primary/10 !shadow-none";
+
 function StepLayoutStepperItem({
   n,
   step,
   interactive,
+  inertAhead,
+  aheadCompleted,
+  lineCovered,
   isLast,
   orientation,
   showDescriptions,
 }: ItemProps) {
   const available = step.available !== false;
-  const inert = !interactive || !available;
+  const inert = !interactive || !available || inertAhead;
+  const separatorOverride = lineCovered ? "!bg-primary" : "!bg-border";
 
   if (orientation === "vertical") {
     return (
@@ -179,35 +218,38 @@ function StepLayoutStepperItem({
         className="w-full min-w-0 !items-stretch !justify-start"
         step={n}
         disabled={!available}
+        completed={step.completed}
       >
-        <div className="flex items-center gap-component">
-          <StepperTrigger
-            className={cn(
-              "shrink-0 !rounded-md",
-              inert && "pointer-events-none cursor-default",
-              !available && "opacity-55"
-            )}
+        <StepperTrigger
+          className={cn(
+            "flex w-full items-center gap-component text-left !rounded-md",
+            inert && "pointer-events-none cursor-default",
+            !available && "opacity-55"
+          )}
+        >
+          <StepperIndicator
+            className={cn(indicatorClass, "shrink-0", aheadCompleted && aheadCompletedIndicatorClass)}
           >
-            <StepperIndicator className={indicatorClass}>{n}</StepperIndicator>
-          </StepperTrigger>
-          <div className={cn("min-w-0 flex-1 text-left", !available && "opacity-55")}>
+            {n}
+          </StepperIndicator>
+          <div className="min-w-0 flex-1">
             <StepperTitle className="wrap-break-word font-semibold leading-snug text-foreground whitespace-normal">
               {step.title}
             </StepperTitle>
             {showDescriptions && step.description ? (
-              <p className="mt-1 text-xs leading-[1.4] text-muted-foreground whitespace-normal wrap-break-word">
+              <p className="text-xs leading-[1.4] text-muted-foreground whitespace-normal wrap-break-word">
                 {step.description}
               </p>
             ) : null}
           </div>
-        </div>
-        {isLast ? null : <StepperSeparator className={verticalSeparatorClass} />}
+        </StepperTrigger>
+        {isLast ? null : <StepperSeparator className={cn(verticalSeparatorClass, separatorOverride)} />}
       </StepperItem>
     );
   }
 
   return (
-    <StepperItem className="min-w-0 items-start" step={n} disabled={inert}>
+    <StepperItem className="min-w-0 items-start" step={n} disabled={inert} completed={step.completed}>
       <div className={horizontalColumnClass}>
         <StepperTrigger
           className={cn(
@@ -216,7 +258,11 @@ function StepLayoutStepperItem({
             !available && "opacity-55"
           )}
         >
-          <StepperIndicator className={indicatorClass}>{n}</StepperIndicator>
+          <StepperIndicator
+            className={cn(indicatorClass, aheadCompleted && aheadCompletedIndicatorClass)}
+          >
+            {n}
+          </StepperIndicator>
           <div className={horizontalLabelGroupClass}>
             <StepperTitle className="wrap-break-word font-semibold leading-snug text-foreground whitespace-normal">
               {step.title}
@@ -229,7 +275,7 @@ function StepLayoutStepperItem({
           </div>
         </StepperTrigger>
       </div>
-      {isLast ? null : <StepperSeparator className={horizontalSeparatorClass} />}
+      {isLast ? null : <StepperSeparator className={cn(horizontalSeparatorClass, separatorOverride)} />}
     </StepperItem>
   );
 }

@@ -78,6 +78,7 @@ De Distill audit (2026-05-21) is volledig afgewerkt; alle findings staan in [Afg
 - [x] BTW/KBO-veld op Registratie naar Autocomplete voor `origin = be`: kboAutocomplete-adapter met mock-dataset bouwt het Belgische scenario; selectie autovult bedrijfsnaam, zeteladres en land/landcode. Voor andere origins blijft de Input met structurele validatie het gedrag.
 - [x] Header-spacing geoptimaliseerd: consistent ritme en betere groepering tussen icon buttons en de primaire login knop.
 - [x] 3.12 OnboardingRegistrationCompletePage geconsolideerd: drie afzonderlijke `PublicOverviewSection`-kaarten ("Je ingediende aanvragen en wat eerst volgt", "Je teamleden in het Klantenportaal", "Volgende stappen, meteen na deze melding") plus de mailbox-voettekst en `Reset sessie-gegevens`-knop verwijderd. Pagina hergebruikt nu `InfoRequestSubmittedPanel` met registratie-specifieke copy en een primary/secondary CTA-paar ("Ga naar Klantenportaal" + "Open mijn mailbox"). Panel uitgebreid met override-props (`heading`, `description`, `sectionTitle`, `sectionDescription`, `actions`) zodat één compositie zowel de informatieaanvraag- als registratie-bevestiging dekt.
+- [x] Stepper-redesign uitgerold over het volledige onboardingtraject. [OnboardingFlowView](packages/ui-certification/src/onboarding/onboarding-flow-view.tsx): layout omgedraaid (stappen-rail links, content rechts), `gap-section` ipv `gap-region`, content stretcht mee in hoogte via `md:flex md:flex-col` + `md:flex-1`. [OnboardingFloatingStepsNav](packages/ui-certification/src/components/onboarding/flow/OnboardingFloatingStepsNav.tsx): sticky gedrag verwijderd, uniforme `p-region` wrapper-padding, `allowSkipAhead` default naar `false`. [buildOnboardingStepperSteps](packages/ui-certification/src/onboarding/onboarding-stepper-model.ts): statische guidance copy per stap, plus `completed`-flag per stap afgeleid uit de validity-helpers in `deriveOnboardingPhaseValidityForFlow`. Primitive [StepLayoutStepper](packages/ui/src/components/step-layout-stepper/StepLayoutStepper.tsx) uitgebreid met `allowSkipAhead`, `completed` per step (witte indicator met blauw vinkje voor ahead-completed steps), `lineCovered`-separator die kijkt of de volgende step bereikt is, hele rij klikbaar (indicator + titel + description), gap tussen titel en description weggehaald. [stepper.tsx](packages/ui/src/components/stepper.tsx) state-ordering: `active` wint van `completed` zodat de huidige stap zijn nummer behoudt zodra zijn data valid is. Sketchpad-stories `onboarding-flow-compositions[-redesign].stories.tsx` verwijderd, regressie blijft gedekt door `Onboarding/Flow/Full flow view (composed)`.
 
 ---
 
@@ -104,10 +105,10 @@ _Feedback origineel gezien op:_ **Facturatie** (drie toggles: "Afwijkende factur
 
 _Feedback origineel gezien op:_ **Land of regio** (eerste keer dat layout opviel — stepper staat rechts, content links), **Registratie** (sticky stepper-sidebar valt op bij een lang scrollend formulier), en **Nazicht** (gevoel dat je vanuit een samenvattingsstap snel naar elke eerdere stap moet kunnen springen — vandaar klikbaarheid, en de subtitle die altijd dynamische waarden toonde i.p.v. duidelijke stap-context).
 
-- [ ] Layout omdraaien: stappen aan de linkerkant, content aan de rechterkant — op alle stappen van het traject.
-- [ ] Niet sticky op lange formulieren (eerst gezien op Registratie).
-- [ ] Reeds bezochte stappen klikbaar maken voor directe navigatie.
-- [ ] Vervang dynamische subtitle (samenvatting van ingevoerde waarden, bv. "Camille Bernard" / "PackLine Industry SARL" / "facturatie@…") door statische guidance copy die beschrijft wat in die stap gebeurt.
+- [x] Layout omdraaien: stappen aan de linkerkant, content aan de rechterkant — op alle stappen van het traject.
+- [x] Niet sticky op lange formulieren (eerst gezien op Registratie).
+- [x] Reeds bezochte stappen klikbaar maken voor directe navigatie.
+- [x] Vervang dynamische subtitle (samenvatting van ingevoerde waarden, bv. "Camille Bernard" / "PackLine Industry SARL" / "facturatie@…") door statische guidance copy die beschrijft wat in die stap gebeurt.
 
 ### Multi-instance entry pattern
 
@@ -196,14 +197,14 @@ _Route:_ `/welcome/aanvraag/:serviceId/controleren`
 
 _Route:_ [`/welcome/formal-request/origin`](http://localhost:5173/welcome/formal-request/origin)
 
-- [ ] Pas [Stepper](#stepper) toe.
+- [x] Pas [Stepper](#stepper) toe.
 - [ ] Optimaliseer choice cards (zie [Choice card componenten](#choice-card-componenten)).
 
 ### 3.6 Traject — stap "Registratie"
 
 _Route:_ [`/welcome/formal-request/customer`](http://localhost:5173/welcome/formal-request/customer)
 
-- [ ] Pas [Stepper](#stepper) toe (inclusief niet-sticky).
+- [x] Pas [Stepper](#stepper) toe (inclusief niet-sticky).
 - [ ] Pas het verified input field pattern toe (zie [Afgewerkt](#afgewerkt)).
 - [ ] Vervang "Bent u de wettelijke vertegenwoordiger?" door checkbox (zie [Choice card componenten](#choice-card-componenten)).
 - [ ] Ruim dubbele/driedubbele titels rond "Wettelijke vertegenwoordiger" op. Behoud één duidelijke sectiekop en geef subvragen/veldgroepen een lichter (of geen) extra label.
