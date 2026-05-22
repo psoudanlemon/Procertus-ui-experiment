@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { FieldDescription } from "@procertus-ui/ui";
+
 // ---------------------------------------------------------------------------
 // Strength calculation
 // ---------------------------------------------------------------------------
@@ -24,10 +26,10 @@ export function calculateStrength(password: string): StrengthLevel {
 
 const strengthText: Record<StrengthLevel, { label: string; text: string }> = {
   0: { label: "", text: "" },
-  1: { label: "Weak", text: "text-[var(--sys-destructive-500)]" },
-  2: { label: "Fair", text: "text-[var(--sys-warning-600)]" },
-  3: { label: "Good", text: "text-[var(--sys-info-600)]" },
-  4: { label: "Strong", text: "text-[var(--sys-success-600)]" },
+  1: { label: "Weak", text: "text-sys-destructive-500" },
+  2: { label: "Fair", text: "text-sys-warning-600" },
+  3: { label: "Good", text: "text-sys-info-600" },
+  4: { label: "Strong", text: "text-sys-success-600" },
 };
 
 // ---------------------------------------------------------------------------
@@ -47,7 +49,7 @@ function PasswordStrength({ password }: PasswordStrengthProps) {
   const { label, text } = strengthText[level];
 
   return (
-    <p className="text-left text-xs leading-normal text-muted-foreground">
+    <FieldDescription className="text-xs">
       {level === 0 ? (
         "Must be at least 8 characters"
       ) : (
@@ -55,7 +57,7 @@ function PasswordStrength({ password }: PasswordStrengthProps) {
           Password strength: <span className={`font-medium ${text}`}>{label}</span>
         </>
       )}
-    </p>
+    </FieldDescription>
   );
 }
 

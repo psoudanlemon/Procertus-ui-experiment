@@ -420,14 +420,11 @@ function EmailThreadComposer({
   const dockedComposerStrip =
     composerDocked && showDockControls ? (
       <div className="border-border border-b bg-muted/20 px-section py-0">
-        <button
+        <Button
           type="button"
+          variant="ghost"
           disabled={disabled}
-          className={cn(
-            "flex w-full min-h-11 items-center gap-3 py-2 text-left text-sm transition-colors",
-            "hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card",
-            disabled && "pointer-events-none opacity-50",
-          )}
+          className="flex h-auto w-full min-h-11 justify-start gap-3 rounded-none px-0 py-2 text-left text-sm font-normal normal-case tracking-normal hover:bg-accent/50 hover:rounded-none"
           aria-expanded={false}
           aria-label="Concept uitklappen"
           onClick={expandComposer}
@@ -445,7 +442,7 @@ function EmailThreadComposer({
               <span className="text-muted-foreground">{dockedPlaceholder}</span>
             )}
           </span>
-        </button>
+        </Button>
       </div>
     ) : null;
 

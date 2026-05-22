@@ -3,6 +3,7 @@ import { ArrowRight02Icon, AtIcon, SmilePlusIcon } from "@hugeicons/core-free-ic
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import {
+  Button,
   Input,
   InputGroup,
   InputGroupAddon,
@@ -189,14 +190,16 @@ export function ChatComposerToolbar({
                 <div className="max-h-[175px] overflow-y-auto">
                   <div className="grid grid-cols-5 gap-micro">
                     {filteredPresets.map((em, i) => (
-                      <button
+                      <Button
                         key={`${em}-${i}`}
                         type="button"
-                        className="flex size-9 items-center justify-center rounded-md text-lg hover:bg-muted"
+                        variant="ghost"
+                        size="icon"
+                        className="text-lg"
                         onClick={() => appendEmoji(em)}
                       >
                         {em}
-                      </button>
+                      </Button>
                     ))}
                   </div>
                 </div>

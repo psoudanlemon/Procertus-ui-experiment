@@ -27,6 +27,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
+  FieldDescription,
   H2,
   H4,
 } from "@procertus-ui/ui";
@@ -143,9 +144,7 @@ export function DetailCardSection({
       {hasHeader ? (
         <header className="flex flex-col gap-micro">
           {title ? <H4 className="leading-none">{title}</H4> : null}
-          {description ? (
-            <p className="text-sm leading-normal text-muted-foreground">{description}</p>
-          ) : null}
+          {description ? <FieldDescription>{description}</FieldDescription> : null}
         </header>
       ) : null}
       {children}
