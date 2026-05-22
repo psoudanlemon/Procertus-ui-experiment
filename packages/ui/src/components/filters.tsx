@@ -249,6 +249,55 @@ const filtersContainerVariants = cva("flex flex-wrap items-center", {
   },
 })
 
+// Single source of truth voor input-hoogte per filter-size. Forceert met `!`
+// zodat het de h-9 default van de Input-primitive binnen InputGroup overschrijft
+// zonder dat consumers de waarde opnieuw moeten declareren op InputGroupInput.
+function filterInputHeightClass(size: FilterContextValue["size"]): string {
+  switch (size) {
+    case "sm":
+      return "h-7!"
+    case "lg":
+      return "h-9!"
+    case "default":
+    default:
+      return "h-8!"
+  }
+}
+
+// Gedeelde option-row styling tussen BooleanList en InlineSelectList. De `<button>`
+// blijft raw omdat option-rows een eigen role/keyboard-contract hebben dat Button
+// (commando-affordances, deep-corner animatie) niet past — hier wordt enkel het
+// visuele oppervlak en focus/hover-state gedeeld.
+const filterOptionRowClasses = cn(
+  "flex h-8 items-center gap-micro rounded-sm px-component text-start text-sm outline-none transition-colors",
+  "hover:bg-accent hover:text-accent-foreground",
+  "focus-visible:ring-2 focus-visible:ring-ring/50",
+)
+
+interface FilterOptionRowProps extends React.ComponentProps<"button"> {
+  selected?: boolean
+}
+
+function FilterOptionRow({
+  selected,
+  className,
+  ...props
+}: FilterOptionRowProps) {
+  return (
+    <button
+      type="button"
+      role="option"
+      aria-selected={selected}
+      className={cn(
+        filterOptionRowClasses,
+        selected && "bg-accent text-accent-foreground",
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
 function FilterInput<T = unknown>({
   field,
   onBlur,
@@ -345,19 +394,9 @@ function FilterInput<T = unknown>({
     onKeyDown?.(e)
   }
 
+  const heightClass = filterInputHeightClass(context.size)
   return (
-    <InputGroup
-      className={cn(
-        "w-36",
-        context.size == "sm" &&
-          "h-7!",
-        context.size == "default" &&
-          "h-8!",
-        context.size == "lg" &&
-          "h-9!",
-        className
-      )}
-    >
+    <InputGroup className={cn("w-36", heightClass, className)}>
       {field?.prefix && (
         <InputGroupAddon>
           <InputGroupText>{field.prefix}</InputGroupText>
@@ -373,14 +412,7 @@ function FilterInput<T = unknown>({
         }
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
-        className={cn(
-          context.size == "sm" &&
-            "h-7! text-xs",
-          context.size == "default" &&
-            "h-8!",
-          context.size == "lg" &&
-            "h-9!"
-        )}
+        className={cn(heightClass, context.size == "sm" && "text-xs")}
         {...props}
       />
       {!isValid && validationMessage && (
@@ -848,9 +880,10 @@ function BetweenInputs({
   const a = values[0] ?? ""
   const b = values[1] ?? ""
   const context = useFilterContext()
+  const heightClass = filterInputHeightClass(context.size)
   return (
     <div className="flex w-full items-center gap-component">
-      <InputGroup className="h-8 flex-1">
+      <InputGroup className={cn(heightClass, "flex-1")}>
         <InputGroupInput
           type={inputType}
           step={step}
@@ -858,20 +891,20 @@ function BetweenInputs({
           placeholder={placeholder}
           autoFocus={autoFocus}
           onChange={(e) => onChange([e.target.value, b])}
-          className="h-8 text-sm"
+          className={cn(heightClass, "text-sm")}
         />
       </InputGroup>
       <span className="text-xs font-medium text-muted-foreground">
         {context.i18n.to.toUpperCase() === "TO" ? "AND" : context.i18n.to}
       </span>
-      <InputGroup className="h-8 flex-1">
+      <InputGroup className={cn(heightClass, "flex-1")}>
         <InputGroupInput
           type={inputType}
           step={step}
           value={String(b)}
           placeholder={placeholder}
           onChange={(e) => onChange([a, e.target.value])}
-          className="h-8 text-sm"
+          className={cn(heightClass, "text-sm")}
         />
       </InputGroup>
     </div>
@@ -896,21 +929,13 @@ function BooleanList<T = unknown>({
       {options.map((option) => {
         const isSelected = current === option.value
         return (
-          <button
+          <FilterOptionRow
             key={String(option.value)}
-            type="button"
-            role="option"
-            aria-selected={isSelected}
+            selected={isSelected}
             onClick={() => onChange([option.value])}
-            className={cn(
-              "flex h-8 items-center gap-micro rounded-sm px-component text-start text-sm outline-none transition-colors",
-              "hover:bg-accent hover:text-accent-foreground",
-              isSelected && "bg-accent text-accent-foreground",
-              "focus-visible:ring-2 focus-visible:ring-ring/50"
-            )}
           >
             <span className="truncate">{option.label}</span>
-          </button>
+          </FilterOptionRow>
         )
       })}
     </div>
@@ -993,19 +1018,11 @@ function InlineSelectList<T = unknown>({
             filtered.map((option) => {
               const isSelected = effectiveValues.includes(option.value)
               return (
-                <button
+                <FilterOptionRow
                   key={String(option.value)}
-                  type="button"
-                  role="option"
-                  aria-selected={isSelected}
+                  selected={isSelected}
                   onClick={() => toggle(option)}
-                  className={cn(
-                    "flex h-8 items-center gap-micro rounded-sm px-component text-start text-sm outline-none transition-colors",
-                    "hover:bg-accent hover:text-accent-foreground",
-                    isSelected && "bg-accent text-accent-foreground",
-                    "focus-visible:ring-2 focus-visible:ring-ring/50",
-                    option.className
-                  )}
+                  className={option.className}
                 >
                   {option.icon}
                   <span className="truncate">{option.label}</span>
@@ -1015,7 +1032,7 @@ function InlineSelectList<T = unknown>({
                       className="ms-auto size-3.5"
                     />
                   )}
-                </button>
+                </FilterOptionRow>
               )
             })
           )}
