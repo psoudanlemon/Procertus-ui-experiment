@@ -4,7 +4,7 @@
  * de consumer-side signatuur wijzigt.
  *
  * Scope: alleen Belgische bedrijven. Voor `OnboardingRequestOrigin === "nl"`
- * komt later een aparte `kvkAutocomplete`-adapter; voor andere origins blijft
+ * is er een parallelle `kvkAutocomplete`-adapter; voor andere origins blijft
  * de plain Input met structurele validatie het juiste pattern (registers zijn
  * niet publiek doorzoekbaar of niet gratis).
  */

@@ -18,12 +18,16 @@ import {
   personSubformEmailStructuralIssue,
   type IdentificatiePersonSubformValue,
 } from "@procertus-ui/domain-certification";
-import type { ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { COUNTRY_SELECT_NONE } from "./onboarding-constants";
 import {
   ONBOARDING_PERSON_LANGUAGE_OPTIONS,
   onboardingPersonLanguageLabel,
 } from "./lib/onboardingPersonLanguage";
+import {
+  cityAutocomplete,
+  hasCityAutocompleteForCountryCode,
+} from "./lib/city-autocomplete";
 
 /** Required field marker: muted until the field is invalid / incomplete (then accent). */
 export function RequiredFieldSuffix({ erroneous }: { erroneous: boolean }) {
@@ -399,11 +403,11 @@ export function IdentificatieAddressSubform({
       <Field>
         <FieldLabel htmlFor={`${idPrefix}-locality`}>Plaats</FieldLabel>
         <FieldContent>
-          <Input
-            id={`${idPrefix}-locality`}
-            value={value.locality}
-            onChange={(e) => patch({ locality: e.target.value })}
-            placeholder="Gemeente of stad"
+          <CityAutocompleteField
+            idPrefix={idPrefix}
+            locality={value.locality}
+            countryCode={value.countryCode}
+            onLocalityChange={(next) => patch({ locality: next })}
           />
           {fieldHints?.locality ? <FieldDescription>{fieldHints.locality}</FieldDescription> : null}
         </FieldContent>
@@ -463,6 +467,98 @@ export function IdentificatieAddressSubform({
         </Field>
       ) : null}
     </div>
+  );
+}
+
+/**
+ * Locality-input met een native `<datalist>`-suggestielijst wanneer er
+ * mock-data voor de countryCode bestaat (BE/NL/DE/FR). Voor andere landen of
+ * een leeg countryCode-veld vallen we terug op een gewone `Input`. We kiezen
+ * voor datalist boven de `Autocomplete`-primitive omdat de gebruiker vrij
+ * moet kunnen blijven typen — niet elke gemeente staat in onze mock-lijst.
+ */
+function CityAutocompleteField({
+  idPrefix,
+  locality,
+  countryCode,
+  onLocalityChange,
+}: {
+  idPrefix: string;
+  locality: string;
+  countryCode: string;
+  onLocalityChange: (next: string) => void;
+}) {
+  const normalizedCode = countryCode.trim().toUpperCase();
+  const useCityLookup = hasCityAutocompleteForCountryCode(normalizedCode);
+
+  if (!useCityLookup) {
+    return (
+      <Input
+        id={`${idPrefix}-locality`}
+        value={locality}
+        onChange={(e) => onLocalityChange(e.target.value)}
+        placeholder="Gemeente of stad"
+      />
+    );
+  }
+
+  return (
+    <CityDatalistInput
+      idPrefix={idPrefix}
+      locality={locality}
+      countryCode={normalizedCode}
+      onLocalityChange={onLocalityChange}
+    />
+  );
+}
+
+function CityDatalistInput({
+  idPrefix,
+  locality,
+  countryCode,
+  onLocalityChange,
+}: {
+  idPrefix: string;
+  locality: string;
+  countryCode: string;
+  onLocalityChange: (next: string) => void;
+}) {
+  const datalistId = `${useId()}-city-options`;
+  const [options, setOptions] = useState<readonly string[]>([]);
+  const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+    cityAutocomplete(locality, controller.signal, countryCode)
+      .then((entries) => {
+        if (controller.signal.aborted) return;
+        setOptions(entries.map((e) => e.name));
+      })
+      .catch((err) => {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        setOptions([]);
+      });
+    return () => controller.abort();
+  }, [locality, countryCode]);
+
+  return (
+    <>
+      <Input
+        id={`${idPrefix}-locality`}
+        value={locality}
+        onChange={(e) => onLocalityChange(e.target.value)}
+        placeholder="Gemeente of stad"
+        list={datalistId}
+        autoComplete="address-level2"
+      />
+      <datalist id={datalistId}>
+        {options.map((name) => (
+          <option key={name} value={name} />
+        ))}
+      </datalist>
+    </>
   );
 }
 

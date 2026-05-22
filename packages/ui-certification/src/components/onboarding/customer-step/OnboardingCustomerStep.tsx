@@ -28,6 +28,11 @@ import {
   type KboCompany,
 } from "../../../onboarding/lib/kbo-autocomplete";
 import {
+  findKvkCompanyByVatNumber,
+  kvkAutocomplete,
+  type KvkCompany,
+} from "../../../onboarding/lib/kvk-autocomplete";
+import {
   customerContextAfterPrototypePresetChange,
   emptyIdentificatiePersonState,
   isLegalRepresentativeCaptureComplete,
@@ -57,17 +62,35 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
     applicantLegalRepPersonFieldsLocked,
   } = model;
 
-  // Alleen voor Belgische registratie: de Autocomplete bevraagt het KBO-mock-
+  // Voor BE/NL bevraagt de Autocomplete het KBO- respectievelijk KvK-mock-
   // register en vult bedrijfsnaam + zeteladres bij selectie. Voor andere
   // origins blijft de plain Input + structurele validatie het juiste pattern;
   // die registers zijn ofwel niet publiek doorzoekbaar ofwel pay-walled, dus
   // een autocomplete-belofte daar zou misleidend zijn.
   const useKboLookup = registrationIdOrigin === "be";
+  const useKvkLookup = registrationIdOrigin === "nl";
   const selectedKboCompany = useKboLookup
     ? findKboCompanyByVatNumber(context.vatNumber)
     : null;
+  const selectedKvkCompany = useKvkLookup
+    ? findKvkCompanyByVatNumber(context.vatNumber)
+    : null;
 
-  const handleKboCompanyChange = (company: KboCompany | null) => {
+  const applyRegisterCompany = (
+    company:
+      | Pick<
+          KboCompany,
+          | "vatNumber"
+          | "name"
+          | "country"
+          | "countryCode"
+          | "street"
+          | "houseNumber"
+          | "postalCode"
+          | "city"
+        >
+      | null,
+  ) => {
     if (company) {
       patchContext({
         vatNumber: company.vatNumber,
@@ -177,7 +200,7 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
                 id="customer-registration-identifier"
                 className="min-w-0"
                 value={selectedKboCompany}
-                onChange={handleKboCompanyChange}
+                onChange={applyRegisterCompany}
                 fetchSuggestions={kboAutocomplete}
                 itemKey={(c) => c.vatNumber}
                 itemLabel={(c) => `${c.name} (${c.vatNumber})`}
@@ -199,12 +222,51 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
                   </>
                 )}
                 loadingMessage="KBO-register raadplegen…"
-                placeholder="Zoek bedrijf op naam, BTW of stad"
+                placeholder="Zoek bedrijf op naam, btw of stad"
                 clearAriaLabel="Wis bedrijfskeuze"
                 state={
                   registrationIdentifierIssue != null
                     ? "invalid"
                     : selectedKboCompany != null
+                      ? "valid"
+                      : undefined
+                }
+                aria-invalid={registrationIdentifierIssue != null}
+              />
+            ) : useKvkLookup ? (
+              <Autocomplete<KvkCompany>
+                id="customer-registration-identifier"
+                className="min-w-0"
+                value={selectedKvkCompany}
+                onChange={applyRegisterCompany}
+                fetchSuggestions={kvkAutocomplete}
+                itemKey={(c) => c.vatNumber}
+                itemLabel={(c) => `${c.name} (KvK ${c.kvkNumber})`}
+                renderItem={(c, q) => (
+                  <span className="flex min-w-0 flex-col">
+                    <span className="truncate font-medium text-foreground">
+                      {highlightMatch(c.name, q)}
+                    </span>
+                    <span className="truncate text-xs text-muted-foreground">
+                      KvK {highlightMatch(c.kvkNumber, q)} &middot;{" "}
+                      {highlightMatch(c.vatNumber, q)} &middot; {highlightMatch(c.city, q)}
+                    </span>
+                  </span>
+                )}
+                resultsHeading={() => "Zoekresultaten"}
+                emptyMessage={(q) => (
+                  <>
+                    Geen bedrijf gevonden voor &quot;
+                    <span className="font-medium text-foreground">{q}</span>&quot;.
+                  </>
+                )}
+                loadingMessage="KvK-register raadplegen…"
+                placeholder="Zoek bedrijf op naam, KvK, btw of stad"
+                clearAriaLabel="Wis bedrijfskeuze"
+                state={
+                  registrationIdentifierIssue != null
+                    ? "invalid"
+                    : selectedKvkCompany != null
                       ? "valid"
                       : undefined
                 }
@@ -245,7 +307,9 @@ export function OnboardingCustomerStep({ model }: OnboardingCustomerStepProps) {
             <FieldDescription id="customer-registration-identifier-hint">
               {useKboLookup
                 ? "Zoek je bedrijf in het KBO-register. We vullen automatisch je bedrijfsnaam en zeteladres in."
-                : registrationIdFieldMeta.description}
+                : useKvkLookup
+                  ? "Zoek je bedrijf in het KvK-register. We vullen automatisch je bedrijfsnaam en vestigingsadres in."
+                  : registrationIdFieldMeta.description}
             </FieldDescription>
           </FieldContent>
         </Field>

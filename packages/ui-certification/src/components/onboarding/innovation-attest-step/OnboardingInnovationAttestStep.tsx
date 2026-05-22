@@ -19,7 +19,7 @@ import {
   Textarea,
 } from "@procertus-ui/ui";
 import { PrototypeCard } from "@procertus-ui/ui-pt1-prototype";
-import { useCallback, useId, useRef, useState, type DragEvent } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type DragEvent } from "react";
 
 import { useOnboardingFlowContext } from "../../../onboarding/onboarding-flow-provider";
 import type {
@@ -30,6 +30,7 @@ import {
   innovationAttestPrototypeRequiredFieldPreset,
   isInnovationAttestCaptureComplete,
 } from "../../../onboarding/onboarding-innovation-attest";
+import { addressAutocomplete } from "../../../onboarding/lib/address-autocomplete";
 
 /** Fictieve bestanden voor de prototypeknop (los van echte drag/drop-upload). */
 const INNOVATION_ATTEST_PROTOTYPE_DEMO_BLUEPRINT: ReadonlyArray<{
@@ -134,6 +135,84 @@ function FormInput({
           onChange={(e) => onChange(e.target.value)}
           aria-describedby={`${id}-desc`}
         />
+        <FieldDescription id={`${id}-desc`}>{description}</FieldDescription>
+      </FieldContent>
+    </Field>
+  );
+}
+
+/**
+ * Adres-veld met postale-lookup-suggesties via een native `<datalist>`. De
+ * waarde blijft één geformatteerde string in het flow-model; de suggesties
+ * helpen de gebruiker een herkenbaar adres te kiezen zonder dat het veld
+ * vrije tekst uitsluit (kleine werven en projectlocaties staan niet altijd
+ * in een register).
+ */
+function FormAddressInput({
+  id,
+  label,
+  description,
+  value,
+  onChange,
+  required = false,
+}: {
+  id: string;
+  label: string;
+  description: string;
+  value: string;
+  onChange: (next: string) => void;
+  required?: boolean;
+}) {
+  const listId = `${id}-suggestions`;
+  const [options, setOptions] = useState<readonly string[]>([]);
+  const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+    addressAutocomplete(value, controller.signal)
+      .then((entries) => {
+        if (controller.signal.aborted) return;
+        setOptions(entries.map((e) => e.formatted));
+      })
+      .catch((err) => {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        setOptions([]);
+      });
+    return () => controller.abort();
+  }, [value]);
+
+  return (
+    <Field data-required={required ? "" : undefined} className="min-w-0">
+      <FieldLabel htmlFor={id}>
+        <span className="inline-flex flex-wrap items-baseline gap-x-1">
+          <span>{label}</span>
+          {required ? (
+            <span className="font-semibold text-foreground" aria-hidden="true">
+              *
+            </span>
+          ) : null}
+        </span>
+        {required ? <span className="sr-only"> Verplicht veld.</span> : null}
+      </FieldLabel>
+      <FieldContent>
+        <Input
+          id={id}
+          type="text"
+          value={value}
+          required={required}
+          aria-required={required}
+          onChange={(e) => onChange(e.target.value)}
+          aria-describedby={`${id}-desc`}
+          list={listId}
+          autoComplete="street-address"
+        />
+        <datalist id={listId}>
+          {options.map((formatted) => (
+            <option key={formatted} value={formatted} />
+          ))}
+        </datalist>
         <FieldDescription id={`${id}-desc`}>{description}</FieldDescription>
       </FieldContent>
     </Field>
@@ -510,10 +589,10 @@ export function OnboardingInnovationAttestStep() {
             onChange={(v) => patchCapture({ clientName: v })}
             required
           />
-          <FormInput
+          <FormAddressInput
             id={pid("client-addr")}
             label="Adres bouwheer"
-            description="Volledig adres van de bouwheer."
+            description="Volledig adres van de bouwheer. Begin te typen voor postale suggesties; je kunt het adres ook handmatig invullen."
             value={capture.clientAddress}
             onChange={(v) => patchCapture({ clientAddress: v })}
           />
@@ -525,10 +604,10 @@ export function OnboardingInnovationAttestStep() {
             onChange={(v) => patchCapture({ projectName: v })}
             required
           />
-          <FormInput
+          <FormAddressInput
             id={pid("proj-addr")}
             label="Projectadres"
-            description="Locatie van de werf of het gebouw waar het product wordt toegepast."
+            description="Locatie van de werf of het gebouw waar het product wordt toegepast. Begin te typen voor postale suggesties; handmatig invullen blijft mogelijk."
             value={capture.projectAddress}
             onChange={(v) => patchCapture({ projectAddress: v })}
           />
