@@ -5,6 +5,12 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Cancel01Icon, Search01Icon } from "@hugeicons/core-free-icons";
 
 import { cn } from "@/lib/utils";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
 import { Spinner } from "@/components/ui/spinner";
 
@@ -69,15 +75,6 @@ type AutocompleteProps<TItem> = {
   state?: "valid" | "invalid";
   "aria-invalid"?: boolean;
 };
-
-const wrapperBaseClasses = cn(
-  "relative flex h-9 w-full min-w-0 items-center gap-2 rounded-lg border border-input bg-transparent px-3 py-1.5 text-base transition-colors outline-none md:text-sm dark:bg-input/30",
-  "hover:not-[:has(input:disabled)]:not-[:has(input:focus-visible)]:not-aria-invalid:not-data-[state=valid]:border-ring",
-  "has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50",
-  "aria-invalid:border-destructive-foreground aria-invalid:ring-3 aria-invalid:ring-destructive-foreground/20 dark:aria-invalid:border-destructive-foreground/50 dark:aria-invalid:ring-destructive-foreground/40",
-  "data-[state=valid]:border-sys-success-500 data-[state=valid]:has-[input:focus-visible]:border-sys-success-500 data-[state=valid]:has-[input:focus-visible]:ring-sys-success-500/20 dark:data-[state=valid]:border-sys-success-400 dark:data-[state=valid]:has-[input:focus-visible]:border-sys-success-400 dark:data-[state=valid]:has-[input:focus-visible]:ring-sys-success-400/40",
-  "has-[input:disabled]:pointer-events-none has-[input:disabled]:cursor-not-allowed has-[input:disabled]:bg-input/50 has-[input:disabled]:opacity-50 dark:has-[input:disabled]:bg-input/80",
-);
 
 function Autocomplete<TItem>({
   value,
@@ -222,13 +219,12 @@ function Autocomplete<TItem>({
   return (
     <Popover open={popoverOpen}>
       <PopoverAnchor asChild>
-        <div
+        <InputGroup
           data-slot="autocomplete"
           data-state={state}
-          aria-invalid={state === "invalid" ? true : ariaInvalid}
-          className={cn(wrapperBaseClasses, className)}
+          className={cn("h-9", className)}
         >
-          <input
+          <InputGroupInput
             ref={inputRef}
             id={id}
             type="text"
@@ -241,6 +237,7 @@ function Autocomplete<TItem>({
                 ? `${listboxId}-${itemKey(results[highlighted])}`
                 : undefined
             }
+            aria-invalid={state === "invalid" ? true : ariaInvalid}
             value={inputValue}
             placeholder={placeholder}
             disabled={disabled}
@@ -250,27 +247,26 @@ function Autocomplete<TItem>({
             onBlur={() => setFocused(false)}
             onKeyDown={handleKeyDown}
             autoComplete="off"
-            className="min-w-0 flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none read-only:cursor-default"
+            className="read-only:cursor-default"
           />
-          {hasValue ? (
-            <button
-              type="button"
-              aria-label={clearAriaLabel}
-              onClick={handleClear}
-              className="inline-flex shrink-0 cursor-pointer rounded-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-            >
-              <HugeiconsIcon icon={Cancel01Icon} className="size-4" />
-            </button>
-          ) : status === "loading" ? (
-            <Spinner size="sm" className="shrink-0" />
-          ) : (
-            <HugeiconsIcon
-              icon={Search01Icon}
-              className="size-4 shrink-0 opacity-50"
-              aria-hidden
-            />
-          )}
-        </div>
+          <InputGroupAddon align="inline-end">
+            {hasValue ? (
+              <InputGroupButton
+                type="button"
+                size="icon-xs"
+                aria-label={clearAriaLabel}
+                onClick={handleClear}
+                disabled={disabled}
+              >
+                <HugeiconsIcon icon={Cancel01Icon} />
+              </InputGroupButton>
+            ) : status === "loading" ? (
+              <Spinner size="sm" />
+            ) : (
+              <HugeiconsIcon icon={Search01Icon} className="opacity-50" aria-hidden />
+            )}
+          </InputGroupAddon>
+        </InputGroup>
       </PopoverAnchor>
       <PopoverContent
         className={cn(
