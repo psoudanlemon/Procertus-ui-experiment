@@ -90,9 +90,9 @@ function GradientHeroExample() {
           <p className="text-xs font-semibold uppercase tracking-wider text-primary">
             PROCERTUS · certification platform
           </p>
-          <h2 className="text-balance text-3xl font-semibold text-heading-foreground sm:text-4xl">
+          <H2 className="text-balance text-3xl sm:text-4xl">
             Eén platform voor elk certificeringsdossier
-          </h2>
+          </H2>
           <Muted className="mx-auto max-w-xl text-pretty">
             Van aanvraag tot opvolging, alles op één plek. Volg de status van je dossier,
             beheer je team en houd documenten up-to-date.
