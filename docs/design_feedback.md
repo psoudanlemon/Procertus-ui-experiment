@@ -7,11 +7,11 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 1. [**Cross-cutting patronen / componenten**](#1-cross-cutting-patronen--componenten): herbruikbare componenten en token-beslissingen die op meerdere plekken landen.
 2. [**Flow- en gedrags-architectuur**](#2-flow--en-gedrags-architectuur): bredere beslissingen over winkelmandje, drafts en navigatie.
 3. [**Page-specifieke wijzigingen**](#3-page-specifieke-wijzigingen): per scherm (3.1 t/m 3.12), met cross-refs naar cross-cutting items.
-4. [**Copy en taalregister**](#4-copy-en-taalregister): openstaande micro-copy (4.11 en 4.13).
+4. [**Copy en taalregister**](#4-copy-en-taalregister): afgewerkt (4.11 en 4.13 doorgevoerd).
 5. [**Distill audit (2026-05-21)**](#5-distill-audit-2026-05-21): openstaande app-level en primitives-findings.
 
 **Onderdelen in sectie 1, in alfabetische scan-volgorde:**
-[Cart-status visibility](#cart-status-visibility) · [Choice card componenten](#choice-card-componenten) · [Combobox met create-new](#combobox-met-create-new) · [Copy density](#copy-density) · [Desktop-breedte van page-level componenten](#desktop-breedte-van-page-level-componenten) · [Heading-hiërarchie en H1–H4 componenten](#heading-hi%C3%ABrarchie-en-h1h4-componenten) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Stepper](#stepper) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox) · [Typografie-token: `leading-[1.6]` op body-copy](#typografie-token-leading-16-op-body-copy).
+[Cart-status visibility](#cart-status-visibility) · [Choice card componenten](#choice-card-componenten) · [Combobox met create-new](#combobox-met-create-new) · [Copy density](#copy-density) · [Heading-hiërarchie en H1–H4 componenten](#heading-hi%C3%ABrarchie-en-h1h4-componenten) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Stepper](#stepper) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox).
 
 ---
 
@@ -52,14 +52,12 @@ Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daa
 - [x] Raw `<h2>` "Levenscyclus" op RequestDetailPage geconverteerd naar `<H3>`.
 - [x] Dashboard widget raw `<h4>` labels geconverteerd naar `<p>` (LatestInvoicesWidget, RecentNotificationsWidget); `text-[11px]` gesnapt naar `text-xs`.
 - [x] Desktop-breedte upgrades op AuthLayout, DraftRequestList, RequestPackageReview en de categorization tree-view sheet.
-- [x] leading-[1.6] uit RequestPackageReview gesnapt naar de standaard body line-height.
-- [x] leading-[1.6] gesnapt in alle resterende sites: OnboardingSummaryStep, onboarding-flow-view, en alle overblijvende RequestPackageReview-plaatsen.
+- [x] leading-[1.6] gesnapt in alle resterende sites: OnboardingSummaryStep, onboarding-flow-view, en alle RequestPackageReview-plaatsen.
 - [x] Desktop-breedte audit (ui-lib + ui-certification): geen resterende max-w-2xl/max-w-3xl zonder responsive upgrade gevonden.
 - [x] Copy density pass: beschrijvingen ingekort op OnboardingCompanyZetelStep (zetel-sectie) en OnboardingInvoicingStep (3 sectie-omschrijvingen).
 - [x] Copy taalregister 4.11 (OnboardingEntryPlaceholderPage): volledig in het Nederlands, inclusief knoplabel "Terug naar aanmelden".
 - [x] Copy taalregister 4.12 (footerConfig): "Privacy policy" → "Privacybeleid" — reeds gedaan.
 - [x] Copy taalregister 4.13 (OnboardingRegistrationCompletePage): alle copy-items doorgevoerd (je-vorm, titels, statuspillen, digitalFollowBrief, voetnoten, callouts); off-token `text-[1.0625rem]` en `leading-[1.65]` gesnapt naar `text-base`.
-- [x] Footer-link "Privacy policy" naar "Privacybeleid" vertaald.
 
 ---
 
@@ -102,14 +100,7 @@ _Feedback origineel gezien op:_ de homepage en de detail-cards op `/welcome` geb
 - `PanelSection` gebruikt `<H4>` voor zijn titel ([PanelSection.tsx](packages/ui/src/components/panel-section/PanelSection.tsx)), dus alle panels in `apps/frontend-pt1-extranet-onboarding/src/panels/` erven die hiërarchie automatisch.
 - `OnboardingFlowView` zet één `<H1>` per stap als page-titel ([onboarding-flow-view.tsx:115](packages/ui-certification/src/onboarding/onboarding-flow-view.tsx#L115)). Het probleem zit niet in de step-titel, wel in de subsecties eronder.
 
-**Beslissing nodig over het "kleine subkop"-register binnen de wizard.** Het 20+ keer gebruikte patroon `<h3 className="text-sm font-semibold tracking-tight text-foreground">` zit visueel tussen `H4` (`text-heading-sm` + uppercase) en `H3` (`text-heading-md`) in. Voor het invullen van het traject moeten we kiezen:
-- Optie A: het patroon snappen naar `H4` en de `uppercase` van `H4` laten vallen (eventueel `H4` aanpassen of een variant toevoegen).
-- Optie B: een nieuwe semantische sub-heading component toevoegen (bv. `SubsectionHeading` of `FormSectionTitle`) die het huidige `text-sm font-semibold tracking-tight` formaliseert, met een Guidelines-pagina voor het wanneer.
-- Optie C: het patroon zonder componentwrap laten, maar wel via een utility-class of `data-slot` zodat het herkenbaar en grep-baar is.
-
-Tot die beslissing valt, zijn de items hieronder bewust niet "vervang door `H3`" maar "wikkel onder een gedeeld component". De refactor moet één keer en bewust gebeuren.
-
-- [x] **Beslis welk register de subsection-kop in de wizard krijgt.** Gekozen voor Optie A: `<H4 className="normal-case tracking-tight text-foreground">` voor form-sectie koppen, `<H3>` voor Nazicht-sectie koppen.
+- [x] **Beslissing genomen (Optie A):** wizard form-sectie koppen via `<H4 className="normal-case tracking-tight text-foreground">`, Nazicht-sectie koppen via `<H3>`.
 - [x] **Audit en converteer top-level page-titels die nu raw zijn.**
   - [x] [RequestDetailPage.tsx](apps/frontend-pt1-extranet-onboarding/src/pages/RequestDetailPage.tsx) "Levenscyclus" geconverteerd naar `<H3>`.
   - [ ] [BrandGradientHero.tsx:16](apps/frontend-pt1-extranet-onboarding/src/components/BrandGradientHero.tsx#L16) gebruikt raw `<h2>`. Component staat sowieso al op de verwijderlijst in [5.1 BrandGradientHero](#brandgradienthero-is-demo-restant-met-engelse-copy), dus opvolgen via dat item (niet apart converteren).
@@ -242,7 +233,7 @@ _Route:_ [`/welcome/formal-request/customer`](http://localhost:5173/welcome/form
 - [ ] Vervang "Bent u de wettelijke vertegenwoordiger?" door checkbox (zie [Choice card componenten](#choice-card-componenten)).
 - [ ] Ruim dubbele/driedubbele titels rond "Wettelijke vertegenwoordiger" op. Behoud één duidelijke sectiekop en geef subvragen/veldgroepen een lichter (of geen) extra label.
 - [ ] Vervang "Role"-veld door combobox met create-new (zie [Combobox met create-new](#combobox-met-create-new)).
-- [ ] Vier raw `<h3 className="text-sm font-semibold tracking-tight ...">` sectie-koppen converteren conform [Heading-hiërarchie en H1–H4 componenten](#heading-hi%C3%ABrarchie-en-h1h4-componenten): [OnboardingCustomerStep.tsx:118,168,254,297](packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx#L118) ("Organisatie-identificatie", "Wettelijke vertegenwoordiger", "Uw gegevens als indiener", "Gegevens wettelijke vertegenwoordiger"). Doe dit in dezelfde ronde als het opruimen van de dubbele titels hierboven.
+- [x] Vier raw `<h3>` sectie-koppen geconverteerd naar `<H4 className="normal-case tracking-tight text-foreground">`: [OnboardingCustomerStep.tsx](packages/ui-certification/src/components/onboarding/customer-step/OnboardingCustomerStep.tsx) ("Organisatie-identificatie", "Wettelijke vertegenwoordiger", "Uw gegevens als indiener", "Gegevens wettelijke vertegenwoordiger").
 
 ### 3.7 Traject — stap "Maatschappelijke zetel"
 
@@ -251,7 +242,7 @@ _Route:_ [`/welcome/formal-request/company`](http://localhost:5173/welcome/forma
 - [ ] Maak meerdere zetels mogelijk in dezelfde stap (zie [Multi-instance entry pattern](#multi-instance-entry-pattern)).
 - [ ] Bouw de koppeling product → zetel hier in (zodat stap "Certificatie (entiteit)" kan verdwijnen, zie 3.8).
 - [ ] Voer copy-density pass uit (zie [Copy density](#copy-density)).
-- [ ] Raw `<h3>` sectie-kop "Maatschappelijke zetel" op [OnboardingCompanyZetelStep.tsx:178](packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyZetelStep.tsx#L178) converteren conform [Heading-hiërarchie en H1–H4 componenten](#heading-hi%C3%ABrarchie-en-h1h4-componenten). Houd rekening met de toekomstige multi-instance lijst: als één kop voor de hele stap volstaat kan de raw `<h3>` ook verdwijnen.
+- [x] Raw `<h3>` sectie-kop "Maatschappelijke zetel" geconverteerd naar `<H4 className="normal-case tracking-tight text-foreground">` in [OnboardingCompanyZetelStep.tsx](packages/ui-certification/src/components/onboarding/company-step/OnboardingCompanyZetelStep.tsx). Bij multi-instance refactor opnieuw evalueren of de kop nodig blijft.
 
 ### 3.8 Traject — stap "Certificatie (entiteit)" verwijderen
 
@@ -275,7 +266,8 @@ De voormalige stap "Extra contacten" wordt samengevoegd met "Facturatie".
 - [ ] Voeg cert/inspectie-contact inline toe op deze stap (overgenomen van de voormalige stap "Extra contacten").
 - [ ] Maak de tweede (reserve) contactpersoon inline toevoegbaar vanuit het primaire contactblok (zie [Multi-instance entry pattern](#multi-instance-entry-pattern)).
 - [ ] Update stepper: "Extra contacten" verdwijnt als aparte stap.
-- [ ] Zes raw `<h3>`/`<h4>` sectie-koppen converteren conform [Heading-hiërarchie en H1–H4 componenten](#heading-hi%C3%ABrarchie-en-h1h4-componenten): [OnboardingInvoicingStep.tsx:125,193,256,269,402](packages/ui-certification/src/components/onboarding/invoicing-step/OnboardingInvoicingStep.tsx#L125) en de raw `<h3>` op de over te nemen blokken in [OnboardingExtrasStep.tsx:21](packages/ui-certification/src/components/onboarding/extras-step/OnboardingExtrasStep.tsx#L21). Doe de conversie nadat de blok-verwijderingen en samenvoeging hierboven gebeurd zijn, anders refactor je koppen die toch verdwijnen.
+- [x] Vijf raw `<h3>`/`<h4>` sectie-koppen in [OnboardingInvoicingStep.tsx](packages/ui-certification/src/components/onboarding/invoicing-step/OnboardingInvoicingStep.tsx) geconverteerd naar `<H4 className="normal-case tracking-tight text-foreground">`.
+- [ ] Raw `<h3>` op de over te nemen blokken in [OnboardingExtrasStep.tsx:21](packages/ui-certification/src/components/onboarding/extras-step/OnboardingExtrasStep.tsx#L21) nog converteren na samenvoeging met Facturatie-stap.
 
 ### 3.10 Traject — stap "Nazicht"
 
@@ -283,7 +275,7 @@ _Route:_ [`/welcome/formal-request/summary`](http://localhost:5173/welcome/forma
 
 - [ ] Kort de samenvatting sterk in, vervang zware kaarten door compacte tabellen zodat de hele pagina in één oogopslag scanbaar is.
 - [ ] Verwijder knop "Aanvragen wijzigen". De gebruiker navigeert terug via "Terug" en via de klikbare [Stepper](#stepper).
-- [ ] Vier raw `<h3 className="m-0 text-base font-semibold ...">` sectie-koppen converteren conform [Heading-hiërarchie en H1–H4 componenten](#heading-hi%C3%ABrarchie-en-h1h4-componenten): [OnboardingSummaryStep.tsx:132,183,240,509](packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx#L132) (aanvrager, geregistreerde juridische entiteiten, geregistreerde personen, begeleidende toelichting). Het visueel register hier is iets groter (`text-base` in plaats van `text-sm`); dat verschil moet je meenemen in de A/B/C-beslissing in de cross-cutting sectie.
+- [x] Vier raw `<h3>` sectie-koppen geconverteerd naar `<H3>` in [OnboardingSummaryStep.tsx](packages/ui-certification/src/components/onboarding/summary-step/OnboardingSummaryStep.tsx): aanvrager, geregistreerde juridische entiteiten, geregistreerde personen, begeleidende toelichting.
 
 ### 3.11 Klantenportaal login pagina
 
@@ -356,9 +348,9 @@ _Feedback origineel gezien op:_ **Aanvraag verzonden** [InfoRequestSubmittedPage
 
 _Feedback origineel gezien op:_ audit naar aanleiding van de cross-cutting [Heading-hiërarchie en H1–H4 componenten](#heading-hi%C3%ABrarchie-en-h1h4-componenten). De publieke `/welcome` flow en de meeste page-shells gebruiken `<H1>` netjes via `PageHeader`, maar drie authenticated/demo-routes wijken af en de twee dashboard-widgets gebruiken een eigen uppercase-mini-kop register.
 
-- [ ] [RequestDetailPage.tsx:63,95](apps/frontend-pt1-extranet-onboarding/src/pages/RequestDetailPage.tsx#L63): raw `<h1 className="mt-3 text-2xl font-semibold tracking-tight">` voor de page-titel en raw `<h2 className="text-base font-semibold text-foreground">` voor "Levenscyclus". Page-titel naar `<H1>` (eventueel via `PageHeader` zodat de page in lijn komt met de andere detail-pages). De "Levenscyclus"-kop is qua niveau een sub-sectie van de detail-card; pas dezelfde keuze toe als voor de wizard-subkoppen.
-- [ ] [CategorizationDemoPage.tsx:13](apps/frontend-pt1-extranet-onboarding/src/pages/CategorizationDemoPage.tsx#L13): raw `<h1>` naar `<H1>`. Mag mee in dezelfde refactor-pass als RequestDetailPage.
-- [ ] [LatestInvoicesWidget.tsx:56](apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/LatestInvoicesWidget.tsx#L56) en [RecentNotificationsWidget.tsx:73](apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/RecentNotificationsWidget.tsx#L73) gebruiken raw `<h4 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">` direct onder een `CardTitle`. Beslis of die rij een echte sub-heading is (dan via `H4`, waarbij `text-[11px]` op de `H4`-baseline moet worden afgepast) of een visueel label (dan een gewone `<p>` of `<small>` zonder heading-tag, om de a11y-volgorde niet te verdubbelen onder `CardTitle`).
+- [x] [RequestDetailPage.tsx](apps/frontend-pt1-extranet-onboarding/src/pages/RequestDetailPage.tsx): page-titel was al `<H1>`; raw `<h2>` "Levenscyclus" geconverteerd naar `<H3>`.
+- [x] [CategorizationDemoPage.tsx](apps/frontend-pt1-extranet-onboarding/src/pages/CategorizationDemoPage.tsx): reeds `<H1>`, geen aanpassing nodig.
+- [x] [LatestInvoicesWidget.tsx](apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/LatestInvoicesWidget.tsx) en [RecentNotificationsWidget.tsx](apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/RecentNotificationsWidget.tsx): raw `<h4>` vervangen door `<p>` (visueel label, geen heading-semantiek onder `CardTitle`); `text-[11px]` gesnapt naar `text-xs`.
 
 #### BrandGradientHero is demo-restant met Engelse copy
 
