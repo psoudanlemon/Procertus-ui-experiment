@@ -303,6 +303,8 @@ _Feedback origineel gezien op:_ **Aanvraag verzonden** [InfoRequestSubmittedPage
 
 > De copy-acties voor deze pagina zijn al doorgevoerd (zie [Afgewerkt](#afgewerkt)). Een deel van die tekst-aanpassingen verhuist of vervalt als de secties samengevoegd of geschrapt worden.
 
+> _Voortgang:_ vergelijkingscomponent `InfoRequestSubmittedPanel` toegevoegd in `packages/ui-certification/src/components/info-request-submitted/` met stories `Current`, `Proposed` en `ProposedMinimal`. Hierdoor kunnen de huidige en voorgestelde composities zij-aan-zij geëvalueerd worden in Storybook voor de definitieve keuze gemaakt en op `InfoRequestSubmittedPage` toegepast wordt.
+
 ### 5.2 Primitives en libraries
 
 #### BrowseCard `variant="faded"` wordt in productie één keer gebruikt

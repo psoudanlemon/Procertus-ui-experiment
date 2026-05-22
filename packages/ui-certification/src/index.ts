@@ -34,6 +34,13 @@ export type {
   RegistrationProcessingDialogProps,
   RegistrationProcessingStep,
 } from "./components/registration-processing-dialog";
+export { InfoRequestSubmittedPanel } from "./components/info-request-submitted";
+export type {
+  InfoRequestInquiryLine,
+  InfoRequestSubmittedPanelProps,
+  InfoRequestSubmittedPortalPerson,
+  InfoRequestSubmittedSnapshot,
+} from "./components/info-request-submitted";
 export {
   BUNDLE_CERT_META,
   BUNDLE_CERT_ORDER,
