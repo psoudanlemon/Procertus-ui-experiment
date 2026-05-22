@@ -1,28 +1,55 @@
 # Design feedback — todo
 
-Checklist op basis van de design review en daaropvolgende audits. Onderverdeeld in:
+Checklist op basis van de design review en daaropvolgende audits.
+
+Bovenaan staat **[Afgewerkt](#afgewerkt)**: alle items die al opgelost zijn. Daaronder de openstaande secties:
 
 1. [**Cross-cutting patronen / componenten**](#1-cross-cutting-patronen--componenten): herbruikbare componenten en token-beslissingen die op meerdere plekken landen.
 2. [**Flow- en gedrags-architectuur**](#2-flow--en-gedrags-architectuur): bredere beslissingen over winkelmandje, drafts en navigatie.
 3. [**Page-specifieke wijzigingen**](#3-page-specifieke-wijzigingen): per scherm (3.1 t/m 3.12), met cross-refs naar cross-cutting items.
-4. [**Copy en taalregister**](#4-copy-en-taalregister): cross-cutting copy-regels en per-pagina micro-copy (4.1 t/m 4.13).
-5. [**Distill audit (2026-05-21)**](#5-distill-audit-2026-05-21): app-level en primitives-findings uit de meest recente audit-ronde.
+4. [**Copy en taalregister**](#4-copy-en-taalregister): openstaande micro-copy (4.11 t/m 4.13).
+5. [**Distill audit (2026-05-21)**](#5-distill-audit-2026-05-21): openstaande app-level en primitives-findings.
 
 **Onderdelen in sectie 1, in alfabetische scan-volgorde:**
-[Cart-status visibility](#cart-status-visibility) · [Choice card componenten](#choice-card-componenten) · [Combobox met create-new](#combobox-met-create-new) · [Copy density](#copy-density) · [Desktop-breedte van page-level componenten](#desktop-breedte-van-page-level-componenten) · [Heading-hiërarchie en H1–H4 componenten](#heading-hi%C3%ABrarchie-en-h1h4-componenten) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Primitives polish — states en token-hygiëne](#primitives-polish--states-en-token-hygiëne) · [Stepper](#stepper) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox) · [Typografie-token: `leading-[1.6]` op body-copy](#typografie-token-leading-16-op-body-copy) · [Verified input field](#verified-input-field).
+[Cart-status visibility](#cart-status-visibility) · [Choice card componenten](#choice-card-componenten) · [Combobox met create-new](#combobox-met-create-new) · [Copy density](#copy-density) · [Desktop-breedte van page-level componenten](#desktop-breedte-van-page-level-componenten) · [Heading-hiërarchie en H1–H4 componenten](#heading-hi%C3%ABrarchie-en-h1h4-componenten) · [Multi-instance entry pattern](#multi-instance-entry-pattern) · [Stepper](#stepper) · [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox) · [Typografie-token: `leading-[1.6]` op body-copy](#typografie-token-leading-16-op-body-copy).
+
+---
+
+## Afgewerkt
+
+- [x] Verified-input pattern gebouwd voor velden met validatie.
+- [x] Verified-input toegepast op Registratie.
+- [x] Verified-input toegepast op Facturatie.
+- [x] Overige validatievelden in het traject geauditeerd.
+- [x] Raw h2's op publieke pagina's omgezet naar de H2 component.
+- [x] Raw h1's op detail- en demo-pagina's omgezet naar de H1 component.
+- [x] Icoon in empty component gefixt voor dark mode.
+- [x] Hover state toegevoegd aan input.
+- [x] Hover state toegevoegd aan textarea.
+- [x] Alert padding op gecureerde spacing-schaal gezet.
+- [x] Publieke pagina's omgezet naar je-vorm.
+- [x] Em dashes uit user-facing copy verwijderd.
+- [x] "Gelieve" en passieve constructies opgeschoond.
+- [x] Prototype-meta-commentaar uit user-facing copy gehaald.
+- [x] Engelse strings in de NL-UI vertaald.
+- [x] Vakjargon vervangen door plain Dutch.
+- [x] Login-copy herschreven in je-vorm.
+- [x] Triage-copy en bullets herschreven.
+- [x] Copy op de informatieaanvraag-pagina herschreven.
+- [x] Copy op de aanvraag-verzonden-pagina en fallbacks herschreven.
+- [x] Banner-copy voor lopende aanvraag gefixt.
+- [x] Productkeuze-copy herschreven.
+- [x] Per-product certificaten-copy herschreven.
+- [x] Wegwijzer-copy herschreven.
+- [x] Dashboard-copy herschreven.
+- [x] Placeholder-fallback ingekort.
+- [x] Check-bullets op TriageOptionCard van text-success naar accent-foreground gezet.
+- [x] TrajectStoryFooter callbacks samengevoegd in één mode-prop.
+- [x] TrajectStoryFooter label-overrides verwijderd.
 
 ---
 
 ## 1. Cross-cutting patronen / componenten
-
-### Verified input field
-
-_Feedback origineel gezien op:_ **Registratie** (groen vinkje naast BTW-/ondernemingsnummer en naast "Gegevens wettelijke vertegenwoordiger") en **Facturatie** (groen vinkje naast e-mail voor facturatie). De huidige losse status-iconen voelen plak-er-op-een-veld en zijn niet consistent met de rest van het form-systeem.
-
-- [x] Bouw één herbruikbare "verified" input field component met consistent succes/error pattern (inline message, eventueel een samenvattende staat per sectie). Vervangt de huidige losse status-iconen naast velden.
-- [x] Toepassen op Registratie — BTW-/ondernemingsnummer en "Gegevens wettelijke vertegenwoordiger".
-- [x] Toepassen op Facturatie — e-mail voor facturatie.
-- [x] Audit overige invulvelden met validatie in het traject en pas toe.
 
 ### Choice card componenten
 
@@ -57,7 +84,7 @@ _Feedback origineel gezien op:_ de homepage en de detail-cards op `/welcome` geb
 **Wat al goed gebeurt (canonische voorbeelden, niet aanpassen):**
 - Authenticated pages zetten `<H1>` via `PageHeader.title`: [DashboardPage.tsx:30](apps/frontend-pt1-extranet-onboarding/src/pages/DashboardPage.tsx#L30), [RequestsOverviewPage.tsx:26](apps/frontend-pt1-extranet-onboarding/src/pages/RequestsOverviewPage.tsx#L26), [ProfileChangeRequestsPage.tsx:42](apps/frontend-pt1-extranet-onboarding/src/pages/ProfileChangeRequestsPage.tsx#L42), [UserProfilePage.tsx:313](apps/frontend-pt1-extranet-onboarding/src/pages/UserProfilePage.tsx#L313), [OrganizationProfilePage.tsx:263](apps/frontend-pt1-extranet-onboarding/src/pages/OrganizationProfilePage.tsx#L263), [DesignSystemPage.tsx:11](apps/frontend-pt1-extranet-onboarding/src/pages/DesignSystemPage.tsx#L11).
 - Triage gebruikt `<H2>` en `<H3>` voor sectie- en card-titel: [TriagePage.tsx:110,179](apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx#L110).
-- Status- en bevestigingspagina's gaan via `StatusContent` met `<H1>` ([StatusContent.tsx:61](packages/ui-lib/src/status-pages/StatusContent.tsx#L61)) en `PublicOverviewSection` met `<H2>` ([PublicOverviewSection.tsx:15](apps/frontend-pt1-extranet-onboarding/src/components/PublicOverviewSection.tsx#L15)). De raw `<h2>` daar mag opgezogen worden in de `H2`-component zodra die conversie elders ook gebeurt, maar de afgeleide pages hoeven niet apart.
+- Status- en bevestigingspagina's gaan via `StatusContent` met `<H1>` ([StatusContent.tsx:61](packages/ui-lib/src/status-pages/StatusContent.tsx#L61)) en `PublicOverviewSection` met `<H2>` ([PublicOverviewSection.tsx:15](apps/frontend-pt1-extranet-onboarding/src/components/PublicOverviewSection.tsx#L15)).
 - `PanelSection` gebruikt `<H4>` voor zijn titel ([PanelSection.tsx](packages/ui/src/components/panel-section/PanelSection.tsx)), dus alle panels in `apps/frontend-pt1-extranet-onboarding/src/panels/` erven die hiërarchie automatisch.
 - `OnboardingFlowView` zet één `<H1>` per stap als page-titel ([onboarding-flow-view.tsx:115](packages/ui-certification/src/onboarding/onboarding-flow-view.tsx#L115)). Het probleem zit niet in de step-titel, wel in de subsecties eronder.
 
@@ -70,15 +97,8 @@ Tot die beslissing valt, zijn de items hieronder bewust niet "vervang door `H3`"
 
 - [ ] **Beslis welk register de subsection-kop in de wizard krijgt.** Optie A/B/C hierboven afwegen samen met Pieter en de Storybook-guidelines. Daarna in één pass toepassen op alle 20+ sites onder `packages/ui-certification/src/components/onboarding/`.
 - [ ] **Audit en converteer top-level page-titels die nu raw zijn.**
-  - [x] [RequestDetailPage.tsx:63](apps/frontend-pt1-extranet-onboarding/src/pages/RequestDetailPage.tsx#L63) raw `<h1 className="mt-3 text-2xl font-semibold tracking-tight">` omgezet naar `<H1 className="mt-3">` (text-2xl 24px matched de H1-baseline van 24px, tracking-tight valt al binnen de H1-letter-spacing-token).
   - [ ] [RequestDetailPage.tsx:95](apps/frontend-pt1-extranet-onboarding/src/pages/RequestDetailPage.tsx#L95) "Levenscyclus" is een raw `<h2 className="text-base ...">` (16px). Geen exacte H-component-match (H3 = 18px, H4 = 14px + uppercase). Wacht op de A/B/C-beslissing hierboven.
-  - [x] [CategorizationDemoPage.tsx:13](apps/frontend-pt1-extranet-onboarding/src/pages/CategorizationDemoPage.tsx#L13) raw `<h1>` omgezet naar `<H1>`.
   - [ ] [BrandGradientHero.tsx:16](apps/frontend-pt1-extranet-onboarding/src/components/BrandGradientHero.tsx#L16) gebruikt raw `<h2>`. Component staat sowieso al op de verwijderlijst in [5.1 BrandGradientHero](#brandgradienthero-is-demo-restant-met-engelse-copy), dus opvolgen via dat item (niet apart converteren).
-- [x] **Audit en converteer raw `<h2>` op publieke vlaktes naar `<H2>`** (of via de bestaande wrapper-componenten):
-  - [x] [PublicOverviewSection.tsx:15](apps/frontend-pt1-extranet-onboarding/src/components/PublicOverviewSection.tsx#L15): raw `<h2>` omgezet naar `<H2>`. Eén plek gerefactored, alle StatusPage-children erven het.
-  - [x] [InfoRequestPlaceholderPage.tsx:115,165](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx#L115): twee raw `<h2 className="m-0 text-heading-lg ...">` omgezet naar `<H2 className="m-0">`.
-  - [x] [TrajectRequestReviewFlow.tsx:91](apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectRequestReviewFlow.tsx#L91): raw `<h2 className="m-0 text-heading-lg ...">` omgezet naar `<H2 className="m-0">`.
-  - [x] [ProductSelectionBasket.tsx:947](packages/ui-certification/src/components/traject/ProductSelectionBasket.tsx#L947): raw `<h2 className="text-xl font-semibold tracking-tight">` omgezet naar `<H2 className="tracking-tight">` (text-xl 20px matched de H2-baseline van 20px).
 - [ ] **Dashboard widgets missen geen H1 (die staat op de DashboardPage), maar gebruiken inconsistente sub-koppen.** [LatestInvoicesWidget.tsx:56](apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/LatestInvoicesWidget.tsx#L56) en [RecentNotificationsWidget.tsx:73](apps/frontend-pt1-extranet-onboarding/src/pages/dashboard-widgets/RecentNotificationsWidget.tsx#L73) gebruiken raw `<h4 className="text-[11px] font-semibold uppercase ...">`. Dat is visueel dichter bij `H4` (uppercase, klein), maar zit naast een `CardTitle` met `text-base`. Beslis of die widgets één duidelijke hiërarchie krijgen (bv. `CardTitle` als sectiehoofd en de uppercase-rij eronder als label, niet als heading) of of het uppercase-label naar `<H4>` mag.
 - [ ] **Audit de raw `<h3>` cluster in de wizard en bepaal welke écht koppen zijn versus visuele labels.** De inventaris hieronder per stap ([3.6 Registratie](#36-traject--stap-registratie), [3.7 Maatschappelijke zetel](#37-traject--stap-maatschappelijke-zetel), [3.9 Facturatie](#39-traject--stap-facturatie-inclusief-extra-contacten), [3.10 Nazicht](#310-traject--stap-nazicht)) is bewust per stap opgesplitst zodat de refactor in één ronde per stap kan gebeuren. Innovatie- en metrologie-stap zitten momenteel niet in de page-list, maar hebben hetzelfde patroon: zie [OnboardingInnovationAttestStep.tsx:298,360,496](packages/ui-certification/src/components/onboarding/innovation-attest-step/OnboardingInnovationAttestStep.tsx#L298) en [OnboardingMetrologyStep.tsx:279,314,344](packages/ui-certification/src/components/onboarding/metrology-step/OnboardingMetrologyStep.tsx#L279).
 - [ ] **Verifieer de a11y-volgorde na de pass.** Het doel is per pagina één `h1`, en daaronder een logische `h2 → h3` reeks zonder gaten. Niet elk blok hoeft een heading te zijn (knoppenrijen, helper-tekstblokken, choice-cards met legend zijn al geen koppen). Wel: als een sectie visueel als kop wordt gepresenteerd, hoort hij ook een heading-tag te krijgen.
@@ -132,15 +152,6 @@ _Feedback origineel gezien op:_ **Homepage** ("Start uw certificeringstraject") 
 - [ ] Cart-status alleen tonen in het winkelmandje en de cart-indicator in de header — niet dupliceren elders.
 - [ ] Verwijder "AL IN UW PAKKET · X PRODUCTEN" indicator van homepage certificaatkaarten.
 - [ ] Verwijder count-badges van homepage filtertabs.
-
-### Primitives polish — states en token-hygiëne
-
-_Feedback origineel gezien op:_ audit van [packages/ui/src/components/ui/](packages/ui/src/components/ui/) tijdens een Storybook-polishronde. Vier primitives missen een state of wijken licht af van het token-systeem. Telkens met een voorstel dat binnen de bestaande tokens valt zodat de guidelines niet hoeven uitgebreid te worden.
-
-- [x] **EmptyIcon — vaste `bg-white` doorbreekt theming.** [packages/ui/src/components/ui/empty.tsx:23](packages/ui/src/components/ui/empty.tsx#L23) — huidige classes `bg-white text-brand-primary-700 dark:bg-white/10 dark:text-brand-primary-200`. In dark mode zakt de cirkel naar "white at 10%" en verliest hij zijn brand-feel. **Voorstel:** vervang door `bg-accent text-accent-foreground`. Light → `brand-accent-50` onder anchor-blauw; dark → `brand-accent-950` onder `brand-accent-300`. Beide al bestaande semantic-token-paren.
-- [x] **Input — geen hover state.** [packages/ui/src/components/ui/input.tsx:11](packages/ui/src/components/ui/input.tsx#L11) — gaat van idle rechtstreeks naar `focus-visible`, dus de cursor geeft geen signaal dat een veld interactief is. **Voorstel:** voeg `hover:not-disabled:not-focus-visible:not-aria-invalid:border-foreground/30` toe (analoog aan `hover:border-foreground/15` op sortable cards en `/20` op de stacking-sequence story). De `not-*`-modifiers zorgen dat focus en error states blijven winnen.
-- [x] **Textarea — geen hover state.** [packages/ui/src/components/ui/textarea.tsx:10](packages/ui/src/components/ui/textarea.tsx#L10) — zelfde gat als Input. **Voorstel:** identieke `hover:not-disabled:not-focus-visible:not-aria-invalid:border-foreground/30`, zodat Input en Textarea als paar consistent voelen.
-- [x] **Alert — `pr-18` valt buiten de gecureerde DS-spacing-schaal.** [packages/ui/src/components/ui/alert.tsx:7](packages/ui/src/components/ui/alert.tsx#L7) — `has-data-[slot=alert-action]:pr-18`. De `--spacing-ds-*`-schaal kent 10 / 11 / 12 / 14 / 16 / 20 / 24, geen 18 — `pr-18` werkt nu enkel via Tailwind v4's default `--spacing: 0.25rem` fallback (4.5rem). In spacious-mobile density (component = 20px, action ≈ 36px) klipt die 4.5rem 4px tegen de actie. **Voorstel:** snap naar `pr-20` (5rem = `--spacing-ds-20`, in de gecureerde schaal en ruim genoeg voor alle density-combo's).
 
 ---
 
@@ -219,7 +230,7 @@ _Route:_ [`/welcome/formal-request/origin`](http://localhost:5173/welcome/formal
 _Route:_ [`/welcome/formal-request/customer`](http://localhost:5173/welcome/formal-request/customer)
 
 - [ ] Pas [Stepper](#stepper) toe (inclusief niet-sticky).
-- [ ] Pas [Verified input field](#verified-input-field) toe.
+- [ ] Pas het verified input field pattern toe (zie [Afgewerkt](#afgewerkt)).
 - [ ] Vervang "Bent u de wettelijke vertegenwoordiger?" door checkbox (zie [Choice card componenten](#choice-card-componenten)).
 - [ ] Ruim dubbele/driedubbele titels rond "Wettelijke vertegenwoordiger" op. Behoud één duidelijke sectiekop en geef subvragen/veldgroepen een lichter (of geen) extra label.
 - [ ] Vervang "Role"-veld door combobox met create-new (zie [Combobox met create-new](#combobox-met-create-new)).
@@ -250,7 +261,7 @@ _Route (huidige stap "Extra contacten", samen te voegen):_ [`/welcome/formal-req
 
 De voormalige stap "Extra contacten" wordt samengevoegd met "Facturatie".
 
-- [ ] Pas [Verified input field](#verified-input-field) toe.
+- [ ] Pas het verified input field pattern toe (zie [Afgewerkt](#afgewerkt)).
 - [ ] Vervang switch-accordions door checkbox (zie [Toggle/switch accordion → checkbox](#toggleswitch-accordion--checkbox)).
 - [ ] Verwijder blokken "Certificatie-aanvragen in dit dossier" + "Factuur rechts-persoon per aanvraag" volledig (niet verplaatsen naar Nazicht).
 - [ ] Voeg cert/inspectie-contact inline toe op deze stap (overgenomen van de voormalige stap "Extra contacten").
@@ -292,111 +303,19 @@ Doel van deze pagina is enkel (1) bevestigen dat de indiening gelukt is, en (2) 
 
 _Origineel gezien tijdens een copy-clarity pass over de publieke pagina's van [`apps/frontend-pt1-extranet-onboarding`](../apps/frontend-pt1-extranet-onboarding/). De wijzigingen zijn gerevert; deze sectie houdt de afspraken vast zodat ze in één gerichte ronde uitgevoerd kunnen worden. De voorgestelde teksten zijn concreet bedoeld als startpunt, niet als verplichte eindtekst._
 
-> **Registerbeslissing (2026-05-21):** we draaien de oorspronkelijke "u"-keuze om en hanteren overal **"je/jouw"**. Reden: persoonlijker, vriendelijker, service-driven, terwijl de toon professioneel en betrouwbaar blijft. De voorgestelde teksten hieronder zijn bij implementatie hertaald naar je-vorm; oorspronkelijke "u"-formuleringen blijven staan als referentie.
+> **Registerbeslissing (2026-05-21):** we draaien de oorspronkelijke "u"-keuze om en hanteren overal **"je/jouw"**. Reden: persoonlijker, vriendelijker, service-driven, terwijl de toon professioneel en betrouwbaar blijft.
 
-### Cross-cutting regels
-
-- [x] **Vorm "je" overal aanhouden.** Resterende "u"/"uw"-vormen vervangen door "je"/"jouw" in alle publieke pagina's. Toegepast op:
-  - [SignupPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/SignupPage.tsx): al in je-vorm, behouden.
-  - [TrajectConfigureFlow.tsx](../apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx): titel en beschrijving in je-vorm.
-  - [TrajectBundleAssembleFlow.tsx](../apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx): beschrijving in je-vorm.
-  - [WegwijzerPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx): page-titel, beschrijving, expert-card en hover-card naar je-vorm.
-- [x] **Geen em dashes (—) in user-facing copy.** Vervangen door komma, dubbele punt of een nieuwe zin op InfoRequestSubmittedPage en OnboardingRegistrationCompletePage.
-- [x] **Geen "Gelieve" of bureaucratische passieve constructies.** Vervangen op [InfoRequestPlaceholderPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx).
-- [x] **Geen prototype-meta-commentaar in user-facing copy.** Verwijderd op DashboardPage en AppPlaceholderPage.
-- [x] **Geen Engelse strings in de NL-UI.** Vertaald:
-  - [footerConfig.ts](../apps/frontend-pt1-extranet-onboarding/src/layouts/footerConfig.ts): `"Privacy policy"` → `"Privacybeleid"`.
-  - [OnboardingEntryPlaceholderPage.tsx](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingEntryPlaceholderPage.tsx): volledige panel + empty state + AuthLayout copy vertaald.
-- [x] **Vakjargon vermeden waar plain Dutch volstaat.** "snapshot", "dossierspoor", "onboarding" (zelfstandig naamwoord) vervangen op OnboardingRegistrationCompletePage.
-
-### Per-pagina copy-actie
-
-#### 4.1 Login [`SignupPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/SignupPage.tsx)
-
-_Route:_ [`/login`](http://localhost:5173/login) (cf. [3.11](#311-klantenportaal-login-pagina))
-
-- [x] `description`: hertaald naar je-vorm. Live: `"Meld je aan met het e-mailadres waarmee je bij PROCERTUS geregistreerd staat."`
-- [x] Below-card link in je-vorm. Live: `"Start je aanvraag hier"`.
-
-#### 4.2 Triage [`TriagePage`](../apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx)
-
-_Route:_ `/welcome/triage/:serviceId` (open via "Aanvraag starten" vanuit een detail-card op `/welcome`)
-
-- [x] Titel verkort en naar je-vorm. Live: `"Wil je meer informatie of meteen je traject opstarten?"`.
-- [x] Beschrijving herschreven: `"Vraag eerst vrijblijvend advies en een prijsopgave, of start meteen het formele dossier zodat de ontvankelijkheidsbeoordeling kan beginnen."`
-- [x] Bullets "Aanvraag meer informatie" toegepast: `"Geen verplichting om op te starten"`, `"Antwoord binnen enkele werkdagen"`, `"Live sessie met een expert mogelijk"`.
-- [x] Bullets "Traject opstarten" geherordend naar 3 voorwaarden + 3 gevolgen, in je-vorm: `"Je hebt voldoende informatie over het traject"`, `"Je hebt je bedrijfsgegevens bij de hand"`, `"Je wil nu indienen"`, `"De ontvankelijkheidsbeoordeling start meteen"`, `"PROCERTUS volgt je dossier actief op"`, `"Je account wordt aangemaakt bij indiening"`.
-- [x] Expert-card heading naar `"Wil je eerst een expert spreken?"`.
-- [x] Expert-card copy: `"Reserveer een live online sessie van één uur en overloop de vereisten samen met een PROCERTUS-expert."`
-
-#### 4.3 Vrijblijvende informatieaanvraag [`InfoRequestPlaceholderPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestPlaceholderPage.tsx)
-
-_Route:_ `/welcome/info-request/:serviceId` (vanuit triage links-kaart)
-
-- [x] Beschrijving in je-vorm, "Gelieve" gedropt. Live: `"Laat je gegevens hieronder achter. We bekijken je vraag en nemen snel contact met je op."`.
-- [x] Sectie-titel naar `"Waarover wil je informatie?"`.
-- [x] Placeholder note-veld: `"Beschrijf hier de context van je vraag of een concreet aandachtspunt."`.
-
-#### 4.4 Aanvraag verzonden [`InfoRequestSubmittedPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx)
-
-_Route:_ `/welcome/info-request/:serviceId/verzonden`
-
-- [x] Sectie-titel naar `"Dit stuurde je in"`, beschrijving in je-vorm: `"De certificaten uit je mandje, samen met de toelichting die je hebt toegevoegd."`.
-- [x] Lege-mandje fallback in je-vorm: `"Je mandje was leeg bij verzending. PROCERTUS leest je vraag toch door en komt op basis daarvan bij je terug."`.
-- [x] Sectie-titel `"Onboarding naar het Klantenportaal"` naar `"Je teamleden in het Klantenportaal"`, beschrijving ingekort: `"Iedereen met een e-mailadres hieronder krijgt een uitnodiging om zich aan te melden. De juiste PROCERTUS-rol wordt automatisch gekoppeld."`.
-- [x] Bullets `"Je volgende stappen op het Klantenportaal"` verkort tot één onderwerp per bullet, actieve zinnen, in je-vorm.
-- [x] Fallback zonder snapshot (geen `serviceId`): em dash weg, gesplitst in 4 zinnen, in je-vorm: `"Bedankt voor je aanvraag. We bekijken je gegevens en nemen snel contact met je op. Herlaad je deze pagina, dan zijn de gekoppelde details niet meer zichtbaar. Je aanvraag is wel ontvangen."`.
-- [x] Expertgesprek-fallback (geen `preferenceLabel`): puntkomma → punt, in je-vorm: `"Je wil afstemmen met een expert. PROCERTUS neemt contact op voor een concreet moment."`. Statuspil-labels meegenomen: `"Geen automatische uitnodiging"` → `"Geen uitnodiging"`.
-
-#### 4.5 Lopende-aanvraag banner [`ActiveInquiryContinueAlert`](../apps/frontend-pt1-extranet-onboarding/src/layouts/ActiveInquiryContinueAlert.tsx)
-
-_Zichtbaar op:_ publieke pagina's onder `/welcome` wanneer er een formele aanvraag in progress is.
-
-- [x] Titel naar `"Lopende certificatieaanvraag"` (één woord, geen spatie).
-- [x] Body in je-vorm: `"Je hebt een formele aanvraag met X certificatieonderzoek(en). Je kan op elk moment verder waar je gestopt was."`.
-
-#### 4.6 Productkeuze [`TrajectConfigureFlow`](../apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectConfigureFlow.tsx)
-
-_Route:_ `/welcome/aanvraag/:serviceId/start`
-
-- [x] Titel in je-vorm: `"Selecteer de producten die je wil certificeren"`.
-- [x] Beschrijving: `"Doorzoek de catalogus of blader stap voor stap door de categorieën."`
-
-#### 4.7 Per-product certificaten [`TrajectBundleAssembleFlow`](../apps/frontend-pt1-extranet-onboarding/src/features/traject/TrajectBundleAssembleFlow.tsx)
-
-_Route:_ `/welcome/aanvraag/:serviceId/pakket` (cf. [3.3](#33-onboarding-stap-voeg-per-product-certificaten-toe))
-
-- [x] Beschrijving in je-vorm: `"Loop je geselecteerde producten door en voeg de certificaten toe die je nog nodig hebt. Zo dien je meteen alles samen in."`.
-
-#### 4.8 Wegwijzer [`WegwijzerPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx)
-
-_Route:_ [`/welcome`](http://localhost:5173/welcome)
-
-- [x] Sectie-titel blijft `"Wanneer vraag je dit het beste aan?"` (je-vorm gekozen i.p.v. u-vorm conform de omgekeerde registerbeslissing). Page-titel en beschrijving in WegwijzerPage ook in je-vorm gezet.
-
-#### 4.9 Dashboard [`DashboardPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/DashboardPage.tsx)
-
-_Route:_ `/` (na login)
-
-- [x] Beschrijving in je-vorm, demo-meta gedropt. Live: `"Overzicht van je sessie, organisatie en certificatieaanvragen."`.
-
-#### 4.10 Placeholder-secties [`AppPlaceholderPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/AppPlaceholderPage.tsx)
-
-_Gebruikt door:_ alle nog niet geïmplementeerde secties in de authenticated app.
-
-- [x] Fallback-zin ingekort: `"Deze sectie is binnenkort beschikbaar."` (navigatiestructuur-meta gedropt).
-
-#### 4.11 Onboarding-entry placeholder [`OnboardingEntryPlaceholderPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingEntryPlaceholderPage.tsx)
+### 4.11 Onboarding-entry placeholder [`OnboardingEntryPlaceholderPage`](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingEntryPlaceholderPage.tsx)
 
 _Route:_ `/welcome/onboarding` (placeholder)
 
 - [ ] Volledige pagina vertalen naar Nederlands: `PANEL.title` + `PANEL.subtitle`, `AuthLayout` title en description, `EmptyTitle`, `EmptyDescription`, knop-label (`"Back to sign in"` naar `"Terug naar aanmelden"`).
 
-#### 4.12 Footer [`footerConfig.ts`](../apps/frontend-pt1-extranet-onboarding/src/layouts/footerConfig.ts)
+### 4.12 Footer [`footerConfig.ts`](../apps/frontend-pt1-extranet-onboarding/src/layouts/footerConfig.ts)
 
 - [ ] `"Privacy policy"` naar `"Privacybeleid"`.
 
-#### 4.13 Bevestigingspagina na indiening [`OnboardingRegistrationCompletePage`](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingRegistrationCompletePage.tsx)
+### 4.13 Bevestigingspagina na indiening [`OnboardingRegistrationCompletePage`](../apps/frontend-pt1-extranet-onboarding/src/pages/OnboardingRegistrationCompletePage.tsx)
 
 _Route:_ [`/registratie-voltooid`](http://localhost:5173/registratie-voltooid) (cf. [3.12](#312-bevestigingspagina-na-indiening-uw-account-is-klaar) voor de structurele wijzigingen. Onderstaande copy-actie blijft zinvol zolang de pagina in haar huidige vorm staat.)
 
@@ -426,13 +345,7 @@ _Feedback origineel gezien op:_ **Triage** ("Liever eerst een expert spreken?" a
 - [ ] Beperk de expert-call CTA tot één visuele ankerplek. Voorstel: behoud de inline kaart op [WegwijzerPage.tsx:276](apps/frontend-pt1-extranet-onboarding/src/pages/WegwijzerPage.tsx#L276) als eerste ontdekpunt, en vervang de derde kaart op [TriagePage.tsx:105](apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx#L105) door een tekstlink of een inline note onder de twee TriageOptionCards.
 - [ ] Of, omgekeerd: behoud de prominentie op Triage (dat is het beslismoment) en zet de `ExpertCallFooterCard` op de wegwijzer terug naar een minder dominante variant (item-row in plaats van gradient-card).
 
-> Raakt aan de expert-card copy-actie in [4.2 Triage](#42-triage-triagepage): als de kaart op Triage vervalt, vervallen ook de geplande copy-aanpassingen daar.
-
-#### Check-bullets op TriageOptionCard stonden op text-success
-
-_Feedback origineel gezien op:_ **Triage** ([`/welcome/triage/:serviceId`](http://localhost:5173/welcome/triage/origin)). De zes check-bullets op `TriageOptionCard` gebruikten `text-success`, terwijl het hier niet om een succes- of validatie-status gaat. Het anchor-blauw register (`accent-foreground`) sluit beter aan bij de icon-tile in de card-header, houdt success-groen vrij voor échte status-signalen, en geeft de vinkjes op de "Traject opstarten"-kaart de visuele rust die past bij een keuzemoment.
-
-- [x] Vervang `text-success` door `text-accent-foreground` op [TriagePage.tsx:189](apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx#L189).
+> De expert-card copy op Triage is al herwerkt (zie [Afgewerkt](#afgewerkt)). Als de kaart op Triage vervalt, vervalt dat copy-werk achteraf alsnog.
 
 #### Vier gestapelde bordered cards op InfoRequestSubmittedPage beslaan dezelfde temporele fase
 
@@ -441,7 +354,7 @@ _Feedback origineel gezien op:_ **Aanvraag verzonden** [InfoRequestSubmittedPage
 - [ ] Vouw "Organisatie en context" [InfoRequestSubmittedPage.tsx:77](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L77) in de lead-beschrijving in. Kanaal en organisatie zijn al in de heading-paragraaf vermeld; alleen het tijdstip "Ontvangen" mag eventueel als compacte regel onder de lead blijven.
 - [ ] Voeg "Onboarding naar het Klantenportaal" [InfoRequestSubmittedPage.tsx:125](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L125) en "Uw volgende stappen op het Klantenportaal" [InfoRequestSubmittedPage.tsx:173](apps/frontend-pt1-extranet-onboarding/src/pages/InfoRequestSubmittedPage.tsx#L173) samen tot één sectie "Volgende stappen". Behoud de personenlijst, plaats de twee tot drie kerninstructies eronder. De vijf bullets van "Volgende stappen" zijn portal-onboarding en horen daar inhoudelijk thuis, niet op de bevestigingspagina (cf. analoge keuze in [3.12](#312-bevestigingspagina-na-indiening-uw-account-is-klaar) voor de registratie-bevestiging).
 
-> Raakt aan de copy-acties in [4.4 Aanvraag verzonden](#44-aanvraag-verzonden-inforequestsubmittedpage): meerdere geplande tekst-aanpassingen verhuizen mee als de secties samengevoegd of geschrapt worden.
+> De copy-acties voor deze pagina zijn al doorgevoerd (zie [Afgewerkt](#afgewerkt)). Een deel van die tekst-aanpassingen verhuist of vervalt als de secties samengevoegd of geschrapt worden.
 
 #### Authenticated detail-pages en widget-subkoppen volgen het H-systeem niet
 
@@ -460,19 +373,12 @@ _Feedback origineel gezien op:_ [BrandGradientHero.tsx:6-28](apps/frontend-pt1-e
 
 ### 5.2 Primitives en libraries
 
-#### TrajectStoryFooter: vier optionele callbacks, drie reële scenarios
-
-_Feedback origineel gezien op:_ [TrajectStoryFooter.tsx:19-30](packages/ui-certification/src/components/traject/TrajectStoryFooter.tsx#L19) (props) en [TrajectStoryFooter.tsx:44-90](packages/ui-certification/src/components/traject/TrajectStoryFooter.tsx#L44) (render). De component accepteert vier onafhankelijke callbacks (`onCancel`, `onBack`, `onContinue`, `onAddMore`) plus vier label-overrides. Theoretisch geeft dat 16+ combinaties; in de praktijk zijn er drie scenarios: eerste stap (alleen "Terug"), tussenstap (cancel + back + continue) en review-stap (cancel + back + add-more + continue).
-
-- [x] Vervang de vier optionele callbacks door één `mode`-prop met de drie reële waardes ("first-step" / "in-flow" / "review"). De callbacks die in die mode niet bestaan, hoeven niet meer doorgegeven te worden. Voordeel: één lezing van de prop-signature volstaat om te zien welke knoppen verschijnen.
-- [x] Schrap de label-overrides. Labels horen in i18n of in een lokale `messages`-object te zitten, niet als prop-by-prop optie op de footer zelf.
-
 #### TriageOptionCard zit lokaal in TriagePage, terwijl de shape generiek voelt
 
 _Feedback origineel gezien op:_ [TriagePage.tsx:138-208](apps/frontend-pt1-extranet-onboarding/src/pages/TriagePage.tsx#L138). De lokaal gedefinieerde `TriageOptionCard` heeft een generiek shape (icon-tile + titel + korte beschrijving + check-bullets + tone "primary" of "muted" + CTA met arrow). Dezelfde shape duikt al op in `MasterCard`-subsecties en is een logische kandidaat voor BENOR/ATG-keuzeschermen later.
 
 - [ ] Hef de lokale definitie op en breng een algemene "DecisionCard" (of vergelijkbare naam) in `packages/ui-lib` als generieke twee-tone keuzekaart. Naam mag niet "Triage" bevatten omdat de inhoud niet domeingebonden is (cf. memory "Name by content, not consumer"). Eerste consument: TriagePage; tweede potentiële consument: het beslismoment "formele aanvraag vs informatieve aanvraag" in andere flows.
-- [ ] Alternatief, als extractie te zwaar voelt: laat de component lokaal, maar dun hem af. De zes bullets aan de primary-kant kunnen naar drie (zie ook [4.2 Triage](#42-triage-triagepage)), de `shadow-proc-md` + `ring-2 ring-primary/30` voelen samen overdone op een muted-vs-primary paar. Eén van beide volstaat als visueel signaal.
+- [ ] Alternatief, als extractie te zwaar voelt: laat de component lokaal, maar dun hem af. De zes bullets aan de primary-kant kunnen naar drie (de bullet-pass voor Triage is al gebeurd, zie [Afgewerkt](#afgewerkt)), de `shadow-proc-md` + `ring-2 ring-primary/30` voelen samen overdone op een muted-vs-primary paar. Eén van beide volstaat als visueel signaal.
 
 > Raakt aan [Choice card componenten](#choice-card-componenten) in sectie 1: een nieuwe `DecisionCard` is mogelijk de juiste plek om die optimalisatieslag te bundelen.
 
@@ -482,8 +388,6 @@ _Feedback origineel gezien op:_ `grep -r 'variant="faded"'` toont één gebruik 
 
 - [ ] Kies één presentatie voor externe verwijzingen. Voorstel: behoud de `<Item>`-rij (compacter, past in de "Overige" tab) en gebruik die ook in `AllCertificatesGrid`. Dat maakt `variant="faded"` overbodig en zorgt voor één lees-pattern voor "dit dossier loopt elders".
 - [ ] Als de faded-variant toch waarde heeft op een andere plek, documenteer dan in `BrowseCard.stories.tsx` voor welk inhoudtype hij bedoeld is. Anders verwijderen uit de `variant`-set.
-
-> Raakt aan de externe-verwijzing tegels op [4.8 Wegwijzer](#48-wegwijzer-wegwijzerpage).
 
 #### `data-density="spacious"` heeft geen meetbare adoptie
 
