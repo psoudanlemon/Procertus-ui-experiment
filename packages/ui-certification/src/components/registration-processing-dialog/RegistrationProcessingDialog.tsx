@@ -3,6 +3,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import type { ReactNode } from "react";
 
 import {
+  Card,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -81,7 +82,7 @@ export function RegistrationProcessingDialog({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription className="text-pretty">{description}</DialogDescription>
         </DialogHeader>
-        <div className="flex items-start gap-component rounded-lg border border-border bg-muted/30 p-section">
+        <Card variant="muted" className="flex flex-row items-start gap-component rounded-lg p-section">
           <HugeiconsIcon
             icon={Loading03Icon}
             className="mt-0.5 size-8 shrink-0 animate-spin [animation-duration:3s] [animation-timing-function:linear] text-primary"
@@ -92,7 +93,7 @@ export function RegistrationProcessingDialog({
             <p className="m-0 font-medium text-foreground">{statusTitle}</p>
             <p className="mt-micro m-0">{statusBody}</p>
           </div>
-        </div>
+        </Card>
         <div className="space-y-component">
           <div className="flex items-center justify-between gap-component text-sm">
             <span className="font-medium text-foreground">{progressLabel}</span>

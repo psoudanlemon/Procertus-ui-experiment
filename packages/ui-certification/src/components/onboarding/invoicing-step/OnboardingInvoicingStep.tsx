@@ -402,12 +402,12 @@ export function OnboardingInvoicingStep({ model }: OnboardingInvoicingStepProps)
           </p>
         </div>
         {!context.invoicingUseContactPerson ? (
-          <div className="rounded-lg border border-border bg-card px-4 py-3">
-            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Wettelijke vertegenwoordiger — factuurcontact
+          <Card variant="outlined" className="gap-2 rounded-lg px-4 py-3">
+            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              Wettelijke vertegenwoordiger, factuurcontact
             </p>
             <IdentificatiePersonRegistrySummary person={legalRepresentativePersonValue(context)} />
-          </div>
+          </Card>
         ) : null}
       </div>
 

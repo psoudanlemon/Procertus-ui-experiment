@@ -103,8 +103,9 @@ export function RequestPackageReview({
   const body = (
     <>
       {rc ? (
-        <section
-          className="rounded-xl border border-border/60 bg-muted/20 p-section"
+        <Card
+          variant="subtle"
+          className="bg-muted/20 p-section"
           aria-labelledby="request-package-requester-heading"
         >
           <h3
@@ -113,7 +114,7 @@ export function RequestPackageReview({
           >
             {sectionTitle}
           </h3>
-          <div className="mt-section grid gap-section sm:grid-cols-2">
+          <div className="grid gap-section sm:grid-cols-2">
             <div className="flex min-w-0 flex-col gap-section">
               <div className="flex flex-col gap-micro">
                 <p className="m-0 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
@@ -155,7 +156,7 @@ export function RequestPackageReview({
               ) : null}
             </div>
           </div>
-        </section>
+        </Card>
       ) : null}
 
       {notice ? (

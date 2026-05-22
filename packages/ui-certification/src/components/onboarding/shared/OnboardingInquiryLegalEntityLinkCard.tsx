@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { Card } from "@procertus-ui/ui";
+
 export type OnboardingInquiryLegalEntityLinkCardProps = {
   leftColumnLabel: string;
   rightColumnLabel: string;
@@ -18,18 +20,20 @@ export function OnboardingInquiryLegalEntityLinkCard({
   right,
 }: OnboardingInquiryLegalEntityLinkCardProps) {
   return (
-    <li className="list-none rounded-lg border border-border bg-card px-4 py-3">
-      <div className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
-        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          {leftColumnLabel}
-        </p>
-        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          {rightColumnLabel}
-        </p>
-        <div className="col-span-full border-b border-border" />
-        <div className="min-w-0">{left}</div>
-        <div className="min-w-0">{right}</div>
-      </div>
+    <li className="list-none">
+      <Card variant="outlined" className="rounded-lg px-4 py-3">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            {leftColumnLabel}
+          </p>
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            {rightColumnLabel}
+          </p>
+          <div className="col-span-full border-b border-border" />
+          <div className="min-w-0">{left}</div>
+          <div className="min-w-0">{right}</div>
+        </div>
+      </Card>
     </li>
   );
 }

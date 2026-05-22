@@ -21,6 +21,9 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import type { ReactNode } from "react";
 
 import {
+  Card,
+  CardContent,
+  CardHeader,
   H2,
   P,
   Table,
@@ -99,15 +102,15 @@ function Section({
   children: ReactNode;
 }) {
   return (
-    <section className="flex w-full flex-col gap-section rounded-xl border border-border bg-card p-section text-card-foreground text-left shadow-none">
-      <div className="flex flex-col gap-micro">
+    <Card variant="outlined" className="text-left">
+      <CardHeader className="gap-micro">
         <H2 className="m-0 tracking-tight">{title}</H2>
         {description ? (
           <P className="m-0 text-sm leading-relaxed text-muted-foreground">{description}</P>
         ) : null}
-      </div>
-      {children}
-    </section>
+      </CardHeader>
+      <CardContent>{children}</CardContent>
+    </Card>
   );
 }
 
